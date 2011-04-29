@@ -28,10 +28,10 @@
     <parent>
         <groupId>org.forgerock</groupId>
         <artifactId>forgerock-parent</artifactId>
-        <version>1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <groupId>org.forgerock.commons</groupId>
-    <artifactId>json-schema-validator</artifactId>
+    <artifactId>json-schema</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>JSON Schema Draft-03 Validator</name>
@@ -54,11 +54,6 @@
             <version>6.0.1</version>
             <scope>test</scope>
         </dependency>
-        <!--dependency>
-            <groupId>oro</groupId>
-            <artifactId>oro</artifactId>
-            <version>2.0.8</version>
-        </dependency-->
     </dependencies>
     <build>
         <plugins>
