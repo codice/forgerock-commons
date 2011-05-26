@@ -434,9 +434,13 @@
           #if($decoration.body.footer)
             $decoration.body.footer
           #else
-            This service is provided to you by ForgeRock AS.
-            <br/>
-            Copyright &#169;#copyright()All Rights Reserved.#publishDate( "bottom" $decoration.publishDate $decoration.version )
+            This service is provided to you by <a href="http://forgerock.com"
+            ><img src="./images/ForgeRock-226x60.png" height="20" width="75"
+            alt="ForgeRock AS" style="vertical-align: bottom;" /></a>.
+            <br />
+            Copyright &#169;#copyright()<a rel="license" href="license.html">
+            Some Rights Reserved.</a>
+            #publishDate( "bottom" $decoration.publishDate $decoration.version )
           #end
       </div>
      </center>
