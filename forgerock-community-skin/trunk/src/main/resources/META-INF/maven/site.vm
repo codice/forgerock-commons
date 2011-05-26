@@ -385,7 +385,9 @@
              <tr>
               <td align="center" valign="middle" width="250">
                 <a href="index.html">
-                  <img alt="logo" src="images/ForgeRock-Community-grey-295x50.png" border="0">
+                  #set($frCommunityLogo = $PathTool.calculateLink("./images/ForgeRock-Community-grey-295x50.png", $relativePath))
+                  #set($frCommunityLogo = $frCommunityLogo.replaceAll("\\", "/"))
+                  <img alt="logo" src="$frCommunityLogo" border="0">
                 </a>
               </td>
               <td style="padding-left: 100px;">
@@ -434,11 +436,16 @@
           #if($decoration.body.footer)
             $decoration.body.footer
           #else
+            #set($frLogo = $PathTool.calculateLink("./images/ForgeRock-226x60.png", $relativePath))
+            #set($frLogo = $frLogo.replaceAll("\\", "/"))
+            #set($frLicense = $PathTool.calculateLink("./license.html", $relativePath))
+            #set($frLicense = $frLicense.replaceAll("\\", "/"))
+
             This service is provided to you by <a href="http://forgerock.com"
-            ><img src="./images/ForgeRock-226x60.png" height="20" width="75"
+            ><img src="$frLogo" height="20" width="75"
             alt="ForgeRock AS" style="vertical-align: bottom;" /></a>.
             <br />
-            Copyright &#169;#copyright()<a rel="license" href="license.html">
+            Copyright &#169;#copyright()<a rel="license" href="$frLicense">
             Some Rights Reserved.</a>
             #publishDate( "bottom" $decoration.publishDate $decoration.version )
           #end
