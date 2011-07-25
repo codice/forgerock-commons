@@ -396,7 +396,7 @@
         <tbody>
              <tr>
               <td align="center" valign="middle" width="250">
-                <a href="index.html">
+                <a href="http://www.forgerock.org/">
                   #set($frCommunityLogo = $PathTool.calculateLink("./images/ForgeRock-Community-grey-295x50.png", $relativePath))
                   #set($frCommunityLogo = $frCommunityLogo.replaceAll("\\", "/"))
                   <img alt="logo" src="$frCommunityLogo" border="0">
