@@ -47,7 +47,7 @@ import org.forgerock.json.crypto.simple.SimpleKeyStoreSelector;
 
 /**
  * @author Paul C. Bryan
- */
+*/
 public class JsonCryptoTest {
 
     private static final String CIPHER = "AES/CBC/PKCS5Padding";
@@ -67,7 +67,7 @@ public class JsonCryptoTest {
     @BeforeClass
     public void beforeClass() throws GeneralSecurityException, IOException {
         KeyGenerator kg = KeyGenerator.getInstance("AES");
-        kg.init(256);
+        kg.init(128); // the Sun JRE out of the box restricts to 128-bit key length
         key = kg.generateKey();
         KeyStore ks = KeyStore.getInstance("JCEKS");
         ks.load(null, null);
