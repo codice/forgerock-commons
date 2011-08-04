@@ -109,7 +109,7 @@
             </plugin>
         </plugins>
     </build>
-<-- may-be-temporary, based-on our decisions around the content and release of forgerock-parent -->
+<!-- may-be-temporary, based-on our decisions around the content and release of forgerock-parent -->
     <repositories>
         <repository>
             <id>forgerock-staging-repository</id>
@@ -127,6 +127,6 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
-<-- /may-be-temporary -->
+<!-- /may-be-temporary -->
     </repositories>
 </project>
