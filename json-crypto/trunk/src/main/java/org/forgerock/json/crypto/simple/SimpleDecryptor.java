@@ -51,8 +51,7 @@ public class SimpleDecryptor implements JsonDecryptor {
     /**
      * TODO: Description.
      *
-     * @param keyStore TODO.
-     * @param password TODO.
+     * @param selector TODO.
      */
     public SimpleDecryptor(SimpleKeySelector selector) {
         this.selector = selector;
