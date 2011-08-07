@@ -127,6 +127,6 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
-<!-- /may-be-temporary -->
     </repositories>
+<!-- /may-be-temporary -->
 </project>

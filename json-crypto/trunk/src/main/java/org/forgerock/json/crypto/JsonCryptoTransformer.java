@@ -45,7 +45,11 @@ public class JsonCryptoTransformer implements JsonTransformer {
         if (JsonCrypto.isJsonCrypto(node)) {
             JsonCrypto crypto = new JsonCrypto(node);
             if (crypto.getType().equals(decryptor.getType())) { // only attempt decryption if type matches
-                node.setValue(decryptor.decrypt(crypto.getValue()).getValue());
+                try {
+                    node.setValue(decryptor.decrypt(crypto.getValue()).getValue());
+                } catch (JsonCryptoException jce) {
+                    throw new JsonException(jce);
+                }
             }
         }
     }

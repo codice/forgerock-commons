@@ -19,13 +19,14 @@ package org.forgerock.json.crypto;
 // Java Standard Edition
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.KeyStore;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.PasswordCallback;
 
 // FEST-Assert
 import static org.fest.assertions.Assertions.assertThat;
@@ -43,53 +44,80 @@ import org.forgerock.json.fluent.JsonTransformer;
 import org.forgerock.json.crypto.simple.SimpleDecryptor;
 import org.forgerock.json.crypto.simple.SimpleEncryptor;
 import org.forgerock.json.crypto.simple.SimpleKeySelector;
-import org.forgerock.json.crypto.simple.SimpleKeyStoreSelector;
 
 /**
  * @author Paul C. Bryan
 */
 public class JsonCryptoTest {
 
-    private static final String CIPHER = "AES/CBC/PKCS5Padding";
+    private static final String SYMMETRIC_CIPHER = "AES/CBC/PKCS5Padding";
+
+    private static final String ASYMMETRIC_CIPHER = "RSA/ECB/OAEPWithSHA1AndMGF1Padding";
 
     private static final String PASSWORD = "P@55W0RD";
 
     private static final String PLAINTEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
 
-    private static final String ALIAS = "secret";
+    private SecretKey secretKey;
 
-    private SecretKey key;
+    private PublicKey publicKey;
 
-    private SimpleKeySelector selector;
+    private PrivateKey privateKey;
+
+    private SimpleKeySelector selector = new SimpleKeySelector() {
+        @Override public Key select(String key) {
+            if (key.equals("secretKey")) {
+                return secretKey;
+            } else if (key.equals("privateKey")) {
+                return privateKey;
+            } else {
+                return null;
+            }
+        }
+    };
 
     // ----- initialization ----------
 
     @BeforeClass
     public void beforeClass() throws GeneralSecurityException, IOException {
+
+        // generate AES 128-bit secret key
         KeyGenerator kg = KeyGenerator.getInstance("AES");
         kg.init(128); // the Sun JRE out of the box restricts to 128-bit key length
-        key = kg.generateKey();
-        KeyStore ks = KeyStore.getInstance("JCEKS");
-        ks.load(null, null);
-        ks.setKeyEntry(ALIAS, key, PASSWORD.toCharArray(), null);
-        selector = new SimpleKeyStoreSelector(ks, PASSWORD);
+        secretKey = kg.generateKey();
+
+        // generate RSA 1024-bit key pair
+        KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+        kpg.initialize(1024);
+        KeyPair kp = kpg.genKeyPair();
+        publicKey = kp.getPublic();
+        privateKey = kp.getPrivate();
     }
 
     // ----- happy path ----------
 
     @Test
-    public void testSimpleEncryption() throws JsonException {
+    public void testSymmetricEncryption() throws JsonCryptoException {
         JsonNode node = new JsonNode(PLAINTEXT);
-        node = new SimpleEncryptor(CIPHER, key, ALIAS).encrypt(node);
+        node = new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey").encrypt(node);
         assertThat(node.getValue()).isNotEqualTo(PLAINTEXT);
         node = new SimpleDecryptor(selector).decrypt(node);
         assertThat(node.getValue()).isEqualTo(PLAINTEXT);
     }
-    
+
     @Test
-    public void testJsonCryptoTransformer() throws JsonException {
+    public void testAsymmetricEncryption() throws JsonCryptoException {
         JsonNode node = new JsonNode(PLAINTEXT);
-        JsonEncryptor encryptor = new SimpleEncryptor(CIPHER, key, ALIAS);
+        node = new SimpleEncryptor(ASYMMETRIC_CIPHER, publicKey, "privateKey").encrypt(node);
+        assertThat(node.getValue()).isNotEqualTo(PLAINTEXT);
+        node = new SimpleDecryptor(selector).decrypt(node);
+        assertThat(node.getValue()).isEqualTo(PLAINTEXT);
+    }
+
+    @Test
+    public void testJsonCryptoTransformer() throws JsonCryptoException {
+        JsonNode node = new JsonNode(PLAINTEXT);
+        JsonEncryptor encryptor = new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey");
         JsonNode crypto = new JsonCrypto(encryptor.getType(), encryptor.encrypt(node)).toJsonNode();
         ArrayList<JsonTransformer> transformers = new ArrayList<JsonTransformer>();
         transformers.add(new JsonCryptoTransformer(new SimpleDecryptor(selector)));
@@ -100,10 +128,18 @@ public class JsonCryptoTest {
     // ----- exceptions ----------
 
     @Test(expectedExceptions=JsonCryptoException.class)
-    public void testDroppedIV() throws JsonException {
+    public void testDroppedIV() throws JsonCryptoException {
         JsonNode node = new JsonNode(PLAINTEXT);
-        node = new SimpleEncryptor(CIPHER, key, ALIAS).encrypt(node);
+        node = new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey").encrypt(node);
         node.remove("iv");
-        node = new SimpleDecryptor(selector).decrypt(node);
+        new SimpleDecryptor(selector).decrypt(node);
+    }
+
+    @Test(expectedExceptions=JsonCryptoException.class)
+    public void testUnknownKey() throws JsonCryptoException {
+        JsonNode node = new JsonNode(PLAINTEXT);
+        node = new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey").encrypt(node);
+        node.put("key", "somethingCompletelyDifferent");
+        new SimpleDecryptor(selector).decrypt(node);
     }
 }

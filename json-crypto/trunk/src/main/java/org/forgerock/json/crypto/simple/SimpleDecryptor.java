@@ -22,6 +22,7 @@ import java.security.GeneralSecurityException;
 import java.security.Key;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 // Apache Commons Codec
 import org.apache.commons.codec.binary.Base64;
@@ -46,6 +47,7 @@ public class SimpleDecryptor implements JsonDecryptor {
     /** TODO: Description. */
     private final ObjectMapper mapper = new ObjectMapper();
 
+    /** TODO: Description. */
     private final SimpleKeySelector selector;
 
     /**
@@ -62,19 +64,34 @@ public class SimpleDecryptor implements JsonDecryptor {
         return "x-simple-encryption";
     }
 
+    private Key select(String alias) throws JsonCryptoException {
+        Key result = selector.select(alias);
+        if (result == null) {
+            throw new JsonCryptoException("key not found: " + alias);
+        }
+        return result;
+    }
+
     @Override
     public JsonNode decrypt(JsonNode node) throws JsonCryptoException {
         try {
-            String alias = node.get("key").required().asString();
-            Key key = selector.select(alias);
-            if (key == null) {
-                throw new JsonCryptoException("key not found: " + alias);
+            JsonNode key = node.get("key").required();
+            String cipher = node.get("cipher").required().asString();
+            Key symmetricKey;
+            if (key.isString()) {
+                symmetricKey = select(key.asString());
+            } else {
+                Key privateKey = select(key.get("key").required().asString());
+                Cipher asymmetric = Cipher.getInstance(key.get("cipher").required().asString());
+                asymmetric.init(Cipher.DECRYPT_MODE, privateKey);
+                byte[] ciphertext = Base64.decodeBase64(key.get("data").required().asString());
+                symmetricKey = new SecretKeySpec(asymmetric.doFinal(ciphertext), cipher.split("/", 2)[0]);
             }
-            Cipher cipher = Cipher.getInstance(node.get("cipher").required().asString());
+            Cipher symmetric = Cipher.getInstance(cipher);
             String iv = node.get("iv").asString();
             IvParameterSpec ivps = (iv == null ? null : new IvParameterSpec(Base64.decodeBase64(iv)));
-            cipher.init(Cipher.DECRYPT_MODE, key, ivps);
-            byte[] plaintext = cipher.doFinal(Base64.decodeBase64(node.get("data").required().asString()));
+            symmetric.init(Cipher.DECRYPT_MODE, symmetricKey, ivps);
+            byte[] plaintext = symmetric.doFinal(Base64.decodeBase64(node.get("data").required().asString()));
             return new JsonNode(mapper.readValue(plaintext, Object.class));
         } catch (GeneralSecurityException gse) { // Java Cryptography Extension
             throw new JsonCryptoException(gse);

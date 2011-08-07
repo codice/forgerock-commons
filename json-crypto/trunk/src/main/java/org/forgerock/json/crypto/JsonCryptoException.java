@@ -24,7 +24,7 @@ import org.forgerock.json.fluent.JsonException;
  *
  * @author Paul C. Bryan
  */
-public class JsonCryptoException extends JsonException {
+public class JsonCryptoException extends Exception {
 
     /** Serializable class a version number. */
     static final long serialVersionUID = 1L;
