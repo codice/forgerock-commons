@@ -85,8 +85,8 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>org.forgerock.json.crypto.*</Export-Package>
-                        <Export-Package>org.forgerock.json.crypto.simple.*</Export-Package>
+                        <Import-Package>*</Import-Package>
+                        <Export-Package>org.forgerock.json.crypto,org.forgerock.json.crypto.simple</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>
