@@ -31,10 +31,10 @@ import org.apache.commons.codec.binary.Base64;
 // Jackson
 import org.codehaus.jackson.map.ObjectMapper;
 
-// JSON Fluent
+// JSON Fluent library
 import org.forgerock.json.fluent.JsonNode;
 
-// JSON Crypto
+// JSON Cryptographic library
 import org.forgerock.json.crypto.JsonCryptoException;
 import org.forgerock.json.crypto.JsonEncryptor;
 
@@ -44,6 +44,9 @@ import org.forgerock.json.crypto.JsonEncryptor;
  * @author Paul C. Bryan
  */
 public class SimpleEncryptor implements JsonEncryptor {
+
+    /** TODO: Description. */
+    public static final String TYPE = "x-simple-encryption";
 
     /** Serializes object model structures into JSON stream. */
     private final ObjectMapper mapper = new ObjectMapper();
@@ -72,9 +75,17 @@ public class SimpleEncryptor implements JsonEncryptor {
 
     @Override
     public String getType() {
-        return "x-simple-encryption";
+        return TYPE;
     }
 
+    /**
+     * TODO: Description.
+     *
+     * @param node TODO.
+     * @return TODO.
+     * @throws GeneralSecurityException TODO.
+     * @throws IOException TODO.
+     */
     private JsonNode symmetric(JsonNode node) throws GeneralSecurityException, IOException {
         Cipher symmetric = Cipher.getInstance(cipher);
         symmetric.init(Cipher.ENCRYPT_MODE, key);
@@ -90,6 +101,14 @@ public class SimpleEncryptor implements JsonEncryptor {
         return new JsonNode(result);
     }
 
+    /**
+     * TODO: Description.
+     *
+     * @param node TODO.
+     * @return TODO.
+     * @throws GeneralSecurityException TODO.
+     * @throws IOException TODO.
+     */
     private JsonNode asymmetric(JsonNode node) throws GeneralSecurityException, IOException {
         String symmetricCipher = "AES/ECB/PKCS5Padding"; // no IV required for randomly-generated session key
         KeyGenerator generator = KeyGenerator.getInstance("AES");

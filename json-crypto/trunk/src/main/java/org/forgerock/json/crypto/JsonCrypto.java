@@ -1,4 +1,19 @@
-    
+/*
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions Copyrighted [year] [name of copyright owner]".
+ *
+ * Copyright © 2011 ForgeRock AS. All rights reserved.
+ */
+
 package org.forgerock.json.crypto;
 
 // Java Standard Edition
@@ -36,9 +51,23 @@ public class JsonCrypto {
         fromJsonNode(node);
     }
 
+    /**
+     * TODO: Description.
+     *
+     * @param type TODO.
+     * @param value TODO.
+     */
     public JsonCrypto(String type, JsonNode value) {
         setType(type);
         setValue(value);
+    }
+
+    /**
+     * Returns {@code true} if the specified JSON node contains a valid JSON crypto structure.
+     */
+    public static boolean isJsonCrypto(JsonNode node) {
+        JsonNode crypto = (node == null ? new JsonNode(null) : node.get("$crypto"));
+        return (crypto.get("type").isString() && crypto.isDefined("value"));
     }
 
     /**
@@ -97,13 +126,5 @@ public class JsonCrypto {
         HashMap<String, Object> result = new HashMap<String, Object>();
         result.put("$crypto", crypto);
         return new JsonNode(result);
-    }
-
-    /**
-     * Returns {@code true} if the specified JSON node contains a valid JSON crypto structure.
-     */
-    public static boolean isJsonCrypto(JsonNode node) {
-        JsonNode crypto = (node == null ? new JsonNode(null) : node.get("$crypto"));
-        return (crypto.get("type").isString() && crypto.isDefined("value"));
     }
 }

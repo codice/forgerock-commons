@@ -30,11 +30,11 @@ import org.apache.commons.codec.binary.Base64;
 // Jackson
 import org.codehaus.jackson.map.ObjectMapper;
 
-// JSON Fluent
+// JSON Fluent library
 import org.forgerock.json.fluent.JsonNode;
 import org.forgerock.json.fluent.JsonNodeException;
 
-// JSON Crypto
+// JSON Cryptographic library
 import org.forgerock.json.crypto.JsonCryptoException;
 import org.forgerock.json.crypto.JsonDecryptor;
 /**
@@ -43,6 +43,9 @@ import org.forgerock.json.crypto.JsonDecryptor;
  * @author Paul C. Bryan
  */
 public class SimpleDecryptor implements JsonDecryptor {
+
+    /** TODO: Description. */
+    public static final String TYPE = "x-simple-encryption";
 
     /** TODO: Description. */
     private final ObjectMapper mapper = new ObjectMapper();
@@ -61,7 +64,7 @@ public class SimpleDecryptor implements JsonDecryptor {
 
     @Override
     public String getType() {
-        return "x-simple-encryption";
+        return TYPE;
     }
 
     private Key select(String alias) throws JsonCryptoException {

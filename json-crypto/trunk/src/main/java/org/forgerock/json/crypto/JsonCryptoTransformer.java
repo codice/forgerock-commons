@@ -31,26 +31,48 @@ public class JsonCryptoTransformer implements JsonTransformer {
     /** TODO: Description. */
     private JsonDecryptor decryptor;
 
+    /** TODO: Description. */
+    private JsonEncryptor encryptor;
+
     /**
      * TODO: Description.
      *
      * @param decryptor TODO.
+     * @throws NullPointerException if {@code decryptor} is {@code null}.
      */
     public JsonCryptoTransformer(JsonDecryptor decryptor) {
+        if (decryptor == null) {
+            throw new NullPointerException();
+        }
         this.decryptor = decryptor;
+    }
+
+    /**
+     * TODO: Description.
+     *
+     * @param encryptor TODO.
+     * @throws NullPointerException if {@code encryptor} is {@code null}.
+     */
+    public JsonCryptoTransformer(JsonEncryptor encryptor) {
+        if (encryptor == null) {
+            throw new NullPointerException();
+        }
+        this.encryptor = encryptor;
     }
 
     @Override
     public void transform(JsonNode node) throws JsonException {
-        if (JsonCrypto.isJsonCrypto(node)) {
-            JsonCrypto crypto = new JsonCrypto(node);
-            if (crypto.getType().equals(decryptor.getType())) { // only attempt decryption if type matches
-                try {
+        try {
+            if (encryptor != null) { // transformer performs encryption
+                node.setValue(new JsonCrypto(encryptor.getType(), encryptor.encrypt(node)).toJsonNode().getValue());
+            } else if (JsonCrypto.isJsonCrypto(node)) { // transformer performs decryption and node properties match
+                JsonCrypto crypto = new JsonCrypto(node);
+                if (crypto.getType().equals(decryptor.getType())) { // only attempt decryption if type matches
                     node.setValue(decryptor.decrypt(crypto.getValue()).getValue());
-                } catch (JsonCryptoException jce) {
-                    throw new JsonException(jce);
                 }
             }
+        } catch (JsonCryptoException jce) {
+            throw new JsonException(jce);
         }
     }
 }
