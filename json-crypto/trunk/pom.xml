@@ -87,6 +87,7 @@
                     <instructions>
                         <Import-Package>*</Import-Package>
                         <Export-Package>org.forgerock.json.crypto,org.forgerock.json.crypto.simple</Export-Package>
+                        <Main-Class>org.forgerock.json.crypto.Main</Main-Class>
                     </instructions>
                 </configuration>
             </plugin>
@@ -109,6 +110,71 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>encrypt</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <executable>java</executable>
+                            <mainClass>org.forgerock.json.crypto.Main</mainClass>
+                            <arguments>
+                                <argument>-encrypt</argument>
+                                <argument>-alias openidm-sym-default</argument>
+                                <argument>-keystore src/test/resources/keystore.jceks</argument>
+                                <argument>-storepass changeit</argument>
+                                <argument>-storetype JCEKS</argument>
+                                <argument>-srcjson ${srcjson}</argument>
+                                <argument>-destjson ${destjson}</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>decrypt</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <executable>java</executable>
+                            <mainClass>org.forgerock.json.crypto.Main</mainClass>
+                            <arguments>
+                                <argument>-decrypt</argument>
+                                <argument>-keystore src/test/resources/keystore.jceks</argument>
+                                <argument>-storepass changeit</argument>
+                                <argument>-storetype JCEKS</argument>
+                                <argument>-srcjson ${srcjson}</argument>
+                                <argument>-destjson ${destjson}</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 <!-- may-be-temporary, based-on our decisions around the content and release of forgerock-parent -->
     <repositories>
         <repository>
