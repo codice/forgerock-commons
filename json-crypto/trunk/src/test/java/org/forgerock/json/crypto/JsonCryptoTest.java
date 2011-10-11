@@ -25,6 +25,8 @@ import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
@@ -34,9 +36,9 @@ import static org.fest.assertions.Assertions.assertThat;
 // TestNG
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.testng.Assert;
 
 // JSON Fluent library
-import org.forgerock.json.fluent.JsonException;
 import org.forgerock.json.fluent.JsonNode;
 import org.forgerock.json.fluent.JsonTransformer;
 
@@ -44,6 +46,7 @@ import org.forgerock.json.fluent.JsonTransformer;
 import org.forgerock.json.crypto.simple.SimpleDecryptor;
 import org.forgerock.json.crypto.simple.SimpleEncryptor;
 import org.forgerock.json.crypto.simple.SimpleKeySelector;
+import org.forgerock.json.fluent.JsonPointer;
 
 /**
  * @author Paul C. Bryan
@@ -123,6 +126,45 @@ public class JsonCryptoTest {
         transformers.add(new JsonCryptoTransformer(new SimpleDecryptor(selector)));
         node = new JsonNode(crypto.getValue(), null, transformers);
         assertThat(node.getValue()).isEqualTo(PLAINTEXT);
+    }
+
+    @Test
+    public void testDeepObjectEncryption() throws JsonCryptoException {
+        JsonTransformer encryptionTransformer = new JsonCryptoTransformer(new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey"));
+        ArrayList<JsonTransformer> transformers = new ArrayList<JsonTransformer>();
+        transformers.add(new JsonCryptoTransformer(new SimpleDecryptor(selector)));
+
+        //Encrypt a simple node
+        JsonNode node = new JsonNode(PASSWORD);
+        encryptionTransformer.transform(node);
+        assertThat(node.getValue()).isNotEqualTo(PASSWORD);
+
+        Map<String, Object> inner = new HashMap<String, Object>();
+        inner.put("password",node.getValue());
+        node = new JsonNode(new HashMap<String, Object>());
+        node.put("user", inner);
+        node.put("description", PLAINTEXT);
+        
+
+        //Decrypt the DeepObject        
+        node.getTransformers().addAll(transformers);
+        node = node.copy();         
+        assertThat(node.get(new JsonPointer("/user/password")).getValue()).isEqualTo(PASSWORD);
+
+        //Encrypt a complex object
+        node = new JsonNode(node.getValue());
+        encryptionTransformer.transform(node);
+        Assert.assertTrue(JsonCrypto.isJsonCrypto(node));
+
+        //Decrypt the DeepObject
+        //TODO Expected way of decryption
+        /*
+        node.getTransformers().addAll(transformers);
+        node = node.copy();
+         */
+        node = new JsonNode(node.getValue(), null, transformers);
+        assertThat(node.get(new JsonPointer("/user/password")).getValue()).isEqualTo(PASSWORD);
+        assertThat(node.get("description").getValue()).isEqualTo(PLAINTEXT);
     }
 
     // ----- exceptions ----------
