@@ -24,6 +24,7 @@
  */
 package org.forgerock.json.schema.validator.validators;
 
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
 import org.forgerock.json.schema.validator.exceptions.ValidationException;
@@ -57,7 +58,7 @@ public class AnyTypeValidator extends Validator {
     /**
      * {@inheritDoc}
      */
-    public void validate(Object node, String at, ErrorHandler handler) throws SchemaException {
+    public void validate(Object node, JsonPointer at, ErrorHandler handler) throws SchemaException {
         if (required && null == node) {
             handler.error(new ValidationException(ERROR_MSG_REQUIRED_PROPERTY, getPath(at, null)));
         }

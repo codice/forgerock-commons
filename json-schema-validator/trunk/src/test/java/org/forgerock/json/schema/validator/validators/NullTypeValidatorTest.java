@@ -63,7 +63,7 @@ public class NullTypeValidatorTest {
             Map<String, Object> schema = (Map<String, Object>) parser.parse(schema2);
             Validator v = ObjectValidatorFactory.getTypeValidator(schema);
             Assert.assertTrue(v.isRequired(), "Required MUST be true");
-            v.validate(null, Validator.AT_ROOT, new ErrorHandler() {
+            v.validate(null, null, new ErrorHandler() {
 
                 @Override
                 public void error(ValidationException exception) throws SchemaException {
@@ -86,7 +86,7 @@ public class NullTypeValidatorTest {
             Map<String, Object> schema = (Map<String, Object>) parser.parse(schema3);
             Validator v = ObjectValidatorFactory.getTypeValidator(schema);
             Assert.assertTrue(v.isRequired(), "Required MUST be true");
-            v.validate(Boolean.TRUE, Validator.AT_ROOT, new ErrorHandler() {
+            v.validate(Boolean.TRUE, null, new ErrorHandler() {
 
                 @Override
                 public void error(ValidationException exception) throws SchemaException {

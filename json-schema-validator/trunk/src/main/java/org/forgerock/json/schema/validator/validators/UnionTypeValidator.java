@@ -24,6 +24,7 @@
  */
 package org.forgerock.json.schema.validator.validators;
 
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.ObjectValidatorFactory;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
@@ -54,7 +55,7 @@ import static org.forgerock.json.schema.validator.Constants.*;
  */
 public class UnionTypeValidator extends Validator {
 
-    private List<Validator> validators;
+    private final List<Validator> validators;
 
     public UnionTypeValidator(Map<String, Object> schema) {
         super(schema);
@@ -73,7 +74,7 @@ public class UnionTypeValidator extends Validator {
     /**
      * {@inheritDoc}
      */
-    public void validate(Object node, String at, ErrorHandler handler) throws SchemaException {
+    public void validate(Object node, JsonPointer at, ErrorHandler handler) throws SchemaException {
         for (Validator v : validators) {
             try {
                 v.validate(node, at, new ErrorHandler() {

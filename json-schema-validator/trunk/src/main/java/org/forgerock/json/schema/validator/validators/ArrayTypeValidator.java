@@ -24,6 +24,7 @@
  */
 package org.forgerock.json.schema.validator.validators;
 
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.ObjectValidatorFactory;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
@@ -142,7 +143,7 @@ public class ArrayTypeValidator extends Validator {
     /**
      * {@inheritDoc}
      */
-    public void validate(Object node, String at, ErrorHandler handler) throws SchemaException {
+    public void validate(Object node, JsonPointer at, ErrorHandler handler) throws SchemaException {
         if (node instanceof List) {
             List<Object> nodeValue = (List<Object>) node;
             if (minItems > -1 && nodeValue.size() < minItems) {
@@ -156,7 +157,7 @@ public class ArrayTypeValidator extends Validator {
 
             if (null != singleValidator) {
                 for (int i = 0; i < nodeValue.size(); i++) {
-                    singleValidator.validate(nodeValue.get(i), String.format("%s[%s]", at, i), handler);
+                    singleValidator.validate(nodeValue.get(i), getPath(at, Integer.toString(i)), handler);
                 }
             } else if (null != tupleValidators) {
                 if (tupleValidators.size() > nodeValue.size()) {
@@ -167,13 +168,13 @@ public class ArrayTypeValidator extends Validator {
                     for (int i = 0; i < nodeValue.size(); i++) {
                         Validator v = i < tupleValidators.size() ? tupleValidators.get(i) : additionalItemsValidator;
                         if (null != v) {
-                            v.validate(nodeValue.get(i), String.format("%s[%s]", at, i), handler);
+                            v.validate(nodeValue.get(i), getPath(at, Integer.toString(i)), handler);
                         }
                     }
                 }
             }
         } else if (null != node) {
-            handler.error(new ValidationException(ERROR_MSG_TYPE_MISMATCH, getPath(at, null)));
+            handler.error(new ValidationException(ERROR_MSG_TYPE_MISMATCH, getPath(at, null), node));
         } else if (required) {
             handler.error(new ValidationException(ERROR_MSG_REQUIRED_PROPERTY, getPath(at, null)));
         }
@@ -181,7 +182,7 @@ public class ArrayTypeValidator extends Validator {
 
     }
 
-    private void checkUniqueItems(List<Object> nodeValue, String at, ErrorHandler handler) throws SchemaException {
+    private void checkUniqueItems(List<Object> nodeValue, JsonPointer at, ErrorHandler handler) throws SchemaException {
         if (uniqueItems && nodeValue.size() > 1) {
             Set<Object> set = new HashSet<Object>();
             for (Object n : nodeValue) {

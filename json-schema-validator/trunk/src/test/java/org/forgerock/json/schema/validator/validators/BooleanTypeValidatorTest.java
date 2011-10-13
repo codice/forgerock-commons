@@ -48,7 +48,7 @@ public class BooleanTypeValidatorTest {
             JSONParser parser = new JSONParser();
             Map<String, Object> schema = (Map<String, Object>) parser.parse(schema1);
             Validator v = ObjectValidatorFactory.getTypeValidator(schema);
-            v.validate("test", Validator.AT_ROOT, new ErrorHandler() {
+            v.validate("test", null, new ErrorHandler() {
 
                 @Override
                 public void error(ValidationException exception) throws ValidationException {
@@ -70,7 +70,7 @@ public class BooleanTypeValidatorTest {
             JSONParser parser = new JSONParser();
             Map<String, Object> schema = (Map<String, Object>) parser.parse(schema1);
             Validator v = ObjectValidatorFactory.getTypeValidator(schema);
-            v.validate(null, Validator.AT_ROOT, new ErrorHandler() {
+            v.validate(null, null, new ErrorHandler() {
 
                 @Override
                 public void error(ValidationException exception) throws ValidationException {
@@ -92,7 +92,7 @@ public class BooleanTypeValidatorTest {
             JSONParser parser = new JSONParser();
             Map<String, Object> schema = (Map<String, Object>) parser.parse(schema1);
             Validator v = ObjectValidatorFactory.getTypeValidator(schema);
-            v.validate(false, Validator.AT_ROOT, new ErrorHandler() {
+            v.validate(false, null, new ErrorHandler() {
 
                 @Override
                 public void error(ValidationException exception) throws SchemaException {

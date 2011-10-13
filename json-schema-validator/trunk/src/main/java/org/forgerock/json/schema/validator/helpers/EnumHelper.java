@@ -24,6 +24,7 @@
  */
 package org.forgerock.json.schema.validator.helpers;
 
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
 import org.forgerock.json.schema.validator.exceptions.ValidationException;
@@ -45,13 +46,13 @@ import static org.forgerock.json.schema.validator.Constants.ERROR_MSG_ENUM_VIOLA
  */
 public class EnumHelper implements SimpleValidator<Object> {
 
-    private List<Object> enumValues;
+    private final List<Object> enumValues;
 
     public EnumHelper(List<Object> enumValues) {
         this.enumValues = enumValues;
     }
 
-    public void validate(Object node, String at, ErrorHandler handler) throws SchemaException {
+    public void validate(Object node, JsonPointer at, ErrorHandler handler) throws SchemaException {
         if (!enumValues.contains(node)) {
             handler.error(new ValidationException(ERROR_MSG_ENUM_VIOLATION, at));
         }

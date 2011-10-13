@@ -24,6 +24,7 @@
  */
 package org.forgerock.json.schema.validator.helpers;
 
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
 import org.forgerock.json.schema.validator.exceptions.ValidationException;
@@ -43,7 +44,7 @@ public class MaximumHelper implements SimpleValidator<Number> {
      * This attribute defines the maximum value of the instance property
      * when the validators of the instance value is a number.
      */
-    private Number maximum;
+    private final Number maximum;
 
     /**
      * This attribute indicates if the value of the instance (if the
@@ -58,7 +59,7 @@ public class MaximumHelper implements SimpleValidator<Number> {
         this.exclusiveMaximum = exclusiveMaximum ? 1 : 0;
     }
 
-    public void validate(Number node, String at, ErrorHandler handler) throws SchemaException {
+    public void validate(Number node, JsonPointer at, ErrorHandler handler) throws SchemaException {
 
         if (maximum.getClass().isAssignableFrom(node.getClass())) {
 

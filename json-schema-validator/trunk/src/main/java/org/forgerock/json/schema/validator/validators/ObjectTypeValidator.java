@@ -31,6 +31,8 @@ package org.forgerock.json.schema.validator.validators;
 import java.util.regex.Matcher;
 import java.util.regex.PatternSyntaxException;
 import java.util.regex.Pattern;
+
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.ObjectValidatorFactory;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
@@ -68,8 +70,8 @@ public class ObjectTypeValidator extends Validator {
      * the property definition.  Properties are considered unordered, the
      * order of the instance properties MAY be in any order.
      */
-    private Map<String, PropertyValidatorBag> propertyValidators;
-    private Set<String> propertyNames;
+    private final Map<String, PropertyValidatorBag> propertyValidators;
+    private final Set<String> propertyNames;
     /**
      * This attribute is an object that defines the requirements of a
      * property on an instance object.  If an object instance has a property
@@ -231,7 +233,7 @@ public class ObjectTypeValidator extends Validator {
     /**
      * {@inheritDoc}
      */
-    public void validate(Object node, String at, ErrorHandler handler) throws SchemaException {
+    public void validate(Object node, JsonPointer at, ErrorHandler handler) throws SchemaException {
 
         if (node instanceof Map) {
             Set<String> additionalPropertyNames = new HashSet<String>(((Map<String, Object>) node).keySet());
@@ -347,7 +349,7 @@ public class ObjectTypeValidator extends Validator {
 
     private class PropertyValidatorBag implements SimpleValidator<Object> {
 
-        private Validator propertyValidator;
+        private final Validator propertyValidator;
         private Set<Validator> patternValidators = null;
         private Validator dependencyValidator = null;
         private Set<String> requiredProperties = null;
@@ -380,7 +382,7 @@ public class ObjectTypeValidator extends Validator {
             return propertyValidator.isRequired();
         }
 
-        public void validate(Object node, String at, ErrorHandler handler) throws SchemaException {
+        public void validate(Object node, JsonPointer at, ErrorHandler handler) throws SchemaException {
             propertyValidator.validate(node, at, handler);
             if (null != patternValidators) {
                 for (Validator v : patternValidators) {
@@ -392,7 +394,7 @@ public class ObjectTypeValidator extends Validator {
             }
         }
 
-        public void validate(Object node, Set<String> propertyKeySet, String at, ErrorHandler handler) throws SchemaException {
+        public void validate(Object node, Set<String> propertyKeySet, JsonPointer at, ErrorHandler handler) throws SchemaException {
             if (null != requiredProperties && !propertyKeySet.containsAll(requiredProperties)) {
                 handler.error(new ValidationException("Dependency ERROR: Missiong properties", at));
             }

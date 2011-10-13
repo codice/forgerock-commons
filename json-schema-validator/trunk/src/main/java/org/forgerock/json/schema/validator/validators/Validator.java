@@ -24,6 +24,9 @@
  */
 package org.forgerock.json.schema.validator.validators;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+import org.forgerock.json.fluent.JsonPointer;
+
 import java.util.Map;
 
 import static org.forgerock.json.schema.validator.Constants.REQUIRED;
@@ -38,7 +41,6 @@ import static org.forgerock.json.schema.validator.Constants.REQUIRED;
  */
 public abstract class Validator implements SimpleValidator<Object> {
 
-    public static final String AT_ROOT = "$";
     protected boolean required = false;
 
     public Validator(Map<String, Object> schema) {
@@ -59,19 +61,17 @@ public abstract class Validator implements SimpleValidator<Object> {
      * Array type: $[0]
      * Object type: $.store.book[0].title
      *
-     * @param at       JSONPath of the current node. If it's null then the value is {@link Validator#AT_ROOT}     *
+     * @param at       JSONPath of the current node. If it's null then the value is {@code /}
      * @param property Property name of the child node.
      * @return JSONPath expressions uses the dot–notation
      *         Example: $.store.book[0].title
      */
-    protected final String getPath(String at, String property) {
-        String path = null == at ? AT_ROOT : at;
+    protected final JsonPointer getPath(JsonPointer at, String property) {
+        JsonPointer path = null == at ? new JsonPointer() : at;
         if (null == property) {
             return path;
-        } else if (property.startsWith("[")) {
-            return path + property;
         } else {
-            return path + "." + property;
+            return path.child(property);
         }
     }
 

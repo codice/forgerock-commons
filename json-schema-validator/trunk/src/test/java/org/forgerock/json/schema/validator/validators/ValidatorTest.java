@@ -1,5 +1,6 @@
 package org.forgerock.json.schema.validator.validators;
 
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.validators.Validator;
 import org.forgerock.json.schema.validator.Constants;
 import org.forgerock.json.schema.validator.ErrorHandler;
@@ -40,13 +41,12 @@ public class ValidatorTest {
         Map<String, Object> schema =  new HashMap<String, Object>();
         schema.put(Constants.REQUIRED, Boolean.TRUE);
         Validator validator = new Validator(schema) {
-            public void validate(Object node, String at, ErrorHandler handler) throws SchemaException {
+            public void validate(Object node, JsonPointer at, ErrorHandler handler) throws SchemaException {
             }
         };
         Assert.assertTrue(validator.required,"Required MUST be True");
-        Assert.assertEquals(validator.getPath(null,null),Validator.AT_ROOT);
-        Assert.assertEquals(validator.getPath("$.path",null),"$.path");
-        Assert.assertEquals(validator.getPath(null,"path"),"$.path");
-        Assert.assertEquals(validator.getPath(null,"[0]"),"$[0]");
+        Assert.assertEquals(validator.getPath(null,null),new JsonPointer());
+        Assert.assertEquals(validator.getPath(new JsonPointer("/path"),null),new JsonPointer("path"));
+        Assert.assertEquals(validator.getPath(null,"path"),new JsonPointer("path"));
     }
 }

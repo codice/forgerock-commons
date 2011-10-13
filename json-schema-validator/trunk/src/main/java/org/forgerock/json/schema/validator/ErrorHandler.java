@@ -34,7 +34,7 @@ import org.forgerock.json.schema.validator.exceptions.ValidationException;
  * handling, it must implement this class.
  * <p/>
  * Use this handler when call the
- * {@link org.forgerock.commons.json.schema.validator.validators.SimpleValidator#validate(Object, String, ErrorHandler)}}
+ * {@link org.forgerock.json.schema.validator.validators.SimpleValidator#validate(Object, org.forgerock.json.fluent.JsonPointer, ErrorHandler)}}
  * method.  The helpers will then report all errors.</p>
  *
  * @author $author$

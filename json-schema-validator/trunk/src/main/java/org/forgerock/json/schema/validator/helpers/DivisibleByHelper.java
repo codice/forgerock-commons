@@ -24,6 +24,7 @@
  */
 package org.forgerock.json.schema.validator.helpers;
 
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
 import org.forgerock.json.schema.validator.validators.SimpleValidator;
@@ -37,7 +38,7 @@ import org.forgerock.json.schema.validator.validators.SimpleValidator;
  * @see <a href="http://tools.ietf.org/html/draft-zyp-json-schema-03#section-5.24">divisibleBy</a>
  */
 public class DivisibleByHelper implements SimpleValidator<Number> {
-    public void validate(Number node, String at, ErrorHandler handler) throws SchemaException {
+    public void validate(Number node, JsonPointer at, ErrorHandler handler) throws SchemaException {
 
     }
 }

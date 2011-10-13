@@ -36,22 +36,22 @@ public class MaximumHelperTest {
 
         MaximumHelper instance = new MaximumHelper(new Float("102.03"), true);
         TestErrorHandler handler = new TestErrorHandler();
-        instance.validate(new Float("100.01"), "$", handler);
+        instance.validate(new Float("100.01"), null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
-        instance.validate(new Double("100.02"), "$", handler);
+        instance.validate(new Double("100.02"), null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
-        instance.validate(100, "$", handler);
+        instance.validate(100, null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
         //Exceptions
-        instance.validate(new Float("103.01"), "$", handler);
+        instance.validate(new Float("103.01"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 1);
-        instance.validate(new Double("103.02"), "$", handler);
+        instance.validate(new Double("103.02"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 2);
-        instance.validate(104, "$", handler);
+        instance.validate(104, null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 3);
-        instance.validate(new Float("102.03"), "$", handler);
+        instance.validate(new Float("102.03"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 4);
-        instance.validate(new Double("102.03"), "$", handler);
+        instance.validate(new Double("102.03"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 5);
     }
 
@@ -60,22 +60,22 @@ public class MaximumHelperTest {
 
         MaximumHelper instance = new MaximumHelper(new Double("102.03"), false);
         TestErrorHandler handler = new TestErrorHandler();
-        instance.validate(new Float("100.01"), "$", handler);
+        instance.validate(new Float("100.01"), null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
-        instance.validate(new Double("100.02"), "$", handler);
+        instance.validate(new Double("100.02"), null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
-        instance.validate(100, "$", handler);
+        instance.validate(100, null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
         //Exceptions
-        instance.validate(new Float("103.01"), "$", handler);
+        instance.validate(new Float("103.01"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 1);
-        instance.validate(new Double("103.02"), "$", handler);
+        instance.validate(new Double("103.02"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 2);
-        instance.validate(104, "$", handler);
+        instance.validate(104, null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 3);
-        instance.validate(new Float("102.03"), "$", handler);
+        instance.validate(new Float("102.03"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 3);
-        instance.validate(new Double("102.03"), "$", handler);
+        instance.validate(new Double("102.03"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 3);
     }
 
@@ -84,22 +84,22 @@ public class MaximumHelperTest {
 
         MaximumHelper instance = new MaximumHelper(102, false);
         TestErrorHandler handler = new TestErrorHandler();
-        instance.validate(new Float("100.01"), "$", handler);
+        instance.validate(new Float("100.01"), null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
-        instance.validate(new Double("100.02"), "$", handler);
+        instance.validate(new Double("100.02"), null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
-        instance.validate(100, "$", handler);
+        instance.validate(100, null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
         //Exceptions
-        instance.validate(new Float("103.01"), "$", handler);
+        instance.validate(new Float("103.01"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 1);
-        instance.validate(new Double("103.02"), "$", handler);
+        instance.validate(new Double("103.02"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 2);
-        instance.validate(104, "$", handler);
+        instance.validate(104, null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 3);
-        instance.validate(new Float("102.00"), "$", handler);
+        instance.validate(new Float("102.00"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 3);
-        instance.validate(new Double("102.00"), "$", handler);
+        instance.validate(new Double("102.00"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 3);
     }
 

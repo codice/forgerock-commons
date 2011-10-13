@@ -29,6 +29,8 @@ package org.forgerock.json.schema.validator.helpers;
 //import org.apache.oro.text.regex.Pattern;
 //import org.apache.oro.text.regex.Perl5Matcher;
 import java.util.regex.Pattern;
+
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
 import org.forgerock.json.schema.validator.exceptions.ValidationException;
@@ -55,7 +57,7 @@ public class RegexpHelper implements SimpleValidator<String> {
 //        return new Perl5Matcher();
 //    }
 
-    public void validate(String node, String at, ErrorHandler handler) throws SchemaException {
+    public void validate(String node, JsonPointer at, ErrorHandler handler) throws SchemaException {
 //        if (null != node && !getMatcher().matches(node, pattern)) {
 //            handler.error(new ValidationException(at + ": does not match the regex pattern " + pattern.getPattern(), at));
 //        }

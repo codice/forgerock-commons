@@ -24,6 +24,7 @@
  */
 package org.forgerock.json.schema.validator;
 
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
 import org.forgerock.json.schema.validator.exceptions.ValidationException;
 import org.forgerock.json.schema.validator.validators.Validator;
@@ -57,7 +58,7 @@ public class FailFastErrorHandler extends ErrorHandler {
         if (ex instanceof ValidationException) {
             throw (ValidationException) ex;
         } else if (null != ex) {
-            throw new ValidationException(ex, Validator.AT_ROOT);
+            throw new ValidationException(ex, new JsonPointer());
         }
     }
 }

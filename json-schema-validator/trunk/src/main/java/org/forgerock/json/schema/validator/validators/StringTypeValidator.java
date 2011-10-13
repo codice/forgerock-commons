@@ -31,6 +31,8 @@ package org.forgerock.json.schema.validator.validators;
 import java.util.regex.Matcher;
 import java.util.regex.PatternSyntaxException;
 import java.util.regex.Pattern;
+
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
 import org.forgerock.json.schema.validator.exceptions.ValidationException;
@@ -154,7 +156,7 @@ public class StringTypeValidator extends Validator {
     /**
      * {@inheritDoc}
      */
-    public void validate(Object node, String at, ErrorHandler handler) throws SchemaException {
+    public void validate(Object node, JsonPointer at, ErrorHandler handler) throws SchemaException {
         if (node instanceof String) {
             String nodeValue = (String) node;
             if (minLength > -1 && nodeValue.length() < minLength) {

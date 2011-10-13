@@ -24,6 +24,7 @@
  */
 package org.forgerock.json.schema.validator.helpers;
 
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
 import org.forgerock.json.schema.validator.exceptions.ValidationException;
@@ -44,7 +45,7 @@ public class MinimumHelper implements SimpleValidator<Number> {
      * This attribute defines the minimum value of the instance property
      * when the validators of the instance value is a number.
      */
-    private Number minimum;
+    private final Number minimum;
     /**
      * This attribute indicates if the value of the instance (if the
      * instance is a number) can not equal the number defined by the
@@ -58,7 +59,7 @@ public class MinimumHelper implements SimpleValidator<Number> {
         this.exclusiveMinimum = exclusiveMinimum ? -1 : 0;
     }
 
-    public void validate(Number node, String at, ErrorHandler handler) throws SchemaException {
+    public void validate(Number node, JsonPointer at, ErrorHandler handler) throws SchemaException {
 
         if (minimum.getClass().isAssignableFrom(node.getClass())) {
             try {

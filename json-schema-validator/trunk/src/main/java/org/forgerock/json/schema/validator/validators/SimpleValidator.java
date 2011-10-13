@@ -24,6 +24,7 @@
  */
 package org.forgerock.json.schema.validator.validators;
 
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
 
@@ -38,14 +39,14 @@ public interface SimpleValidator<T> {
      * Validates the <code>node</code> value against the embedded schema object.
      * <p/>
      * The selected error handler defines the behaviour of the validator. The
-     * {@link org.forgerock.commons.json.schema.validator.FailFastErrorHandler} throws exception at firs violation.
+     * {@link org.forgerock.json.schema.validator.FailFastErrorHandler} throws exception at firs violation.
      * Other customised {@link ErrorHandler} can collect all exceptions and after the validation the
      * examination of the <code>handler</code> contains the final result.
      *
      * @param node      value to validate
      * @param at        JSONPath of the node. null means it's the root node
-     * @param handler   customised error handler like {@link org.forgerock.commons.json.schema.validator.FailFastErrorHandler}
+     * @param handler   customised error handler like {@link org.forgerock.json.schema.validator.FailFastErrorHandler}
      * @throws SchemaException when the <code>node</code> violates with the schema
      */
-    public void validate(T node, String at, ErrorHandler handler) throws SchemaException;
+    public void validate(T node, JsonPointer at, ErrorHandler handler) throws SchemaException;
 }

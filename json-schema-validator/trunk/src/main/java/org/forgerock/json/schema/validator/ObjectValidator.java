@@ -32,7 +32,7 @@ import java.util.Map;
  * The ObjectValidator is a sample implementation of how to use the validator.
  * <p/>
  * The validators was designed to keep in the memory or other cache and validate multiple instances.
- * This implementation creates a new {@link org.forgerock.commons.json.schema.validator.validators.Validator} each time
+ * This implementation creates a new {@link Validator} each time
  * and uses the {@link FailFastErrorHandler} to validate the instance object.
  *
  * @author $author$

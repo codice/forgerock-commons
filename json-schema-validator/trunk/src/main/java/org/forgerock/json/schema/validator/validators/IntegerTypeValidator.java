@@ -24,6 +24,7 @@
  */
 package org.forgerock.json.schema.validator.validators;
 
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
 import org.forgerock.json.schema.validator.exceptions.ValidationException;
@@ -135,7 +136,7 @@ public class IntegerTypeValidator extends Validator {
     /**
      * {@inheritDoc}
      */
-    public void validate(Object node, String at, ErrorHandler handler) throws SchemaException {
+    public void validate(Object node, JsonPointer at, ErrorHandler handler) throws SchemaException {
         if (node instanceof Number) {
             int nodeValue = truncate((Long) node, at, handler);
 
@@ -160,7 +161,7 @@ public class IntegerTypeValidator extends Validator {
     }
 
 
-    private int truncate(Long nodeValue, String at, ErrorHandler handler) throws SchemaException {
+    private int truncate(Long nodeValue, JsonPointer at, ErrorHandler handler) throws SchemaException {
         if ((nodeValue & LONG_HIGH_BITS) == 0 || (nodeValue & LONG_HIGH_BITS) == LONG_HIGH_BITS) {
             return nodeValue.intValue();
         } else {

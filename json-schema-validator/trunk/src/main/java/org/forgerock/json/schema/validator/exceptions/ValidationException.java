@@ -24,13 +24,16 @@
  */
 package org.forgerock.json.schema.validator.exceptions;
 
+import org.forgerock.json.fluent.JsonNode;
+import org.forgerock.json.fluent.JsonPointer;
+
 /**
  * Encapsulate a JSON validator error.
  * <p/>
  * <p>This exception may include information for locating the error
  * in the original JSON document object.  Note that although the application
  * will receive a ValidationException as the argument to the handlers
- * in the {@link org.forgerock.commons.json.schema.validator.ErrorHandler ErrorHandler} interface,
+ * in the {@link org.forgerock.json.schema.validator.ErrorHandler ErrorHandler} interface,
  * the application is not actually required to throw the exception;
  * instead, it can simply read the information in it and take a
  * different action.</p>
@@ -45,42 +48,30 @@ package org.forgerock.json.schema.validator.exceptions;
 public class ValidationException extends SchemaException {
 
     public ValidationException(String string) {
-        super(string);
-        this.path = null;
+        super(null, string);
     }
 
     public ValidationException(String string, Throwable throwable) {
-        super(string, throwable);
-        this.path = null;
+        super(null, string, throwable);
     }
 
-    public ValidationException(String string, Throwable throwable, String path) {
-        super(string, throwable);
-        this.path = path;
+    public ValidationException(String string, Throwable throwable, JsonPointer path) {
+        super(new JsonNode(null, path), string, throwable);
     }
 
-    public ValidationException(String message, String path) {
-        super(message);
-        this.path = path;
+    public ValidationException(String message, JsonPointer path) {
+        super(new JsonNode(null, path), message);
     }
 
-    public ValidationException(Exception e, String path) {
-        super(e);
-        this.path = path;
+    public ValidationException(String message, JsonPointer path, Object value) {
+        super(new JsonNode(value, path), message);
     }
 
-    public ValidationException(String message, Exception e, String path) {
-        super(message, e);
-        this.path = path;
+    public ValidationException(Exception e, JsonPointer path) {
+        super(new JsonNode(null, path), e);
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // Internal state.
-    //////////////////////////////////////////////////////////////////////
-
-
-    /**
-     * The dot–notated JSONPath to the violent node
-     */
-    private String path;
+    public ValidationException(String message, Exception e, JsonPointer path) {
+        super(new JsonNode(null, path), message, e);
+    }
 }

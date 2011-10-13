@@ -37,22 +37,22 @@ public class MinimumHelperTest {
         MinimumHelper instance = new MinimumHelper(new Float("99.03"), true);
         ValidationException exception = null;
         TestErrorHandler handler = new TestErrorHandler();
-        instance.validate(new Float("100.01"), "$", handler);
+        instance.validate(new Float("100.01"), null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
-        instance.validate(new Double("100.02"), "$", handler);
+        instance.validate(new Double("100.02"), null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
-        instance.validate(100, "$", handler);
+        instance.validate(100, null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
         //Exceptions
-        instance.validate(new Float("95.01"), "$", handler);
+        instance.validate(new Float("95.01"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 1);
-        instance.validate(new Double("95.02"), "$", handler);
+        instance.validate(new Double("95.02"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 2);
-        instance.validate(95, "$", handler);
+        instance.validate(95, null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 3);
-        instance.validate(new Float("99.03"), "$", handler);
+        instance.validate(new Float("99.03"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 4);
-        instance.validate(new Double("99.03"), "$", handler);
+        instance.validate(new Double("99.03"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 5);
     }
 
@@ -62,23 +62,23 @@ public class MinimumHelperTest {
         MinimumHelper instance = new MinimumHelper(new Double("99.03"), false);
         ValidationException exception = null;
         TestErrorHandler handler = new TestErrorHandler();
-        instance.validate(new Float("100.01"), "$", handler);
+        instance.validate(new Float("100.01"), null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
-        instance.validate(new Double("100.02"), "$", handler);
+        instance.validate(new Double("100.02"), null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
-        instance.validate(100, "$", handler);
+        instance.validate(100, null, handler);
         Assert.assertTrue(handler.getExceptions().isEmpty());
         //Exceptions
-        instance.validate(new Float("95.01"), "$", handler);
+        instance.validate(new Float("95.01"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 1);
-        instance.validate(new Double("95.02"), "$", handler);
+        instance.validate(new Double("95.02"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 2);
-        instance.validate(95, "$", handler);
+        instance.validate(95, null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 3);
 //        1 == new Double("99.03").compareTo((new Float("99.03")).doubleValue());
-//        instance.validate(new Float("99.03"), "$", handler);
+//        instance.validate(new Float("99.03"), null, handler);
 //        Assert.assertTrue(handler.getExceptions().size() == 3);
-        instance.validate(new Double("99.03"), "$", handler);
+        instance.validate(new Double("99.03"), null, handler);
         Assert.assertTrue(handler.getExceptions().size() == 3);
     }
 }

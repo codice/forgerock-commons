@@ -24,6 +24,7 @@
  */
 package org.forgerock.json.schema.validator.helpers;
 
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
 import org.forgerock.json.schema.validator.validators.SimpleValidator;
@@ -51,7 +52,7 @@ public class FormatHelper implements SimpleValidator<Object> {
         }
     }
 
-    public void validate(Object node, String at, ErrorHandler handler) throws SchemaException {
+    public void validate(Object node, JsonPointer at, ErrorHandler handler) throws SchemaException {
         //TODO: implements
     }
 }
