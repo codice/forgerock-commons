@@ -31,58 +31,46 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <groupId>org.forgerock.commons</groupId>
-    <artifactId>json-schema</artifactId>
+    <artifactId>json-schema-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>bundle</packaging>
+    <packaging>pom</packaging>
     <name>JSON Schema Draft-03 Validator</name>
     <description>Simple tool to validate objects with draft-zyp-json-schema-03.</description>
+    <inceptionYear>2011</inceptionYear>
+    <url>http://commons.forgerock.org/json-schema</url>
+    <licenses>
+        <license>
+            <name>CDDL-1.0</name>
+            <url>http://www.opensource.org/licenses/cddl1.php</url>
+            <comments>Common Development and Distribution License (CDDL) 1.0.
+            This license applies to OpenIDM source code as indicated in the
+            source code.
+            </comments>
+            <distribution>repo</distribution>
+        </license>
+        <license>
+            <name>CC BY-NC-ND 3.0</name>
+            <url>http://creativecommons.org/licenses/by-nc-nd/3.0/</url>
+            <comments>Creative Commons Attribution-NonCommercial-NoDerivs 3.0
+            Unported. This license applies to the site content, and to the
+            documentation as indicated in the documentation source code.
+            </comments>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
     <scm>
         <connection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/trunk</connection>
         <developerConnection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/trunk</developerConnection>
         <url>http://sources.forgerock.org/browse/commons/json-schema-validator/trunk</url>
     </scm>
-    <dependencies>
-        <dependency>
-            <groupId>org.forgerock.commons</groupId>
-            <artifactId>json-fluent</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>6.2.1</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <Export-Package>org.forgerock.json.schema.validator.*</Export-Package>
-                        <Main-Class>org.forgerock.json.schema.Main</Main-Class>
-                    </instructions>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <parallel>true</parallel>
-                    <threadCount>10</threadCount>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <distributionManagement>
+        <site>
+            <id>forgerock.org</id>
+            <name>ForgeRock Community Server</name>
+            <url>${siteDistributionURL}</url>
+        </site>
+    </distributionManagement>
+
     <!-- may-be-temporary, based-on our decisions around the content and release of forgerock-parent -->
     <repositories>
         <repository>
@@ -103,4 +91,32 @@
         </repository>
     </repositories>
     <!-- /may-be-temporary -->
+
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>http://builds.forgerock.org/job/Commons - JSON Schema/</url>
+        <notifiers>
+            <notifier>
+                <type>mail</type>
+                <sendOnError>true</sendOnError>
+                <sendOnFailure>true</sendOnFailure>
+                <sendOnSuccess>false</sendOnSuccess>
+                <sendOnWarning>false</sendOnWarning>
+                <!--address>commons-dev@forgerock.org</address-->
+            </notifier>
+        </notifiers>
+    </ciManagement>
+
+    <properties>
+
+        <!-- Site Properties -->
+        <siteDistributionURL>scp://forgerock.org/var/www/vhosts/commons.forgerock.org/httpdocs/json-schema</siteDistributionURL>
+
+    </properties>
+
+    <modules>
+        <module>json-schema</module>
+        <module>json-schema-cli</module>
+    </modules>
+
 </project>

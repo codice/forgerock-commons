@@ -15,12 +15,16 @@
  */
 package org.forgerock.json.schema;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.forgerock.json.fluent.JsonNode;
 import org.forgerock.json.schema.validator.Constants;
+import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.FailFastErrorHandler;
 import org.forgerock.json.schema.validator.ObjectValidatorFactory;
 import org.forgerock.json.schema.validator.exceptions.SchemaException;
+import org.forgerock.json.schema.validator.exceptions.ValidationException;
 import org.forgerock.json.schema.validator.validators.Validator;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
@@ -47,23 +51,20 @@ public class Main {
 
     private final Map<URI, Validator> schemaCache = new HashMap<URI, Validator>();
 
-    /*@Option(name = "-ra", usage = "recursively run something")
-    private boolean recursive;*/
+    @Option(name = "-v", aliases = {"--verbose"}, usage = "display all validation error not just the first")
+    private boolean verbose;
 
-    @Option(name = "-f", aliases = {"-file", "-dir"}, required = true, usage = "file or folder contains the schema(s)")
-    private File schemaFile = new File(".");
+    @Option(name = "-s", aliases = {"--schemas"}, required = true, usage = "file or folder contains the schema(s)", metaVar = "./schema")
+    private File schemaFile = new File("./schema");
 
-    @Option(name = "-i", aliases = {"-input"}, required = false, usage = "input from this file", metaVar = "INPUT")
-    private File inputFile;
-
-    @Option(name = "-s", aliases = {"-schema"}, usage = "name of the schema. Optional if the object has \"$schema\" property")
-    private String schemaURI;
-
-    @Option(name = "-r", aliases = {"-root"}, usage = "default schema base: " + ROOT_SCHEMA_ID)
+    @Option(name = "-b", aliases = {"--base"}, usage = "base value to resolve relative schema IDs. Default: " + ROOT_SCHEMA_ID, metaVar = ROOT_SCHEMA_ID)
     private String schemeBase = ROOT_SCHEMA_ID;
 
-    @Option(name = "-v", aliases = {"-verbose"}, usage = "display all validation error not just the first")
-    private boolean verbose;
+    @Option(name = "-i", aliases = {"--id"}, usage = "id of the schema. Optional if the object has \"$schema\" property")
+    private String schemaURI;
+
+    @Option(name = "-f", aliases = {"--file"}, usage = "input from this file", metaVar = "sample.json")
+    private File inputFile;
 
     // receives other command line parameters than options
     @Argument
@@ -112,7 +113,7 @@ public class Main {
         // set the base for all relative schema
         URI base = new URI(schemeBase);
         if (!base.isAbsolute()) {
-            throw new IllegalArgumentException("-r (-root) must be an absolute URI");
+            throw new IllegalArgumentException("-b (-base) must be an absolute URI");
         }
 
         // load all schema
@@ -122,21 +123,23 @@ public class Main {
             for (; ; ) {
                 try {
                     validate(loadFromConsole());
-                } catch (SchemaException e) {
+                } catch (Exception e) {
                     printOutException(e);
-                } catch (URISyntaxException e) {
-                    System.out.append("Validation failed with exception: ").println(e.getMessage());
                 }
             }
         } else {
-            validate(loadFromFile());
+            try {
+                validate(loadFromFile());
+            } catch (Exception e) {
+                printOutException(e);
+            }
         }
     }
 
     //Initialization
 
     private void init(URI base) throws IOException {
-        System.out.append("Loading schemas from: ").append(schemaFile.getAbsolutePath()).append(" with base ").append(base.getPath()).println(" URI");
+        System.out.append("Loading schemas from: ").append(schemaFile.getAbsolutePath()).append(" with base ").append(base.toString()).println(" URI");
         if (schemaFile.isDirectory()) {
             validateDirectory(schemaFile);
             FileFilter filter = new FileFilter() {
@@ -167,7 +170,8 @@ public class Main {
             id = base.resolve(id);
         }
         schemaCache.put(id, v);
-        System.out.append("Schema from ").append(schemaFile.getAbsolutePath()).append(" cached with id: ").println(id.toString());
+        System.out.append("Schema ").append(id.toString()).println(" loaded from file:");
+        System.out.append("     location: ").println(schemaFile.getAbsolutePath());
     }
 
     /**
@@ -197,6 +201,7 @@ public class Main {
 
     /**
      * Directory is valid if it exists, does not represent a file, and can be read.
+     *
      * @param aDirectory
      * @throws java.io.FileNotFoundException
      */
@@ -220,39 +225,69 @@ public class Main {
     private void validate(JsonNode node) throws SchemaException, URISyntaxException {
         URI schemaId = node.get(Constants.SCHEMA).asURI();
         if (null == schemaId && isEmptyOrBlank(schemaURI)) {
-            throw new IllegalArgumentException("-s (-schema) must be an URI");
+            System.out.println("-i (--id) must be an URI");
+            return;
         } else if (null == schemaId) {
             schemaId = new URI(schemaURI);
         }
 
         Validator validator = schemaCache.get(schemaId);
         if (null != validator) {
-            validator.validate(node.getValue(), null, new FailFastErrorHandler());
-            System.out.println("OK - Object is valid!");
+            if (verbose) {
+                final boolean[] valid = new boolean[1];
+                validator.validate(node.getValue(), null, new ErrorHandler() {
+                    @Override
+                    public void error(ValidationException exception) throws SchemaException {
+                        valid[0] = false;
+                        printOutException(exception);
+                    }
+
+                    @Override
+                    public void assembleException() throws ValidationException {
+                    }
+                });
+                if (valid.length == 0) {
+                    System.out.println("OK - Object is valid!");
+                }
+            } else {
+                validator.validate(node.getValue(), null, new FailFastErrorHandler());
+                System.out.println("OK - Object is valid!");
+            }
         } else {
             System.out.append("Schema ").append(schemaId.toString()).println(" not found!");
         }
     }
 
-    private JsonNode loadFromConsole() {
-        System.out.println("Type 'exit' to exit");
-        System.out.println("Type '.' to finish input");
+    private JsonNode loadFromConsole() throws IOException {
+        System.out.println();
+        System.out.println("> Enter 'exit' and press enter to exit");
+        System.out.println("> Press ctrl-D to finish input");
+        System.out.println("Start data input:");
         String input = null;
         StringBuilder stringBuilder = new StringBuilder();
-        do {
-            input = System.console().readLine();
-            if ("exit".equalsIgnoreCase(input)) {
-                System.exit(0);
-            } else if (".".equals(input)) {
+        Console c = System.console();
+        if (c == null) {
+            System.err.println("No console.");
+            System.exit(1);
+        }
+
+        Scanner scanner = new Scanner(c.reader());
+
+        while (scanner.hasNext()) {
+            input = scanner.next();
+            if (null == input) {
+                //control-D pressed
                 break;
+            } else if ("exit".equalsIgnoreCase(input)) {
+                System.exit(0);
             } else {
                 stringBuilder.append(input);
             }
-        } while (true);
+        }
         return new JsonNode(mapper.readValue(stringBuilder.toString(), Object.class));
     }
 
-    private JsonNode loadFromFile() {
+    private JsonNode loadFromFile() throws IOException {
         return new JsonNode(mapper.readValue(inputFile, Object.class));
     }
 
@@ -261,11 +296,17 @@ public class Main {
         return str == null || str.trim().isEmpty();
     }
 
-    private void printOutException(SchemaException ex) {
-        System.out.append("> > > > > ").append(ex.getClass().getSimpleName()).println(" < < < < <");
-        if (null != ex.getNode())
-            System.out.append("Path: ").println(ex.getNode().getPointer().toString());
+    private void printOutException(Exception ex) {
+        String top = "> > > > > >                                                         < < < < < <";
+        String exName = ex.getClass().getSimpleName();
+        StringBuilder sb = new StringBuilder(top.substring(0, 40 - (exName.length() / 2))).append(exName);
+        sb.append(top.substring(sb.length()));
+
+        System.out.println(sb);
+        if ((ex instanceof SchemaException) && (null != ((SchemaException) ex).getNode()))
+            System.out.append("Path: ").println(((SchemaException) ex).getNode().getPointer().toString());
         System.out.append("Message: ").println(ex.getMessage());
-        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+
     }
 }
