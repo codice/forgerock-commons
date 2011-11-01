@@ -31,8 +31,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.map.ObjectMapper;
 
 // JSON Fluent library
-import org.forgerock.json.fluent.JsonNode;
-import org.forgerock.json.fluent.JsonNodeException;
+import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.fluent.JsonValueException;
 
 // JSON Cryptographic library
 import org.forgerock.json.crypto.JsonCryptoException;
@@ -76,10 +76,10 @@ public class SimpleDecryptor implements JsonDecryptor {
     }
 
     @Override
-    public JsonNode decrypt(JsonNode node) throws JsonCryptoException {
+    public JsonValue decrypt(JsonValue value) throws JsonCryptoException {
         try {
-            JsonNode key = node.get("key").required();
-            String cipher = node.get("cipher").required().asString();
+            JsonValue key = value.get("key").required();
+            String cipher = value.get("cipher").required().asString();
             Key symmetricKey;
             if (key.isString()) {
                 symmetricKey = select(key.asString());
@@ -91,16 +91,16 @@ public class SimpleDecryptor implements JsonDecryptor {
                 symmetricKey = new SecretKeySpec(asymmetric.doFinal(ciphertext), cipher.split("/", 2)[0]);
             }
             Cipher symmetric = Cipher.getInstance(cipher);
-            String iv = node.get("iv").asString();
+            String iv = value.get("iv").asString();
             IvParameterSpec ivps = (iv == null ? null : new IvParameterSpec(Base64.decodeBase64(iv)));
             symmetric.init(Cipher.DECRYPT_MODE, symmetricKey, ivps);
-            byte[] plaintext = symmetric.doFinal(Base64.decodeBase64(node.get("data").required().asString()));
-            return new JsonNode(mapper.readValue(plaintext, Object.class));
+            byte[] plaintext = symmetric.doFinal(Base64.decodeBase64(value.get("data").required().asString()));
+            return new JsonValue(mapper.readValue(plaintext, Object.class));
         } catch (GeneralSecurityException gse) { // Java Cryptography Extension
             throw new JsonCryptoException(gse);
         } catch (IOException ioe) { // Jackson
             throw new JsonCryptoException(ioe);
-        } catch (JsonNodeException jne) { // JSON Fluent
+        } catch (JsonValueException jne) { // JSON Fluent
             throw new JsonCryptoException(jne);
         }
     }

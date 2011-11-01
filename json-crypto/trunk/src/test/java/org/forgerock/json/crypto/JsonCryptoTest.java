@@ -39,7 +39,7 @@ import org.testng.annotations.Test;
 import org.testng.Assert;
 
 // JSON Fluent library
-import org.forgerock.json.fluent.JsonNode;
+import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.fluent.JsonTransformer;
 
 // JSON Crypto library
@@ -101,31 +101,31 @@ public class JsonCryptoTest {
 
     @Test
     public void testSymmetricEncryption() throws JsonCryptoException {
-        JsonNode node = new JsonNode(PLAINTEXT);
-        node = new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey").encrypt(node);
-        assertThat(node.getValue()).isNotEqualTo(PLAINTEXT);
-        node = new SimpleDecryptor(selector).decrypt(node);
-        assertThat(node.getValue()).isEqualTo(PLAINTEXT);
+        JsonValue value = new JsonValue(PLAINTEXT);
+        value = new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey").encrypt(value);
+        assertThat(value.getValue()).isNotEqualTo(PLAINTEXT);
+        value = new SimpleDecryptor(selector).decrypt(value);
+        assertThat(value.getValue()).isEqualTo(PLAINTEXT);
     }
 
     @Test
     public void testAsymmetricEncryption() throws JsonCryptoException {
-        JsonNode node = new JsonNode(PLAINTEXT);
-        node = new SimpleEncryptor(ASYMMETRIC_CIPHER, publicKey, "privateKey").encrypt(node);
-        assertThat(node.getValue()).isNotEqualTo(PLAINTEXT);
-        node = new SimpleDecryptor(selector).decrypt(node);
-        assertThat(node.getValue()).isEqualTo(PLAINTEXT);
+        JsonValue value = new JsonValue(PLAINTEXT);
+        value = new SimpleEncryptor(ASYMMETRIC_CIPHER, publicKey, "privateKey").encrypt(value);
+        assertThat(value.getValue()).isNotEqualTo(PLAINTEXT);
+        value = new SimpleDecryptor(selector).decrypt(value);
+        assertThat(value.getValue()).isEqualTo(PLAINTEXT);
     }
 
     @Test
     public void testJsonCryptoTransformer() throws JsonCryptoException {
-        JsonNode node = new JsonNode(PLAINTEXT);
+        JsonValue value = new JsonValue(PLAINTEXT);
         JsonEncryptor encryptor = new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey");
-        JsonNode crypto = new JsonCrypto(encryptor.getType(), encryptor.encrypt(node)).toJsonNode();
+        JsonValue crypto = new JsonCrypto(encryptor.getType(), encryptor.encrypt(value)).toJsonValue();
         ArrayList<JsonTransformer> transformers = new ArrayList<JsonTransformer>();
         transformers.add(new JsonCryptoTransformer(new SimpleDecryptor(selector)));
-        node = new JsonNode(crypto.getValue(), null, transformers);
-        assertThat(node.getValue()).isEqualTo(PLAINTEXT);
+        value = new JsonValue(crypto.getValue(), null, transformers);
+        assertThat(value.getValue()).isEqualTo(PLAINTEXT);
     }
 
     @Test
@@ -134,54 +134,49 @@ public class JsonCryptoTest {
         ArrayList<JsonTransformer> transformers = new ArrayList<JsonTransformer>();
         transformers.add(new JsonCryptoTransformer(new SimpleDecryptor(selector)));
 
-        //Encrypt a simple node
-        JsonNode node = new JsonNode(PASSWORD);
-        encryptionTransformer.transform(node);
-        assertThat(node.getValue()).isNotEqualTo(PASSWORD);
+        // encrypt a simple value
+        JsonValue value = new JsonValue(PASSWORD);
+        encryptionTransformer.transform(value);
+        assertThat(value.getValue()).isNotEqualTo(PASSWORD);
 
         Map<String, Object> inner = new HashMap<String, Object>();
-        inner.put("password",node.getValue());
-        node = new JsonNode(new HashMap<String, Object>());
-        node.put("user", inner);
-        node.put("description", PLAINTEXT);
-        
+        inner.put("password", value.getValue());
+        value = new JsonValue(new HashMap<String, Object>());
+        value.put("user", inner);
+        value.put("description", PLAINTEXT);
 
-        //Decrypt the DeepObject        
-        node.getTransformers().addAll(transformers);
-        node = node.copy();         
-        assertThat(node.get(new JsonPointer("/user/password")).getValue()).isEqualTo(PASSWORD);
+        // decrypt the deep object        
+        value.getTransformers().addAll(transformers);
+        value = value.copy();         
+        assertThat(value.get(new JsonPointer("/user/password")).getValue()).isEqualTo(PASSWORD);
 
-        //Encrypt a complex object
-        node = new JsonNode(node.getValue());
-        encryptionTransformer.transform(node);
-        Assert.assertTrue(JsonCrypto.isJsonCrypto(node));
+        // encrypt a complex object
+        value = new JsonValue(value.getValue());
+        encryptionTransformer.transform(value);
+        Assert.assertTrue(JsonCrypto.isJsonCrypto(value));
 
-        //Decrypt the DeepObject
-        //TODO Expected way of decryption
-        /*
-        node.getTransformers().addAll(transformers);
-        node = node.copy();
-         */
-        node = new JsonNode(node.getValue(), null, transformers);
-        assertThat(node.get(new JsonPointer("/user/password")).getValue()).isEqualTo(PASSWORD);
-        assertThat(node.get("description").getValue()).isEqualTo(PLAINTEXT);
+        // decrypt the deep object
+        value.addTransformers(transformers);
+        assertThat(value.get(new JsonPointer("/user/password")).getValue()).isEqualTo(PASSWORD);
+        assertThat(value.get("description").getValue()).isEqualTo(PLAINTEXT);
     }
 
     // ----- exceptions ----------
 
     @Test(expectedExceptions=JsonCryptoException.class)
     public void testDroppedIV() throws JsonCryptoException {
-        JsonNode node = new JsonNode(PLAINTEXT);
-        node = new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey").encrypt(node);
-        node.remove("iv");
-        new SimpleDecryptor(selector).decrypt(node);
+        JsonValue value = new JsonValue(PLAINTEXT);
+        value = new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey").encrypt(value);
+        value.remove("iv");
+        new SimpleDecryptor(selector).decrypt(value);
     }
 
     @Test(expectedExceptions=JsonCryptoException.class)
     public void testUnknownKey() throws JsonCryptoException {
-        JsonNode node = new JsonNode(PLAINTEXT);
-        node = new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey").encrypt(node);
-        node.put("key", "somethingCompletelyDifferent");
-        new SimpleDecryptor(selector).decrypt(node);
+        JsonValue value = new JsonValue(PLAINTEXT);
+        value = new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey").encrypt(value);
+        value.put("key", "somethingCompletelyDifferent");
+        new SimpleDecryptor(selector).decrypt(value);
+        new SimpleDecryptor(selector).decrypt(value);
     }
 }

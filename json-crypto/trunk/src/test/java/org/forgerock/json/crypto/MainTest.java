@@ -17,7 +17,7 @@ package org.forgerock.json.crypto;
 
 import java.net.URLDecoder;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.forgerock.json.fluent.JsonNode;
+import org.forgerock.json.fluent.JsonValue;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -59,8 +59,8 @@ public class MainTest {
         Main.main(args);
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode expected = new JsonNode(mapper.readValue(MainTest.class.getResourceAsStream("/clean.json"), Map.class));
-        JsonNode actual = new JsonNode(mapper.readValue(MainTest.class.getResourceAsStream("/decrypted.json"), Map.class));
+        JsonValue expected = new JsonValue(mapper.readValue(MainTest.class.getResourceAsStream("/clean.json"), Map.class));
+        JsonValue actual = new JsonValue(mapper.readValue(MainTest.class.getResourceAsStream("/decrypted.json"), Map.class));
         Assert.assertEquals(actual.getValue(), expected.getValue());
     }
 }

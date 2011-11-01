@@ -20,8 +20,8 @@ package org.forgerock.json.crypto;
 import java.util.HashMap;
 
 // JSON Fluent library
-import org.forgerock.json.fluent.JsonNodeException;
-import org.forgerock.json.fluent.JsonNode;
+import org.forgerock.json.fluent.JsonValueException;
+import org.forgerock.json.fluent.JsonValue;
 
 /**
  * TODO: Description.
@@ -34,7 +34,7 @@ public class JsonCrypto {
     private String type;
 
     /** TODO: Description. */
-    private JsonNode value;
+    private JsonValue value;
 
     /**
      * TODO: Description.
@@ -45,10 +45,10 @@ public class JsonCrypto {
     /**
      * TODO: Description.
      *
-     * @param node TODO.
+     * @param value TODO.
      */
-    public JsonCrypto(JsonNode node) throws JsonNodeException {
-        fromJsonNode(node);
+    public JsonCrypto(JsonValue value) throws JsonValueException {
+        fromJsonValue(value);
     }
 
     /**
@@ -57,16 +57,16 @@ public class JsonCrypto {
      * @param type TODO.
      * @param value TODO.
      */
-    public JsonCrypto(String type, JsonNode value) {
+    public JsonCrypto(String type, JsonValue value) {
         setType(type);
         setValue(value);
     }
 
     /**
-     * Returns {@code true} if the specified JSON node contains a valid JSON crypto structure.
+     * Returns {@code true} if the specified JSON value contains a valid JSON crypto structure.
      */
-    public static boolean isJsonCrypto(JsonNode node) {
-        JsonNode crypto = (node == null ? new JsonNode(null) : node.get("$crypto"));
+    public static boolean isJsonCrypto(JsonValue value) {
+        JsonValue crypto = (value == null ? new JsonValue(null) : value.get("$crypto"));
         return (crypto.get("type").isString() && crypto.isDefined("value"));
     }
 
@@ -89,7 +89,7 @@ public class JsonCrypto {
     /**
      * TODO: Description.
      */
-    public JsonNode getValue() {
+    public JsonValue getValue() {
         return value;
     }
 
@@ -98,18 +98,18 @@ public class JsonCrypto {
      *
      * @param value TODO.
      */
-    public void setValue(JsonNode value) {
+    public void setValue(JsonValue value) {
         this.value = value;
     }
 
     /**
      * TODO: Description.
      *
-     * @param node TODO.
-     * @throws JsonNodeException TODO.
+     * @param value TODO.
+     * @throws JsonValueException TODO.
      */
-    public void fromJsonNode(JsonNode node) throws JsonNodeException {
-        JsonNode crypto = node.get("$crypto").required();
+    public void fromJsonValue(JsonValue value) throws JsonValueException {
+        JsonValue crypto = value.get("$crypto").required();
         this.type = crypto.get("type").required().asString();
         this.value = crypto.get("value").required();
     }
@@ -119,12 +119,12 @@ public class JsonCrypto {
      *
      * @return TODO.
      */
-    public JsonNode toJsonNode() {
+    public JsonValue toJsonValue() {
         HashMap<String, Object> crypto = new HashMap<String, Object>();
         crypto.put("type", type);
         crypto.put("value", value == null ? null : value.getValue());
         HashMap<String, Object> result = new HashMap<String, Object>();
         result.put("$crypto", crypto);
-        return new JsonNode(result);
+        return new JsonValue(result);
     }
 }

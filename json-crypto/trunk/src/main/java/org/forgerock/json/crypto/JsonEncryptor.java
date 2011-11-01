@@ -17,7 +17,7 @@
 package org.forgerock.json.crypto;
 
 // JSON Fluent library
-import org.forgerock.json.fluent.JsonNode;
+import org.forgerock.json.fluent.JsonValue;
 
 /**
  * TODO: Description.
@@ -36,9 +36,9 @@ public interface JsonEncryptor {
     /**
      * Encrypts the specified value.
      *
-     * @param node the value to be encrypted.
+     * @param value the value to be encrypted.
      * @return the encrypted value.
      * @throws JsonCryptoException if the encryptor fails to encrypt the value.
      */
-    JsonNode encrypt(JsonNode node) throws JsonCryptoException;
+    JsonValue encrypt(JsonValue value) throws JsonCryptoException;
 }

@@ -18,7 +18,7 @@ package org.forgerock.json.crypto;
 
 // JSON Fluent library
 import org.forgerock.json.fluent.JsonException;
-import org.forgerock.json.fluent.JsonNode;
+import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.fluent.JsonTransformer;
 
 /**
@@ -61,14 +61,14 @@ public class JsonCryptoTransformer implements JsonTransformer {
     }
 
     @Override
-    public void transform(JsonNode node) throws JsonException {
+    public void transform(JsonValue value) throws JsonException {
         try {
             if (encryptor != null) { // transformer performs encryption
-                node.setValue(new JsonCrypto(encryptor.getType(), encryptor.encrypt(node)).toJsonNode().getValue());
-            } else if (JsonCrypto.isJsonCrypto(node)) { // transformer performs decryption and node properties match
-                JsonCrypto crypto = new JsonCrypto(node);
+                value.setValue(new JsonCrypto(encryptor.getType(), encryptor.encrypt(value)).toJsonValue().getValue());
+            } else if (JsonCrypto.isJsonCrypto(value)) { // transformer performs decryption and value properties match
+                JsonCrypto crypto = new JsonCrypto(value);
                 if (crypto.getType().equals(decryptor.getType())) { // only attempt decryption if type matches
-                    node.setValue(decryptor.decrypt(crypto.getValue()).getValue());
+                    value.setValue(decryptor.decrypt(crypto.getValue()).getValue());
                 }
             }
         } catch (JsonCryptoException jce) {

@@ -13,13 +13,14 @@
  *
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
+
 package org.forgerock.json.crypto;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.forgerock.json.crypto.simple.SimpleDecryptor;
 import org.forgerock.json.crypto.simple.SimpleEncryptor;
 import org.forgerock.json.crypto.simple.SimpleKeyStoreSelector;
-import org.forgerock.json.fluent.JsonNode;
+import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.fluent.JsonTransformer;
 import org.apache.commons.cli.*;
@@ -30,8 +31,7 @@ import java.security.KeyStore;
 import java.util.ArrayList;
 
 /**
- * @author $author$
- * @version $Revision$ $Date$
+ * @author László Hordós
  */
 public class Main {
 
@@ -110,15 +110,15 @@ public class Main {
                 throw new JsonCryptoException("key not found: " + cmd.getOptionValue(PROPERTIES_ALIAS_OPTION));
             }
             JsonTransformer encryptionTransformer = new JsonCryptoTransformer(new SimpleEncryptor(cmd.getOptionValue(PROPERTIES_CIPHER_OPTION, DEFAULT_CIPHER), key, cmd.getOptionValue(PROPERTIES_ALIAS_OPTION)));
-            JsonNode node = getSourceNode(cmd.getOptionValue(PROPERTIES_SRCJSON_OPTION), true);
-            encryptionTransformer.transform(node);
-            setDestinationNode(cmd.getOptionValue(PROPERTIES_DESTJSON_OPTION), node);
+            JsonValue value = getSourceValue(cmd.getOptionValue(PROPERTIES_SRCJSON_OPTION), true);
+            encryptionTransformer.transform(value);
+            setDestinationValue(cmd.getOptionValue(PROPERTIES_DESTJSON_OPTION), value);
         } else if (cmd.hasOption(PROPERTIES_DECRYPT_COMMAND)) {
             final ArrayList<JsonTransformer> decryptionTransformers = new ArrayList<JsonTransformer>(1);
             decryptionTransformers.add(new JsonCryptoTransformer(new SimpleDecryptor(getSimpleKeySelector(cmd.getOptionValue(PROPERTIES_KEYSTORE_OPTION),
                     cmd.getOptionValue(PROPERTIES_STORETYPE_OPTION, KeyStore.getDefaultType()), cmd.getOptionValue(PROPERTIES_STOREPASS_OPTION), cmd.getOptionValue(PROPERTIES_PROVIDERNAME_OPTION)))));
-            JsonNode node = getSourceNode(cmd.getOptionValue(PROPERTIES_SRCJSON_OPTION), true);
-            setDestinationNode(cmd.getOptionValue(PROPERTIES_DESTJSON_OPTION), new JsonNode(node.getValue(), new JsonPointer(), decryptionTransformers));
+            JsonValue value = getSourceValue(cmd.getOptionValue(PROPERTIES_SRCJSON_OPTION), true);
+            setDestinationValue(cmd.getOptionValue(PROPERTIES_DESTJSON_OPTION), new JsonValue(value.getValue(), new JsonPointer(), decryptionTransformers));
         } else {
             usage();
         }
@@ -135,22 +135,22 @@ public class Main {
         return new SimpleKeyStoreSelector(ks, password);
     }
 
-    private JsonNode getSourceNode(String source, boolean file) throws IOException {
-        JsonNode src = null;
+    private JsonValue getSourceValue(String source, boolean file) throws IOException {
+        JsonValue src = null;
         if (file) {
             File srcFile = new File(source);
             if (srcFile.exists()) {
-                src = new JsonNode(mapper.readValue(srcFile, Object.class));
+                src = new JsonValue(mapper.readValue(srcFile, Object.class));
             } else {
                 throw new FileNotFoundException("JsonSource file not found at: " + srcFile.getAbsolutePath());
             }
         } else {
-            src = new JsonNode(mapper.readValue(source, Object.class));
+            src = new JsonValue(mapper.readValue(source, Object.class));
         }
         return src;
     }
 
-    private void setDestinationNode(String destination, JsonNode value) throws IOException {
+    private void setDestinationValue(String destination, JsonValue value) throws IOException {
         if (null == destination) {
             mapper.writeValue(System.out, value.getValue());
         } else {
