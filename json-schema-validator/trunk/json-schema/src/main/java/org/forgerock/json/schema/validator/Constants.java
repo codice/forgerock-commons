@@ -247,18 +247,18 @@ public class Constants {
      */
     public static final String ERROR_MSG_REQUIRED_PROPERTY = "Required property violation at {}";
     /**
-     * Node at {} does not have a value in the enumeration.
+     * Value at {} does not have a value in the enumeration.
      */
-    public static final String ERROR_MSG_ENUM_VIOLATION = "Node at {} does not have a value in the enumeration.";
+    public static final String ERROR_MSG_ENUM_VIOLATION = "Value at {} does not have a value in the enumeration.";
     /**
-     * Node at {} MUST be null.
+     * Value at {} MUST be null.
      */
-    public static final String ERROR_MSG_NULL_TYPE = "Node at {} MUST be null.";
+    public static final String ERROR_MSG_NULL_TYPE = "Value at {} MUST be null.";
 
     /**
-     * Node has additional properties
+     * Value has additional properties
      */
-    public static final String ERROR_MSG_ADDITIONAL_PROPERTIES = "Node at {} has additional properties.";
+    public static final String ERROR_MSG_ADDITIONAL_PROPERTIES = "Value at {} has additional properties.";
 
     /**
      * {}

@@ -24,7 +24,7 @@
  */
 package org.forgerock.json.schema.validator.exceptions;
 
-import org.forgerock.json.fluent.JsonNode;
+import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.fluent.JsonPointer;
 
 /**
@@ -56,22 +56,22 @@ public class ValidationException extends SchemaException {
     }
 
     public ValidationException(String string, Throwable throwable, JsonPointer path) {
-        super(new JsonNode(null, path), string, throwable);
+        super(new JsonValue(null, path), string, throwable);
     }
 
     public ValidationException(String message, JsonPointer path) {
-        super(new JsonNode(null, path), message);
+        super(new JsonValue(null, path), message);
     }
 
     public ValidationException(String message, JsonPointer path, Object value) {
-        super(new JsonNode(value, path), message);
+        super(new JsonValue(value, path), message);
     }
 
     public ValidationException(Exception e, JsonPointer path) {
-        super(new JsonNode(null, path), e);
+        super(new JsonValue(null, path), e);
     }
 
     public ValidationException(String message, Exception e, JsonPointer path) {
-        super(new JsonNode(null, path), message, e);
+        super(new JsonValue(null, path), message, e);
     }
 }

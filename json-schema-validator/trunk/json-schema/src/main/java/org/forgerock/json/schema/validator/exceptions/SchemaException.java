@@ -27,8 +27,8 @@
 package org.forgerock.json.schema.validator.exceptions;
 
 
-import org.forgerock.json.fluent.JsonNode;
-import org.forgerock.json.fluent.JsonNodeException;
+import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.fluent.JsonValueException;
 
 import java.io.OutputStream;
 
@@ -44,15 +44,15 @@ import java.io.OutputStream;
  * @version $Revision$ $Date$
  * @see org.forgerock.json.schema.validator.exceptions.ValidationException
  */
-public class SchemaException extends JsonNodeException {
+public class SchemaException extends JsonValueException {
 
-    public SchemaException(JsonNode node, String message) {
-        super(node, message);
+    public SchemaException(JsonValue value, String message) {
+        super(value, message);
         this.exception = null;
     }
 
-    public SchemaException(JsonNode node, String message, Throwable throwable) {
-        super(node, message, throwable);
+    public SchemaException(JsonValue value, String message, Throwable throwable) {
+        super(value, message, throwable);
     }
 
 
@@ -63,11 +63,11 @@ public class SchemaException extends JsonNodeException {
      * one, and its message will become the default message for
      * the SchemaException.</p>
      *
-     * @param node
+     * @param value
      * @param e The exception to be wrapped in a SchemaException.
      */
-    public SchemaException(JsonNode node, Exception e) {
-        super(node);
+    public SchemaException(JsonValue value, Exception e) {
+        super(value);
         this.exception = e;
     }
 
@@ -78,12 +78,12 @@ public class SchemaException extends JsonNodeException {
      * <p>The existing exception will be embedded in the new
      * one, but the new exception will have its own message.</p>
      *
-     * @param node
+     * @param value
      * @param message The detail message.
      * @param e       The exception to be wrapped in a SchemaException.
      */
-    public SchemaException(JsonNode node, String message, Exception e) {
-        super(node, message);
+    public SchemaException(JsonValue value, String message, Exception e) {
+        super(value, message);
         this.exception = e;
     }
 

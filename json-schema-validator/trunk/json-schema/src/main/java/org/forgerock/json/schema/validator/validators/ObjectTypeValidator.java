@@ -233,10 +233,10 @@ public class ObjectTypeValidator extends Validator {
     /**
      * {@inheritDoc}
      */
-    public void validate(Object node, JsonPointer at, ErrorHandler handler) throws SchemaException {
+    public void validate(Object value, JsonPointer at, ErrorHandler handler) throws SchemaException {
 
-        if (node instanceof Map) {
-            Set<String> additionalPropertyNames = new HashSet<String>(((Map<String, Object>) node).keySet());
+        if (value instanceof Map) {
+            Set<String> additionalPropertyNames = new HashSet<String>(((Map<String, Object>) value).keySet());
             additionalPropertyNames.removeAll(propertyNames);
 
             if (!allowAdditionalProperties && !additionalPropertyNames.isEmpty()) {
@@ -244,12 +244,12 @@ public class ObjectTypeValidator extends Validator {
                 handler.error(new ValidationException("Error: Additional Properties not allowed", getPath(at, null)));
             }
 
-            Set<String> instancePropertyKeySet = Collections.unmodifiableSet(((Map<String, Object>) node).keySet());
+            Set<String> instancePropertyKeySet = Collections.unmodifiableSet(((Map<String, Object>) value).keySet());
 
             for (Map.Entry<String, PropertyValidatorBag> schemaProperty : propertyValidators.entrySet()) {
                 Map.Entry<String, Object> entry = null;
                 //null == entry.getValue() can not used for Null type
-                for (Map.Entry<String, Object> instanceProperty : ((Map<String, Object>) node).entrySet()) {
+                for (Map.Entry<String, Object> instanceProperty : ((Map<String, Object>) value).entrySet()) {
                     if (schemaProperty.getKey().equals(instanceProperty.getKey())) {
                         entry = instanceProperty;
                         break;
@@ -264,29 +264,29 @@ public class ObjectTypeValidator extends Validator {
             }
 
             for (String additionalPropertyName : additionalPropertyNames) {
-                Object propertyNode = ((Map<String, Object>) node).get(additionalPropertyName);
+                Object propertyValue = ((Map<String, Object>) value).get(additionalPropertyName);
 
                 if (null != additionalPropertyValidator) {
-                    additionalPropertyValidator.validate(propertyNode, getPath(at, additionalPropertyName), handler);
+                    additionalPropertyValidator.validate(propertyValue, getPath(at, additionalPropertyName), handler);
                 }
 
                 // @TODO: Implement Dependency check
                 Validator dependencyPropertyValidator = null != dependenciesValidators ? dependenciesValidators.get(additionalPropertyName) : null;
                 if (null != dependencyPropertyValidator) {
-                    dependencyPropertyValidator.validate(propertyNode, getPath(at, additionalPropertyName), handler);
+                    dependencyPropertyValidator.validate(propertyValue, getPath(at, additionalPropertyName), handler);
                 }
 
                 if (null != patternPropertyValidators) {
                     for (Map.Entry<Pattern, Validator> v : patternPropertyValidators.entrySet()) {
                         Matcher matcher = v.getKey().matcher(additionalPropertyName);
                         if (matcher.matches()) {
-                            v.getValue().validate(propertyNode, getPath(at, additionalPropertyName), handler);
+                            v.getValue().validate(propertyValue, getPath(at, additionalPropertyName), handler);
                         }
                     }
                 }
             }
 
-//            Map<String, Object> instanceProperties = (Map<String, Object>) node;
+//            Map<String, Object> instanceProperties = (Map<String, Object>) value;
 //
 //            if (dependenciesList != null && !dependenciesList.isEmpty()) {
 //                for (String dependency : dependenciesList) {
@@ -340,7 +340,7 @@ public class ObjectTypeValidator extends Validator {
 //                // additional properties exist but is not allowed
 //                handler.error(new ValidationException(ERROR_MSG_ADDITIONAL_PROPERTIES)); // @TODO: Add exception message to contants
 //            }
-        } else if (null != node) {
+        } else if (null != value) {
             handler.error(new ValidationException(ERROR_MSG_TYPE_MISMATCH, getPath(at, null)));
         } else if (required) {
             handler.error(new ValidationException(ERROR_MSG_REQUIRED_PROPERTY, getPath(at, null)));
@@ -382,23 +382,23 @@ public class ObjectTypeValidator extends Validator {
             return propertyValidator.isRequired();
         }
 
-        public void validate(Object node, JsonPointer at, ErrorHandler handler) throws SchemaException {
-            propertyValidator.validate(node, at, handler);
+        public void validate(Object value, JsonPointer at, ErrorHandler handler) throws SchemaException {
+            propertyValidator.validate(value, at, handler);
             if (null != patternValidators) {
                 for (Validator v : patternValidators) {
-                    v.validate(node, at, handler);
+                    v.validate(value, at, handler);
                 }
             }
             if (null != dependencyValidator) {
-                dependencyValidator.validate(node, at, handler);
+                dependencyValidator.validate(value, at, handler);
             }
         }
 
-        public void validate(Object node, Set<String> propertyKeySet, JsonPointer at, ErrorHandler handler) throws SchemaException {
+        public void validate(Object value, Set<String> propertyKeySet, JsonPointer at, ErrorHandler handler) throws SchemaException {
             if (null != requiredProperties && !propertyKeySet.containsAll(requiredProperties)) {
                 handler.error(new ValidationException("Dependency ERROR: Missiong properties", at));
             }
-            validate(node, at, handler);
+            validate(value, at, handler);
         }
     }
 }

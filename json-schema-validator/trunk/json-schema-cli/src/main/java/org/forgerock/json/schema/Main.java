@@ -18,7 +18,7 @@ package org.forgerock.json.schema;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.forgerock.json.fluent.JsonNode;
+import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.schema.validator.Constants;
 import org.forgerock.json.schema.validator.ErrorHandler;
 import org.forgerock.json.schema.validator.FailFastErrorHandler;
@@ -163,7 +163,7 @@ public class Main {
     }
 
     private void loadSchema(URI base, File schemaFile) throws IOException {
-        JsonNode schemaMap = new JsonNode(mapper.readValue(new FileInputStream(schemaFile), Map.class));
+        JsonValue schemaMap = new JsonValue(mapper.readValue(new FileInputStream(schemaFile), Map.class));
         URI id = schemaMap.get(Constants.ID).required().asURI();
         Validator v = ObjectValidatorFactory.getTypeValidator(schemaMap.asMap());
         if (!id.isAbsolute()) {
@@ -222,8 +222,8 @@ public class Main {
 
     //Validation
 
-    private void validate(JsonNode node) throws SchemaException, URISyntaxException {
-        URI schemaId = node.get(Constants.SCHEMA).asURI();
+    private void validate(JsonValue value) throws SchemaException, URISyntaxException {
+        URI schemaId = value.get(Constants.SCHEMA).asURI();
         if (null == schemaId && isEmptyOrBlank(schemaURI)) {
             System.out.println("-i (--id) must be an URI");
             return;
@@ -235,7 +235,7 @@ public class Main {
         if (null != validator) {
             if (verbose) {
                 final boolean[] valid = new boolean[1];
-                validator.validate(node.getValue(), null, new ErrorHandler() {
+                validator.validate(value.getValue(), null, new ErrorHandler() {
                     @Override
                     public void error(ValidationException exception) throws SchemaException {
                         valid[0] = false;
@@ -250,7 +250,7 @@ public class Main {
                     System.out.println("OK - Object is valid!");
                 }
             } else {
-                validator.validate(node.getValue(), null, new FailFastErrorHandler());
+                validator.validate(value.getValue(), null, new FailFastErrorHandler());
                 System.out.println("OK - Object is valid!");
             }
         } else {
@@ -258,7 +258,7 @@ public class Main {
         }
     }
 
-    private JsonNode loadFromConsole() throws IOException {
+    private JsonValue loadFromConsole() throws IOException {
         System.out.println();
         System.out.println("> Enter 'exit' and press enter to exit");
         System.out.println("> Press ctrl-D to finish input");
@@ -284,11 +284,11 @@ public class Main {
                 stringBuilder.append(input);
             }
         }
-        return new JsonNode(mapper.readValue(stringBuilder.toString(), Object.class));
+        return new JsonValue(mapper.readValue(stringBuilder.toString(), Object.class));
     }
 
-    private JsonNode loadFromFile() throws IOException {
-        return new JsonNode(mapper.readValue(inputFile, Object.class));
+    private JsonValue loadFromFile() throws IOException {
+        return new JsonValue(mapper.readValue(inputFile, Object.class));
     }
 
 
@@ -303,8 +303,8 @@ public class Main {
         sb.append(top.substring(sb.length()));
 
         System.out.println(sb);
-        if ((ex instanceof SchemaException) && (null != ((SchemaException) ex).getNode()))
-            System.out.append("Path: ").println(((SchemaException) ex).getNode().getPointer().toString());
+        if ((ex instanceof SchemaException) && (null != ((SchemaException) ex).getJsonValue()))
+            System.out.append("Path: ").println(((SchemaException) ex).getJsonValue().getPointer().toString());
         System.out.append("Message: ").println(ex.getMessage());
         System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
 
