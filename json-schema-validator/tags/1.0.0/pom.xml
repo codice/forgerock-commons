@@ -33,7 +33,7 @@
     </parent>
     <groupId>org.forgerock.commons</groupId>
     <artifactId>json-schema-parent</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>JSON Schema Draft-03 Validator Parent</name>
     <description>Simple tool to validate objects with draft-zyp-json-schema-03.</description>
@@ -60,9 +60,9 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/branches/1.0.x</connection>
-        <developerConnection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/branches/1.0.x</developerConnection>
-        <url>http://sources.forgerock.org/browse/commons/json-schema-validator/branches/1.0.x</url>
+        <connection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/tags/1.0.0</connection>
+        <developerConnection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/tags/1.0.0</developerConnection>
+        <url>http://sources.forgerock.org/browse/commons/json-schema-validator/tags/1.0.0</url>
     </scm>
     <distributionManagement>
         <site>
@@ -72,7 +72,6 @@
         </site>
     </distributionManagement>
 
-    <!-- may-be-temporary, based-on our decisions around the content and release of forgerock-parent -->
     <repositories>
         <repository>
             <id>forgerock-staging-repository</id>
@@ -91,7 +90,6 @@
             </releases>
         </repository>
     </repositories>
-    <!-- /may-be-temporary -->
 
     <ciManagement>
         <system>Jenkins</system>

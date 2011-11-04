@@ -29,30 +29,40 @@
     <parent>
         <groupId>org.forgerock.commons</groupId>
         <artifactId>json-schema-parent</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <groupId>org.forgerock.commons</groupId>
-    <artifactId>json-schema</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
-    <packaging>bundle</packaging>
-    <name>JSON Schema Draft-03 Validator</name>
+    <artifactId>json-schema-cli</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>JSON Schema Draft-03 Validator Command line tool</name>
     <description>Simple tool to validate objects with draft-zyp-json-schema-03.</description>
     <scm>
-        <connection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/branches/1.0.x/json-schema</connection>
-        <developerConnection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/branches/1.0.x/json-schema</developerConnection>
-        <url>http://sources.forgerock.org/browse/commons/json-schema-validator/branches/1.0.x/json-schema</url>
+        <connection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/tags/1.0.0/json-schema-cli</connection>
+        <developerConnection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/tags/1.0.0/json-schema-cli
+        </developerConnection>
+        <url>http://sources.forgerock.org/browse/commons/json-schema-validator/tags/1.0.0/json-schema-cli</url>
     </scm>
     <dependencies>
         <dependency>
             <groupId>org.forgerock.commons</groupId>
-            <artifactId>json-fluent</artifactId>
+            <artifactId>json-schema</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1</version>
-            <scope>test</scope>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>args4j</groupId>
+            <artifactId>args4j</artifactId>
+            <version>2.0.16</version>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
@@ -64,21 +74,30 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <instructions>
-                        <Export-Package>org.forgerock.json.schema.validator.*</Export-Package>
-                    </instructions>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <mainClass>org.forgerock.json.schema.Main</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <parallel>true</parallel>
-                    <threadCount>10</threadCount>
                 </configuration>
             </plugin>
         </plugins>

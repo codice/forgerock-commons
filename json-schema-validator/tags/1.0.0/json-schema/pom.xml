@@ -29,18 +29,18 @@
     <parent>
         <groupId>org.forgerock.commons</groupId>
         <artifactId>json-schema-parent</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <groupId>org.forgerock.commons</groupId>
     <artifactId>json-schema</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>bundle</packaging>
     <name>JSON Schema Draft-03 Validator</name>
     <description>Simple tool to validate objects with draft-zyp-json-schema-03.</description>
     <scm>
-        <connection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/branches/1.0.x/json-schema</connection>
-        <developerConnection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/branches/1.0.x/json-schema</developerConnection>
-        <url>http://sources.forgerock.org/browse/commons/json-schema-validator/branches/1.0.x/json-schema</url>
+        <connection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/tags/1.0.0/json-schema</connection>
+        <developerConnection>scm:svn:https://svn.forgerock.org/commons/json-schema-validator/tags/1.0.0/json-schema</developerConnection>
+        <url>http://sources.forgerock.org/browse/commons/json-schema-validator/tags/1.0.0/json-schema</url>
     </scm>
     <dependencies>
         <dependency>
@@ -82,5 +82,5 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build>    
 </project>
