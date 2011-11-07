@@ -20,11 +20,11 @@
     <parent>
         <groupId>org.forgerock.commons</groupId>
         <artifactId>json-crypto-project</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0-SNAPSHOT</version>
     </parent>
     <groupId>org.forgerock.commons</groupId>
     <artifactId>json-crypto-cli</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0-SNAPSHOT</version>
     <name>JSON Crypto command line interface</name>
     <description>ForgeRock JSON Crypographic command line interface</description>
     <packaging>jar</packaging>
