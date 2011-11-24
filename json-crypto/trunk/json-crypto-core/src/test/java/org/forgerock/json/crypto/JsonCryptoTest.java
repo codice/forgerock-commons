@@ -102,18 +102,18 @@ public class JsonCryptoTest {
     public void testSymmetricEncryption() throws JsonCryptoException {
         JsonValue value = new JsonValue(PLAINTEXT);
         value = new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey").encrypt(value);
-        assertThat(value.getValue()).isNotEqualTo(PLAINTEXT);
+        assertThat(value.getObject()).isNotEqualTo(PLAINTEXT);
         value = new SimpleDecryptor(selector).decrypt(value);
-        assertThat(value.getValue()).isEqualTo(PLAINTEXT);
+        assertThat(value.getObject()).isEqualTo(PLAINTEXT);
     }
 
     @Test
     public void testAsymmetricEncryption() throws JsonCryptoException {
         JsonValue value = new JsonValue(PLAINTEXT);
         value = new SimpleEncryptor(ASYMMETRIC_CIPHER, publicKey, "privateKey").encrypt(value);
-        assertThat(value.getValue()).isNotEqualTo(PLAINTEXT);
+        assertThat(value.getObject()).isNotEqualTo(PLAINTEXT);
         value = new SimpleDecryptor(selector).decrypt(value);
-        assertThat(value.getValue()).isEqualTo(PLAINTEXT);
+        assertThat(value.getObject()).isEqualTo(PLAINTEXT);
     }
 
     @Test
@@ -123,41 +123,43 @@ public class JsonCryptoTest {
         JsonValue crypto = new JsonCrypto(encryptor.getType(), encryptor.encrypt(value)).toJsonValue();
         ArrayList<JsonTransformer> transformers = new ArrayList<JsonTransformer>();
         transformers.add(new JsonCryptoTransformer(new SimpleDecryptor(selector)));
-        value = new JsonValue(crypto.getValue(), null, transformers);
-        assertThat(value.getValue()).isEqualTo(PLAINTEXT);
+        value = new JsonValue(crypto.getObject(), null, transformers);
+        assertThat(value.getObject()).isEqualTo(PLAINTEXT);
     }
 
     @Test
     public void testDeepObjectEncryption() throws JsonCryptoException {
-        JsonTransformer encryptionTransformer = new JsonCryptoTransformer(new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey"));
+        SimpleEncryptor encryptor = new SimpleEncryptor(SYMMETRIC_CIPHER, secretKey, "secretKey");
         ArrayList<JsonTransformer> transformers = new ArrayList<JsonTransformer>();
         transformers.add(new JsonCryptoTransformer(new SimpleDecryptor(selector)));
 
         // encrypt a simple value
         JsonValue value = new JsonValue(PASSWORD);
-        encryptionTransformer.transform(value);
-        assertThat(value.getValue()).isNotEqualTo(PASSWORD);
+        value = new JsonCrypto(encryptor.getType(), encryptor.encrypt(value)).toJsonValue();
+        assertThat(value.getObject()).isNotEqualTo(PASSWORD);
+        assertThat(JsonCrypto.isJsonCrypto(value)).isTrue();
 
         Map<String, Object> inner = new HashMap<String, Object>();
-        inner.put("password", value.getValue());
+        inner.put("password", value.getObject());
         value = new JsonValue(new HashMap<String, Object>());
         value.put("user", inner);
         value.put("description", PLAINTEXT);
 
         // decrypt the deep object        
         value.getTransformers().addAll(transformers);
-        value = value.copy();         
-        assertThat(value.get(new JsonPointer("/user/password")).getValue()).isEqualTo(PASSWORD);
+        value = value.copy();
+        assertThat(value.get(new JsonPointer("/user/password")).getObject()).isEqualTo(PASSWORD);
 
         // encrypt a complex object
-        value = new JsonValue(value.getValue());
-        encryptionTransformer.transform(value);
+        value = new JsonValue(value.getObject());
+        value = new JsonCrypto(encryptor.getType(), encryptor.encrypt(value)).toJsonValue();
         assertThat(JsonCrypto.isJsonCrypto(value)).isTrue();
 
         // decrypt the deep object
-        value.addTransformers(transformers);
-        assertThat(value.get(new JsonPointer("/user/password")).getValue()).isEqualTo(PASSWORD);
-        assertThat(value.get("description").getValue()).isEqualTo(PLAINTEXT);
+        value.getTransformers().addAll(transformers);
+        value.applyTransformers();
+        assertThat(value.get(new JsonPointer("/user/password")).getObject()).isEqualTo(PASSWORD);
+        assertThat(value.get("description").getObject()).isEqualTo(PLAINTEXT);
     }
 
     // ----- exceptions ----------

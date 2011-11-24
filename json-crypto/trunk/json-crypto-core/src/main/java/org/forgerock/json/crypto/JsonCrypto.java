@@ -37,9 +37,10 @@ public class JsonCrypto {
     private JsonValue value;
 
     /**
-     * Constructs an uninitialized JSON cryptographic object.
+     * Constructs an empty JSON cryptographic object.
      */
     public JsonCrypto() {
+        // empty
     }
 
     /**
@@ -67,10 +68,18 @@ public class JsonCrypto {
     /**
      * Returns {@code true} if the specified JSON value contains a valid {@code $crypto}
      * JSON object structure.
+     * <p>
+     * Note: This method does not suppress transformers in the specified value. Consequently,
+     * this method can return {@code false} if members are transformed, for example if a
+     * {@link JsonCryptoTransformer} transforms the value as it is being inspected.
      */
     public static boolean isJsonCrypto(JsonValue value) {
-        JsonValue crypto = (value == null ? new JsonValue(null) : value.get("$crypto"));
-        return (crypto.get("type").isString() && crypto.isDefined("value"));
+        boolean result = false;
+        if (value.isDefined("$crypto")) { // avoid transformer endless loops
+            JsonValue crypto = value.get("$crypto");
+            result = (crypto.get("type").isString() && crypto.isDefined("value"));
+        }
+        return result;
     }
 
     /**
@@ -123,7 +132,7 @@ public class JsonCrypto {
     public JsonValue toJsonValue() {
         HashMap<String, Object> crypto = new HashMap<String, Object>();
         crypto.put("type", type);
-        crypto.put("value", value == null ? null : value.getValue());
+        crypto.put("value", value == null ? null : value.getObject());
         HashMap<String, Object> result = new HashMap<String, Object>();
         result.put("$crypto", crypto);
         return new JsonValue(result);

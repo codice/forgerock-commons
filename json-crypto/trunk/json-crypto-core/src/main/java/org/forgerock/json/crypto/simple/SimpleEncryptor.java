@@ -16,7 +16,7 @@
 
 package org.forgerock.json.crypto.simple;
 
-// Java Standard Edition
+// Java SE
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.Key;
@@ -31,10 +31,10 @@ import org.apache.commons.codec.binary.Base64;
 // Jackson
 import org.codehaus.jackson.map.ObjectMapper;
 
-// JSON Fluent library
+// JSON Fluent
 import org.forgerock.json.fluent.JsonValue;
 
-// JSON Cryptographic library
+// JSON Crypto
 import org.forgerock.json.crypto.JsonCryptoException;
 import org.forgerock.json.crypto.JsonEncryptor;
 
@@ -86,10 +86,10 @@ public class SimpleEncryptor implements JsonEncryptor {
      * @throws GeneralSecurityException if a cryptographic operation failed.
      * @throws IOException if an I/O exception occurred.
      */
-    private JsonValue symmetric(JsonValue value) throws GeneralSecurityException, IOException {
+    private Object symmetric(Object object) throws GeneralSecurityException, IOException {
         Cipher symmetric = Cipher.getInstance(cipher);
         symmetric.init(Cipher.ENCRYPT_MODE, key);
-        String data = Base64.encodeBase64String(symmetric.doFinal(mapper.writeValueAsBytes(value.getValue())));
+        String data = Base64.encodeBase64String(symmetric.doFinal(mapper.writeValueAsBytes(object)));
         byte[] iv = symmetric.getIV();
         HashMap<String, Object> result = new HashMap<String, Object>();
         result.put("cipher", this.cipher);
@@ -98,7 +98,7 @@ public class SimpleEncryptor implements JsonEncryptor {
         if (iv != null) {            
             result.put("iv", Base64.encodeBase64String(iv));
         }
-        return new JsonValue(result);
+        return result;
     }
 
     /**
@@ -109,14 +109,14 @@ public class SimpleEncryptor implements JsonEncryptor {
      * @throws GeneralSecurityException if a cryptographic operation failed.
      * @throws IOException if an I/O exception occurred.
      */
-    private JsonValue asymmetric(JsonValue value) throws GeneralSecurityException, IOException {
+    private Object asymmetric(Object object) throws GeneralSecurityException, IOException {
         String symmetricCipher = "AES/ECB/PKCS5Padding"; // no IV required for randomly-generated session key
         KeyGenerator generator = KeyGenerator.getInstance("AES");
         generator.init(128);
         SecretKey sessionKey = generator.generateKey();
         Cipher symmetric = Cipher.getInstance(symmetricCipher);
         symmetric.init(Cipher.ENCRYPT_MODE, sessionKey);
-        String data = Base64.encodeBase64String(symmetric.doFinal(mapper.writeValueAsBytes(value.getValue())));
+        String data = Base64.encodeBase64String(symmetric.doFinal(mapper.writeValueAsBytes(object)));
         Cipher asymmetric = Cipher.getInstance(cipher);
         asymmetric.init(Cipher.ENCRYPT_MODE, key);
         HashMap<String, Object> keyObject = new HashMap<String, Object>();
@@ -127,13 +127,14 @@ public class SimpleEncryptor implements JsonEncryptor {
         result.put("cipher", symmetricCipher);
         result.put("key", keyObject);
         result.put("data", data);
-        return new JsonValue(result);
+        return result;
     }
 
     @Override
     public JsonValue encrypt(JsonValue value) throws JsonCryptoException {
+        Object object = value.getWrappedObject();
         try {
-            return (key instanceof SecretKey ? symmetric(value) : asymmetric(value));
+            return new JsonValue((key instanceof SecretKey ? symmetric(object) : asymmetric(object)));
         } catch (GeneralSecurityException gse) { // Java Cryptography Extension
             throw new JsonCryptoException(gse);
         } catch (IOException ioe) { // Jackson

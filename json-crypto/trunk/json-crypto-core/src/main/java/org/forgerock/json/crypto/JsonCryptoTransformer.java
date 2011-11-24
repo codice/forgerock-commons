@@ -22,7 +22,7 @@ import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.fluent.JsonTransformer;
 
 /**
- * Transforms JSON values by applying an encryptor or decryptor.
+ * Transforms JSON values by applying a decryptor.
  *
  * @author Paul C. Bryan
  */
@@ -30,9 +30,6 @@ public class JsonCryptoTransformer implements JsonTransformer {
 
     /** Decryptor to apply to JSON values. */
     private JsonDecryptor decryptor;
-
-    /** Encryptor to apply to JSON values. */
-    private JsonEncryptor encryptor;
 
     /**
      * Constructs a transformer to apply a decryptor.
@@ -47,32 +44,17 @@ public class JsonCryptoTransformer implements JsonTransformer {
         this.decryptor = decryptor;
     }
 
-    /**
-     * Constructs a transformer to apply an encryptor.
-     *
-     * @param encryptor the encryptor to apply to JSON values.
-     * @throws NullPointerException if {@code encryptor} is {@code null}.
-     */
-    public JsonCryptoTransformer(JsonEncryptor encryptor) {
-        if (encryptor == null) {
-            throw new NullPointerException();
-        }
-        this.encryptor = encryptor;
-    }
-
     @Override
     public void transform(JsonValue value) throws JsonException {
-        try {
-            if (encryptor != null) { // transformer performs encryption
-                value.setValue(new JsonCrypto(encryptor.getType(), encryptor.encrypt(value)).toJsonValue().getValue());
-            } else if (JsonCrypto.isJsonCrypto(value)) { // transformer performs decryption and value properties match
-                JsonCrypto crypto = new JsonCrypto(value);
-                if (crypto.getType().equals(decryptor.getType())) { // only attempt decryption if type matches
-                    value.setValue(decryptor.decrypt(crypto.getValue()).getValue());
+        if (JsonCrypto.isJsonCrypto(value)) {
+            JsonCrypto crypto = new JsonCrypto(value);
+            if (crypto.getType().equals(decryptor.getType())) { // only attempt decryption if type matches
+                try {
+                    value.setObject(decryptor.decrypt(crypto.getValue()).getObject());
+                } catch (JsonCryptoException jce) {
+                    throw new JsonException(jce);
                 }
             }
-        } catch (JsonCryptoException jce) {
-            throw new JsonException(jce);
         }
     }
 }
