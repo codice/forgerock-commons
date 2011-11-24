@@ -16,7 +16,7 @@
 
 package org.forgerock.json.ref;
 
-// Java Standard Edition
+// Java SE
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -138,7 +138,7 @@ public class JsonReferenceTransformer implements JsonTransformer {
             }
 
             if (root != null && isStandaloneFragment(rel)) { // resolve against already-loaded document
-                value.setValue(resolveFragment(root, rel).getValue());
+                value.setObject(resolveFragment(root, rel).getObject());
             } else if (isResolvable(ref)) { // supported absolute URI of resource to load
                 URI abs = ref;
                 if (abs.getFragment() != null) {
@@ -149,8 +149,8 @@ public class JsonReferenceTransformer implements JsonTransformer {
                     }
                 }
                 JsonValue result = resolveFragment(resolve(abs), ref);
-                value.setValue(result.getValue());
-                value.addTransformers(result.getTransformers()); // resolves relative $refs
+                value.setObject(result.getObject());
+                value.getTransformers().addAll(0, result.getTransformers()); // resolves relative $refs
             } else if (rel != null) {
                 throw new JsonException("No base to resolve relative URI reference");
             }

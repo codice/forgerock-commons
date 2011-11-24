@@ -16,7 +16,7 @@
 
 package org.forgerock.json.ref;
 
-// Java Standard Edition
+// Java SE
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -48,8 +48,9 @@ public class JsonReferenceTest {
     public void x() throws URISyntaxException {
         JsonReference ref = new JsonReference().setURI(new URI("#/foo"));
         root.put("foo", "bar");
-        root.put("baz", ref.toJsonValue().getValue());
-        root.addTransformer(new JsonReferenceTransformer(null, root));
-        assertThat(root.get("baz").getValue().equals("bar"));
+        root.put("baz", ref.toJsonValue().getObject());
+        root.getTransformers().add(new JsonReferenceTransformer(null, root));
+        root.applyTransformers();
+        assertThat(root.get("baz").getObject().equals("bar"));
     }
 }

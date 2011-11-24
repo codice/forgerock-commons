@@ -82,7 +82,7 @@ public class JacksonReferenceTransformer extends JsonReferenceTransformer {
                 }
             }
         }
-        result.addTransformer(new JacksonReferenceTransformer(uri, result)); // support $refs
+        result.getTransformers().add(0, new JacksonReferenceTransformer(uri, result)); // support $refs
         return result;
     }
 }

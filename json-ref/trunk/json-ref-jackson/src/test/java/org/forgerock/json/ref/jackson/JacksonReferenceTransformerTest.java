@@ -54,8 +54,9 @@ public class JacksonReferenceTransformerTest {
         out.close();
         JsonReference ref = new JsonReference().setURI(new URI(tmp.toURI().toString() + "#/a/b/c"));
         JsonValue root = new JsonValue(new HashMap<String, Object>());
-        root.put("g", ref.toJsonValue().getValue());
-        root.addTransformer(new JacksonReferenceTransformer(null, null));
-        assertThat(root.get("g").getValue().equals("f"));
+        root.put("g", ref.toJsonValue().getObject());
+        root.getTransformers().add(0, new JacksonReferenceTransformer(null, null));
+        root.applyTransformers();
+        assertThat(root.get("g").getObject().equals("f"));
     }
 }

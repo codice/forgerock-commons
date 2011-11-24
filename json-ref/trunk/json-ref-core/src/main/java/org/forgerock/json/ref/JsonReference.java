@@ -16,7 +16,7 @@
 
 package org.forgerock.json.ref;
 
-// Java Standard Edition
+// Java SE
 import java.net.URI;
 import java.util.HashMap;
 
@@ -35,32 +35,30 @@ public class JsonReference {
     private URI uri;
 
     /**
-     * Returns a shallow copy of a JSON value, sans transformers.
-     *
-     * @param value the value to be stripped of transformers.
-     * @return a JSON value, hold the transformers. 
-     */ 
-    private static JsonValue strip(JsonValue value) {
-        return (value == null ? null : new JsonValue(value.getValue(), value.getPointer(), null));
+     * Constructs an empty JSON Reference object.
+     */
+    public JsonReference() {
+        // empty: bare, hollow, stark, unfulfilled, unoccupied, vacant
     }
 
     /**
      * Returns {@code true} if the specified JSON value contains a valid {@code $ref}
      * JSON object structure.
      *
+     * Note: This method does not suppress transformers in the specified value. Consequently,
+     * this method can return {@code false} if members are transformed, for example if a
+     * {@link JsonReferenceTransformer} transforms the value as it is being inspected.
+     *
      * @param value the value to test for a JSON Reference.
      * @return {@code true} if the value is a {@code $ref} JSON Reference.
      */
     public static boolean isJsonReference(JsonValue value) {
-        JsonValue ref = (value == null ? null : strip(value).get("$ref"));
-        return (ref != null && ref.isString());
-    }
-
-    /**
-     * Constructs a new, empty JSON Reference.
-     */
-    public JsonReference() {
-        // empty: bare, hollow, stark, unfulfilled, unoccupied, vacant
+        boolean result = false;
+        if (value.isDefined("$ref")) { // avoid transformer endless loops
+            JsonValue ref = value.get("$ref");
+            result = ref.isString();
+        }
+        return result;
     }
 
     /**
@@ -90,7 +88,6 @@ public class JsonReference {
      * @throws NullPointerException if {@code value} is {@code null}.
      */
     public JsonReference fromJsonValue(JsonValue value) throws JsonValueException {
-        value = strip(value);
         this.uri = value.get("$ref").required().asURI();
         return this;
     }
