@@ -19,14 +19,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.forgerock.commons</groupId>
-        <artifactId>json-ref-project</artifactId>
+        <artifactId>org.forgerock.json.ref.parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <groupId>org.forgerock.commons</groupId>
-    <artifactId>json-ref-core</artifactId>
+    <artifactId>org.forgerock.json.ref.jackson</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>JSON Reference core library</name>
-    <description>ForgeRock JSON Reference core library</description>
+    <name>JSON Reference Jackson implementation</name>
+    <description>Implementation JSON Reference using Jackson, which supports http: and file: schemes</description>
     <packaging>bundle</packaging>
     <dependencies>
         <dependency>
@@ -42,9 +42,27 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.forgerock.commons</groupId>
             <artifactId>json-fluent</artifactId>
             <version>1.1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.forgerock.commons</groupId>
+            <artifactId>json-ref-core</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -64,9 +82,8 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>
-                            org.forgerock.json.ref;version=${project.version}
-                        </Export-Package>
+                        <Import-Package>*</Import-Package>
+                        <Export-Package>org.forgerock.json.ref.jackson;version=${project.version}</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>

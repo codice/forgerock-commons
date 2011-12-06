@@ -23,19 +23,19 @@
         <version>1.0.0</version>
     </parent>
     <groupId>org.forgerock.commons</groupId>
-    <artifactId>json-ref-project</artifactId>
+    <artifactId>org.forgerock.json.ref.parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>JSON Reference project</name>
-    <description>ForgeRock JSON Reference project</description>
+    <name>JSON Reference parent project</name>
+    <description>Parent project for the JSON Reference library</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.source>1.6</maven.compiler.source>
     </properties>
     <modules>
-        <module>json-ref-core</module>
-        <module>json-ref-jackson</module>
+        <module>core</module>
+        <module>jackson</module>
     </modules>
     <repositories>
 <!-- may-be-temporary, based-on our decisions around the content and release of forgerock-parent -->
