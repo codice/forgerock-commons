@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * An implementation of a list with lazy initialization. The factory to create the list
- * instance is not invoked until the first call to one of this object's methods.
+ * A list with lazy initialization. The factory is called to initialize the list on the first
+ * call to one of this object's methods.
  *
  * @author Paul C. Bryan
  */
@@ -34,7 +34,13 @@ public class LazyList<E> implements List<E> {
     private List<E> list;
 
     /** Factory to create the instance of the list to expose. */
-    private Factory<List<E>> factory;
+    protected Factory<List<E>> factory;
+
+    /**
+     * Constructs a new lazy list. Allows factory to be set in subclass constructor.
+     */
+    protected LazyList() {
+    }
 
     /**
      * Constructs a new lazy list.

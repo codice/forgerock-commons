@@ -19,13 +19,12 @@ package org.forgerock.util;
 
 // Java SE
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * An implementation of a map with lazy initialization. The factory to create the map
- * instance is not invoked until the first call to one of this object's methods.
+ * A map with lazy initialization. The factory is called to initialize the map on the first
+ * call to one of this object's methods.
  *
  * @author Paul C. Bryan
  */  
@@ -35,7 +34,13 @@ public class LazyMap<K, V> implements Map<K, V> {
     private Map<K, V> map;
 
     /** Factory to create the instance of the map to expose. */
-    private Factory<Map<K, V>> factory;
+    protected Factory<Map<K, V>> factory;
+
+    /**
+     * Constructs a new lazy map. Allows factory to be set in subclass constructor.
+     */
+    protected LazyMap() {
+    }
 
     /**
      * Constructs a new lazy map.
@@ -140,7 +145,7 @@ public class LazyMap<K, V> implements Map<K, V> {
      * @param m mappings to be stored in the map.
      */
     @Override
-    public void putAll(Map<? extends K,? extends V> m) {
+    public void putAll(Map<? extends K, ? extends V> m) {
         lazy().putAll(m);
     }
 
@@ -172,7 +177,7 @@ public class LazyMap<K, V> implements Map<K, V> {
      * Returns a {@link Set} view of the mappings contained in the map.
      */
     @Override
-    public Set<Map.Entry<K,V>> entrySet() {
+    public Set<Map.Entry<K, V>> entrySet() {
         return lazy().entrySet();
     }
 
@@ -188,7 +193,7 @@ public class LazyMap<K, V> implements Map<K, V> {
      * Compares the specified object with the map for equality.
      *
      * @param o object to be compared for equality with the map.
-     * @return true if the specified object is equal to the map.
+     * @return {@code true} if the specified object is equal to the map.
      */
     @Override
     public boolean equals(Object o) {
