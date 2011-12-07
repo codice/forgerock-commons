@@ -52,8 +52,7 @@ public class ExtendedServerResource extends ServerResource {
         Method method = getMethod();
         if (PATCH.equals(method)) {
             result = patch(getRequestEntity());
-        }
-        else {
+        } else {
             result = super.doHandle();
         }
         return result;
@@ -66,12 +65,10 @@ public class ExtendedServerResource extends ServerResource {
         if (PATCH.equals(method)) {
             if (isExisting()) {
                 result = patch(getRequestEntity(), variant);
-            }
-            else {
+            } else {
                 setStatus(Status.CLIENT_ERROR_NOT_FOUND);
             }
-        }
-        else {
+        } else {
             result = super.doHandle(variant);
         }
         return result;
