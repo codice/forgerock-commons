@@ -29,7 +29,7 @@ import org.forgerock.json.resource.JsonResource;
  *
  * @author Paul C. Bryan
  */
-class JsonResourceRestlet extends Finder {
+public class JsonResourceRestlet extends Finder {
 
     /** TODO: Description. */
     private JsonResource resource;
@@ -52,7 +52,7 @@ class JsonResourceRestlet extends Finder {
      */
     @Override
     public void handle(Request request, Response response) {
-        request.getAttributes().put(JsonServerResource.class.getName(), resource);
+        request.getAttributes().put(JsonResource.class.getName(), resource);
         super.handle(request, response);
     }
 }

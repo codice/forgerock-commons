@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 // Restlet API
 import org.restlet.Request;
@@ -31,39 +32,65 @@ import org.restlet.data.Form;
 import org.forgerock.util.Factory;
 import org.forgerock.util.LazyMap;
 
+// JSON Fluent
+import org.forgerock.json.fluent.JsonValue;
+
 /**
  * TODO: Description.
  *
  * @author Paul C. Bryan
  */
-class RestletRequestHttpContext extends LazyMap<String, Object> {
-
-    /** TODO: Description. */
-    private Request request;
+class RestletRequestHttpContext {
 
     /**
      * TODO: Description.
+     *
+     * @param request TODO.
+     * @return TODO.
      */
-    public RestletRequestHttpContext(Request request, final Object parent) {
-        this.request = request;
-        this.factory = new Factory<Map<String, Object>>() {
+    private static Map<String, Object> securityProperties(Request request) {
+        Map<String, Object> result = null;
+        Principal user = request.getClientInfo().getUser();
+        if (user != null) {
+            String name = user.getName();
+            if (name != null) {
+                result = new LinkedHashMap<String, Object>();
+                result.put("user", name);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * TODO: Description.
+     *
+     * @param request TODO.
+     * @param parent TODO.
+     */
+    public static JsonValue newContext(final Request request, final JsonValue parent) {
+        return new JsonValue(new LazyMap<String, Object>(new Factory<Map<String, Object>>() {
             @Override public Map<String, Object> newInstance() {
                 LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>();
                 result.put("type", "http");
-                result.put("parent", parent);
-                result.put("method", RestletRequestHttpContext.this.request.getMethod().getName());
-                result.put("path", RestletRequestHttpContext.this.request.getResourceRef().getRelativePart());
-                result.put("query", lazyQuery());
-                result.put("headers", lazyHeaders());
+                result.put("uuid", UUID.randomUUID().toString());
+                result.put("parent", parent.getWrappedObject());
+                Map<String, Object> security = securityProperties(request);
+                if (security != null) {
+                    result.put("security", security);
+                }
+                result.put("method", request.getMethod().getName());
+                result.put("path", request.getResourceRef().getRelativePart());
+                result.put("query", lazyQuery(request));
+                result.put("headers", lazyHeaders(request));
                 return result;
             }
-        };
+        }));
     }
 
     /**
      * TODO: Description.
      */
-    private Map<String, List<String>> lazyForm(final Form form) {
+    private static Map<String, List<String>> lazyForm(final Form form) {
         return new LazyMap<String, List<String>>(new Factory<Map<String, List<String>>>() {
             @Override public Map<String, List<String>> newInstance() {
                 LinkedHashMap<String, List<String>> result = new LinkedHashMap<String, List<String>>();
@@ -78,14 +105,14 @@ class RestletRequestHttpContext extends LazyMap<String, Object> {
     /**
      * TODO: Description.
      */
-    private Map<String, List<String>> lazyQuery() {
+    private static Map<String, List<String>> lazyQuery(final Request request) {
         return lazyForm(request.getResourceRef().getQueryAsForm());
     }
 
     /**
      * TODO: Description.
      */
-    private Map<String, List<String>> lazyHeaders() {
+    private static Map<String, List<String>> lazyHeaders(final Request request) {
         return lazyForm((Form)(request.getAttributes().get("org.restlet.http.headers")));
     }
 }

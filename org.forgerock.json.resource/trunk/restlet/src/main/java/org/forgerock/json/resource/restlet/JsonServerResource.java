@@ -46,8 +46,9 @@ import org.forgerock.json.fluent.JsonValue;
 
 // JSON Resource
 import org.forgerock.json.resource.JsonResource;
+import org.forgerock.json.resource.JsonResourceAccessor;
+import org.forgerock.json.resource.JsonResourceContext;
 import org.forgerock.json.resource.JsonResourceException;
-
 
 /**
  * TODO: Description.
@@ -56,8 +57,8 @@ import org.forgerock.json.resource.JsonResourceException;
  */
 public class JsonServerResource extends ExtendedServerResource {
 
-    /** The JSON resource this resource represents. */
-    private JsonResource resource;
+    /** TODO: Description. */
+    private JsonResourceAccessor accessor;
 
     /** TODO: Description. */
     private Conditions conditions;
@@ -68,7 +69,7 @@ public class JsonServerResource extends ExtendedServerResource {
     /** TODO: Description. */
     private String rev;
 
-    /** Current value of the resource, if it was read. */
+    /** Current value of the resource (if it has been already read). */
     private JsonValue value;
 
     /**
@@ -101,95 +102,23 @@ public class JsonServerResource extends ExtendedServerResource {
     /**
      * TODO: Description.
      *
-     * @param type TODO.
      * @param parent TODO.
      * @return TODO.
      */
-    private Map<String, Object> newContext(String type, Map<String, Object> parent) {
-        Map<String, Object> context = new LinkedHashMap<String, Object>();
-        context.put("type", type);
-        context.put("parent", parent);
-        return context;
-    }
-
-    /**
-     * TODO: Description.
-     */
-    private Map<String, Object> rootContext() {
-        Map<String, Object> context = newContext("root", null);
-        context.put("uuid", UUID.randomUUID().toString());
-// TODO: timestamp (once date support in JSON Fluent is completed)
-        return context;
-    }
-
-    /**
-     * TODO: Description.
-     *
-     * @param parent TODO.
-     * @return TODO.
-     */
-    private Map<String, Object> httpContext(Map<String, Object> parent) {
-        return new RestletRequestHttpContext(getRequest(), parent);
-    }
-
-    /**
-     * TODO: Description.
-     *
-     * @param parent TODO.
-     * @return TODO.
-     */
-    private Map<String, Object> securityContext(Map<String, Object> parent) {
-        Map<String, Object> context = parent; // simply return parent if no security context to push
-        Principal user = getClientInfo().getUser();
-        if (user != null) {
-            String name = user.getName();
-            if (name != null) {
-                context = newContext("security", parent);
-                context.put("user", name);
-            }
-        }
-        return context;
-    }
-
-    /**
-     * TODO: Description.
-     *
-     * @param method TODO.
-     * @return TODO.
-     */
-    private JsonValue newJsonResourceRequest(String method) {
-        Map<String, Object> request = newContext("resource", securityContext(httpContext(rootContext())));
-        request.put("method", method);
-        request.put("id", this.id);
-        return new JsonValue(request);
+    private JsonValue newHttpContext(JsonValue parent) {
+        return RestletRequestHttpContext.newContext(getRequest(), parent);
     }
 
     /**
      * Returns the request's query parameters as a JSON value.
      */
-    private Map<String, Object> getQueryParams() {
+    private JsonValue getQueryParams() {
         Map<String, Object> map = new HashMap<String, Object>();
         Form query = getQuery();
         if (query != null) {
             map.putAll(query.getValuesMap()); // copy for isolation and mutability
         }
-        return map;
-    }
-
-    /**
-     * TODO: Description.
-     *
-     * @param value TODO.
-     * @return TODO.
-     * @throws JsonResourceException TODO.
-     */
-    private JsonValue jsonResourceCreate(JsonValue value) throws JsonResourceException {
-        if (value == null) {
-            throw JsonResourceException.BAD_REQUEST;
-        }
-        JsonValue request = newJsonResourceRequest("create");
-        request.put("value", value.getObject());
-        return resource.handle(request);
+        return new JsonValue(map);
     }
 
     /**
@@ -200,9 +129,9 @@ public class JsonServerResource extends ExtendedServerResource {
      * @return the value of the JSON resource.
      * @throws JsonResourceException if the JSON resource could not be read or a precondition failed.
      */
-    private JsonValue jsonResourceRead() throws JsonResourceException {
+    private JsonValue read() throws JsonResourceException {
         if (this.value == null) {
-            JsonValue value = resource.handle(newJsonResourceRequest("read"));
+            JsonValue value = accessor.read(this.id);
             Status status = conditions.getStatus(getMethod(), true, getTag(value), null);
             if (status != null && status.isError()) {
                 throw JsonResourceException.VERSION_MISMATCH;
@@ -210,75 +139,6 @@ public class JsonServerResource extends ExtendedServerResource {
             this.value = value; // cache to prevent multiple reads
         }
         return this.value;
-    }
-
-    /**
-     * TODO: Description.
-     *
-     * @param value TODO.
-     * @return TODO.
-     * @throws JsonResourceException TODO.
-     */
-    private JsonValue jsonResourceUpdate(JsonValue value) throws JsonResourceException {
-        if (value == null) {
-            throw JsonResourceException.BAD_REQUEST;
-        }
-        JsonValue request = newJsonResourceRequest("update");
-        request.put("rev", rev);
-        request.put("value", value.getObject());
-        return resource.handle(request);
-    }
-
-    /**
-     * TODO: Description.
-     *
-     * @throws JsonResourceException TODO.
-     */
-    private void jsonResourceDelete() throws JsonResourceException {
-        JsonValue request = newJsonResourceRequest("delete");
-        request.put("rev", rev);
-        resource.handle(request);
-    }
-
-    /**
-     * TODO: Description.
-     *
-     * @param value TODO.
-     * @return TODO.
-     * @throws JsonResurceException TODO.
-     */
-    private JsonValue jsonResourcePatch(JsonValue value) throws JsonResourceException {
-        JsonValue request = newJsonResourceRequest("patch");
-        request.put("rev", rev);
-        request.put("value", value.getObject());
-        return resource.handle(request);
-    }
-
-    /**
-     * TODO: Description.
-     *
-     * @param params TODO.
-     * @return TODO.
-     * @throws JsonResourceException TODO.
-     */
-    private JsonValue jsonResourceQuery() throws JsonResourceException {
-        JsonValue request = newJsonResourceRequest("query");
-        request.put("params", getQueryParams());
-        return resource.handle(request);
-    }
-
-    /**
-     * TODO: Description.
-     *
-     * @param params TODO.
-     * @return TODO.
-     * @throws JsonResourceException TODO.
-     */
-    private JsonValue jsonResourceAction(JsonValue value) throws JsonResourceException {
-        JsonValue request = newJsonResourceRequest("action");
-        request.put("params", getQueryParams());
-        request.put("value", value.getObject());
-        return resource.handle(request);
     }
 
     /**
@@ -293,7 +153,6 @@ public class JsonServerResource extends ExtendedServerResource {
         if (entity != null && !(entity instanceof EmptyRepresentation)) {
             JacksonRepresentation jr = (entity instanceof JacksonRepresentation ?
              (JacksonRepresentation)entity : new JacksonRepresentation<Object>(entity, Object.class));
-            Object o = jr.getObject();
             result = new JsonValue(jr.getObject());
         }
         return result;
@@ -308,11 +167,14 @@ public class JsonServerResource extends ExtendedServerResource {
         setNegotiated(false); // we shall speak all-JSON for now
         setConditional(false); // conditional requests handled in implementation
         conditions = getConditions();
-        resource = (JsonResource)getRequestAttributes().get(JsonResource.class.getName());
         String remaining = getReference().getRemainingPart(false, false);
         if (remaining != null && remaining.length() > 0) {
             id = remaining; // default: null (resource itself is being operated on)
         }
+        accessor = new JsonResourceAccessor(
+         (JsonResource)(getRequestAttributes().get(JsonResource.class.getName())),
+         new JsonValue(newHttpContext(JsonResourceContext.newRootContext()))
+        );
     }
 
     /**
@@ -327,7 +189,7 @@ public class JsonServerResource extends ExtendedServerResource {
                 throw JsonResourceException.VERSION_MISMATCH; // unsupported
             }
             if (conditions.getMatch().size() > 1 || conditions.getNoneMatch().size() > 0) {
-                rev = getTag(jsonResourceRead()).getName(); // derive from fetched resource
+                rev = getTag(read()).getName(); // derive from fetched resource
             } else if (conditions.getMatch().size() == 1) {
                 rev = conditions.getMatch().get(0).getName(); // derive from request
             }
@@ -354,11 +216,11 @@ public class JsonServerResource extends ExtendedServerResource {
         try {
             Form query = getQuery();
             if (query == null || query.size() == 0) { // read
-                response = toRepresentation(jsonResourceRead());
+                response = toRepresentation(read());
             } else if (conditions.hasSome()) { // query w. precondition: automatic mismatch
                     throw JsonResourceException.VERSION_MISMATCH;
             } else { // query                
-                response = toRepresentation(jsonResourceQuery());
+                response = toRepresentation(accessor.query(this.id, getQueryParams()));
             }
             if (response == null) { // expect a response from the read or query
                 throw JsonResourceException.INTERNAL_ERROR;
@@ -389,22 +251,22 @@ public class JsonServerResource extends ExtendedServerResource {
         Representation response = null;
         List<Tag> match = conditions.getMatch();
         List<Tag> noneMatch = conditions.getNoneMatch();
-        JsonValue value = entityValue(entity);
         try {
+            JsonValue value = entityValue(entity);
             if (match.size() == 0 && noneMatch.size() == 1
             && noneMatch.get(0) != null && noneMatch.get(0).equals(Tag.ALL)) { // unambiguous create
-                response = toRepresentation(jsonResourceCreate(value));
+                response = toRepresentation(accessor.create(this.id, value));
                 setStatus(Status.SUCCESS_CREATED);
             } else if (noneMatch.size() == 0 && match.size() == 1
              && match.get(0) != null && !match.get(0).equals(Tag.ALL)) { // unambiguous update
-                response = toRepresentation(jsonResourceUpdate(value));
+                response = toRepresentation(accessor.update(this.id, this.rev, value));
 // TODO: Should a successful update to the _id property result in a redirect to the new resource?
             } else { // ambiguous whether object is being created or updated
-                try {
-                    response = toRepresentation(jsonResourceUpdate(value)); // attempt update
+                try { // try update first
+                    response = toRepresentation(accessor.update(this.id, this.rev, value));
                 } catch (JsonResourceException jre) {
-                    if (jre.getCode() == Status.CLIENT_ERROR_NOT_FOUND.getCode()) {
-                        response = toRepresentation(jsonResourceCreate(value)); // fallback to create
+                    if (jre.hasCode(JsonResourceException.NOT_FOUND)) { // nothing to update; fallback to create
+                        response = toRepresentation(accessor.create(this.id, value));
                         setStatus(Status.SUCCESS_CREATED);
                     } else {
                         throw jre;
@@ -449,13 +311,13 @@ public class JsonServerResource extends ExtendedServerResource {
                 if (_id != null) { // allow optional specification of identifier in query parameter
                     this.id = _id;
                 }
-                response = toRepresentation(jsonResourceCreate(entityValue(entity)));
+                response = toRepresentation(accessor.create(this.id, entityValue(entity)));
                 if (response == null) { // expect a response to the create
                     throw JsonResourceException.INTERNAL_ERROR;
                 }
                 setStatus(Status.SUCCESS_CREATED);
             } else { // action
-                response = toRepresentation(jsonResourceAction(entityValue(entity)));
+                response = toRepresentation(accessor.action(this.id, getQueryParams(), entityValue(entity)));
                 if (response == null) {
                     setStatus(Status.SUCCESS_NO_CONTENT);
                 }
@@ -473,7 +335,7 @@ public class JsonServerResource extends ExtendedServerResource {
     @Override
     public Representation delete() throws ResourceException {
         try {
-            jsonResourceDelete();
+            accessor.delete(this.id, this.rev);
         } catch (JsonResourceException jre) {
             throw new ResourceException(jre);
         }
@@ -492,7 +354,7 @@ public class JsonServerResource extends ExtendedServerResource {
     public Representation patch(Representation entity) throws ResourceException {
         Representation response = null;
         try {
-            response = toRepresentation(jsonResourcePatch(entityValue(entity)));
+            response = toRepresentation(accessor.patch(this.id, this.rev, entityValue(entity)));
             if (response == null) { // expect a response to the patch
                 throw JsonResourceException.INTERNAL_ERROR;
             }
