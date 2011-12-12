@@ -90,9 +90,9 @@ public class JsonServerResource extends ExtendedServerResource {
      * @return TODO.
      */
     private Representation toRepresentation(JsonValue value) {
-        JacksonRepresentation result = null;
+        JacksonRepresentation<Object> result = null;
         if (value != null) {
-            result = new JacksonRepresentation(value.getObject());
+            result = new JacksonRepresentation<Object>(value.getObject());
             result.setObjectClass(Object.class); // probably superfluous
             result.setTag(getTag(value)); // set ETag, if _rev is in value
         }

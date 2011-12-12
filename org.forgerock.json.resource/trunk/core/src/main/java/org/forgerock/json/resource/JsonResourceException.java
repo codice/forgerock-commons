@@ -178,7 +178,7 @@ public class JsonResourceException extends Exception {
      * {@code null} as its detail message.
      *
      * @param code the numeric code of the exception.
-     * @param reason the short reason phrase of the exception.
+     * @param message the short reason phrase of the exception.
      */
     public JsonResourceException(int code, String message) {
         super(message);
@@ -252,7 +252,7 @@ public class JsonResourceException extends Exception {
      * exception.
      *
      * @param exception the exception whose code is to be compared to this exception's.
-     * @return {@true} if the specified exception has the same code.
+     * @return {@code true} if the specified exception has the same code.
      */
     public boolean hasCode(JsonResourceException exception) {
         return (this.code == exception.code);
