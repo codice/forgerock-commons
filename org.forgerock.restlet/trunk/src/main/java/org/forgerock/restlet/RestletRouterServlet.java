@@ -45,13 +45,22 @@ import org.restlet.ext.servlet.ServletAdapter;
 public class RestletRouterServlet extends HttpServlet {
 
     /** TODO: Description. */
-    private Application application;
-    
+    private final Application application;
+
+    /** TODO: Description. */
+    private final Router router = new Router();
+
     /** TODO: Description. */
     private ServletAdapter adapter;
 
-    /** TODO: Description. */
-    private Router router;
+    /**
+     * TODO: Description.
+     */
+    public RestletRouterServlet() {
+        application = new Application();
+        application.getTunnelService().setQueryTunnel(false); // query string purism
+        application.setInboundRoot(router);
+    }
 
     /**
      * TODO: Description.
@@ -102,10 +111,6 @@ public class RestletRouterServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        router = new Router();
-        application = new Application();
-        application.getTunnelService().setQueryTunnel(false); // query string purism
-        application.setInboundRoot(router);
         adapter = new ServletAdapter(getServletContext(), application);
     }
 
@@ -117,8 +122,6 @@ public class RestletRouterServlet extends HttpServlet {
     @Override
     public void destroy() {
         adapter = null;
-        application = null;
-        router = null;
         super.destroy();
     }
 

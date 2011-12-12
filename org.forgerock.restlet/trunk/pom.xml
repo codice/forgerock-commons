@@ -80,7 +80,7 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            org.forgerock.restlet.servlet;version=${project.version}
+                            org.forgerock.restlet;version=${project.version}
                         </Export-Package>
                     </instructions>
                 </configuration>
