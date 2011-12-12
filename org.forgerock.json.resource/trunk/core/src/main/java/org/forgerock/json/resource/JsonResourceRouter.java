@@ -29,7 +29,7 @@ import org.forgerock.json.fluent.JsonValueException;
  *
  * @author Paul C. Bryan
  */
-public class JsonResourceIdRouter implements JsonResource {
+public class JsonResourceRouter implements JsonResource {
 
     /**
      * Maps {@code id} prefixes to the resources to route to. An {@code id} matches if it
@@ -44,12 +44,16 @@ public class JsonResourceIdRouter implements JsonResource {
      * by the {@code '/'} character. On a successful match, the {@code id} member in the JSON
      * resource request is modified to remove the matching resource prefix.
      *
-     * @throws JsonResourceException if there is no resource to route to.
-     * @throws JsonValueException if the request is malformed.
+     * @throws JsonResourceException if there is no resource to route to or the request is malformed.
      */
     @Override
-    public JsonValue handle(JsonValue request) throws JsonResourceException, JsonValueException {
-        String id = request.get("id").asString();
+    public JsonValue handle(JsonValue request) throws JsonResourceException {
+        String id;
+        try {
+            id = request.get("id").asString();
+        } catch (JsonValueException jve) {
+            throw new JsonResourceException(JsonResourceException.BAD_REQUEST, jve);
+        }
         JsonResource resource = routes.get(id); // try exact match first
         String child = null;
         if (resource == null && id != null) {

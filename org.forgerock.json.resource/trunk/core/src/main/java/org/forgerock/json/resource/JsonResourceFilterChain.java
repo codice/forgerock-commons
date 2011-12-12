@@ -22,7 +22,6 @@ import java.util.List;
 
 // JSON Fluent
 import org.forgerock.json.fluent.JsonValue;
-import org.forgerock.json.fluent.JsonValueException;
 
 /**
  * TODO: Description.
@@ -41,14 +40,12 @@ public class JsonResourceFilterChain implements JsonResource {
      * TODO: Description.
      *
      * @throws JsonResourceException if there is an exception handling the request.
-     * @throws JsonValueException if the request is malformed.
      */
     @Override
-    public JsonValue handle(JsonValue request) throws JsonResourceException, JsonValueException {
+    public JsonValue handle(JsonValue request) throws JsonResourceException {
         return new JsonResource() {
             int cursor = 0;
-            @Override public JsonValue handle(JsonValue request)
-             throws JsonResourceException, JsonValueException {
+            @Override public JsonValue handle(JsonValue request) throws JsonResourceException {
                 return (cursor < filters.size() ?
                  filters.get(cursor++).filter(request, this) : resource.handle(request));
             }

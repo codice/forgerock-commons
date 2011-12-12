@@ -18,7 +18,6 @@ package org.forgerock.json.resource;
 
 // JSON Fluent
 import org.forgerock.json.fluent.JsonValue;
-import org.forgerock.json.fluent.JsonValueException;
 
 /**
  * Interface to filter JSON resource requests and/or JSON resource responses.
@@ -43,7 +42,6 @@ public interface JsonResourceFilter {
      * @param next the next filter or resource in chain.
      * @return the JSON resource response.
      * @throws JsonResourceException if there is an exception handling the request.
-     * @throws JsonValueException if the request is malformed.
      */
-    JsonValue filter(JsonValue request, JsonResource next) throws JsonResourceException, JsonValueException;
+    JsonValue filter(JsonValue request, JsonResource next) throws JsonResourceException;
 }

@@ -18,7 +18,6 @@ package org.forgerock.json.resource;
 
 // JSON Fluent
 import org.forgerock.json.fluent.JsonValue;
-import org.forgerock.json.fluent.JsonValueException;
 
 /**
  * TODO: Description.
@@ -33,7 +32,6 @@ public interface JsonResource {
      * @param request the JSON resource request.
      * @return the JSON resource response.
      * @throws JsonResourceException if there is an exception handling the request.
-     * @throws JsonValueException if the request is malformed.
      */
-    JsonValue handle(JsonValue request) throws JsonResourceException, JsonValueException;
+    JsonValue handle(JsonValue request) throws JsonResourceException;
 }
