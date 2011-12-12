@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.forgerock.commons</groupId>
-        <artifactId>json-resource-project</artifactId>
+        <artifactId>org.forgerock.json.resource.parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <groupId>org.forgerock.commons</groupId>
