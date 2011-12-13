@@ -20,7 +20,7 @@ package org.forgerock.json.resource;
 import org.forgerock.json.fluent.JsonValue;
 
 /**
- * TODO: Description.
+ * A resource that exposes a JSON representation.
  *
  * @author Paul C. Bryan
  */
@@ -28,6 +28,8 @@ public interface JsonResource {
 
     /**
      * Handles a JSON resource request and returns a JSON resource response.
+     * <p>
+     * Note: The request SHOULD NOT be modified by the resource.
      *
      * @param request the JSON resource request.
      * @return the JSON resource response.

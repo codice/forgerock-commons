@@ -35,9 +35,12 @@ public interface JsonResourceFilter {
      * before being returned by the filter.
      * <p>
      * A filter may elect not to pass the request to the next handler, instead handling the
-     * request itself. The filter can also replace a response with response of its own after
-     * the call to {@code next.handle(request)}.
+     * request itself, or creating its own request variant. After the call to 
+     * {@code next.handle(request)}, the filter can modify the response or replace it with
+     * a response of its own.
      * <p>
+     * Note: The request SHOULD NOT be modified by the filter.
+     * 
      * @param request the JSON resource request.
      * @param next the next filter or resource in chain.
      * @return the JSON resource response.

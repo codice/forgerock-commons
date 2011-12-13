@@ -74,7 +74,8 @@ public class JsonResourceRouter implements JsonResource {
         if (resource == null) {
             throw new JsonResourceException(JsonResourceException.NOT_FOUND, "No route for " + id);
         }
-        request.put("id", child); // modify id in request; can be null
+        request = request.clone(); // shallow copy to modify id
+        request.put("id", child); // "relativize" id in request; can be null
         return resource.handle(request);
     }
 }

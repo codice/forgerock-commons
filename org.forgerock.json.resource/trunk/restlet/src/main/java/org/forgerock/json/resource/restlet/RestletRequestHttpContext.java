@@ -79,7 +79,7 @@ class RestletRequestHttpContext {
                     result.put("security", security);
                 }
                 result.put("method", request.getMethod().getName());
-                result.put("path", request.getResourceRef().getRelativePart());
+                result.put("path", request.getOriginalRef().getPath());
                 result.put("query", lazyQuery(request));
                 result.put("headers", lazyHeaders(request));
                 return result;
@@ -106,7 +106,11 @@ class RestletRequestHttpContext {
      * TODO: Description.
      */
     private static Map<String, List<String>> lazyQuery(final Request request) {
-        return lazyForm(request.getResourceRef().getQueryAsForm());
+        Map<String, List<String>> result = null;
+        if (request.getOriginalRef().getQuery() != null) {
+            result = lazyForm(request.getResourceRef().getQueryAsForm());
+        }
+        return result;
     }
 
     /**

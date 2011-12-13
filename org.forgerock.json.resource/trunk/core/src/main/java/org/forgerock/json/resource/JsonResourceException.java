@@ -173,9 +173,6 @@ public class JsonResourceException extends Exception {
 
     /**
      * Constructs a new exception with the specified exception code and detail message.
-     * 
-     * and reason phrase, and
-     * {@code null} as its detail message.
      *
      * @param code the numeric code of the exception.
      * @param message the short reason phrase of the exception.

@@ -81,8 +81,12 @@ public class JsonResourceContext {
      * @return the root context.
      */
     public static JsonValue getRootContext(JsonValue context) {
-        while (context != null && context.isDefined("parent")) {
-            context = context.get("parent");
+        while (context != null) {
+            JsonValue parent = context.get("parent");
+            if (parent.isNull()) {
+                break;
+            }
+            context = parent;
         }
         return (context == null ? new JsonValue(null) : context);
     }
