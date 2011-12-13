@@ -21,22 +21,29 @@ import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.fluent.JsonValueException;
 
 /**
- * A convenience class that breaks-out requests into specific methods.
+ * A convenience class that dispatches requests to specific methods.
  *
  * @author Paul C. Bryan
  */
 public class SimpleJsonResource implements JsonResource {
 
-    /** TODO: Description. */
-    private enum Method {
+    /** Standard JSON resource request methods. */
+    public enum Method {
         create, read, update, delete, patch, query, action
     }
 
     /**
-     * TODO: Description.
+     * Handles a JSON resource request by dispatching to the method corresponding with the
+     * method member of the request. If the request method is not one of the standard JSON
+     * resource request methods, a {@code JsonResourceException} is thrown. 
      * <p>
      * This method catches any thrown {@code JsonValueException}, and rethrows it as a
-     * {@link JsonResourceException#BAD_REQUEST}.
+     * {@link JsonResourceException#BAD_REQUEST}. This allows the use of JsonValue methods
+     * to validate the content of the request.
+     *
+     * @param request the JSON resource request.
+     * @return the JSON resource response.
+     * @throws if there is an exception handling the request.
      */ 
     @Override
     public JsonValue handle(JsonValue request) throws JsonResourceException {
@@ -71,77 +78,84 @@ public class SimpleJsonResource implements JsonResource {
     }
 
     /**
-     * TODO: Description.
+     * Called to handle a "create" JSON resource request. This implementation throws a
+     * {@link JsonResourceException#FORBIDDEN} exception.
      *
-     * @param request TODO.
-     * @return TODO.
-     * @throws JsonResourceException TODO.
+     * @param request the JSON resource request.
+     * @return the JSON resource response.
+     * @throws if there is an exception handling the request.
      */
     protected JsonValue create(JsonValue request) throws JsonResourceException {
         throw JsonResourceException.FORBIDDEN;
     }
 
     /**
-     * TODO: Description.
+     * Called to handle a "read" JSON resource request. This implementation throws a
+     * {@link JsonResourceException#FORBIDDEN} exception.
      *
-     * @param request TODO.
-     * @return TODO.
-     * @throws JsonResourceException TODO.
+     * @param request the JSON resource request.
+     * @return the JSON resource response.
+     * @throws if there is an exception handling the request.
      */
     protected JsonValue read(JsonValue request) throws JsonResourceException {
         throw JsonResourceException.FORBIDDEN;
     }
 
     /**
-     * TODO: Description.
+     * Called to handle a "update" JSON resource request. This implementation throws a
+     * {@link JsonResourceException#FORBIDDEN} exception.
      *
-     * @param request TODO.
-     * @return TODO.
-     * @throws JsonResourceException TODO.
+     * @param request the JSON resource request.
+     * @return the JSON resource response.
+     * @throws if there is an exception handling the request.
      */
     protected JsonValue update(JsonValue request) throws JsonResourceException {
         throw JsonResourceException.FORBIDDEN;
     }
 
     /**
-     * TODO: Description.
+     * Called to handle a "delete" JSON resource request. This implementation throws a
+     * {@link JsonResourceException#FORBIDDEN} exception.
      *
-     * @param request TODO.
-     * @return TODO.
-     * @throws JsonResourceException TODO.
+     * @param request the JSON resource request.
+     * @return the JSON resource response.
+     * @throws if there is an exception handling the request.
      */
     protected JsonValue delete(JsonValue request) throws JsonResourceException {
         throw JsonResourceException.FORBIDDEN;
     }
 
     /**
-     * TODO: Description.
+     * Called to handle a "patch" JSON resource request. This implementation throws a
+     * {@link JsonResourceException#FORBIDDEN} exception.
      *
-     * @param request TODO.
-     * @return TODO.
-     * @throws JsonResourceException TODO.
+     * @param request the JSON resource request.
+     * @return the JSON resource response.
+     * @throws if there is an exception handling the request.
      */
     protected JsonValue patch(JsonValue request) throws JsonResourceException {
         throw JsonResourceException.FORBIDDEN;
     }
 
     /**
-     * TODO: Description.
+     * Called to handle a "query" JSON resource request. This implementation throws a
+     * {@link JsonResourceException#FORBIDDEN} exception.
      *
-     * @param request TODO.
-     * @return TODO.
-     * @throws JsonResourceException TODO.
+     * @param request the JSON resource request.
+     * @return the JSON resource response.
+     * @throws if there is an exception handling the request.
      */
     protected JsonValue query(JsonValue request) throws JsonResourceException {
         throw JsonResourceException.FORBIDDEN;
     }
 
     /**
-     * TODO: Description.
+     * Called to handle an "action" JSON resource request. This implementation throws a
+     * {@link JsonResourceException#FORBIDDEN} exception.
      *
-     * @param request TODO.
-     * @return TODO.
-     * @throws JsonResourceException TODO.
+     * @param request the JSON resource request.
+     * @return the JSON resource response.
+     * @throws if there is an exception handling the request.
      */
     protected JsonValue action(JsonValue request) throws JsonResourceException {
         throw JsonResourceException.FORBIDDEN;

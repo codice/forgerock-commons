@@ -28,18 +28,18 @@ public interface JsonResourceFilter {
 
     /**
      * Filters the JSON resource request and/or JSON resource response. A filter is typically
-     * included in a list within {@link JsonResourceFilterChain}. 
+     * included in a list of filters in a {@link JsonResourceFilterChain}. 
      * <p>
      * To pass the request to the next filter/handler in the chain, the filter calls
      * {@code next.handle(request)}. The response returned from the call can be filtered
      * before being returned by the filter.
      * <p>
-     * A filter may elect not to pass the request to the next handler, instead handling the
-     * request itself, or creating its own request variant. After the call to 
-     * {@code next.handle(request)}, the filter can modify the response or replace it with
-     * a response of its own.
+     * A filter may elect not to pass the request to the next filter/handler, instead handling
+     * the request itself. It may also create its own request variant, and pass that along.
+     * After the call to {@code next.handle(request)}, the filter can modify the response or
+     * replace it with its own response.
      * <p>
-     * Note: The request SHOULD NOT be modified by the filter.
+     * <strong>Note:</strong> This method <strong>should not</strong> modify the request.
      * 
      * @param request the JSON resource request.
      * @param next the next filter or resource in chain.

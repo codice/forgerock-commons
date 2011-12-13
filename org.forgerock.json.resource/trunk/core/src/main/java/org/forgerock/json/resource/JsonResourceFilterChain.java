@@ -24,7 +24,11 @@ import java.util.List;
 import org.forgerock.json.fluent.JsonValue;
 
 /**
- * TODO: Description.
+ * Passes JSON resource requests through a list of filters and then to a target resource.
+ * <p>
+ * <strong>Note:</strong> This implementation is not synchronized. Modifying an active filter
+ * chain can result in undefined behavior. If a filter chain needs to be modified, it is
+ * recommended to create a copy, modify the, and then place it into service.
  *
  * @author Paul C. Bryan
  */
@@ -33,21 +37,31 @@ public class JsonResourceFilterChain implements JsonResource {
     /** The list of filters to pass the request through. */
     protected final List<JsonResourceFilter> filters = new ArrayList<JsonResourceFilter>();
 
-    /** The resource to dispatch the request to once passed through all filters. */
+    /** The target resource to process the request once passed through the filters. */
     protected JsonResource resource;
 
     /**
-     * TODO: Description.
+     * Handles a JSON resource request by passing it through the filters and then to the
+     * target resource.
      *
+     * @param request the JSON resource request.
+     * @return the JSON resource response.
      * @throws JsonResourceException if there is an exception handling the request.
      */
     @Override
     public JsonValue handle(JsonValue request) throws JsonResourceException {
         return new JsonResource() {
-            int cursor = 0;
+            private int cursor = 0;
             @Override public JsonValue handle(JsonValue request) throws JsonResourceException {
-                return (cursor < filters.size() ?
-                 filters.get(cursor++).filter(request, this) : resource.handle(request));
+                int saved = cursor; // save position to restore after the call
+                JsonValue response;
+                try {
+                    response = (cursor < filters.size() ?
+                     filters.get(cursor++).filter(request, this) : resource.handle(request));
+                } finally {
+                    cursor = saved;
+                }
+                return response;
             }
         }.handle(request);
     }
