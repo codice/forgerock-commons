@@ -134,7 +134,7 @@ public class JsonServerResource extends ExtendedServerResource {
             JsonValue value = accessor.read(this.id);
             Status status = conditions.getStatus(getMethod(), true, getTag(value), null);
             if (status != null && status.isError()) {
-                throw JsonResourceException.VERSION_MISMATCH;
+                throw new JsonResourceException(JsonResourceException.VERSION_MISMATCH);
             }
             this.value = value; // cache to prevent multiple reads
         }
@@ -186,7 +186,7 @@ public class JsonServerResource extends ExtendedServerResource {
     protected Representation doHandle() throws ResourceException {
         try {
             if (conditions.getModifiedSince() != null || conditions.getUnmodifiedSince() != null) {
-                throw JsonResourceException.VERSION_MISMATCH; // unsupported
+                throw new JsonResourceException(JsonResourceException.VERSION_MISMATCH); // unsupported
             }
             if (conditions.getMatch().size() > 1 || conditions.getNoneMatch().size() > 0) {
                 rev = getTag(read()).getName(); // derive from fetched resource
@@ -218,12 +218,12 @@ public class JsonServerResource extends ExtendedServerResource {
             if (query == null || query.size() == 0) { // read
                 response = toRepresentation(read());
             } else if (conditions.hasSome()) { // query w. precondition: automatic mismatch
-                    throw JsonResourceException.VERSION_MISMATCH;
+                    throw new JsonResourceException(JsonResourceException.VERSION_MISMATCH);
             } else { // query                
                 response = toRepresentation(accessor.query(this.id, getQueryParams()));
             }
             if (response == null) { // expect a response from the read or query
-                throw JsonResourceException.INTERNAL_ERROR;
+                throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
             }
         } catch (JsonResourceException jre) {
             throw new ResourceException(jre);
@@ -265,7 +265,7 @@ public class JsonServerResource extends ExtendedServerResource {
                 try { // try update first
                     response = toRepresentation(accessor.update(this.id, this.rev, value));
                 } catch (JsonResourceException jre) {
-                    if (jre.hasCode(JsonResourceException.NOT_FOUND)) { // nothing to update; fallback to create
+                    if (jre.getCode() == JsonResourceException.NOT_FOUND) { // nothing to update; fallback to create
                         response = toRepresentation(accessor.create(this.id, value));
                         setStatus(Status.SUCCESS_CREATED);
                     } else {
@@ -274,7 +274,7 @@ public class JsonServerResource extends ExtendedServerResource {
                 }
             }
             if (response == null) { // expect a response from the create or update
-                throw JsonResourceException.INTERNAL_ERROR;
+                throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
             }
         } catch (JsonResourceException jre) {
             throw new ResourceException(jre);
@@ -313,7 +313,7 @@ public class JsonServerResource extends ExtendedServerResource {
                 }
                 response = toRepresentation(accessor.create(this.id, entityValue(entity)));
                 if (response == null) { // expect a response to the create
-                    throw JsonResourceException.INTERNAL_ERROR;
+                    throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
                 }
                 setStatus(Status.SUCCESS_CREATED);
             } else { // action
@@ -356,7 +356,7 @@ public class JsonServerResource extends ExtendedServerResource {
         try {
             response = toRepresentation(accessor.patch(this.id, this.rev, entityValue(entity)));
             if (response == null) { // expect a response to the patch
-                throw JsonResourceException.INTERNAL_ERROR;
+                throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
             }
         } catch (JsonResourceException jre) {
             throw new ResourceException(jre);

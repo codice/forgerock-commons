@@ -75,7 +75,7 @@ public class JsonResourceAccessor {
      */
     public JsonValue create(String id, JsonValue value) throws JsonResourceException {
         if (value == null) {
-            throw JsonResourceException.BAD_REQUEST;
+            throw new JsonResourceException(JsonResourceException.BAD_REQUEST);
         }
         JsonValue request = newRequest("create", id);
         request.put("value", value.getObject());
@@ -103,7 +103,7 @@ public class JsonResourceAccessor {
      */
     public JsonValue update(String id, String rev, JsonValue value) throws JsonResourceException {
         if (value == null) {
-            throw JsonResourceException.BAD_REQUEST;
+            throw new JsonResourceException(JsonResourceException.BAD_REQUEST);
         }
         JsonValue request = newRequest("update", id);
         if (rev != null) {
@@ -138,7 +138,7 @@ public class JsonResourceAccessor {
      */
     public JsonValue patch(String id, String rev, JsonValue value) throws JsonResourceException {
         if (value == null) {
-            throw JsonResourceException.BAD_REQUEST;
+            throw new JsonResourceException(JsonResourceException.BAD_REQUEST);
         }
         JsonValue request = newRequest("patch", id);
         if (rev != null) {

@@ -42,50 +42,50 @@ public class JsonResourceException extends Exception {
      * Indicates that the request could not be understood by the resource due to malformed
      * syntax. Equivalent to HTTP status: 400 Bad Request.
      */
-    public static final JsonResourceException BAD_REQUEST = new JsonResourceException(400);
+    public static final int BAD_REQUEST = 400;
 
     /**
      * Indicates the request could not be completed due to a conflict with the current state
      * of the resource. Equivalent to HTTP status: 409 Conflict.
      */
-    public static final JsonResourceException CONFLICT = new JsonResourceException(409);
+    public static final int CONFLICT = 409;
 
     /**
      * Indicates that the resource understood the request, but is refusing to fulfill it.
      * Equivalent to HTTP status: 403 Forbidden.
      */
-    public static final JsonResourceException FORBIDDEN = new JsonResourceException(403);
+    public static final int FORBIDDEN = 403;
 
     /**
      * Indicates that a resource encountered an unexpected condition which prevented it from
      * fulfilling the request. Equivalent to HTTP status: 500 Internal Server Error.
      */
-    public static final JsonResourceException INTERNAL_ERROR = new JsonResourceException(500);
+    public static final int INTERNAL_ERROR = 500;
 
     /**
      * Indicates that the resource could not be found. Equivalent to HTTP status:
      * 404 Not Found.
      */
-    public static final JsonResourceException NOT_FOUND = new JsonResourceException(404);
+    public static final int NOT_FOUND = 404;
 
     /**
      * Indicates that the resource's current version does not match the version provided.
      * Equivalent to HTTP status: 412 Precondition Failed.
      */
-    public static final JsonResourceException VERSION_MISMATCH = new JsonResourceException(412);
+    public static final int VERSION_MISMATCH = 412;
 
     /**
      * Indicates that the resource requires a version, but no version was supplied in the
      * request. Equivalent to draft-nottingham-http-new-status-03 HTTP status:
      * 428 Precondition Required.
      */ 
-    public static final JsonResourceException VERSION_REQUIRED = new JsonResourceException(428);
+    public static final int VERSION_REQUIRED = 428;
 
     /**
      * Indicates that the resource is temporarily unable to handle the request. Equivalent to
      * HTTP status: 503 Service Unavailable.
      */
-    public static final JsonResourceException UNAVAILABLE = new JsonResourceException(503);
+    public static final int UNAVAILABLE = 503;
 
     /** The numeric code of the exception. */
     private final int code;
@@ -101,35 +101,84 @@ public class JsonResourceException extends Exception {
     private static String reason(int code) {
         String result = "Resource Exception"; // default
         switch (code) {
-        case 400: result = "Bad Request"; break;
+        case BAD_REQUEST: result = "Bad Request"; break;
         case 401: result = "Unauthorized"; break;
         case 402: result = "Payment Required"; break;
-        case 403: result = "Forbidden"; break;
-        case 404: result = "Not Found"; break;
+        case FORBIDDEN: result = "Forbidden"; break;
+        case NOT_FOUND: result = "Not Found"; break;
         case 405: result = "Method Not Allowed"; break;
         case 406: result = "Not Acceptable"; break;
         case 407: result = "Proxy Authentication Required"; break;
         case 408: result = "Request Time-out"; break;
-        case 409: result = "Conflict"; break;
+        case CONFLICT: result = "Conflict"; break;
         case 410: result = "Gone"; break;
         case 411: result = "Length Required"; break;
-        case 412: result = "Precondition Failed"; break;
+        case VERSION_REQUIRED: result = "Precondition Failed"; break;
         case 413: result = "Request Entity Too Large"; break;
         case 414: result = "Request-URI Too Large"; break;
         case 415: result = "Unsupported Media Type"; break;
         case 416: result = "Requested range not satisfiable"; break;
         case 417: result = "Expectation Failed"; break;
-        case 428: result = "Precondition Required";  break; // draft-nottingham-http-new-status-03
-        case 500: result = "Internal Server Error"; break;
+        case VERSION_MISMATCH: result = "Precondition Required";  break; // draft-nottingham-http-new-status-03
+        case INTERNAL_ERROR: result = "Internal Server Error"; break;
         case 501: result = "Not Implemented"; break;
         case 502: result = "Bad Gateway"; break;
-        case 503: result = "Service Unavailable"; break;
+        case UNAVAILABLE: result = "Service Unavailable"; break;
         case 504: result = "Gateway Time-out"; break;
         case 505: result = "HTTP Version not supported"; break;
         }
         return result;
     }
     
+    /**
+     * Constructs a new exception with the specified exception code, and {@code null} as its
+     * detail message. If the error code corresponds with a known HTTP error status code,
+     * then the reason phrase is set to a corresponding reason phrase, otherwise is
+     * set to a generic value {@code "Resource Exception"}.
+     *
+     * @param code the numeric code of the exception.
+     */
+    public JsonResourceException(int code) {
+        this.code = code;
+        this.reason = reason(code);
+    }
+
+    /**
+     * Constructs a new exception with the specified exception code and detail message.
+     *
+     * @param code the numeric code of the exception.
+     * @param message the short reason phrase of the exception.
+     */
+    public JsonResourceException(int code, String message) {
+        super(message);
+        this.code = code;
+        this.reason = reason(code);
+    }
+
+    /**
+     * Constructs a new exception with the specified exception code and cause.
+     *
+     * @param code the numeric code of the exception.
+     * @param cause the cause of the exception.
+     */
+    public JsonResourceException(int code, Throwable cause) {
+        super(cause);
+        this.code = code;
+        this.reason = reason(code);
+    }
+
+    /**
+     * Constructs a new exception with the specified exception code, reason phrase and cause.
+     * The detail message is initialized to the detail message from the specified cause. 
+     *
+     * @param code the numeric code of the exception.
+     * @param message the detail message of the exception.
+     * @param cause the cause of the exception.
+     */
+    public JsonResourceException(int code, String message, Throwable cause) {
+        this(code, reason(code), message, cause);
+    }
+
     /**
      * Constructs a new exception with the specified exception code, reason phrase, detail
      * message and cause.
@@ -146,91 +195,6 @@ public class JsonResourceException extends Exception {
     }
 
     /**
-     * Constructs a new exception with the specified exception code, reason phrase and detail
-     * message.
-     *
-     * @param code the numeric code of the exception.
-     * @param reason the short reason phrase of the exception.
-     * @param message the detail message of the exception.
-     */
-    public JsonResourceException(int code, String reason, String message) {
-        super(message);
-        this.code = code;
-        this.reason = reason;
-    }
-
-    /**
-     * Constructs a new exception with the specified exception code, reason phrase and cause.
-     * The detail message is initialized to the detail message from the specified cause. 
-     *
-     * @param code the numeric code of the exception.
-     * @param reason the short reason phrase of the exception.
-     * @param cause the cause of the exception.
-     */
-    public JsonResourceException(int code, String reason, Throwable cause) {
-        this(code, reason, cause.getMessage(), cause);
-    }
-
-    /**
-     * Constructs a new exception with the specified exception code and detail message.
-     *
-     * @param code the numeric code of the exception.
-     * @param message the short reason phrase of the exception.
-     */
-    public JsonResourceException(int code, String message) {
-        super(message);
-        this.code = code;
-        this.reason = reason(code);
-    }
-
-    /**
-     * Constructs a new exception with the specified exception code, and {@code null} as its
-     * detail message. If the error code corresponds with a known HTTP error status code,
-     * then the reason phrase is set to a corresponding reason phrase, otherwise is
-     * set to a generic value {@code "Resource Exception"}.
-     *
-     * @param code the numeric code of the exception.
-     */
-    public JsonResourceException(int code) {
-        this(code, reason(code));
-    }
-
-    /**
-     * Constructs a new exception, with the exception code and reason phrase from the
-     * specified prototype, and the specified detail message.
-     *
-     * @param prototype the exception prototype from which to derive error code and reason phrase. 
-     * @param message the detail message of the exception.
-     */
-    public JsonResourceException(JsonResourceException prototype, String message) {
-        this(prototype.code, prototype.reason, message);
-    }
-
-    /**
-     * Constructs a new exception, with the exception code and reason phrase from the
-     * specified prototype, and the specified cause. The detail message is initialized to the
-     * detail message from the specified cause. 
-     *
-     * @param prototype the exception prototype from which to derive error code and reason phrase. 
-     * @param cause the cause of the exception.
-     */
-    public JsonResourceException(JsonResourceException prototype, Throwable cause) {
-        this(prototype.code, prototype.reason, cause);
-    }
-
-    /**
-     * Constructs a new exception, with the exception code and reason phrase from the
-     * specified prototype, and the specified detail message and cause.
-     *
-     * @param prototype the exception prototype from which to derive error code and reason phrase. 
-     * @param message the detail message of the exception.
-     * @param cause the cause of the exception.
-     */
-    public JsonResourceException(JsonResourceException prototype, String message, Throwable cause) {
-        this(prototype.code, prototype.reason, message, cause);
-    }
-
-    /**
      * Returns the numeric code of the exception.
      */
     public int getCode() {
@@ -242,17 +206,6 @@ public class JsonResourceException extends Exception {
      */
     public String getReason() {
         return reason;
-    }
-
-    /**
-     * Returns {@code true} if this exception has the same code as the specified
-     * exception.
-     *
-     * @param exception the exception whose code is to be compared to this exception's.
-     * @return {@code true} if the specified exception has the same code.
-     */
-    public boolean hasCode(JsonResourceException exception) {
-        return (this.code == exception.code);
     }
 
     /**

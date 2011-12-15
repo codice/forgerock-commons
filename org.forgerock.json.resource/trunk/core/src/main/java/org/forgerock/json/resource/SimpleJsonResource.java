@@ -57,7 +57,7 @@ public class SimpleJsonResource implements JsonResource {
                 case patch: return patch(request);
                 case query: return query(request);
                 case action: return action(request);
-                default: throw JsonResourceException.BAD_REQUEST;
+                default: throw new JsonResourceException(JsonResourceException.BAD_REQUEST);
                 }
             } catch (JsonValueException jve) {
                 throw new JsonResourceException(JsonResourceException.BAD_REQUEST, jve);
@@ -86,7 +86,7 @@ public class SimpleJsonResource implements JsonResource {
      * @throws if there is an exception handling the request.
      */
     protected JsonValue create(JsonValue request) throws JsonResourceException {
-        throw JsonResourceException.FORBIDDEN;
+        throw new JsonResourceException(JsonResourceException.FORBIDDEN);
     }
 
     /**
@@ -98,7 +98,7 @@ public class SimpleJsonResource implements JsonResource {
      * @throws if there is an exception handling the request.
      */
     protected JsonValue read(JsonValue request) throws JsonResourceException {
-        throw JsonResourceException.FORBIDDEN;
+        throw new JsonResourceException(JsonResourceException.FORBIDDEN);
     }
 
     /**
@@ -110,7 +110,7 @@ public class SimpleJsonResource implements JsonResource {
      * @throws if there is an exception handling the request.
      */
     protected JsonValue update(JsonValue request) throws JsonResourceException {
-        throw JsonResourceException.FORBIDDEN;
+        throw new JsonResourceException(JsonResourceException.FORBIDDEN);
     }
 
     /**
@@ -122,7 +122,7 @@ public class SimpleJsonResource implements JsonResource {
      * @throws if there is an exception handling the request.
      */
     protected JsonValue delete(JsonValue request) throws JsonResourceException {
-        throw JsonResourceException.FORBIDDEN;
+        throw new JsonResourceException(JsonResourceException.FORBIDDEN);
     }
 
     /**
@@ -134,7 +134,7 @@ public class SimpleJsonResource implements JsonResource {
      * @throws if there is an exception handling the request.
      */
     protected JsonValue patch(JsonValue request) throws JsonResourceException {
-        throw JsonResourceException.FORBIDDEN;
+        throw new JsonResourceException(JsonResourceException.FORBIDDEN);
     }
 
     /**
@@ -146,7 +146,7 @@ public class SimpleJsonResource implements JsonResource {
      * @throws if there is an exception handling the request.
      */
     protected JsonValue query(JsonValue request) throws JsonResourceException {
-        throw JsonResourceException.FORBIDDEN;
+        throw new JsonResourceException(JsonResourceException.FORBIDDEN);
     }
 
     /**
@@ -158,7 +158,7 @@ public class SimpleJsonResource implements JsonResource {
      * @throws if there is an exception handling the request.
      */
     protected JsonValue action(JsonValue request) throws JsonResourceException {
-        throw JsonResourceException.FORBIDDEN;
+        throw new JsonResourceException(JsonResourceException.FORBIDDEN);
     }
 
     /**
