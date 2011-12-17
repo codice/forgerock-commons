@@ -28,6 +28,7 @@ import java.util.UUID;
 // Restlet
 import org.restlet.data.Conditions;
 import org.restlet.data.Form;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.data.Tag;
 import org.restlet.representation.EmptyRepresentation;
@@ -142,6 +143,49 @@ public class JsonServerResource extends ExtendedServerResource {
     }
 
     /**
+     * TODO: Description.
+     *
+     * @param id TODO.
+     * @param value TODO.
+     * @return TODO.
+     * @throws ResourceException TODO.
+     */
+    private Representation create(String id, JsonValue value) throws JsonResourceException {
+        JsonValue response = accessor.create(id, value);
+        if (response == null) { // expect a response
+            throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
+        }
+        JsonValue _id = response.get("_id");
+        if (_id.isString()) {
+            setLocationRef(new Reference(getOriginalRef(), _id.asString()));
+        }
+        setStatus(Status.SUCCESS_CREATED);
+        return toRepresentation(response);
+    }
+
+    /**
+     * TODO: Description.
+     *
+     * @param id TODO.
+     * @param rev TODO.
+     * @param value TODO.
+     * @return TODO.
+     * @throws ResourceException TODO.
+     */
+    private Representation update(String id, String rev, JsonValue value) throws JsonResourceException {
+        JsonValue response = accessor.update(id, rev, value);
+        if (response == null) { // expect a response
+            throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
+        }
+        JsonValue _id = response.get("_id");
+        if (_id.isString() && !id.equals(_id.getObject())) { // resource was moved
+            setLocationRef(new Reference(getOriginalRef(), _id.asString()));
+            setStatus(Status.SUCCESS_CREATED); // respond like WebDAV MOVE method would
+        }
+        return toRepresentation(response);
+    }
+
+    /**
      * Returns the entity as a JSON value, or {@code null} if there is no entity or if it
      * cannot be represented as a JSON value.
      *
@@ -212,23 +256,23 @@ public class JsonServerResource extends ExtendedServerResource {
      */
     @Override
     public Representation get() throws ResourceException {
-        Representation response = null;
+        Representation representation;
         try {
             Form query = getQuery();
             if (query == null || query.size() == 0) { // read
-                response = toRepresentation(read());
+                representation = toRepresentation(read());
             } else if (conditions.hasSome()) { // query w. precondition: automatic mismatch
                     throw new JsonResourceException(JsonResourceException.VERSION_MISMATCH);
             } else { // query                
-                response = toRepresentation(accessor.query(this.id, getQueryParams()));
+                representation = toRepresentation(accessor.query(this.id, getQueryParams()));
             }
-            if (response == null) { // expect a response from the read or query
+            if (representation == null || representation instanceof EmptyRepresentation) {
                 throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
             }
         } catch (JsonResourceException jre) {
             throw new ResourceException(jre);
         }
-        return response;
+        return representation;
     }
 
     /**
@@ -248,38 +292,32 @@ public class JsonServerResource extends ExtendedServerResource {
      */
     @Override
     public Representation put(Representation entity) throws ResourceException {
-        Representation response = null;
+        Representation representation;
         List<Tag> match = conditions.getMatch();
         List<Tag> noneMatch = conditions.getNoneMatch();
         try {
             JsonValue value = entityValue(entity);
             if (match.size() == 0 && noneMatch.size() == 1
             && noneMatch.get(0) != null && noneMatch.get(0).equals(Tag.ALL)) { // unambiguous create
-                response = toRepresentation(accessor.create(this.id, value));
-                setStatus(Status.SUCCESS_CREATED);
+                representation = create(this.id, value);
             } else if (noneMatch.size() == 0 && match.size() == 1
              && match.get(0) != null && !match.get(0).equals(Tag.ALL)) { // unambiguous update
-                response = toRepresentation(accessor.update(this.id, this.rev, value));
-// TODO: Should a successful update to the _id property result in a redirect to the new resource?
+                representation = update(this.id, this.rev, value);
             } else { // ambiguous whether object is being created or updated
                 try { // try update first
-                    response = toRepresentation(accessor.update(this.id, this.rev, value));
+                    representation = update(this.id, this.rev, value);
                 } catch (JsonResourceException jre) {
                     if (jre.getCode() == JsonResourceException.NOT_FOUND) { // nothing to update; fallback to create
-                        response = toRepresentation(accessor.create(this.id, value));
-                        setStatus(Status.SUCCESS_CREATED);
+                        representation = create(this.id, value);
                     } else {
                         throw jre;
                     }
                 }
             }
-            if (response == null) { // expect a response from the create or update
-                throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
-            }
         } catch (JsonResourceException jre) {
             throw new ResourceException(jre);
         }
-        return response;
+        return representation;
     }
 
     /**
@@ -302,7 +340,7 @@ public class JsonServerResource extends ExtendedServerResource {
      */
     @Override 
     public Representation post(Representation entity) throws ResourceException {
-        Representation response = null;
+        Representation representation;
         Form query = getQuery();
         String _action = query.getFirstValue("_action");
         try {
@@ -311,21 +349,17 @@ public class JsonServerResource extends ExtendedServerResource {
                 if (_id != null) { // allow optional specification of identifier in query parameter
                     this.id = _id;
                 }
-                response = toRepresentation(accessor.create(this.id, entityValue(entity)));
-                if (response == null) { // expect a response to the create
-                    throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
-                }
-                setStatus(Status.SUCCESS_CREATED);
+                representation = create(this.id, entityValue(entity));
             } else { // action
-                response = toRepresentation(accessor.action(this.id, getQueryParams(), entityValue(entity)));
-                if (response == null) {
+                representation = toRepresentation(accessor.action(this.id, getQueryParams(), entityValue(entity)));
+                if (representation == null || representation instanceof EmptyRepresentation) {
                     setStatus(Status.SUCCESS_NO_CONTENT);
                 }
             }
         } catch (JsonResourceException jre) {
             throw new ResourceException(jre);
         }
-        return response;
+        return representation;
     }
 
     /**
