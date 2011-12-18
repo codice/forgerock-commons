@@ -73,6 +73,9 @@ public class JsonServerResource extends ExtendedServerResource {
     /** Current value of the resource (if it has been already read). */
     private JsonValue value;
 
+    /** Reference to resource being accessed. */
+    private Reference ref;
+
     /**
      * TODO: Description.
      *
@@ -157,7 +160,7 @@ public class JsonServerResource extends ExtendedServerResource {
         }
         JsonValue _id = response.get("_id");
         if (_id.isString()) {
-            setLocationRef(new Reference(getOriginalRef(), _id.asString()));
+            setLocationRef(new Reference(this.ref, _id.asString()));
         }
         setStatus(Status.SUCCESS_CREATED);
         return toRepresentation(response);
@@ -179,7 +182,7 @@ public class JsonServerResource extends ExtendedServerResource {
         }
         JsonValue _id = response.get("_id");
         if (_id.isString() && !id.equals(_id.getObject())) { // resource was moved
-            setLocationRef(new Reference(getOriginalRef(), _id.asString()));
+            setLocationRef(new Reference(this.ref, _id.asString()));
             setStatus(Status.SUCCESS_CREATED); // respond like WebDAV MOVE method would
         }
         return toRepresentation(response);
@@ -192,7 +195,7 @@ public class JsonServerResource extends ExtendedServerResource {
      * @param entity the entity to be mapped to the JSON value.
      * @return the entity as a JSON value, or {@code null} if empty or does not exist.
      */
-    private JsonValue entityValue(Representation entity) {
+    private JsonValue entityValue(Representation entity) throws ResourceException {
         JsonValue result = null;
         if (entity != null && !(entity instanceof EmptyRepresentation)) {
             JacksonRepresentation jr = (entity instanceof JacksonRepresentation ?
@@ -203,6 +206,17 @@ public class JsonServerResource extends ExtendedServerResource {
     }
 
     /**
+     * Throws a {@code JsonResourceException} if the specified entity value is {@code null}.
+     * Otherwise, returns the value.
+     */
+    private JsonValue requireEntity(JsonValue entity) throws JsonResourceException {
+        if (entity == null || entity.isNull()) {
+            throw new JsonResourceException(JsonResourceException.BAD_REQUEST, "Malformed or missing entity body");
+        }
+        return entity;
+    }
+
+    /**
      * Initializes the state of the resource.
      */
     @Override
@@ -210,15 +224,16 @@ public class JsonServerResource extends ExtendedServerResource {
         setAnnotated(false); // using method names, not annotations
         setNegotiated(false); // we shall speak all-JSON for now
         setConditional(false); // conditional requests handled in implementation
-        conditions = getConditions();
+        this.conditions = getConditions();
         String remaining = getReference().getRemainingPart(false, false);
         if (remaining != null && remaining.length() > 0) {
-            id = remaining; // default: null (resource itself is being operated on)
+            this.id = remaining; // default: null (resource itself is being operated on)
         }
-        accessor = new JsonResourceAccessor(
+        this.accessor = new JsonResourceAccessor(
          (JsonResource)(getRequestAttributes().get(JsonResource.class.getName())),
          new JsonValue(newHttpContext(JsonResourceContext.newRootContext()))
         );
+        this.ref = getOriginalRef();
     }
 
     /**
@@ -296,7 +311,7 @@ public class JsonServerResource extends ExtendedServerResource {
         List<Tag> match = conditions.getMatch();
         List<Tag> noneMatch = conditions.getNoneMatch();
         try {
-            JsonValue value = entityValue(entity);
+            JsonValue value = requireEntity(entityValue(entity));
             if (match.size() == 0 && noneMatch.size() == 1
             && noneMatch.get(0) != null && noneMatch.get(0).equals(Tag.ALL)) { // unambiguous create
                 representation = create(this.id, value);
@@ -345,11 +360,12 @@ public class JsonServerResource extends ExtendedServerResource {
         String _action = query.getFirstValue("_action");
         try {
             if ("create".equals(_action)) {
-                String _id = query.getFirstValue("_id");
-                if (_id != null) { // allow optional specification of identifier in query parameter
-                    this.id = _id;
+                JsonValue value = entityValue(entity);
+                if (this.id != null && this.id.charAt(this.id.length() - 1) != '/') {
+                    this.ref.setPath(this.ref.getPath() + '/');
+                    this.id = this.id + '/'; // create new resource within collection
                 }
-                representation = create(this.id, entityValue(entity));
+                representation = create(this.id, requireEntity(entityValue(entity)));
             } else { // action
                 representation = toRepresentation(accessor.action(this.id, getQueryParams(), entityValue(entity)));
                 if (representation == null || representation instanceof EmptyRepresentation) {
@@ -386,16 +402,16 @@ public class JsonServerResource extends ExtendedServerResource {
      */
     @Override
     public Representation patch(Representation entity) throws ResourceException {
-        Representation response = null;
+        Representation representation = null;
         try {
-            response = toRepresentation(accessor.patch(this.id, this.rev, entityValue(entity)));
-            if (response == null) { // expect a response to the patch
+            representation = toRepresentation(accessor.patch(this.id, this.rev, requireEntity(entityValue(entity))));
+            if (representation == null) { // expect a response to the patch
                 throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
             }
         } catch (JsonResourceException jre) {
             throw new ResourceException(jre);
         }
-        return response;
+        return representation;
     }
 
     /**

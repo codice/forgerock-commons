@@ -17,7 +17,7 @@
 package org.forgerock.json.resource;
 
 // Java SE
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 // JSON Fluent
@@ -36,7 +36,7 @@ public class JsonResourceRouter implements JsonResource {
      * is equal to the prefix, or if it begins with the prefix separated by a '/' character.
      * This map permits a {@code null} key.
      */
-    protected final Map<String, JsonResource> routes = new HashMap<String, JsonResource>();
+    protected final Map<String, JsonResource> routes = new LinkedHashMap<String, JsonResource>();
 
     /**
      * Dispatches the JSON resource request to the matching resource. A resource matches if
@@ -58,7 +58,7 @@ public class JsonResourceRouter implements JsonResource {
         String child = null;
         if (resource == null && id != null) {
             int idLength = id.length();
-            for (String key : routes.keySet()) {
+            for (String key : routes.keySet()) { // LinkedHashMap for iteration performance
                 if (key != null) {
                     int keyLength = key.length();
                     if (idLength > keyLength && id.charAt(keyLength) == '/' && id.startsWith(key)) {
@@ -74,8 +74,8 @@ public class JsonResourceRouter implements JsonResource {
         if (resource == null) {
             throw new JsonResourceException(JsonResourceException.NOT_FOUND, "No route for " + id);
         }
-        request = request.clone(); // shallow copy to modify id
-        request.put("id", child); // "relativize" id in request; can be null
+        request = request.clone();
+        request.put("id", child); // "relativize" id; can be null
         return resource.handle(request);
     }
 }
