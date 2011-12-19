@@ -42,6 +42,7 @@ import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.fluent.JsonTransformer;
 
 // JSON Crypto
+import org.forgerock.json.crypto.JsonCrypto;
 import org.forgerock.json.crypto.JsonCryptoException;
 import org.forgerock.json.crypto.JsonCryptoTransformer;
 import org.forgerock.json.crypto.simple.SimpleDecryptor;
@@ -128,16 +129,16 @@ public class Main {
             if (key == null) {
                 throw new JsonCryptoException("key not found: " + cmd.getOptionValue(PROPERTIES_ALIAS_OPTION));
             }
-            JsonTransformer encryptionTransformer = new JsonCryptoTransformer(new SimpleEncryptor(cmd.getOptionValue(PROPERTIES_CIPHER_OPTION, DEFAULT_CIPHER), key, cmd.getOptionValue(PROPERTIES_ALIAS_OPTION)));
+            SimpleEncryptor encryptor = new SimpleEncryptor(cmd.getOptionValue(PROPERTIES_CIPHER_OPTION, DEFAULT_CIPHER), key, cmd.getOptionValue(PROPERTIES_ALIAS_OPTION));
             JsonValue value = getSourceValue(cmd.getOptionValue(PROPERTIES_SRCJSON_OPTION), true);
-            encryptionTransformer.transform(value);
+            value = new JsonCrypto(encryptor.getType(), encryptor.encrypt(value)).toJsonValue();
             setDestinationValue(cmd.getOptionValue(PROPERTIES_DESTJSON_OPTION), value);
         } else if (cmd.hasOption(PROPERTIES_DECRYPT_COMMAND)) {
             final ArrayList<JsonTransformer> decryptionTransformers = new ArrayList<JsonTransformer>(1);
             decryptionTransformers.add(new JsonCryptoTransformer(new SimpleDecryptor(getSimpleKeySelector(cmd.getOptionValue(PROPERTIES_KEYSTORE_OPTION),
                     cmd.getOptionValue(PROPERTIES_STORETYPE_OPTION, KeyStore.getDefaultType()), cmd.getOptionValue(PROPERTIES_STOREPASS_OPTION), cmd.getOptionValue(PROPERTIES_PROVIDERNAME_OPTION)))));
             JsonValue value = getSourceValue(cmd.getOptionValue(PROPERTIES_SRCJSON_OPTION), true);
-            setDestinationValue(cmd.getOptionValue(PROPERTIES_DESTJSON_OPTION), new JsonValue(value.getValue(), new JsonPointer(), decryptionTransformers));
+            setDestinationValue(cmd.getOptionValue(PROPERTIES_DESTJSON_OPTION), new JsonValue(value.getObject(), new JsonPointer(), decryptionTransformers));
         } else {
             usage();
         }
@@ -171,11 +172,11 @@ public class Main {
 
     private void setDestinationValue(String destination, JsonValue value) throws IOException {
         if (null == destination) {
-            mapper.writeValue(System.out, value.getValue());
+            mapper.writeValue(System.out, value.getObject());
         } else {
             File dest = new File(destination);
             dest.getParentFile().mkdirs();
-            mapper.writeValue(dest, value.getValue());
+            mapper.writeValue(dest, value.getObject());
         }
     }
 

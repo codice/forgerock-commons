@@ -68,6 +68,6 @@ public class MainTest {
         ObjectMapper mapper = new ObjectMapper();
         JsonValue expected = new JsonValue(mapper.readValue(MainTest.class.getResourceAsStream("/clean.json"), Map.class));
         JsonValue actual = new JsonValue(mapper.readValue(MainTest.class.getResourceAsStream("/decrypted.json"), Map.class));
-        assertThat(actual.getValue()).isEqualTo(expected.getValue());
+        assertThat(actual.getObject()).isEqualTo(expected.getObject());
     }
 }
