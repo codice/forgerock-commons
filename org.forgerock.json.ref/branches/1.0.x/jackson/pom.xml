@@ -20,11 +20,11 @@
     <parent>
         <groupId>org.forgerock.commons</groupId>
         <artifactId>org.forgerock.json.ref.parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
     </parent>
     <groupId>org.forgerock.commons</groupId>
     <artifactId>org.forgerock.json.ref.jackson</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>JSON Reference Jackson implementation</name>
     <description>Implementation JSON Reference using Jackson, which supports http: and file: schemes</description>
     <packaging>bundle</packaging>
