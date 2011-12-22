@@ -21,23 +21,30 @@ import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.resource.Finder;
 
+// JSON Fluent
+import org.forgerock.json.fluent.JsonValue;
+
 // JSON Resource
 import org.forgerock.json.resource.JsonResource;
+import org.forgerock.json.resource.JsonResourceContext;
 
 /**
- * Wraps a JSON resource object, exposing it as a Restlet.
+ * A Restlet that dispatches requests to a JSON resource.
  *
  * @author Paul C. Bryan
  */
 public class JsonResourceRestlet extends Finder {
 
-    /** TODO: Description. */
+    /** Request attribute containing members to add to the HTTP context. */
+    public static final String ATTRIBUTE_HTTP_CONTEXT = "org.forgerock.json.resource.context.http";
+
+    /** The JSON resource to dispatch Restlet requests to. */
     private JsonResource resource;
 
     /**
-     * TODO: Description.
+     * Constructs a new Restlet that dispatching requests to a JSON resource.
      *
-     * @param resource TODO.
+     * @param resource the JSON resource to dispatch Restlet requests to.
      */
     public JsonResourceRestlet(JsonResource resource) {
         this.resource = resource;
@@ -45,14 +52,32 @@ public class JsonResourceRestlet extends Finder {
     }
 
     /**
-     * Handles a restlet call.
+     * Handles a Restlet request.
      *
      * @param request the request to handle.
      * @param response the response to update.
      */
     @Override
     public void handle(Request request, Response response) {
-        request.getAttributes().put(JsonResource.class.getName(), resource);
+        request.getAttributes().put(JsonResourceRestlet.class.getName(), this);
         super.handle(request, response);
+    }
+
+    /**
+     * Returns the JSON resource that this Restlet dispatches requests to.
+     */ 
+    public JsonResource getResource() {
+        return this.resource;
+    }
+
+    /**
+     * Creates a new HTTP context object associated with an incoming Restlet request. Can be
+     * overriden by an application to customize the context.
+     *
+     * @param request the Restlet request for which to create the new HTTP context object.
+     * @return a new HTTP context object for the Restlet request.
+     */
+    public JsonValue newContext(Request request) {
+        return RestletRequestHttpContext.newContext(request, JsonResourceContext.newRootContext());
     }
 }

@@ -26,6 +26,7 @@ import java.util.UUID;
 
 // Restlet API
 import org.restlet.Request;
+import org.restlet.data.ClientInfo;
 import org.restlet.data.Form;
 
 // Utilities
@@ -36,7 +37,7 @@ import org.forgerock.util.LazyMap;
 import org.forgerock.json.fluent.JsonValue;
 
 /**
- * TODO: Description.
+ * Represents a restlet request object as a HTTP request context.
  *
  * @author Paul C. Bryan
  */
@@ -49,15 +50,25 @@ class RestletRequestHttpContext {
      * @return TODO.
      */
     private static Map<String, Object> securityProperties(Request request) {
-        Map<String, Object> result = null;
-        Principal user = request.getClientInfo().getUser();
-        if (user != null) {
-            String name = user.getName();
-            if (name != null) {
-                result = new LinkedHashMap<String, Object>();
-                result.put("user", name);
+        Map<String, Object> result = new LinkedHashMap<String, Object>();
+        ClientInfo rci = request.getClientInfo();
+        String name = null;
+        {
+            Principal user = rci.getUser();
+            if (user != null) {
+                name = user.getName();
             }
         }
+        if (name == null) {
+            List<Principal> principals = request.getClientInfo().getPrincipals();
+            if (principals != null && principals.size() != 0) {
+                Principal principal = principals.get(0);
+                if (principal != null) {
+                    name = principal.getName();
+                }
+            }
+        }
+        result.put("user", name);
         return result;
     }
 
@@ -74,10 +85,7 @@ class RestletRequestHttpContext {
                 result.put("type", "http");
                 result.put("uuid", UUID.randomUUID().toString());
                 result.put("parent", parent.getWrappedObject());
-                Map<String, Object> security = securityProperties(request);
-                if (security != null) {
-                    result.put("security", security);
-                }
+                result.put("security", securityProperties(request));
                 result.put("method", request.getMethod().getName());
                 result.put("path", request.getOriginalRef().getPath());
                 result.put("query", lazyQuery(request));
@@ -90,12 +98,19 @@ class RestletRequestHttpContext {
     /**
      * TODO: Description.
      */
-    private static Map<String, List<String>> lazyForm(final Form form) {
-        return new LazyMap<String, List<String>>(new Factory<Map<String, List<String>>>() {
-            @Override public Map<String, List<String>> newInstance() {
-                LinkedHashMap<String, List<String>> result = new LinkedHashMap<String, List<String>>();
+    private static Map<String, Object> lazyForm(final Form form) {
+        return new LazyMap<String, Object>(new Factory<Map<String, Object>>() {
+            @Override public Map<String, Object> newInstance() {
+                LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>();
                 for (String name : form.getNames()) {
-                    result.put(name, Arrays.asList(form.getValuesArray(name)));
+                    String[] values = form.getValuesArray(name);
+                    if (values.length == 0) {
+                        result.put(name, null);
+                    } else if (values.length == 1) {
+                        result.put(name, values[0]);
+                    } else {
+                        result.put(name, Arrays.asList(values));
+                    }
                 }
                 return result;
             }
@@ -105,8 +120,8 @@ class RestletRequestHttpContext {
     /**
      * TODO: Description.
      */
-    private static Map<String, List<String>> lazyQuery(final Request request) {
-        Map<String, List<String>> result = null;
+    private static Map<String, Object> lazyQuery(final Request request) {
+        Map<String, Object> result = null;
         if (request.getOriginalRef().getQuery() != null) {
             result = lazyForm(request.getResourceRef().getQueryAsForm());
         }
@@ -116,7 +131,7 @@ class RestletRequestHttpContext {
     /**
      * TODO: Description.
      */
-    private static Map<String, List<String>> lazyHeaders(final Request request) {
+    private static Map<String, Object> lazyHeaders(final Request request) {
         return lazyForm((Form)(request.getAttributes().get("org.restlet.http.headers")));
     }
 }

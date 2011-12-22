@@ -48,7 +48,6 @@ import org.forgerock.json.fluent.JsonValue;
 // JSON Resource
 import org.forgerock.json.resource.JsonResource;
 import org.forgerock.json.resource.JsonResourceAccessor;
-import org.forgerock.json.resource.JsonResourceContext;
 import org.forgerock.json.resource.JsonResourceException;
 
 /**
@@ -57,6 +56,9 @@ import org.forgerock.json.resource.JsonResourceException;
  * @author Paul C. Bryan
  */
 public class JsonServerResource extends ExtendedServerResource {
+
+    /** TODO: Description. */
+    private JsonResourceRestlet restlet;
 
     /** TODO: Description. */
     private JsonResourceAccessor accessor;
@@ -101,16 +103,6 @@ public class JsonServerResource extends ExtendedServerResource {
             result.setTag(getTag(value)); // set ETag, if _rev is in value
         }
         return result;
-    }
-
-    /**
-     * TODO: Description.
-     *
-     * @param parent TODO.
-     * @return TODO.
-     */
-    private JsonValue newHttpContext(JsonValue parent) {
-        return RestletRequestHttpContext.newContext(getRequest(), parent);
     }
 
     /**
@@ -229,10 +221,8 @@ public class JsonServerResource extends ExtendedServerResource {
         if (remaining != null && remaining.length() > 0) {
             this.id = remaining; // default: null (resource itself is being operated on)
         }
-        this.accessor = new JsonResourceAccessor(
-         (JsonResource)(getRequestAttributes().get(JsonResource.class.getName())),
-         new JsonValue(newHttpContext(JsonResourceContext.newRootContext()))
-        );
+        this.restlet = (JsonResourceRestlet)(getRequestAttributes().get(JsonResourceRestlet.class.getName()));
+        this.accessor = new JsonResourceAccessor(restlet.getResource(), restlet.newContext(getRequest()));
         this.ref = getOriginalRef();
     }
 
