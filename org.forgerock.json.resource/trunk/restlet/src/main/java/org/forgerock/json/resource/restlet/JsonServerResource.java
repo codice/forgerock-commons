@@ -28,6 +28,7 @@ import java.util.UUID;
 // Restlet
 import org.restlet.data.Conditions;
 import org.restlet.data.Form;
+import org.restlet.data.Method;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.data.Tag;
@@ -233,14 +234,22 @@ public class JsonServerResource extends ExtendedServerResource {
      */
     @Override
     protected Representation doHandle() throws ResourceException {
+        List<Tag> match = conditions.getMatch();
+        List<Tag> noneMatch = conditions.getNoneMatch();
         try {
             if (conditions.getModifiedSince() != null || conditions.getUnmodifiedSince() != null) {
                 throw new JsonResourceException(JsonResourceException.VERSION_MISMATCH); // unsupported
-            }
-            if (conditions.getMatch().size() > 1 || conditions.getNoneMatch().size() > 0) {
+            } else if (match.contains(null)) {
+                throw new JsonResourceException(JsonResourceException.BAD_REQUEST, "Invalid If-Match tag");
+            } else if (noneMatch.contains(null)) {
+                throw new JsonResourceException(JsonResourceException.BAD_REQUEST, "Invalid If-None-Match tag");
+            } else if (match.size() == 1 && noneMatch.size() == 0) {
+                rev = match.get(0).getName(); // derive from request
+            } else if (getMethod().equals(Method.PUT) && noneMatch.size() == 1
+             && match.size() == 0 && Tag.ALL.equals(noneMatch.get(0))) {
+                // unambiguous create; don't set revision
+            } else {
                 rev = getTag(read()).getName(); // derive from fetched resource
-            } else if (conditions.getMatch().size() == 1) {
-                rev = conditions.getMatch().get(0).getName(); // derive from request
             }
         } catch (JsonResourceException jre) {
             throw new ResourceException(jre);
@@ -302,11 +311,9 @@ public class JsonServerResource extends ExtendedServerResource {
         List<Tag> noneMatch = conditions.getNoneMatch();
         try {
             JsonValue value = requireEntity(entityValue(entity));
-            if (match.size() == 0 && noneMatch.size() == 1
-            && noneMatch.get(0) != null && noneMatch.get(0).equals(Tag.ALL)) { // unambiguous create
+            if (match.size() == 0 && noneMatch.size() == 1 && noneMatch.get(0).equals(Tag.ALL)) { // unambiguous create
                 representation = create(this.id, value);
-            } else if (noneMatch.size() == 0 && match.size() == 1
-             && match.get(0) != null && !match.get(0).equals(Tag.ALL)) { // unambiguous update
+            } else if (noneMatch.size() == 0 && match.size() == 1 && !match.get(0).equals(Tag.ALL)) { // unambiguous update
                 representation = update(this.id, this.rev, value);
             } else { // ambiguous whether object is being created or updated
                 try { // try update first
