@@ -243,11 +243,11 @@ public class JsonServerResource extends ExtendedServerResource {
                 throw new JsonResourceException(JsonResourceException.BAD_REQUEST, "Invalid If-Match tag");
             } else if (noneMatch.contains(null)) {
                 throw new JsonResourceException(JsonResourceException.BAD_REQUEST, "Invalid If-None-Match tag");
-            } else if (match.size() == 1 && noneMatch.size() == 0) {
+            } else if (match.size() == 1 && noneMatch.size() == 0 && !Tag.ALL.equals(match.get(0))) {
                 rev = match.get(0).getName(); // derive from request
-            } else if (getMethod().equals(Method.PUT) && noneMatch.size() == 1
-             && match.size() == 0 && Tag.ALL.equals(noneMatch.get(0))) {
-                // unambiguous create
+            } else if (getMethod().equals(Method.PUT) && noneMatch.size() == 1 &&
+             match.size() == 0 && Tag.ALL.equals(noneMatch.get(0))) {
+                // unambiguous create; set no version
             } else if (match.size() != 0 || noneMatch.size() != 0) {
                 rev = getTag(read()).getName(); // derive from fetched resource
             }
