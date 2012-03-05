@@ -84,6 +84,7 @@ public class SimpleJsonResource implements JsonResource {
      * @param request the JSON resource request.
      * @return the JSON resource response.
      * @throws if there is an exception handling the request.
+     * @see <a href="https://wikis.forgerock.org/confluence/x/4wHk">resource-create-request</a>
      */
     protected JsonValue create(JsonValue request) throws JsonResourceException {
         throw new JsonResourceException(JsonResourceException.FORBIDDEN);
@@ -96,6 +97,7 @@ public class SimpleJsonResource implements JsonResource {
      * @param request the JSON resource request.
      * @return the JSON resource response.
      * @throws if there is an exception handling the request.
+     * @see <a href="https://wikis.forgerock.org/confluence/x/5QHk">resource-read-request</a>
      */
     protected JsonValue read(JsonValue request) throws JsonResourceException {
         throw new JsonResourceException(JsonResourceException.FORBIDDEN);
@@ -108,6 +110,7 @@ public class SimpleJsonResource implements JsonResource {
      * @param request the JSON resource request.
      * @return the JSON resource response.
      * @throws if there is an exception handling the request.
+     * @see <a href="https://wikis.forgerock.org/confluence/x/5wHk">resource-update-request</a>
      */
     protected JsonValue update(JsonValue request) throws JsonResourceException {
         throw new JsonResourceException(JsonResourceException.FORBIDDEN);
@@ -120,6 +123,7 @@ public class SimpleJsonResource implements JsonResource {
      * @param request the JSON resource request.
      * @return the JSON resource response.
      * @throws if there is an exception handling the request.
+     * @see <a href="https://wikis.forgerock.org/confluence/x/6QHk">resource-delete-request</a>
      */
     protected JsonValue delete(JsonValue request) throws JsonResourceException {
         throw new JsonResourceException(JsonResourceException.FORBIDDEN);
@@ -132,6 +136,7 @@ public class SimpleJsonResource implements JsonResource {
      * @param request the JSON resource request.
      * @return the JSON resource response.
      * @throws if there is an exception handling the request.
+     * @see <a href="https://wikis.forgerock.org/confluence/x/K4Dr">resource-patch-request</a>
      */
     protected JsonValue patch(JsonValue request) throws JsonResourceException {
         throw new JsonResourceException(JsonResourceException.FORBIDDEN);
@@ -144,6 +149,7 @@ public class SimpleJsonResource implements JsonResource {
      * @param request the JSON resource request.
      * @return the JSON resource response.
      * @throws if there is an exception handling the request.
+     * @see <a href="https://wikis.forgerock.org/confluence/x/6wHk">resource-query-request</a>
      */
     protected JsonValue query(JsonValue request) throws JsonResourceException {
         throw new JsonResourceException(JsonResourceException.FORBIDDEN);
@@ -156,6 +162,7 @@ public class SimpleJsonResource implements JsonResource {
      * @param request the JSON resource request.
      * @return the JSON resource response.
      * @throws if there is an exception handling the request.
+     * @see <a href="https://wikis.forgerock.org/confluence/x/7QHk">resource-action-request</a>
      */
     protected JsonValue action(JsonValue request) throws JsonResourceException {
         throw new JsonResourceException(JsonResourceException.FORBIDDEN);
