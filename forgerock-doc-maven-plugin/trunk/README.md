@@ -1,12 +1,9 @@
 # ForgeRock Doc Build Maven Plugin
 
-As of early March 2012 the configurations for ForgeRock core documentation
-builds are maintained in sync by copy/paste. A better solution would centralize
-configuration, leaving only the source files and a small amount of
-configuration per core documentation project. A centralized configuration would
-ensure that output formats are formatted uniformly.
+This Maven plugin centralizes configuration of core documentation, to ensure
+that output documents are formatted uniformly.
 
-With centralized configuration handled by a Maven plugin, the core
+With centralized configuration handled by this Maven plugin, the core
 documentation-related project configuration takes at least two arguments:
 
 *   `<projectName>`: the short name for the project such as OpenAM, OpenDJ,

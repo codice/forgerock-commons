@@ -37,6 +37,12 @@
  <description>Common machinery for generating core documentation from DocBook XML sources</description>
  <url>http://docs.forgerock.org</url>
 
+ <scm>
+  <url>https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/</url>
+  <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/trunk/</connection>
+  <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/trunk/</developerConnection>
+ </scm>
+
  <licenses>
   <license>
    <name>MPL-2.0</name>
@@ -134,6 +140,20 @@
      <source>1.6</source>
      <target>1.6</target>
     </configuration>
+    </plugin>
+    <plugin>
+     <groupId>org.apache.maven.plugins</groupId>
+     <artifactId>maven-release-plugin</artifactId>
+     <version>2.2.2</version>
+     <configuration>
+      <!-- Disable inherited configuration -->
+      <autoVersionSubmodules>true</autoVersionSubmodules>
+      <mavenExecutorId>forked-path</mavenExecutorId>
+      <useReleaseProfile>true</useReleaseProfile>
+      <suppressCommitBeforeTag>false</suppressCommitBeforeTag>
+      <goals>deploy</goals>
+      <arguments>-Penforce</arguments>
+     </configuration>
     </plugin>
    </plugins>
   </pluginManagement>
