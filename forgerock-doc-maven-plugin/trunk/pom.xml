@@ -120,7 +120,7 @@
    <name>ForgeRock Snapshot Repository</name>
    <url>http://maven.forgerock.org/repo/snapshots</url>
    <snapshots>
-    <enabled>false</enabled>
+    <enabled>true</enabled>
    </snapshots>
   </repository>
   <repository>
