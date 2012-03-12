@@ -64,6 +64,8 @@
  <properties>
   <docbkxVersion>2.0.14</docbkxVersion>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  <maven.compiler.target>1.6</maven.compiler.target>
+  <maven.compiler.source>1.6</maven.compiler.source>
  </properties>
 
  <dependencies>
@@ -133,14 +135,6 @@
  <build>
   <pluginManagement>
    <plugins>
-    <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-compiler-plugin</artifactId>
-    <configuration>
-     <source>1.6</source>
-     <target>1.6</target>
-    </configuration>
-    </plugin>
     <plugin>
      <groupId>org.apache.maven.plugins</groupId>
      <artifactId>maven-release-plugin</artifactId>
