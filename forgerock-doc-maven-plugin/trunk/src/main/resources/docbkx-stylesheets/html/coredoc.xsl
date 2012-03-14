@@ -65,6 +65,9 @@
  </xsl:param>
  <xsl:param name="toc.section.depth" select="0" />
 
+ <xsl:param name="use.extensions" select="1" />
+ <xsl:param name="linenumbering.everyNth" select="1" />
+
  <xsl:template match="xslthl:keyword" mode="xslthl">
    <strong class="hl-keyword">
      <xsl:apply-templates mode="xslthl"/>

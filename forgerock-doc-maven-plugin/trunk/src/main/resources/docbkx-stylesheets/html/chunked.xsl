@@ -68,6 +68,9 @@
  <xsl:param name="toc.max.depth" select="1" />
  <xsl:param name="generate.meta.abstract" select="1" />
 
+ <xsl:param name="use.extensions" select="1" />
+ <xsl:param name="linenumbering.everyNth" select="1" />
+
  <xsl:template match="xslthl:keyword" mode="xslthl">
    <strong class="hl-keyword">
      <xsl:apply-templates mode="xslthl"/>
