@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -39,22 +40,25 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 public class HTMLUtils
 {
   /**
-   * Add a <code>.htaccess</code> file to each directory for publication on an
-   * Apache HTTPD server.
+   * Add a <code>.htaccess</code> file to the base directory, for publication
+   * on an Apache HTTPD server.
+   * <p>
+   * According to Apache documentation on
+   * <a href="http://httpd.apache.org/docs/2.4/howto/htaccess.html#how">How
+   * directives are applied</a>, "The configuration directives found in a .htaccess file are applied to the directory in which the .htaccess file is found, and to all subdirectories thereof."
+   * So there is no need to copy the file recursively to all directories.
    *
    * @param baseDir
-   *          Base directory under which to add files recursively
+   *          Base directory under which to add the file
    * @param htaccess
    *          <code>.htaccess</code> file to copy
-   * @return Directories to which the file was copied
    * @throws IOException
    *           Something went wrong during copy procedure.
    */
-  public static List<File> addHtaccess(String baseDir, File htaccess)
+  public static void addHtaccess(String baseDir, File htaccess)
       throws IOException
   {
-    RecursiveFileCopier rcf = new RecursiveFileCopier(htaccess);
-    return rcf.add(new File(baseDir));
+    FileUtils.copyFileToDirectory(htaccess, new File(baseDir));
   }
 
 

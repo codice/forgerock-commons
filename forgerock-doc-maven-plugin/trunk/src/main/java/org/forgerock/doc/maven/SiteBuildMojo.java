@@ -21,9 +21,11 @@ package org.forgerock.doc.maven;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
@@ -59,6 +61,23 @@ public class SiteBuildMojo extends AbstractBuildMojo
     Executor exec = new Executor();
     getLog().info("Laying out site...");
     exec.layout();
+
+    getLog().info("Adding .htaccess file...");
+    String layoutDir = siteDirectory.getPath() + File.separator + "doc";
+    File htaccess = new File(buildDirectory.getPath()
+        + File.separator + ".htaccess");
+    FileUtils.deleteQuietly(htaccess);
+    try
+    {
+      FileUtils.copyURLToFile(getClass().getResource("/.htaccess"),
+          htaccess);
+      HTMLUtils.addHtaccess(layoutDir, htaccess);
+    }
+    catch (IOException e)
+    {
+      throw new MojoExecutionException("Failed to copy .htaccess: "
+          + e.getMessage());
+    }
   }
 
 

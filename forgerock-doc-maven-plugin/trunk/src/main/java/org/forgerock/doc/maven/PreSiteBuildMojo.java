@@ -506,14 +506,6 @@ public class PreSiteBuildMojo extends AbstractBuildMojo
           css);
       HTMLUtils.addCss(htmlDir, css,
           FilenameUtils.getBaseName(documentSrcName) + ".html");
-
-      getLog().info("Adding .htaccess files...");
-      File htaccess = new File(buildDirectory.getPath()
-          + File.separator + ".htaccess");
-      FileUtils.deleteQuietly(htaccess);
-      FileUtils.copyURLToFile(getClass().getResource("/.htaccess"),
-          htaccess);
-      HTMLUtils.addHtaccess(htmlDir, htaccess);
     }
     catch (IOException e)
     {
