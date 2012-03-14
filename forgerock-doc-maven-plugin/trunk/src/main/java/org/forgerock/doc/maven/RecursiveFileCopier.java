@@ -18,8 +18,6 @@
 
 package org.forgerock.doc.maven;
 
-
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,51 +27,41 @@ import java.util.List;
 import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.FileUtils;
 
-
-
 /**
  * Copy a file to all directories.
  */
-public class RecursiveFileCopier extends DirectoryWalker<File>
-{
+public class RecursiveFileCopier extends DirectoryWalker<File> {
 
   /**
-   * The file to copy
+   * The file to copy.
    */
-  private final File fileToCopy;
-
-
+  private final File fFileToCopy;
 
   /**
-   * {@inheritDoc}
+   * Copier to add a file recursively to all directories.
    *
    * @param fileToCopy
    *          File to copy
    */
-  public RecursiveFileCopier(File fileToCopy)
-  {
+  public RecursiveFileCopier(final File fileToCopy) {
     super();
-    this.fileToCopy = fileToCopy;
+    this.fFileToCopy = fileToCopy;
   }
 
-
-
   /**
-   * Copy a file recursively to all subdirectories.
+   * Copy a file recursively to all directories.
    *
    * @param startDirectory
    *          Base directory under which to copy the file recursively
    * @return List of directories to which the file was copied
    * @throws IOException
+   *           Something went wrong copying the file.
    */
-  public List<File> add(File startDirectory) throws IOException
-  {
+  public final List<File> add(final File startDirectory) throws IOException {
     List<File> results = new ArrayList<File>();
     walk(startDirectory, results);
     return results;
   }
-
-
 
   /**
    * Copy a file to a directory.
@@ -85,12 +73,13 @@ public class RecursiveFileCopier extends DirectoryWalker<File>
    * @param results
    *          List of directories to which files have been copied
    * @return True on success
+   * @throws IOException
+   *           Something went wrong copying the file.
    */
   @Override
-  protected boolean handleDirectory(File directory, int depth,
-      Collection<File> results) throws IOException
-  {
-    FileUtils.copyFileToDirectory(fileToCopy, directory);
+  protected final boolean handleDirectory(final File directory,
+      final int depth, final Collection<File> results) throws IOException {
+    FileUtils.copyFileToDirectory(fFileToCopy, directory);
     results.add(directory);
     return true;
   }

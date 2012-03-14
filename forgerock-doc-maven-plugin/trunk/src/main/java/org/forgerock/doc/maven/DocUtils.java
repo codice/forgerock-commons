@@ -24,13 +24,10 @@ import java.io.FilenameFilter;
 import java.util.Set;
 import java.util.TreeSet;
 
-
-
 /**
- * Utility methods to work with documents
+ * Utility methods to work with documents.
  */
-public class DocUtils
-{
+public final class DocUtils {
   /**
    * Rename document to reflect project and document name. For example,
    * index.pdf could be renamed OpenAM-Admin-Guide.pdf.
@@ -44,13 +41,10 @@ public class DocUtils
    *          File name extension not including dot, e.g. pdf
    * @return New name for document. Can be "" if rename failed.
    */
-  public static String renameDoc(String projectName, String docName,
-      String extension)
-  {
+  public static String renameDoc(final String projectName,
+      final String docName, final String extension) {
     return renameDoc(projectName, docName, "", extension);
   }
-
-
 
   /**
    * Rename document to reflect project and document name. For example,
@@ -67,34 +61,29 @@ public class DocUtils
    *          File name extension not including dot, e.g. pdf
    * @return New name for document. Can be "" if rename failed.
    */
-  public static String renameDoc(String projectName, String docName,
-      String version, String extension)
-  {
-    if (isDocNameOk(docName))
-    {
-      docName = capitalize(docName);
-    }
-    else
-    {
+  public static String renameDoc(final String projectName,
+      final String docName, final String version, final String extension) {
+    String doc = docName;
+    if (isDocNameOk(doc)) {
+      doc = capitalize(doc);
+    } else {
       return "";
     }
 
     // Need trailing dash when version is not empty.
-    if (!version.equalsIgnoreCase(""))
-    {
-      version = version + '-';
+    String vers = version;
+    if (!vers.equalsIgnoreCase("")) {
+      vers = vers + '-';
     }
 
     // Only add a . if the extension is not empty.
-    if (!extension.equalsIgnoreCase(""))
-    {
-      extension = "." + extension;
+    String ext = extension;
+    if (!ext.equalsIgnoreCase("")) {
+      ext = "." + ext;
     }
 
-    return projectName + '-' + version + docName + extension;
+    return projectName + '-' + vers + doc + ext;
   }
-
-
 
   /**
    * Capitalize initial letters in a document name.
@@ -103,24 +92,17 @@ public class DocUtils
    *          Name of the document such as reference or admin-guide
    * @return Capitalized name such as Reference or Admin-Guide
    */
-  private static String capitalize(String docName)
-  {
+  private static String capitalize(final String docName) {
     char[] chars = docName.toLowerCase().toCharArray();
 
     boolean isInitial = true;
-    for (int i = 0; i < chars.length; i++)
-    {
-      if (isInitial && Character.isLetter(chars[i]))
-      {
+    for (int i = 0; i < chars.length; i++) {
+      if (isInitial && Character.isLetter(chars[i])) {
         chars[i] = Character.toUpperCase(chars[i]);
         isInitial = false;
-      }
-      else if (Character.isLetter(chars[i]))
-      {
+      } else if (Character.isLetter(chars[i])) {
         isInitial = false;
-      }
-      else
-      {
+      } else {
         isInitial = true;
       }
     }
@@ -128,26 +110,24 @@ public class DocUtils
     return String.valueOf(chars);
   }
 
-
-
   /**
    * Check that the document name contains only letters and dashes.
    *
+   * @param docName
+   *          Name of the document to check
    * @return True as long as the document name contains nothing else.
    */
-  private static boolean isDocNameOk(String docName)
-  {
+  private static boolean isDocNameOk(final String docName) {
     char[] chars = docName.toCharArray();
 
-    for (char c : chars)
-    {
-      if (!(Character.isLetter(c) || c == '-')) return false;
+    for (char c : chars) {
+      if (!(Character.isLetter(c) || c == '-')) {
+        return false;
+      }
     }
 
     return true;
   }
-
-
 
   /**
    * Returns names of directories that mirror the document names and contain
@@ -161,45 +141,43 @@ public class DocUtils
    *          index.xml.
    * @return Document names, as in admin-guide or reference
    */
-  public static Set<String> getDocumentNames(File srcDir,
-      final String docFile)
-  {
+  public static Set<String> getDocumentNames(final File srcDir,
+      final String docFile) {
     Set<String> documentDirectories = new TreeSet<String>();
 
     // Match directories containing DocBook document entry point files,
     // and ignore everything else.
-    FileFilter filter = new FileFilter()
-    {
+    FileFilter filter = new FileFilter() {
       @Override
-      public boolean accept(File file)
-      {
+      public boolean accept(final File file) {
         return file.isDirectory();
       }
     };
 
     File[] directories = srcDir.listFiles(filter);
-    if (directories.length > 0)
-    {
+    if (directories.length > 0) {
 
-      FilenameFilter nameFilter = new FilenameFilter()
-      {
+      FilenameFilter nameFilter = new FilenameFilter() {
         @Override
-        public boolean accept(File file, String name)
-        {
+        public boolean accept(final File file, final String name) {
           return name.equalsIgnoreCase(docFile);
         }
       };
 
-      for (File dir : directories)
-      {
-        String found[] = dir.list(nameFilter);
-        if (found.length > 0)
-        {
+      for (File dir : directories) {
+        String[] found = dir.list(nameFilter);
+        if (found.length > 0) {
           documentDirectories.add(dir.getName());
         }
       }
     }
 
     return documentDirectories;
+  }
+
+  /**
+   * Not used.
+   */
+  private DocUtils() {
   }
 }

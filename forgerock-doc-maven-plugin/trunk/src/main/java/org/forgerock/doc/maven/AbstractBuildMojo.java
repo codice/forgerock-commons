@@ -18,8 +18,6 @@
 
 package org.forgerock.doc.maven;
 
-
-
 import java.io.File;
 import java.util.List;
 
@@ -28,20 +26,29 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.project.MavenProject;
 
-
-
 /**
  * AbstractMojo implementation for building core documentation from <a
  * href="http://www.docbook.org/tdg51/en/html/docbook.html">DocBook XML</a>
- * using <a href="http://code.google.com/p/docbkx-tools/">docbkx-tools</a>
+ * using <a href="http://code.google.com/p/docbkx-tools/">docbkx-tools</a>.
  */
-abstract class AbstractBuildMojo extends AbstractMojo
-{
+abstract class AbstractBuildMojo extends AbstractMojo {
   /**
-   * Executions seem to hit an NPE when the version is not specified.
+   * Docbkx Tools plugin version to use. Executions seem to hit an NPE when the
+   * version is not specified.
+   *
+   * @parameter default-value="2.0.14" expression="${docbkxVersion}
+   * @required
    */
-  protected final String docbkxVersion = "2.0.14"; // FIXME!
-  protected final String resourcesVersion = "2.5"; // FIXME!
+  private String docbkxVersion;
+
+  /**
+   * Maven resources plugin version to use. Executions seem to hit an NPE when
+   * the version is not specified.
+   *
+   * @parameter default-value="2.5" expression="${resourcesVersion}
+   * @required
+   */
+  private String resourcesVersion;
 
   /**
    * Short name of the project, such as OpenAM, OpenDJ, OpenIDM.
@@ -49,7 +56,7 @@ abstract class AbstractBuildMojo extends AbstractMojo
    * @parameter expression="${projectName}"
    * @required
    */
-  protected String projectName;
+  private String projectName;
 
   /**
    * Google Analytics identifier for the project.
@@ -57,30 +64,14 @@ abstract class AbstractBuildMojo extends AbstractMojo
    * @parameter expression="${googleAnalyticsId}"
    * @required
    */
-  protected String googleAnalyticsId;
+  private String googleAnalyticsId;
 
   /**
    * Do not process these formats. Choices include: epub, html, man, pdf, rtf.
    *
    * @parameter
    */
-  protected List<String> excludes;
-
-  /**
-   * Return the list of formats not to process.
-   *
-   * @return Formats not to process (choices: epub, html, man, pdf, rtf)
-   */
-  public List<String> getExcludes() {
-    return excludes;
-  }
-
-  /**
-   * Set the list of formats not to process (epub, html, man, pdf, rtf).
-   */
-  public void setExcludes(List<String> excludes) {
-    this.excludes = excludes;
-  }
+  private List<String> excludes;
 
   /**
    * Base directory for DocBook XML source files.
@@ -89,7 +80,7 @@ abstract class AbstractBuildMojo extends AbstractMojo
    *            expression="${docbkxSourceDirectory}"
    * @required
    */
-  protected File docbkxSourceDirectory;
+  private File docbkxSourceDirectory;
 
   /**
    * Base directory for built documentation.
@@ -98,7 +89,7 @@ abstract class AbstractBuildMojo extends AbstractMojo
    *            expression="${docbkxOutputDirectory}"
    * @required
    */
-  protected File docbkxOutputDirectory;
+  private File docbkxOutputDirectory;
 
   /**
    * Target directory for this plugin.
@@ -106,7 +97,7 @@ abstract class AbstractBuildMojo extends AbstractMojo
    * @parameter default-value="${project.build.directory}"
    * @required
    */
-  protected File buildDirectory;
+  private File buildDirectory;
 
   /**
    * The Maven Project Object.
@@ -115,7 +106,7 @@ abstract class AbstractBuildMojo extends AbstractMojo
    * @required
    * @readonly
    */
-  protected MavenProject project;
+  private MavenProject project;
 
   /**
    * The Maven Session Object.
@@ -124,7 +115,7 @@ abstract class AbstractBuildMojo extends AbstractMojo
    * @required
    * @readonly
    */
-  protected MavenSession session;
+  private MavenSession session;
 
   /**
    * The Maven PluginManager Object.
@@ -132,7 +123,7 @@ abstract class AbstractBuildMojo extends AbstractMojo
    * @component
    * @required
    */
-  protected BuildPluginManager pluginManager;
+  private BuildPluginManager pluginManager;
 
   /**
    * Top-level DocBook documents included in the documentation set such as
@@ -165,9 +156,104 @@ abstract class AbstractBuildMojo extends AbstractMojo
    * The <code>...other files...</code> can have whatever names you want, as
    * long as the name does not conflict with the file name you set here.
    *
-   * @parameter default-value="index.xml"
-   *            expression="${documentSrcName}"
+   * @parameter default-value="index.xml" expression="${documentSrcName}"
    * @required
    */
-  protected String documentSrcName;
+  private String documentSrcName;
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getDocbkxVersion() {
+    return docbkxVersion;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getResourcesVersion() {
+    return resourcesVersion;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getProjectName() {
+    return projectName;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getGoogleAnalyticsId() {
+    return googleAnalyticsId;
+  }
+
+  /**
+   * Return the list of formats not to process.
+   *
+   * @return Formats not to process (choices: epub, html, man, pdf, rtf)
+   */
+  public List<String> getExcludes() {
+    return excludes;
+  }
+
+  /**
+   * Set the list of formats not to process (epub, html, man, pdf, rtf).
+   *
+   * @param excludedFormats
+   *          List of formats to exclude
+   */
+  public void setExcludes(final List<String> excludedFormats) {
+    this.excludes = excludedFormats;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public File getDocbkxSourceDirectory() {
+    return docbkxSourceDirectory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public File getDocbkxOutputDirectory() {
+    return docbkxOutputDirectory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public File getBuildDirectory() {
+    return buildDirectory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public MavenProject getProject() {
+    return project;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public MavenSession getSession() {
+    return session;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public BuildPluginManager getPluginManager() {
+    return pluginManager;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getDocumentSrcName() {
+    return documentSrcName;
+  }
 }

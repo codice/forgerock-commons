@@ -18,8 +18,6 @@
 
 package org.forgerock.doc.maven;
 
-
-
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -31,39 +29,31 @@ import java.util.Map;
 import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.FileUtils;
 
-
-
 /**
  * Update matching files in all directories, replacing the first occurrence of
  * the string to replace with the replacement string. Files are expected to be
  * UTF-8 encoded.
  */
-public class FilteredFileUpdater extends DirectoryWalker<File>
-{
+public class FilteredFileUpdater extends DirectoryWalker<File> {
   /**
-   * Replacements to apply. The keys are the strings to replace, the values
-   * are the replacements.
+   * Replacements to apply. The keys are the strings to replace, the values are
+   * the replacements.
    */
-  private final Map<String,String> replacements;
-
-
+  private final Map<String, String> msReplacements;
 
   /**
-   * {@inheritDoc}
+   * Construct an updater with a list of replacements per file.
    *
    * @param replacements
    *          Keys are strings to replace. Values are replacements.
    * @param filterToMatch
    *          Update files matching this filter
    */
-  public FilteredFileUpdater(Map<String,String> replacements,
-      FileFilter filterToMatch)
-  {
+  public FilteredFileUpdater(final Map<String, String> replacements,
+      final FileFilter filterToMatch) {
     super(filterToMatch, -1);
-    this.replacements = replacements;
+    this.msReplacements = replacements;
   }
-
-
 
   /**
    * Update files that match the filter.
@@ -72,15 +62,13 @@ public class FilteredFileUpdater extends DirectoryWalker<File>
    *          Base directory under which to update files, recursively
    * @return List of updated files
    * @throws IOException
+   *           Something went wrong changing a file's content.
    */
-  public List<File> update(File startDirectory) throws IOException
-  {
+  public final List<File> update(final File startDirectory) throws IOException {
     List<File> results = new ArrayList<File>();
     walk(startDirectory, results);
     return results;
   }
-
-
 
   /**
    * Update files that match, adding them to the results.
@@ -91,17 +79,17 @@ public class FilteredFileUpdater extends DirectoryWalker<File>
    *          Not used
    * @param results
    *          List of files updated
+   * @throws IOException
+   *           Something went wrong changing a file's content.
    */
   @Override
-  protected void handleFile(File file, int depth,
-      Collection<File> results) throws IOException
-  {
-    if (file.isFile())
-    {
+  protected final void handleFile(final File file, final int depth,
+      final Collection<File> results) throws IOException {
+    if (file.isFile()) {
       String data = FileUtils.readFileToString(file, "UTF-8");
 
-      for (String key : replacements.keySet()) {
-        data = data.replace(key, replacements.get(key));
+      for (String key : msReplacements.keySet()) {
+        data = data.replace(key, msReplacements.get(key));
       }
 
       FileUtils.deleteQuietly(file);

@@ -18,8 +18,6 @@
 
 package org.forgerock.doc.maven;
 
-
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,8 +29,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
-
-
 /**
  * Layout built documentation. The resulting documentation set is found under a
  * doc/ directory in the site directory.
@@ -40,71 +36,64 @@ import org.twdata.maven.mojoexecutor.MojoExecutor;
  * @goal layout
  * @phase site
  */
-public class SiteBuildMojo extends AbstractBuildMojo
-{
+public class SiteBuildMojo extends AbstractBuildMojo {
   /**
-   * File system directory for site build
+   * File system directory for site build.
    *
    * @parameter default-value="${project.build.directory}/site"
    *            expression="${siteDirectory}"
    * @required
    */
-  protected File siteDirectory;
+  private File siteDirectory;
 
-
+  /**
+   * {@inheritDoc}
+   */
+  public final File getSiteDirectory() {
+    return siteDirectory;
+  }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public void execute() throws MojoExecutionException
-  {
+  public final void execute() throws MojoExecutionException {
     Executor exec = new Executor();
     getLog().info("Laying out site...");
     exec.layout();
 
     getLog().info("Adding .htaccess file...");
-    String layoutDir = siteDirectory.getPath() + File.separator + "doc";
-    File htaccess = new File(buildDirectory.getPath()
-        + File.separator + ".htaccess");
+    String layoutDir = getSiteDirectory().getPath() + File.separator + "doc";
+    File htaccess = new File(getBuildDirectory().getPath() + File.separator
+        + ".htaccess");
     FileUtils.deleteQuietly(htaccess);
-    try
-    {
-      FileUtils.copyURLToFile(getClass().getResource("/.htaccess"),
-          htaccess);
+    try {
+      FileUtils.copyURLToFile(getClass().getResource("/.htaccess"), htaccess);
       HTMLUtils.addHtaccess(layoutDir, htaccess);
-    }
-    catch (IOException e)
-    {
+    } catch (IOException e) {
       throw new MojoExecutionException("Failed to copy .htaccess: "
           + e.getMessage());
     }
 
     getLog().info("Add redirect to docs.html under layout directory...");
-    try
-    {
-      String redirect = IOUtils.toString(getClass()
-          .getResourceAsStream("/index.html"), "UTF-8");
-      redirect = redirect.replaceAll("PROJECT", projectName)
-          .replaceAll("LOWERCASE", projectName.toLowerCase());
-      File file = new File(siteDirectory.getPath() + File.separator + "doc"
-          + File.separator + "index.html");
+    try {
+      String redirect = IOUtils.toString(
+          getClass().getResourceAsStream("/index.html"), "UTF-8");
+      redirect = redirect.replaceAll("PROJECT", getProjectName()).replaceAll(
+          "LOWERCASE", getProjectName().toLowerCase());
+      File file = new File(getSiteDirectory().getPath() + File.separator
+          + "doc" + File.separator + "index.html");
       FileUtils.write(file, redirect, "UTF-8");
-    }
-    catch (IOException e)
-    {
+    } catch (IOException e) {
       throw new MojoExecutionException("Failed to copy redirect file: "
           + e.getMessage());
     }
   }
 
-
-
   /**
    * Enclose methods to run plugins.
    */
-  class Executor extends MojoExecutor
-  {
+  class Executor extends MojoExecutor {
     /**
      * Returns element specifying built documents to copy to the site directory.
      *
@@ -112,30 +101,24 @@ public class SiteBuildMojo extends AbstractBuildMojo
      * @throws MojoExecutionException
      *           Something went wrong getting document names.
      */
-    private MojoExecutor.Element getResources()
-        throws MojoExecutionException
-    {
+    private MojoExecutor.Element getResources() throws MojoExecutionException {
 
       ArrayList<MojoExecutor.Element> r = new ArrayList<MojoExecutor.Element>();
 
       Set<String> docNames = DocUtils.getDocumentNames(
-          docbkxSourceDirectory, documentSrcName);
-      if (docNames.isEmpty())
-      {
+          getDocbkxSourceDirectory(), getDocumentSrcName());
+      if (docNames.isEmpty()) {
         throw new MojoExecutionException("No document names found.");
       }
 
-      if (getExcludes() == null)
-      {
+      if (getExcludes() == null) {
         setExcludes(new ArrayList<String>());
       }
 
-      if (getExcludes().isEmpty() || !getExcludes().contains("epub"))
-      {
-        for (String docName : docNames)
-        {
-          String epubDir = FilenameUtils.
-              separatorsToUnix(docbkxOutputDirectory.getPath())
+      if (getExcludes().isEmpty() || !getExcludes().contains("epub")) {
+        for (String docName : docNames) {
+          String epubDir = FilenameUtils
+              .separatorsToUnix(getDocbkxOutputDirectory().getPath())
               + "/epub/" + docName;
           r.add(
               element(name("resource"),
@@ -145,35 +128,29 @@ public class SiteBuildMojo extends AbstractBuildMojo
         }
       }
 
-      if (getExcludes().isEmpty() || !getExcludes().contains("html"))
-      {
-        String htmlDir = FilenameUtils.
-            separatorsToUnix(docbkxOutputDirectory.getPath())
-            + "/html/";
+      if (getExcludes().isEmpty() || !getExcludes().contains("html")) {
+        String htmlDir = FilenameUtils
+            .separatorsToUnix(getDocbkxOutputDirectory().getPath()) + "/html/";
         r.add(
             element(name("resource"),
                 element(name("directory"), htmlDir)));
       }
 
-      if (getExcludes().isEmpty() || !getExcludes().contains("pdf"))
-      {
-        String pdfDir = FilenameUtils.
-            separatorsToUnix(docbkxOutputDirectory.getPath())
-            + "/pdf/";
+      if (getExcludes().isEmpty() || !getExcludes().contains("pdf")) {
+        String pdfDir = FilenameUtils
+            .separatorsToUnix(getDocbkxOutputDirectory().getPath()) + "/pdf/";
         r.add(
             element(name("resource"),
                 element(name("directory"), pdfDir),
                 element(name("includes"),
-                    element(name("include"), "**/*.pdf"))));
+                      element(name("include"), "**/*.pdf"))));
       }
 
-      if (getExcludes().isEmpty() || !getExcludes().contains("rtf"))
-      {
-        String rtfDir = FilenameUtils.
-            separatorsToUnix(docbkxOutputDirectory.getPath())
-            + "/rtf/";
+      if (getExcludes().isEmpty() || !getExcludes().contains("rtf")) {
+        String rtfDir = FilenameUtils
+            .separatorsToUnix(getDocbkxOutputDirectory().getPath()) + "/rtf/";
         r.add(
-            element( name("resource"),
+            element(name("resource"),
                 element(name("directory"), rtfDir),
                 element(name("includes"),
                     element(name("include"), "**/*.rtf"))));
@@ -182,34 +159,30 @@ public class SiteBuildMojo extends AbstractBuildMojo
       return element("resources", r.toArray(new Element[0]));
     }
 
-
-
     /**
-     * Lay out docs in site directory under <code>/doc</code>
+     * Lay out docs in site directory under <code>/doc</code>.
      *
      * @throws MojoExecutionException
      *           Problem during execution.
      */
-    public void layout() throws MojoExecutionException
-    {
+    public void layout() throws MojoExecutionException {
       if (siteDirectory == null) {
         throw new MojoExecutionException("<siteDirectory> must be set.");
       }
 
-      String siteDocDirectory = FilenameUtils
-          .separatorsToUnix(siteDirectory.getPath())
-          + "/doc";
+      String siteDocDirectory = FilenameUtils.separatorsToUnix(siteDirectory
+          .getPath()) + "/doc";
       executeMojo(
           plugin(
               groupId("org.apache.maven.plugins"),
               artifactId("maven-resources-plugin"),
-              version(resourcesVersion)),
+              version(getResourcesVersion())),
           goal("copy-resources"),
           configuration(
               element(name("encoding"), "UTF-8"),
               element(name("outputDirectory"), siteDocDirectory),
-              getResources()),
-          executionEnvironment(project, session, pluginManager));
+                getResources()),
+          executionEnvironment(getProject(), getSession(), getPluginManager()));
     }
   }
 }
