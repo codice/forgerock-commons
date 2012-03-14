@@ -27,6 +27,7 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
@@ -76,6 +77,23 @@ public class SiteBuildMojo extends AbstractBuildMojo
     catch (IOException e)
     {
       throw new MojoExecutionException("Failed to copy .htaccess: "
+          + e.getMessage());
+    }
+
+    getLog().info("Add redirect to docs.html under layout directory...");
+    try
+    {
+      String redirect = IOUtils.toString(getClass()
+          .getResourceAsStream("/index.html"), "UTF-8");
+      redirect = redirect.replaceAll("PROJECT", projectName)
+          .replaceAll("LOWERCASE", projectName.toLowerCase());
+      File file = new File(siteDirectory.getPath() + File.separator + "doc"
+          + File.separator + "index.html");
+      FileUtils.write(file, redirect, "UTF-8");
+    }
+    catch (IOException e)
+    {
+      throw new MojoExecutionException("Failed to copy redirect file: "
           + e.getMessage());
     }
   }
