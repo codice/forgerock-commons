@@ -8,28 +8,39 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 /* On double-click, reformat <div class="screen"> for easy copying. */
 var minus = "<img alt=\"minus\" class=\"toggle\" width=\"18\" height=\"10\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAKCAYAAAC5Sw6hAAADHmlDQ1BJQ0MgUHJvZmlsZQAAeAGFVN9r01AU/tplnbDhizpnEQk+aJFuZFN0Q5y2a1e6zVrqNrchSJumbVyaxiTtfrAH2YtvOsV38Qc++QcM2YNve5INxhRh+KyIIkz2IrOemzRNJ1MDufe73/nuOSfn5F6g+XFa0xQvDxRVU0/FwvzE5BTf8gFeHEMr/GhNi4YWSiZHQA/Tsnnvs/MOHsZsdO5v36v+Y9WalQwR8BwgvpQ1xCLhWaBpXNR0E+DWie+dMTXCzUxzWKcECR9nOG9jgeGMjSOWZjQ1QJoJwgfFQjpLuEA4mGng8w3YzoEU5CcmqZIuizyrRVIv5WRFsgz28B9zg/JfsKiU6Zut5xCNbZoZTtF8it4fOX1wjOYA1cE/Xxi9QbidcFg246M1fkLNJK4RJr3n7nRpmO1lmpdZKRIlHCS8YlSuM2xp5gsDiZrm0+30UJKwnzS/NDNZ8+PtUJUE6zHF9fZLRvS6vdfbkZMH4zU+pynWf0D+vff1corleZLw67QejdX0W5I6Vtvb5M2mI8PEd1E/A0hCgo4cZCjgkUIMYZpjxKr4TBYZIkqk0ml0VHmyONY7KJOW7RxHeMlfDrheFvVbsrj24Pue3SXXjrwVhcW3o9hR7bWB6bqyE5obf3VhpaNu4Te55ZsbbasLCFH+iuWxSF5lyk+CUdd1NuaQU5f8dQvPMpTuJXYSWAy6rPBe+CpsCk+FF8KXv9TIzt6tEcuAcSw+q55TzcbsJdJM0utkuL+K9ULGGPmQMUNanb4kTZyKOfLaUAsnBneC6+biXC/XB567zF3h+rkIrS5yI47CF/VFfCHwvjO+Pl+3b4hhp9u+02TrozFa67vTkbqisXqUj9sn9j2OqhMZsrG+sX5WCCu0omNqSrN0TwADJW1Ol/MFk+8RhAt8iK4tiY+rYleQTysKb5kMXpcMSa9I2S6wO4/tA7ZT1l3maV9zOfMqcOkb/cPrLjdVBl4ZwNFzLhegM3XkCbB8XizrFdsfPJ63gJE722OtPW1huos+VqvbdC5bHgG7D6vVn8+q1d3n5H8LeKP8BqkjCtbCoV8yAAAAUklEQVQoFWO8HyrynwEKFFa9ZoSxiaEfhInC9TKADAICBkowyAwmYmwmRg3VDGLBZtvHPGmE37Eo4J/0FCMsaesibDZicRiKENVcRDWDGKmVIAFsW0aIsyjVzwAAAABJRU5ErkJggg%3D%3D\">";
 var plus = "<img alt=\"plus\" class=\"toggle\" width=\"18\" height=\"10\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAKCAYAAAC5Sw6hAAADHmlDQ1BJQ0MgUHJvZmlsZQAAeAGFVN9r01AU/tplnbDhizpnEQk+aJFuZFN0Q5y2a1e6zVrqNrchSJumbVyaxiTtfrAH2YtvOsV38Qc++QcM2YNve5INxhRh+KyIIkz2IrOemzRNJ1MDufe73/nuOSfn5F6g+XFa0xQvDxRVU0/FwvzE5BTf8gFeHEMr/GhNi4YWSiZHQA/Tsnnvs/MOHsZsdO5v36v+Y9WalQwR8BwgvpQ1xCLhWaBpXNR0E+DWie+dMTXCzUxzWKcECR9nOG9jgeGMjSOWZjQ1QJoJwgfFQjpLuEA4mGng8w3YzoEU5CcmqZIuizyrRVIv5WRFsgz28B9zg/JfsKiU6Zut5xCNbZoZTtF8it4fOX1wjOYA1cE/Xxi9QbidcFg246M1fkLNJK4RJr3n7nRpmO1lmpdZKRIlHCS8YlSuM2xp5gsDiZrm0+30UJKwnzS/NDNZ8+PtUJUE6zHF9fZLRvS6vdfbkZMH4zU+pynWf0D+vff1corleZLw67QejdX0W5I6Vtvb5M2mI8PEd1E/A0hCgo4cZCjgkUIMYZpjxKr4TBYZIkqk0ml0VHmyONY7KJOW7RxHeMlfDrheFvVbsrj24Pue3SXXjrwVhcW3o9hR7bWB6bqyE5obf3VhpaNu4Te55ZsbbasLCFH+iuWxSF5lyk+CUdd1NuaQU5f8dQvPMpTuJXYSWAy6rPBe+CpsCk+FF8KXv9TIzt6tEcuAcSw+q55TzcbsJdJM0utkuL+K9ULGGPmQMUNanb4kTZyKOfLaUAsnBneC6+biXC/XB567zF3h+rkIrS5yI47CF/VFfCHwvjO+Pl+3b4hhp9u+02TrozFa67vTkbqisXqUj9sn9j2OqhMZsrG+sX5WCCu0omNqSrN0TwADJW1Ol/MFk+8RhAt8iK4tiY+rYleQTysKb5kMXpcMSa9I2S6wO4/tA7ZT1l3maV9zOfMqcOkb/cPrLjdVBl4ZwNFzLhegM3XkCbB8XizrFdsfPJ63gJE722OtPW1huos+VqvbdC5bHgG7D6vVn8+q1d3n5H8LeKP8BqkjCtbCoV8yAAAAYElEQVQoFWO8HyrynwEKFFa9ZoSxiaEfhInC9TKADAICBlz4Q67UfxDGJQ8SB5nBRIzNxKihmkEs2Gz7mCeN8DtUAbIY/6SnGGFJWxch2whzCbIYNl9QzUVUM4iRWgkSAKcsS/O6iJF0AAAAAElFTkSuQmCC\">";
+
 $(document).ready(function() {
   /* Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=116083 */
   if (navigator.userAgent.match(/Firefox/i)) {
     $(".screen").wrap("<pre />");
     $(".programlisting").wrap("<pre />");
   }
-  $(".screen").attr("title", "Double-click [-] to flatten lines.");
-  $(".screen").prepend(minus);
+
+  /*
+    Include both a wrapped (.screen) and unwrapped (.flat) version of
+    each screen element, with [-] image to collapse and [+] image
+    to expand content.
+   */
+  $(".screen").each(function () {
+    $(this).replaceWith(
+      "<div class=\"screen\" title=\"Click [-] to flatten lines.\">"
+        + minus + $(this).html() + "</div>" +
+      "<div class=\"flat nodisplay\" title=\"Click [+] to wrap long lines.\">"
+        + plus + $(this).html().replace(/(\n|\r\n) /g," ") + "</div>"
+    )});
 });
-$(".screen").live("dblclick", function() {
-  $(this).replaceWith(
-    "<div class=\"flat\" title=\"Double-click [+] to wrap long lines.\">" +
-      $(this).html().replace(/<img alt="minus" .*>/, plus)
-          .replace(/(\n|\r\n) /g," ") + "\r\n<!--" + $(this).html() + "-->" +
-    "</div>");
-});
-$(".flat").live("dblclick", function() {
-  $(this).replaceWith(
-    "<div class=\"screen\" title=\"Double-click [-] to flatten lines.\">" +
-      $(this).html().replace(/(.|\n|\r\n)+<!\-\-/m,"").replace(/\-\-\>/,"")
-          .replace(/<img alt="plus" .*>/, minus) +
-    "</div>");
+
+/*
+  Add class="nodisplay" to parent div; remove from parent's sibling.
+  If the current parent is .screen, then next sibling is .flat.
+*/
+$(".toggle").live("click", function() {
+  $(this).parent().toggleClass("nodisplay");
+  if ($(this).parent().hasClass("screen")) {
+    $(this).parent().next().toggleClass("nodisplay");
+  } else {
+    $(this).parent().prev().toggleClass("nodisplay");
+  }
 });
 </script>
 <link rel="shortcut icon" href="http://forgerock.org/favicon.ico">

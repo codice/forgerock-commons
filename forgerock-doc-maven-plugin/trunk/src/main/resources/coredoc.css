@@ -225,6 +225,10 @@ div.screen {
   float: left;
 }
 
+.nodisplay {
+  display: none;
+}
+
 .formalpara-title {
   font-weight: bold;
 }
