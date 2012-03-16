@@ -104,6 +104,11 @@
    <artifactId>maven-resources-plugin</artifactId>
    <version>2.5</version>
   </dependency>
+  <dependency>
+   <groupId>org.forgerock.maven.plugins</groupId>
+   <artifactId>linktester-maven-plugin</artifactId>
+   <version>1.0.0</version>
+  </dependency>
  </dependencies>
 
  <inceptionYear>2012</inceptionYear>

@@ -51,6 +51,15 @@ abstract class AbstractBuildMojo extends AbstractMojo {
   private String resourcesVersion;
 
   /**
+   * ForgeRock linktester plugin version to use. Executions seem to hit an NPE
+   * when the version is not specified.
+   *
+   * @parameter default-value="1.0.0" expression="${linkTesterVersion}
+   * @required
+   */
+  private String linkTesterVersion;
+
+  /**
    * Short name of the project, such as OpenAM, OpenDJ, OpenIDM.
    *
    * @parameter expression="${projectName}"
@@ -173,6 +182,13 @@ abstract class AbstractBuildMojo extends AbstractMojo {
    */
   public String getResourcesVersion() {
     return resourcesVersion;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getLinkTesterVersion() {
+    return linkTesterVersion;
   }
 
   /**
