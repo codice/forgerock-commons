@@ -26,7 +26,7 @@ You call the plugin from your `pom.xml` as follows.
 		  <plugin>
 		   <groupId>org.forgerock.commons</groupId>
 		   <artifactId>forgerock-doc-maven-plugin</artifactId>
-		   <version>0.1.0-SNAPSHOT</version>
+		   <version>0.5.0-SNAPSHOT</version>
 		   <inherited>false</inherited>
 		   <configuration>
 		    <projectName>OpenAM</projectName>
