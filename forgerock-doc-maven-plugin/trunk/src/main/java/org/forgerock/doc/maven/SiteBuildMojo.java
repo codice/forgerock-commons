@@ -30,8 +30,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 /**
- * Layout built documentation. The resulting documentation set is found under a
- * doc/ directory in the site directory.
+ * Layout built documentation. The resulting documentation set is found under
+ * <code>target/site/doc</code>.
  *
  * @goal layout
  * @phase site
@@ -96,6 +96,7 @@ public class SiteBuildMojo extends AbstractBuildMojo {
   class Executor extends MojoExecutor {
     /**
      * Returns element specifying built documents to copy to the site directory.
+     * Man pages are not currently copied anywhere.
      *
      * @return Compound element specifying built documents to copy
      * @throws MojoExecutionException
@@ -160,7 +161,7 @@ public class SiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * Lay out docs in site directory under <code>/doc</code>.
+     * Lay out docs in site directory under <code>target/site/doc</code>.
      *
      * @throws MojoExecutionException
      *           Problem during execution.

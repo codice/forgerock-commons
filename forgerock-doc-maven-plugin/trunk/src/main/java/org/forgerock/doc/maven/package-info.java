@@ -32,6 +32,9 @@
  *
  * The <code>...other files...</code> can have whatever names you want, as
  * long as the name does not conflict with the file name you set here.
+ * <p>
+ * See the plugin README.md for more information and example specifications
+ * for adding the plugin to your Maven project.
  */
 package org.forgerock.doc.maven;
 

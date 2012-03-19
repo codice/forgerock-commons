@@ -54,6 +54,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     // FIXME: Get these directly from the plugin .jar rather than copying.
     copyResources();
 
+    // The Executor actually calls other plugins.
     Executor exec = new Executor();
 
     // Prepare FOP for printable output, e.g. PDF.
@@ -120,7 +121,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
   }
 
   /**
-   * Copy resources needed from plugin to project build directory.
+   * Copy resources needed from plugin to project build directory. Resources
+   * include custom fonts and XSL customization files.
    *
    * @throws MojoExecutionException
    *           Copy failed
@@ -303,8 +305,12 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
   /**
    * Get absolute path to a temporary Olink target database XML document that
-   * points to the individual generated Olink DB files. The current
-   * implementation works only for single HTML.
+   * points to the individual generated Olink DB files.
+   * <p>
+   * FIXME: The current implementation works only for single HTML. See Bob
+   * Stayton's work <a href="http://www.sagehill.net/docbookxsl/Olinking.html"
+   * >Olinking between documents</a> for details on setting up the target
+   * database.
    *
    * @return Absolute path to the temporary file
    * @throws MojoExecutionException Could not write target DB file.
@@ -397,8 +403,6 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
    * <li>A favicon link</li>
    * <li>JavaScript used by Google Analytics</li>
    * <li>CSS to style the HTML</li>
-   * <li>.htaccess files, currently only used to compress the docs when served
-   * by Apache HTTPD</li>
    * </ul>
    *
    * @param htmlDir
@@ -616,7 +620,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
    */
   class Executor extends MojoExecutor {
     /**
-     * Prepare Apache FOP for output formats like PDF.
+     * Prepare Apache FOP for output formats like PDF. This step involves font
+     * metrics generation.
      *
      * @throws MojoExecutionException
      *           Failed to prepare FOP.
@@ -662,8 +667,12 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * Prepare Olink database files. FIXME: Make this work for more than single
-     * page HTML output.
+     * Prepare Olink database files.
+     * <p>
+     * FIXME: Make this work for more than single page HTML output. See Bob
+     * Stayton's <a href="http://www.sagehill.net/docbookxsl/Olinking.html"
+     * >Olinking between documents</a> for details on setting up the target
+     * database.
      *
      * @param baseConfiguration
      *          Common configuration for all executions
@@ -769,7 +778,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * Build FO documents from DocBook XML sources.
+     * Build FO documents from DocBook XML sources, including fonts.
      *
      * @param baseConfiguration
      *          Common configuration for all executions
@@ -923,7 +932,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             executionEnvironment(
                 getProject(), getSession(), getPluginManager()));
 
-        // Avoid every new document overwriting the last.
+        // Avoid each new document overwriting the last.
         File file = new File(getDocbkxOutputDirectory(), format + File.separator
             + FilenameUtils.getBaseName(getDocumentSrcName()) + "." + format);
         renameDocument(file, docName);

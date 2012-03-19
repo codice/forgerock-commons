@@ -89,7 +89,7 @@ public final class HTMLUtils {
   }
 
   /**
-   * Replace an HTML tag with content from a template file.
+   * Replace HTML tags with additional content.
    *
    * @param baseDir
    *          Base directory under which to find HTML files recursively

@@ -17,6 +17,9 @@ The project then runs two plugin executions:
 2.  A `layout` goal in the `site` phase to copy content under
     `site-doc`
 
+## Example Plugin Specification
+
+You call the plugin from your `pom.xml` as follows.
 
 		<build>
 		 <plugins>
@@ -49,6 +52,48 @@ The project then runs two plugin executions:
 		 </plugins>
 		</build>
 
+## Source Layout Requirements
+
+The assumption is that all of your DocBook XML documents are found under
+`src/main/docbkx/` relative to the `pom.xml` file in which you call the
+plugin. Documents are expected to be found in folders under that path, where
+the folder name is a lowercase version of the document name, such as
+release-notes, install-guide, admin-guide, reference, or similar. Furthermore,
+all documents have the same file name for the file containing the top-level
+document element, by default `index.xml`. The plugin expects to find all
+images in an `images` folder inside the document folder.
+
+An example project layout looks like this:
+
+     src/main/docbkx/
+      dev-guide/
+       images/
+       index.xml
+       ...other files...
+      install-guide/
+       images/
+       index.xml
+       ...other files...
+      reference/
+       images/
+       index.xml
+       ...other files...
+      release-notes/
+       images/
+       index.xml
+       ...other files...
+      shared/
+       ...other files...
+
+## Link Checking
+
+By default, the plugin checks links found in the DocBook XML source, including
+Olinks. You can find errors in the `target/linktester.err` file.
+
+This capability is provided by Peter Major's linktester plugin.
+
+## Excluding Output Formats
+
 To exclude formats from the build, you can use the optional
 `<excludes>` configuration element. The following example
 excludes all formats but HTML from the build.
@@ -60,7 +105,19 @@ excludes all formats but HTML from the build.
       <exclude>rtf</exclude>
      </excludes>
 
-More to come...
+## Expected Results
+
+When you run the plugin with `mvn pre-site`, it builds the output formats,
+which you find under `target/docbkx`. The plugin also runs the link check.
+
+When you run the plugin with `mvn site`, it takes what was constructed during
+the `pre-site` phase and moves it under `target/site/doc` as expected for a
+Maven project site. The plugin adds an `index.html` in that directory that
+redirects to `http://project.forgerock.org/docs.html`, so you do need one of
+those in your Maven site.
+
+The plugin also adds a `.htaccess` file under `target/site/doc` indicating to
+Apache HTTPD server to compress text files like HTML and CSS.
 
 * * *
 This work is licensed under the Creative Commons
