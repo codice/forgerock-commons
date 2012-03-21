@@ -63,7 +63,9 @@
   section   nop
   set       toc,title
  </xsl:param>
- <xsl:param name="toc.section.depth" select="0" />
+ <!-- <xsl:param name="toc.section.depth" select="1" /> -->
+ <xsl:param name="toc.max.depth" select="1" />
+ <xsl:param name="generate.meta.abstract" select="1" />
 
  <xsl:param name="use.extensions" select="1" />
  <xsl:param name="linenumbering.everyNth" select="1" />
