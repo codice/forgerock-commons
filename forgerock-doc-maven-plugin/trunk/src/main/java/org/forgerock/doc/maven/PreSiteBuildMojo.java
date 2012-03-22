@@ -339,7 +339,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
       content.append("<targetset>\n");
       content
-          .append(" <targetsetinfo>Target DB for OpenIDM DocBook content,\n");
+          .append(" <targetsetinfo>Target DB for ForgeRock DocBook content,\n");
       content.append(" for use with non-chunked HTML only.</targetsetinfo>\n");
       content.append(" <sitemap>\n");
       content.append("  <dir name='doc'>\n");
