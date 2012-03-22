@@ -349,22 +349,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
       content.append("  <dir name='doc'>\n");
 
       for (String docName : docNames) {
-        content.append("   <dir name='" + docName + "'>\n");
-
-        String longName = DocUtils.renameDoc(getProjectName(), docName, "");
-        if (longName == "") {
-          throw new MojoExecutionException("Failed to get the long name for "
-              + getProjectName() + " and " + docName);
-        }
-
-        content.append("    <dir name='" + longName + "'>\n");
-        content.append("     <document targetdoc='" + docName + "'\n");
-        content.append("               baseuri='../" + docName + "/"
+        content.append("   <document targetdoc='" + docName + "'\n");
+        content.append("             baseuri='../" + docName + "/"
             + FilenameUtils.getBaseName(getDocumentSrcName()) + ".html'>\n");
-        content.append("      &" + docName + ";\n");
-        content.append("     </document>\n");
-        content.append("    </dir>\n");
-        content.append("   </dir>\n");
+        content.append("    &" + docName + ";\n");
+        content.append("   </document>\n");
       }
       content.append("  </dir>\n");
       content.append(" </sitemap>\n");
