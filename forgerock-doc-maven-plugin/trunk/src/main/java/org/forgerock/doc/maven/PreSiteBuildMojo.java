@@ -749,7 +749,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             + File.separator + docName + File.separator + baseName
             + File.separator + "images");
         try {
-          FileUtils.copyDirectory(srcDir, destDir);
+          if (srcDir.exists()) {
+            FileUtils.copyDirectory(srcDir, destDir);
+          }
         } catch (IOException e) {
           throw new MojoExecutionException("Failed to copy images from "
               + srcDir + " to " + destDir);
@@ -1018,7 +1020,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         File destDir = new File(getDocbkxOutputDirectory(), "html"
             + File.separator + docName + File.separator + "images");
         try {
-          FileUtils.copyDirectory(srcDir, destDir);
+          if (srcDir.exists()) {
+            FileUtils.copyDirectory(srcDir, destDir);
+          }
         } catch (IOException e) {
           throw new MojoExecutionException("Failed to copy images from "
               + srcDir + " to " + destDir);
@@ -1073,7 +1077,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             + File.separator + docName + File.separator + baseName
             + File.separator + "images");
         try {
-          FileUtils.copyDirectory(srcDir, destDir);
+          if (srcDir.exists()) {
+            FileUtils.copyDirectory(srcDir, destDir);
+          }
         } catch (IOException e) {
           throw new MojoExecutionException("Failed to copy images from "
               + srcDir + " to " + destDir);
