@@ -54,7 +54,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     // FIXME: Get these directly from the plugin .jar rather than copying.
     copyResources();
 
-    // The Executor actually calls other plugins.
+    // The Executor is what actually calls other plugins.
     Executor exec = new Executor();
 
     // Prepare FOP for printable output, e.g. PDF.
@@ -64,12 +64,6 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     // Get the common configuration for all output generation.
     getLog().info("Preparing common configuration...");
     ArrayList<MojoExecutor.Element> baseConf = exec.getBaseConfiguration();
-
-    // Prepare Olink database files for inter-document links declared in
-    // the DocBook XML source. For background, try
-    // http://www.sagehill.net/docbookxsl/Olinking.html
-    getLog().info("Preparing Olink DB files...");
-    exec.buildOlinkDB(baseConf);
 
     if (getExcludes() == null) {
       setExcludes(new ArrayList<String>());
@@ -108,7 +102,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     // Build and prepare HTML for publishing.
     if (getExcludes().isEmpty() || !getExcludes().contains("html")) {
       getLog().info("Building single HTML pages...");
+      exec.buildSingleHTMLOlinkDB(baseConf);
       exec.buildSingleHTML(baseConf);
+
       getLog().info("Building chunked HTML pages...");
       exec.buildChunkedHTML(baseConf);
       postProcessHTML(getDocbkxOutputDirectory().getPath()
@@ -315,7 +311,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
    * @return Absolute path to the temporary file
    * @throws MojoExecutionException Could not write target DB file.
    */
-  final String getTargetDatabaseDocument() throws MojoExecutionException {
+  final String buildSingleHTMLTargetDB() throws MojoExecutionException {
     File targetDB = new File(getBuildDirectory() + File.separator
         + "olinkdb-single-html-pages.xml");
     try {
@@ -668,7 +664,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * @throws MojoExecutionException
      *           Failed to prepare the target DB files.
      */
-    void buildOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration)
+    void buildSingleHTMLOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration)
         throws MojoExecutionException {
       ArrayList<MojoExecutor.Element> cfg =
           new ArrayList<MojoExecutor.Element>();
@@ -1002,7 +998,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
       cfg.add(element(name("htmlCustomization"),
           FilenameUtils.separatorsToUnix(singleHTMLCustomization.getPath())));
       cfg.add(element(name("targetDatabaseDocument"),
-          getTargetDatabaseDocument()));
+          buildSingleHTMLTargetDB()));
 
       // Copy images from source to build. DocBook XSL does not copy the
       // images, because XSL does not have a facility for copying files.
