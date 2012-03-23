@@ -101,11 +101,12 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     // Build and prepare HTML for publishing.
     if (getExcludes().isEmpty() || !getExcludes().contains("html")) {
-      getLog().info("Building single HTML pages...");
+      getLog().info("Building single page HTML...");
       exec.buildSingleHTMLOlinkDB(baseConf);
       exec.buildSingleHTML(baseConf);
 
-      getLog().info("Building chunked HTML pages...");
+      getLog().info("Building chunked HTML...");
+      exec.buildChunkedHTMLOlinkDB(baseConf);
       exec.buildChunkedHTML(baseConf);
       postProcessHTML(getDocbkxOutputDirectory().getPath()
           + File.separator + "html");
@@ -301,19 +302,14 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
   /**
    * Get absolute path to a temporary Olink target database XML document that
-   * points to the individual generated Olink DB files.
-   * <p>
-   * FIXME: The current implementation works only for single HTML. See Bob
-   * Stayton's work <a href="http://www.sagehill.net/docbookxsl/Olinking.html"
-   * >Olinking between documents</a> for details on setting up the target
-   * database.
+   * points to the individual generated Olink DB files, for single page HTML.
    *
    * @return Absolute path to the temporary file
    * @throws MojoExecutionException Could not write target DB file.
    */
   final String buildSingleHTMLTargetDB() throws MojoExecutionException {
     File targetDB = new File(getBuildDirectory() + File.separator
-        + "olinkdb-single-html-pages.xml");
+        + "olinkdb-single-page-html.xml");
     try {
       StringBuilder content = new StringBuilder();
       content.append("<?xml version='1.0' encoding='utf-8'?>\n");
@@ -331,7 +327,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
       for (String docName : docNames) {
         String sysId = getBuildDirectory().getAbsolutePath() + File.separator
-            + docName + ".target.db";
+            + docName + "single.target.db";
         content.append("<!ENTITY " + docName + " SYSTEM '" + sysId + "'>\n");
       }
 
@@ -340,7 +336,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
       content.append("<targetset>\n");
       content
           .append(" <targetsetinfo>Target DB for ForgeRock DocBook content,\n");
-      content.append(" for use with non-chunked HTML only.</targetsetinfo>\n");
+      content.append(" for use with single page HTML only.</targetsetinfo>\n");
       content.append(" <sitemap>\n");
       content.append("  <dir name='doc'>\n");
 
@@ -374,6 +370,72 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
    * @required
    */
   private File chunkedHTMLCustomization;
+
+  /**
+   * Get absolute path to a temporary Olink target database XML document that
+   * points to the individual generated Olink DB files, for chunked HTML.
+   *
+   * @return Absolute path to the temporary file
+   * @throws MojoExecutionException Could not write target DB file.
+   */
+  final String buildChunkedHTMLTargetDB() throws MojoExecutionException {
+    File targetDB = new File(getBuildDirectory() + File.separator
+        + "olinkdb-chunked-html.xml");
+    try {
+      StringBuilder content = new StringBuilder();
+      content.append("<?xml version='1.0' encoding='utf-8'?>\n");
+      content.append("<!DOCTYPE targetset[\n");
+
+      String targetDbDtd = IOUtils.toString(getClass().getResourceAsStream(
+          "/targetdatabase.dtd"));
+      content.append(targetDbDtd + "\n");
+
+      Set<String> docNames = DocUtils.getDocumentNames(
+          getDocbkxSourceDirectory(), getDocumentSrcName());
+      if (docNames.isEmpty()) {
+        throw new MojoExecutionException("No document names found.");
+      }
+
+      for (String docName : docNames) {
+        String sysId = getBuildDirectory().getAbsolutePath() + File.separator
+            + docName + "chunked.target.db";
+        content.append("<!ENTITY " + docName + " SYSTEM '" + sysId + "'>\n");
+      }
+
+      content.append("]>\n");
+
+      content.append("<targetset>\n");
+      content
+          .append(" <targetsetinfo>Target DB for ForgeRock DocBook content,\n");
+      content.append(" for use with chunked HTML only.</targetsetinfo>\n");
+      content.append(" <sitemap>\n");
+      content.append("  <dir name='doc'>\n");
+
+      String baseName = FilenameUtils.getBaseName(getDocumentSrcName());
+      for (String docName : docNames) {
+        content.append("   <dir name='" + docName + "'>\n");
+        content.append("    <dir name='" + baseName + "'>\n");
+        content.append("     <document targetdoc='" + docName + "'\n");
+        content.append("               baseuri='../../" + docName + "/"
+            + baseName + "/'>\n");
+        content.append("      &" + docName + ";\n");
+        content.append("     </document>\n");
+        content.append("    </dir>\n");
+        content.append("   </dir>\n");
+      }
+
+      content.append("  </dir>\n");
+      content.append(" </sitemap>\n");
+      content.append("</targetset>\n");
+
+      FileUtils.writeStringToFile(targetDB, content.toString());
+    } catch (IOException e) {
+      throw new MojoExecutionException(
+          "Failed to write Olink target database: "
+              + e.getMessage());
+    }
+    return targetDB.getPath();
+  }
 
   /**
    * Prepare single and chunked HTML for publication.
@@ -652,63 +714,6 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * Prepare Olink database files.
-     * <p>
-     * FIXME: Make this work for more than single page HTML output. See Bob
-     * Stayton's <a href="http://www.sagehill.net/docbookxsl/Olinking.html"
-     * >Olinking between documents</a> for details on setting up the target
-     * database.
-     *
-     * @param baseConfiguration
-     *          Common configuration for all executions
-     * @throws MojoExecutionException
-     *           Failed to prepare the target DB files.
-     */
-    void buildSingleHTMLOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration)
-        throws MojoExecutionException {
-      ArrayList<MojoExecutor.Element> cfg =
-          new ArrayList<MojoExecutor.Element>();
-      cfg.add(element(name("xincludeSupported"), isXincludeSupported));
-      cfg.add(element(name("sourceDirectory"),
-          FilenameUtils.separatorsToUnix(getDocbkxSourceDirectory()
-                .getPath())));
-
-      Set<String> docNames =
-          DocUtils.getDocumentNames(getDocbkxSourceDirectory(),
-          getDocumentSrcName());
-      if (docNames.isEmpty()) {
-        throw new MojoExecutionException("No document names found.");
-      }
-
-      for (String docName : docNames) {
-        cfg.add(element(name("includes"),
-            docName + "/" + getDocumentSrcName()));
-        cfg.add(element(name("collectXrefTargets"), "only"));
-        cfg.add(element(name("targetsFilename"),
-            FilenameUtils.separatorsToUnix(getBuildDirectory().getPath()) + "/"
-                + docName + ".target.db"));
-
-        executeMojo(
-            plugin(
-                groupId("com.agilejava.docbkx"),
-                artifactId("docbkx-maven-plugin"),
-                version(getDocbkxVersion())),
-            goal("generate-html"),
-            configuration(cfg.toArray(new Element[0])),
-            executionEnvironment(
-                getProject(), getSession(), getPluginManager()));
-
-        File outputDir = new File(getDocbkxOutputDirectory(), "html"
-            + File.separator + docName);
-        try {
-          FileUtils.deleteDirectory(outputDir);
-        } catch (IOException e) {
-          throw new MojoExecutionException("Cannot delete " + outputDir);
-        }
-      }
-    }
-
-    /**
      * Build EPUB documents from DocBook XML sources.
      *
      * @param baseConfiguration
@@ -980,6 +985,59 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
+     * Prepare Olink database files for single page HTML output.
+     *
+     * @param baseConfiguration
+     *          Common configuration for all executions
+     * @throws MojoExecutionException
+     *           Failed to prepare the target DB files.
+     */
+    void buildSingleHTMLOlinkDB(
+        final ArrayList<MojoExecutor.Element> baseConfiguration)
+        throws MojoExecutionException {
+      ArrayList<MojoExecutor.Element> cfg =
+          new ArrayList<MojoExecutor.Element>();
+      cfg.add(element(name("xincludeSupported"), isXincludeSupported));
+      cfg.add(element(name("sourceDirectory"),
+          FilenameUtils.separatorsToUnix(getDocbkxSourceDirectory()
+                .getPath())));
+
+      Set<String> docNames =
+          DocUtils.getDocumentNames(getDocbkxSourceDirectory(),
+          getDocumentSrcName());
+      if (docNames.isEmpty()) {
+        throw new MojoExecutionException("No document names found.");
+      }
+
+      for (String docName : docNames) {
+        cfg.add(element(name("includes"),
+            docName + "/" + getDocumentSrcName()));
+        cfg.add(element(name("collectXrefTargets"), "only"));
+        cfg.add(element(name("targetsFilename"),
+            FilenameUtils.separatorsToUnix(getBuildDirectory().getPath()) + "/"
+                + docName + "single.target.db"));
+
+        executeMojo(
+            plugin(
+                groupId("com.agilejava.docbkx"),
+                artifactId("docbkx-maven-plugin"),
+                version(getDocbkxVersion())),
+            goal("generate-html"),
+            configuration(cfg.toArray(new Element[0])),
+            executionEnvironment(
+                getProject(), getSession(), getPluginManager()));
+
+        File outputDir = new File(getDocbkxOutputDirectory(), "html"
+            + File.separator + docName);
+        try {
+          FileUtils.deleteDirectory(outputDir);
+        } catch (IOException e) {
+          throw new MojoExecutionException("Cannot delete " + outputDir);
+        }
+      }
+    }
+
+    /**
      * Build single page HTML from DocBook XML sources.
      *
      * @param baseConfiguration
@@ -1036,6 +1094,64 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
+     * Prepare Olink database files for chunked HTML output.
+     *
+     * @param baseConfiguration
+     *          Common configuration for all executions
+     * @throws MojoExecutionException
+     *           Failed to prepare the target DB files.
+     */
+    void buildChunkedHTMLOlinkDB(
+        final ArrayList<MojoExecutor.Element> baseConfiguration)
+        throws MojoExecutionException {
+      ArrayList<MojoExecutor.Element> cfg =
+          new ArrayList<MojoExecutor.Element>();
+      cfg.add(element(name("xincludeSupported"), isXincludeSupported));
+      cfg.add(element(name("sourceDirectory"),
+          FilenameUtils.separatorsToUnix(getDocbkxSourceDirectory()
+                .getPath())));
+      cfg.add(element(name("chunkedOutput"), "true"));
+      cfg.add(element(name("htmlCustomization"),
+          FilenameUtils.separatorsToUnix(chunkedHTMLCustomization.getPath())));
+
+      Set<String> docNames =
+          DocUtils.getDocumentNames(getDocbkxSourceDirectory(),
+          getDocumentSrcName());
+      if (docNames.isEmpty()) {
+        throw new MojoExecutionException("No document names found.");
+      }
+
+      for (String docName : docNames) {
+        cfg.add(element(name("currentDocid"), docName));
+        cfg.add(element(name("includes"),
+            docName + "/" + getDocumentSrcName()));
+        cfg.add(element(name("collectXrefTargets"), "only"));
+        cfg.add(element(name("targetsFilename"),
+            FilenameUtils.separatorsToUnix(getBuildDirectory().getPath()) + "/"
+                + docName + "chunked.target.db"));
+
+        executeMojo(
+            plugin(
+                groupId("com.agilejava.docbkx"),
+                artifactId("docbkx-maven-plugin"),
+                version(getDocbkxVersion())),
+            goal("generate-html"),
+            configuration(cfg.toArray(new Element[0])),
+            executionEnvironment(
+                getProject(), getSession(), getPluginManager()));
+
+        File outputDir = new File(getDocbkxOutputDirectory(), "html"
+            + File.separator + docName
+            + File.separator + FilenameUtils.getBaseName(getDocumentSrcName()));
+        try {
+          FileUtils.deleteDirectory(outputDir);
+        } catch (IOException e) {
+          throw new MojoExecutionException("Cannot delete " + outputDir);
+        }
+      }
+    }
+
+    /**
      * Build chunked HTML pages from DocBook XML sources.
      *
      * @param baseConfiguration
@@ -1053,6 +1169,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
       cfg.add(element(name("chunkedOutput"), "true"));
       cfg.add(element(name("htmlCustomization"),
           FilenameUtils.separatorsToUnix(chunkedHTMLCustomization.getPath())));
+      cfg.add(element(name("targetDatabaseDocument"),
+          buildChunkedHTMLTargetDB()));
 
       // Copy images from source to build. DocBook XSL does not copy the
       // images, because XSL does not have a facility for copying files.
