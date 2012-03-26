@@ -19,7 +19,8 @@ The project then runs two plugin executions:
 
 ## Example Plugin Specification
 
-You call the plugin from your `pom.xml` as follows.
+You call the plugin from your `pom.xml` as follows. This example uses a
+POM property called `gaId`, whose value is the Google Analytics ID.
 
 		<build>
 		 <plugins>
@@ -29,8 +30,8 @@ You call the plugin from your `pom.xml` as follows.
 		   <version>0.6.0-SNAPSHOT</version>
 		   <inherited>false</inherited>
 		   <configuration>
-		    <projectName>OpenAM</projectName>
-		    <googleAnalyticsId>UA-23412190-7</googleAnalyticsId>
+		    <projectName>MyProject</projectName>
+		    <googleAnalyticsId>${gaId}</googleAnalyticsId>
 		   </configuration>
 		   <executions>
 		    <execution>
@@ -121,11 +122,13 @@ Apache HTTPD server to compress text files like HTML and CSS.
 
 ## Release Layout
 
-You can add a `release` goal to the site phase execution to prepare a version
-for release on docs.forgerock.org. After you add the release goal, be sure to
-turn off draft mode and add a release version.
+You can call the `release` goal in the site phase to prepare a doc layout
+for release on docs.forgerock.org. When you call the release goal, be sure to
+turn off draft mode, add a release version, and override the Google Analytics
+ID using the property.
 
-     mvn clean site -DisDraftMode=no -DreleaseVersion=1.0.0
+     mvn -DisDraftMode=no -DreleaseVersion=1.0.0 -D"gaId=UA-23412190-14" \
+     clean site org.forgerock.commons:forgerock-doc-maven-plugin:release
 
 * * *
 This work is licensed under the Creative Commons
