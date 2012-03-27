@@ -16,7 +16,7 @@
 !     Copyright 2012 ForgeRock AS
 !
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0   http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
  <modelVersion>4.0.0</modelVersion>
 
  <parent>
@@ -27,7 +27,7 @@
 
  <groupId>org.forgerock.commons</groupId>
  <artifactId>forgerock-doc-maven-plugin</artifactId>
- <version>1.0.0</version>
+ <version>1.0.1-SNAPSHOT</version>
  <packaging>maven-plugin</packaging>
 
  <name>ForgeRock Doc Build Maven Plugin</name>
@@ -35,9 +35,9 @@
  <url>http://docs.forgerock.org</url>
 
  <scm>
-  <url>https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/tags/forgerock-doc-maven-plugin-1.0.0</url>
-  <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/tags/forgerock-doc-maven-plugin-1.0.0</connection>
-  <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/tags/forgerock-doc-maven-plugin-1.0.0</developerConnection>
+  <url>https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/</url>
+  <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/trunk/</connection>
+  <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/trunk/</developerConnection>
  </scm>
 
  <licenses>
