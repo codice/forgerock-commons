@@ -1,3 +1,5 @@
+# Workaround for COMMWEB-50: Web server may strip whitespace in <div> elements
+ModPagespeed off
 # compress text, html, javascript, css, xml:
 AddOutputFilterByType DEFLATE text/plain
 AddOutputFilterByType DEFLATE text/html
