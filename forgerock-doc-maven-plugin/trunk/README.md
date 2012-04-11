@@ -27,7 +27,7 @@ POM property called `gaId`, whose value is the Google Analytics ID.
 		  <plugin>
 		   <groupId>org.forgerock.commons</groupId>
 		   <artifactId>forgerock-doc-maven-plugin</artifactId>
-		   <version>0.6.0-SNAPSHOT</version>
+		   <version>1.0.1-SNAPSHOT</version>
 		   <inherited>false</inherited>
 		   <configuration>
 		    <projectName>MyProject</projectName>
@@ -91,7 +91,8 @@ An example project layout looks like this:
 By default, the plugin checks links found in the DocBook XML source, including
 Olinks. You can find errors in the `target/linktester.err` file.
 
-This capability is provided by Peter Major's linktester plugin.
+This capability is provided by Peter Major's
+[linktester](https://github.com/aldaris/docbook-linktester) plugin.
 
 ## Excluding Output Formats
 
