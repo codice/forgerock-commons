@@ -105,5 +105,5 @@
    <xsl:attribute name="font-size">0.75em</xsl:attribute>
   </xsl:attribute-set>
   
-  <xsl:param name="ulink.footnotes" select="1" />
+  <xsl:param name="ulink.footnotes" select="0" />
 </xsl:stylesheet>
