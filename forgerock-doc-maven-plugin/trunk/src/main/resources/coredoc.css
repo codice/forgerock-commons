@@ -157,7 +157,8 @@ div.warning {
 div.appendix,
 div.chapter,
 div.index,
-div.preface {
+div.preface,
+div.refentry {
   border-bottom: thin solid #ccc;
 }
 
