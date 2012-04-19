@@ -14,13 +14,18 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.json.resource;
+package org.forgerock.resource.client.impl;
 
 // Java SE
 import java.util.LinkedHashMap;
 
 // JSON Fluent
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.resource.client.ResourceAccessor;
+import org.forgerock.resource.exception.BadRequestException;
+import org.forgerock.resource.exception.ResourceException;
+import org.forgerock.resource.framework.JsonResourceProvider;
+import org.forgerock.resource.framework.impl.JsonResourceContext;
 
 /**
  * Wraps a JsonResource object and provides a set of convenience methods to use for accessing
@@ -28,10 +33,10 @@ import org.forgerock.json.fluent.JsonValue;
  *
  * @author Paul C. Bryan
  */
-public class JsonResourceAccessor {
+public class ResourceAccessorImpl implements ResourceAccessor {
 
     /** The resource to access through the accessor. */
-    private JsonResource resource;
+    private JsonResourceProvider resource;
 
     /** The context to pass as the parent context for all requests. */
     private JsonValue context;
@@ -43,7 +48,7 @@ public class JsonResourceAccessor {
      * @param context the context to pass as the parent context for all requests.
      * @throws NullPointerException if {@code resource} is {@code null}.
      */
-    public JsonResourceAccessor(JsonResource resource, JsonValue context) {
+    public ResourceAccessorImpl(JsonResourceProvider resource, JsonValue context) {
         if (resource == null) {
             throw new NullPointerException();
         }
@@ -66,44 +71,35 @@ public class JsonResourceAccessor {
         return request;
     }
 
-    /**
-     * Creates a resource.
-     *
-     * @param id the requested identifier for the newly created resource.
-     * @param value the value of the resource to create.
-     * @throws JsonResourceException if there is an exception handling the request.
+    /* (non-Javadoc)
+     * @see org.forgerock.resource.client.impl.ResourceAccessor#create(java.lang.String, org.forgerock.json.fluent.JsonValue)
      */
-    public JsonValue create(String id, JsonValue value) throws JsonResourceException {
+    @Override
+    public JsonValue create(String id, JsonValue value) throws ResourceException {
         if (value == null) {
-            throw new JsonResourceException(JsonResourceException.BAD_REQUEST);
+            throw new BadRequestException("Value passed in is null");
         }
         JsonValue request = newRequest("create", id);
         request.put("value", value.getObject());
         return resource.handle(request);
     }
 
-    /**
-     * Reads a resource.
-     *
-     * @param id the identifier of the resource to read.
-     * @throws JsonResourceException if there is an exception handling the request.
+    /* (non-Javadoc)
+     * @see org.forgerock.resource.client.impl.ResourceAccessor#read(java.lang.String)
      */
-    public JsonValue read(String id) throws JsonResourceException {
+    @Override
+    public JsonValue read(String id) throws ResourceException {
         JsonValue request = newRequest("read", id);
         return resource.handle(request);
     }
 
-    /**
-     * Updates a resource.
-     *
-     * @param id the identifier of the resource to update.
-     * @param rev the current version of the resource, or {@code null} if not provided.
-     * @param value the new value to updated the resource to.
-     * @throws JsonResourceException if there is an exception handling the request.
+    /* (non-Javadoc)
+     * @see org.forgerock.resource.client.impl.ResourceAccessor#update(java.lang.String, java.lang.String, org.forgerock.json.fluent.JsonValue)
      */
-    public JsonValue update(String id, String rev, JsonValue value) throws JsonResourceException {
+    @Override
+    public JsonValue update(String id, String rev, JsonValue value) throws ResourceException {
         if (value == null) {
-            throw new JsonResourceException(JsonResourceException.BAD_REQUEST);
+            throw new BadRequestException("Value passed in is null");
         }
         JsonValue request = newRequest("update", id);
         if (rev != null) {
@@ -113,14 +109,11 @@ public class JsonResourceAccessor {
         return resource.handle(request);
     }
 
-    /**
-     * Deletes a resource.
-     *
-     * @param id the identifier of the resource to delete.
-     * @param rev the current version of the resource, or {@code null} if not provided.
-     * @throws JsonResourceException if there is an exception handling the request.
+    /* (non-Javadoc)
+     * @see org.forgerock.resource.client.impl.ResourceAccessor#delete(java.lang.String, java.lang.String)
      */
-    public JsonValue delete(String id, String rev) throws JsonResourceException {
+    @Override
+    public JsonValue delete(String id, String rev) throws ResourceException {
         JsonValue request = newRequest("delete", id);
         if (rev != null) {
             request.put("rev", rev);
@@ -128,17 +121,13 @@ public class JsonResourceAccessor {
         return resource.handle(request);
     }
 
-    /**
-     * Applies a set of patches to a resource.
-     *
-     * @param id the identifier of the resource to patch.
-     * @param rev the current version of the resource, or {@code null} if not provided.
-     * @param value the patch document to apply to the resource.
-     * @throws JsonResourceException if there is an exception handling the request.
+    /* (non-Javadoc)
+     * @see org.forgerock.resource.client.impl.ResourceAccessor#patch(java.lang.String, java.lang.String, org.forgerock.json.fluent.JsonValue)
      */
-    public JsonValue patch(String id, String rev, JsonValue value) throws JsonResourceException {
+    @Override
+    public JsonValue patch(String id, String rev, JsonValue value) throws ResourceException {
         if (value == null) {
-            throw new JsonResourceException(JsonResourceException.BAD_REQUEST);
+            throw new BadRequestException("Value passed in is null");
         }
         JsonValue request = newRequest("patch", id);
         if (rev != null) {
@@ -148,28 +137,21 @@ public class JsonResourceAccessor {
         return resource.handle(request);
     }
 
-    /**
-     * Performs a query on a resource.
-     *
-     * @param id the identifier of the resource to query.
-     * @param params the parameters to supply to the query.
-     * @throws JsonResourceException if there is an exception handling the request.
+    /* (non-Javadoc)
+     * @see org.forgerock.resource.client.impl.ResourceAccessor#query(java.lang.String, org.forgerock.json.fluent.JsonValue)
      */
-    public JsonValue query(String id, JsonValue params) throws JsonResourceException {
+    @Override
+    public JsonValue query(String id, JsonValue params) throws ResourceException {
         JsonValue request = newRequest("query", id);
         request.put("params", params.getObject());
         return resource.handle(request);
     }
     
-    /**
-     * Performs an action on a resource.
-     *
-     * @param id the identifier of the resource to perform the action on.
-     * @param params the parameters to supply to the action.
-     * @param value the value to supply to the action; or {@code null} if no value.
-     * @throws JsonResourceException if there is an exception handling the request.
+    /* (non-Javadoc)
+     * @see org.forgerock.resource.client.impl.ResourceAccessor#action(java.lang.String, org.forgerock.json.fluent.JsonValue, org.forgerock.json.fluent.JsonValue)
      */
-    public JsonValue action(String id, JsonValue params, JsonValue value) throws JsonResourceException {
+    @Override
+    public JsonValue action(String id, JsonValue params, JsonValue value) throws ResourceException {
         JsonValue request = newRequest("action", id);
         request.put("params", params.getObject());
         if (value != null) {

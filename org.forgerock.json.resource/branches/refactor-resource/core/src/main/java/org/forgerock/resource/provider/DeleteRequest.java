@@ -11,30 +11,23 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
- * Copyright © 2011 ForgeRock AS. All rights reserved.
+ * Copyright © 2012 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.json.resource;
+package org.forgerock.resource.provider;
 
-// JSON Fluent
 import org.forgerock.json.fluent.JsonValue;
 
 /**
- * A resource that has a JSON representation. Handles JSON resource requests.
- *
- * @author Paul C. Bryan
+ * Provides access to the request details for a delete method
+ *  
+ * @author aegloff
  */
-public interface JsonResource {
-
+public interface DeleteRequest extends Request {
+    
     /**
-     * Handles a JSON resource request and returns a JSON resource response. If a request
-     * results in an error, a {@code JsonResourceException} is thrown.
-     * <p>
-     * <strong>Note:</strong> This method <strong>should not</strong> modify the request.
-     *
-     * @param request the JSON resource request.
-     * @return the JSON resource response.
-     * @throws JsonResourceException if there is an exception handling the request.
+     * @return the revision expected to be updated.
      */
-    JsonValue handle(JsonValue request) throws JsonResourceException;
+    String getRevision();
+    
 }

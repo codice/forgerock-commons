@@ -14,10 +14,12 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.json.resource;
+package org.forgerock.resource.framework;
 
 // JSON Fluent
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.resource.exception.ResourceException;
+import org.forgerock.resource.framework.impl.JsonResourceFilterChain;
 
 /**
  * Interface to filter JSON resource requests and/or JSON resource responses.
@@ -44,7 +46,7 @@ public interface JsonResourceFilter {
      * @param request the JSON resource request.
      * @param next the next filter or resource in chain.
      * @return the JSON resource response.
-     * @throws JsonResourceException if there is an exception handling the request.
+     * @throws ResourceException if there is an exception handling the request.
      */
-    JsonValue filter(JsonValue request, JsonResource next) throws JsonResourceException;
+    JsonValue filter(JsonValue request, JsonResourceProvider next) throws ResourceException;
 }

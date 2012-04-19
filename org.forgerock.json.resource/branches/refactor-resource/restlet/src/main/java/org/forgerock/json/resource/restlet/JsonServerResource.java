@@ -34,7 +34,7 @@ import org.restlet.data.Status;
 import org.restlet.data.Tag;
 import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
-import org.restlet.resource.ResourceException;
+//import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
 // Jackson
@@ -47,9 +47,14 @@ import org.forgerock.restlet.ExtendedServerResource;
 import org.forgerock.json.fluent.JsonValue;
 
 // JSON Resource
-import org.forgerock.json.resource.JsonResource;
-import org.forgerock.json.resource.JsonResourceAccessor;
-import org.forgerock.json.resource.JsonResourceException;
+//import org.forgerock.json.resource.JsonResourceProvider;
+import org.forgerock.resource.client.ResourceAccessor;
+import org.forgerock.resource.client.impl.ResourceAccessorImpl;
+import org.forgerock.resource.exception.BadRequestException;
+import org.forgerock.resource.exception.InternalServerErrorException;
+import org.forgerock.resource.exception.PreconditionFailedException;
+import org.forgerock.resource.exception.ResourceException;
+
 
 /**
  * TODO: Description.
@@ -62,7 +67,7 @@ public class JsonServerResource extends ExtendedServerResource {
     private JsonResourceRestlet restlet;
 
     /** TODO: Description. */
-    private JsonResourceAccessor accessor;
+    private ResourceAccessor accessor;
 
     /** TODO: Description. */
     private Conditions conditions;
@@ -124,14 +129,18 @@ public class JsonServerResource extends ExtendedServerResource {
      * precondition(s) must be tested against current version of the resource.
      *
      * @return the value of the JSON resource.
-     * @throws JsonResourceException if the JSON resource could not be read or a precondition failed.
+     * @throws ResourceException if the JSON resource could not be read or a precondition failed.
      */
-    private JsonValue read() throws JsonResourceException {
+    private JsonValue read() throws ResourceException {
         if (this.value == null) {
             JsonValue value = accessor.read(this.id);
             Status status = conditions.getStatus(getMethod(), true, getTag(value), null);
             if (status != null && status.isError()) {
-                throw new JsonResourceException(JsonResourceException.VERSION_MISMATCH);
+                throw new PreconditionFailedException(
+                        status.getCode() + " " 
+                        + status.getName() + " "
+                        + status.getDescription(), 
+                        status.getThrowable());
             }
             this.value = value; // cache to prevent multiple reads
         }
@@ -146,10 +155,10 @@ public class JsonServerResource extends ExtendedServerResource {
      * @return TODO.
      * @throws ResourceException TODO.
      */
-    private Representation create(String id, JsonValue value) throws JsonResourceException {
+    private Representation create(String id, JsonValue value) throws ResourceException {
         JsonValue response = accessor.create(id, value);
         if (response == null) { // expect a response
-            throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
+            throw new InternalServerErrorException("Expected a response, but response was null");
         }
         JsonValue _id = response.get("_id");
         if (_id.isString()) {
@@ -168,10 +177,10 @@ public class JsonServerResource extends ExtendedServerResource {
      * @return TODO.
      * @throws ResourceException TODO.
      */
-    private Representation update(String id, String rev, JsonValue value) throws JsonResourceException {
+    private Representation update(String id, String rev, JsonValue value) throws ResourceException {
         JsonValue response = accessor.update(id, rev, value);
         if (response == null) { // expect a response
-            throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
+            throw new InternalServerErrorException("Expected a response, but response was null");
         }
         JsonValue _id = response.get("_id");
         if (_id.isString() && !id.equals(_id.getObject())) { // resource was moved
@@ -188,7 +197,7 @@ public class JsonServerResource extends ExtendedServerResource {
      * @param entity the entity to be mapped to the JSON value.
      * @return the entity as a JSON value, or {@code null} if empty or does not exist.
      */
-    private JsonValue entityValue(Representation entity) throws ResourceException {
+    private JsonValue entityValue(Representation entity) throws org.restlet.resource.ResourceException {
         JsonValue result = null;
         if (entity != null && !(entity instanceof EmptyRepresentation)) {
             JacksonRepresentation jr = (entity instanceof JacksonRepresentation ?
@@ -199,12 +208,12 @@ public class JsonServerResource extends ExtendedServerResource {
     }
 
     /**
-     * Throws a {@code JsonResourceException} if the specified entity value is {@code null}.
+     * Throws a {@code ResourceException} if the specified entity value is {@code null}.
      * Otherwise, returns the value.
      */
-    private JsonValue requireEntity(JsonValue entity) throws JsonResourceException {
+    private JsonValue requireEntity(JsonValue entity) throws ResourceException {
         if (entity == null || entity.isNull()) {
-            throw new JsonResourceException(JsonResourceException.BAD_REQUEST, "Malformed or missing entity body");
+            throw new BadRequestException("Malformed or missing entity body");
         }
         return entity;
     }
@@ -223,7 +232,7 @@ public class JsonServerResource extends ExtendedServerResource {
             this.id = remaining; // default: null (resource itself is being operated on)
         }
         this.restlet = (JsonResourceRestlet)(getRequestAttributes().get(JsonResourceRestlet.class.getName()));
-        this.accessor = new JsonResourceAccessor(restlet.getResource(), restlet.newContext(getRequest()));
+        this.accessor = new ResourceAccessorImpl(restlet.getResource(), restlet.newContext(getRequest()));
         this.ref = getOriginalRef();
     }
 
@@ -233,16 +242,16 @@ public class JsonServerResource extends ExtendedServerResource {
      * handler.
      */
     @Override
-    protected Representation doHandle() throws ResourceException {
+    protected Representation doHandle() throws org.restlet.resource.ResourceException {
         List<Tag> match = conditions.getMatch();
         List<Tag> noneMatch = conditions.getNoneMatch();
         try {
             if (conditions.getModifiedSince() != null || conditions.getUnmodifiedSince() != null) {
-                throw new JsonResourceException(JsonResourceException.VERSION_MISMATCH); // unsupported
+                throw new PreconditionFailedException("Modified or unmodified since header conditions not supported");
             } else if (match.contains(null)) {
-                throw new JsonResourceException(JsonResourceException.BAD_REQUEST, "Invalid If-Match tag");
+                throw new BadRequestException("Invalid If-Match tag");
             } else if (noneMatch.contains(null)) {
-                throw new JsonResourceException(JsonResourceException.BAD_REQUEST, "Invalid If-None-Match tag");
+                throw new BadRequestException("Invalid If-None-Match tag");
             } else if (match.size() == 1 && noneMatch.size() == 0 && !Tag.ALL.equals(match.get(0))) {
                 rev = match.get(0).getName(); // derive from request
             } else if (getMethod().equals(Method.PUT) && noneMatch.size() == 1
@@ -251,8 +260,8 @@ public class JsonServerResource extends ExtendedServerResource {
             } else if (match.size() != 0 || noneMatch.size() != 0) {
                 rev = getTag(read()).getName(); // derive from fetched resource
             }
-        } catch (JsonResourceException jre) {
-            throw new ResourceException(jre);
+        } catch (ResourceException jre) {
+            throw new org.restlet.resource.ResourceException(jre);
         }
         return super.doHandle();
     }
@@ -266,25 +275,25 @@ public class JsonServerResource extends ExtendedServerResource {
      * with a {@code "query"} method.
      *
      * @return TODO.
-     * @throws ResourceException TODO.
+     * @throws org.restlet.resource.ResourceException TODO.
      */
     @Override
-    public Representation get() throws ResourceException {
+    public Representation get() throws org.restlet.resource.ResourceException {
         Representation representation;
         try {
             Form query = getQuery();
             if (query == null || query.size() == 0) { // read
                 representation = toRepresentation(read());
             } else if (conditions.hasSome()) { // query w. precondition: automatic mismatch
-                    throw new JsonResourceException(JsonResourceException.VERSION_MISMATCH);
+                    throw new PreconditionFailedException("Query does not support preconditions, but precondition present.");
             } else { // query                
                 representation = toRepresentation(accessor.query(this.id, getQueryParams()));
             }
             if (representation == null || representation instanceof EmptyRepresentation) {
-                throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
+                throw new InternalServerErrorException("Expected a response, but response was null or empty");
             }
-        } catch (JsonResourceException jre) {
-            throw new ResourceException(jre);
+        } catch (ResourceException jre) {
+            throw new org.restlet.resource.ResourceException(jre);
         }
         return representation;
     }
@@ -302,10 +311,10 @@ public class JsonServerResource extends ExtendedServerResource {
      *
      * @param entity TODO.
      * @return TODO.
-     * @throws ResourceException TODO.
+     * @throws org.restlet.resource.ResourceException TODO.
      */
     @Override
-    public Representation put(Representation entity) throws ResourceException {
+    public Representation put(Representation entity) throws org.restlet.resource.ResourceException {
         Representation representation;
         List<Tag> match = conditions.getMatch();
         List<Tag> noneMatch = conditions.getNoneMatch();
@@ -318,16 +327,16 @@ public class JsonServerResource extends ExtendedServerResource {
             } else { // ambiguous whether object is being created or updated
                 try { // try update first
                     representation = update(this.id, this.rev, value);
-                } catch (JsonResourceException jre) {
-                    if (jre.getCode() == JsonResourceException.NOT_FOUND) { // nothing to update; fallback to create
+                } catch (ResourceException jre) {
+                    if (jre.getCode() == ResourceException.NOT_FOUND) { // nothing to update; fallback to create
                         representation = create(this.id, value);
                     } else {
                         throw jre;
                     }
                 }
             }
-        } catch (JsonResourceException jre) {
-            throw new ResourceException(jre);
+        } catch (ResourceException jre) {
+            throw new org.restlet.resource.ResourceException(jre);
         }
         return representation;
     }
@@ -348,10 +357,10 @@ public class JsonServerResource extends ExtendedServerResource {
      *
      * @param entity TODO.
      * @return TODO.
-     * @throws ResourceException TODO.
+     * @throws org.restlet.resource.ResourceException TODO.
      */
     @Override 
-    public Representation post(Representation entity) throws ResourceException {
+    public Representation post(Representation entity) throws org.restlet.resource.ResourceException {
         Representation representation;
         Form query = getQuery();
         String _action = query.getFirstValue("_action");
@@ -369,8 +378,8 @@ public class JsonServerResource extends ExtendedServerResource {
                     setStatus(Status.SUCCESS_NO_CONTENT);
                 }
             }
-        } catch (JsonResourceException jre) {
-            throw new ResourceException(jre);
+        } catch (ResourceException jre) {
+            throw new org.restlet.resource.ResourceException(jre);
         }
         return representation;
     }
@@ -380,11 +389,11 @@ public class JsonServerResource extends ExtendedServerResource {
      * {@code "delete"} method.
      */
     @Override
-    public Representation delete() throws ResourceException {
+    public Representation delete() throws org.restlet.resource.ResourceException {
         try {
             accessor.delete(this.id, this.rev);
-        } catch (JsonResourceException jre) {
-            throw new ResourceException(jre);
+        } catch (ResourceException jre) {
+            throw new org.restlet.resource.ResourceException(jre);
         }
         setStatus(Status.SUCCESS_NO_CONTENT);
         return null; // no content
@@ -395,37 +404,37 @@ public class JsonServerResource extends ExtendedServerResource {
      * {@code "patch"} method.
      *
      * @return TODO.
-     * @throws ResourceException TODO.
+     * @throws org.restlet.resource.ResourceException TODO.
      */
     @Override
-    public Representation patch(Representation entity) throws ResourceException {
+    public Representation patch(Representation entity) throws org.restlet.resource.ResourceException {
         Representation representation = null;
         try {
             representation = toRepresentation(accessor.patch(this.id, this.rev, requireEntity(entityValue(entity))));
             if (representation == null) { // expect a response to the patch
-                throw new JsonResourceException(JsonResourceException.INTERNAL_ERROR);
+                throw new InternalServerErrorException("Expected a response, but response was null");
             }
-        } catch (JsonResourceException jre) {
-            throw new ResourceException(jre);
+        } catch (ResourceException jre) {
+            throw new org.restlet.resource.ResourceException(jre);
         }
         return representation;
     }
 
     /**
      * Overrides the response to provide a JSON error structure in the entity if a
-     * {@code ResourceException} is being thrown.
+     * {@code org.restlet.resource.ResourceException} is being thrown.
      */
     @Override
     protected void doCatch(Throwable throwable) {
-        JsonResourceException jre = null;
-        if (throwable instanceof ResourceException) {
+        ResourceException jre = null;
+        if (throwable instanceof org.restlet.resource.ResourceException) {
             Throwable cause = throwable.getCause();
-            if (cause != null && cause instanceof JsonResourceException) {
-                jre = (JsonResourceException)cause;
+            if (cause != null && cause instanceof ResourceException) {
+                jre = (ResourceException)cause;
             }
         }
         if (jre == null) {
-            jre = new JsonResourceException(JsonResourceException.INTERNAL_ERROR, throwable);
+            jre = new InternalServerErrorException("Unexpected failure", throwable);
         }
         int code = jre.getCode();
         if (code < 400 || code > 599) { // not an HTTP error status code

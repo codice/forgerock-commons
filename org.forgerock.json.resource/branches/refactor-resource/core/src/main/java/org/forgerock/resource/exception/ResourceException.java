@@ -14,7 +14,7 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.json.resource;
+package org.forgerock.resource.exception;
 
 // Java SE
 import java.util.LinkedHashMap;
@@ -33,7 +33,7 @@ import org.forgerock.json.fluent.JsonValue;
  *
  * @author Paul C. Bryan
  */
-public class JsonResourceException extends Exception {
+public class ResourceException extends Exception {
 
     /** Serializable class a version number. */
     private static final long serialVersionUID = 1L;
@@ -82,6 +82,12 @@ public class JsonResourceException extends Exception {
     public static final int VERSION_REQUIRED = 428;
 
     /**
+     * Indicates that the resource does not implement/support the feature to fulfill the request
+     * HTTP status: 501 Not Implemented.
+     */
+    public static final int NOT_SUPPORTED = 501;
+    
+    /**
      * Indicates that the resource is temporarily unable to handle the request. Equivalent to
      * HTTP status: 503 Service Unavailable.
      */
@@ -91,8 +97,68 @@ public class JsonResourceException extends Exception {
     private final int code;
 
     /** The short reason phrase of the exception. */
-    private final String reason;
+    private String reason;
 
+    /**
+     * Factory method to get an exception with the specified 
+     * exception code, reason phrase, detail message and cause.
+     * 
+     * Useful to translate http status codes to the relevant Java exception type.
+     * 
+     * The type of the returned exception will be a sub-type of ResourceException.
+     *
+     * @param code the numeric code of the exception.
+     * @param reason the short reason phrase of the exception, 
+     * or null if this implementation should assign a short reason phrase.
+     * @param message the detail message of the exception.
+     * @param cause the cause of the exception.
+     */
+    public static ResourceException getException(int code, String reason, String message, Throwable cause) {
+        ResourceException ex = null;
+        switch (code) {
+        case BAD_REQUEST: ex = new BadRequestException(message, cause); break;
+        case FORBIDDEN: ex = new ForbiddenException(message, cause); break; // Authorization exceptions
+        case NOT_FOUND: ex = new NotFoundException(message, cause); break;
+        case CONFLICT: ex = new ConflictException(message, cause); break;
+        case VERSION_MISMATCH: ex = new PreconditionFailedException(message, cause); break;
+        case VERSION_REQUIRED: ex = new PreconditionRequiredException(message, cause);  break; // draft-nottingham-http-new-status-03
+        case INTERNAL_ERROR: ex = new InternalServerErrorException(message, cause); break;
+        case NOT_SUPPORTED: ex = new NotSupportedException(message, cause); break; // Not Implemented
+        case UNAVAILABLE: ex = new ServiceUnavailableException(message, cause); break;
+
+        // Temporary failures without specific exception classes 
+        case 408: // Request Time-out 
+        case 504: // Gateway Time-out
+            ex = new RetryableException(code, message, cause);
+            break;
+        
+        // Permanent Failures without specific exception classes            
+        case 401: // Unauthorized - Missing or bad authentication 
+        case 402: // Payment Required
+        case 405: // Method Not Allowed
+        case 406: // Not Acceptable
+        case 407: // Proxy Authentication Required
+        case 410: // Gone
+        case 411: // Length Required
+        case 413: // Request Entity Too Large
+        case 414: // Request-URI Too Large
+        case 415: // Unsupported Media Type
+        case 416: // Requested range not satisfiable
+        case 417: // Expectation Failed
+        case 502: // Bad Gateway
+        case 505: // HTTP Version not supported
+            ex = new PermanentException(code, message, cause);
+            break;
+        default: 
+            ex = new UncategorizedException(code, message, cause);
+        }
+        if (reason != null) {
+            ex.setReason(reason);
+        }
+        
+        return ex;
+    }
+    
     /**
      * Returns the reason phrase for an HTTP error status code, per RFC 2616 and
      * draft-nottingham-http-new-status-03. If no match is found, then a generic reason
@@ -102,9 +168,9 @@ public class JsonResourceException extends Exception {
         String result = "Resource Exception"; // default
         switch (code) {
         case BAD_REQUEST: result = "Bad Request"; break;
-        case 401: result = "Unauthorized"; break;
+        case 401: result = "Unauthorized"; break; // Missing or bad authentication (despite the name)
         case 402: result = "Payment Required"; break;
-        case FORBIDDEN: result = "Forbidden"; break;
+        case FORBIDDEN: result = "Forbidden"; break; // Authorization exceptions
         case NOT_FOUND: result = "Not Found"; break;
         case 405: result = "Method Not Allowed"; break;
         case 406: result = "Not Acceptable"; break;
@@ -113,15 +179,15 @@ public class JsonResourceException extends Exception {
         case CONFLICT: result = "Conflict"; break;
         case 410: result = "Gone"; break;
         case 411: result = "Length Required"; break;
-        case VERSION_REQUIRED: result = "Precondition Failed"; break;
+        case VERSION_MISMATCH: result = "Precondition Failed"; break;
         case 413: result = "Request Entity Too Large"; break;
         case 414: result = "Request-URI Too Large"; break;
         case 415: result = "Unsupported Media Type"; break;
         case 416: result = "Requested range not satisfiable"; break;
         case 417: result = "Expectation Failed"; break;
-        case VERSION_MISMATCH: result = "Precondition Required";  break; // draft-nottingham-http-new-status-03
+        case VERSION_REQUIRED: result = "Precondition Required";  break; // draft-nottingham-http-new-status-03
         case INTERNAL_ERROR: result = "Internal Server Error"; break;
-        case 501: result = "Not Implemented"; break;
+        case NOT_SUPPORTED: result = "Not Implemented"; break;
         case 502: result = "Bad Gateway"; break;
         case UNAVAILABLE: result = "Service Unavailable"; break;
         case 504: result = "Gateway Time-out"; break;
@@ -138,7 +204,7 @@ public class JsonResourceException extends Exception {
      *
      * @param code the numeric code of the exception.
      */
-    public JsonResourceException(int code) {
+    protected ResourceException(int code) {
         this.code = code;
         this.reason = reason(code);
     }
@@ -149,7 +215,7 @@ public class JsonResourceException extends Exception {
      * @param code the numeric code of the exception.
      * @param message the short reason phrase of the exception.
      */
-    public JsonResourceException(int code, String message) {
+    protected ResourceException(int code, String message) {
         super(message);
         this.code = code;
         this.reason = reason(code);
@@ -161,7 +227,7 @@ public class JsonResourceException extends Exception {
      * @param code the numeric code of the exception.
      * @param cause the cause of the exception.
      */
-    public JsonResourceException(int code, Throwable cause) {
+    protected ResourceException(int code, Throwable cause) {
         super(cause);
         this.code = code;
         this.reason = reason(code);
@@ -175,7 +241,7 @@ public class JsonResourceException extends Exception {
      * @param message the detail message of the exception.
      * @param cause the cause of the exception.
      */
-    public JsonResourceException(int code, String message, Throwable cause) {
+    protected ResourceException(int code, String message, Throwable cause) {
         this(code, reason(code), message, cause);
     }
 
@@ -184,16 +250,21 @@ public class JsonResourceException extends Exception {
      * message and cause.
      *
      * @param code the numeric code of the exception.
-     * @param reason the short reason phrase of the exception.
+     * @param reason the short reason phrase of the exception, 
+     * or null to have this implementation assign a reason String
      * @param message the detail message of the exception.
      * @param cause the cause of the exception.
      */
-    public JsonResourceException(int code, String reason, String message, Throwable cause) {
+    protected ResourceException(int code, String reason, String message, Throwable cause) {
         super(message, cause);
         this.code = code;
-        this.reason = reason;
+        if (reason != null) {
+            this.reason = reason;
+        } else {
+            this.reason = reason(code);
+        }
     }
-
+    
     /**
      * Returns the numeric code of the exception.
      */
@@ -206,6 +277,13 @@ public class JsonResourceException extends Exception {
      */
     public String getReason() {
         return reason;
+    }
+    
+    /**
+     * Sets/overrides the short reason phrase of the exception.
+     */
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     /**

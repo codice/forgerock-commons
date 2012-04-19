@@ -25,8 +25,8 @@ import org.restlet.resource.Finder;
 import org.forgerock.json.fluent.JsonValue;
 
 // JSON Resource
-import org.forgerock.json.resource.JsonResource;
-import org.forgerock.json.resource.JsonResourceContext;
+import org.forgerock.resource.framework.JsonResourceProvider;
+import org.forgerock.resource.framework.impl.JsonResourceContext;
 
 /**
  * A Restlet that dispatches requests to a JSON resource.
@@ -39,14 +39,14 @@ public class JsonResourceRestlet extends Finder {
     public static final String ATTRIBUTE_HTTP_CONTEXT = "org.forgerock.json.resource.context.http";
 
     /** The JSON resource to dispatch Restlet requests to. */
-    private JsonResource resource;
+    private JsonResourceProvider resource;
 
     /**
      * Constructs a new Restlet that dispatching requests to a JSON resource.
      *
      * @param resource the JSON resource to dispatch Restlet requests to.
      */
-    public JsonResourceRestlet(JsonResource resource) {
+    public JsonResourceRestlet(JsonResourceProvider resource) {
         this.resource = resource;
         setTargetClass(JsonServerResource.class);
     }
@@ -66,7 +66,7 @@ public class JsonResourceRestlet extends Finder {
     /**
      * Returns the JSON resource that this Restlet dispatches requests to.
      */ 
-    public JsonResource getResource() {
+    public JsonResourceProvider getResource() {
         return this.resource;
     }
 

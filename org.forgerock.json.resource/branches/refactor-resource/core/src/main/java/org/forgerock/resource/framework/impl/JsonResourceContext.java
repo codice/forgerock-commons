@@ -14,7 +14,7 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.json.resource;
+package org.forgerock.resource.framework.impl;
 
 // Java SE
 import java.util.LinkedHashMap;

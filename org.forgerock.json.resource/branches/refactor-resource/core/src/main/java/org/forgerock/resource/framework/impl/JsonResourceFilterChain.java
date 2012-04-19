@@ -14,7 +14,7 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.json.resource;
+package org.forgerock.resource.framework.impl;
 
 // Java SE
 import java.util.ArrayList;
@@ -22,6 +22,9 @@ import java.util.List;
 
 // JSON Fluent
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.resource.exception.ResourceException;
+import org.forgerock.resource.framework.JsonResourceFilter;
+import org.forgerock.resource.framework.JsonResourceProvider;
 
 /**
  * Passes JSON resource requests through a list of filters and then to a target resource.
@@ -32,13 +35,13 @@ import org.forgerock.json.fluent.JsonValue;
  *
  * @author Paul C. Bryan
  */
-public class JsonResourceFilterChain implements JsonResource {
+public class JsonResourceFilterChain implements JsonResourceProvider {
 
     /** The list of filters to pass the request through. */
     protected final List<JsonResourceFilter> filters = new ArrayList<JsonResourceFilter>();
 
     /** The target resource to process the request once passed through the filters. */
-    protected JsonResource resource;
+    protected JsonResourceProvider resource;
 
     /**
      * Handles a JSON resource request by passing it through the filters and then to the
@@ -46,13 +49,13 @@ public class JsonResourceFilterChain implements JsonResource {
      *
      * @param request the JSON resource request.
      * @return the JSON resource response.
-     * @throws JsonResourceException if there is an exception handling the request.
+     * @throws ResourceException if there is an exception handling the request.
      */
     @Override
-    public JsonValue handle(JsonValue request) throws JsonResourceException {
-        return new JsonResource() {
+    public JsonValue handle(JsonValue request) throws ResourceException {
+        return new JsonResourceProvider() {
             private int cursor = 0;
-            @Override public JsonValue handle(JsonValue request) throws JsonResourceException {
+            @Override public JsonValue handle(JsonValue request) throws ResourceException {
                 int saved = cursor; // save position to restore after the call
                 JsonValue response;
                 try {

@@ -14,7 +14,7 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.json.resource;
+package org.forgerock.resource.framework.impl;
 
 // Java SE
 import java.util.LinkedHashMap;
@@ -23,20 +23,24 @@ import java.util.Map;
 // JSON Fluent
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.fluent.JsonValueException;
+import org.forgerock.resource.exception.BadRequestException;
+import org.forgerock.resource.exception.NotFoundException;
+import org.forgerock.resource.exception.ResourceException;
+import org.forgerock.resource.framework.JsonResourceProvider;
 
 /**
  * Routes requests to resources based on matching {@code id} prefix.
  *
  * @author Paul C. Bryan
  */
-public class JsonResourceRouter implements JsonResource {
+public class JsonResourceRouter implements JsonResourceProvider {
 
     /**
      * Maps {@code id} prefixes to the resources to route to. An {@code id} matches if it
      * is equal to the prefix, or if it begins with the prefix separated by a '/' character.
      * This map permits a {@code null} key.
      */
-    protected final Map<String, JsonResource> routes = new LinkedHashMap<String, JsonResource>();
+    protected final Map<String, JsonResourceProvider> routes = new LinkedHashMap<String, JsonResourceProvider>();
 
     /**
      * Dispatches the JSON resource request to the matching resource. A resource matches if
@@ -44,17 +48,17 @@ public class JsonResourceRouter implements JsonResource {
      * by the {@code '/'} character. On a successful match, the {@code id} member in the JSON
      * resource request is modified to remove the matching resource prefix.
      *
-     * @throws JsonResourceException if there is no resource to route to or the request is malformed.
+     * @throws ResourceException if there is no resource to route to or the request is malformed.
      */
     @Override
-    public JsonValue handle(JsonValue request) throws JsonResourceException {
+    public JsonValue handle(JsonValue request) throws ResourceException {
         String id;
         try {
             id = request.get("id").asString();
         } catch (JsonValueException jve) {
-            throw new JsonResourceException(JsonResourceException.BAD_REQUEST, jve);
+            throw new BadRequestException("Id in request is invalid", jve);
         }
-        JsonResource resource = routes.get(id); // try exact match first
+        JsonResourceProvider resource = routes.get(id); // try exact match first
         String child = null;
         if (resource == null && id != null) {
             int idLength = id.length();
@@ -72,7 +76,7 @@ public class JsonResourceRouter implements JsonResource {
             }
         }
         if (resource == null) {
-            throw new JsonResourceException(JsonResourceException.NOT_FOUND, "No route for " + id);
+            throw new NotFoundException("No route for " + id);
         }
         request = request.clone();
         request.put("id", child); // "relativize" id; can be null
