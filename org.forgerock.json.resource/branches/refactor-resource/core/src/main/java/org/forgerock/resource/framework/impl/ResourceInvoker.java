@@ -73,32 +73,30 @@ public class ResourceInvoker implements JsonResourceProvider {
 // THIS METHOD IS WORK IN PROGRESS!
                 
                 switch (request.get("method").required().asEnum(Method.class)) {
-                    case create: 
-                        CreateRequestImpl createIn = new CreateRequestImpl();
-                        createIn.setRequest(request);
-                        createIn.setFieldFilter(filter);
-                        CreateResultHandlerImpl createOut = new CreateResultHandlerImpl();
-                        resource.create(createIn, context, createOut);
-                        // This is a short-term solution until we support async processing throughout
-                        return createOut.waitForResult();
-                    case read:
-                        ReadRequestImpl readIn = new ReadRequestImpl();
-                        readIn.setRequest(request);
-                        readIn.setFieldFilter(filter);
-                        ReadResultHandlerImpl readOut = new ReadResultHandlerImpl();
-                        resource.read(readIn, context, readOut);
-                        // This is a short-term solution until we support async processing throughout
-                        return readOut.waitForResult();
-                    case update:
-                        //TODO: implement
-                        throw new NotSupportedException("need to implement this");
-                        //return new JsonValue(null);
-                    case delete: return new JsonValue(null);
-                    case patch: return new JsonValue(null);
-                    case query: return new JsonValue(null);
-                    case action: return new JsonValue(null);
-                    default:
-                        throw new BadRequestException("Method unsupported: " + request.get("method"));
+                case create: 
+                    CreateRequestImpl createIn = new CreateRequestImpl();
+                    createIn.setRequest(request);
+                    createIn.setFieldFilter(filter);
+                    CreateResultHandlerImpl createOut = new CreateResultHandlerImpl();
+                    resource.create(createIn, context, createOut);
+                    // This is a short-term solution until we support async processing throughout
+                    return createOut.waitForResult();
+                case read:
+                    ReadRequestImpl readIn = new ReadRequestImpl();
+                    readIn.setRequest(request);
+                    readIn.setFieldFilter(filter);
+                    ReadResultHandlerImpl readOut = new ReadResultHandlerImpl();
+                    resource.read(readIn, context, readOut);
+                    // This is a short-term solution until we support async processing throughout
+                    return readOut.waitForResult();
+                case update:
+                case delete:
+                case patch:
+                case query:
+                case action:
+                    throw new NotSupportedException("need to implement this");
+                default:
+                    throw new BadRequestException("Method unsupported: " + request.get("method"));
                 }
             } catch (JsonValueException jve) {
                 throw new BadRequestException("Invalid request", jve);
