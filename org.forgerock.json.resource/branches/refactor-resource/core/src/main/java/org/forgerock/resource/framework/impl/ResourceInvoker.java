@@ -30,6 +30,8 @@ import org.forgerock.resource.provider.Resource;
 import org.forgerock.resource.provider.impl.ContextImpl;
 import org.forgerock.resource.provider.impl.CreateRequestImpl;
 import org.forgerock.resource.provider.impl.CreateResultHandlerImpl;
+import org.forgerock.resource.provider.impl.DeleteRequestImpl;
+import org.forgerock.resource.provider.impl.DeleteResultHandlerImpl;
 import org.forgerock.resource.provider.impl.ReadRequestImpl;
 import org.forgerock.resource.provider.impl.ReadResultHandlerImpl;
 import org.forgerock.resource.provider.impl.UpdateRequestImpl;
@@ -100,6 +102,13 @@ public class ResourceInvoker implements JsonResourceProvider {
                     // This is a short-term solution until we support async processing throughout
                     return updateOut.waitForResult();
                 case delete:
+                    DeleteRequestImpl deleteIn = new DeleteRequestImpl();
+                    deleteIn.setRequest(request);
+                    deleteIn.setFieldFilter(filter);
+                    DeleteResultHandlerImpl deleteOut = new DeleteResultHandlerImpl();
+                    resource.delete(deleteIn, context, deleteOut);
+                    // This is a short-term solution until we support async processing throughout
+                    return deleteOut.waitForResult();
                 case patch:
                 case query:
                 case action:
