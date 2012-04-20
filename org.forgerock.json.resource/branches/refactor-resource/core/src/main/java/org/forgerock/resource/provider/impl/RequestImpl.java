@@ -17,6 +17,7 @@
 package org.forgerock.resource.provider.impl;
 
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.fluent.JsonValueException;
 import org.forgerock.resource.provider.FieldFilter;
 import org.forgerock.resource.provider.Request;
 
@@ -48,7 +49,10 @@ public class RequestImpl implements Request {
      * {@inheritDoc} 
      */
     public String getId() {
-        return request.get("id").required().asString();
+        if (!request.isDefined("id")) {
+            throw new JsonValueException(request, "Excepted id in request, but is not present.");
+        }
+        return request.get("id").asString();
     }
     
     /**

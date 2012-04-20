@@ -117,7 +117,8 @@ public class ResourceInvoker implements JsonResourceProvider {
                     throw new BadRequestException("Method unsupported: " + request.get("method"));
                 }
             } catch (JsonValueException jve) {
-                throw new BadRequestException("Invalid request", jve);
+                jve.printStackTrace();
+                throw new BadRequestException("Invalid request: " + jve.getMessage() + " value: " + jve.getJsonValue(), jve);
             }
         } catch (Exception e1) {
             try {

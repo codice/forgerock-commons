@@ -76,7 +76,14 @@ public class ResultHandlerImpl implements ResultHandler {
         }
         JsonValue response = null;
         if (value != null) {
-            response = value; // Put the body at top level
+            if (value.isMap()) {
+                // If response is map already, but it at top level
+                response = value; 
+            } else {
+                // If response is not a map, place it in a map
+                response = new JsonValue(new LinkedHashMap<String, Object>());
+                response.put("value", value.getObject());
+            }
         } else {
             response = new JsonValue(new LinkedHashMap<String, Object>());
         }
