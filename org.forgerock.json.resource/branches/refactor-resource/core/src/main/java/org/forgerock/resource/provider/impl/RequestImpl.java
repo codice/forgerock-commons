@@ -72,6 +72,13 @@ public class RequestImpl implements Request {
     protected JsonValue getValue() {
         return request.get("value");
     }
+    
+    /**
+     * @return the revision requested in the request, or null if no MVCC requested
+     */
+    protected String getRevision() {
+        return request.get("rev").asString();
+    }
 
 }
 

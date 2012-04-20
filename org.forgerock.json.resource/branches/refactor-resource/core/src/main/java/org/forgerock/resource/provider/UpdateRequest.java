@@ -26,7 +26,7 @@ import org.forgerock.json.fluent.JsonValue;
 public interface UpdateRequest extends Request {
     
     /**
-     * @return the revision expected to be updated.
+     * @return the revision requested in the request, or null if no MVCC requested
      */
     String getRevision();
     

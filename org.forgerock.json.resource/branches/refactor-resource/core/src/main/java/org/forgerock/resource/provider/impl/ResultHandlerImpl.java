@@ -74,15 +74,17 @@ public class ResultHandlerImpl implements ResultHandler {
         if (ex != null) {
             throw ex;
         }
-        JsonValue response = new JsonValue(new LinkedHashMap<String, Object>());
+        JsonValue response = null;
+        if (value != null) {
+            response = value; // Put the body at top level
+        } else {
+            response = new JsonValue(new LinkedHashMap<String, Object>());
+        }
         response.put("_id", id);
         if (rev != null) {
             response.put("_rev", rev);
         }
-// TODO: review         
-        if (value != null) {
-            response.put("value", value);
-        }
+
         return response;
     }
 }

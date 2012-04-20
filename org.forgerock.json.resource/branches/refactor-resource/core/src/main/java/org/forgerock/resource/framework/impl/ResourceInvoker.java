@@ -32,6 +32,8 @@ import org.forgerock.resource.provider.impl.CreateRequestImpl;
 import org.forgerock.resource.provider.impl.CreateResultHandlerImpl;
 import org.forgerock.resource.provider.impl.ReadRequestImpl;
 import org.forgerock.resource.provider.impl.ReadResultHandlerImpl;
+import org.forgerock.resource.provider.impl.UpdateRequestImpl;
+import org.forgerock.resource.provider.impl.UpdateResultHandlerImpl;
 
 /**
  * Dispatches requests to specific methods.
@@ -90,6 +92,13 @@ public class ResourceInvoker implements JsonResourceProvider {
                     // This is a short-term solution until we support async processing throughout
                     return readOut.waitForResult();
                 case update:
+                    UpdateRequestImpl updateIn = new UpdateRequestImpl();
+                    updateIn.setRequest(request);
+                    updateIn.setFieldFilter(filter);
+                    UpdateResultHandlerImpl updateOut = new UpdateResultHandlerImpl();
+                    resource.update(updateIn, context, updateOut);
+                    // This is a short-term solution until we support async processing throughout
+                    return updateOut.waitForResult();
                 case delete:
                 case patch:
                 case query:

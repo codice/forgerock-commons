@@ -16,6 +16,8 @@
 
 package org.forgerock.resource.provider;
 
+import org.forgerock.json.fluent.JsonValue;
+
 /**
  * Handles the result processing of update on a Resource.
  * 
@@ -44,7 +46,8 @@ public interface UpdateResultHandler extends ResultHandler {
      * @param id the identifier to report to the caller as updated.
      * @param rev the current revision of the updated object (if MVCC supported), 
      * or null if not supported
+     * @param value the resource value after the update, optionally filtered according to the request 
      */
-    void setResult(String id, String rev);
+    void setResult(String id, String rev, JsonValue value);
 
 }

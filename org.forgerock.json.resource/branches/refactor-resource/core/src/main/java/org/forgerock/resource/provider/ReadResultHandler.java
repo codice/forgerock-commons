@@ -34,6 +34,7 @@ public interface ReadResultHandler extends ResultHandler {
      * @param id the identifier to report to the caller as read.
      * @param rev the current revision of the read object (if MVCC supported), 
      * or null if not supported
+     * @param value the read resource value, optionally filtered according to the request 
      */
     void setResult(String id, String rev, JsonValue value);
 
