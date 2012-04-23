@@ -106,4 +106,6 @@
   </xsl:attribute-set>
   
   <xsl:param name="ulink.footnotes" select="0" />
+  <xsl:param name="ulink.show" select="0" />
+  <xsl:param name="ulink.hyphenate.chars">:/@&?.#</xsl:param>
 </xsl:stylesheet>
