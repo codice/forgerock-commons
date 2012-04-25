@@ -16,6 +16,8 @@
 
 package org.forgerock.resource.provider.impl;
 
+import java.util.Map;
+
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.fluent.JsonValueException;
 import org.forgerock.resource.provider.FieldFilter;
@@ -52,7 +54,7 @@ public class RequestImpl implements Request {
         if (!request.isDefined("id")) {
             throw new JsonValueException(request, "Excepted id in request, but is not present.");
         }
-        return request.get("id").asString();
+        return request.get("id").asString(); // This may legally be null
     }
     
     /**
@@ -82,6 +84,13 @@ public class RequestImpl implements Request {
      */
     protected String getRevision() {
         return request.get("rev").asString();
+    }
+    
+    /**
+     * @return the parameters of the request
+     */
+    protected Map<String, Object> getParameters() {
+        return request.get("params").asMap();
     }
 
 }

@@ -27,11 +27,17 @@ import org.forgerock.resource.framework.JsonResourceProvider;
 import org.forgerock.resource.provider.Context;
 import org.forgerock.resource.provider.FieldFilter;
 import org.forgerock.resource.provider.Resource;
+import org.forgerock.resource.provider.impl.ActionRequestImpl;
+import org.forgerock.resource.provider.impl.ActionResultHandlerImpl;
 import org.forgerock.resource.provider.impl.ContextImpl;
 import org.forgerock.resource.provider.impl.CreateRequestImpl;
 import org.forgerock.resource.provider.impl.CreateResultHandlerImpl;
 import org.forgerock.resource.provider.impl.DeleteRequestImpl;
 import org.forgerock.resource.provider.impl.DeleteResultHandlerImpl;
+import org.forgerock.resource.provider.impl.PatchRequestImpl;
+import org.forgerock.resource.provider.impl.PatchResultHandlerImpl;
+import org.forgerock.resource.provider.impl.QueryRequestImpl;
+import org.forgerock.resource.provider.impl.QueryResultHandlerImpl;
 import org.forgerock.resource.provider.impl.ReadRequestImpl;
 import org.forgerock.resource.provider.impl.ReadResultHandlerImpl;
 import org.forgerock.resource.provider.impl.UpdateRequestImpl;
@@ -110,14 +116,33 @@ public class ResourceInvoker implements JsonResourceProvider {
                     // This is a short-term solution until we support async processing throughout
                     return deleteOut.waitForResult();
                 case patch:
+                    PatchRequestImpl patchIn = new PatchRequestImpl();
+                    patchIn.setRequest(request);
+                    patchIn.setFieldFilter(filter);
+                    PatchResultHandlerImpl patchOut = new PatchResultHandlerImpl();
+                    resource.patch(patchIn, context, patchOut);
+                    // This is a short-term solution until we support async processing throughout
+                    return patchOut.waitForResult();
                 case query:
+                    QueryRequestImpl queryIn = new QueryRequestImpl();
+                    queryIn.setRequest(request);
+                    queryIn.setFieldFilter(filter);
+                    QueryResultHandlerImpl queryOut = new QueryResultHandlerImpl();
+                    resource.query(queryIn, context, queryOut);
+                    // This is a short-term solution until we support async processing throughout
+                    return queryOut.waitForResult();
                 case action:
-                    throw new NotSupportedException("need to implement this");
+                    ActionRequestImpl actionIn = new ActionRequestImpl();
+                    actionIn.setRequest(request);
+                    actionIn.setFieldFilter(filter);
+                    ActionResultHandlerImpl actionOut = new ActionResultHandlerImpl();
+                    resource.action(actionIn, context, actionOut);
+                    // This is a short-term solution until we support async processing throughout
+                    return actionOut.waitForResult();
                 default:
                     throw new BadRequestException("Method unsupported: " + request.get("method"));
                 }
             } catch (JsonValueException jve) {
-                jve.printStackTrace();
                 throw new BadRequestException("Invalid request: " + jve.getMessage() + " value: " + jve.getJsonValue(), jve);
             }
         } catch (Exception e1) {

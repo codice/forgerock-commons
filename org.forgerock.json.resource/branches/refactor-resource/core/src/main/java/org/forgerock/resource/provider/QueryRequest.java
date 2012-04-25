@@ -28,6 +28,11 @@ import org.forgerock.json.fluent.JsonValue;
 public interface QueryRequest extends Request {
     
     /**
+     * @return the query identifier for pre-defined queries, or null if not defined
+     */
+    String getQueryId();
+    
+    /**
      * @return the query parameters
      */
     Map<String, Object> getParameters();

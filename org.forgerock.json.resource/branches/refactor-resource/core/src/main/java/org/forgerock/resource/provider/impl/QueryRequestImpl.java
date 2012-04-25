@@ -14,28 +14,29 @@
  * Copyright © 2012 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.resource.provider;
+package org.forgerock.resource.provider.impl;
+
+import java.util.Map;
 
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.resource.provider.QueryRequest;
 
 /**
- * Handles the result processing of patch on a Resource.
- * 
- * Supports either synchronous or asynchronous internal processing,  
- * @see ResultHandler for details.
+ * Provides access to the request details for a query method
  *
  * @author aegloff
  */
-public interface PatchResultHandler extends ResultHandler {
+public class QueryRequestImpl extends RequestImpl implements QueryRequest {
 
-    /**
-     * Handle the successful result of a patch
-     * 
-     * @param id the identifier to report to the caller as patched.
-     * @param rev the current revision of the patched object (if MVCC supported), 
-     * or null if not supported
-     * @param value the resource value after the update, optionally filtered according to the request 
-     */
-    void setResult(String id, String rev, JsonValue value);
-
+    public final static String QUERY_ID = "_query-id";
+    
+    @Override
+    public String getQueryId() {
+        return (String) getParameters().get(QUERY_ID);
+    }
+    
+    @Override
+    public Map<String, Object> getParameters() {
+        return super.getParameters();
+    }
 }
