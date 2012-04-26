@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ! CCPL HEADER START
-  !
   ! This work is licensed under the Creative Commons
   ! Attribution-NonCommercial-NoDerivs 3.0 Unported License.
   ! To view a copy of this license, visit
@@ -18,10 +16,8 @@
   ! enclosed by brackets "[]" replaced with your own identifying information:
   !      Portions Copyright [yyyy] [name of copyright owner]
   !
-  ! CCPL HEADER END
-  !
   !      Copyright 2011-2012 ForgeRock AS
-  !    
+  !
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
  xmlns:xslthl="http://xslthl.sf.net" exclude-result-prefixes="xslthl"

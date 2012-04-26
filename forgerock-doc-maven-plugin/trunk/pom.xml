@@ -63,6 +63,7 @@
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   <maven.compiler.target>1.6</maven.compiler.target>
   <maven.compiler.source>1.6</maven.compiler.source>
+  <checkstyleHeaderLocation>${basedir}/src/main/resources/org/forgerock/checkstyle/mpl2-java-header</checkstyleHeaderLocation>
  </properties>
 
  <dependencies>
@@ -149,10 +150,6 @@
       <goals>deploy</goals>
       <arguments>-Penforce</arguments>
      </configuration>
-    </plugin>
-    <plugin>
-     <groupId>org.apache.maven.plugins</groupId>
-     <artifactId>maven-checkstyle-plugin</artifactId>
     </plugin>
    </plugins>
  </build>
