@@ -22,8 +22,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
  xmlns:d="http://docbook.org/ns/docbook" exclude-result-prefixes="d">
  <xsl:import href="urn:docbkx:stylesheet" />
-
- <xsl:preserve-space elements="d:programlisting"/>
+ <xsl:preserve-space elements="d:programlisting d:screen"/>
 
  <xsl:template match="d:programlisting">
   <xsl:choose>
@@ -64,6 +63,12 @@
     <pre class="brush: plain;"><xsl:value-of select="." /></pre>
    </xsl:otherwise>
   </xsl:choose>
+ </xsl:template>
+
+ <xsl:template match="d:screen">
+  <div class="screen">
+   <pre class="brush: shell;"><xsl:value-of select="." /></pre>
+  </div>
  </xsl:template>
 
  <xsl:param name="make.clean.html" select="1" />

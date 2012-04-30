@@ -235,9 +235,6 @@ div.variablelist-title
   font-weight: bold;
 }
 
-div.programlisting,
-div.flat,
-div.screen,
 div.synopsis {
   background-color: #fff;
   border: thin dashed #ccc;
@@ -248,14 +245,9 @@ div.synopsis {
   white-space: pre;
 }
 
-div.flat,
-div.screen {
-  text-indent: -18px;
-}
-
 .toggle {
   position: relative;
-  left: -40px;
+  left: -24px;
   float: left;
 }
 
