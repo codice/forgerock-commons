@@ -25,7 +25,7 @@
  <xsl:output method="html" encoding="UTF-8" indent="no" />
  <xsl:preserve-space elements="d:programlisting d:screen"/>
 
- <xsl:template match="d:programlisting|d:screen">
+ <xsl:template match="d:programlisting">
   <xsl:choose>
    <xsl:when test="@language='aci'">
     <pre class="brush: plain;"><xsl:value-of select="." /></pre>
@@ -64,6 +64,19 @@
     <pre class="brush: plain;"><xsl:value-of select="." /></pre>
    </xsl:otherwise>
   </xsl:choose>
+ </xsl:template>
+
+ <xsl:template match="d:screen">
+  <div class="screen">
+   <xsl:choose>
+    <xsl:when test="@language='shell'">
+     <pre class="brush: shell;"><xsl:value-of select="." /></pre>
+    </xsl:when>
+    <xsl:otherwise>
+     <pre class="brush: plain;"><xsl:value-of select="." /></pre>
+    </xsl:otherwise>
+   </xsl:choose>
+  </div>
  </xsl:template>
 
  <xsl:param name="make.clean.html" select="1" />
