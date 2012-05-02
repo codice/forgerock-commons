@@ -27,19 +27,19 @@
  <xsl:template match="d:programlisting">
   <xsl:choose>
    <xsl:when test="@language='aci'">
-    <pre class="brush: plain;"><xsl:value-of select="." /></pre>
+    <pre class="brush: aci;"><xsl:value-of select="." /></pre>
    </xsl:when>
    <xsl:when test="@language='csv'">
-    <pre class="brush: plain;"><xsl:value-of select="." /></pre>
+    <pre class="brush: csv;"><xsl:value-of select="." /></pre>
    </xsl:when>
    <xsl:when test="@language='html'">
     <pre class="brush: html;"><xsl:value-of select="." /></pre>
    </xsl:when>
    <xsl:when test="@language='http'">
-    <pre class="brush: plain;"><xsl:value-of select="." /></pre>
+    <pre class="brush: http;"><xsl:value-of select="." /></pre>
    </xsl:when>
    <xsl:when test="@language='ini'">
-    <pre class="brush: plain;"><xsl:value-of select="." /></pre>
+    <pre class="brush: ini;"><xsl:value-of select="." /></pre>
    </xsl:when>
    <xsl:when test="@language='java'">
     <pre class="brush: java;"><xsl:value-of select="." /></pre>
@@ -48,10 +48,7 @@
     <pre class="brush: javascript;"><xsl:value-of select="." /></pre>
    </xsl:when>
    <xsl:when test="@language='ldif'">
-    <pre class="brush: plain;"><xsl:value-of select="." /></pre>
-   </xsl:when>
-   <xsl:when test="@language='none'">
-    <pre class="brush: plain;"><xsl:value-of select="." /></pre>
+    <pre class="brush: ldif;"><xsl:value-of select="." /></pre>
    </xsl:when>
    <xsl:when test="@language='shell'">
     <pre class="brush: shell;"><xsl:value-of select="." /></pre>

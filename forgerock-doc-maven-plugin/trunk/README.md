@@ -140,19 +140,20 @@ in HTML.
 
 	 Source			SyntaxHighlighter	Brush Name
 	 ---			---					---
-	 aci			plain				shBrushPlain.js
-	 csv			plain				shBrushPlain.js
+	 aci			aci					shBrushAci.js
+	 csv			csv					shBrushCsv.js
 	 html			html				shBrushXml.js
-	 http			plain				shBrushPlain.js
-	 ini			plain				shBrushPlain.js
+	 http			http				shBrushHttp.js
+	 ini			ini					shBrushProperties.js
 	 java			java				shBrushJava.js
 	 javascript		javascript			shBrushJScript.js
-	 ldif			plain				shBrushPlain.js
+	 ldif			ldif				shBrushLDIF.js
 	 none			plain				shBrushPlain.js
 	 shell			shell				shBrushBash.js
 	 xml			xml					shBrushXml.js
 
-TODO: Brush support for `aci`, `csv`, `http`, `ini`, and `ldif` at least.
+Brush support for `aci`, `csv`, `http`, `ini`, and `ldif` is provided by
+[a fork of SyntaxHighlighter](https://github.com/markcraig/SyntaxHighlighter).
 
 * * *
 This work is licensed under the Creative Commons
