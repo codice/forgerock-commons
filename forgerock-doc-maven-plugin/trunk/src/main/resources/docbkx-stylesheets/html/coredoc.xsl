@@ -100,7 +100,7 @@
   preface   nop
   qandadiv  nop
   qandaset  nop
-  reference nop
+  reference toc,title
   sect1     nop
   sect2     nop
   sect3     nop
