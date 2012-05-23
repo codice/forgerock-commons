@@ -49,13 +49,17 @@ public class JsonPointer implements Iterable<String> {
      * @throws JsonPointerException if the pointer is malformed.
      */
     public JsonPointer(String pointer) throws JsonException {
-        ArrayList<String> list = new ArrayList<String>();
         String[] split = pointer.split("/", -1);
-        for (int n = 0; n < split.length; n++) {
+        int length = split.length;
+        ArrayList<String> list = new ArrayList<String>(length);
+        for (int n = 0; n < length; n++) {
             if (n == 0 && split[n].length() == 0) {
                 continue; // leading slash ignored
+            } else if (n == length -1 && split[n].length() == 0) {
+                continue; // trailing slash ignored
+            } else {
+                list.add(decode(split[n]));
             }
-            list.add(decode(split[n]));
         }
         tokens = list.toArray(tokens);
     }
@@ -153,6 +157,99 @@ public class JsonPointer implements Iterable<String> {
             parent.tokens = Arrays.copyOf(this.tokens, this.tokens.length - 1);
         }
         return parent;
+    }
+
+    /**
+     * Returns a pointer containing all but the first reference token contained
+     * in this pointer, or {@code null} if this pointer contains less than 2
+     * reference tokens.
+     * <p>
+     * This method yields the following results: <blockquote>
+     * <table cellpadding=1 cellspacing=0 summary="Examples illustrating usage of relativePointer">
+     * <tr>
+     * <th>Input</th>
+     * <th>Output</th>
+     * </tr>
+     * <tr>
+     * <td align=left>/</td>
+     * <td align=left><tt>null</tt></td>
+     * </tr>
+     * <tr>
+     * <td align=left>/a</td>
+     * <td align=left><tt>null</tt></td>
+     * </tr>
+     * <tr>
+     * <td align=left>/a/b</td>
+     * <td align=left>/b</td>
+     * </tr>
+     * <tr>
+     * <td align=left>/a/b/c</td>
+     * <td align=left>/b/c</td>
+     * </tr>
+     * </table>
+     * </blockquote>
+     *
+     * @return A pointer containing all but the first reference token contained
+     *         in this pointer.
+     */
+    public JsonPointer relativePointer() {
+        return tokens.length > 1 ? relativePointer(tokens.length - 1) : null;
+    }
+
+    /**
+     * Returns a pointer containing the last {@code sz} reference tokens
+     * contained in this pointer.
+     * <p>
+     * This method yields the following results: <blockquote>
+     * <table cellpadding=1 cellspacing=0 summary="Examples illustrating usage of relativePointer">
+     * <tr>
+     * <th>Input</th>
+     * <th>sz</th>
+     * <th>Output</th>
+     * </tr>
+     * <tr>
+     * <td align=left>/a/b/c</td>
+     * <td align=center>0</td>
+     * <td align=left>/</td>
+     * </tr>
+     * <tr>
+     * <td align=left>/a/b/c</td>
+     * <td align=center>1</td>
+     * <td align=left>/c</td>
+     * </tr>
+     * <tr>
+     * <td align=left>/a/b/c</td>
+     * <td align=center>2</td>
+     * <td align=left>/b/c</td>
+     * </tr>
+     * <tr>
+     * <td align=left>/a/b/c</td>
+     * <td align=center>3</td>
+     * <td align=left>/a/b/c</td>
+     * </tr>
+     * </table>
+     * </blockquote>
+     *
+     * @param sz
+     *            The number of trailing reference tokens to retain.
+     * @return A pointer containing the last {@code sz} reference tokens
+     *         contained in this pointer.
+     * @throws IndexOutOfBoundsException
+     *             If {@code sz} is negative or greater than {@code size()}.
+     */
+    public JsonPointer relativePointer(int sz) {
+        int length = tokens.length;
+        if (sz < 0 || sz > length) {
+            throw new IndexOutOfBoundsException();
+        } else if (sz == length) {
+            return this;
+        } else if (sz == 0) {
+            return new JsonPointer();
+        } else {
+            JsonPointer relativePointer = new JsonPointer();
+            relativePointer.tokens = Arrays.copyOfRange(tokens, length - sz, length);
+            return relativePointer;
+        }
     }
 
     /**

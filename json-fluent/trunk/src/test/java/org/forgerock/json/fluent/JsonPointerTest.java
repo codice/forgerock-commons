@@ -18,16 +18,8 @@
 package org.forgerock.json.fluent;
 
 // Java SE
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-// FEST-Assert
 import static org.fest.assertions.Assertions.assertThat;
 
-// TestNG
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 /**
@@ -59,8 +51,29 @@ public class JsonPointerTest {
     }
 
     @Test
+    public void parseVsStringRootEquality1() {
+        JsonPointer p1 = new JsonPointer("");
+        JsonPointer p2 = new JsonPointer();
+        assertThat((Object)p1).isEqualTo((Object)p2);
+    }
+
+    @Test
+    public void parseVsStringRootEqualityTrailingSlash() {
+        JsonPointer p1 = new JsonPointer("/");
+        JsonPointer p2 = new JsonPointer();
+        assertThat((Object)p1).isEqualTo((Object)p2);
+    }
+
+    @Test
     public void parseVsStringChildEquality() {
         JsonPointer p1 = new JsonPointer("/a/b/c");
+        JsonPointer p2 = new JsonPointer().child("a").child("b").child("c");
+        assertThat((Object)p1).isEqualTo((Object)p2);
+    }
+
+    @Test
+    public void parseVsStringChildEqualityTrailingSlash() {
+        JsonPointer p1 = new JsonPointer("/a/b/c/");
         JsonPointer p2 = new JsonPointer().child("a").child("b").child("c");
         assertThat((Object)p1).isEqualTo((Object)p2);
     }
@@ -78,10 +91,104 @@ public class JsonPointerTest {
         assertThat(p1.toString()).isEqualTo("/a%2Fb/c");
     }
 
+    @Test
+    public void relativePointer0() {
+        JsonPointer p = new JsonPointer("/");
+        assertThat((Object) p.relativePointer()).isNull();
+    }
+
+    @Test
+    public void relativePointer1() {
+        JsonPointer p = new JsonPointer("/a");
+        assertThat((Object) p.relativePointer()).isNull();
+    }
+
+    @Test
+    public void relativePointer2() {
+        JsonPointer p = new JsonPointer("/a/b");
+        assertThat((Object) p.relativePointer()).isEqualTo(new JsonPointer("/b"));
+    }
+
+    @Test
+    public void relativePointer3() {
+        JsonPointer p = new JsonPointer("/a/b/c");
+        assertThat((Object) p.relativePointer()).isEqualTo(new JsonPointer("/b/c"));
+    }
+
+    @Test
+    public void relativePointerOffset0() {
+        JsonPointer p = new JsonPointer("/");
+        assertThat((Object) p.relativePointer(0)).isSameAs(p);
+    }
+
+    @Test
+    public void relativePointerOffset1_0() {
+        JsonPointer p = new JsonPointer("/a");
+        assertThat((Object) p.relativePointer(0)).isEqualTo(new JsonPointer("/"));
+    }
+
+    @Test
+    public void relativePointerOffset1_1() {
+        JsonPointer p = new JsonPointer("/a");
+        assertThat((Object) p.relativePointer(1)).isSameAs(p);
+    }
+
+    @Test
+    public void relativePointerOffset2_0() {
+        JsonPointer p = new JsonPointer("/a/b");
+        assertThat((Object) p.relativePointer(0)).isEqualTo(new JsonPointer("/"));
+    }
+
+    @Test
+    public void relativePointerOffset2_1() {
+        JsonPointer p = new JsonPointer("/a/b");
+        assertThat((Object) p.relativePointer(1)).isEqualTo(new JsonPointer("/b"));
+    }
+
+    @Test
+    public void relativePointerOffset2_2() {
+        JsonPointer p = new JsonPointer("/a/b");
+        assertThat((Object) p.relativePointer(2)).isSameAs(p);
+    }
+
+    @Test
+    public void relativePointerOffset3_0() {
+        JsonPointer p = new JsonPointer("/a/b/c");
+        assertThat((Object) p.relativePointer(0)).isEqualTo(new JsonPointer("/"));
+    }
+
+    @Test
+    public void relativePointerOffset3_1() {
+        JsonPointer p = new JsonPointer("/a/b/c");
+        assertThat((Object) p.relativePointer(1)).isEqualTo(new JsonPointer("/c"));
+    }
+
+    @Test
+    public void relativePointerOffset3_2() {
+        JsonPointer p = new JsonPointer("/a/b/c");
+        assertThat((Object) p.relativePointer(2)).isEqualTo(new JsonPointer("/b/c"));
+    }
+
+    @Test
+    public void relativePointerOffset3_3() {
+        JsonPointer p = new JsonPointer("/a/b/c");
+        assertThat((Object) p.relativePointer(3)).isSameAs(p);
+    }
+
     // ----- exception unit tests ----------
 
     @Test(expectedExceptions=JsonException.class)
     public void uriSyntaxException() throws JsonException {
         new JsonPointer("%%%");
+    }
+
+    @Test(expectedExceptions=IndexOutOfBoundsException.class)
+    public void relativePathOffsetNegative() {
+        new JsonPointer("/a/b/c").relativePointer(-1);
+    }
+
+    @Test(expectedExceptions=IndexOutOfBoundsException.class)
+    public void relativePathOffsetTooLarge() {
+        new JsonPointer("/a/b/c").relativePointer(4);
     }
 }
