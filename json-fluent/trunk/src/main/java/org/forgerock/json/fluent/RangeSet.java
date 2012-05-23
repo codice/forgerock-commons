@@ -61,16 +61,16 @@ class RangeSet extends AbstractSet<String> implements Set<String>, Cloneable, Se
     public Iterator<String> iterator() {
         return new Iterator<String>() {
             int cursor = start;
-            @Override public boolean hasNext() {
+            public boolean hasNext() {
                 return cursor <= end;
             }
-            @Override public String next() {
+            public String next() {
                 if (cursor > end) {
                     throw new NoSuchElementException();
                 }
                 return Integer.toString(cursor++);
             }
-            @Override public void remove() {
+            public void remove() {
                 throw new UnsupportedOperationException();
             }
         };

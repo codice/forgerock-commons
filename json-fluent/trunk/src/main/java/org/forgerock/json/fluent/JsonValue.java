@@ -33,7 +33,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -45,7 +44,7 @@ import org.forgerock.util.RangeSet;
 /**
  * Represents a value in a JSON object model structure. JSON values are represented with
  * standard Java objects: {@link String}, {@link Number}, {@link Map}, {@link List},
- * {@link Boolean} and {@code null}. 
+ * {@link Boolean} and {@code null}.
  * <p>
  * A JSON value may have one or more transformers associated with it. Transformers apply
  * transformations to the JSON value upon construction, and upon members as they are retrieved.
@@ -88,7 +87,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
      * This constructor will automatically unwrap any {@link JsonValueWrapper} and/or
      * {@link JsonValue} objects. The pointer is inherited from the wrapped value, except
      * if {@code pointer} is not {@code null}. The transformers are inherited from the
-     * wrapped value, except if {@code transformers} is not {@code null}. 
+     * wrapped value, except if {@code transformers} is not {@code null}.
      *
      * @param object the Java object representing the JSON value.
      * @param pointer the pointer to the value in a JSON structure.
@@ -173,7 +172,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
         if (isMap()) {
             return new JsonValueMap(this);
         } else if (isList()) {
-            return new JsonValueList(this);
+            return new JsonValueList<Object>(this);
         } else {
             return object;
         }
@@ -235,7 +234,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
         Object object = this.object;
         for (int n = 0; n < Integer.MAX_VALUE; n++) {
             boolean affected = false;
-            for (JsonTransformer transformer : transformers) { 
+            for (JsonTransformer transformer : transformers) {
                 transformer.transform(this);
                 if (!eq(object, this.object)) { // transformer affected the value
                     object = this.object; // note the new value for next iteration
@@ -271,7 +270,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
      * @return this JSON value.
      * @throws JsonValueException if the value is not the specified type.
      */
-    public JsonValue expect(Class type) throws JsonValueException {
+    public JsonValue expect(Class<?> type) throws JsonValueException {
         if (object != null && !type.isInstance(object)) {
             throw new JsonValueException(this, "Expecting a " + type.getName());
         }
@@ -294,7 +293,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
      */
     @SuppressWarnings("unchecked")
     public Map<String, Object> asMap() throws JsonValueException {
-        return (object == null ? null : (Map)(expect(Map.class).object));
+        return (object == null ? null : (Map<String, Object>)(expect(Map.class).object));
     }
 
     /**
@@ -331,7 +330,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
         if (object != null) {
             expect(List.class);
             if (type != Object.class) {
-                List<Object> list = (List)this.object;
+                List<Object> list = (List<Object>)this.object;
                 for (Object element : list) {
                     if (element != null && !type.isInstance(element)) {
                         throw new JsonValueException(this, "Expecting a List of " + type.getName() + " elements");
@@ -339,7 +338,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
                 }
             }
         }
-        return (List)object;
+        return (List<E>)object;
     }
 
     /**
@@ -352,7 +351,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
     /**
      * Returns the JSON value as a {@code String} object. If the JSON value is {@code null},
      * this method returns {@code null}.
-     * 
+     *
      * @return the string value.
      * @throws JsonValueException if the JSON value is not a string.
      */
@@ -602,7 +601,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
 
     /**
      * Returns {@code true} if this JSON value contains the specified item.
-     * 
+     *
      * @param key the {@code Map} key or {@code List} index of the item to seek.
      * @return {@code true} if this JSON value contains the specified member.
      * @throws NullPointerException if {@code key} is {@code null}.
@@ -622,7 +621,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
      * Returns {@code true} this JSON value contains an item with the specified value.
      *
      * @param object the object to seek within this JSON value.
-     * @return {@code true} if this value contains the specified member value. 
+     * @return {@code true} if this value contains the specified member value.
      */
     public boolean contains(Object object) {
         boolean result = false;
@@ -678,7 +677,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
         }
         return new JsonValue(result, pointer.child(index), transformers);
     }
-     
+
     /**
      * Returns the specified child value with a pointer, relative to this value as root.
      * If the specified child value does not exist, then {@code null} is returned.
@@ -779,7 +778,6 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
      *
      * @param index the {@code List} index identifying the child value to remove.
      */
-    @SuppressWarnings("unchecked")
     public void remove(int index) {
         if (index >= 0 && isList()) {
             List<Object> list = asList();
@@ -872,16 +870,16 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
                     }
                     return result;
                 }
-                @Override public Iterator<String> iterator() {
+                public Iterator<String> iterator() {
                     return new Iterator<String>() {
-                        Iterator i = range.iterator();
-                        @Override public boolean hasNext() {
+                        Iterator<Integer> i = range.iterator();
+                        public boolean hasNext() {
                             return i.hasNext();
                         }
-                        @Override public String next() {
+                        public String next() {
                             return i.next().toString();
                         }
-                        @Override public void remove() {
+                        public void remove() {
                             throw new UnsupportedOperationException();
                         }
                     };
@@ -902,33 +900,32 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
      * Note: calls to the {@code next()} method may throw the runtime {@link JsonException}
      * if any transformers fail to execute.
      */
-    @Override
     public Iterator<JsonValue> iterator() {
         if (isList()) { // optimize for list
             return new Iterator<JsonValue>() {
                 int cursor = 0;
                 Iterator<Object> i = asList().iterator();
-                @Override public boolean hasNext() {
+                public boolean hasNext() {
                     return i.hasNext();
                 }
-                @Override public JsonValue next() {
+                public JsonValue next() {
                     Object element = i.next();
                     return new JsonValue(element, pointer.child(cursor++), transformers);
                 }
-                @Override public void remove() {
+                public void remove() {
                     throw new UnsupportedOperationException();
                 }
             };
         } else {
             return new Iterator<JsonValue>() {
                 Iterator<String> i = keys().iterator();
-                @Override public boolean hasNext() {
+                public boolean hasNext() {
                     return i.hasNext();
                 }
-                @Override public JsonValue next() {
+                public JsonValue next() {
                     return get(i.next());
                 }
-                @Override public void remove() {
+                public void remove() {
                     throw new UnsupportedOperationException();
                 }
             };
@@ -993,7 +990,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
      * Returns a string representation of the JSON value. The result resembles—but is not
      * guaranteed to conform to—JSON syntax. This method does not apply transformations to
      * the value's children.
-     */ 
+     */
     @SuppressWarnings("unchecked")
     @Override
     public String toString() {
@@ -1002,7 +999,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
             sb.append("null");
         } else if (isMap()) {
             sb.append("{ ");
-            Map<Object, Object> map = (Map)object;
+            Map<Object, Object> map = (Map<Object, Object>)object;
             for (Iterator<Object> i = map.keySet().iterator(); i.hasNext();) {
                 Object key = i.next();
                 sb.append('"').append(key.toString()).append("\": ");
@@ -1014,7 +1011,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
             sb.append(" }");
         } else if (isList()) {
             sb.append("[ ");
-            for (Iterator<Object> i = ((List)object).iterator(); i.hasNext();) {
+            for (Iterator<Object> i = ((List<Object>)object).iterator(); i.hasNext();) {
                 sb.append(new JsonValue(i.next()).toString()); // recursion
                 if (i.hasNext()) {
                     sb.append(", ");

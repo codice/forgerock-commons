@@ -43,7 +43,6 @@ public class JsonValueList<E> extends AbstractList<E> implements JsonValueWrappe
         this.jsonValue = jsonValue.expect(List.class);
     }
 
-    @Override // JsonValueWrapper
     public JsonValue unwrap() {
         return jsonValue;
     }
@@ -80,7 +79,6 @@ public class JsonValueList<E> extends AbstractList<E> implements JsonValueWrappe
      * @return the element previously at the specified position.
      * @throws IndexOutOfBoundsException if the index is out of range.
      */
-    @SuppressWarnings("unchecked")
     @Override
     public E set(int index, E element) {
         E result = get(index); // includes index range check
@@ -109,7 +107,6 @@ public class JsonValueList<E> extends AbstractList<E> implements JsonValueWrappe
      * @param index the index of the element to be removed.
      * @return the element previously at the specified position.
      */
-    @SuppressWarnings("unchecked")
     @Override
     public E remove(int index) {
         E result = get(index); // includes index range check
