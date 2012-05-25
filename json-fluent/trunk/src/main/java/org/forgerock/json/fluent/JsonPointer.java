@@ -294,6 +294,18 @@ public class JsonPointer implements Iterable<String> {
     }
 
     /**
+     * Returns {@code true} if this pointer identifies the root value of a JSON
+     * structure. More specifically, it returns {@code true} if this pointer
+     * does not contain any reference tokens (i.e. {@code size() == 0}).
+     *
+     * @return {@code true} if this pointer identifies the root value of a JSON
+     *         structure.
+     */
+    public boolean isEmpty() {
+        return size() == 0;
+    }
+
+    /**
      * Returns an iterator over the pointer's reference tokens.
      */
     public Iterator<String> iterator() {
