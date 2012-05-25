@@ -161,7 +161,7 @@ public class JsonPointer implements Iterable<String> {
 
     /**
      * Returns a pointer containing all but the first reference token contained
-     * in this pointer, or {@code null} if this pointer contains less than 2
+     * in this pointer, or {@code /} if this pointer contains less than 2
      * reference tokens.
      * <p>
      * This method yields the following results: <blockquote>
@@ -172,11 +172,11 @@ public class JsonPointer implements Iterable<String> {
      * </tr>
      * <tr>
      * <td align=left>/</td>
-     * <td align=left><tt>null</tt></td>
+     * <td align=left><tt>/</tt></td>
      * </tr>
      * <tr>
      * <td align=left>/a</td>
-     * <td align=left><tt>null</tt></td>
+     * <td align=left><tt>/</tt></td>
      * </tr>
      * <tr>
      * <td align=left>/a/b</td>
@@ -193,7 +193,7 @@ public class JsonPointer implements Iterable<String> {
      *         in this pointer.
      */
     public JsonPointer relativePointer() {
-        return tokens.length > 1 ? relativePointer(tokens.length - 1) : null;
+        return tokens.length > 0 ? relativePointer(tokens.length - 1) : this;
     }
 
     /**

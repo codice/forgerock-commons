@@ -94,13 +94,13 @@ public class JsonPointerTest {
     @Test
     public void relativePointer0() {
         JsonPointer p = new JsonPointer("/");
-        assertThat((Object) p.relativePointer()).isNull();
+        assertThat((Object) p.relativePointer()).isEqualTo(new JsonPointer("/"));
     }
 
     @Test
     public void relativePointer1() {
         JsonPointer p = new JsonPointer("/a");
-        assertThat((Object) p.relativePointer()).isNull();
+        assertThat((Object) p.relativePointer()).isEqualTo(new JsonPointer("/"));
     }
 
     @Test
