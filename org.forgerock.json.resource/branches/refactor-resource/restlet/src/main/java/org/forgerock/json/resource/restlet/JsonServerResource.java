@@ -17,13 +17,10 @@
 package org.forgerock.json.resource.restlet;
 
 // Java SE
-import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 
 // Restlet
 import org.restlet.data.Conditions;
@@ -35,12 +32,13 @@ import org.restlet.data.Tag;
 import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 //import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
 
 // Jackson
 import org.restlet.ext.jackson.JacksonRepresentation;
 
 // Restlet Utilities
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.forgerock.restlet.ExtendedServerResource;
 
 // JSON Fluent
@@ -104,11 +102,40 @@ public class JsonServerResource extends ExtendedServerResource {
     private Representation toRepresentation(JsonValue value) {
         JacksonRepresentation<Object> result = null;
         if (value != null) {
-            result = new JacksonRepresentation<Object>(value.getObject());
+            result = new JacksonRepresentation<Object>(value.getObject()) {
+              /**
+                 * {@inheritDoc}
+                 */
+                protected ObjectMapper createObjectMapper() {
+                    ObjectMapper mapper = super.createObjectMapper();
+                    if (isPrettyPrint()) {
+                        mapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, true);
+                    }
+                    return mapper;
+                }
+            };
             result.setObjectClass(Object.class); // probably superfluous
             result.setTag(getTag(value)); // set ETag, if _rev is in value
         }
         return result;
+    }
+
+    /**
+     * Returns {@code true} if the client requested that JSON results should be
+     * indented in order to be more human readable.
+     *
+     * @return {@code true} if the client requested that JSON results should be
+     *         indented in order to be more human readable.
+     */
+    private boolean isPrettyPrint() {
+        Form query = getQuery();
+        if (query != null) {
+            String s = query.getFirstValue("prettyprint", true);
+            String ls = s != null ? s.toLowerCase(Locale.ENGLISH) : null;
+            return ls != null && ls.equals("true");
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -137,9 +164,9 @@ public class JsonServerResource extends ExtendedServerResource {
             Status status = conditions.getStatus(getMethod(), true, getTag(value), null);
             if (status != null && status.isError()) {
                 throw new PreconditionFailedException(
-                        status.getCode() + " " 
+                        status.getCode() + " "
                         + status.getName() + " "
-                        + status.getDescription(), 
+                        + status.getDescription(),
                         status.getThrowable());
             }
             this.value = value; // cache to prevent multiple reads
@@ -282,11 +309,12 @@ public class JsonServerResource extends ExtendedServerResource {
         Representation representation;
         try {
             Form query = getQuery();
-            if (query == null || query.size() == 0) { // read
+            if (query == null || query.size() == 0
+                    || (query.size() == 1 && query.getFirstValue("prettyprint") != null)) { // read
                 representation = toRepresentation(read());
             } else if (conditions.hasSome()) { // query w. precondition: automatic mismatch
                     throw new PreconditionFailedException("Query does not support preconditions, but precondition present.");
-            } else { // query                
+            } else { // query
                 representation = toRepresentation(accessor.query(this.id, getQueryParams()));
             }
             if (representation == null || representation instanceof EmptyRepresentation) {
@@ -359,7 +387,7 @@ public class JsonServerResource extends ExtendedServerResource {
      * @return TODO.
      * @throws org.restlet.resource.ResourceException TODO.
      */
-    @Override 
+    @Override
     public Representation post(Representation entity) throws org.restlet.resource.ResourceException {
         Representation representation;
         Form query = getQuery();
