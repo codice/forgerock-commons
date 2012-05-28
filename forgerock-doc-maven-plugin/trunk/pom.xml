@@ -16,7 +16,9 @@
 !     Copyright 2012 ForgeRock AS
 !
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
  <modelVersion>4.0.0</modelVersion>
 
  <parent>
@@ -32,7 +34,7 @@
 
  <name>ForgeRock Doc Build Maven Plugin</name>
  <description>Common machinery for generating core documentation from DocBook XML sources</description>
- <url>http://docs.forgerock.org</url>
+ <url>http://commons.forgerock.org/forgerock-doc-maven-plugin</url>
 
  <scm>
   <url>https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/</url>
@@ -108,6 +110,35 @@
    <version>1.0.0</version>
   </dependency>
  </dependencies>
+
+ <issueManagement>
+  <system>Jira</system>
+  <url>https://bugster.forgerock.org/jira/browse/COMMWEB</url>
+ </issueManagement>
+
+ <ciManagement>
+  <system>jenkins</system>
+  <url>http://builds.forgerock.org/view/Docs/job/Commons%20-%20Forgerock%20Doc%20Maven%20Plugin/</url>
+      <notifiers>
+      <notifier>
+        <type>mail</type>
+        <sendOnError>true</sendOnError>
+        <sendOnFailure>true</sendOnFailure>
+        <sendOnSuccess>false</sendOnSuccess>
+        <sendOnWarning>false</sendOnWarning>
+        <!-- TODO: create this mailing list -->
+        <address>docs@forgerock.org</address>
+      </notifier>
+    </notifiers>
+ </ciManagement>
+
+ <distributionManagement>
+    <site>
+      <id>forgerock.org</id>
+      <name>ForgeRock Community</name>
+      <url>scp://forgerock.org/var/www/vhosts/commons.forgerock.org/httpdocs/forgerock-doc-maven-plugin</url>
+    </site>
+ </distributionManagement>
 
  <inceptionYear>2012</inceptionYear>
 
