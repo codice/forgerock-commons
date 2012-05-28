@@ -322,7 +322,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
             for (String docName : docNames) {
                 String sysId = getBuildDirectory().getAbsolutePath()
-                        + File.separator + docName + "single.target.db";
+                        + File.separator + docName + "-single.target.db";
                 content.append("<!ENTITY " + docName + " SYSTEM '" + sysId
                         + "'>\n");
             }
@@ -394,7 +394,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
             for (String docName : docNames) {
                 String sysId = getBuildDirectory().getAbsolutePath()
-                        + File.separator + docName + "chunked.target.db";
+                        + File.separator + docName + "-chunked.target.db";
                 content.append("<!ENTITY " + docName + " SYSTEM '" + sysId
                         + "'>\n");
             }
@@ -1010,7 +1010,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                                 .getPath())
                                 + "/"
                                 + docName
-                                + "single.target.db"));
+                                + "-single.target.db"));
 
                 executeMojo(
                         plugin(groupId("com.agilejava.docbkx"),
@@ -1122,7 +1122,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                                 .getPath())
                                 + "/"
                                 + docName
-                                + "chunked.target.db"));
+                                + "-chunked.target.db"));
 
                 executeMojo(
                         plugin(groupId("com.agilejava.docbkx"),
