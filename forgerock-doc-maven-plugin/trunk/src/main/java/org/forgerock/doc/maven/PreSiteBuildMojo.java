@@ -494,7 +494,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * @return &lt;p&gt; containing a link to log a bug in Jira
      */
     final String getLinkToJira() {
-        String link = "<div id=\"footer\"><p>Something wrong on this page? "
+        String link = "<p>&nbsp;</p><div id=\"footer\"><p>Something wrong on this page? "
                 + "<a href=\"JIRA-URL\">Log a documentation bug.</a></p></div>";
 
         // https://confluence.atlassian.com/display/JIRA/Creating+Issues+via+direct+HTML+links
