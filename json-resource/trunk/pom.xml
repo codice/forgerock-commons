@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.forgerock</groupId>
         <artifactId>forgerock-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0-SNAPSHOT</version>
     </parent>
     <groupId>org.forgerock.commons</groupId>
     <artifactId>json-resource-parent</artifactId>
@@ -35,7 +35,9 @@
     </properties>
     <modules>
         <module>core</module>
+        <!-- 
         <module>restlet</module>
+        -->
     </modules>
     <repositories>
 <!-- may-be-temporary, based-on our decisions around the content and release of forgerock-parent -->
@@ -46,6 +48,14 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+        </repository>
+        <repository>
+            <id>forgerock-snapshots-repository</id>
+            <name>ForgeRock Snapshot Repository</name>
+            <url>http://maven.forgerock.org/repo/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </repository>
 <!-- /may-be-temporary -->
     </repositories>
