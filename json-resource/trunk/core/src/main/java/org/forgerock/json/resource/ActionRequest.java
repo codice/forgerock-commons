@@ -28,29 +28,29 @@ import org.forgerock.json.fluent.JsonValue;
 public interface ActionRequest extends Request {
 
     /**
-     * Returns the parameters which should be used to control the behavior of
-     * this action request. The returned map may be modified if permitted by
-     * this action request.
+     * Returns the additional parameters which should be used to control the
+     * behavior of this action request. The returned map may be modified if
+     * permitted by this action request.
      *
-     * @return The parameters which should be used to control the behavior of
-     *         this action request (never {@code null}).
+     * @return The additional parameters which should be used to control the
+     *         behavior of this action request (never {@code null}).
      */
-    Map<String, Object> getActionParameters();
+    Map<String, String> getAdditionalActionParameters();
 
     /**
-     * Sets a parameter which should be used to control the behavior of this
-     * action request.
+     * Sets an additional parameter which should be used to control the behavior
+     * of this action request.
      *
      * @param name
-     *            The name of the parameter.
+     *            The name of the additional parameter.
      * @param value
-     *            The parameter's value.
+     *            The additional parameter's value.
      * @return This action request.
      * @throws UnsupportedOperationException
      *             If this action request does not permit changes to the
-     *             parameters.
+     *             additional parameters.
      */
-    ActionRequest setActionParameter(String name, Object value);
+    ActionRequest setAdditionalActionParameter(String name, String value);
 
     /**
      * Returns the content of this action request. The structure of the content

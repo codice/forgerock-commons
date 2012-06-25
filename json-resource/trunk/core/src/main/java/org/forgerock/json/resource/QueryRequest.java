@@ -30,29 +30,29 @@ public interface QueryRequest extends Request {
     // TODO: paged results.
 
     /**
-     * Returns the parameters which should be used to control the behavior of
-     * this query request. The returned map may be modified if permitted by this
-     * query request.
+     * Returns the additional parameters which should be used to control the
+     * behavior of this query request. The returned map may be modified if
+     * permitted by this query request.
      *
-     * @return The parameters which should be used to control the behavior of
-     *         this query request (never {@code null}).
+     * @return The additional parameters which should be used to control the
+     *         behavior of this query request (never {@code null}).
      */
-    Map<String, Object> getQueryParameters();
+    Map<String, String> getQueryAdditionalParameters();
 
     /**
-     * Sets a parameter which should be used to control the behavior of this
-     * query request.
+     * Sets an additional parameter which should be used to control the behavior
+     * of this query request.
      *
      * @param name
-     *            The name of the parameter.
+     *            The name of the additional parameter.
      * @param value
-     *            The parameter's value.
+     *            The additional parameter's value.
      * @return This query request.
      * @throws UnsupportedOperationException
      *             If this query request does not permit changes to the
-     *             parameters.
+     *             additional parameters.
      */
-    QueryRequest setQueryParameter(String name, Object value);
+    QueryRequest setAdditionalQueryParameter(String name, String value);
 
     /**
      * Returns the query identifier for pre-defined queries.
