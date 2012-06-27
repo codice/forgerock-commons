@@ -288,3 +288,8 @@ span.msgexplan-title {
  right: 0;
  font-size: x-small;
 }
+
+.syntaxhighlighter
+.toolbar {
+  display: none !important;
+}
