@@ -49,7 +49,7 @@ public interface CreateRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    String getEndPoint();
+    String getComponent();
 
     /**
      * {@inheritDoc}
@@ -82,7 +82,7 @@ public interface CreateRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    CreateRequest setEndPoint(String path);
+    CreateRequest setComponent(String path);
 
     /**
      * {@inheritDoc}

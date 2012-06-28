@@ -62,7 +62,7 @@ public interface ActionRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    String getEndPoint();
+    String getComponent();
 
     /**
      * {@inheritDoc}
@@ -117,7 +117,7 @@ public interface ActionRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    ActionRequest setEndPoint(String path);
+    ActionRequest setComponent(String path);
 
     /**
      * {@inheritDoc}

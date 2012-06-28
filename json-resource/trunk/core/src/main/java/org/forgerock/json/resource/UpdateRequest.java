@@ -43,7 +43,7 @@ public interface UpdateRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    String getEndPoint();
+    String getComponent();
 
     /**
      * {@inheritDoc}
@@ -84,7 +84,7 @@ public interface UpdateRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    UpdateRequest setEndPoint(String path);
+    UpdateRequest setComponent(String path);
 
     /**
      * {@inheritDoc}

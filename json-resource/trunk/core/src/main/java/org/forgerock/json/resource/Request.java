@@ -61,13 +61,13 @@ public interface Request {
     Request addFieldFilter(String... fields);
 
     /**
-     * Returns the name of the JSON resource end-point to which this request
+     * Returns the name of the JSON resource component to which this request
      * should be targeted.
      *
-     * @return The name of the JSON resource end-point to which this request
+     * @return The name of the JSON resource component to which this request
      *         should be targeted.
      */
-    String getEndPoint();
+    String getComponent();
 
     /**
      * Returns the list of fields which should be included with each JSON
@@ -91,18 +91,18 @@ public interface Request {
     String getId();
 
     /**
-     * Sets the name of the JSON resource end-point to which this request should
+     * Sets the name of the JSON resource component to which this request should
      * be targeted.
      *
      * @param name
-     *            The name of the JSON resource end-point to which this request
+     *            The name of the JSON resource component to which this request
      *            should be targeted.
      * @return This request.
      * @throws UnsupportedOperationException
      *             If this request does not permit changes to the JSON resource
-     *             end-point name.
+     *             component name.
      */
-    Request setEndPoint(String name);
+    Request setComponent(String name);
 
     /**
      * Sets the ID of the JSON resource to which this request should be

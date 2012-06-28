@@ -59,7 +59,7 @@ public interface QueryRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    String getEndPoint();
+    String getComponent();
 
     /**
      * {@inheritDoc}
@@ -130,7 +130,7 @@ public interface QueryRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    QueryRequest setEndPoint(String path);
+    QueryRequest setComponent(String path);
 
     /**
      * {@inheritDoc}

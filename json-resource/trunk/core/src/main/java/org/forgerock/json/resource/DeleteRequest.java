@@ -41,7 +41,7 @@ public interface DeleteRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    String getEndPoint();
+    String getComponent();
 
     /**
      * {@inheritDoc}
@@ -75,7 +75,7 @@ public interface DeleteRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    DeleteRequest setEndPoint(String path);
+    DeleteRequest setComponent(String path);
 
     /**
      * {@inheritDoc}

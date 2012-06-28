@@ -41,7 +41,7 @@ public interface ReadRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    String getEndPoint();
+    String getComponent();
 
     /**
      * {@inheritDoc}
@@ -59,7 +59,7 @@ public interface ReadRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    ReadRequest setEndPoint(String path);
+    ReadRequest setComponent(String path);
 
     /**
      * {@inheritDoc}
