@@ -20,7 +20,7 @@ import java.io.Closeable;
 import java.util.Collection;
 
 import org.forgerock.json.fluent.JsonValue;
-import org.forgerock.resource.exception.ResourceException;
+import org.forgerock.json.resource.exception.ResourceException;
 
 /**
  * A client connection to a JSON resource provider over which read and update
@@ -228,6 +228,9 @@ public interface Connection extends Closeable {
      * Searches for all JSON resources matching a user specified set of
      * criteria, and places the results in the provided collection.
      *
+     * @param <T>
+     *            The type of the collection in which the results should be
+     *            placed.
      * @param request
      *            The query request.
      * @param results

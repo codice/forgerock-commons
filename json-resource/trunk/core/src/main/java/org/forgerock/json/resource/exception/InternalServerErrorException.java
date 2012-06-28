@@ -14,45 +14,55 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.resource.exception;
+package org.forgerock.json.resource.exception;
 
 // JSON Resource
 
 /**
  * An exception that is thrown during an operation on a resource when the server
- * is temporarily unable to handle the request.
- * 
- * 
+ * encountered an unexpected condition which prevented it from fulfilling the
+ * request.
  */
-public class ServiceUnavailableException extends RetryableException {
+public class InternalServerErrorException extends ResourceException {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Constructs a new exception with {@code null} as its detail message.
      */
-    public ServiceUnavailableException() {
-        super(ResourceException.UNAVAILABLE, null, null);
+    public InternalServerErrorException() {
+        super(ResourceException.INTERNAL_ERROR);
     }
 
     /**
      * Constructs a new exception with the specified detail message.
+     *
+     * @param message
+     *            The detail message.
      */
-    public ServiceUnavailableException(final String message) {
-        super(ResourceException.UNAVAILABLE, message, null);
+    public InternalServerErrorException(final String message) {
+        super(ResourceException.INTERNAL_ERROR, message);
     }
 
     /**
      * Constructs a new exception with the specified detail message and cause.
+     *
+     * @param message
+     *            The detail message.
+     * @param cause
+     *            The exception which caused this exception to be thrown.
      */
-    public ServiceUnavailableException(final String message, final Throwable cause) {
-        super(ResourceException.UNAVAILABLE, message, cause);
+    public InternalServerErrorException(final String message, final Throwable cause) {
+        super(ResourceException.INTERNAL_ERROR, message, cause);
     }
 
     /**
      * Constructs a new exception with the specified cause.
+     *
+     * @param cause
+     *            The exception which caused this exception to be thrown.
      */
-    public ServiceUnavailableException(final Throwable cause) {
-        super(ResourceException.UNAVAILABLE, null, cause);
+    public InternalServerErrorException(final Throwable cause) {
+        super(ResourceException.INTERNAL_ERROR, cause);
     }
 }

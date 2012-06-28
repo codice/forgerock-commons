@@ -64,12 +64,105 @@ public final class QueryFilter {
         }
     }
 
+    private static final class EqualsImpl extends Impl {
+        private final JsonPointer field;
+        private final Object valueAssertion;
+
+        private EqualsImpl(final JsonPointer field, final Object valueAssertion) {
+            this.field = field;
+            this.valueAssertion = valueAssertion;
+        }
+
+        @Override
+        protected <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
+            return v.visitEqualsFilter(p, field, valueAssertion);
+        }
+    }
+
+    private static final class ExtendedMatchImpl extends Impl {
+        private final JsonPointer field;
+        private final String matchingRuleId;
+        private final Object valueAssertion;
+
+        private ExtendedMatchImpl(final JsonPointer field, final String matchingRuleId,
+                final Object valueAssertion) {
+            this.field = field;
+            this.matchingRuleId = matchingRuleId;
+            this.valueAssertion = valueAssertion;
+        }
+
+        @Override
+        protected <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
+            return v.visitExtendedMatchFilter(p, field, matchingRuleId, valueAssertion);
+        }
+    }
+
+    private static final class GreaterThanImpl extends Impl {
+        private final JsonPointer field;
+        private final Object valueAssertion;
+
+        private GreaterThanImpl(final JsonPointer field, final Object valueAssertion) {
+            this.field = field;
+            this.valueAssertion = valueAssertion;
+        }
+
+        @Override
+        protected <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
+            return v.visitGreaterThanFilter(p, field, valueAssertion);
+        }
+    }
+
+    private static final class GreaterThanOrEqualToImpl extends Impl {
+        private final JsonPointer field;
+        private final Object valueAssertion;
+
+        private GreaterThanOrEqualToImpl(final JsonPointer field, final Object valueAssertion) {
+            this.field = field;
+            this.valueAssertion = valueAssertion;
+        }
+
+        @Override
+        protected <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
+            return v.visitGreaterThanOrEqualToFilter(p, field, valueAssertion);
+        }
+    }
+
     private static abstract class Impl {
         protected Impl() {
             // Nothing to do.
         }
 
         protected abstract <R, P> R accept(QueryFilterVisitor<R, P> v, P p);
+    }
+
+    private static final class LessThanImpl extends Impl {
+        private final JsonPointer field;
+        private final Object valueAssertion;
+
+        private LessThanImpl(final JsonPointer field, final Object valueAssertion) {
+            this.field = field;
+            this.valueAssertion = valueAssertion;
+        }
+
+        @Override
+        protected <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
+            return v.visitLessThanFilter(p, field, valueAssertion);
+        }
+    }
+
+    private static final class LessThanOrEqualToImpl extends Impl {
+        private final JsonPointer field;
+        private final Object valueAssertion;
+
+        private LessThanOrEqualToImpl(final JsonPointer field, final Object valueAssertion) {
+            this.field = field;
+            this.valueAssertion = valueAssertion;
+        }
+
+        @Override
+        protected <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
+            return v.visitLessThanOrEqualToFilter(p, field, valueAssertion);
+        }
     }
 
     private static final class NotImpl extends Impl {
@@ -108,99 +201,6 @@ public final class QueryFilter {
         @Override
         protected <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
             return v.visitPresentFilter(p, field);
-        }
-    }
-
-    private static final class EqualsImpl extends Impl {
-        private final JsonPointer field;
-        private final Object valueAssertion;
-
-        private EqualsImpl(final JsonPointer field, final Object valueAssertion) {
-            this.field = field;
-            this.valueAssertion = valueAssertion;
-        }
-
-        @Override
-        protected <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
-            return v.visitEqualsFilter(p, field, valueAssertion);
-        }
-    }
-
-    private static final class GreaterThanImpl extends Impl {
-        private final JsonPointer field;
-        private final Object valueAssertion;
-
-        private GreaterThanImpl(final JsonPointer field, final Object valueAssertion) {
-            this.field = field;
-            this.valueAssertion = valueAssertion;
-        }
-
-        @Override
-        protected <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
-            return v.visitGreaterThanFilter(p, field, valueAssertion);
-        }
-    }
-
-    private static final class LessThanImpl extends Impl {
-        private final JsonPointer field;
-        private final Object valueAssertion;
-
-        private LessThanImpl(final JsonPointer field, final Object valueAssertion) {
-            this.field = field;
-            this.valueAssertion = valueAssertion;
-        }
-
-        @Override
-        protected <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
-            return v.visitLessThanFilter(p, field, valueAssertion);
-        }
-    }
-
-    private static final class GreaterThanOrEqualToImpl extends Impl {
-        private final JsonPointer field;
-        private final Object valueAssertion;
-
-        private GreaterThanOrEqualToImpl(final JsonPointer field, final Object valueAssertion) {
-            this.field = field;
-            this.valueAssertion = valueAssertion;
-        }
-
-        @Override
-        protected <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
-            return v.visitGreaterThanOrEqualToFilter(p, field, valueAssertion);
-        }
-    }
-
-    private static final class LessThanOrEqualToImpl extends Impl {
-        private final JsonPointer field;
-        private final Object valueAssertion;
-
-        private LessThanOrEqualToImpl(final JsonPointer field, final Object valueAssertion) {
-            this.field = field;
-            this.valueAssertion = valueAssertion;
-        }
-
-        @Override
-        protected <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
-            return v.visitLessThanOrEqualToFilter(p, field, valueAssertion);
-        }
-    }
-
-    private static final class ExtendedMatchImpl extends Impl {
-        private final JsonPointer field;
-        private final String matchingRuleId;
-        private final Object valueAssertion;
-
-        private ExtendedMatchImpl(final JsonPointer field, final String matchingRuleId,
-                final Object valueAssertion) {
-            this.field = field;
-            this.matchingRuleId = matchingRuleId;
-            this.valueAssertion = valueAssertion;
-        }
-
-        @Override
-        protected <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
-            return v.visitExtendedMatchFilter(p, field, matchingRuleId, valueAssertion);
         }
     }
 
@@ -262,6 +262,20 @@ public final class QueryFilter {
     }
 
     /**
+     * Creates a new {@code equality} filter using the provided field name and
+     * value assertion.
+     *
+     * @param field
+     *            The name of field within the JSON resource to be compared.
+     * @param valueAssertion
+     *            The assertion value.
+     * @return The newly created {@code equality} filter.
+     */
+    public static QueryFilter equals(final JsonPointer field, final Object valueAssertion) {
+        return new QueryFilter(new EqualsImpl(field, valueAssertion));
+    }
+
+    /**
      * Creates a new {@code extended match} filter using the provided field
      * name, matching rule identifier, and value assertion.
      *
@@ -279,17 +293,17 @@ public final class QueryFilter {
     }
 
     /**
-     * Creates a new {@code equality} filter using the provided field name and
-     * value assertion.
+     * Creates a new {@code greater than} filter using the provided field name
+     * and value assertion.
      *
      * @param field
      *            The name of field within the JSON resource to be compared.
      * @param valueAssertion
      *            The assertion value.
-     * @return The newly created {@code equality} filter.
+     * @return The newly created {@code greater than} filter.
      */
-    public static QueryFilter equals(final JsonPointer field, final Object valueAssertion) {
-        return new QueryFilter(new EqualsImpl(field, valueAssertion));
+    public static QueryFilter greaterThan(final JsonPointer field, final Object valueAssertion) {
+        return new QueryFilter(new GreaterThanImpl(field, valueAssertion));
     }
 
     /**
@@ -308,17 +322,17 @@ public final class QueryFilter {
     }
 
     /**
-     * Creates a new {@code greater than} filter using the provided field name
-     * and value assertion.
+     * Creates a new {@code less than} filter using the provided field name and
+     * value assertion.
      *
      * @param field
      *            The name of field within the JSON resource to be compared.
      * @param valueAssertion
      *            The assertion value.
-     * @return The newly created {@code greater than} filter.
+     * @return The newly created {@code less than} filter.
      */
-    public static QueryFilter greaterThan(final JsonPointer field, final Object valueAssertion) {
-        return new QueryFilter(new GreaterThanImpl(field, valueAssertion));
+    public static QueryFilter lessThan(final JsonPointer field, final Object valueAssertion) {
+        return new QueryFilter(new LessThanImpl(field, valueAssertion));
     }
 
     /**
@@ -333,20 +347,6 @@ public final class QueryFilter {
      */
     public static QueryFilter lessThanOrEqualTo(final JsonPointer field, final Object valueAssertion) {
         return new QueryFilter(new LessThanOrEqualToImpl(field, valueAssertion));
-    }
-
-    /**
-     * Creates a new {@code less than} filter using the provided field name and
-     * value assertion.
-     *
-     * @param field
-     *            The name of field within the JSON resource to be compared.
-     * @param valueAssertion
-     *            The assertion value.
-     * @return The newly created {@code less than} filter.
-     */
-    public static QueryFilter lessThan(final JsonPointer field, final Object valueAssertion) {
-        return new QueryFilter(new LessThanImpl(field, valueAssertion));
     }
 
     /**
@@ -408,6 +408,24 @@ public final class QueryFilter {
         return new QueryFilter(new PresentImpl(field));
     }
 
+    /**
+     * Parses the provided string representation of a query filter as a
+     * {@code QueryFilter}.
+     *
+     * @param string
+     *            The string representation of a query filter .
+     * @return The parsed {@code QueryFilter}.
+     * @throws IllegalArgumentException
+     *             If {@code string} is not a valid string representation of a
+     *             query filter.
+     */
+    public static QueryFilter valueOf(final String string) {
+        /*
+         * TODO: parse a filter from the toString() representation.
+         */
+        return alwaysFalse();
+    }
+
     private final Impl pimpl;
 
     private QueryFilter(final Impl pimpl) {
@@ -430,24 +448,6 @@ public final class QueryFilter {
      */
     public <R, P> R accept(final QueryFilterVisitor<R, P> v, final P p) {
         return pimpl.accept(v, p);
-    }
-
-    /**
-     * Parses the provided string representation of a query filter as a
-     * {@code QueryFilter}.
-     *
-     * @param string
-     *            The string representation of a query filter .
-     * @return The parsed {@code QueryFilter}.
-     * @throws IllegalArgumentException
-     *             If {@code string} is not a valid string representation of a
-     *             query filter.
-     */
-    public static QueryFilter valueOf(String string) {
-        /*
-         * TODO: parse a filter from the toString() representation.
-         */
-        return alwaysFalse();
     }
 
     /**

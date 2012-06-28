@@ -29,16 +29,7 @@ public interface Request {
     // should be pushed down? For example, a bulk update operation would not use
     // any of these parameters.
 
-    /**
-     * Returns the list of fields which should be included with each JSON
-     * resource returned by this request. The returned list may be modified if
-     * permitted by this query request. An empty list indicates that all fields
-     * should be included.
-     *
-     * @return The list of fields which should be included with each JSON
-     *         resource returned by this request (never {@code null}).
-     */
-    List<JsonPointer> getFieldFilters();
+    // TODO: include support for something similar to LDAP controls?
 
     /**
      * Adds one or more fields which should be included with each JSON resource
@@ -79,6 +70,27 @@ public interface Request {
     String getEndPoint();
 
     /**
+     * Returns the list of fields which should be included with each JSON
+     * resource returned by this request. The returned list may be modified if
+     * permitted by this query request. An empty list indicates that all fields
+     * should be included.
+     *
+     * @return The list of fields which should be included with each JSON
+     *         resource returned by this request (never {@code null}).
+     */
+    List<JsonPointer> getFieldFilters();
+
+    /**
+     * Returns the ID of the JSON resource to which this request should be
+     * targeted, if applicable.
+     *
+     * @return The ID of the JSON resource to which this request should be
+     *         targeted, or {@code null} if the ID is not applicable (e.g. for
+     *         singleton resources, certain actions, or some create requests).
+     */
+    String getId();
+
+    /**
      * Sets the name of the JSON resource end-point to which this request should
      * be targeted.
      *
@@ -91,16 +103,6 @@ public interface Request {
      *             end-point name.
      */
     Request setEndPoint(String name);
-
-    /**
-     * Returns the ID of the JSON resource to which this request should be
-     * targeted, if applicable.
-     *
-     * @return The ID of the JSON resource to which this request should be
-     *         targeted, or {@code null} if the ID is not applicable (e.g. for
-     *         singleton resources, certain actions, or some create requests).
-     */
-    String getId();
 
     /**
      * Sets the ID of the JSON resource to which this request should be

@@ -27,67 +27,6 @@ import org.forgerock.json.fluent.JsonPointer;
 public interface PatchRequest extends Request {
 
     /**
-     * Returns the patch which should be applied to the JSON resource.
-     *
-     * @return The patch which should be applied to the JSON resource.
-     */
-    Patch getPatch();
-
-    /**
-     * Sets the patch which should be applied to the JSON resource.
-     *
-     * @param changes
-     *            The patch which should be applied to the JSON resource.
-     * @return This patch request.
-     * @throws UnsupportedOperationException
-     *             If this patch request does not permit changes to the patch.
-     */
-    PatchRequest setPatch(Patch changes);
-
-    /**
-     * Returns the expected version information associated with the JSON
-     * resource to be patched. Version information can be used in order to
-     * implement multi-version concurrency control (MVCC).
-     * <p>
-     * The returned version information may be {@code null} indicating that the
-     * client does not care if the resource has been modified concurrently. If
-     * the version information is non-{@code null}, and it does not match the
-     * current version of the targeted JSON resource, then the patch request
-     * will be rejected by the provider.
-     *
-     * @return The expected version information associated with the JSON
-     *         resource to be patched.
-     */
-    String getRevision();
-
-    /**
-     * Sets the expected version information associated with the JSON resource
-     * to be patched. Version information can be used in order to implement
-     * multi-version concurrency control (MVCC).
-     * <p>
-     * The provided version information may be {@code null} indicating that the
-     * client does not care if the resource has been modified concurrently. If
-     * the version information is non-{@code null}, and it does not match the
-     * current version of the targeted JSON resource, then the patch request
-     * will be rejected by the provider.
-     *
-     * @param version
-     *            The expected version information associated with the JSON
-     *            resource to be patched.
-     * @return This patch request.
-     * @throws UnsupportedOperationException
-     *             If this patch request does not permit changes to the version
-     *             information.
-     */
-    DeleteRequest setRevision(String version);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    List<JsonPointer> getFieldFilters();
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -109,7 +48,7 @@ public interface PatchRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    PatchRequest setEndPoint(String path);
+    List<JsonPointer> getFieldFilters();
 
     /**
      * {@inheritDoc}
@@ -118,8 +57,69 @@ public interface PatchRequest extends Request {
     String getId();
 
     /**
+     * Returns the patch which should be applied to the JSON resource.
+     *
+     * @return The patch which should be applied to the JSON resource.
+     */
+    Patch getPatch();
+
+    /**
+     * Returns the expected version information associated with the JSON
+     * resource to be patched. Version information can be used in order to
+     * implement multi-version concurrency control (MVCC).
+     * <p>
+     * The returned version information may be {@code null} indicating that the
+     * client does not care if the resource has been modified concurrently. If
+     * the version information is non-{@code null}, and it does not match the
+     * current version of the targeted JSON resource, then the patch request
+     * will be rejected by the provider.
+     *
+     * @return The expected version information associated with the JSON
+     *         resource to be patched.
+     */
+    String getRevision();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    PatchRequest setEndPoint(String path);
+
+    /**
      * {@inheritDoc}
      */
     @Override
     PatchRequest setId(String id);
+
+    /**
+     * Sets the patch which should be applied to the JSON resource.
+     *
+     * @param changes
+     *            The patch which should be applied to the JSON resource.
+     * @return This patch request.
+     * @throws UnsupportedOperationException
+     *             If this patch request does not permit changes to the patch.
+     */
+    PatchRequest setPatch(Patch changes);
+
+    /**
+     * Sets the expected version information associated with the JSON resource
+     * to be patched. Version information can be used in order to implement
+     * multi-version concurrency control (MVCC).
+     * <p>
+     * The provided version information may be {@code null} indicating that the
+     * client does not care if the resource has been modified concurrently. If
+     * the version information is non-{@code null}, and it does not match the
+     * current version of the targeted JSON resource, then the patch request
+     * will be rejected by the provider.
+     *
+     * @param version
+     *            The expected version information associated with the JSON
+     *            resource to be patched.
+     * @return This patch request.
+     * @throws UnsupportedOperationException
+     *             If this patch request does not permit changes to the version
+     *             information.
+     */
+    DeleteRequest setRevision(String version);
 }

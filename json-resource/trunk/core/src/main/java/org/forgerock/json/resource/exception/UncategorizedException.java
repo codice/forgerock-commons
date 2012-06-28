@@ -14,18 +14,15 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.resource.exception;
-
+package org.forgerock.json.resource.exception;
 
 /**
  * An exception that indicates that a failure is not directly known to the
  * system, and hence requires out-of-band knowledge or enhancements to determine
  * if a failure should be categorized as temporary or permanent.
- * 
+ *
  * @see RetryableException for failures that are temporary instead.
  * @see PermanentException for failures that are permanent instead.
- * 
- * 
  */
 public class UncategorizedException extends ResourceException {
 
@@ -33,9 +30,13 @@ public class UncategorizedException extends ResourceException {
 
     /**
      * Constructs a new exception with the specified detail message and cause.
-     * 
+     *
+     * @param code
+     *            The numeric code of the exception.
      * @param message
+     *            The detail message.
      * @param cause
+     *            The exception which caused this exception to be thrown.
      */
     public UncategorizedException(final int code, final String message, final Throwable cause) {
         super(code, message, cause);

@@ -77,7 +77,6 @@ public interface ResourceProvider<C extends RequestContext> {
      *            The action request.
      * @param handler
      *            The result handler to be notified on completion.
-     *
      */
     void action(C context, ActionRequest request, ResultHandler<JsonValue> handler);
 

@@ -17,5 +17,5 @@
 /**
  * Common resource exceptions.
  */
-package org.forgerock.resource.exception;
+package org.forgerock.json.resource.exception;
 

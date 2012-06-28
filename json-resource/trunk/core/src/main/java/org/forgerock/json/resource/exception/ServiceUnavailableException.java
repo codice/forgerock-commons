@@ -14,46 +14,54 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.resource.exception;
+package org.forgerock.json.resource.exception;
 
 // JSON Resource
 
 /**
- * An exception that is thrown during a operation on a resource when the
- * specified object version does not match the version provided.
- * 
- * 
- * 
+ * An exception that is thrown during an operation on a resource when the server
+ * is temporarily unable to handle the request.
  */
-public class PreconditionFailedException extends ResourceException {
+public class ServiceUnavailableException extends RetryableException {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Constructs a new exception with {@code null} as its detail message.
      */
-    public PreconditionFailedException() {
-        super(ResourceException.VERSION_MISMATCH);
+    public ServiceUnavailableException() {
+        super(ResourceException.UNAVAILABLE, null, null);
     }
 
     /**
      * Constructs a new exception with the specified detail message.
+     *
+     * @param message
+     *            The detail message.
      */
-    public PreconditionFailedException(final String message) {
-        super(ResourceException.VERSION_MISMATCH, message);
+    public ServiceUnavailableException(final String message) {
+        super(ResourceException.UNAVAILABLE, message, null);
     }
 
     /**
      * Constructs a new exception with the specified detail message and cause.
+     *
+     * @param message
+     *            The detail message.
+     * @param cause
+     *            The exception which caused this exception to be thrown.
      */
-    public PreconditionFailedException(final String message, final Throwable cause) {
-        super(ResourceException.VERSION_MISMATCH, message, cause);
+    public ServiceUnavailableException(final String message, final Throwable cause) {
+        super(ResourceException.UNAVAILABLE, message, cause);
     }
 
     /**
      * Constructs a new exception with the specified cause.
+     *
+     * @param cause
+     *            The exception which caused this exception to be thrown.
      */
-    public PreconditionFailedException(final Throwable cause) {
-        super(ResourceException.VERSION_MISMATCH, cause);
+    public ServiceUnavailableException(final Throwable cause) {
+        super(ResourceException.UNAVAILABLE, null, cause);
     }
 }

@@ -27,11 +27,44 @@ import org.forgerock.json.fluent.JsonValue;
 public interface CreateRequest extends Request {
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    CreateRequest addFieldFilter(JsonPointer... fields);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    CreateRequest addFieldFilter(String... fields);
+
+    /**
      * Returns the content of the JSON resource to be created.
      *
      * @return The content of the JSON resource to be created.
      */
     JsonValue getContent();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getEndPoint();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    List<JsonPointer> getFieldFilters();
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The resource ID may be {@code null} indicating that the resource provider
+     * should generate a resource ID on behalf of the client.
+     */
+    @Override
+    String getId();
 
     /**
      * Sets the content of the JSON resource to be created.
@@ -49,40 +82,7 @@ public interface CreateRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    List<JsonPointer> getFieldFilters();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    CreateRequest addFieldFilter(JsonPointer... fields);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    CreateRequest addFieldFilter(String... fields);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    String getEndPoint();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     CreateRequest setEndPoint(String path);
-
-    /**
-     * {@inheritDoc}
-     * <p>
-     * The resource ID may be {@code null} indicating that the resource provider
-     * should generate a resource ID on behalf of the client.
-     */
-    @Override
-    String getId();
 
     /**
      * {@inheritDoc}

@@ -26,49 +26,6 @@ import org.forgerock.json.fluent.JsonPointer;
 public interface DeleteRequest extends Request {
 
     /**
-     * Returns the expected version information associated with the JSON
-     * resource to be deleted. Version information can be used in order to
-     * implement multi-version concurrency control (MVCC).
-     * <p>
-     * The returned version information may be {@code null} indicating that the
-     * client does not care if the resource has been modified concurrently. If
-     * the version information is non-{@code null}, and it does not match the
-     * current version of the targeted JSON resource, then the delete request
-     * will be rejected by the provider.
-     *
-     * @return The expected version information associated with the JSON
-     *         resource to be deleted.
-     */
-    String getRevision();
-
-    /**
-     * Sets the expected version information associated with the JSON resource
-     * to be deleted. Version information can be used in order to implement
-     * multi-version concurrency control (MVCC).
-     * <p>
-     * The provided version information may be {@code null} indicating that the
-     * client does not care if the resource has been modified concurrently. If
-     * the version information is non-{@code null}, and it does not match the
-     * current version of the targeted JSON resource, then the delete request
-     * will be rejected by the provider.
-     *
-     * @param version
-     *            The expected version information associated with the JSON
-     *            resource to be deleted.
-     * @return This delete request.
-     * @throws UnsupportedOperationException
-     *             If this delete request does not permit changes to the version
-     *             information.
-     */
-    DeleteRequest setRevision(String version);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    List<JsonPointer> getFieldFilters();
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -90,7 +47,7 @@ public interface DeleteRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    DeleteRequest setEndPoint(String path);
+    List<JsonPointer> getFieldFilters();
 
     /**
      * {@inheritDoc}
@@ -99,9 +56,52 @@ public interface DeleteRequest extends Request {
     String getId();
 
     /**
+     * Returns the expected version information associated with the JSON
+     * resource to be deleted. Version information can be used in order to
+     * implement multi-version concurrency control (MVCC).
+     * <p>
+     * The returned version information may be {@code null} indicating that the
+     * client does not care if the resource has been modified concurrently. If
+     * the version information is non-{@code null}, and it does not match the
+     * current version of the targeted JSON resource, then the delete request
+     * will be rejected by the provider.
+     *
+     * @return The expected version information associated with the JSON
+     *         resource to be deleted.
+     */
+    String getRevision();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    DeleteRequest setEndPoint(String path);
+
+    /**
      * {@inheritDoc}
      */
     @Override
     DeleteRequest setId(String id);
+
+    /**
+     * Sets the expected version information associated with the JSON resource
+     * to be deleted. Version information can be used in order to implement
+     * multi-version concurrency control (MVCC).
+     * <p>
+     * The provided version information may be {@code null} indicating that the
+     * client does not care if the resource has been modified concurrently. If
+     * the version information is non-{@code null}, and it does not match the
+     * current version of the targeted JSON resource, then the delete request
+     * will be rejected by the provider.
+     *
+     * @param version
+     *            The expected version information associated with the JSON
+     *            resource to be deleted.
+     * @return This delete request.
+     * @throws UnsupportedOperationException
+     *             If this delete request does not permit changes to the version
+     *             information.
+     */
+    DeleteRequest setRevision(String version);
 
 }

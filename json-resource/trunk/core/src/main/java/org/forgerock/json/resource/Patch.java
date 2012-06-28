@@ -17,7 +17,7 @@
 package org.forgerock.json.resource;
 
 import org.forgerock.json.fluent.JsonValue;
-import org.forgerock.resource.exception.ConflictException;
+import org.forgerock.json.resource.exception.ConflictException;
 
 /**
  * The interface that provides the ability to apply partial changes to

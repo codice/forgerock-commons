@@ -14,7 +14,7 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.resource.exception;
+package org.forgerock.json.resource.exception;
 
 // Java SE
 import java.util.LinkedHashMap;
@@ -31,8 +31,6 @@ import org.forgerock.json.fluent.JsonValue;
  * exceptions that correspond with HTTP status codes. For the sake of
  * interoperability with HTTP, if an exception corresponds with an HTTP error
  * status, use the matching HTTP status code.
- *
- *
  */
 public class ResourceException extends ExecutionException {
 
@@ -97,24 +95,22 @@ public class ResourceException extends ExecutionException {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Factory method to get an exception with the specified exception code,
-     * reason phrase, detail message and cause.
-     *
-     * Useful to translate http status codes to the relevant Java exception
-     * type.
-     *
-     * The type of the returned exception will be a sub-type of
-     * ResourceException.
+     * Returns an exception with the specified exception code, reason phrase,
+     * detail message and cause. Useful for translating HTTP status codes to the
+     * relevant Java exception type. The type of the returned exception will be
+     * a sub-type of ResourceException.
      *
      * @param code
-     *            the numeric code of the exception.
+     *            The numeric code of the exception.
      * @param reason
-     *            the short reason phrase of the exception, or null if this
+     *            The short reason phrase of the exception, or null if this
      *            implementation should assign a short reason phrase.
      * @param message
-     *            the detail message of the exception.
+     *            The detail message.
      * @param cause
-     *            the cause of the exception.
+     *            The exception which caused this exception to be thrown.
+     * @return A resource exception having the provided code, reason, message,
+     *         and cause.
      */
     public static ResourceException getException(final int code, final String reason,
             final String message, final Throwable cause) {
@@ -282,7 +278,7 @@ public class ResourceException extends ExecutionException {
      * {@code "Resource Exception"}.
      *
      * @param code
-     *            the numeric code of the exception.
+     *            The numeric code of the exception.
      */
     protected ResourceException(final int code) {
         this.code = code;
@@ -294,9 +290,9 @@ public class ResourceException extends ExecutionException {
      * message.
      *
      * @param code
-     *            the numeric code of the exception.
+     *            The numeric code of the exception.
      * @param message
-     *            the short reason phrase of the exception.
+     *            The detail message.
      */
     protected ResourceException(final int code, final String message) {
         super(message);
@@ -309,14 +305,14 @@ public class ResourceException extends ExecutionException {
      * phrase, detail message and cause.
      *
      * @param code
-     *            the numeric code of the exception.
+     *            The numeric code of the exception.
      * @param reason
-     *            the short reason phrase of the exception, or null to have this
+     *            The short reason phrase of the exception, or null to have this
      *            implementation assign a reason String
      * @param message
-     *            the detail message of the exception.
+     *            The detail message.
      * @param cause
-     *            the cause of the exception.
+     *            The exception which caused this exception to be thrown.
      */
     protected ResourceException(final int code, final String reason, final String message,
             final Throwable cause) {
@@ -335,11 +331,11 @@ public class ResourceException extends ExecutionException {
      * from the specified cause.
      *
      * @param code
-     *            the numeric code of the exception.
+     *            The numeric code of the exception.
      * @param message
-     *            the detail message of the exception.
+     *            The detail message.
      * @param cause
-     *            the cause of the exception.
+     *            The exception which caused this exception to be thrown.
      */
     protected ResourceException(final int code, final String message, final Throwable cause) {
         this(code, reason(code), message, cause);
@@ -349,9 +345,9 @@ public class ResourceException extends ExecutionException {
      * Constructs a new exception with the specified exception code and cause.
      *
      * @param code
-     *            the numeric code of the exception.
+     *            The numeric code of the exception.
      * @param cause
-     *            the cause of the exception.
+     *            The exception which caused this exception to be thrown.
      */
     protected ResourceException(final int code, final Throwable cause) {
         super(cause);
@@ -361,6 +357,8 @@ public class ResourceException extends ExecutionException {
 
     /**
      * Returns the numeric code of the exception.
+     *
+     * @return The numeric code of the exception.
      */
     public int getCode() {
         return code;
@@ -368,6 +366,8 @@ public class ResourceException extends ExecutionException {
 
     /**
      * Returns the short reason phrase of the exception.
+     *
+     * @return The short reason phrase of the exception.
      */
     public String getReason() {
         return reason;
@@ -375,6 +375,9 @@ public class ResourceException extends ExecutionException {
 
     /**
      * Sets/overrides the short reason phrase of the exception.
+     *
+     * @param reason
+     *            The short reason phrase of the exception.
      */
     public void setReason(final String reason) {
         this.reason = reason;
@@ -383,6 +386,9 @@ public class ResourceException extends ExecutionException {
     /**
      * Returns the exception in a JSON object structure, suitable for inclusion
      * in the entity of an HTTP error response.
+     *
+     * @return The exception in a JSON object structure, suitable for inclusion
+     *         in the entity of an HTTP error response.
      */
     public JsonValue toJsonValue() {
         final LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>();

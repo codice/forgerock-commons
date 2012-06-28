@@ -16,7 +16,7 @@
 
 package org.forgerock.json.resource;
 
-import org.forgerock.resource.exception.ResourceException;
+import org.forgerock.json.resource.exception.ResourceException;
 
 /**
  * A completion handler for consuming the result of an asynchronous operation or

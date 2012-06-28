@@ -14,16 +14,13 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.resource.exception;
-
+package org.forgerock.json.resource.exception;
 
 /**
  * An exception that indicates that a failure is permanent, i.e. that re-trying
  * alone without addressing the cause is not expected to succeed.
- * 
+ *
  * @see RetryableException for failures that are temporary instead.
- * 
- * 
  */
 public class PermanentException extends ResourceException {
 
@@ -38,8 +35,9 @@ public class PermanentException extends ResourceException {
 
     /**
      * Constructs a new exception with the specified detail message.
-     * 
+     *
      * @param message
+     *            The detail message.
      */
     // public RetryableException(String message) {
     // super(ResourceException.BAD_REQUEST, message);
@@ -47,8 +45,9 @@ public class PermanentException extends ResourceException {
 
     /**
      * Constructs a new exception with the specified cause.
-     * 
+     *
      * @param cause
+     *            The exception which caused this exception to be thrown.
      */
     // public RetryableException(Throwable cause) {
     // super(ResourceException.BAD_REQUEST, cause);
@@ -56,9 +55,13 @@ public class PermanentException extends ResourceException {
 
     /**
      * Constructs a new exception with the specified detail message and cause.
-     * 
+     *
+     * @param code
+     *            The numeric code of the exception.
      * @param message
+     *            The detail message.
      * @param cause
+     *            The exception which caused this exception to be thrown.
      */
     public PermanentException(final int code, final String message, final Throwable cause) {
         super(code, message, cause);

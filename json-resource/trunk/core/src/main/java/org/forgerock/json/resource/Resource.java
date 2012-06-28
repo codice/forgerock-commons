@@ -27,9 +27,9 @@ public final class Resource {
     // TODO: should we have a getter for the endpoint as well? I think the
     // endpoint is an extrinsic property of a resource.
 
+    private final JsonValue content;
     private final String id;
     private final String revision;
-    private final JsonValue content;
 
     /**
      * Creates a new JSON resource.
@@ -41,7 +41,7 @@ public final class Resource {
      * @param content
      *            The JSON resource content.
      */
-    public Resource(String id, String revision, JsonValue content) {
+    public Resource(final String id, final String revision, final JsonValue content) {
         this.id = id;
         this.revision = revision;
         this.content = content;

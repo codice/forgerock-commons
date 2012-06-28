@@ -24,8 +24,16 @@ import org.forgerock.json.fluent.JsonPointer;
  */
 public final class SortKey {
 
-    private final JsonPointer field;
-    private final boolean isAscendingOrder;
+    /**
+     * Creates a new ascending-order sort key for the provided JSON field.
+     *
+     * @param field
+     *            The sort key field.
+     * @return A new ascending-order sort key.
+     */
+    public static SortKey ascendingOrder(final JsonPointer field) {
+        return new SortKey(field, true);
+    }
 
     /**
      * Creates a new ascending-order sort key for the provided JSON field.
@@ -36,7 +44,7 @@ public final class SortKey {
      * @throws IllegalArgumentException
      *             If {@code field} is not a valid JSON pointer.
      */
-    public static SortKey ascendingOrder(String field) {
+    public static SortKey ascendingOrder(final String field) {
         return ascendingOrder(new JsonPointer(field));
     }
 
@@ -46,22 +54,9 @@ public final class SortKey {
      * @param field
      *            The sort key field.
      * @return A new descending-order sort key.
-     * @throws IllegalArgumentException
-     *             If {@code field} is not a valid JSON pointer.
      */
-    public static SortKey descendingOrder(String field) {
-        return descendingOrder(new JsonPointer(field));
-    }
-
-    /**
-     * Creates a new ascending-order sort key for the provided JSON field.
-     *
-     * @param field
-     *            The sort key field.
-     * @return A new ascending-order sort key.
-     */
-    public static SortKey ascendingOrder(JsonPointer field) {
-        return new SortKey(field, true);
+    public static SortKey descendingOrder(final JsonPointer field) {
+        return new SortKey(field, false);
     }
 
     /**
@@ -70,9 +65,11 @@ public final class SortKey {
      * @param field
      *            The sort key field.
      * @return A new descending-order sort key.
+     * @throws IllegalArgumentException
+     *             If {@code field} is not a valid JSON pointer.
      */
-    public static SortKey descendingOrder(JsonPointer field) {
-        return new SortKey(field, false);
+    public static SortKey descendingOrder(final String field) {
+        return descendingOrder(new JsonPointer(field));
     }
 
     /**
@@ -83,11 +80,15 @@ public final class SortKey {
      *            The sort key to be reversed.
      * @return The reversed sort key.
      */
-    public static SortKey reverseOrder(SortKey key) {
+    public static SortKey reverseOrder(final SortKey key) {
         return new SortKey(key.field, !key.isAscendingOrder);
     }
 
-    private SortKey(JsonPointer field, boolean isAscendingOrder) {
+    private final JsonPointer field;
+
+    private final boolean isAscendingOrder;
+
+    private SortKey(final JsonPointer field, final boolean isAscendingOrder) {
         this.field = field;
         this.isAscendingOrder = isAscendingOrder;
     }
@@ -116,7 +117,7 @@ public final class SortKey {
      * {@inheritDoc}
      */
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append(isAscendingOrder ? '+' : '-');
         builder.append(field);
         return builder.toString();

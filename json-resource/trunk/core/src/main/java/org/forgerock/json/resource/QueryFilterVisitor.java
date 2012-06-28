@@ -1,27 +1,17 @@
 /*
- * CDDL HEADER START
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
  *
- * The contents of this file are subject to the terms of the
- * Common Development and Distribution License, Version 1.0 only
- * (the "License").  You may not use this file except in compliance
- * with the License.
+ * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+ * specific language governing permission and limitations under the License.
  *
- * You can obtain a copy of the license at legal-notices/CDDLv1_0.txt
- * or http://forgerock.org/license/CDDLv1.0.html.
- * See the License for the specific language governing permissions
- * and limitations under the License.
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
  *
- * When distributing Covered Code, include this CDDL HEADER in each
- * file and include the License file at legal-notices/CDDLv1_0.txt.
- * If applicable, add the following below this CDDL HEADER, with the
- * fields enclosed by brackets "[]" replaced with your own identifying
- * information:
- *      Portions Copyright [yyyy] [name of copyright owner]
- *
- * CDDL HEADER END
- *
- *
- *      Copyright 2009 Sun Microsystems, Inc.
+ * Copyright © 2012 ForgeRock AS. All rights reserved.
  */
 
 package org.forgerock.json.resource;
@@ -50,17 +40,6 @@ import org.forgerock.json.fluent.JsonPointer;
 public interface QueryFilterVisitor<R, P> {
 
     /**
-     * Visits a boolean literal filter.
-     *
-     * @param p
-     *            A visitor specified parameter.
-     * @param value
-     *            The boolean literal value.
-     * @return Returns a visitor specified result.
-     */
-    R visitBooleanLiteralFilter(P p, boolean value);
-
-    /**
      * Visits an {@code and} filter.
      * <p>
      * <b>Implementation note</b>: for the purposes of matching, an empty
@@ -75,40 +54,44 @@ public interface QueryFilterVisitor<R, P> {
     R visitAndFilter(P p, List<QueryFilter> subFilters);
 
     /**
-     * Visits a {@code not} filter.
+     * Visits a boolean literal filter.
      *
      * @param p
      *            A visitor specified parameter.
-     * @param subFilter
-     *            The sub-filter.
+     * @param value
+     *            The boolean literal value.
      * @return Returns a visitor specified result.
      */
-    R visitNotFilter(P p, QueryFilter subFilter);
+    R visitBooleanLiteralFilter(P p, boolean value);
 
     /**
-     * Visits an {@code or} filter.
-     * <p>
-     * <b>Implementation note</b>: for the purposes of matching, an empty
-     * sub-filter list should always evaluate to {@code false}.
-     *
-     * @param p
-     *            A visitor specified parameter.
-     * @param subFilters
-     *            The unmodifiable list of sub-filters.
-     * @return Returns a visitor specified result.
-     */
-    R visitOrFilter(P p, List<QueryFilter> subFilters);
-
-    /**
-     * Visits a {@code present} filter.
+     * Visits a {@code equality} filter.
      *
      * @param p
      *            A visitor specified parameter.
      * @param field
      *            A pointer to the field within JSON resource to be compared.
+     * @param valueAssertion
+     *            The value assertion.
      * @return Returns a visitor specified result.
      */
-    R visitPresentFilter(P p, JsonPointer field);
+    R visitEqualsFilter(P p, JsonPointer field, Object valueAssertion);
+
+    /**
+     * Visits a {@code comparison} filter.
+     *
+     * @param p
+     *            A visitor specified parameter.
+     * @param field
+     *            A pointer to the field within JSON resource to be compared.
+     * @param matchingRuleId
+     *            The ID of the matching rule to be used for performing the
+     *            comparison.
+     * @param valueAssertion
+     *            The value assertion.
+     * @return Returns a visitor specified result.
+     */
+    R visitExtendedMatchFilter(P p, JsonPointer field, String matchingRuleId, Object valueAssertion);
 
     /**
      * Visits a {@code greater than} filter.
@@ -163,32 +146,39 @@ public interface QueryFilterVisitor<R, P> {
     R visitLessThanOrEqualToFilter(P p, JsonPointer field, Object valueAssertion);
 
     /**
-     * Visits a {@code equality} filter.
+     * Visits a {@code not} filter.
      *
      * @param p
      *            A visitor specified parameter.
-     * @param field
-     *            A pointer to the field within JSON resource to be compared.
-     * @param valueAssertion
-     *            The value assertion.
+     * @param subFilter
+     *            The sub-filter.
      * @return Returns a visitor specified result.
      */
-    R visitEqualsFilter(P p, JsonPointer field, Object valueAssertion);
+    R visitNotFilter(P p, QueryFilter subFilter);
 
     /**
-     * Visits a {@code comparison} filter.
+     * Visits an {@code or} filter.
+     * <p>
+     * <b>Implementation note</b>: for the purposes of matching, an empty
+     * sub-filter list should always evaluate to {@code false}.
+     *
+     * @param p
+     *            A visitor specified parameter.
+     * @param subFilters
+     *            The unmodifiable list of sub-filters.
+     * @return Returns a visitor specified result.
+     */
+    R visitOrFilter(P p, List<QueryFilter> subFilters);
+
+    /**
+     * Visits a {@code present} filter.
      *
      * @param p
      *            A visitor specified parameter.
      * @param field
      *            A pointer to the field within JSON resource to be compared.
-     * @param matchingRuleId
-     *            The ID of the matching rule to be used for performing the
-     *            comparison.
-     * @param valueAssertion
-     *            The value assertion.
      * @return Returns a visitor specified result.
      */
-    R visitExtendedMatchFilter(P p, JsonPointer field, String matchingRuleId, Object valueAssertion);
+    R visitPresentFilter(P p, JsonPointer field);
 
 }

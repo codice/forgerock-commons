@@ -11,55 +11,55 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
- * Copyright © 2011 ForgeRock AS. All rights reserved.
+ * Copyright © 2012 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.resource.exception;
-
+package org.forgerock.json.resource.exception;
 
 /**
- * An exception that is thrown during a operation on a resource when the
- * requested operation is malformed.
- * 
- * 
+ * An exception that is thrown during an operation on a resource when the
+ * resource does not implement/support the feature to fulfill the request.
  */
-public class BadRequestException extends ResourceException {
+public class NotSupportedException extends ResourceException {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Constructs a new exception with {@code null} as its detail message.
      */
-    public BadRequestException() {
-        super(ResourceException.BAD_REQUEST);
+    public NotSupportedException() {
+        super(ResourceException.NOT_SUPPORTED);
     }
 
     /**
      * Constructs a new exception with the specified detail message.
-     * 
+     *
      * @param message
+     *            The detail message.
      */
-    public BadRequestException(final String message) {
-        super(ResourceException.BAD_REQUEST, message);
+    public NotSupportedException(final String message) {
+        super(ResourceException.NOT_SUPPORTED, message);
     }
 
     /**
      * Constructs a new exception with the specified detail message and cause.
-     * 
+     *
      * @param message
+     *            The detail message.
      * @param cause
+     *            The exception which caused this exception to be thrown.
      */
-    public BadRequestException(final String message, final Throwable cause) {
-        super(ResourceException.BAD_REQUEST, message, cause);
+    public NotSupportedException(final String message, final Throwable cause) {
+        super(ResourceException.NOT_SUPPORTED, message, cause);
     }
 
     /**
      * Constructs a new exception with the specified cause.
-     * 
+     *
      * @param cause
+     *            The exception which caused this exception to be thrown.
      */
-    public BadRequestException(final Throwable cause) {
-        super(ResourceException.BAD_REQUEST, cause);
+    public NotSupportedException(final Throwable cause) {
+        super(ResourceException.NOT_SUPPORTED, cause);
     }
-
 }

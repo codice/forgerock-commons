@@ -14,46 +14,59 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.resource.exception;
+package org.forgerock.json.resource.exception;
 
 // JSON Resource
 
 /**
- * An exception that is thrown during an operation on a resource when the server
- * encountered an unexpected condition which prevented it from fulfilling the
- * request.
- * 
- * 
+ * An exception that is thrown during a operation on a resource when such an
+ * operation would result in a conflict. For example: when a patch conflicts
+ * with the object state. For MVCC version required/failed failures use those
+ * specific exceptions instead,
+ *
+ * @see PreconditionFailedException
+ * @see PreconditionRequiredException
  */
-public class InternalServerErrorException extends ResourceException {
+public class ConflictException extends ResourceException {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Constructs a new exception with {@code null} as its detail message.
      */
-    public InternalServerErrorException() {
-        super(ResourceException.INTERNAL_ERROR);
+    public ConflictException() {
+        super(ResourceException.CONFLICT);
     }
 
     /**
      * Constructs a new exception with the specified detail message.
+     *
+     * @param message
+     *            The detail message.
      */
-    public InternalServerErrorException(final String message) {
-        super(ResourceException.INTERNAL_ERROR, message);
+    public ConflictException(final String message) {
+        super(ResourceException.CONFLICT, message);
     }
 
     /**
      * Constructs a new exception with the specified detail message and cause.
+     *
+     * @param message
+     *            The detail message.
+     * @param cause
+     *            The exception which caused this exception to be thrown.
      */
-    public InternalServerErrorException(final String message, final Throwable cause) {
-        super(ResourceException.INTERNAL_ERROR, message, cause);
+    public ConflictException(final String message, final Throwable cause) {
+        super(ResourceException.CONFLICT, message, cause);
     }
 
     /**
      * Constructs a new exception with the specified cause.
+     *
+     * @param cause
+     *            The exception which caused this exception to be thrown.
      */
-    public InternalServerErrorException(final Throwable cause) {
-        super(ResourceException.INTERNAL_ERROR, cause);
+    public ConflictException(final Throwable cause) {
+        super(ResourceException.CONFLICT, cause);
     }
 }

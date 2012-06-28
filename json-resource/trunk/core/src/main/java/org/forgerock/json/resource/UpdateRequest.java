@@ -28,68 +28,6 @@ import org.forgerock.json.fluent.JsonValue;
 public interface UpdateRequest extends Request {
 
     /**
-     * Returns the expected version information associated with the JSON
-     * resource to be updated. Version information can be used in order to
-     * implement multi-version concurrency control (MVCC).
-     * <p>
-     * The returned version information may be {@code null} indicating that the
-     * client does not care if the resource has been modified concurrently. If
-     * the version information is non-{@code null}, and it does not match the
-     * current version of the targeted JSON resource, then the update request
-     * will be rejected by the provider.
-     *
-     * @return The expected version information associated with the JSON
-     *         resource to be updated.
-     */
-    String getRevision();
-
-    /**
-     * Sets the expected version information associated with the JSON resource
-     * to be updated. Version information can be used in order to implement
-     * multi-version concurrency control (MVCC).
-     * <p>
-     * The provided version information may be {@code null} indicating that the
-     * client does not care if the resource has been modified concurrently. If
-     * the version information is non-{@code null}, and it does not match the
-     * current version of the targeted JSON resource, then the update request
-     * will be rejected by the provider.
-     *
-     * @param version
-     *            The expected version information associated with the JSON
-     *            resource to be updated.
-     * @return This patch request.
-     * @throws UnsupportedOperationException
-     *             If this update request does not permit changes to the version
-     *             information.
-     */
-    UpdateRequest setRevision(String version);
-
-    /**
-     * Returns the new content of the JSON resource to be replaced.
-     *
-     * @return The new content of the JSON resource to be replaced.
-     */
-    JsonValue getNewContent();
-
-    /**
-     * Sets the new content of the JSON resource to be replaced.
-     *
-     * @param content
-     *            The new content of the JSON resource to be replaced.
-     * @return This update request.
-     * @throws UnsupportedOperationException
-     *             If this update request does not permit changes to the
-     *             content.
-     */
-    UpdateRequest setNewContent(JsonValue content);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    List<JsonPointer> getFieldFilters();
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -111,7 +49,7 @@ public interface UpdateRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    UpdateRequest setEndPoint(String path);
+    List<JsonPointer> getFieldFilters();
 
     /**
      * {@inheritDoc}
@@ -120,8 +58,70 @@ public interface UpdateRequest extends Request {
     String getId();
 
     /**
+     * Returns the new content of the JSON resource to be replaced.
+     *
+     * @return The new content of the JSON resource to be replaced.
+     */
+    JsonValue getNewContent();
+
+    /**
+     * Returns the expected version information associated with the JSON
+     * resource to be updated. Version information can be used in order to
+     * implement multi-version concurrency control (MVCC).
+     * <p>
+     * The returned version information may be {@code null} indicating that the
+     * client does not care if the resource has been modified concurrently. If
+     * the version information is non-{@code null}, and it does not match the
+     * current version of the targeted JSON resource, then the update request
+     * will be rejected by the provider.
+     *
+     * @return The expected version information associated with the JSON
+     *         resource to be updated.
+     */
+    String getRevision();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    UpdateRequest setEndPoint(String path);
+
+    /**
      * {@inheritDoc}
      */
     @Override
     UpdateRequest setId(String id);
+
+    /**
+     * Sets the new content of the JSON resource to be replaced.
+     *
+     * @param content
+     *            The new content of the JSON resource to be replaced.
+     * @return This update request.
+     * @throws UnsupportedOperationException
+     *             If this update request does not permit changes to the
+     *             content.
+     */
+    UpdateRequest setNewContent(JsonValue content);
+
+    /**
+     * Sets the expected version information associated with the JSON resource
+     * to be updated. Version information can be used in order to implement
+     * multi-version concurrency control (MVCC).
+     * <p>
+     * The provided version information may be {@code null} indicating that the
+     * client does not care if the resource has been modified concurrently. If
+     * the version information is non-{@code null}, and it does not match the
+     * current version of the targeted JSON resource, then the update request
+     * will be rejected by the provider.
+     *
+     * @param version
+     *            The expected version information associated with the JSON
+     *            resource to be updated.
+     * @return This patch request.
+     * @throws UnsupportedOperationException
+     *             If this update request does not permit changes to the version
+     *             information.
+     */
+    UpdateRequest setRevision(String version);
 }

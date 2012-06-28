@@ -16,7 +16,7 @@
 
 package org.forgerock.json.resource;
 
-import org.forgerock.resource.exception.ResourceException;
+import org.forgerock.json.resource.exception.ResourceException;
 
 /**
  * A completion handler for consuming the results of a query request.
@@ -32,6 +32,8 @@ import org.forgerock.resource.exception.ResourceException;
  * handlers.
  */
 public interface QueryResultHandler extends ResultHandler<Void> {
+    // FIXME: need to return a result containing the paged results cookie.
+
     /**
      * {@inheritDoc}
      */

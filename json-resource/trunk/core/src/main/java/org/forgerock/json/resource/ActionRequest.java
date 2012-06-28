@@ -28,6 +28,27 @@ import org.forgerock.json.fluent.JsonValue;
 public interface ActionRequest extends Request {
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    ActionRequest addFieldFilter(JsonPointer... fields);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    ActionRequest addFieldFilter(String... fields);
+
+    /**
+     * Returns the identifier of the type of operation to be performed by this
+     * action request.
+     *
+     * @return The identifier of the type of operation to be performed by this
+     *         action request.
+     */
+    String getActionId();
+
+    /**
      * Returns the additional parameters which should be used to control the
      * behavior of this action request. The returned map may be modified if
      * permitted by this action request.
@@ -36,6 +57,46 @@ public interface ActionRequest extends Request {
      *         behavior of this action request (never {@code null}).
      */
     Map<String, String> getAdditionalActionParameters();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getEndPoint();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    List<JsonPointer> getFieldFilters();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getId();
+
+    /**
+     * Returns the content of this action request. The structure of the content
+     * is defined by the action.
+     *
+     * @return The content of this action request.
+     */
+    JsonValue getValue();
+
+    /**
+     * Sets the identifier of the type of operation to be performed by this
+     * action request.
+     *
+     * @param id
+     *            The identifier of the type of operation to be performed by
+     *            this action request.
+     * @return This action request.
+     * @throws UnsupportedOperationException
+     *             If this action request does not permit changes to the action
+     *             ID.
+     */
+    ActionRequest setActionId(String id);
 
     /**
      * Sets an additional parameter which should be used to control the behavior
@@ -53,12 +114,16 @@ public interface ActionRequest extends Request {
     ActionRequest setAdditionalActionParameter(String name, String value);
 
     /**
-     * Returns the content of this action request. The structure of the content
-     * is defined by the action.
-     *
-     * @return The content of this action request.
+     * {@inheritDoc}
      */
-    JsonValue getValue();
+    @Override
+    ActionRequest setEndPoint(String path);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    ActionRequest setId(String id);
 
     /**
      * Sets the content of this action request. The structure of the content is
@@ -72,69 +137,4 @@ public interface ActionRequest extends Request {
      *             content.
      */
     ActionRequest setValue(JsonValue value);
-
-    /**
-     * Returns the identifier of the type of operation to be performed by this
-     * action request.
-     *
-     * @return The identifier of the type of operation to be performed by this
-     *         action request.
-     */
-    String getActionId();
-
-    /**
-     * Sets the identifier of the type of operation to be performed by this
-     * action request.
-     *
-     * @param id
-     *            The identifier of the type of operation to be performed by
-     *            this action request.
-     * @return This action request.
-     * @throws UnsupportedOperationException
-     *             If this action request does not permit changes to the action
-     *             ID.
-     */
-    ActionRequest setActionId(String id);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    List<JsonPointer> getFieldFilters();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    ActionRequest addFieldFilter(JsonPointer... fields);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    ActionRequest addFieldFilter(String... fields);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    String getEndPoint();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    ActionRequest setEndPoint(String path);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    String getId();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    ActionRequest setId(String id);
 }

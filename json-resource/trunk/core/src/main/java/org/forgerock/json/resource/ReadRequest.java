@@ -29,12 +29,6 @@ public interface ReadRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    List<JsonPointer> getFieldFilters();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     ReadRequest addFieldFilter(JsonPointer... fields);
 
     /**
@@ -53,13 +47,19 @@ public interface ReadRequest extends Request {
      * {@inheritDoc}
      */
     @Override
-    ReadRequest setEndPoint(String path);
+    List<JsonPointer> getFieldFilters();
 
     /**
      * {@inheritDoc}
      */
     @Override
     String getId();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    ReadRequest setEndPoint(String path);
 
     /**
      * {@inheritDoc}

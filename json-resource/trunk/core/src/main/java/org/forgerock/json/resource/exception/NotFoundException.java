@@ -14,46 +14,53 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.resource.exception;
+package org.forgerock.json.resource.exception;
 
 // JSON Resource
 
 /**
- * An exception that is thrown during a operation on a resource set when the
- * specified resource version (revision) does not match the version provided.
- * 
- * 
- * 
+ * An exception that is thrown when a specified resource cannot be found.
  */
-public class PreconditionRequiredException extends ResourceException {
+public class NotFoundException extends ResourceException {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Constructs a new exception with {@code null} as its detail message.
      */
-    public PreconditionRequiredException() {
-        super(ResourceException.VERSION_MISMATCH);
+    public NotFoundException() {
+        super(ResourceException.NOT_FOUND);
     }
 
     /**
      * Constructs a new exception with the specified detail message.
+     *
+     * @param message
+     *            The detail message.
      */
-    public PreconditionRequiredException(final String message) {
-        super(ResourceException.VERSION_MISMATCH, message);
+    public NotFoundException(final String message) {
+        super(ResourceException.NOT_FOUND, message);
     }
 
     /**
      * Constructs a new exception with the specified detail message and cause.
+     *
+     * @param message
+     *            The detail message.
+     * @param cause
+     *            The exception which caused this exception to be thrown.
      */
-    public PreconditionRequiredException(final String message, final Throwable cause) {
-        super(ResourceException.VERSION_MISMATCH, message, cause);
+    public NotFoundException(final String message, final Throwable cause) {
+        super(ResourceException.NOT_FOUND, message, cause);
     }
 
     /**
      * Constructs a new exception with the specified cause.
+     *
+     * @param cause
+     *            The exception which caused this exception to be thrown.
      */
-    public PreconditionRequiredException(final Throwable cause) {
-        super(ResourceException.VERSION_MISMATCH, cause);
+    public NotFoundException(final Throwable cause) {
+        super(ResourceException.NOT_FOUND, cause);
     }
 }

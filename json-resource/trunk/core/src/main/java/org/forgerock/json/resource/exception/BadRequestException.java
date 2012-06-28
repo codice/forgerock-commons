@@ -14,56 +14,53 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.resource.exception;
-
+package org.forgerock.json.resource.exception;
 
 /**
- * An exception that indicates that a failure may be temporary, and that
- * retrying the same request may be able to succeed in the future.
- * 
- * Use a specific retryable sub-type if available.
- * 
- * @see PermanentException for failures that are permanent in nature instead.
- * 
- * 
+ * An exception that is thrown during a operation on a resource when the
+ * requested operation is malformed.
  */
-public class RetryableException extends ResourceException {
+public class BadRequestException extends ResourceException {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Constructs a new exception with {@code null} as its detail message.
      */
-    // public RetryableException() {
-    // super(ResourceException.BAD_REQUEST);
-    // }
+    public BadRequestException() {
+        super(ResourceException.BAD_REQUEST);
+    }
 
     /**
      * Constructs a new exception with the specified detail message.
-     * 
+     *
      * @param message
+     *            The detail message.
      */
-    // public RetryableException(String message) {
-    // super(ResourceException.BAD_REQUEST, message);
-    // }
-
-    /**
-     * Constructs a new exception with the specified cause.
-     * 
-     * @param cause
-     */
-    // public RetryableException(Throwable cause) {
-    // super(ResourceException.BAD_REQUEST, cause);
-    // }
+    public BadRequestException(final String message) {
+        super(ResourceException.BAD_REQUEST, message);
+    }
 
     /**
      * Constructs a new exception with the specified detail message and cause.
-     * 
+     *
      * @param message
+     *            The detail message.
      * @param cause
+     *            The exception which caused this exception to be thrown.
      */
-    public RetryableException(final int code, final String message, final Throwable cause) {
-        super(code, message, cause);
+    public BadRequestException(final String message, final Throwable cause) {
+        super(ResourceException.BAD_REQUEST, message, cause);
+    }
+
+    /**
+     * Constructs a new exception with the specified cause.
+     *
+     * @param cause
+     *            The exception which caused this exception to be thrown.
+     */
+    public BadRequestException(final Throwable cause) {
+        super(ResourceException.BAD_REQUEST, cause);
     }
 
 }

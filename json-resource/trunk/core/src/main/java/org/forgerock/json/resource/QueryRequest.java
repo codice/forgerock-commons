@@ -30,6 +30,50 @@ public interface QueryRequest extends Request {
     // TODO: paged results.
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    QueryRequest addFieldFilter(JsonPointer... fields);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    QueryRequest addFieldFilter(String... fields);
+
+    /**
+     * Adds one or more sort keys which will be used for ordering the JSON
+     * resources returned by this query request.
+     *
+     * @param keys
+     *            The sort keys which will be used for ordering the JSON
+     *            resources returned by this query request.
+     * @return This query request.
+     * @throws UnsupportedOperationException
+     *             If this query request does not permit changes to the sort
+     *             keys.
+     */
+    QueryRequest addSortKey(SortKey... keys);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getEndPoint();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    List<JsonPointer> getFieldFilters();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    String getId();
+
+    /**
      * Returns the additional parameters which should be used to control the
      * behavior of this query request. The returned map may be modified if
      * permitted by this query request.
@@ -38,6 +82,34 @@ public interface QueryRequest extends Request {
      *         behavior of this query request (never {@code null}).
      */
     Map<String, String> getQueryAdditionalParameters();
+
+    /**
+     * Returns the query filter which will be used for selecting which JSON
+     * resources will be returned.
+     *
+     * @return The query filter which will be used for selecting which JSON
+     *         resources will be returned, or {@code null} if all JSON resources
+     *         should be returned.
+     */
+    QueryFilter getQueryFilter();
+
+    /**
+     * Returns the query identifier for pre-defined queries.
+     *
+     * @return The query identifier for pre-defined queries, or {@code null} if
+     *         a pre-defined query is not to be used.
+     */
+    String getQueryId();
+
+    /**
+     * Returns the sort keys which should be used for ordering the JSON
+     * resources returned by this query request. The returned list may be
+     * modified if permitted by this query request.
+     *
+     * @return The sort keys which should be used for ordering the JSON
+     *         resources returned by this query request (never {@code null}).
+     */
+    List<SortKey> getSortKeys();
 
     /**
      * Sets an additional parameter which should be used to control the behavior
@@ -55,35 +127,16 @@ public interface QueryRequest extends Request {
     QueryRequest setAdditionalQueryParameter(String name, String value);
 
     /**
-     * Returns the query identifier for pre-defined queries.
-     *
-     * @return The query identifier for pre-defined queries, or {@code null} if
-     *         a pre-defined query is not to be used.
+     * {@inheritDoc}
      */
-    String getQueryId();
+    @Override
+    QueryRequest setEndPoint(String path);
 
     /**
-     * Sets the query identifier for pre-defined queries.
-     *
-     * @param id
-     *            The query identifier for pre-defined queries, or {@code null}
-     *            if a pre-defined query is not to be used.
-     * @return This query request.
-     * @throws UnsupportedOperationException
-     *             If this query request does not permit changes to the query
-     *             identifier.
+     * {@inheritDoc}
      */
-    QueryRequest setQueryId(String id);
-
-    /**
-     * Returns the query filter which will be used for selecting which JSON
-     * resources will be returned.
-     *
-     * @return The query filter which will be used for selecting which JSON
-     *         resources will be returned, or {@code null} if all JSON resources
-     *         should be returned.
-     */
-    QueryFilter getQueryFilter();
+    @Override
+    QueryRequest setId(String id);
 
     /**
      * Sets the query filter which will be used for selecting which JSON
@@ -101,68 +154,15 @@ public interface QueryRequest extends Request {
     QueryRequest setQueryFilter(QueryFilter filter);
 
     /**
-     * Adds one or more sort keys which will be used for ordering the JSON
-     * resources returned by this query request.
+     * Sets the query identifier for pre-defined queries.
      *
-     * @param keys
-     *            The sort keys which will be used for ordering the JSON
-     *            resources returned by this query request.
+     * @param id
+     *            The query identifier for pre-defined queries, or {@code null}
+     *            if a pre-defined query is not to be used.
      * @return This query request.
      * @throws UnsupportedOperationException
-     *             If this query request does not permit changes to the sort
-     *             keys.
+     *             If this query request does not permit changes to the query
+     *             identifier.
      */
-    QueryRequest addSortKey(SortKey... keys);
-
-    /**
-     * Returns the sort keys which should be used for ordering the JSON
-     * resources returned by this query request. The returned list may be
-     * modified if permitted by this query request.
-     *
-     * @return The sort keys which should be used for ordering the JSON
-     *         resources returned by this query request (never {@code null}).
-     */
-    List<SortKey> getSortKeys();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    List<JsonPointer> getFieldFilters();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    QueryRequest addFieldFilter(JsonPointer... fields);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    QueryRequest addFieldFilter(String... fields);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    String getEndPoint();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    QueryRequest setEndPoint(String path);
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    String getId();
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    QueryRequest setId(String id);
+    QueryRequest setQueryId(String id);
 }

@@ -14,15 +14,11 @@
  * Copyright © 2011 ForgeRock AS. All rights reserved.
  */
 
-package org.forgerock.resource.exception;
-
+package org.forgerock.json.resource.exception;
 
 /**
  * An exception that is thrown when access to a resource is forbidden during an
  * operation on an resource.
- * 
- * 
- * 
  */
 public class ForbiddenException extends ResourceException {
 
@@ -37,6 +33,9 @@ public class ForbiddenException extends ResourceException {
 
     /**
      * Constructs a new exception with the specified detail message.
+     *
+     * @param message
+     *            The detail message.
      */
     public ForbiddenException(final String message) {
         super(ResourceException.FORBIDDEN, message);
@@ -44,6 +43,11 @@ public class ForbiddenException extends ResourceException {
 
     /**
      * Constructs a new exception with the specified detail message and cause.
+     *
+     * @param message
+     *            The detail message.
+     * @param cause
+     *            The exception which caused this exception to be thrown.
      */
     public ForbiddenException(final String message, final Throwable cause) {
         super(ResourceException.FORBIDDEN, message, cause);
@@ -51,6 +55,9 @@ public class ForbiddenException extends ResourceException {
 
     /**
      * Constructs a new exception with the specified cause.
+     *
+     * @param cause
+     *            The exception which caused this exception to be thrown.
      */
     public ForbiddenException(final Throwable cause) {
         super(ResourceException.FORBIDDEN, cause);
