@@ -44,11 +44,8 @@ import org.forgerock.json.fluent.JsonValue;
  * Asynchronous implementations must take care to eventually set a result or a
  * failure on the result handler; i.e. they must catch all exceptions and set a
  * failure.
- *
- * @param <C>
- *            The type of request context handled by this resource provider
  */
-public interface ResourceProvider<C extends RequestContext> {
+public interface ResourceProvider {
 
     /**
      * Handles performing an action on a resource, and optionally returns an
@@ -78,7 +75,7 @@ public interface ResourceProvider<C extends RequestContext> {
      * @param handler
      *            The result handler to be notified on completion.
      */
-    void action(C context, ActionRequest request, ResultHandler<JsonValue> handler);
+    void action(Context context, ActionRequest request, ResultHandler<JsonValue> handler);
 
     /**
      * Adds a new JSON resource, invoking the provided result handler upon
@@ -105,7 +102,7 @@ public interface ResourceProvider<C extends RequestContext> {
      * @param handler
      *            The result handler to be notified on completion.
      */
-    void create(C context, CreateRequest request, ResultHandler<Resource> handler);
+    void create(Context context, CreateRequest request, ResultHandler<Resource> handler);
 
     /**
      * Deletes a JSON resource, invoking the provided result handler upon
@@ -132,7 +129,7 @@ public interface ResourceProvider<C extends RequestContext> {
      * @param handler
      *            The result handler to be notified on completion.
      */
-    void delete(C context, DeleteRequest request, ResultHandler<Resource> handler);
+    void delete(Context context, DeleteRequest request, ResultHandler<Resource> handler);
 
     /**
      * Updates a JSON resource by applying a set of changes to its existing
@@ -162,7 +159,7 @@ public interface ResourceProvider<C extends RequestContext> {
      * @param handler
      *            The result handler to be notified on completion.
      */
-    void patch(C context, PatchRequest request, ResultHandler<Resource> handler);
+    void patch(Context context, PatchRequest request, ResultHandler<Resource> handler);
 
     /**
      * Searches for all JSON resources matching a user specified set of
@@ -186,7 +183,7 @@ public interface ResourceProvider<C extends RequestContext> {
      * @param handler
      *            The query result handler to be notified on completion.
      */
-    void query(C context, QueryRequest request, QueryResultHandler handler);
+    void query(Context context, QueryRequest request, QueryResultHandler handler);
 
     /**
      * Reads a JSON resource, invoking the provided result handler upon
@@ -210,7 +207,7 @@ public interface ResourceProvider<C extends RequestContext> {
      * @param handler
      *            The result handler to be notified on completion.
      */
-    void read(C context, ReadRequest request, ResultHandler<Resource> handler);
+    void read(Context context, ReadRequest request, ResultHandler<Resource> handler);
 
     /**
      * Updates a JSON resource by replacing its existing content with new
@@ -238,6 +235,6 @@ public interface ResourceProvider<C extends RequestContext> {
      * @param handler
      *            The result handler to be notified on completion.
      */
-    void update(C context, UpdateRequest request, ResultHandler<Resource> handler);
+    void update(Context context, UpdateRequest request, ResultHandler<Resource> handler);
 
 }
