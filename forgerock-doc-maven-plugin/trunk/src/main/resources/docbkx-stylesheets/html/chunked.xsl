@@ -92,7 +92,7 @@
  <xsl:param name="use.id.as.filename" select="1" />
 
  <xsl:param name="generate.toc">
-  appendix  nop
+  appendix  toc,title
   article/appendix  nop
   article   nop
   book      toc,title
@@ -107,10 +107,11 @@
   sect3     nop
   sect4     nop
   sect5     nop
-  section   nop
+  section   toc
   set       toc,title
  </xsl:param>
- <!-- <xsl:param name="toc.section.depth" select="1" /> -->
+ <xsl:param name="generate.section.toc.level" select="1" />
+ <xsl:param name="toc.section.depth" select="2" />
  <xsl:param name="toc.max.depth" select="1" />
  <xsl:param name="generate.meta.abstract" select="1" />
 

@@ -22,6 +22,28 @@ $(document).ready(function() {
       "<div class=\"flat nodisplay\" title=\"Click [+] to wrap long lines.\">"
         + plus + $(this).html().replace(/(\n|\r\n) /g," ") + "</div>"
     )});
+
+  /*
+   * COMMWEB-73: Make it easier to copy links to anchors in the HTML core docs
+   *
+   * On mouseover, prepend a ↪ to titles which links to the element.
+   *
+   * This code works for elements that are class="title". To affect procedures
+   * as well for example, change $(".title") to $(".title, .procedure"). Then
+   * also change the code to insert the ↪ in the procedure title, rather than
+   * outside the entire procedure, which is a block. The same applies to
+   * example and probably other block-formatted elements.
+   */
+  $(".title").each(function() {
+    var href = $(this).children("a").attr("name");
+    $(this).prepend('<a href=\"#' + href
+      + '\" class=\"showlink\" style=\"display: none;\">&#x021AA; </a>');
+    $(this).mouseenter(function() {
+      $(this).children('a.showlink').show();
+    }).mouseleave(function() {
+      $(this).children('a.showlink').hide();
+    });
+  });
 });
 
 /*
