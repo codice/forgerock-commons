@@ -362,7 +362,7 @@ public class JsonServerResource extends ExtendedServerResource {
                     this.ref.setPath(this.ref.getPath() + '/');
                     this.id = this.id + '/'; // create new resource within collection
                 }
-                representation = create(this.id, requireEntity(entityValue(entity)));
+                representation = create(this.id, requireEntity(value));
             } else { // action
                 representation = toRepresentation(accessor.action(this.id, getQueryParams(), entityValue(entity)));
                 if (representation == null || representation instanceof EmptyRepresentation) {
