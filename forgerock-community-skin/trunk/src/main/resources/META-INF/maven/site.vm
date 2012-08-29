@@ -360,18 +360,16 @@
     </style>
     <link rel="stylesheet" href="$relativePath/css/print.css" type="text/css" media="print" />
     <script type="text/javascript" src="$relativePath/js/jquery/jquery-1.5.1.min.js"></script>
-    #if ($decoration.custom && $decoration.custom.getChild("siteSearchFQDN"))
+    <!-- Google custom search (site:forgerock.org) -->
     <script type="text/javascript">
-      function clearTextField(srchForm) {
-        if (srchForm.q.value == "Google Search")
-          srchForm.q.value = ""
-      }
-      function replaceTextIfEmpty(srchForm) {
-        if (srchForm.q.value == "")
-          srchForm.q.value = "Google Search"
-      }
+      (function() {
+        var cx = '014235704172142694464:-bjfug5znh0';
+        var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
+        gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
+      })();
     </script>
-    #end
     #foreach( $author in $authors )
       <meta name="author" content="$author" />
     #end
@@ -427,17 +425,6 @@
       </div>
     </div>
     <div id="leftColumn">
-      #if ($decoration.custom && $decoration.custom.getChild("siteSearchFQDN"))
-      #set ($siteSearchFQDN = $decoration.custom.getChild("siteSearchFQDN").getValue())
-      <div id="siteSearchBox" style="padding:2px;width:11em;">
-        <form method="get" action="http://www.google.com/search">
-          <input type="text" name="q" size="24" maxlength="255"
-           value="Google Search" onFocus="clearTextField(this.form)"
-           onBlur="replaceTextIfEmpty(this.form)"/>
-          <input type="hidden" name="sitesearch" value="${siteSearchFQDN}" />
-        </form>
-      </div>
-      #end
       <div id="navcolumn">
        #publishDate( "navigation-top" $decoration.publishDate $decoration.version )
        #mainMenu( $decoration.body.menus )
@@ -446,6 +433,9 @@
       </div>
     </div>
     <div id="bodyColumn">
+      <div id="search" style="float: right; width: 384px;">
+        <gcse:searchbox-only></gcse:searchbox-only>
+      </div>
       <div id="contentBox">
         $bodyContent
       </div>
