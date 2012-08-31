@@ -432,6 +432,8 @@
   <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="d:info/d:authorgroup"/>
   <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="d:bookinfo/d:author"/>
   <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="d:info/d:author"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="d:bookinfo/d:releaseinfo"/>
+  <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="d:info/d:releaseinfo"/>
   <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="d:bookinfo/d:date"/>
   <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="d:info/d:date"/>
 </xsl:template>
@@ -540,8 +542,20 @@
 </fo:block>
 </xsl:template>
 
+<xsl:template match="d:releaseinfo" mode="book.titlepage.recto.auto.mode">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.recto.style" font-size="12pt" space-before="9pt" keep-with-next.within-column="always">
+<xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
+</fo:block>
+</xsl:template>
+
 <xsl:template match="d:date" mode="book.titlepage.recto.auto.mode">
-<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.recto.style">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.recto.style" font-size="12pt" space-before="9pt" keep-with-next.within-column="always">
+<xsl:text>Publication date: </xsl:text><xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
+</fo:block>
+</xsl:template>
+
+<xsl:template match="d:pubdate" mode="book.titlepage.recto.auto.mode">
+<fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.recto.style" font-size="12pt" space-before="9pt" keep-with-next.within-column="always">
 <xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>

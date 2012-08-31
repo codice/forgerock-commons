@@ -8,7 +8,7 @@ documentation-related project configuration takes at least two arguments:
 
 *   `<projectName>`: the short name for the project such as OpenAM, OpenDJ,
     or OpenIDM
-*   `<googleAnalyticsId>` to add Google Analytics JavaScript to the HTML
+*   `<googleAnalyticsId>`: to add Google Analytics JavaScript to the HTML
     output
 
 The project then runs two plugin executions:
@@ -129,6 +129,7 @@ turn off draft mode, add a release version, and override the Google Analytics
 ID using the property.
 
      mvn -DisDraftMode=no -DreleaseVersion=1.0.0 -D"gaId=UA-23412190-14" \
+     -D"releaseDate=Software release date: January 1, 1970" \
      clean site org.forgerock.commons:forgerock-doc-maven-plugin:release
 
 ## Notes on Syntax Highlighting

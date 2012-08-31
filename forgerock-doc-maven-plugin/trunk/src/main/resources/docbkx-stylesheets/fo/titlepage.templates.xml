@@ -160,7 +160,12 @@
            because only the first editor generates the list of editors.
       <editor t:predicate="[position() = 1]"/>
       -->
-      <date/>
+      <releaseinfo font-size="&hsize2;"
+        space-before="&hsize2space;"
+        keep-with-next.within-column="always" />
+      <date font-size="&hsize2;"
+        space-before="&hsize2space;"
+        keep-with-next.within-column="always" />
     </t:titlepage-content>
 
   <t:titlepage-content t:side="verso">
