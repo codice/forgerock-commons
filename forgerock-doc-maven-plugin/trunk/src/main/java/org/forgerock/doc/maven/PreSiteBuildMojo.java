@@ -1267,6 +1267,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                                     element(name("include"), "**/"
                                             + getDocumentSrcName())),
                             element(name("validating"), "true"),
+                            element(name("skipUrls"), getSkipLinkCheck()),
                             element(name("xIncludeAware"), "true"),
                             element(name("failOnError"), "false"),
                             element(name("outputFile"), log)),

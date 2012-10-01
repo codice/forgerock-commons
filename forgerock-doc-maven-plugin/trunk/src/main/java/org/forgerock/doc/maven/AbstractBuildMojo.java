@@ -59,6 +59,16 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     private String linkTesterVersion;
 
     /**
+     * Whether the ForgeRock linktester plugin should skip checking that
+     * external URLs are valid. See the {@code skipUrls} parameter of the <a
+     * href="https://github.com/aldaris/docbook-linktester/">linktester
+     * plugin</a>.
+     *
+     * @parameter default-value="false" expression="${skipLinkCheck}"
+     */
+    private String skipLinkCheck;
+
+    /**
      * Short name of the project, such as OpenAM, OpenDJ, OpenIDM.
      *
      * @parameter expression="${projectName}"
@@ -202,6 +212,20 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     /**
      * {@inheritDoc}
      */
+    public String getSkipLinkCheck() {
+        return skipLinkCheck;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSkipLinkCheck(String doLinkCheck) {
+        this.skipLinkCheck = doLinkCheck;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getProjectName() {
         return projectName;
     }
@@ -214,38 +238,28 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * Return the list of formats not to process.
-     *
-     * @return Formats not to process (choices: epub, html, man, pdf, rtf)
+     * {@inheritDoc}
      */
     public List<String> getExcludes() {
         return excludes;
     }
 
     /**
-     * Set the list of formats not to process (epub, html, man, pdf, rtf).
-     *
-     * @param excludedFormats
-     *            List of formats to exclude
+     * {@inheritDoc}
      */
     public void setExcludes(final List<String> excludedFormats) {
         this.excludes = excludedFormats;
     }
 
     /**
-     * Return the format to process.
-     *
-     * @return Format to process (choices: epub, html, man, pdf, rtf)
+     * {@inheritDoc}
      */
     public String getInclude() {
         return include;
     }
 
     /**
-     * Set the format to process.
-     *
-     * @param includedFormat
-     *            Format to include (choices: epub, html, man, pdf, rtf)
+     * {@inheritDoc}
      */
     public void setInclude(String includedFormat) {
         this.include = includedFormat;

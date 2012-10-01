@@ -91,6 +91,11 @@ An example project layout looks like this:
 By default, the plugin checks links found in the DocBook XML source, including
 Olinks. You can find errors in the `target/linktester.err` file.
 
+If you want to skip the checks for external URLs, pass `-DskipLinkCheck=true`
+to Maven, as in the following example:
+
+    mvn -DskipLinkCheck=true clean pre-site
+
 This capability is provided by Peter Major's
 [linktester](https://github.com/aldaris/docbook-linktester) plugin.
 
