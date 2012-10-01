@@ -17,6 +17,7 @@ package org.forgerock.doc.maven;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -111,11 +112,9 @@ public class SiteBuildMojo extends AbstractBuildMojo {
                 throw new MojoExecutionException("No document names found.");
             }
 
-            if (getExcludes() == null) {
-                setExcludes(new ArrayList<String>());
-            }
+            List<String> formats = getOutputFormats();
 
-            if (getExcludes().isEmpty() || !getExcludes().contains("epub")) {
+            if (formats.contains("epub")) {
                 for (String docName : docNames) {
                     String epubDir = FilenameUtils
                             .separatorsToUnix(getDocbkxOutputDirectory()
@@ -129,7 +128,7 @@ public class SiteBuildMojo extends AbstractBuildMojo {
                 }
             }
 
-            if (getExcludes().isEmpty() || !getExcludes().contains("html")) {
+            if (formats.contains("html")) {
                 String htmlDir = FilenameUtils
                         .separatorsToUnix(getDocbkxOutputDirectory().getPath())
                         + "/html/";
@@ -137,7 +136,7 @@ public class SiteBuildMojo extends AbstractBuildMojo {
                         element(name("directory"), htmlDir)));
             }
 
-            if (getExcludes().isEmpty() || !getExcludes().contains("pdf")) {
+            if (formats.contains("pdf")) {
                 String pdfDir = FilenameUtils
                         .separatorsToUnix(getDocbkxOutputDirectory().getPath())
                         + "/pdf/";
@@ -148,7 +147,7 @@ public class SiteBuildMojo extends AbstractBuildMojo {
                                 element(name("include"), "**/*.pdf"))));
             }
 
-            if (getExcludes().isEmpty() || !getExcludes().contains("rtf")) {
+            if (formats.contains("rtf")) {
                 String rtfDir = FilenameUtils
                         .separatorsToUnix(getDocbkxOutputDirectory().getPath())
                         + "/rtf/";

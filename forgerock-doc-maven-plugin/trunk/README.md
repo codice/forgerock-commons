@@ -107,6 +107,22 @@ excludes all formats but HTML from the build.
       <exclude>rtf</exclude>
      </excludes>
 
+## Generating Single-Chapter Output
+
+By default, the plugin generates output for each document whose root is named
+`index.xml`. You can change this by setting `documentSrcName` when you run
+Maven. For example, if you want to produce pre-site output only for a chapter
+named `chap-one.xml`, then you would set `documentSrcName` as follows.
+
+    mvn -DdocumentSrcName=chap-one.xml clean pre-site
+
+If you want only one type of output, then specify that using `include`.
+The following command generates only PDF output for your single chapter.
+
+    mvn -DdocumentSrcName=chap-one.xml -Dinclude=pdf clean pre-site
+
+Formats include `epub`, `html`, `man`, `pdf`, and `rtf`.
+
 ## Expected Results
 
 When you run the plugin with `mvn pre-site`, it builds the output formats,

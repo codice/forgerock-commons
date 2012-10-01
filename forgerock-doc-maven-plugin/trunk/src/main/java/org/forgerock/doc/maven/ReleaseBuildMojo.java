@@ -17,6 +17,7 @@ package org.forgerock.doc.maven;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -180,11 +181,10 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
                 throw new MojoExecutionException("No document names found.");
             }
 
-            if (getExcludes() == null) {
-                setExcludes(new ArrayList<String>());
-            }
 
-            if (getExcludes().isEmpty() || !getExcludes().contains("html")) {
+            List<String> formats = getOutputFormats("html", "pdf");
+
+            if (formats.contains("html")) {
                 String htmlDir = FilenameUtils
                         .separatorsToUnix(getDocbkxOutputDirectory().getPath())
                         + "/html/";
@@ -192,7 +192,7 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
                         element(name("directory"), htmlDir)));
             }
 
-            if (getExcludes().isEmpty() || !getExcludes().contains("pdf")) {
+            if (formats.contains("pdf")) {
                 String pdfDir = FilenameUtils
                         .separatorsToUnix(getDocbkxOutputDirectory().getPath())
                         + "/pdf/";

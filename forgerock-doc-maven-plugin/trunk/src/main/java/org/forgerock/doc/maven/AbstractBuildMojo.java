@@ -15,11 +15,14 @@
 package org.forgerock.doc.maven;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.BuildPluginManager;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
 /**
@@ -73,10 +76,19 @@ abstract class AbstractBuildMojo extends AbstractMojo {
 
     /**
      * Do not process these formats. Choices include: epub, html, man, pdf, rtf.
+     * Do not set both excludes and includes in the same configuration.
      *
      * @parameter
      */
     private List<String> excludes;
+
+    /**
+     * Process only this format. Choices include: epub, html, man, pdf, rtf.
+     * Do not set both excludes and includes in the same configuration.
+     *
+     * @parameter expression="${include}"
+     */
+    private String include;
 
     /**
      * Base directory for DocBook XML source files.
@@ -221,6 +233,25 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
+     * Return the format to process.
+     *
+     * @return Format to process (choices: epub, html, man, pdf, rtf)
+     */
+    public String getInclude() {
+        return include;
+    }
+
+    /**
+     * Set the format to process.
+     *
+     * @param includedFormat
+     *            Format to include (choices: epub, html, man, pdf, rtf)
+     */
+    public void setInclude(String includedFormat) {
+        this.include = includedFormat;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public File getDocbkxSourceDirectory() {
@@ -267,5 +298,47 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      */
     public String getDocumentSrcName() {
         return documentSrcName;
+    }
+
+    /**
+     * Return a list of output formats to generate. If no defaults are
+     * specified, then the default list of formats includes epub, html, man,
+     * pdf, rtf.
+     *
+     * @param defaults
+     *            (Restricted) list of formats to consider. Set this to limit
+     *            the list of output formats. Formats are passed on to the
+     *            plugin as is.
+     * @return List of output formats.
+     */
+    public List<String> getOutputFormats(final String... defaults)
+            throws MojoExecutionException {
+        List<String> formats = Arrays.asList("epub", "html", "man", "pdf", "rtf");
+        if (defaults.length != 0) {                      // Restrict list.
+            formats = Arrays.asList(defaults);
+        }
+
+        if (getExcludes() == null) {
+            setExcludes(new ArrayList<String>());
+        }
+
+        if (getInclude() == null) {
+            setInclude("");
+        }
+
+        if (!getExcludes().isEmpty() && !getInclude().equals("")) {
+            throw new MojoExecutionException("Do not set both <excludes> and"
+                    + "<include> in the same configuration.");
+
+        } else if (!getExcludes().isEmpty()) {          // Exclude formats.
+            for (String format : getExcludes()) {
+                formats.remove(format);
+            }
+        } else if (formats.contains(getInclude())) {    // Include one format.
+            List<String> includes = new ArrayList<String>();
+            includes.add(getInclude());
+            formats = includes;
+        }
+        return formats;
     }
 }

@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -62,12 +63,10 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         getLog().info("Preparing common configuration...");
         ArrayList<MojoExecutor.Element> baseConf = exec.getBaseConfiguration();
 
-        if (getExcludes() == null) {
-            setExcludes(new ArrayList<String>());
-        }
+        List<String> formats = getOutputFormats();
 
         // Build and prepare EPUB for publishing.
-        if (getExcludes().isEmpty() || !getExcludes().contains("epub")) {
+        if (formats.contains("epub")) {
             getLog().info("Building EPUB...");
             exec.buildEPUB(baseConf);
             postProcessEPUB(getDocbkxOutputDirectory().getPath()
@@ -75,7 +74,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         }
 
         // Build and prepare PDF for publishing.
-        if (getExcludes().isEmpty() || !getExcludes().contains("pdf")) {
+        if (formats.contains("pdf")) {
             getLog().info("Building PDF...");
             exec.buildPDF(baseConf);
             postProcessPDF(getDocbkxOutputDirectory().getPath()
@@ -83,7 +82,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         }
 
         // Build and prepare RTF for publishing.
-        if (getExcludes().isEmpty() || !getExcludes().contains("rtf")) {
+        if (formats.contains("rtf")) {
             getLog().info("Building RTF...");
             exec.buildRTF(baseConf);
             postProcessRTF(getDocbkxOutputDirectory().getPath()
@@ -91,13 +90,13 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         }
 
         // Build and prepare man pages for publishing.
-        if (getExcludes().isEmpty() || !getExcludes().contains("man")) {
+        if (formats.contains("man")) {
             getLog().info("Building man pages...");
             exec.buildManpages(baseConf);
         }
 
         // Build and prepare HTML for publishing.
-        if (getExcludes().isEmpty() || !getExcludes().contains("html")) {
+        if (formats.contains("html")) {
             getLog().info("Building single page HTML...");
             exec.buildSingleHTMLOlinkDB(baseConf);
             exec.buildSingleHTML(baseConf);
