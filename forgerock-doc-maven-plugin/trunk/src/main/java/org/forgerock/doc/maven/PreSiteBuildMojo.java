@@ -111,8 +111,10 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         }
 
         // Test links in document source, and generate a report.
-        getLog().info("Running linktester...");
-        exec.testLinks();
+        if (!getRunLinkTester().equalsIgnoreCase("false")) {
+            getLog().info("Running linktester...");
+            exec.testLinks();
+        }
     }
 
     /**

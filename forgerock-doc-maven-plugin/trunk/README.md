@@ -99,6 +99,8 @@ to Maven, as in the following example:
 This capability is provided by Peter Major's
 [linktester](https://github.com/aldaris/docbook-linktester) plugin.
 
+Run linktester at the top level of the project, not in modules. 
+
 ## Excluding Output Formats
 
 To exclude formats from the build, you can use the optional
