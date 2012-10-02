@@ -55,15 +55,17 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         // The Executor is what actually calls other plugins.
         Executor exec = new Executor();
 
+        List<String> formats = getOutputFormats();
+
         // Prepare FOP for printable output, e.g. PDF.
-        getLog().info("Preparing Apache FOP...");
-        exec.prepareFOP();
+        if (formats.contains("pdf") || formats.contains("rtf")) {
+            getLog().info("Preparing Apache FOP...");
+            exec.prepareFOP();
+        }
 
         // Get the common configuration for all output generation.
         getLog().info("Preparing common configuration...");
         ArrayList<MojoExecutor.Element> baseConf = exec.getBaseConfiguration();
-
-        List<String> formats = getOutputFormats();
 
         // Build and prepare EPUB for publishing.
         if (formats.contains("epub")) {
