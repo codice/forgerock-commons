@@ -78,6 +78,7 @@
   
   <xsl:param name="use.extensions" select="1" />
   <xsl:param name="linenumbering.everyNth" select="1" />
+  <xsl:param name="orderedlist.label.width">1.8em</xsl:param>
 
   <xsl:param name="default.table.frame">topbot</xsl:param>
   <xsl:param name="default.table.rules">none</xsl:param>
