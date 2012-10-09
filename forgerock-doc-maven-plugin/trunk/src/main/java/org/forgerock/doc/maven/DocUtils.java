@@ -151,25 +151,6 @@ public final class DocUtils {
     }
 
     /**
-     * Check that the document name contains only letters and dashes.
-     *
-     * @param docName
-     *            Name of the document to check
-     * @return True as long as the document name contains nothing else.
-     */
-    private static boolean isDocNameOk(final String docName) {
-        char[] chars = docName.toCharArray();
-
-        for (char c : chars) {
-            if (!(Character.isLetter(c) || c == '-')) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Returns names of directories that mirror the document names and contain
      * DocBook XML documents to build.
      *
