@@ -116,7 +116,7 @@
 
  <issueManagement>
   <system>Jira</system>
-  <url>https://bugster.forgerock.org/jira/browse/COMMWEB</url>
+  <url>https://bugster.forgerock.org/jira/browse/DOCS</url>
  </issueManagement>
 
  <ciManagement>
