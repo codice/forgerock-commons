@@ -44,6 +44,19 @@ $(document).ready(function() {
       $(this).children('a.showlink').hide();
     });
   });
+
+  /*
+   * DOCS-36: HTML output should wrap large images in links to themselves at
+   *          full size
+   *
+   * It would be cool if when you click (large) images in HTML output, you get
+   * the same effect as right-click &gt; copy image location + new tab &gt;
+   * paste copied image location and go.
+   */
+  $("img").wrap(function() {
+    return "<a target=\"_blank\" href=\"" + $(this).attr('src') + "\" />";
+  });
+
 });
 
 /*
