@@ -51,6 +51,8 @@ define("org/forgerock/commons/ui/user/LoginView", [
                     var expire = new Date();
                     expire.setDate(expire.getDate + 365*20);
                     cookieHelper.setCookie("login", this.$el.find("input[name=login]").val(), expire);
+                } else {
+                    cookieHelper.deleteCookie("login");
                 }
                 
                 eventManager.sendEvent(constants.EVENT_LOGIN_REQUEST, {userName: this.$el.find("input[name=login]").val(), password: this.$el.find("input[name=password]").val()});
@@ -62,7 +64,11 @@ define("org/forgerock/commons/ui/user/LoginView", [
                 validatorsManager.bindValidators(this.$el);
                 
                 var login = cookieHelper.getCookie("login");
-                this.$el.find("input[name=login]").val(login);
+                
+                if(login) {
+                    this.$el.find("input[name=login]").val(login);
+                    this.$el.find("[name=loginRemember]").attr("checked","true");
+                } 
                 
                 if(callback) {
                     callback();
