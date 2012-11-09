@@ -208,7 +208,8 @@ define("org/forgerock/commons/ui/common/util/FormGenerationUtils", [
                 } else {
                     dateFormat = propertyTypeMapping[param].datePattern;
                     date = dateUtil.parseDateString(paramValue, dateFormat);
-                    params[param] = date;
+//                    params[param] = date;
+                    params[param] = "2012-06-30T00:00:00Z";
                 }
             } else if ("long" === typeName) {
                 if (paramValue === '') {
