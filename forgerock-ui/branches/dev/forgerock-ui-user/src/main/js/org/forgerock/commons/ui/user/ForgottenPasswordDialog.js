@@ -123,7 +123,7 @@ define("org/forgerock/commons/ui/user/ForgottenPasswordDialog", [
 
             if (validatorType === "securityAnswer") {
                 
-                if (this.$el.find("input[name=_id]").val()) {
+                if (typeof(msg) === "undefined") {
                     validatorsManager.bindValidators(this.$el, userDelegate.baseEntity + "/" + this.$el.find("input[name=_id]").val(), _.bind(function () {
                         this.$el.find("#fgtnPasswordDiv").show();
                         this.data.height = 400;
@@ -131,7 +131,11 @@ define("org/forgerock/commons/ui/user/ForgottenPasswordDialog", [
                     }, this)); 
                 }
                 else {
+                    this.$el.find(".group-field-errors.validationRules .field-rule").not(":first").remove();
                     this.$el.find("#fgtnPasswordDiv").hide();
+                    this.data.height = 300;
+                    this.resize();
+                    this.$el.find("input[name=_id]").val("");
                 }
                 
             }
