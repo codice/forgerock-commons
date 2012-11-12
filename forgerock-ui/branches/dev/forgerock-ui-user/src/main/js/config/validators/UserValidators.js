@@ -148,21 +148,17 @@ define("config/validators/UserValidators", [
                         return;
                     }
                    
-                    userDelegate.checkUserNameAvailability(v, function(available) {
-                        if(!available) {
-                            callback();
-                            $(input).attr('data-validation-status', 'ok');
-                        } else {
-                            callback("No such user");
-                            $(input).attr('data-validation-status', 'error');
-                        }
-                        
-                        $("input[name=fgtnSecurityAnswer]").trigger("keyup");
-                        $("input[name=password]").trigger("keyup");
-                        $("input[name=passwordConfirm]").trigger("keyup");
-                        
-                        $("input[name='Update']").click();
-                    });  
+                    userDelegate.getSecurityQuestionForUserName(v, 
+                    _.bind(function(securityQuestion) {
+                        $(input).attr('data-validation-status', 'ok');
+                        callback();
+                        $(this.el).trigger("userNameFound", securityQuestion);
+                    }, this),
+                    _.bind(function () {
+                        callback("No such user");
+                        $(input).attr('data-validation-status', 'error');
+                    }, this)
+                    );  
                 }
             },
             "securityAnswer": {
@@ -180,7 +176,7 @@ define("config/validators/UserValidators", [
                     userName = $(el).find("input[name='resetUsername']").val();
                     userDelegate.getBySecurityAnswer(userName, v, 
                         function(result) {
-                            $(el).find("input[name=_id]").val(result);
+                            $(el).find("input[name=_id]").val(result._id);
                             callback();
                         },      
                         function() {
