@@ -320,6 +320,28 @@ define("org/forgerock/commons/ui/common/util/UIUtils", [
         }
     });
     
+    Handlebars.registerHelper('checkbox', function(map, name, options) {
+        var ret = "<div style='float: left'>", key;
+        
+        for(key in map) {
+            ret += '<input type="checkbox" name="'+ name +'" value="'+ key +'">' + map[key] + '<br />';
+        }
+        
+        ret += "</div>";
+        
+        return new Handlebars.SafeString(ret);
+    });
+    
+    Handlebars.registerHelper('siteImages', function(images, options) {
+        var ret = "", i;
+        
+        for(i = 0; i < images.length; i++) {
+            ret += '<img class="item" src="images/passphrase/'+ images[i] +'" data-site-image="'+ images[i] +'" />';
+        }
+        
+        return new Handlebars.SafeString(ret);
+    });
+    
     obj.loadSelectOptions = function(data, el, empty, callback) {
         if( empty === undefined || empty === true ) {
             data = [ {

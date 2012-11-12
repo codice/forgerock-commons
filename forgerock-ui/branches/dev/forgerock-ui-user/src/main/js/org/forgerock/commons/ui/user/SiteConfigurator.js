@@ -105,6 +105,10 @@ define("org/forgerock/commons/ui/user/SiteConfigurator", [
            }
        }
        
+       if(config.siteImages) {
+           conf.globalData.siteImages = config.siteImages;
+       }
+       
        if (config.language) {
            i18nManager.setLanguage(config.language);
        } else {

@@ -32,15 +32,30 @@ define("org/forgerock/commons/ui/user/LoginView", [
     "org/forgerock/commons/ui/common/main/ValidatorsManager",
     "org/forgerock/commons/ui/common/main/EventManager",
     "org/forgerock/commons/ui/common/util/Constants",
-    "org/forgerock/commons/ui/common/util/CookieHelper"
-], function(AbstractView, validatorsManager, eventManager, constants, cookieHelper) {
+    "org/forgerock/commons/ui/common/util/CookieHelper",
+    "org/forgerock/commons/ui/user/delegates/SiteIdentificationDelegate",
+    "org/forgerock/commons/ui/common/main/Configuration"
+], function(AbstractView, validatorsManager, eventManager, constants, cookieHelper, siteIdentificationDelegate, conf) {
     var LoginView = AbstractView.extend({
         template: "templates/user/LoginTemplate.html",
         baseTemplate: "templates/user/LoginBaseTemplate.html",
         
         events: {
             "click input[type=submit]": "formSubmit",
+            "change input[name=login]": "getSiteIdentification",
             "onValidate": "onValidate"
+        },
+        
+        getSiteIdentification: function() {
+            var login = this.$el.find("input[name=login]").val();
+            
+            if(conf.globalData.siteIdentification) {
+                siteIdentificationDelegate.getSiteIdentificationForLogin(login, _.bind(function(data) {
+                    this.$el.find("#siteImage").html('<img src="images/passphrase/'+ data.siteImage +'" />');
+                    this.$el.find("#passPhrase").html(data.passPhrase);
+                    this.$el.find("#identificationMessage").html('');
+                }, this));
+            }
         },
         
         formSubmit: function(event) {
@@ -68,6 +83,7 @@ define("org/forgerock/commons/ui/user/LoginView", [
                 if(login) {
                     this.$el.find("input[name=login]").val(login);
                     this.$el.find("[name=loginRemember]").attr("checked","true");
+                    this.getSiteIdentification();
                 } 
                 
                 if(callback) {

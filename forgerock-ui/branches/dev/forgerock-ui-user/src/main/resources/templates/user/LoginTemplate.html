@@ -21,8 +21,18 @@
 	</div>
 	<div class="column2" style="padding-top: 20px;">
 		<div class="row-layout">
+		    {{#siteIdentification}}
+            <div class="row">
+                <h5>Site Identification</h5>
+                <div id="identificationMessage">
+                    Here will be displayed your site image and pass phrase. <br />
+                    Please enter you login.
+                </div>
+                <div id="siteImage"></div>
+                <div id="passPhrase"></div>
+            </div>	    
+		    {{/siteIdentification}}
 			{{#selfRegistration}}
-			<p>
 			<div class="row">
 				<h5>{{t "templates.user.LoginTemplate.noAccountQuestion"}}</h5>
 		    	<a href="{{url 'register'}}">{{t "templates.user.LoginTemplate.registerAccount"}}</a>
