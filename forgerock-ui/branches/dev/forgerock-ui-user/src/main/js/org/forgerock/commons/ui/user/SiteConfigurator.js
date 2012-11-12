@@ -87,8 +87,8 @@ define("org/forgerock/commons/ui/user/SiteConfigurator", [
        }
        
        
-       if(config.forgottenPassword === true) {
-           conf.globalData.forgottenPassword = true;             
+       if(config.securityQuestions === true) {
+           conf.globalData.securityQuestions = true;             
        } else {
            if(router.configuration && router.configuration.routes.forgottenPassword) {
                console.log("Removing forgottenPassword route.");
