@@ -142,7 +142,7 @@ define("org/forgerock/commons/ui/user/delegates/UserDelegate", [
                 if(data.result === "correct" && successCallback) {
                     successCallback(data);
                 } else if (data.result === "error" && errorCallback) {
-                    errorCallback(data)
+                    errorCallback(data);
                 }
                 
             },
@@ -163,7 +163,7 @@ define("org/forgerock/commons/ui/user/delegates/UserDelegate", [
                 if(data.result === "correct" && successCallback) {
                     successCallback(data);
                 } else if (data.result === "error") {
-                    errorCallback(data)
+                    errorCallback(data);
                 }
                 
             },
