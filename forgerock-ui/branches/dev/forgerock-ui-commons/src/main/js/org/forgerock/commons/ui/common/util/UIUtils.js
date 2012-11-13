@@ -321,13 +321,13 @@ define("org/forgerock/commons/ui/common/util/UIUtils", [
     });
     
     Handlebars.registerHelper('checkbox', function(map, name, options) {
-        var ret = "<div style='float: left'>", key;
+        var ret = "<div class='checkboxList'><ol>", key;
         
         for(key in map) {
-            ret += '<input type="checkbox" name="'+ name +'" value="'+ key +'">' + map[key] + '<br />';
+            ret += '<li><input type="checkbox" name="'+ name +'" value="'+ key +'" id="'+ name +'_'+ key +'"><label for="'+ name +'_'+ key +'">' + map[key] + '</label></li>';
         }
         
-        ret += "</div>";
+        ret += "</ol></div>";
         
         return new Handlebars.SafeString(ret);
     });

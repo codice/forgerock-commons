@@ -50,11 +50,18 @@ define("org/forgerock/commons/ui/user/LoginView", [
             var login = this.$el.find("input[name=login]").val();
             
             if(conf.globalData.siteIdentification) {
-                siteIdentificationDelegate.getSiteIdentificationForLogin(login, _.bind(function(data) {
-                    this.$el.find("#siteImage").html('<img src="images/passphrase/'+ data.siteImage +'" />');
-                    this.$el.find("#passPhrase").html(data.passPhrase);
-                    this.$el.find("#identificationMessage").html('');
-                }, this));
+                if (login.length) {
+                    siteIdentificationDelegate.getSiteIdentificationForLogin(login, _.bind(function(data) {
+                        this.$el.find("#siteImage").html('<img src="images/passphrase/'+ data.siteImage +'" />');
+                        this.$el.find("#passPhrase").html(data.passPhrase);
+                        this.$el.find("#identificationMessage").hide();
+                    }, this));
+                }
+                else {
+                    this.$el.find("#siteImage").hide();
+                    this.$el.find("#passPhrase").hide();
+                    this.$el.find("#identificationMessage").show();
+                }
             }
         },
         

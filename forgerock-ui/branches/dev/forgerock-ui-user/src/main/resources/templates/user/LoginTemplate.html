@@ -23,11 +23,8 @@
         <div class="row-layout">
             {{#siteIdentification}}
             <div class="row">
-                <h5>Site Identification</h5>
-                <div id="identificationMessage">
-                    Here will be displayed your site image and pass phrase. <br />
-                    Please enter you login.
-                </div>
+                <h5>{{t "templates.user.LoginTemplate.siteIdentificationHeader"}}</h5>
+                <div id="identificationMessage">{{t "templates.user.LoginTemplate.siteIdentificationExplanation"}}</div>
                 <div id="siteImage"></div>
                 <div id="passPhrase"></div>
             </div>      
