@@ -52,7 +52,13 @@ define("org/forgerock/commons/ui/user/profile/ChangeSecurityDataDialog", [
             "customValidate": "customValidate",
             "click .dialogCloseCross img": "close",
             "click input[name='close']": "close",
-            "click .dialogContainer": "stop"
+            "click .dialogContainer": "stop",
+            "check_reauth": "reauth"
+        },
+        reauth: function(){
+            if (!conf.hasOwnProperty('passwords')) {
+                eventManager.sendEvent(constants.ROUTE_REQUEST, {routeName: "enterOldPassword"});
+            }
         },
         
         formSubmit: function(event) {
@@ -71,6 +77,7 @@ define("org/forgerock/commons/ui/user/profile/ChangeSecurityDataDialog", [
             
             this.delegate.patchSelectedUserAttributes(conf.loggedUser._id, conf.loggedUser._rev, patchDefinitionObject, _.bind(function(r) {
                 eventManager.sendEvent(constants.EVENT_DISPLAY_MESSAGE_REQUEST, "securityDataChanged");
+                delete conf.passwords;
                 this.close();
                 
                 if ($.inArray("openidm-admin", conf.loggedUser.roles.split(",")) === -1) {
@@ -110,11 +117,6 @@ define("org/forgerock/commons/ui/user/profile/ChangeSecurityDataDialog", [
                     
             this.show(_.bind(function() {
                     validatorsManager.bindValidators(this.$el, this.delegate.baseEntity + "/" + conf.loggedUser._id, _.bind(function () {
-                    
-                    if(conf.passwords) {
-                        this.$el.find("input[name=oldPassword]").val(conf.passwords.password);                    
-                        delete conf.passwords;
-                    }
                     
                     this.reloadData();
                 }, this));
