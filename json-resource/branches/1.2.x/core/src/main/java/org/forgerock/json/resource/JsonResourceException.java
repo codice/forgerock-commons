@@ -17,6 +17,7 @@
 package org.forgerock.json.resource;
 
 // Java SE
+import java.util.Map;
 import java.util.LinkedHashMap;
 
 // JSON Fluent
@@ -92,6 +93,9 @@ public class JsonResourceException extends Exception {
 
     /** The short reason phrase of the exception. */
     private final String reason;
+
+    /** The failure detail, suitable for programmatic consumption */
+    private Map<String, Object> detail;
 
     /**
      * Returns the reason phrase for an HTTP error status code, per RFC 2616 and
@@ -209,6 +213,20 @@ public class JsonResourceException extends Exception {
     }
 
     /**
+     * Returns the failure detail.
+     */
+    public Map<String, Object> getDetail() {
+        return this.detail;
+    }
+
+    /**
+     * Sets the failure detail.
+     */
+    public void setDetail(Map<String, Object> detail) {
+        this.detail = detail;
+    }
+
+    /**
      * Returns the exception in a JSON object structure, suitable for inclusion in the
      * entity of an HTTP error response.
      */
@@ -218,7 +236,11 @@ public class JsonResourceException extends Exception {
         if (reason != null) { // optional
             result.put("reason", reason);
         }
-        String detail = getMessage();
+        String msg = getMessage();
+        if (msg != null) { // optional
+            result.put("message", msg);
+        }
+        Map<String, Object> detail = getDetail();
         if (detail != null) { // optional
             result.put("detail", detail);
         }
