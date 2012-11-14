@@ -46,7 +46,7 @@ define("org/forgerock/commons/ui/user/delegates/UserDelegate", [
         obj.usersCallback = successCallback;
         obj.numberOfUsers = 0;
 
-        obj.serviceCall({url: "/?_query-id=query-all&fields=*", success: function(data) {
+        obj.serviceCall({url: "/?_queryId=query-all&fields=*", success: function(data) {
             if(successCallback) {
                 obj.users = data.result;
                 successCallback(data.result);
@@ -179,7 +179,7 @@ define("org/forgerock/commons/ui/user/delegates/UserDelegate", [
 
     obj.getForUserName = function(uid, successCallback, errorCallback) {
         obj.serviceCall({
-            url: "/?_query-id=for-userName&" + $.param({uid: uid.toLowerCase()}), 
+            url: "/?_queryId=for-userName&" + $.param({uid: uid.toLowerCase()}), 
             success: function (data) {
                 if(data.result.length !== 1) {
                     if(errorCallback) {
