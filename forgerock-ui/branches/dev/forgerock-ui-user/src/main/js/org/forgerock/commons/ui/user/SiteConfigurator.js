@@ -33,8 +33,9 @@ define("org/forgerock/commons/ui/user/SiteConfigurator", [
    "org/forgerock/commons/ui/common/main/EventManager",
    "org/forgerock/commons/ui/common/main/Configuration",
    "org/forgerock/commons/ui/user/delegates/SiteConfigurationDelegate",
-   "org/forgerock/commons/ui/common/main/i18nManager"
-], function(AbstractConfigurationAware, constants, eventManager, conf, configurationDelegate, i18nManager) {
+   "org/forgerock/commons/ui/common/main/i18nManager",
+   "org/forgerock/openidm/ui/admin/notifications/NotificationViewHelper"
+], function(AbstractConfigurationAware, constants, eventManager, conf, configurationDelegate, i18nManager, notificationViewHelper) {
    var obj = new AbstractConfigurationAware();
    
    obj.initialized = false;
@@ -117,6 +118,14 @@ define("org/forgerock/commons/ui/user/SiteConfigurator", [
        
        if(config.roles) {
            conf.globalData.userRoles = config.roles;
+       }
+       
+       if(config.notificationTypes) {
+           notificationViewHelper.notificationTypes = config.notificationTypes;
+       }
+       
+       if(config.defaultNotificationType) {
+           notificationViewHelper.defaultType = config.defaultNotificationType;
        }
        
    };
