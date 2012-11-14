@@ -139,7 +139,7 @@ define("org/forgerock/commons/ui/common/main/ValidatorsManager", [
                     
                     // This binds the events to all of our fields which have validation policies defined by the server
                     input.on(event, _.bind(function (e) {
-                        var validationContext = (e.type === "change") ? "server":"client";
+                        var validationContext = (e.type === "change" || e.type === "blur") ? "server":"client";
                         
                         $.doTimeout(this.input.attr('name')+'validation' + validationContext, 100, _.bind(function() {
     
@@ -168,7 +168,8 @@ define("org/forgerock/commons/ui/common/main/ValidatorsManager", [
                                             // and then calls that function, appending the resulting array into our collection of policy failures.
                                             policyFailures = policyFailures.concat(EVAL_IS_EVIL("policyFunction = " + policy.policyFunction)(form2js(this.input.closest('form')[0]), this.input.val(), params, this.property.name));
                                         }
-                                        else {
+                                        // we have a special case for reauth required, since that is kind of a strange case.
+                                        else if (!($.inArray("REAUTH_REQUIRED", policy.policyRequirements) !== -1 && policy.policyRequirements.length === 1)) {
                                             hasServerPolicies = true;
                                         }
                                     }, this));
@@ -191,8 +192,8 @@ define("org/forgerock/commons/ui/common/main/ValidatorsManager", [
                                                 for (l = 0; l < result.failedPolicyRequirements.length; l++) {
                                                     policyFailures = policyFailures.concat(result.failedPolicyRequirements[l].policyRequirements);
                                                 }
-                                                postValidation.call(this, policyFailures);
                                             }
+                                            postValidation.call(this, policyFailures);
                                         }, this)
                                     );
                                 }
