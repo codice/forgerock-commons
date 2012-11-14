@@ -68,7 +68,7 @@ class RestletRequestHttpContext {
                 }
             }
         }
-        result.put("user", name);
+        result.put("username", name);
         return result;
     }
 
