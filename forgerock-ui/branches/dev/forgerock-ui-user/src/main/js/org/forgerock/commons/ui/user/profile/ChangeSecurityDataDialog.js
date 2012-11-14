@@ -55,9 +55,15 @@ define("org/forgerock/commons/ui/user/profile/ChangeSecurityDataDialog", [
             "click .dialogContainer": "stop",
             "check_reauth": "reauth"
         },
-        reauth: function(){
-            if (!conf.hasOwnProperty('passwords')) {
-                eventManager.sendEvent(constants.ROUTE_REQUEST, {routeName: "enterOldPassword"});
+        reauth: function(event, propertyName){
+            // we only need to force re-authentication if the properties needing it are one of the two we are prepared to change
+            if (propertyName === "password" || (conf.globalData.hasOwnProperty("securityQuestions") && propertyName === "securityAnswer")) {
+                if (!conf.hasOwnProperty('passwords')) {
+                    this.reauth_required = true;
+                    eventManager.sendEvent(constants.ROUTE_REQUEST, {routeName: "enterOldPassword"});
+                } else {
+                    this.reauth_required = false;
+                }
             }
         },
         
@@ -114,12 +120,16 @@ define("org/forgerock/commons/ui/user/profile/ChangeSecurityDataDialog", [
             } else if(conf.globalData.securityQuestions === true) {
                 this.data.height = 475;
             }
-                    
+            
+            $("#dialogs").hide();
             this.show(_.bind(function() {
-                    validatorsManager.bindValidators(this.$el, this.delegate.baseEntity + "/" + conf.loggedUser._id, _.bind(function () {
-                    
-                    this.reloadData();
+                validatorsManager.bindValidators(this.$el, this.delegate.baseEntity + "/" + conf.loggedUser._id, _.bind(function () {
+                    $("#dialogs").show();
+                    if (!this.reauth_required) {
+                        this.reloadData();
+                    }
                 }, this));
+                
             }, this));
         },
         

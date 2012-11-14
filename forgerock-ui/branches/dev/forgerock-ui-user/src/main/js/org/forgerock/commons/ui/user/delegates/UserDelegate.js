@@ -84,9 +84,15 @@ define("org/forgerock/commons/ui/user/delegates/UserDelegate", [
     /**
      * Check credentials method
      */
-    obj.checkCredentials = function(uid, password, successCallback, errorCallback) {
+    obj.checkCredentials = function(password, successCallback, errorCallback) {
+
+        var headers = {};
+        headers[constants.OPENIDM_HEADER_PARAM_REAUTH] = password;
         obj.serviceCall({
-            url: "/?_query-id=for-credentials&" + $.param({password: password, uid: uid.toLowerCase()}),
+            serviceUrl: constants.host + "/openidm/authentication?_action=reauthenticate",
+            url: "",
+            type: "POST",
+            headers: headers,
             success: successCallback,
             error: errorCallback
         });

@@ -121,14 +121,17 @@ define("config/validators/UserValidators", [
                         return;
                     }
                     
-                    userDelegate.checkCredentials(conf.loggedUser.userName, v, function(result) {
-                        if(result.result) {
+                    userDelegate.checkCredentials(v, function(result) {
+                        if(result.reauthenticated) {
                             callback();
                             $(input).attr('data-validation-status', 'ok');
                             $("input[name='Continue']").click();
                         } else {
                             callback($.t("common.form.validation.incorrectPassword"));
                         }
+                    },
+                    function (result) {
+                        callback($.t("common.form.validation.incorrectPassword"));
                     });
                 }
             },
