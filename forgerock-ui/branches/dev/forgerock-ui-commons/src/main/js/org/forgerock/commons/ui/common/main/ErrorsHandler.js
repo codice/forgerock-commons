@@ -35,7 +35,7 @@ define("org/forgerock/commons/ui/common/main/ErrorsHandler", [
     var obj = new AbstractConfigurationAware();
     
     obj.handleError = function(error, handlers) {
-        var handler,parseErr;
+        var handler;
         
         if(error.error && !error.status) {
             error.status = error.error;
