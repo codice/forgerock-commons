@@ -50,7 +50,7 @@ define("org/forgerock/commons/ui/common/util/FormGenerationUtils", [
         
         var enumValues, handlebarsValueExpression, fieldValue, valueExpression, formFieldDisplayName,
         formFieldIsReadable, formFieldIsWritable, formFieldIsRequired, formFieldType, formFieldVariableExpression, 
-        formFieldVariableName, formFieldDefaultExpression, formFieldDateFormat; 
+        formFieldVariableName, formFieldDefaultExpression, formFieldValue, formFieldDateFormat; 
         
         formFieldIsReadable = formFieldDescription.readable;
         
@@ -66,11 +66,16 @@ define("org/forgerock/commons/ui/common/util/FormGenerationUtils", [
         
         formFieldVariableExpression = formFieldDescription.variableExpression ? formFieldDescription.variableExpression.expressionText : null; 
         formFieldDefaultExpression = formFieldDescription.defaultExpression ? formFieldDescription.defaultExpression.expressionText : null;
+        formFieldValue = formFieldDescription.value ? formFieldDescription.value : null;
         
-        if (formFieldVariableExpression) {
-            valueExpression = formFieldVariableExpression;
-        } else if (formFieldDefaultExpression) {
-            valueExpression = formFieldDefaultExpression;
+        if (formFieldValue) {
+            valueExpression = formFieldValue;
+        } else {
+            if (formFieldVariableExpression) {
+                valueExpression = formFieldVariableExpression;
+            } else if (formFieldDefaultExpression) {
+                valueExpression = formFieldDefaultExpression;
+            }
         }
         
         if (valueExpression) {
@@ -208,8 +213,7 @@ define("org/forgerock/commons/ui/common/util/FormGenerationUtils", [
                 } else {
                     dateFormat = propertyTypeMapping[param].datePattern;
                     date = dateUtil.parseDateString(paramValue, dateFormat);
-//                    params[param] = date;
-                    params[param] = "2012-06-30T00:00:00Z";
+                    params[param] = dateUtil.formatDate(date, 'u');
                 }
             } else if ("long" === typeName) {
                 if (paramValue === '') {
