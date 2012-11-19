@@ -35,7 +35,7 @@ define("org/forgerock/commons/ui/common/main/SessionManager", [
     var obj = new AbstractConfigurationAware();
     
     obj.login = function(username, password, successCallback, errorCallback) {
-        cookieHelper.deleteCookie("JSESSIONID", "", ""); // resets the session cookie to discard old session that may still exist
+        cookieHelper.deleteCookie("JSESSIONID", "/", ""); // resets the session cookie to discard old session that may still exist
         require(obj.configuration.loginHelperClass).login(username, password, successCallback, errorCallback);
     };
     
