@@ -150,39 +150,8 @@ define("org/forgerock/commons/ui/common/main/ValidatorsManager", [
                         var validationContext = (e.type === "change" || e.type === "blur") ? "server":"client";
                         
                         $.doTimeout(this.input.attr('name')+'validation' + validationContext, 100, _.bind(function() {
-                            // this function must be defined and identical on both the client and the server side if it to be used in a 
-                            // function that is identified as "clientValidation": true
-                            var checkIfRequiredApplies = function(allPolicyRequirements,failedPolicyRequirements,value) {
-                                    var i,j,
-                                        hasRequired=false,
-                                        requireFailed=false;
-                                    
-                                    if (typeof(allPolicyRequirements) !== "undefined") {
-                                        for (i in allPolicyRequirements) {
-                                            if (allPolicyRequirements[i]  === "REQUIRED") {
-                                                hasRequired = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    if (hasRequired && typeof(failedPolicyRequirements) !== "undefined") {
-                                        for (j in failedPolicyRequirements) {
-                                            if (failedPolicyRequirements[j].policyRequirement === "REQUIRED") {
-                                                requireFailed = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    // this means that the 'required' flag has not been set, even though this field is empty; 
-                                    // this indicates the required attribute is not being enforced 
-                                    if (hasRequired && !requireFailed && !(typeof(value) === "string" && value.length)) { 
-                                        return false; // do not attempt to impose this policy rule on this optional field
-                                    } else {
-                                        return hasRequired;
-                                    }
-                                },
-                                params,
-                                policyFailures = [],
+    
+                            var j,params,policyFailures = [],
                                 hasServerPolicies = false,
                                 EVAL_IS_EVIL = eval; // JSLint doesn't like eval usage; this is a bit of a hack around that, while acknowledging it.
                             
@@ -200,7 +169,7 @@ define("org/forgerock/commons/ui/common/main/ValidatorsManager", [
                                     params = policy.params;
                                     // This instantiates the string representation of the function into an actual, executable local function
                                     // and then calls that function, appending the resulting array into our collection of policy failures.
-                                    policyFailures = policyFailures.concat(EVAL_IS_EVIL("checkIfRequiredApplies=" + checkIfRequiredApplies.toString() +  "; policyFunction = " + policy.policyFunction).call({"failedPolicyRequirements": policyFailures, "allPolicyRequirements": this.property.policyRequirements}, form2js(this.input.closest('form')[0]), this.input.val(), params, this.property.name));
+                                    policyFailures = policyFailures.concat(EVAL_IS_EVIL("policyFunction = " + policy.policyFunction)(form2js(this.input.closest('form')[0]), this.input.val(), params, this.property.name));
                                 }
                                 // we have a special case for reauth required, since that is kind of a strange case.
                                 else if (!($.inArray("REAUTH_REQUIRED", policy.policyRequirements) !== -1 && policy.policyRequirements.length === 1)) {
