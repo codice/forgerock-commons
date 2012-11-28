@@ -56,7 +56,7 @@ define("org/forgerock/commons/ui/common/main/ValidatorsManager", [
                     this.input.attr("data-validation-status", "ok");
                 }
                 
-                el.trigger("onValidate", [this.input, msg.length ? msg.join(",") : false]); 
+                el.trigger("onValidate", [this.input, msg.length ? msg.join("<br>") : false]); 
                 
                 // re-validate dependent form fields
                 if (thisInput.attr("data-validation-dependents")) {
@@ -88,12 +88,12 @@ define("org/forgerock/commons/ui/common/main/ValidatorsManager", [
                     
                     input = el.find("[name=" + property.name + "]");
                     
-                    input.attr("data-validation-status", "ok").data("prevValue", input.val());
+                    input.attr("data-validation-status", "error");
                     
                     if (input.attr('data-validator-event')) {
-                        event = input.attr('data-validator-event') + "keyup change blur";
+                        event = input.attr('data-validator-event') + " keyup change blur";
                     } else {
-                        event = "change keyup blur";
+                        event = "keyup change blur";
                     }
                     
 
@@ -105,52 +105,90 @@ define("org/forgerock/commons/ui/common/main/ValidatorsManager", [
                     
                     // This adds requirement descriptions for DOM containers specifically designated to hold them
                     _.each($(".validationRules[data-for-validator~='"+input.attr("name")+"']"), function (ruleContainer) {
-                        // allPolicyReqParams is used to compile a set of all parameters that get made 
-                        // available for policies which produce a given requirement
-                        var allPolicyReqParams = {};
-                        _.each(property.policies, function (policy) {
 
-                            if (policy.params) {
-                                _.each(policy.policyRequirements, function (policyReq) {
-                                    if (!allPolicyReqParams[policyReq]) {
-                                        allPolicyReqParams[policyReq] = policy.params;
-                                    }
-                                    else {
-                                        $.extend(allPolicyReqParams[policyReq], policy.params);
-                                    }
-                                });
-                            }
+                        // we don't want to add the rules to this container more than once,
+                        // so checking for this attribute prevents this from happening.
+                        if (!$(ruleContainer).attr('validation-loaded')) {
                             
-                        });
-                        
-                        _.each(property.policyRequirements, function (req) {
-                            var reqDiv = $('<div class="field-rule"><span class="error">x</span><span/></div>');
+                            // allPolicyReqParams is used to compile a set of all parameters that get made 
+                            // available for policies which produce a given requirement
+                            var allPolicyReqParams = {};
+                            _.each(property.policies, function (policy) {
+    
+                                if (policy.params) {
+                                    _.each(policy.policyRequirements, function (policyReq) {
+                                        if (!allPolicyReqParams[policyReq]) {
+                                            allPolicyReqParams[policyReq] = policy.params;
+                                        }
+                                        else {
+                                            $.extend(allPolicyReqParams[policyReq], policy.params);
+                                        }
+                                    });
+                                }
+                                
+                            });
                             
-                            // if there is no text to show for this rule, then don't display it.
-                            if ($.t("common.form.validation." + req, allPolicyReqParams[req]).length) {
-                                reqDiv.find("span:last")
-                                    .attr("data-for-req", req)
-                                    .attr("data-for-validator", input.attr("name"))
-                                    .text($.t("common.form.validation." + req, allPolicyReqParams[req]));
-                                $(ruleContainer).append(reqDiv);
-                            }
-                        });
+                            _.each(property.policyRequirements, function (req) {
+                                var reqDiv = $('<div class="field-rule"><span class="error">x</span><span/></div>');
+                                
+                                // if there is no text to show for this rule, then don't display it.
+                                if ($.t("common.form.validation." + req, allPolicyReqParams[req]).length) {
+                                    reqDiv.find("span:last")
+                                        .attr("data-for-req", req)
+                                        .attr("data-for-validator", input.attr("name"))
+                                        .text($.t("common.form.validation." + req, allPolicyReqParams[req]));
+                                    $(ruleContainer).append(reqDiv);
+                                }
+                            });
+                            $(ruleContainer).attr('validation-loaded', "true");
+                        }
                     });
+                    
                     
                     // This binds the events to all of our fields which have validation policies defined by the server
                     input.on(event, _.bind(function (e) {
                         var validationContext = (e.type === "change" || e.type === "blur") ? "server":"client";
                         
                         $.doTimeout(this.input.attr('name')+'validation' + validationContext, 100, _.bind(function() {
-    
-                            var j,params,policyFailures = [],
+                            // this function must be defined and identical on both the client and the server side if it to be used in a 
+                            // function that is identified as "clientValidation": true
+                            var checkIfRequiredApplies = function(allPolicyRequirements,failedPolicyRequirements,value) {
+                                    var i,j,
+                                        hasRequired=false,
+                                        requireFailed=false;
+                                    
+                                    if (typeof(allPolicyRequirements) !== "undefined") {
+                                        for (i in allPolicyRequirements) {
+                                            if (allPolicyRequirements[i]  === "REQUIRED") {
+                                                hasRequired = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if (hasRequired && typeof(failedPolicyRequirements) !== "undefined") {
+                                        for (j in failedPolicyRequirements) {
+                                            if (failedPolicyRequirements[j].policyRequirement === "REQUIRED") {
+                                                requireFailed = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    // this means that the 'required' flag has not been set, even though this field is empty; 
+                                    // this indicates the required attribute is not being enforced 
+                                    if (hasRequired && !requireFailed && !(typeof(value) === "string" && value.length)) { 
+                                        return false; // do not attempt to impose this policy rule on this optional field
+                                    } else {
+                                        return hasRequired;
+                                    }
+                                },
+                                params,
+                                policyFailures = [],
                                 hasServerPolicies = false,
                                 EVAL_IS_EVIL = eval; // JSLint doesn't like eval usage; this is a bit of a hack around that, while acknowledging it.
                             
                             this.input.siblings(".validation-message").empty();
                             
                             _.each(this.property.policies, _.bind(function(policy,j) {
-                                
                                 // The policy may return the JavaScript validation function as a string property;
                                 // If so, we can use that validation function directly here
                                 if (policy.policyFunction) {
@@ -162,7 +200,7 @@ define("org/forgerock/commons/ui/common/main/ValidatorsManager", [
                                     params = policy.params;
                                     // This instantiates the string representation of the function into an actual, executable local function
                                     // and then calls that function, appending the resulting array into our collection of policy failures.
-                                    policyFailures = policyFailures.concat(EVAL_IS_EVIL("policyFunction = " + policy.policyFunction)(form2js(this.input.closest('form')[0]), this.input.val(), params, this.property.name));
+                                    policyFailures = policyFailures.concat(EVAL_IS_EVIL("checkIfRequiredApplies=" + checkIfRequiredApplies.toString() +  "; policyFunction = " + policy.policyFunction).call({"failedPolicyRequirements": policyFailures, "allPolicyRequirements": this.property.policyRequirements}, form2js(this.input.closest('form')[0]), this.input.val(), params, this.property.name));
                                 }
                                 // we have a special case for reauth required, since that is kind of a strange case.
                                 else if (!($.inArray("REAUTH_REQUIRED", policy.policyRequirements) !== -1 && policy.policyRequirements.length === 1)) {
