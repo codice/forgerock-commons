@@ -249,7 +249,8 @@ public class JsonServerResource extends ExtendedServerResource {
              match.size() == 0 && Tag.ALL.equals(noneMatch.get(0))) {
                 // unambiguous create; set no version
             } else if (match.size() != 0 || noneMatch.size() != 0) {
-                rev = getTag(read()).getName(); // derive from fetched resource
+                Tag tag = getTag(read());
+                rev = tag != null ? tag.getName() : null; // derive from fetched resource
             }
         } catch (JsonResourceException jre) {
             throw new ResourceException(jre);
