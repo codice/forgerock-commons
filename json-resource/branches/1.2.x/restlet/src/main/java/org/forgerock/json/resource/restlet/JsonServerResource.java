@@ -309,6 +309,12 @@ public class JsonServerResource extends ExtendedServerResource {
         Representation representation;
         List<Tag> match = conditions.getMatch();
         List<Tag> noneMatch = conditions.getNoneMatch();
+        
+        if (this.id.endsWith("/")) {
+            throw new ResourceException(new JsonResourceException(JsonResourceException.BAD_REQUEST, 
+                    "Invalid resource ID ending in '/', implying an empty client assigned ID. Use POST with create action to generate server assigned id."));
+        }
+        
         try {
             JsonValue value = requireEntity(entityValue(entity));
             if (match.size() == 0 && noneMatch.size() == 1 && noneMatch.get(0).equals(Tag.ALL)) { // unambiguous create
