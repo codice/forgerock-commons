@@ -129,7 +129,6 @@
         <sendOnFailure>true</sendOnFailure>
         <sendOnSuccess>false</sendOnSuccess>
         <sendOnWarning>false</sendOnWarning>
-        <!-- TODO: create this mailing list -->
         <address>docs@forgerock.org</address>
       </notifier>
     </notifiers>
