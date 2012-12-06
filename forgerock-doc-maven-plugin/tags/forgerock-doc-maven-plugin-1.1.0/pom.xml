@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+! MPL 2.0 HEADER START
+!
+! This Source Code Form is subject to the terms of the Mozilla Public
+! License, v. 2.0. If a copy of the MPL was not distributed with this
+! file, You can obtain one at http://mozilla.org/MPL/2.0/.
+!
+! If applicable, add the following below this MPL 2.0 HEADER, replacing
+! the fields enclosed by brackets "[]" replaced with your own identifying
+! information:
+!     Portions Copyright [yyyy] [name of copyright owner]
+!
+! MPL 2.0 HEADER END
+!
+!     Copyright 2012 ForgeRock AS
+!
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+
+ <parent>
+  <artifactId>forgerock-parent</artifactId>
+  <groupId>org.forgerock</groupId>
+  <version>1.1.0</version>
+ </parent>
+
+ <groupId>org.forgerock.commons</groupId>
+ <artifactId>forgerock-doc-maven-plugin</artifactId>
+ <version>1.1.0</version>
+ <packaging>maven-plugin</packaging>
+
+ <name>ForgeRock Doc Build Maven Plugin</name>
+ <description>Common machinery for generating core documentation from DocBook XML sources</description>
+ <url>http://commons.forgerock.org/forgerock-doc-maven-plugin</url>
+
+ <scm>
+  <url>https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/tags/forgerock-doc-maven-plugin-1.1.0</url>
+  <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/tags/forgerock-doc-maven-plugin-1.1.0</connection>
+  <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/tags/forgerock-doc-maven-plugin-1.1.0</developerConnection>
+ </scm>
+
+ <licenses>
+  <license>
+   <name>MPL-2.0</name>
+   <url>http://www.mozilla.org/MPL/2.0/</url>
+   <comments>Mozilla Public License Version 2.0. This license applies to
+   source code as indicated in the source code.</comments>
+   <distribution>repo</distribution>
+  </license>
+  <license>
+   <name>CC BY-NC-ND 3.0</name>
+   <url>http://creativecommons.org/licenses/by-nc-nd/3.0/</url>
+   <comments>Creative Commons Attribution-NonCommercial-NoDerivs 3.0
+   Unported. This license applies to the site content and to the
+   documentation as indicated in the documentation source code.</comments>
+   <distribution>repo</distribution>
+  </license>
+ </licenses>
+
+ <properties>
+  <docbkxVersion>2.0.14</docbkxVersion>
+  <mavenVersion>3.0.4</mavenVersion>
+  <mavenPluginVersion>3.1</mavenPluginVersion>
+  <mavenPluginPluginVersion>3.1</mavenPluginPluginVersion>
+  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  <maven.compiler.target>1.6</maven.compiler.target>
+  <maven.compiler.source>1.6</maven.compiler.source>
+  <checkstyleHeaderLocation>${basedir}/src/main/resources/org/forgerock/checkstyle/mpl2-java-header</checkstyleHeaderLocation>
+ </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>3.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>${mavenVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.agilejava.docbkx</groupId>
+            <artifactId>docbkx-fop-support</artifactId>
+            <version>${docbkxVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.agilejava.docbkx</groupId>
+            <artifactId>docbkx-maven-plugin</artifactId>
+            <version>${docbkxVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.twdata.maven</groupId>
+            <artifactId>mojo-executor</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.forgerock.maven.plugins</groupId>
+            <artifactId>linktester-maven-plugin</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+    </dependencies>
+
+ <issueManagement>
+  <system>Jira</system>
+  <url>https://bugster.forgerock.org/jira/browse/DOCS</url>
+ </issueManagement>
+
+ <ciManagement>
+  <system>jenkins</system>
+  <url>http://builds.forgerock.org/view/Docs/job/Commons%20-%20Forgerock%20Doc%20Maven%20Plugin/</url>
+      <notifiers>
+      <notifier>
+        <type>mail</type>
+        <sendOnError>true</sendOnError>
+        <sendOnFailure>true</sendOnFailure>
+        <sendOnSuccess>false</sendOnSuccess>
+        <sendOnWarning>false</sendOnWarning>
+        <address>docs@forgerock.org</address>
+      </notifier>
+    </notifiers>
+ </ciManagement>
+
+ <distributionManagement>
+    <site>
+      <id>forgerock.org</id>
+      <name>ForgeRock Community</name>
+      <url>scp://forgerock.org/var/www/vhosts/commons.forgerock.org/httpdocs/forgerock-doc-maven-plugin</url>
+    </site>
+ </distributionManagement>
+
+ <inceptionYear>2012</inceptionYear>
+
+ <repositories>
+  <repository>
+   <id>forgerock-staging-repository</id>
+   <name>ForgeRock Release Repository</name>
+   <url>http://maven.forgerock.org/repo/releases</url>
+   <snapshots>
+    <enabled>false</enabled>
+   </snapshots>
+  </repository>
+  <repository>
+   <id>forgerock-snapshots-repository</id>
+   <name>ForgeRock Snapshot Repository</name>
+   <url>http://maven.forgerock.org/repo/snapshots</url>
+   <releases>
+    <enabled>false</enabled>
+   </releases>
+  </repository>
+ </repositories>
+
+ <build>
+   <plugins>
+    <plugin>
+     <groupId>org.apache.maven.plugins</groupId>
+     <artifactId>maven-release-plugin</artifactId>
+     <version>2.3.2</version>
+     <configuration>
+      <!-- Disable inherited configuration -->
+      <autoVersionSubmodules>true</autoVersionSubmodules>
+      <mavenExecutorId>forked-path</mavenExecutorId>
+      <useReleaseProfile>true</useReleaseProfile>
+      <suppressCommitBeforeTag>false</suppressCommitBeforeTag>
+      <goals>deploy</goals>
+      <arguments>-Penforce</arguments>
+     </configuration>
+    </plugin>
+   </plugins>
+ </build>
+
+ <reporting>
+  <plugins>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-plugin-plugin</artifactId>
+    <version>${mavenPluginPluginVersion}</version>
+   </plugin>
+  </plugins>
+ </reporting>
+</project>
