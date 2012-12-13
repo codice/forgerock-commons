@@ -36,7 +36,7 @@ public class JsonResourceRouter implements JsonResource {
      * is equal to the prefix, or if it begins with the prefix separated by a '/' character.
      * This map permits a {@code null} key.
      */
-    protected final Map<String, JsonResource> routes = new LinkedHashMap<String, JsonResource>();
+    protected Map<String, JsonResource> routes = new LinkedHashMap<String, JsonResource>();
 
     /**
      * Dispatches the JSON resource request to the matching resource. A resource matches if
