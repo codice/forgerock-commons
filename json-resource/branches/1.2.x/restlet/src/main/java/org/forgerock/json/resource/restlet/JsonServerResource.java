@@ -1,31 +1,39 @@
 /*
- * The contents of this file are subject to the terms of the Common Development and
- * Distribution License (the License). You may not use this file except in compliance with the
- * License.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
- * specific language governing permission and limitations under the License.
+ * Copyright (c) 2011-2012 ForgeRock AS. All Rights Reserved
  *
- * When distributing Covered Software, include this CDDL Header Notice in each file and include
- * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
- * Header, with the fields enclosed by brackets [] replaced by your own identifying
- * information: "Portions Copyrighted [year] [name of copyright owner]".
+ * The contents of this file are subject to the terms
+ * of the Common Development and Distribution License
+ * (the License). You may not use this file except in
+ * compliance with the License.
  *
- * Copyright © 2011 ForgeRock AS. All rights reserved.
+ * You can obtain a copy of the License at
+ * http://forgerock.org/license/CDDLv1.0.html
+ * See the License for the specific language governing
+ * permission and limitations under the License.
+ *
+ * When distributing Covered Code, include this CDDL
+ * Header Notice in each file and include the License file
+ * at http://forgerock.org/license/CDDLv1.0.html
+ * If applicable, add the following below the CDDL Header,
+ * with the fields enclosed by brackets [] replaced by
+ * your own identifying information:
+ * "Portions Copyrighted [year] [name of copyright owner]"
  */
 
 package org.forgerock.json.resource.restlet;
 
 // Java SE
-import java.security.Principal;
-import java.util.ArrayList;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import java.util.logging.Level;
 
 // Restlet
+import org.restlet.Context;
 import org.restlet.data.Conditions;
 import org.restlet.data.Form;
 import org.restlet.data.Method;
@@ -35,7 +43,6 @@ import org.restlet.data.Tag;
 import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
-import org.restlet.resource.ServerResource;
 
 // Jackson
 import org.restlet.ext.jackson.JacksonRepresentation;
@@ -47,7 +54,6 @@ import org.forgerock.restlet.ExtendedServerResource;
 import org.forgerock.json.fluent.JsonValue;
 
 // JSON Resource
-import org.forgerock.json.resource.JsonResource;
 import org.forgerock.json.resource.JsonResourceAccessor;
 import org.forgerock.json.resource.JsonResourceException;
 
@@ -220,7 +226,15 @@ public class JsonServerResource extends ExtendedServerResource {
         this.conditions = getConditions();
         String remaining = getReference().getRemainingPart(false, false);
         if (remaining != null && remaining.length() > 0) {
-            this.id = remaining; // default: null (resource itself is being operated on)
+            try {
+                this.id = URLDecoder.decode(remaining, "UTF-8"); // default: null (resource itself is being operated on)
+            } catch (UnsupportedEncodingException uee) {
+                Context.getCurrentLogger()
+                        .log(Level.WARNING,
+                                "Unable to decode the string with the UTF-8 character set.",
+                                uee);
+                throw new ResourceException(uee);
+            }
         }
         this.restlet = (JsonResourceRestlet)(getRequestAttributes().get(JsonResourceRestlet.class.getName()));
         this.accessor = new JsonResourceAccessor(restlet.getResource(), restlet.newContext(getRequest()));
