@@ -339,10 +339,15 @@ define("org/forgerock/commons/ui/common/util/UIUtils", [
     });
     
     Handlebars.registerHelper('siteImages', function(images, options) {
-        var ret = "", i;
+        var urlRegexp = /\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>]))/ig,
+            ret = "", i;
         
         for(i = 0; i < images.length; i++) {
-            ret += '<img class="item" src="images/passphrase/'+ images[i] +'" data-site-image="'+ images[i] +'" />';
+            if (images[i].match(urlRegexp)) {
+                ret += '<img class="item" src="' + images[i] +'" data-site-image="'+ images[i] +'" />';
+            } else {
+                ret += '<img class="item" src="images/passphrase/'+ images[i] +'" data-site-image="'+ images[i] +'" />';
+            }
         }
         
         return new Handlebars.SafeString(ret);
