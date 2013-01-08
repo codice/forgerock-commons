@@ -45,7 +45,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jslint-maven-plugin</artifactId>
                 <configuration>
-                    <disallowInsecureCharsInRegExp>false</disallowInsecureCharsInRegExp>
                     <excludes>
                         <exclude>**/libs/*.js</exclude>
                         <exclude>**/*Test.js</exclude>

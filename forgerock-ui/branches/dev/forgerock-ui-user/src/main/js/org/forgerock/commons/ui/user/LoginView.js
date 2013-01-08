@@ -47,20 +47,12 @@ define("org/forgerock/commons/ui/user/LoginView", [
         },
         
         getSiteIdentification: function() {
-            // thanks to John Gruber for this regexp http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-            // also to "Searls" for his port to JS https://gist.github.com/1033143
-            var urlRegexp = /\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>]))/ig,
-                login = this.$el.find("input[name=login]").val();
+            var login = this.$el.find("input[name=login]").val();
             
             if(conf.globalData.siteIdentification) {
                 if (login.length) {
                     siteIdentificationDelegate.getSiteIdentificationForLogin(login, _.bind(function(data) {
-                        
-                        if (data.siteImage.match(urlRegexp)) {
-                            this.$el.find("#siteImage").html('<img src="'+ data.siteImage +'" />');
-                        } else {
-                            this.$el.find("#siteImage").html('<img src="images/passphrase/'+ encodeURIComponent(data.siteImage) +'" />');
-                        }
+                        this.$el.find("#siteImage").html('<img src="'+ encodeURI(data.siteImage) +'" />');
                         
                         this.$el.find("#passPhrase").text(data.passPhrase);
                         this.$el.find("#identificationMessage").hide();
