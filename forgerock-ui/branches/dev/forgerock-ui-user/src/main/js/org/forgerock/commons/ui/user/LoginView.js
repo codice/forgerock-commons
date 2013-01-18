@@ -68,7 +68,7 @@ define("org/forgerock/commons/ui/user/LoginView", [
         
         formSubmit: function(event) {
             event.preventDefault();
-            
+            this.$el.find(":input").trigger("keyup");
             if(validatorsManager.formValidated(this.$el)) {
                 if(this.$el.find("[name=loginRemember]:checked").length !== 0) {
                     var expire = new Date();
