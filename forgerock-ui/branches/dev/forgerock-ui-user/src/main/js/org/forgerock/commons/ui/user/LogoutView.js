@@ -22,38 +22,21 @@
  * "Portions Copyrighted [year] [name of copyright owner]"
  */
 
-/*global define, $, Backbone */
+/*global define, $, form2js, _, js2form, window */
 
-/**
- * @author mbilski
- */
-define("org/forgerock/commons/ui/user/login/LoggedUserBarView", [
+define("org/forgerock/commons/ui/user/LogoutView", [
+    "org/forgerock/commons/ui/common/main/AbstractView",
     "org/forgerock/commons/ui/common/main/EventManager",
     "org/forgerock/commons/ui/common/util/Constants",
-    "org/forgerock/commons/ui/common/main/Configuration"
-], function(eventManager, constants, conf) {
-    var LoggedUserBarView = Backbone.View.extend({
-        element: "#loginContent",
-        
+    "org/forgerock/commons/ui/common/util/CookieHelper"
+], function(AbstractView, eventManager, constants) {
+    var LogoutView = AbstractView.extend({
         render: function() {
-            this.setElement(this.element);
-            
-            if(conf.loggedUser) {
-                this.$el.find("#profile_link").show();
-                if (conf.loggedUser.userName) {
-                    this.$el.find("#user_name").text(conf.loggedUser.userName); //idm
-                } else if (conf.loggedUser.cn) {
-                    this.$el.find("#user_name").text(conf.loggedUser.cn); //am
-                }
-                
-                this.$el.show();
-            } else {
-                this.$el.hide();
-            }
+            eventManager.sendEvent(constants.EVENT_LOGOUT);
         }
     }); 
     
-    return new LoggedUserBarView();
+    return new LogoutView();
 });
 
 

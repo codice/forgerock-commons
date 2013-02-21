@@ -159,7 +159,7 @@ define("config/process/UserConfig", [
             }
         },
         {
-            startEvent: constants.EVENT_USER_SUCCESSFULY_REGISTERED,
+            startEvent: constants.EVENT_USER_SUCCESSFULLY_REGISTERED,
             description: "User registered",
             dependencies: [
                 "org/forgerock/commons/ui/common/main/Router"
@@ -185,9 +185,9 @@ define("config/process/UserConfig", [
             processDescription: function(event, router, conf, sessionManager) {
                 sessionManager.logout();
                 conf.setProperty('loggedUser', null);
+                router.navigate(router.configuration.routes.login.url, {trigger: true});
                 eventManager.sendEvent(constants.EVENT_AUTHENTICATION_DATA_CHANGED, {anonymousMode: true});
                 eventManager.sendEvent(constants.EVENT_DISPLAY_MESSAGE_REQUEST, "loggedOut");
-                router.execRouteHandler("");
                 delete conf.gotoURL;
             }
          },
