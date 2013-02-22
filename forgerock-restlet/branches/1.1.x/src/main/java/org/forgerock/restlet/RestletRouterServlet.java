@@ -136,6 +136,7 @@ public class RestletRouterServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        response.setHeader("Cache-Control", "no-cache");
         adapter.service(request, response);
     }
 }
