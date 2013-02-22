@@ -31,15 +31,14 @@ define("org/forgerock/commons/ui/user/main", [
     "./profile/UserProfileView",
     "./TermsOfUseDialog",
     "./profile/EnterOldPasswordDialog",
-	"./ForgottenPasswordDialog",
-	"./profile/ChangeSecurityDataDialog",
+    "./ForgottenPasswordDialog",
+    "./profile/ChangeSecurityDataDialog",
     "./profile/ChangeSiteIdentificationDialog",
     "./LoginView",
-    "./LogoutView",
-	"./LoginDialog",
-	"./NotFoundView",
-	"./login/LoggedUserBarView",
-	"./SiteConfigurator",
-	"./delegates/SiteConfigurationDelegate",
-	"./delegates/SiteIdentificationDelegate"
+    "./LoginDialog",
+    "./NotFoundView",
+    "./login/LoggedUserBarView",
+    "./SiteConfigurator",
+    "./delegates/SiteConfigurationDelegate",
+    "./delegates/SiteIdentificationDelegate"
 ]);

@@ -185,9 +185,8 @@ define("config/process/UserConfig", [
             processDescription: function(event, router, conf, sessionManager) {
                 sessionManager.logout();
                 conf.setProperty('loggedUser', null);
-                router.navigate(router.configuration.routes.login.url, {trigger: true});
-                eventManager.sendEvent(constants.EVENT_AUTHENTICATION_DATA_CHANGED, {anonymousMode: true});
                 eventManager.sendEvent(constants.EVENT_DISPLAY_MESSAGE_REQUEST, "loggedOut");
+                eventManager.sendEvent(constants.EVENT_CHANGE_VIEW, {route: router.configuration.routes.login });
                 delete conf.gotoURL;
             }
          },
