@@ -82,14 +82,14 @@ public interface ScriptRegistry extends SourceUnitObserver {
      *         {@code ScriptEntry} instance.
      * @throws NullPointerException
      *             if script is null.
-     *             @throws org.forgerock.json.fluent.JsonValueException
-     *             @throws IllegalArgumentException
+     * @throws org.forgerock.json.fluent.JsonValueException
+     * @throws IllegalArgumentException
      */
-    public ScriptEntry takeScript(JsonValue script)  throws ScriptException;
+    public ScriptEntry takeScript(JsonValue script) throws ScriptException;
 
     /**
      * Takes a {@code ScriptEntry} from this {@code ScriptRegistry}.
-     *
+     * 
      * @param name
      *            The identifier of the {@code ScriptEntry}.
      * @return <tt>null</tt> if the registry does not have the script, else the
@@ -98,18 +98,6 @@ public interface ScriptRegistry extends SourceUnitObserver {
      *             if script is null.
      */
     public ScriptEntry takeScript(ScriptName name);
-
-    /**
-     * Takes a {@code ScriptEntry} from this {@code ScriptRegistry}.
-     * 
-     * @param name
-     *            The script source name.
-     * @param type
-     *            The script language type.
-     * @return <tt>null</tt> if the registry does not have the script, else the
-     *         {@code ScriptEntry} instance.
-     */
-    public ScriptEntry takeScript(String name);
 
     public void addScriptListener(ScriptName name, ScriptListener hook);
 

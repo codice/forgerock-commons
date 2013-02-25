@@ -24,66 +24,80 @@
 
 package org.forgerock.script.scope;
 
-import java.lang.ref.WeakReference;
-
+import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.Connection;
-import org.forgerock.json.resource.ConnectionFactory;
 import org.forgerock.json.resource.Context;
 import org.forgerock.json.resource.InternalServerErrorException;
+import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.json.resource.ResourceException;
+import org.forgerock.json.resource.ServerContext;
+import org.forgerock.json.resource.ServiceUnavailableException;
 
 /**
  * A NAME does ...
- *
+ * 
  * @author Laszlo Hordos
  */
-public class OperationParameter {
+public class OperationParameter implements Parameter {
 
-    private final Context context;
+    protected final Context context;
+    protected final String connectionId;
+    protected final PersistenceConfig persistenceConfig;
 
-    private final ConnectionFactory connectionFactory;
-
-    public OperationParameter(final Context context, final ConnectionFactory connectionFactory) {
+    public OperationParameter(final Context context, final String connectionId,
+            final PersistenceConfig persistenceConfig) {
         this.context = context;
-        this.connectionFactory = connectionFactory;
+        this.connectionId = connectionId;
+        this.persistenceConfig = persistenceConfig;
     }
 
     /**
-     * Copy constructor.
-     *
-     * @param parameter
+     * Returns the internal connection.
+     * 
+     * @return The internal connection.
+     * @throws org.forgerock.json.resource.NotFoundException
+     *             If no such connection exists.
+     * @throws ResourceException
+     *             If the connection could not be obtained for some other reason
+     *             (e.g. due to a configuration or initialization problem).
      */
-    public OperationParameter(OperationParameter parameter) {
-        context = parameter.getContext();
-        connectionFactory = parameter.getConnectionFactory();
-    }
-
-    public Context getContext() {
-        return context;
-    }
-
-    public ConnectionFactory getConnectionFactory() {
-        return connectionFactory;
-    }
-
-    public Connection getConnection() throws ResourceException {
-        final ConnectionFactory fc = getConnectionFactory();
-        if (null != fc) {
-            return fc.getConnection();
+    public ServerContext getServerContext(JsonValue savedContext) throws ResourceException {
+        if (null != savedContext) {
+            return ServerContext.loadFromJson(savedContext, getPersistenceConfig());
+        } else if (context instanceof ServerContext) {
+            return (ServerContext) context;
+        } else if (null != context) {
+            return new ServerContext(context, getConnection());
         }
-        // TODO: i18n
-        throw new InternalServerErrorException("ConnectionFactory is not set");
+        throw new InternalServerErrorException("Failed to get ServerContext.");
     }
 
     /**
-     * This method intended to be overwritten.
-     * @return
+     * Returns the internal connection.
+     * 
+     * @return The internal connection.
+     * @throws org.forgerock.json.resource.NotFoundException
+     *             If no such connection exists.
+     * @throws ResourceException
+     *             If the connection could not be obtained for some other reason
+     *             (e.g. due to a configuration or initialization problem).
      */
-    public Function getCallbackFunction(){
-        return null;
+    public Connection getConnection() throws ResourceException {
+        Connection connection =
+                getPersistenceConfig().getConnectionProvider().getConnection(getConnectionId());
+        if (null != connection) {
+            return connection;
+        }
+        throw new ServiceUnavailableException("Failed to get Connection for id: "
+                + getConnectionId());
     }
 
-    public WeakReference<OperationParameter> getSelfReference(){
-        return new WeakReference<OperationParameter>(this);
+    public String getConnectionId() {
+        return connectionId;
     }
+
+    public PersistenceConfig getPersistenceConfig() {
+        return persistenceConfig;
+    }
+
 }

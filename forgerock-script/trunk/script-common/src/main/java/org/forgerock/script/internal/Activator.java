@@ -25,17 +25,9 @@
 package org.forgerock.script.internal;
 
 import java.net.URL;
-import java.util.Hashtable;
-import java.util.List;
 
-import org.forgerock.script.ScriptRegistry;
-import org.forgerock.script.osgi.OSGiScriptEngineFactoryIterable;
-import org.forgerock.script.osgi.ScriptEngineManifestScanner;
-import org.ops4j.pax.swissbox.extender.BundleObserver;
-import org.ops4j.pax.swissbox.extender.BundleURLScanner;
 import org.ops4j.pax.swissbox.extender.BundleWatcher;
 import org.ops4j.pax.swissbox.extender.ManifestEntry;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;

@@ -24,8 +24,6 @@
 
 package org.forgerock.script;
 
-import org.forgerock.script.source.SourceUnit;
-
 /**
  * A ScriptName identifies a {@code Script} object.
  * <p/>
@@ -36,13 +34,19 @@ import org.forgerock.script.source.SourceUnit;
 public final class ScriptName {
     private final String name;
     private final String type;
+    private final String revision;
 
     public ScriptName(String name, String type) {
+        this(name, type, null);
+    }
+
+    public ScriptName(String name, String type, String revision) {
         if (null == name || null == type || name.trim().isEmpty() || type.trim().isEmpty()) {
             throw new IllegalArgumentException("Required name and type");
         }
         this.name = name;
         this.type = type;
+        this.revision = revision;
     }
 
     public String getName() {
@@ -53,10 +57,15 @@ public final class ScriptName {
         return type;
     }
 
+    public String getRevision() {
+        return revision != null ? revision : "0";
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (o == null || getClass() != o.getClass())
+        if (!(o instanceof ScriptName))
             return false;
 
         ScriptName that = (ScriptName) o;
@@ -69,6 +78,7 @@ public final class ScriptName {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int result = name.hashCode();
         result = 31 * result + type.hashCode();
@@ -76,10 +86,10 @@ public final class ScriptName {
     }
 
     public String toString() {
-        return name + ":" + type;
-    }
-
-    public static ScriptName forName(String name) {
-        return new ScriptName(SourceUnit.AUTO_DETECT, name);
+        StringBuilder sb = new StringBuilder(name).append(':').append(type);
+        if (null != revision) {
+            sb.append(':').append(revision);
+        }
+        return sb.toString();
     }
 }

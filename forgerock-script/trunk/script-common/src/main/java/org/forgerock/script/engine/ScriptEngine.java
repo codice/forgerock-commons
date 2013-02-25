@@ -26,7 +26,6 @@ package org.forgerock.script.engine;
 
 import javax.script.Bindings;
 
-import org.forgerock.json.resource.ConnectionFactory;
 import org.forgerock.json.resource.Context;
 
 /**
@@ -46,8 +45,6 @@ public interface ScriptEngine {
      */
     public ScriptEngineFactory getFactory();
 
-    public ConnectionFactory  getConnectionFactory();
-
     /**
      * Visits a function instance.
      * 
@@ -62,7 +59,7 @@ public interface ScriptEngine {
     /**
      * Visits a function instance.
      * 
-     * @param p
+     * @param context
      *            A visitor specified parameter.
      * @param value
      *            The ScriptContext instance.

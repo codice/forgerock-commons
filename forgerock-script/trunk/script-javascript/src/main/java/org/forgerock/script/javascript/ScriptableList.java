@@ -26,12 +26,13 @@ package org.forgerock.script.javascript;
 
 // Java Standard Edition
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
-import org.forgerock.script.scope.ObjectConverter;
-import org.forgerock.script.scope.OperationParameter;
+import org.forgerock.script.scope.AbstractFactory;
+import org.forgerock.script.scope.Parameter;
+import org.forgerock.util.LazyList;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.IdScriptableObject;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Wrapper;
 
@@ -45,18 +46,21 @@ import org.mozilla.javascript.Wrapper;
  * 
  * @author Paul C. Bryan
  */
-class ScriptableList implements Scriptable, Wrapper {
+class ScriptableList extends IdScriptableObject implements Wrapper {
+
+    /** The request being wrapped. */
+    private final Parameter parameter;
 
     /** The list being wrapped. */
     private final List<Object> list;
 
-    private final WeakReference<OperationParameter> paramReference;
-
-    /** The parent scope of the object. */
-    private Scriptable parent;
-
-    /** The prototype of the object. */
-    private Scriptable prototype;
+    public ScriptableList(final AbstractFactory.ListFactory factory) {
+        if (null == factory) {
+            throw new NullPointerException();
+        }
+        this.list = new LazyList<Object>(factory);
+        this.parameter = factory.getParameter();
+    }
 
     /**
      * Constructs a new scriptable wrapper around the specified list.
@@ -66,16 +70,15 @@ class ScriptableList implements Scriptable, Wrapper {
      * @throws NullPointerException
      *             if the specified list is {@code null}.
      */
-    public ScriptableList(OperationParameter objectConverter, List<Object> list) {
-        if (list == null) {
+    public ScriptableList(final Parameter operationParameter, final List<Object> list) {
+        if (null == operationParameter) {
+            throw new NullPointerException();
+        }
+        if (null == list) {
             throw new NullPointerException();
         }
         this.list = list;
-        if (null != objectConverter) {
-            paramReference = new WeakReference<OperationParameter>(objectConverter);
-        } else {
-            paramReference = null;
-        }
+        this.parameter = operationParameter;
     }
 
     /**
@@ -120,11 +123,15 @@ class ScriptableList implements Scriptable, Wrapper {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Object get(int index, Scriptable start) {
-        if (index >= 0 && index < list.size()) {
-            return ScriptableWrapper.wrap(null != paramReference ? paramReference.get() : null, list.get(index));
+    public Object get(int index, final Scriptable start) {
+        if (this == start) {
+            if (index >= 0 && index < list.size()) {
+                return Converter.wrap(parameter, list.get(index), start, list instanceof LazyList);
+            } else {
+                return NOT_FOUND;
+            }
         } else {
-            return NOT_FOUND;
+            return start.get(index, start);
         }
     }
 
@@ -188,31 +195,6 @@ class ScriptableList implements Scriptable, Wrapper {
                 throw Context.reportRuntimeError("list prohibits modification");
             }
         }
-    }
-
-    @Override
-    public Scriptable getPrototype() {
-        /*
-         * if (prototype == null) { // default if not explicitly set return
-         * ScriptableObject.getClassPrototype(getParentScope(), "Array"); }
-         * FIXME
-         */
-        return prototype;
-    }
-
-    @Override
-    public void setPrototype(Scriptable prototype) {
-        this.prototype = prototype;
-    }
-
-    @Override
-    public Scriptable getParentScope() {
-        return parent;
-    }
-
-    @Override
-    public void setParentScope(Scriptable parent) {
-        this.parent = parent;
     }
 
     @Override

@@ -29,6 +29,12 @@ import java.util.Map;
 
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.runtime.wrappers.Wrapper;
+import org.forgerock.json.resource.Connection;
+import org.forgerock.json.resource.ConnectionFactory;
+import org.forgerock.json.resource.ConnectionProvider;
+import org.forgerock.json.resource.RequestHandler;
+import org.forgerock.json.resource.ResourceException;
+import org.forgerock.json.resource.Resources;
 import org.forgerock.script.scope.Function;
 
 import groovy.lang.MetaClass;

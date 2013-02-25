@@ -34,7 +34,7 @@ import org.forgerock.json.resource.Context;
 public interface ScriptEntry extends Scope {
 
     public enum Visibility {
-        PUBLIC, PROTECTED, PRIVATE, DEFAULT;
+        PUBLIC, PRIVATE, DEFAULT;
     }
 
     /**

@@ -26,19 +26,22 @@ package org.forgerock.script.javascript;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.script.Bindings;
-import javax.script.ScriptContext;
 import javax.script.ScriptException;
 
 import org.forgerock.script.engine.CompiledScript;
 import org.forgerock.script.exception.ScriptThrownException;
+import org.forgerock.script.scope.OperationParameter;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.RhinoException;
 import org.mozilla.javascript.Script;
+import org.mozilla.javascript.ScriptRuntime;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.WrappedException;
@@ -70,10 +73,10 @@ public class RhinoScript implements CompiledScript {
     private final Script script;
 
     /** The script name */
-    private String scriptName;
+    private final String scriptName;
 
-    /** Default ScripContext */
-    //private final ScriptContext scriptContext;
+    /** The parent ScriptEngin */
+    private final RhinoScriptEngine engine;
 
     public static Global global = new Global();
 
@@ -94,23 +97,6 @@ public class RhinoScript implements CompiledScript {
     private final boolean sharedScope;
 
     /**
-     * Compiles the JavaScript source code into an executable script. A sealed
-     * shared scope containing standard JavaScript objects (Object, String,
-     * Number, Date, etc.) will be used for script execution rather than
-     * allocating a new unsealed scope for each execution.
-     * 
-     * @param source
-     *            the source code of the JavaScript script.
-     * @throws ScriptException
-     *             if there was an exception encountered while compiling the
-     *             script.
-     */
-    public RhinoScript(String name, String source, ScriptContext scriptContext)
-            throws ScriptException {
-        this(name, source, true);
-    }
-
-    /**
      * Compiles the JavaScript source code into an executable script. If
      * {@code useSharedScope} is {@code true}, then a sealed shared scope
      * containing standard JavaScript objects (Object, String, Number, Date,
@@ -126,10 +112,11 @@ public class RhinoScript implements CompiledScript {
      *             if there was an exception encountered while compiling the
      *             script.
      */
-    public RhinoScript(String name, String source, boolean sharedScope)
-            throws ScriptException {
+    public RhinoScript(String name, String source, final RhinoScriptEngine engine,
+            boolean sharedScope) throws ScriptException {
         this.scriptName = name;
         this.sharedScope = sharedScope;
+        this.engine = engine;
         Context cx = Context.enter();
         try {
             scriptScope = getScriptScope(cx);
@@ -144,10 +131,11 @@ public class RhinoScript implements CompiledScript {
     /**
      * TEMPORARY
      */
-    public RhinoScript(String name, Reader reader, boolean sharedScope)
-            throws ScriptException {
+    public RhinoScript(String name, Reader reader, final RhinoScriptEngine engine,
+            boolean sharedScope) throws ScriptException {
         this.scriptName = name;
         this.sharedScope = sharedScope;
+        this.engine = engine;
         try {
             Context cx = Context.enter();
             try {
@@ -180,7 +168,8 @@ public class RhinoScript implements CompiledScript {
      *            The runtime context of the executing script.
      * @return the JavaScript standard objects.
      */
-    private ScriptableObject getStandardObjects(Context context) {
+    // TODO Load RhinoTopLevel scope
+    private ScriptableObject getStandardObjects(final Context context) {
         if (!sharedScope) {
             ScriptableObject scope = context.initStandardObjects(); // somewhat
                                                                     // expensive
@@ -206,15 +195,13 @@ public class RhinoScript implements CompiledScript {
      * @return the context scriptable for this script
      */
     private Scriptable getScriptScope(Context context) {
+        Scriptable topLevel = getStandardObjects(context);
         Map<String, Object> scriptScopeMap = new HashMap<String, Object>();
         addLoggerProperty(scriptScopeMap);
-        Scriptable scriptScopeScriptable = new ScriptableMap(null, scriptScopeMap);
-        scriptScopeScriptable.setPrototype(getStandardObjects(context)); // standard
-                                                                         // objects
-                                                                         // included
-                                                                         // with
-                                                                         // every
-                                                                         // box
+        Scriptable scriptScopeScriptable = context.newObject(topLevel);
+
+        // standard objects included with every box
+        scriptScopeScriptable.setPrototype(topLevel);
         scriptScopeScriptable.setParentScope(null);
         return scriptScopeScriptable;
     }
@@ -227,17 +214,53 @@ public class RhinoScript implements CompiledScript {
      */
     private void addLoggerProperty(Map<String, Object> scope) {
         String loggerName = "org.forgerock.openidm.script.javascript.JavaScript." + scriptName;
-        //scope.put("logger", LoggerPropertyFactory.get(loggerName));
+        // scope.put("logger", LoggerPropertyFactory.get(loggerName));
     }
 
-    public Object eval(org.forgerock.json.resource.Context requestContext, Bindings bindings) throws ScriptException {
-        if (bindings == null) {
-            throw new NullPointerException();
-        }
+    @Override
+    public Object eval(final org.forgerock.json.resource.Context ctx, Bindings request,
+            Bindings... scopes) throws ScriptException {
+
         Context context = Context.enter();
         try {
-            //TODO missing Context and ConnectionFactory
-            Scriptable outer = new ScriptableMap(null, bindings);
+            Scriptable outer = context.newObject(getStandardObjects(context));
+
+            final OperationParameter operationParameter = engine.getOperationParameter(ctx);
+
+            Set<String> safeAttributes = null != request ? request.keySet() : Collections.EMPTY_SET;
+            Map<String, Object> scope = new HashMap<String, Object>();
+            for (Map<String, Object> next : scopes) {
+                if (null == next)
+                    continue;
+                for (Map.Entry<String, Object> entry : next.entrySet()) {
+                    if (scope.containsKey(entry.getKey())
+                            || safeAttributes.contains(entry.getKey())) {
+                        continue;
+                    }
+                    long index = ScriptRuntime.indexFromString(entry.getKey());
+                    if (index < 0) {
+                        outer.put(entry.getKey(), outer, Converter.wrap(operationParameter, entry
+                                .getValue(), outer, true));
+                    } else {
+                        outer.put((int) index, outer, Converter.wrap(operationParameter, entry
+                                .getValue(), outer, true));
+                    }
+                }
+            }
+
+            if (null != request) {
+                for (Map.Entry<String, Object> entry : request.entrySet()) {
+                    long index = ScriptRuntime.indexFromString(entry.getKey());
+                    if (index < 0) {
+                        outer.put(entry.getKey(), outer, Converter.wrap(operationParameter, entry
+                                .getValue(), outer, false));
+                    } else {
+                        outer.put((int) index, outer, Converter.wrap(operationParameter, entry
+                                .getValue(), outer, false));
+                    }
+                }
+            }
+
             outer.setPrototype(scriptScope); // script level context and
                                              // standard objects included with
                                              // every box
@@ -250,20 +273,22 @@ public class RhinoScript implements CompiledScript {
             Object result = Converter.convert(script.exec(context, inner));
             return result;
         } catch (WrappedException e) {
-            //TODO Implement properly
-            if ( e.getWrappedException() instanceof NoSuchMethodException) {
-                throw new ScriptThrownException("NoSuchMethodException",(Exception)e.getWrappedException());
+            // TODO Implement properly
+            if (e.getWrappedException() instanceof NoSuchMethodException) {
+                throw new ScriptThrownException("NoSuchMethodException", (Exception) e
+                        .getWrappedException());
             } else if (e.getWrappedException() instanceof Exception) {
-                throw new ScriptThrownException("Exception",(Exception)e.getWrappedException());
+                throw new ScriptThrownException("Exception", (Exception) e.getWrappedException());
             } else {
-                throw new ScriptThrownException("Throwable",e.getWrappedException().getMessage());
+                throw new ScriptThrownException("Throwable", e.getWrappedException().getMessage());
             }
         } catch (RhinoException re) {
-            if (re instanceof JavaScriptException) { // thrown by the script
-                                                     // itself
-                throw new ScriptThrownException(Converter.convert(((JavaScriptException) re)
-                        .getValue()), re);
-            } else { // some other runtime exception encountered
+            if (re instanceof JavaScriptException) {
+                // thrown by the script itself
+                throw new ScriptThrownException(re, Converter.convert(((JavaScriptException) re)
+                        .getValue()));
+            } else {
+                // some other runtime exception encountered
                 throw new ScriptException(re.getMessage());
             }
         } finally {

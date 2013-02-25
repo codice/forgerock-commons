@@ -26,7 +26,6 @@ package org.forgerock.script;
 
 import javax.script.Bindings;
 
-
 /**
  * A NAME does ...
  * 

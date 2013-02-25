@@ -2,7 +2,7 @@
 <!--
   ~ DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
   ~
-  ~ Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+  ~ Copyright (c) 2012-2013 ForgeRock Inc. All rights reserved.
   ~
   ~ The contents of this file are subject to the terms
   ~ of the Common Development and Distribution License
@@ -103,7 +103,7 @@
         <maven.compiler.source>1.6</maven.compiler.source>
 
         <!-- version management -->
-        <slf4j.version>1.6.6</slf4j.version>
+        <slf4j.version>1.7.2</slf4j.version>
 
         <!-- Commons forgerock-rest versions -->
         <commons.forgerock-rest.version>2.0.0-SNAPSHOT</commons.forgerock-rest.version>
@@ -135,7 +135,7 @@
         <module>script-common</module>
         <module>script-javascript</module>
         <module>script-groovy</module>
-        <module>script-jruby</module>
+        <!--module>script-jruby</module-->
     </modules>
 
     <dependencyManagement>
@@ -153,6 +153,12 @@
                 <version>${commons.forgerock-rest.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.forgerock.commons</groupId>
+                <artifactId>i18n-slf4j</artifactId>
+                <version>1.4.1-SNAPSHOT</version>
+            </dependency>
+
             <!-- SLF4J -->
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -160,6 +166,7 @@
                 <version>${slf4j.version}</version>
             </dependency>
 
+            <!-- Provided Dependencies -->
             <!-- Core OSGi -->
             <dependency>
                 <groupId>org.osgi</groupId>
@@ -167,18 +174,12 @@
                 <version>4.3.0</version>
                 <scope>provided</scope>
             </dependency>
-            <dependency>
-                <groupId>org.osgi</groupId>
-                <artifactId>org.osgi.compendium</artifactId>
-                <version>4.3.0</version>
-                <scope>provided</scope>
-            </dependency>
 
             <!-- Test Dependencies -->
             <dependency>
                 <groupId>org.easytesting</groupId>
-                <artifactId>fest-assert</artifactId>
-                <version>1.4</version>
+                <artifactId>fest-assert-core</artifactId>
+                <version>2.0M8</version>
             </dependency>
             <dependency>
                 <groupId>org.testng</groupId>
@@ -197,19 +198,36 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.forgerock.commons</groupId>
+                    <artifactId>i18n-maven-plugin</artifactId>
+                    <version>1.4.1-SNAPSHOT</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>generate-messages</goal>
+                            </goals>
+                            <!--<configuration>
+                                <messageFiles>
+                                    <messageFile>com/example/my_tool.properties</messageFile>
+                                </messageFiles>
+                            </configuration>-->
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>2.3.7</version>
                     <configuration>
                         <instructions>
-                            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                             <Import-Package>${commons.script.osgi.import}</Import-Package>
                             <_versionpolicy>${commons.script.osgi.import.default.version}</_versionpolicy>
-                            <Implementation-Build>${ci.build.number}</Implementation-Build>
                             <SCM-Revision>${ci.svn.revision}</SCM-Revision>
                             <_removeheaders>
                                 Bnd-LastModified,Built-By,Private-Package,Tool,Build-Jdk,Include-Resource,Ignore-Package,Private-Package,Bundle-DocURL
                             </_removeheaders>
+                            <Include-Resource>{maven-resources}</Include-Resource>
                         </instructions>
                         <versions>
                             <project.osgi.version.clean>${project.version}</project.osgi.version.clean>

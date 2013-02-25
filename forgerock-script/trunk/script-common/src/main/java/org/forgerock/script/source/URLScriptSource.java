@@ -49,16 +49,28 @@ public class URLScriptSource implements ScriptSource {
     private SourceContainer parent = null;
 
     public URLScriptSource(ScriptEntry.Visibility visibility, URL source, ScriptName scriptName) {
+        if (null == source) {
+            throw new IllegalArgumentException("URL source is null");
+        }
+        if (null == scriptName) {
+            throw new IllegalArgumentException("ScriptName is null");
+        }
         this.visibility = visibility;
         this.source = source;
-        this.scriptName = scriptName;
+        this.scriptName = new ScriptName(scriptName.getName(), scriptName.getType(), scriptName.getRevision());;
     }
 
     public URLScriptSource(ScriptEntry.Visibility visibility, URL source, ScriptName scriptName,
-            SourceContainer parent) {
+            final SourceContainer parent) {
+        if (null == source) {
+            throw new IllegalArgumentException("URL source is null");
+        }
+        if (null == scriptName) {
+            throw new IllegalArgumentException("ScriptName is null");
+        }
         this.visibility = visibility;
         this.source = source;
-        this.scriptName = scriptName;
+        this.scriptName = new ScriptName(scriptName.getName(), scriptName.getType(), scriptName.getRevision());;
         this.parent = parent;
     }
 

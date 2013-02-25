@@ -24,12 +24,13 @@
 
 package org.forgerock.script.javascript;
 
-import java.lang.ref.WeakReference;
 import java.util.Map;
 
-import org.forgerock.script.scope.ObjectConverter;
-import org.forgerock.script.scope.OperationParameter;
+import org.forgerock.script.scope.AbstractFactory;
+import org.forgerock.script.scope.Parameter;
+import org.forgerock.util.LazyMap;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Wrapper;
 
@@ -40,18 +41,21 @@ import org.mozilla.javascript.Wrapper;
  * 
  * @author Paul C. Bryan
  */
-class ScriptableMap implements Scriptable, Wrapper {
+class ScriptableMap extends NativeObject implements Wrapper {
+
+    /** The request being wrapped. */
+    private final Parameter parameter;
 
     /** The map being wrapped. */
     private final Map<String, Object> map;
 
-    private final WeakReference<OperationParameter> paramReference;
-
-    /** The parent scope of the object. */
-    private Scriptable parent;
-
-    /** The prototype of the object. */
-    private Scriptable prototype;
+    public ScriptableMap(final AbstractFactory.MapFactory factory) {
+        if (null == factory) {
+            throw new NullPointerException();
+        }
+        this.parameter = factory.getParameter();
+        this.map = new LazyMap<String, Object>(factory);
+    }
 
     /**
      * Constructs a new scriptable wrapper around the specified list.
@@ -61,16 +65,15 @@ class ScriptableMap implements Scriptable, Wrapper {
      * @throws NullPointerException
      *             if the specified map is {@code null}.
      */
-    public ScriptableMap(OperationParameter objectConverter, Map<String, Object> map) {
-        if (map == null) {
+    public ScriptableMap(final Parameter parameter, final Map<String, Object> map) {
+        if (null == parameter) {
             throw new NullPointerException();
         }
-        this.map = map;
-        if (null != objectConverter) {
-            paramReference = new WeakReference<OperationParameter>(objectConverter);
-        } else {
-            paramReference = null;
+        if (null == map) {
+            throw new NullPointerException();
         }
+        this.parameter = parameter;
+        this.map = map;
     }
 
     @Override
@@ -82,7 +85,7 @@ class ScriptableMap implements Scriptable, Wrapper {
     @SuppressWarnings("unchecked")
     public Object get(String name, Scriptable start) {
         if (map.containsKey(name)) {
-            return ScriptableWrapper.wrap(null != paramReference ? paramReference.get() : null, map.get(name));
+            return Converter.wrap(parameter, map.get(name), start, map instanceof LazyMap);
         } else {
             return NOT_FOUND;
         }
@@ -90,7 +93,7 @@ class ScriptableMap implements Scriptable, Wrapper {
 
     @Override
     public Object get(int index, Scriptable start) {
-        return get(Integer.toString(index), start);
+        return has(index, start) ? get(Integer.toString(index), start) : super.get(index, start);
     }
 
     @Override
@@ -129,30 +132,6 @@ class ScriptableMap implements Scriptable, Wrapper {
     @Override
     public void delete(int index) {
         delete(Integer.toString(index));
-    }
-
-    @Override
-    public Scriptable getPrototype() {
-        /*
-         * if (prototype == null) { // default if not explicitly set return
-         * ScriptableObject.getClassPrototype(prototype, "Object"); } FIXME
-         */
-        return prototype;
-    }
-
-    @Override
-    public void setPrototype(Scriptable prototype) {
-        this.prototype = prototype;
-    }
-
-    @Override
-    public Scriptable getParentScope() {
-        return parent;
-    }
-
-    @Override
-    public void setParentScope(Scriptable parent) {
-        this.parent = parent;
     }
 
     @Override

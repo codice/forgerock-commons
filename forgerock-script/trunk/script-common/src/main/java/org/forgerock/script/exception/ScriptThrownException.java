@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2013 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -24,8 +24,14 @@
 
 package org.forgerock.script.exception;
 
+import static org.forgerock.json.resource.ResourceException.*;
+
+import java.util.Map;
+
 import javax.script.ScriptException;
 
+import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.resource.ResourceException;
 
 /**
  * An exception that is thrown to indicate that an executed script encountered
@@ -33,24 +39,18 @@ import javax.script.ScriptException;
  * 
  * @author Paul C. Bryan
  */
-
 public class ScriptThrownException extends ScriptException {
 
     /** Serializable class a version number. */
-    private static final long serialVersionUID = -517416087837241796L;
+    static final long serialVersionUID = 1L;
 
     /** Value that was thrown by the script. */
     private Object value;
 
     /**
-     * Constructs a new exception with the specified value and {@code null} as
-     * its detail message.
-     */
-
-    /**
      * Constructs a new exception with the specified value and detail message.
      */
-    public ScriptThrownException(Object value, String message) {
+    public ScriptThrownException(String message, Object value) {
         super(message);
         this.value = value;
     }
@@ -58,18 +58,18 @@ public class ScriptThrownException extends ScriptException {
     /**
      * Constructs a new exception with the specified value and cause.
      */
-    public ScriptThrownException(Object value, Exception exception) {
-        super(exception);
+    public ScriptThrownException(Exception e, Object value) {
+        super(e);
         this.value = value;
     }
 
-    public ScriptThrownException(Object value, String message, String fileName, int lineNumber) {
+    public ScriptThrownException(String message, String fileName, int lineNumber, Object value) {
         super(message, fileName, lineNumber);
         this.value = value;
     }
 
-    public ScriptThrownException(Object value, String message, String fileName, int lineNumber,
-            int columnNumber) {
+    public ScriptThrownException(String message, String fileName, int lineNumber, int columnNumber,
+            Object value) {
         super(message, fileName, lineNumber, columnNumber);
         this.value = value;
     }
@@ -80,4 +80,62 @@ public class ScriptThrownException extends ScriptException {
     public Object getValue() {
         return value;
     }
+
+    /**
+     * Converts the script exception to an appropriate json resource exception.
+     * 
+     * The exception message is set to, in order of precedence 1. Specific
+     * message set in the thrown script exception 2. Default exception supplied
+     * to this method, or if null 3. value toString of this exception
+     * 
+     * @param defaultMsg
+     *            a default message to use if no explicit message is set, or
+     *            null if value toString shoudl be used instead
+     * @return the appropriate JsonResourceException
+     * @throws org.forgerock.json.fluent.JsonValueException
+     *             when value can not be converted to ResourceException
+     */
+    public ResourceException toResourceException(int defaultCode, String defaultMsg) {
+        if (value instanceof Map) {
+            // Convention on structuring well known exceptions with value that
+            // contains
+            // code : Integer matching ResourceException codes
+            // (required for it to be considered a known exception definition)
+            // reason : String - optional exception reason, not set this use the
+            // default value
+            // message : String - optional exception message, set to
+            // value.toString if not present
+            // detail : Map<String, Object> - optional structure with exception
+            // detail
+            // cause : Throwable - optional cause to chain
+            JsonValue val = new JsonValue(value);
+            Integer openidmCode = val.get(FIELD_CODE).asInteger();
+            if (openidmCode != null) {
+                String message = val.get(FIELD_MESSAGE).asString();
+                if (message == null) {
+                    if (defaultMsg != null) {
+                        message = defaultMsg;
+                    } else {
+                        message = String.valueOf(value);
+                    }
+                }
+                JsonValue failureDetail = val.get(FIELD_DETAIL);
+                Throwable throwable = (Throwable) val.get("cause").getObject();
+                if (throwable == null) {
+                    throwable = this;
+                }
+                return getException(openidmCode.intValue(), message, throwable).setDetail(
+                        failureDetail);
+
+            }
+        }
+        if (defaultMsg != null) {
+            return getException(defaultCode, defaultMsg, this);
+        } else if (value == null) {
+            return getException(defaultCode, null, this);
+        } else {
+            return getException(defaultCode, String.valueOf(value.toString()), this);
+        }
+    }
+
 }

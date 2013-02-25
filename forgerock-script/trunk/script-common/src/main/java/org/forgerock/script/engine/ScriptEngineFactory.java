@@ -28,8 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.forgerock.json.resource.ConnectionFactory;
-
+import org.forgerock.json.resource.PersistenceConfig;
 
 /**
  * {@code ScriptEngineFactory} is used to describe and instantiate
@@ -113,6 +112,7 @@ public interface ScriptEngineFactory {
      * 
      * @return A new {@code ScriptEngine} instance.
      */
-    public ScriptEngine getScriptEngine(AtomicReference<ConnectionFactory> connectionFactory, Map<String, Object> configuration);
+    public ScriptEngine getScriptEngine(AtomicReference<PersistenceConfig> connectionFactory,
+            Map<String, Object> configuration);
 
 }

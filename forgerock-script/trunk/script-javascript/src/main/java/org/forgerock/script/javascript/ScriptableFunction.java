@@ -27,12 +27,14 @@ package org.forgerock.script.javascript;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.forgerock.json.resource.Connection;
-import org.forgerock.json.resource.ConnectionFactory;
+import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.script.scope.Function;
 import org.forgerock.script.scope.OperationParameter;
+import org.forgerock.script.scope.Parameter;
+import org.mozilla.javascript.BaseFunction;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeFunction;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.WrappedException;
 import org.mozilla.javascript.Wrapper;
@@ -43,33 +45,24 @@ import org.mozilla.javascript.Wrapper;
  * 
  * @author Paul C. Bryan
  */
-class ScriptableFunction implements org.mozilla.javascript.Function, Wrapper {
+class ScriptableFunction extends BaseFunction implements Wrapper {
 
-    /** The parent scope of the object. */
-    private Scriptable parent;
+    /** The request being wrapped. */
+    private final Parameter parameter;
 
-    /** The prototype of the object. */
-    private Scriptable prototype;
+    /** The function being wrapped. */
+    private final Function<?> function;
 
-    /** TODO: Description. */
-    private final Function function;
-    /** TODO: Description. */
-    private final OperationParameter parameter;
-
-    /**
-     * TODO: Description.
-     * 
-     * @param function
-     *            TODO.
-     */
-    public ScriptableFunction(Function function) {
+    ScriptableFunction(final Parameter operationParameter, final Function<?> function) {
         this.function = function;
-        this.parameter = null;
+        this.parameter = operationParameter;
     }
 
-    public ScriptableFunction(final OperationParameter connection, Function function) {
+    ScriptableFunction(Scriptable scope, Scriptable prototype,
+            final OperationParameter operationParameter, final Function<?> function) {
+        super(scope, prototype);
         this.function = function;
-        this.parameter = connection;
+        this.parameter = operationParameter;
     }
 
     /**
@@ -82,24 +75,38 @@ class ScriptableFunction implements org.mozilla.javascript.Function, Wrapper {
     private List<Object> convert(Object[] args) {
         ArrayList<Object> list = new ArrayList<Object>();
         for (Object object : args) {
+            if (object instanceof NativeFunction) {
+                continue;
+            }
             list.add(Converter.convert(object));
         }
         return list;
     }
 
     @Override
-    public Object call(Context cx, Scriptable scope, Scriptable thisObj, Object[] args) {
+    public Object call(final Context cx, final Scriptable scope, final Scriptable thisObj,
+            Object[] args) {
         try {
-            final Function[] callbackFunction = new Function[1];
-            //TODO Provide the visitorParam
-            return ScriptableWrapper.wrap(parameter, function.call(new OperationParameter(parameter.getContext(),parameter.getConnectionFactory()) {
-                public Function getCallbackFunction() {
-                    if (callbackFunction.length > 0) {
-                        return callbackFunction[0];
+            Function<?> callbackFunction = null;
+            if (args.length > 0 && args[args.length - 1] instanceof NativeFunction) {
+                final NativeFunction nativeFunction = (NativeFunction) args[args.length - 1];
+                callbackFunction = new Function<Void>() {
+                    @Override
+                    public Void call(Parameter scope0, Function<?> callback, Object... arguments)
+                            throws ResourceException, NoSuchMethodException {
+                        nativeFunction.call(cx, scope, thisObj, arguments);
+                        return null;
                     }
-                    return null;
-                }
-            }, convert(args).toArray()));
+                };
+            }
+            Object result = function.call(parameter, callbackFunction, convert(args).toArray());
+            if (null == result) {
+                return null;
+            } else if (result instanceof JsonValue ) {
+                return Converter.wrap(parameter, ((JsonValue)result).getObject(), scope, false);
+            } else {
+                return Converter.wrap(parameter, result, scope, false);
+            }
         } catch (Throwable throwable) {
             throw new WrappedException(throwable);
         }
@@ -110,14 +117,16 @@ class ScriptableFunction implements org.mozilla.javascript.Function, Wrapper {
         throw Context.reportRuntimeError("functions may not be used as constructors");
     }
 
+    /**
+     * Gets the value returned by calling the typeof operator on this object.
+     * 
+     * @see org.mozilla.javascript.ScriptableObject#getTypeOf()
+     * @return "function" or "undefined" if {@link #avoidObjectDetection()}
+     *         returns <code>true</code>
+     */
     @Override
-    public String getClassName() {
-        return "ScriptableFunction";
-    }
-
-    @Override
-    public Object get(String name, Scriptable start) {
-        return NOT_FOUND;
+    public String getTypeOf() {
+        return avoidObjectDetection() ? "undefined" : "function";
     }
 
     @Override
@@ -153,26 +162,6 @@ class ScriptableFunction implements org.mozilla.javascript.Function, Wrapper {
     @Override
     public void delete(int index) {
         throw Context.reportRuntimeError("function prohibits modification");
-    }
-
-    @Override
-    public Scriptable getPrototype() {
-        return prototype;
-    }
-
-    @Override
-    public void setPrototype(Scriptable prototype) {
-        this.prototype = prototype;
-    }
-
-    @Override
-    public Scriptable getParentScope() {
-        return parent;
-    }
-
-    @Override
-    public void setParentScope(Scriptable parent) {
-        this.parent = parent;
     }
 
     @Override

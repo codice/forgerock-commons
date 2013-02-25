@@ -24,20 +24,18 @@
 
 package org.forgerock.script.javascript;
 
-// Java Standard Edition
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.forgerock.script.scope.AbstractFactory;
+import org.forgerock.script.scope.Function;
+import org.forgerock.script.scope.Parameter;
+import org.forgerock.util.Factory;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Wrapper;
-
-// Mozilla Rhino
-
-// TODO: get rid of this; provide a replacement that just wraps the scriptable and exposes list/map interfaces
 
 /**
  * Converts scriptable types provided by Rhino into standard Java objects.
@@ -97,6 +95,29 @@ class Converter {
         return false;
     }
 
+    public static final Object wrap(final Parameter parameter, final Object value,
+            final Scriptable scope, boolean doCopy) {
+        if (value == null) {
+            return null;
+        } else if (value instanceof Map) {
+            if (doCopy) {
+                return new ScriptableMap(getMap(parameter, (Map) value));
+            } else {
+                return new ScriptableMap(parameter, (Map) value);
+            }
+        } else if (value instanceof List) {
+            if (doCopy) {
+                return new ScriptableList(getList(parameter, (List) value));
+            } else {
+                return new ScriptableList(parameter, (List) value);
+            }
+        } else if (value instanceof Function) {
+            return new ScriptableFunction(parameter, (Function) value);
+        } else {
+            return Context.javaToJS(value, scope);
+        }
+    }
+
     /**
      * Converts a value provided from JavaScript into a standard Java object.
      * Used when the script is attempting to assign a value to a supplied scope
@@ -151,7 +172,73 @@ class Converter {
         } else if (value instanceof Number || value instanceof String || value instanceof Boolean
                 || value instanceof Map || value instanceof List) {
             result = value; // already valid JSON element
+        } else if (value instanceof CharSequence) {
+            result = ((CharSequence) value).toString();
         }
         return result;
+    }
+
+    public static AbstractFactory.MapFactory getMap(final Parameter operationParameter,
+            final Map<String, Object> source) {
+        return new CopyMapFactory(operationParameter, source);
+
+    }
+
+    public static AbstractFactory.ListFactory getList(final Parameter operationParameter,
+            final List<Object> source) {
+        return new CopyListFactory(operationParameter, source);
+
+    }
+
+    public static class CopyListFactory extends AbstractFactory.ListFactory {
+
+        private final Parameter parameter;
+
+        public CopyListFactory(final Parameter parameter, final List<Object> source) {
+            super(source);
+            this.parameter = parameter;
+        }
+
+        public Parameter getParameter() {
+            return parameter;
+        }
+
+        protected Factory<List<Object>> newListFactory(final List<Object> source) {
+            return Converter.getList(parameter, source);
+        }
+
+        protected Factory<Map<String, Object>> newMapFactory(final Map<String, Object> source) {
+            return Converter.getMap(parameter, source);
+        }
+
+        protected Object convertFunction(final Function<?> source) {
+            return source;
+        }
+    }
+
+    public static class CopyMapFactory extends AbstractFactory.MapFactory {
+
+        private final Parameter parameter;
+
+        public CopyMapFactory(final Parameter parameter, final Map<String, Object> source) {
+            super(source);
+            this.parameter = parameter;
+        }
+
+        public Parameter getParameter() {
+            return parameter;
+        }
+
+        protected Factory<List<Object>> newListFactory(final List<Object> source) {
+            return Converter.getList(parameter, source);
+        }
+
+        protected Factory<Map<String, Object>> newMapFactory(final Map<String, Object> source) {
+            return Converter.getMap(parameter, source);
+        }
+
+        protected Object convertFunction(final Function<?> source) {
+            return source;
+        }
     }
 }

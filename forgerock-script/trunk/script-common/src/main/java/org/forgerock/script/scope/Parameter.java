@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock AS. All Rights Reserved
+ * Copyright (c) 2013 ForgeRock AS. All Rights Reserved
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -24,27 +24,30 @@
 
 package org.forgerock.script.scope;
 
+import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.resource.PersistenceConfig;
+import org.forgerock.json.resource.ResourceException;
+import org.forgerock.json.resource.ServerContext;
+
 /**
- * A NAME does ...
+ * A Parameter does ...
  * 
  * @author Laszlo Hordos
  */
-public interface Element {
+public interface Parameter {
 
     /**
-     * Applies a {@code ScriptableVisitor} to this {@code Element}.
+     * Returns the internal connection.
      * 
-     * @param <R>
-     *            The return type of the visitor's methods.
-     * @param <P>
-     *            The type of the additional parameters to the visitor's
-     *            methods.
-     * @param v
-     *            The scriptable visitor.
-     * @param p
-     *            Optional additional visitor parameter.
-     * @return A result as specified by the visitor.
+     * @return The ServerContext assigned with current
+     *         {@link org.forgerock.json.resource.Request}.
+     * @throws org.forgerock.json.resource.NotFoundException
+     *             If no such connection exists.
+     * @throws org.forgerock.json.resource.ResourceException
+     *             If the connection could not be obtained for some other reason
+     *             (e.g. due to a configuration or initialization problem).
      */
-    <R, P> R accept(final ScriptableVisitor<R, P> v, final P p);
+    public ServerContext getServerContext(JsonValue savedContext) throws ResourceException;
 
+    public PersistenceConfig getPersistenceConfig();
 }

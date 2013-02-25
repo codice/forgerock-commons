@@ -26,7 +26,6 @@ package org.forgerock.script;
 
 import java.util.EventObject;
 
-
 /**
  * A ScriptEvent does ...
  * 

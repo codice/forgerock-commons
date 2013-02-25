@@ -28,16 +28,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.Map;
-
-import javax.script.Bindings;
-import javax.script.SimpleBindings;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.forgerock.json.resource.Context;
-import org.forgerock.json.resource.Request;
-import org.forgerock.script.scope.Element;
-import org.forgerock.script.scope.ObjectConverter;
-import org.forgerock.script.scope.ScriptableVisitor;
+import org.forgerock.json.resource.Requests;
+import org.forgerock.json.resource.Resources;
 
 /**
  * A NAME does ...
@@ -45,6 +41,19 @@ import org.forgerock.script.scope.ScriptableVisitor;
  * @author Laszlo Hordos
  */
 public abstract class AbstractScriptEngine implements ScriptEngine {
+
+    private static final List<String> imports = new ArrayList<String>();
+
+    static {
+        imports.add("org.forgerock.json.resource.*");
+        imports.add("org.forgerock.json.fluent.*");
+        imports.add("static " + Resources.class.getName() + ".*");
+        imports.add("static " + Requests.class.getName() + ".*");
+    }
+
+    public static List<String> getImports() {
+        return imports;
+    }
 
     /**
      * This is the writer to be used to output from scripts. By default, a
@@ -78,10 +87,9 @@ public abstract class AbstractScriptEngine implements ScriptEngine {
      */
     protected Reader reader;
 
-
     protected AbstractScriptEngine() {
         reader = new InputStreamReader(System.in);
-        writer = new PrintWriter(System.out , true);
+        writer = new PrintWriter(System.out, true);
         errorWriter = new PrintWriter(System.err, true);
     }
 
@@ -116,64 +124,51 @@ public abstract class AbstractScriptEngine implements ScriptEngine {
     }
 
     /** {@inheritDoc  */
-    public Object compileObject(final Context context, Object value) {
-        return compileObject(getVisitor(), getObjectConverter(context), value);
-    }
+    // public Map<String, Object> compileBindings(final Context context,
+    // final Map<String, Object> request, Map<String, Object>... scopes) {
+
+    //
+    // Set<String> safeAttributes = null != request ? request.keySet() :
+    // Collections.EMPTY_SET;
+    // Map<String, Object> scope = new HashMap<String, Object>();
+    // for (Map<String, Object> next : scopes) {
+    // if (null == next)
+    // continue;
+    // for (Map.Entry<String, Object> entry : next.entrySet()) {
+    // if (scope.containsKey(entry.getKey()) ||
+    // safeAttributes.contains(entry.getKey())) {
+    // continue;
+    // }
+    //
+    //
+    //
+    // scope.put(entry.getKey(), entry.getValue());
+    // }
+    // }
+    //
+    // JsonValue requestScope = null;
+    // if (null != request) {
+    // // Make a deep copy and merge
+    // request.putAll(scope.copy().asMap());
+    // requestScope = new JsonValue(request);
+    // } else {
+    // // Make a deep copy
+    // requestScope = scope.copy();
+    // }
+    // requestScope.getTransformers().add(getOperationParameter(context));
+
+    // return new SimpleBindings(new JsonValueMap(requestScope));
+    // }
 
     /** {@inheritDoc  */
-    public Bindings compileBindings(final Context context, final Bindings request,
-            Bindings... scopes) {
-        Bindings result = new SimpleBindings();
-        ObjectConverter param = getObjectConverter(context);
-        ScriptableVisitor<Object, ObjectConverter> visitor = getVisitor();
+    public Object compileObject(final Context context, Object value) {
+        // JsonValue temp = new JsonValue(value);
+        // temp.getTransformers().add(getOperationParameter(context));
+        // temp = temp.copy();
+        // return temp.getObject();
 
-        if (null != request) {
-            for (Map.Entry<String, Object> entry : request.entrySet()) {
-                result.put(entry.getKey(), compileObject(visitor, param, entry.getValue()));
-            }
-        }
-
-        for (Bindings next : scopes) {
-            if (null == next)
-                continue;
-            for (Map.Entry<String, Object> entry : next.entrySet()) {
-                if (!result.containsKey(entry.getKey())) {
-                    result.put(entry.getKey(), compileObject(visitor, param, Utils.deepCopy(entry
-                            .getValue())));
-                }
-            }
-        }
-        return result;
+        return null;
     }
-
-    protected Object compileObject(final ScriptableVisitor<Object, ObjectConverter> visitor,
-            final ObjectConverter param, final Object value) {
-        if (null == value) {
-            return getNull();
-        } else if (value instanceof Element) {
-            return ((Element) value).accept(visitor, param);
-        }
-        if (value instanceof Request) {
-            return ((Request) value).accept(visitor, param);
-        } else {
-            return visitor.visitObject(param, value);
-        }
-    }
-
-    /**
-     * Gets the request context
-     * 
-     * @param context
-     * @return
-     */
-    protected abstract ObjectConverter getObjectConverter(final Context context);
-
-    /**
-     * Gets the Visitor
-     * 
-     * @return
-     */
-    protected abstract ScriptableVisitor<Object, ObjectConverter> getVisitor();
 
     /**
      * Gets the {@code null} object representation.
@@ -186,4 +181,7 @@ public abstract class AbstractScriptEngine implements ScriptEngine {
     protected Object getNull() {
         return null;
     }
+
+    // protected abstract OperationParameter getOperationParameter(final Context
+    // context);
 }

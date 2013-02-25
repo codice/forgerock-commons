@@ -37,10 +37,11 @@ import org.forgerock.script.ScriptName;
 public interface SourceUnit {
 
     public static final String AUTO_DETECT = "auto-detect";
-    public static final String TYPE = "type";
-    public static final String NAME = "name";
-    public static final String SOURCE = "source";
-    public static final String VISIBILITY = "visibility";
+    public static final String ATTR_TYPE = "type";
+    public static final String ATTR_NAME = "name";
+    public static final String ATTR_REVISION = "revision";
+    public static final String ATTR_SOURCE = "source";
+    public static final String ATTR_VISIBILITY = "visibility";
 
     ScriptName getName();
 

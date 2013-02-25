@@ -24,28 +24,34 @@
 
 package org.forgerock.script;
 
-import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.resource.Connection;
+import org.forgerock.json.resource.ConnectionProvider;
+import org.forgerock.json.resource.InMemoryBackend;
+import org.forgerock.json.resource.InternalServerErrorException;
+import org.forgerock.json.resource.PersistenceConfig;
+import org.forgerock.json.resource.ResourceException;
 import org.forgerock.json.resource.Resources;
-import org.forgerock.json.resource.Context;
 import org.forgerock.json.resource.ReadRequest;
 import org.forgerock.json.resource.Resource;
 import org.forgerock.json.resource.ResultHandler;
 import org.forgerock.json.resource.RequestHandler;
+import org.forgerock.json.resource.RootContext;
+import org.forgerock.json.resource.Router;
+import org.forgerock.json.resource.RoutingMode;
 import org.forgerock.json.resource.ServerContext;
 import org.forgerock.script.engine.ScriptEngineFactory;
 import org.forgerock.script.exception.ScriptThrownException;
 import org.forgerock.script.registry.ScriptRegistryImpl;
-import org.forgerock.script.scope.ConnectionFunction;
+import org.forgerock.script.scope.Function;
+import org.forgerock.script.scope.FunctionFactory;
 import org.forgerock.script.source.DirectoryContainer;
 import org.forgerock.script.source.EmbeddedScriptSource;
 import org.forgerock.script.source.ScriptSource;
@@ -57,7 +63,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -86,7 +92,27 @@ public abstract class ScriptTest {
 
         RequestHandler resource = mock(RequestHandler.class);
 
-        scriptRegistry.setConnectionFactory(Resources.newInternalConnectionFactory(resource));
+        final Router router = new Router();
+        router.addRoute("Users", new InMemoryBackend());
+        router.addRoute("Groups", new InMemoryBackend());
+        router.addRoute(RoutingMode.EQUALS, "mock/{id}",resource);
+
+        scriptRegistry.setPersistenceConfig(PersistenceConfig.builder().connectionProvider(new ConnectionProvider() {
+            @Override
+            public Connection getConnection(String connectionId) throws ResourceException {
+                if ("DEFAULT".equalsIgnoreCase(connectionId)) {
+                    return Resources.newInternalConnection(router);
+                } else {
+                    throw new InternalServerErrorException("Connection not found with id: "
+                            + connectionId);
+                }
+            }
+
+            @Override
+            public String getConnectionId(Connection connection) throws ResourceException {
+                return "DEFAULT";
+            }
+        }).build());
 
         doAnswer(new Answer<Void>() {
             public Void answer(InvocationOnMock invocation) throws Throwable {
@@ -98,17 +124,12 @@ public abstract class ScriptTest {
             }
         }).when(resource).handleRead(any(ServerContext.class),any(ReadRequest.class),any(ResultHandler.class));
 
-        Map<String,Object> router = new HashMap<String, Object>(7);
-
-        for (ConnectionFunction operation : ConnectionFunction.values()) {
-            router.put(operation.name().toLowerCase(),operation);
-        }
-        scriptRegistry.put("router", router);
+        scriptRegistry.put("router", FunctionFactory.getResource());
 
         URL container = getScriptContainer("/container/");
         Assert.assertNotNull(container);
 
-        scriptRegistry.addSourceUnit(new DirectoryContainer("name", container));
+        scriptRegistry.addSourceUnit(new DirectoryContainer("container", container));
         scriptRegistry.addSourceUnit(new EmbeddedScriptSource(ScriptEntry.Visibility.PUBLIC,
                 "egy = egy + 2;egy", new ScriptName("test1",getLanguageName())));
 
@@ -124,7 +145,7 @@ public abstract class ScriptTest {
         ScriptEntry scriptEntry = getScriptRegistry().takeScript(scriptName);
         Assert.assertNotNull(scriptEntry);
         scriptEntry.put("egy", 1);
-        assertThat(scriptEntry.getScript(null).eval()).isEqualTo(3);
+        assertThat(scriptEntry.getScript(new RootContext()).eval()).isEqualTo(3);
 
         // Load Script from Directory
         scriptEntry = getScriptRegistry().takeScript(new ScriptName("sample", getLanguageName()));
@@ -132,7 +153,7 @@ public abstract class ScriptTest {
 
         // Set ServiceLevel Scope
         scriptEntry.put("egy", 1);
-        Script script = scriptEntry.getScript(null);
+        Script script = scriptEntry.getScript(new RootContext());
 
         // Set RequestLevel Scope
         script.put("ketto", 2);
@@ -148,7 +169,7 @@ public abstract class ScriptTest {
 
         getScriptRegistry().addSourceUnit(scriptSource);
         Assert.assertNotNull(getScriptRegistry().takeScript(scriptSource.getName()));
-        getScriptRegistry().takeScript(scriptSource.getName()).getScript(null).eval(new SimpleBindings());
+        getScriptRegistry().takeScript(scriptSource.getName()).getScript(new RootContext()).eval(new SimpleBindings());
     }
 
     @Test
@@ -157,9 +178,10 @@ public abstract class ScriptTest {
         ScriptEntry scriptEntry = getScriptRegistry().takeScript(scriptName);
         Assert.assertNotNull(scriptEntry);
 
-        Script script = scriptEntry.getScript(null);
+        Script script = scriptEntry.getScript(new RootContext());
         // Set RequestLevel Scope
         script.put("ketto", 2);
+        script.putSafe("callback", mock(Function.class));
         assertThat(script.eval()).isEqualTo("DDOE");
     }
 
@@ -174,7 +196,7 @@ public abstract class ScriptTest {
     @Test(threadPoolSize = 4, invocationCount = 10, timeOut = 1000,
             dataProvider = "Data-Provider-Function", dependsOnMethods = { "testEval" })
     public void parameterIntTest(ScriptEntry scriptEntry) throws Exception {
-        Script script = scriptEntry.getScript(null);
+        Script script = scriptEntry.getScript(new RootContext());
         script.put("ketto", 2);
         assertThat(script.eval()).isEqualTo(3);
     }
@@ -202,14 +224,21 @@ public abstract class ScriptTest {
 
         getScriptRegistry().addSourceUnit(scriptSource);
         Assert.assertEquals(status[0], ScriptEvent.REGISTERED);
-        assertThat(((ScriptEntry) status[1]).getScript(null).eval()).isEqualTo(4);
+        assertThat(((ScriptEntry) status[1]).getScript(new RootContext()).eval()).isEqualTo(4);
+
+        scriptName = new ScriptName("listener",getLanguageName(), "1");
+        scriptSource = new EmbeddedScriptSource("2 * 2", scriptName) {
+            public ScriptName[] getDependencies() {
+                return new ScriptName[] { parentContainer.getName() };
+            }
+        };
         getScriptRegistry().addSourceUnit(scriptSource);
         Assert.assertEquals(status[0], ScriptEvent.MODIFIED);
-        assertThat(((ScriptEntry) status[1]).getScript(null).eval()).isEqualTo(4);
+        assertThat(((ScriptEntry) status[1]).getScript(new RootContext()).eval()).isEqualTo(4);
         getScriptRegistry().removeSourceUnit(scriptSource);
         Assert.assertEquals(status[0], ScriptEvent.UNREGISTERING);
         try {
-            ((ScriptEntry) status[1]).getScript(null).eval();
+            ((ScriptEntry) status[1]).getScript(new RootContext()).eval();
             Assert.fail("Script MUST fail!");
         } catch (ScriptException e) {
             /* Expected */
@@ -219,7 +248,7 @@ public abstract class ScriptTest {
 
         getScriptRegistry().addSourceUnit(scriptSource);
         Assert.assertEquals(status[0], ScriptEvent.REGISTERED);
-        assertThat(((ScriptEntry) status[1]).getScript(null).eval()).isEqualTo(4);
+        assertThat(((ScriptEntry) status[1]).getScript(new RootContext()).eval()).isEqualTo(4);
         getScriptRegistry().removeSourceUnit(parentContainer);
         Assert.assertEquals(status[0], ScriptEvent.UNREGISTERING);
 

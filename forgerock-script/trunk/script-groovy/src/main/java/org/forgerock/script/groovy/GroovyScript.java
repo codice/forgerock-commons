@@ -27,17 +27,27 @@ package org.forgerock.script.groovy;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.script.Bindings;
 import javax.script.ScriptException;
 
+import groovy.util.ResourceException;
 import org.codehaus.groovy.runtime.MetaClassHelper;
 import org.codehaus.groovy.runtime.MethodClosure;
 import org.forgerock.json.resource.Context;
 import org.forgerock.script.engine.CompiledScript;
 import org.forgerock.script.exception.ScriptThrownException;
+import org.forgerock.script.scope.AbstractFactory;
+import org.forgerock.script.scope.Function;
+import org.forgerock.script.scope.OperationParameter;
+import org.forgerock.script.scope.Parameter;
+import org.forgerock.util.Factory;
+import org.forgerock.util.LazyMap;
 
 import groovy.lang.Binding;
 import groovy.lang.Closure;
@@ -59,17 +69,41 @@ import groovy.lang.Tuple;
  */
 public class GroovyScript implements CompiledScript {
 
-    private final Class<Script> scriptClass;
+    private final String  scriptName;
 
     private final GroovyScriptEngineImpl engine;
 
-    public GroovyScript(Class<Script> clazz, final GroovyScriptEngineImpl groovyEngine) throws IllegalAccessException, InstantiationException {
-        scriptClass = clazz;
-        scriptClass.newInstance();
+    public GroovyScript(String  scriptName, final GroovyScriptEngineImpl groovyEngine)
+            throws IllegalAccessException, InstantiationException, ResourceException, groovy.util.ScriptException {
+        this.scriptName = scriptName;
         engine = groovyEngine;
+        engine.createScript(scriptName, new Binding());
     }
 
-    public Object eval(final Context context, final Bindings bindings) throws ScriptException {
+    public Object eval(final Context context, final Bindings request, Bindings... scopes)
+            throws ScriptException {
+
+        Set<String> safeAttributes = null != request ? request.keySet() : Collections.EMPTY_SET;
+        Map<String, Object> scope = new HashMap<String, Object>();
+        for (Map<String, Object> next : scopes) {
+            if (null == next)
+                continue;
+            for (Map.Entry<String, Object> entry : next.entrySet()) {
+                if (scope.containsKey(entry.getKey()) || safeAttributes.contains(entry.getKey())) {
+                    continue;
+                }
+                scope.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        scope = new LazyMap<String, Object>(new InnerMapFactory(scope, new OperationParameter(context,"DEFAULT", engine.getPersistenceConfig())));
+
+        final Map<String, Object> bindings = null != request ? request : scope;
+        if (null != request) {
+            // Make a deep copy and merge
+            request.putAll(scope);
+        }
+
         // Bindings so script has access to this environment.
         // Only initialize once.
         if (null == bindings.get("context")) {
@@ -118,11 +152,10 @@ public class GroovyScript implements CompiledScript {
         // }
 
         try {
-            Script scriptObject = scriptClass.newInstance();
-            scriptObject.setBinding(new Binding(bindings));
+            Script scriptObject = engine.createScript(scriptName, new Binding(bindings));
 
             // create a Map of MethodClosures from this new script object
-            Method[] methods = scriptClass.getMethods();
+            Method[] methods = scriptObject.getClass().getMethods();
             final Map<String, Closure> closures = new HashMap<String, Closure>();
             for (Method m : methods) {
                 String name = m.getName();
@@ -171,7 +204,7 @@ public class GroovyScript implements CompiledScript {
                     }
                 }
 
-                private Object callGlobal(String name, Object[] args, Bindings ctx) {
+                private Object callGlobal(String name, Object[] args, Map<String, Object> ctx) {
                     Closure closure = closures.get(name);
                     if (closure != null) {
                         return closure.call(args);
@@ -205,6 +238,58 @@ public class GroovyScript implements CompiledScript {
             // ctx.removeAttribute("context",
             // DefaultScriptContext.REQUEST_SCOPE);
             // ctx.removeAttribute("out", DefaultScriptContext.REQUEST_SCOPE);
+        }
+    }
+
+    public static class InnerMapFactory extends AbstractFactory.MapFactory {
+
+        private final Parameter parameter;
+
+        public InnerMapFactory(final Map<String, Object> source, final Parameter parameter) {
+            super(source);
+            this.parameter = parameter;
+        }
+
+        protected Factory<List<Object>> newListFactory(final List<Object> source) {
+            return new InnerListFactory(source, parameter);
+        }
+
+        protected Factory<Map<String, Object>> newMapFactory(final Map<String, Object> source) {
+            return new InnerMapFactory(source, parameter);
+        }
+
+        protected Object convertFunction(final Function<?> source) {
+            return new FunctionClosure(null, parameter, source);
+        }
+
+        public Parameter getParameter() {
+            return parameter;
+        }
+    }
+
+    public static class InnerListFactory extends AbstractFactory.ListFactory {
+
+        private final Parameter parameter;
+
+        public InnerListFactory(final List<Object> source, final Parameter parameter) {
+            super(source);
+            this.parameter = parameter;
+        }
+
+        protected Factory<List<Object>> newListFactory(final List<Object> source) {
+            return new InnerListFactory(source, parameter);
+        }
+
+        protected Factory<Map<String, Object>> newMapFactory(final Map<String, Object> source) {
+            return new InnerMapFactory(source, parameter);
+        }
+
+        protected Object convertFunction(final Function<?> source) {
+            return new FunctionClosure(null, parameter, source);
+        }
+
+        public Parameter getParameter() {
+            return parameter;
         }
     }
 }

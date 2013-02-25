@@ -45,14 +45,14 @@ public class EmbeddedScriptSource implements ScriptSource {
 
     public EmbeddedScriptSource(String source, ScriptName scriptName) {
         this.source = source;
-        this.scriptName = scriptName;
+        this.scriptName = new ScriptName(scriptName.getName(), scriptName.getType(), scriptName.getRevision());
     }
 
     public EmbeddedScriptSource(ScriptEntry.Visibility visibility, String source,
             ScriptName scriptName) {
         this.visibility = visibility;
         this.source = source;
-        this.scriptName = scriptName;
+        this.scriptName = new ScriptName(scriptName.getName(), scriptName.getType(), scriptName.getRevision());
     }
 
     public String guessType() {

@@ -173,7 +173,7 @@ public class DirectoryContainer implements SourceContainer, ScriptEngineFactoryA
         return decodedFile;
     }
 
-    public void setScriptEngineFactory(Iterable<ScriptEngineFactory> factory) {
+    public void setScriptEngineFactory(final Iterable<ScriptEngineFactory> factory) {
         this.factories = factory;
     }
 

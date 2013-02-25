@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2013 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -28,17 +28,17 @@ import java.net.URLDecoder;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.forgerock.json.resource.ConnectionFactory;
+import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.script.engine.AbstractScriptEngine;
 import org.forgerock.script.engine.CompilationHandler;
 import org.forgerock.script.engine.ScriptEngineFactory;
 import org.forgerock.script.scope.OperationParameter;
-import org.forgerock.script.scope.ScriptableVisitor;
-import org.forgerock.script.scope.ObjectConverter;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.script.Bindings;
 
 /**
  * A NAME does ...
@@ -50,19 +50,15 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
     // Logger
     private static final Logger logger = LoggerFactory.getLogger(RhinoScriptEngine.class);
     private ScriptEngineFactory factory;
-    private AtomicReference<ConnectionFactory> connectionFactory;
+    private AtomicReference<PersistenceConfig> persistenceConfigReference;
 
-    RhinoScriptEngine(Map<String, Object> configuration,final ScriptEngineFactory factory) {
+    RhinoScriptEngine(Map<String, Object> configuration, final ScriptEngineFactory factory) {
         this.factory = factory;
 
         Object debugProperty = configuration.get(CONFIG_DEBUG_PROPERTY);
         if (debugProperty instanceof String) {
             initDebugListener((String) debugProperty);
         }
-    }
-
-    public ConnectionFactory getConnectionFactory() {
-        return connectionFactory.get();
     }
 
     public void compileScript(CompilationHandler handler) {
@@ -73,24 +69,32 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
             boolean sharedScope = true;// config.get("sharedScope").defaultTo(true).asBoolean();
             handler.setClassLoader(RhinoScriptEngine.class.getClassLoader());
             String name = handler.getScriptSource().getName().getName();
-            if (null != handler.getScriptSource().getSource() && "file".equals(handler.getScriptSource().getSource().getProtocol())){
-               name = URLDecoder.decode(handler.getScriptSource().getSource().getFile(),"utf-8");
+            if (null != handler.getScriptSource().getSource()
+                    && "file".equals(handler.getScriptSource().getSource().getProtocol())) {
+                name = URLDecoder.decode(handler.getScriptSource().getSource().getFile(), "utf-8");
             }
-            handler.setCompiledScript(new RhinoScript(name, handler.getScriptSource()
-                            .getReader(), sharedScope));
+            handler.setCompiledScript(new RhinoScript(name, handler.getScriptSource().getReader(),
+                    this, sharedScope));
         } catch (Throwable e) {
             handler.handleException(e);
         }
-
-        // To change body of implemented methods use File | Settings | File
-        // Templates.
     }
 
     public ScriptEngineFactory getFactory() {
         return factory;
     }
 
+    public OperationParameter getOperationParameter(
+            final org.forgerock.json.resource.Context context) {
+        final PersistenceConfig persistenceConfig = persistenceConfigReference.get();
+        if (null == persistenceConfig) {
+            throw new NullPointerException();
+        }
+        return new OperationParameter(context, "DEFAULT", persistenceConfig);
+    }
+
     private ContextFactory.Listener debugListener = null;
+
     private volatile Boolean debugInitialised = null;
 
     public static final String CONFIG_DEBUG_PROPERTY = "openidm.script.javascript.debug";
@@ -145,24 +149,18 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
         }
     }
 
-    protected ObjectConverter getObjectConverter(final org.forgerock.json.resource.Context context) {
-        return new ObjectConverter(new OperationParameter( context, getConnectionFactory())) {
-            protected void init() {
-
-            }
-
-            public Object handle(Object value) {
-                return value;
-            }
-        };
+    public void setPersistenceConfig(final AtomicReference<PersistenceConfig> persistenceConfig) {
+        this.persistenceConfigReference = persistenceConfig;
     }
 
-    protected ScriptableVisitor<Object, ObjectConverter> getVisitor() {
-        return new RhinoScriptableVisitor();
+    @Override
+    public Bindings compileBindings(org.forgerock.json.resource.Context context, Bindings request, Bindings... value) {
+        return null;
     }
 
     // private Script initializeScript(String name, File source, boolean
-    // sharedScope) throws ScriptException {
+    // sharedScope)
+    // throws ScriptException {
     // initDebugListener();
     // if (debugInitialised) {
     // try {
@@ -186,7 +184,8 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
     // }
     //
     // private Script initializeScript(String name, String source, boolean
-    // sharedScope) throws ScriptException {
+    // sharedScope)
+    // throws ScriptException {
     // initDebugListener();
     // if (debugInitialised) {
     // try {
@@ -206,8 +205,4 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
     // return new RhinoScript(name, source, sharedScope);
     // }
 
-
-    public void setConnectionFactory(AtomicReference<ConnectionFactory> connectionFactory) {
-        this.connectionFactory = connectionFactory;
-    }
 }

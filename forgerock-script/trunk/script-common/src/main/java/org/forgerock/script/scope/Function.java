@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock AS. All Rights Reserved
+ * Copyright (c) 2012-2013 ForgeRock AS. All Rights Reserved
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -24,12 +24,17 @@
 
 package org.forgerock.script.scope;
 
+import java.io.Serializable;
+
+import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.resource.ResourceException;
+
 /**
  * Exposes a function that can be provided to a script to invoke.
  * 
  * @author Laszlo Hordos
  */
-public interface Function extends Element {
+public interface Function<R> extends Serializable {
 
     /**
      * Computes a result, or throws an exception if unable to do so.
@@ -40,5 +45,6 @@ public interface Function extends Element {
      * @throws Exception
      *             if unable to compute a result
      */
-    Object call(OperationParameter parameter, Object[] arguments) throws Exception;
+    public R call(Parameter scope, Function<?> callback, Object... arguments)
+            throws ResourceException, NoSuchMethodException;
 }

@@ -53,15 +53,16 @@
         </dependency>
 
         <dependency>
-            <groupId>org.mozilla</groupId>
-            <artifactId>rhino</artifactId>
-            <version>1.7R4</version>
-        </dependency>
-        <!--dependency>
             <groupId>de.matrixweb.osgi.wrapped</groupId>
             <artifactId>osgi-wrapped-rhino</artifactId>
             <version>1.7R4</version>
-        </dependency-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.mozilla</groupId>
+                    <artifactId>rhino</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>org.eclipse.wst.jsdt.debug</groupId>
             <artifactId>rhino.debugger</artifactId>
@@ -82,10 +83,16 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
 
+        <!-- Provided Dependencies -->
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+        </dependency>
+
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.easytesting</groupId>
-            <artifactId>fest-assert</artifactId>
+            <artifactId>fest-assert-core</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -105,6 +112,13 @@
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
+        <!-- https://bugzilla.mozilla.org/show_bug.cgi?id=379385 -->
+        <dependency>
+            <groupId>org.mozilla</groupId>
+            <artifactId>rhino</artifactId>
+            <version>1.7R4</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
@@ -122,9 +136,11 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>
+                        <Private-Package>org.forgerock.script.javascript.internal*</Private-Package>
+                        <!--Export-Package>
                             org.forgerock.script.javascript*;version="${project.osgi.version.clean}"
-                        </Export-Package>
+                        </Export-Package-->
+                        <Bundle-Activator>org.forgerock.script.javascript.internal.Activator</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>

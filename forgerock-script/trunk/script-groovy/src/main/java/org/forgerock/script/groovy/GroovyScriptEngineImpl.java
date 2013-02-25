@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2013 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -25,32 +25,29 @@
 package org.forgerock.script.groovy;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.script.ScriptException;
+import javax.script.Bindings;
 
 import org.codehaus.groovy.control.CompilerConfiguration;
-import org.forgerock.json.resource.ConnectionFactory;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
+import org.codehaus.groovy.runtime.InvokerHelper;
 import org.forgerock.json.resource.Context;
+import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.script.engine.AbstractScriptEngine;
 import org.forgerock.script.engine.CompilationHandler;
 import org.forgerock.script.engine.ScriptEngineFactory;
-import org.forgerock.script.scope.ObjectConverter;
-import org.forgerock.script.scope.OperationParameter;
-import org.forgerock.script.scope.ScriptableVisitor;
-import org.forgerock.script.source.SourceContainer;
-import org.forgerock.script.source.SourceUnit;
-import org.forgerock.script.source.SourceUnitObserver;
+import org.forgerock.script.source.URLScriptSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyCodeSource;
 import groovy.lang.Script;
@@ -63,50 +60,142 @@ import groovy.util.ResourceException;
  * 
  * @author Laszlo Hordos
  */
-public class GroovyScriptEngineImpl extends AbstractScriptEngine implements ResourceConnector,
-        SourceUnitObserver {
+public class GroovyScriptEngineImpl extends AbstractScriptEngine {
 
-    // Logger
+    /**
+     * Setup logging for the {@link GroovyScriptEngineImpl}.
+     */
     private static final Logger logger = LoggerFactory.getLogger(GroovyScriptEngineImpl.class);
 
-    private ScriptEngineFactory factory;
+    private final ScriptEngineFactory factory;
 
-    private GroovyScriptEngine groovyScriptEngine;
+    private final GroovyScriptEngine groovyScriptEngine;
 
-    private AtomicReference<ConnectionFactory> connectionFactory;
+    private final AtomicReference<PersistenceConfig> persistenceConfig;
 
-    GroovyScriptEngineImpl(Map<String, Object> configuration, final ScriptEngineFactory factory) {
+    private final GroovyClassLoader loader;
+
+    private final ConcurrentMap<String, Class> scriptCache = new ConcurrentHashMap<String, Class>();
+    private final ConcurrentMap<String, URL> sourceCache = new ConcurrentHashMap<String, URL>();
+
+    private static final String DOT_STAR = ".*";
+    private static final String EMPTY_STRING = "";
+
+    GroovyScriptEngineImpl(Map<String, Object> configuration, final ScriptEngineFactory factory,
+            final AtomicReference<PersistenceConfig> persistenceConfig) {
         this.factory = factory;
+        this.persistenceConfig = persistenceConfig;
 
-        // TODO get them from configuration
-        Properties properties = new Properties();
+        Properties properties = null;
+        for (Map.Entry<String, Object> entry : configuration.entrySet()) {
+            if (entry.getKey().startsWith("groovy.") && entry.getValue() instanceof String) {
+                if (null == properties) {
+                    properties = new Properties();
+                }
+                properties.put(entry.getKey(), entry.getValue());
+            }
+        }
+        final CompilerConfiguration config =
+                null != properties ? new CompilerConfiguration(properties)
+                        : new CompilerConfiguration();
+        config.addCompilationCustomizers(GroovyScriptEngineImpl.getImportCustomizer());
 
-        CompilerConfiguration config = new CompilerConfiguration(properties);
+        Object jointCompilationOptions = configuration.get("jointCompilationOptions");
+        if (jointCompilationOptions instanceof Map) {
+            config.setJointCompilationOptions((Map<String, Object>) jointCompilationOptions);
+        }
+        this.loader = new GroovyClassLoader(getParentLoader(), config, false /* true */);
+        groovyScriptEngine = new GroovyScriptEngine(new ResourceConnector() {
+            @Override
+            public URLConnection getResourceConnection(String resourceName)
+                    throws ResourceException {
+                URL source = sourceCache.get(resourceName);
+                if (null != source) {
+                    try {
+                        URLConnection groovyScriptConn = source.openConnection();
 
-        GroovyClassLoader loader =
-                new GroovyClassLoader(getParentLoader(), config, false /* true */);
+                        // Make sure we can open it, if we can't it doesn't
+                        // exist.
+                        // Could be very slow if there are any non-file:// URLs
+                        // in there
 
-        groovyScriptEngine = new GroovyScriptEngine(this, loader);
+                        groovyScriptConn.getInputStream();
+                        return groovyScriptConn;
+                    } catch (IOException e) {
+                        throw new ResourceException("Cannot open URL: " + source.toString(), e);
+                    }
+                }
+
+                throw new ResourceException("No resource for " + resourceName + " was found");
+            }
+        }, loader);
         groovyScriptEngine.setConfig(config);
+    }
 
+    /**
+     * Creates a Script with a given scriptName and binding.
+     * 
+     * @param scriptName
+     *            name of the script to run
+     * @param binding
+     *            the binding to pass to the script
+     * @return the script object
+     * @throws ResourceException
+     *             if there is a problem accessing the script
+     * @throws groovy.util.ScriptException
+     *             if there is a problem parsing the script
+     */
+    Script createScript(String scriptName, Binding binding) throws ResourceException,
+            groovy.util.ScriptException {
+
+        Class clazz = scriptCache.get(scriptName);
+        if (clazz == null) {
+            // Load from URL
+            return groovyScriptEngine.createScript(scriptName, binding);
+        } else {
+            return InvokerHelper.createScript(clazz, binding);
+        }
+    }
+
+    static ImportCustomizer getImportCustomizer() {
+        final ImportCustomizer ic = new ImportCustomizer();
+        for (final String imp : getImports()) {
+            ic.addStarImports(imp.replace(DOT_STAR, EMPTY_STRING));
+        }
+        // ic.addImports("org.forgerock.script.scope");
+        // ic.addStaticImport(ConnectionFunction.class.getName(),
+        // ConnectionFunction.CREATE.toString());
+        return ic;
     }
 
     public void compileScript(CompilationHandler handler) {
         try {
             handler.setClassLoader(groovyScriptEngine.getGroovyClassLoader());
 
-            GroovyCodeSource codeSource =
-                    new GroovyCodeSource(handler.getScriptSource().getReader(), handler
-                            .getScriptSource().getName().getName(), "/groovy/script");
-            codeSource.setCachable(false);
-
-            Class scriptClass = groovyScriptEngine.getGroovyClassLoader().parseClass(codeSource);
-
-            if (groovy.lang.Script.class.isAssignableFrom(scriptClass)) {
-                handler.setCompiledScript(new GroovyScript(scriptClass,this));
-            } else {
-                handler.handleException(new ScriptException("Source is not a Groovy Script"));
+            GroovyCodeSource codeSource = null;
+            if (handler.getScriptSource() instanceof URLScriptSource) {
+                URL source = ((URLScriptSource) handler.getScriptSource()).getSource();
+                try {
+                    codeSource = new GroovyCodeSource(source);
+                    sourceCache.put(codeSource.getName(), source);
+                } catch (IllegalArgumentException e) {
+                    logger.trace("Groovy source at {} is not file", source);
+                }
             }
+
+            if (null == codeSource) {
+                // TODO write to cache file
+                codeSource =
+                        new GroovyCodeSource(handler.getScriptSource().getReader(), handler
+                                .getScriptSource().getName().getName(), handler.getScriptSource()
+                                .getName().getName());
+                scriptCache.put(codeSource.getName(), groovyScriptEngine.getGroovyClassLoader()
+                        .parseClass(codeSource));
+            } else {
+                groovyScriptEngine.getGroovyClassLoader().parseClass(codeSource);
+            }
+
+            handler.setCompiledScript(new GroovyScript(codeSource.getName(), this));
         } catch (Throwable e) {
             e.printStackTrace();
             handler.handleException(e);
@@ -134,102 +223,11 @@ public class GroovyScriptEngineImpl extends AbstractScriptEngine implements Reso
         return Script.class.getClassLoader();
     }
 
-    private Set<URL> roots = new HashSet<URL>();
-
-    /**
-     * Get a resource connection as a {@code URLConnection} to retrieve a script
-     * from the {@code ResourceConnector}.
-     * 
-     * @param resourceName
-     *            name of the resource to be retrieved
-     * @return a URLConnection to the resource
-     * @throws ResourceException
-     */
-    public URLConnection getResourceConnection(String resourceName) throws ResourceException {
-        // Get the URLConnection
-        URLConnection groovyScriptConn = null;
-
-        ResourceException se = null;
-        for (URL root : roots) {
-            URL scriptURL = null;
-            try {
-                scriptURL = new URL(root, resourceName);
-                groovyScriptConn = scriptURL.openConnection();
-
-                // Make sure we can open it, if we can't it doesn't exist.
-                // Could be very slow if there are any non-file:// URLs in there
-                groovyScriptConn.getInputStream();
-
-                break; // Now this is a bit unusual
-
-            } catch (MalformedURLException e) {
-                String message = "Malformed URL: " + root + ", " + resourceName;
-                if (se == null) {
-                    se = new ResourceException(message);
-                } else {
-                    se = new ResourceException(message, se);
-                }
-            } catch (IOException e1) {
-                groovyScriptConn = null;
-                String message = "Cannot open URL: " + scriptURL;
-                groovyScriptConn = null;
-                if (se == null) {
-                    se = new ResourceException(message);
-                } else {
-                    se = new ResourceException(message, se);
-                }
-            }
-        }
-
-        if (se == null)
-            se = new ResourceException("No resource for " + resourceName + " was found");
-
-        // If we didn't find anything, report on all the exceptions that
-        // occurred.
-        if (groovyScriptConn == null)
-            throw se;
-        return groovyScriptConn;
+    public Bindings compileBindings(Context context, Bindings request, Bindings... value) {
+        return null;
     }
 
-    public void addSourceUnit(SourceUnit unit) {
-        if (unit instanceof SourceContainer) {
-            URL root = unit.getSource();
-            if (null != root) {
-                roots.add(root);
-            }
-        }
-    }
-
-    public void removeSourceUnit(SourceUnit unit) {
-        if (unit instanceof SourceContainer) {
-            URL root = unit.getSource();
-            if (null != root) {
-                roots.remove(root);
-            }
-        }
-    }
-
-    protected ObjectConverter getObjectConverter(Context context) {
-        return new ObjectConverter(new OperationParameter(context, getConnectionFactory())) {
-            protected void init() {
-
-            }
-
-            public Object handle(Object value) {
-                return value;
-            }
-        };
-    }
-
-    protected ScriptableVisitor<Object, ObjectConverter> getVisitor() {
-        return new GroovyScriptableVisitor();
-    }
-
-    public ConnectionFactory getConnectionFactory() {
-        return connectionFactory.get();
-    }
-
-    public void setConnectionFactory(AtomicReference<ConnectionFactory> connectionFactory) {
-        this.connectionFactory = connectionFactory;
+    public PersistenceConfig getPersistenceConfig() {
+        return persistenceConfig.get();
     }
 }

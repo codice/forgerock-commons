@@ -48,43 +48,48 @@
             <artifactId>json-resource</artifactId>
         </dependency>
 
-        <!-- Core OSGi -->
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ops4j.pax.swissbox</groupId>
-            <artifactId>pax-swissbox-extender</artifactId>
-            <version>1.5.1</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>pax-swissbox-optional-jcl</artifactId>
-                    <groupId>org.ops4j.pax.swissbox</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.ops4j.base</groupId>
-            <artifactId>ops4j-base-spi</artifactId>
-            <version>1.4.0</version>
-        </dependency>
-
         <!-- SLF4J -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
 
+        <!-- Provided Dependencies -->
+        <!-- Core OSGi -->
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+        </dependency>
+        <!--        <dependency>
+                    <groupId>org.osgi</groupId>
+                    <artifactId>org.osgi.compendium</artifactId>
+                </dependency>-->
+
+        <dependency>
+            <groupId>org.ops4j.pax.swissbox</groupId>
+            <artifactId>pax-swissbox-extender</artifactId>
+            <version>1.6.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>pax-swissbox-optional-jcl</artifactId>
+                    <groupId>org.ops4j.pax.swissbox</groupId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.base</groupId>
+            <artifactId>ops4j-base-spi</artifactId>
+            <version>1.4.0</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.easytesting</groupId>
-            <artifactId>fest-assert</artifactId>
+            <artifactId>fest-assert-core</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -107,9 +112,10 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>
+                        <Private-Package>org.forgerock.script.internal*</Private-Package>
+                        <!--<Export-Package>
                             org.forgerock.script*;version="${project.osgi.version.clean}"
-                        </Export-Package>
+                        </Export-Package>-->
                     </instructions>
                 </configuration>
             </plugin>

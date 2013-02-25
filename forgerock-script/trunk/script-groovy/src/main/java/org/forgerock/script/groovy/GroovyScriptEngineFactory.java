@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.forgerock.json.resource.ConnectionFactory;
+import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.script.engine.ScriptEngine;
 import org.forgerock.script.engine.ScriptEngineFactory;
 
@@ -94,12 +94,13 @@ public class GroovyScriptEngineFactory implements ScriptEngineFactory {
         return GroovySystem.getVersion();
     }
 
-    public ScriptEngine getScriptEngine(AtomicReference<ConnectionFactory> connectionFactory,
+    public ScriptEngine getScriptEngine(final AtomicReference<PersistenceConfig> persistenceConfig,
             Map<String, Object> configuration) {
-        synchronized (this) {
-            if (null == engine) {
-                engine = new GroovyScriptEngineImpl(configuration, this);
-                engine.setConnectionFactory(connectionFactory);
+        if (null == engine) {
+            synchronized (this) {
+                if (null == engine) {
+                    engine = new GroovyScriptEngineImpl(configuration, this, persistenceConfig);
+                }
             }
         }
         return engine;

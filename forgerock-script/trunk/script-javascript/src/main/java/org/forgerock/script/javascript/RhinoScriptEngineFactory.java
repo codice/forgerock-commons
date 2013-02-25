@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.forgerock.json.resource.ConnectionFactory;
+import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.script.engine.ScriptEngine;
 import org.forgerock.script.engine.ScriptEngineFactory;
 
@@ -41,10 +41,9 @@ import org.forgerock.script.engine.ScriptEngineFactory;
  */
 public class RhinoScriptEngineFactory implements ScriptEngineFactory {
 
-    public static final String VERSION = "1.7 release 3";
+    public static final String VERSION = "1.7 release 4";
 
     public static final String LANGUAGE_NAME = "ECMAScript";
-
 
     private static List<String> names;
     private static List<String> mimeTypes;
@@ -102,12 +101,15 @@ public class RhinoScriptEngineFactory implements ScriptEngineFactory {
         return "1.8";
     }
 
-    public ScriptEngine getScriptEngine(AtomicReference<ConnectionFactory> connectionFactory,
-                                        Map<String, Object> configuration) {
-        synchronized (this) {
-            if (null == engine) {
-                engine = new RhinoScriptEngine(configuration, this);
-                engine.setConnectionFactory(connectionFactory);
+    public ScriptEngine getScriptEngine(
+            final AtomicReference<PersistenceConfig> persistenceConfigReference,
+            Map<String, Object> configuration) {
+        if (null == engine) {
+            synchronized (this) {
+                if (null == engine) {
+                    engine = new RhinoScriptEngine(configuration, this);
+                    engine.setPersistenceConfig(persistenceConfigReference);
+                }
             }
         }
         return engine;

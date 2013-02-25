@@ -37,12 +37,20 @@ import org.forgerock.json.resource.Context;
 public interface CompiledScript {
 
     /**
-     * Executes the program stored in this <code>CompiledScript</code> object.
+     * Evaluated the script stored in this {@code CompiledScript} object.
+     * <p/>
      * 
-     * @param bindings
+     * @param context
+     *            A {@code context} associated with the
+     *            {@link org.forgerock.json.resource.Request}.
+     * 
+     * @param request
      *            A <code>ScriptContext</code> that is used in the same way as
      *            the <code>ScriptContext</code> passed to the <code>eval</code>
      *            methods of <code>ScriptEngine</code>.
+     * @param scopes
+     *            Additional {@code Bindings} extending the {@code request}
+     *            with.
      * 
      * @return The value returned by the script execution, if any. Should return
      *         <code>null</code> if no value is returned by the script
@@ -50,10 +58,8 @@ public interface CompiledScript {
      * 
      * @throws javax.script.ScriptException
      *             if an error occurs.
-     * @throws NullPointerException
-     *             if bindings is null.
      */
-
-    public Object eval(Context context, Bindings bindings) throws ScriptException;
+    public Object eval(Context context, Bindings request, Bindings... scopes)
+            throws ScriptException;
 
 }

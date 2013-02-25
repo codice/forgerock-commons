@@ -27,16 +27,35 @@ package org.forgerock.script;
 import javax.script.Bindings;
 import javax.script.ScriptException;
 
-import org.forgerock.json.resource.Context;
-import org.forgerock.script.engine.CompiledScript;
-
 /**
  * Interface for all executable script.
  * 
  * @see javax.script.CompiledScript
  * 
  */
-public interface Script extends Scope, CompiledScript {
+public interface Script extends Scope {
+
+    /**
+     * Sets a key/value pair in the state of the Request that may either create
+     * a Thread-Safe Java Language Binding to be used in the execution of
+     * scripts or be used in some other way, depending on whether the key is
+     * reserved.
+     * <p/>
+     * The {@link org.forgerock.script.Scope#put(String, Object)} suppress the
+     * value with the same key.
+     * 
+     * 
+     * @param key
+     *            The name of named value to add
+     * @param value
+     *            The value of named value to add.
+     * 
+     * @throws NullPointerException
+     *             if key is null.
+     * @throws IllegalArgumentException
+     *             if key is empty.
+     */
+    public void putSafe(String key, Object value);
 
     /**
      * Executes the program stored in the {@code Script} object using the

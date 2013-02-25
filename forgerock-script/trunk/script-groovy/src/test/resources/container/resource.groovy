@@ -22,9 +22,104 @@
  * "Portions Copyrighted [year] [name of copyright owner]"
  */
 
-def map1 = router.read('DDOE');
-if (map1 != null) {
-    map1._id;
-} else {
-    throw 'NotGonnaDoIt';
+import org.forgerock.json.resource.NotSupportedException
+
+def scimUser1 = [
+        externalId: "701984",
+        userName: "bjensen@example.com",
+        name: [
+                formatted: "Ms. Barbara J Jensen III",
+                familyName: "Jensen",
+                givenName: "Barbara",
+                middleName: "Jane",
+                honorificPrefix: "Ms.",
+                honorificSuffix: "III"
+        ],
+        displayName: "Babs Jensen",
+        nickName: "Babs",
+        profileUrl: "https://login.example.com/bjensen"
+]
+/**
+ * <pre>
+ * create(String resourceContainer, String newResourceId, Map content[, List fieldFilter][,Map context])
+ * </pre>
+ */
+def userC1 = router.create("Users", null, scimUser1)
+
+def userC2 = router.create("Users", "bjensen@example.com", scimUser1)
+
+/**
+ * <pre>
+ * read(String resourceName[, List fieldFilter][,Map context])
+ * </pre>
+ */
+def userR1 = router.read("Users/" + userC1._id)
+
+def userR2 = router.read("Users/bjensen@example.com")
+
+/**
+ * <pre>
+ * update(String resourceName, String revision, Map content [, List fieldFilter][,Map context])
+ * </pre>
+ */
+def scimUser1Updated = scimUser1
+scimUser1Updated.userType = "Employee"
+scimUser1Updated.title = "Tour Guide"
+scimUser1Updated.preferredLanguage = "en_US"
+scimUser1Updated.locale = "en_US"
+scimUser1Updated.timezone = "America/Los_Angeles"
+scimUser1Updated.active = true
+
+def userU1 = router.update("Users/" + userC1._id, userR1._rev, scimUser1Updated)
+
+def userU2 = router.update("Users/bjensen@example.com", userR2._rev, scimUser1Updated)
+
+/**
+ * <pre>
+ * patch(String resourceName, String revision, Map patch [, List fieldFilter][,Map context])
+ * </pre>
+ */
+
+/**
+ * <pre>
+ * query(String resourceContainer, Map params [, List fieldFilter][,Map context])
+ * </pre>
+ */
+def queryParams1 = [
+        _queryId: "query-all-ids"
+]
+def queryParams2 = [
+        _filter: "nickName eq \"Babs\""
+]
+
+try {
+    def userQ1 = router.query("Users", queryParams1)
+} catch (NotSupportedException e) {
+    //expected
 }
+def userQ2 = router.query("Users", queryParams2)
+def userQ3 = router.query("Users", queryParams2, callback)
+
+def printResult = { resource, error ->
+    if (error != null) {
+        print "Result" + resource
+    } else {
+        print "Error:" + error
+    }
+}
+def userQ4 = router.query("Users", queryParams2, printResult)
+
+/**
+ * <pre>
+ * delete(String resourceName, String revision [, List fieldFilter][,Map context])
+ * </pre>
+ */
+
+/**
+ * <pre>
+ * action(String resourceName, [String actionId,] Map params, Map content[, List fieldFilter][,Map context])
+ * </pre>
+ */
+def userA1 = router.action("Users", "clear", [_action: "clear"]);
+
+"DDOE"

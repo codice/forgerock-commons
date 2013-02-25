@@ -26,7 +26,6 @@ package org.forgerock.script.source;
 
 import javax.script.ScriptException;
 
-
 /**
  * A NAME does ...
  * 

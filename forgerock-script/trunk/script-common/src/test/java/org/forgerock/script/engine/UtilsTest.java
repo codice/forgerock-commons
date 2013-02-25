@@ -25,15 +25,18 @@
 package org.forgerock.script.engine;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.fest.assertions.MapAssert;
+
+import org.fest.assertions.api.MapAssert;
+import org.fest.assertions.data.MapEntry;
 import org.forgerock.json.fluent.JsonValue;
 import org.testng.annotations.Test;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.testng.Assert.*;
 
 /**
@@ -68,7 +71,7 @@ public class UtilsTest {
 
         Object copyOfPaper = Utils.deepCopy(paper);
         assertTrue(copyOfPaper instanceof Map);
-        assertThat((Map)copyOfPaper).isNotSameAs(paper).includes(MapAssert.entry("rock","crushes"));
+        assertThat((Map)copyOfPaper).contains(MapEntry.entry("rock", "crushes")).isNotSameAs(paper);
 
 
         Object copyOfRock = Utils.deepCopy(rock);

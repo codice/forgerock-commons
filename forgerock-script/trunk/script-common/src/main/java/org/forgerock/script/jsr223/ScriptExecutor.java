@@ -37,7 +37,6 @@ import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 import javax.script.SimpleScriptContext;
 
-
 /**
  * A ScriptExecutor is a placeholder for sample code. This file will be deleted!
  * 

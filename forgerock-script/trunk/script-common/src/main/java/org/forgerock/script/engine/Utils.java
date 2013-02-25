@@ -40,7 +40,6 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.forgerock.json.fluent.JsonValue;
-import org.forgerock.script.scope.ObjectConverter;
 
 /**
  * A NAME does ...
@@ -53,7 +52,7 @@ public class Utils {
         public final A fst;
         public final B snd;
 
-        public Pair(final A a,final B b) {
+        public Pair(final A a, final B b) {
             fst = a;
             snd = b;
         }
@@ -67,9 +66,8 @@ public class Utils {
         }
 
         public boolean equals(Object other) {
-            return other instanceof Pair<?, ?> &&
-                    equals(fst, ((Pair<?, ?>) other).fst) &&
-                    equals(snd, ((Pair<?, ?>) other).snd);
+            return other instanceof Pair<?, ?> && equals(fst, ((Pair<?, ?>) other).fst)
+                    && equals(snd, ((Pair<?, ?>) other).snd);
         }
 
         public int hashCode() {
@@ -78,11 +76,10 @@ public class Utils {
             return result;
         }
 
-        public static <A, B> Pair<A, B> of(final A a,final B b) {
+        public static <A, B> Pair<A, B> of(final A a, final B b) {
             return new Pair<A, B>(a, b);
         }
     }
-
 
     private Utils() {
     }
@@ -116,44 +113,43 @@ public class Utils {
         return engine;
     }
 
-
     public static Object deepCopy(final Object source) {
         if (source instanceof JsonValue) {
-            return  new JsonValue(deepCopy( ((JsonValue)source).getObject()));
-        }  else if (source instanceof Collection || source instanceof Map) {
-            return deepCopy(source,new Stack<Pair<Object,Object>>());
+            return new JsonValue(deepCopy(((JsonValue) source).getObject()));
+        } else if (source instanceof Collection || source instanceof Map) {
+            return deepCopy(source, new Stack<Pair<Object, Object>>());
         } else {
             return source;
         }
     }
 
-    @SuppressWarnings({"unchecked"})
-    private static Object deepCopy(Object source, final Stack<Pair<Object,Object>> valueStack) {
-        Iterator<Pair<Object,Object>> i = valueStack.iterator();
+    @SuppressWarnings({ "unchecked" })
+    private static Object deepCopy(Object source, final Stack<Pair<Object, Object>> valueStack) {
+        Iterator<Pair<Object, Object>> i = valueStack.iterator();
         while (i.hasNext()) {
-            Pair<Object,Object> next = i.next();
-            if (next.fst == source){
+            Pair<Object, Object> next = i.next();
+            if (next.fst == source) {
                 return next.snd;
             }
         }
 
         if (source instanceof JsonValue) {
-            return  new JsonValue(deepCopy( ((JsonValue)source).getObject(), valueStack));
-        }  else if (source instanceof Collection) {
-            List<Object> copy = new ArrayList<Object>(((Collection)source).size());
-            valueStack.push(Pair.of(source,(Object)copy));
+            return new JsonValue(deepCopy(((JsonValue) source).getObject(), valueStack));
+        } else if (source instanceof Collection) {
+            List<Object> copy = new ArrayList<Object>(((Collection) source).size());
+            valueStack.push(Pair.of(source, (Object) copy));
             for (Object o : (Collection) source) {
-                copy.add(deepCopy(o,valueStack ));
+                copy.add(deepCopy(o, valueStack));
             }
-            //valueStack.pop();
+            // valueStack.pop();
             return copy;
-        }  else if (source instanceof Map) {
-            Map copy = new LinkedHashMap(((Map)source).size());
-            valueStack.push(Pair.of(source,(Object)copy));
-            for (Map.Entry<Object,Object> entry  : ((Map<Object,Object>) source).entrySet()) {
-                copy.put(entry.getKey(),deepCopy(entry.getValue(), valueStack));
+        } else if (source instanceof Map) {
+            Map copy = new LinkedHashMap(((Map) source).size());
+            valueStack.push(Pair.of(source, (Object) copy));
+            for (Map.Entry<Object, Object> entry : ((Map<Object, Object>) source).entrySet()) {
+                copy.put(entry.getKey(), deepCopy(entry.getValue(), valueStack));
             }
-            //valueStack.pop();
+            // valueStack.pop();
             return copy;
         } else {
             return source;

@@ -24,9 +24,12 @@
 
 package org.forgerock.script.groovy;
 
+import java.util.Arrays;
+
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.resource.ResourceException;
 import org.forgerock.script.scope.Function;
-import org.forgerock.script.scope.OperationParameter;
+import org.forgerock.script.scope.Parameter;
 
 import groovy.lang.Closure;
 
@@ -35,22 +38,16 @@ import groovy.lang.Closure;
  * 
  * @author Laszlo Hordos
  */
-public class FunctionClosure extends Closure<Object> {
+public class FunctionClosure extends Closure<JsonValue> {
 
     private static final long serialVersionUID = -8234912264889627793L;
 
     /** TODO: Description. */
-    private final Function function;
+    private final Function<?> function;
     /** TODO: Description. */
-    private final OperationParameter parameter;
+    private final Parameter parameter;
 
-    public FunctionClosure(Object owner, Function method) {
-        super(owner);
-        this.function = method;
-        this.parameter = null;
-    }
-
-    public FunctionClosure(Object owner, final OperationParameter parameter, Function function) {
+    public FunctionClosure(final Object owner, final Parameter parameter, final Function<?> function) {
         super(owner);
         this.function = function;
         this.parameter = parameter;
@@ -59,13 +56,45 @@ public class FunctionClosure extends Closure<Object> {
     @SuppressWarnings("unchecked")
     public Object doCall(Object... args) {
         try {
-            // TODO unwrap the callback
-            // TODO wrap the result if necessary
-            Object result = function.call(parameter, args);
-            if (result instanceof JsonValue) {
-                return ((JsonValue) result).getObject();
+            Object[] arguments = args;
+            Function<?> callbackFunction = null;
+            if (args.length > 0 && args[args.length - 1] instanceof Closure) {
+                final Closure nativeClosure = (Closure) args[args.length - 1];
+                if (nativeClosure instanceof FunctionClosure) {
+                    callbackFunction = ((FunctionClosure) nativeClosure).function;
+                } else {
+                    callbackFunction = new Function<Void>() {
+                        @Override
+                        public Void call(final Parameter scope0, final Function<?> callback,
+                                final Object... arguments) throws ResourceException,
+                                NoSuchMethodException {
+
+                            Class[] paramTypes = nativeClosure.getParameterTypes();
+                            Object[] params = new Object[paramTypes.length];
+                            for (int i = 0; i < paramTypes.length; i++) {
+                                if (i < arguments.length - 1) {
+                                    params[i] = arguments[i];
+                                } else {
+                                    params[i] = null;
+                                }
+                            }
+                            try {
+                                nativeClosure.call(params);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                // TODO do something
+                            }
+                            return null;
+                        }
+                    };
+                }
+                arguments = Arrays.copyOfRange(args, 0, args.length - 1);
             }
-            return  result;
+            Object result = function.call(parameter, callbackFunction, arguments);
+            if (result instanceof JsonValue) {
+                return ((JsonValue)result).getObject();
+            }
+            return result;
         } catch (Throwable e) {
             return throwRuntimeException(e);
         }
