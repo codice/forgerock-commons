@@ -22,16 +22,23 @@
  * "Portions Copyrighted [year] [name of copyright owner]"
  */
 
-/*global define*/
+/*global define, $, _, Backbone, window */
 
-define("org/forgerock/commons/ui/common/components/main", [
-	"./Breadcrumbs",
-	"./popup/PopupCtrl",
-	"./Dialog",
-	"./Footer",
-	"./Navigation",
-	"./GridTableView",
-	"./LineTableView",
-	"./Messages",
-	"./ConfirmationDialog"
-]);
+define("org/forgerock/commons/ui/common/components/Footer", [
+    "org/forgerock/commons/ui/common/main/AbstractView"
+], function(AbstractView) {
+
+    var Footer = AbstractView.extend({
+        
+        element: "#footer",
+        template: "templates/common/FooterTemplate.html",
+        noBaseTemplate: true,
+        
+        render: function() {
+            this.parentRender();
+        }
+
+    });
+
+    return new Footer();
+});

@@ -39,6 +39,7 @@ define("config/process/UserConfig", [
                 "org/forgerock/commons/ui/common/components/Navigation",
                 "org/forgerock/commons/ui/common/components/popup/PopupCtrl",
                 "org/forgerock/commons/ui/common/components/Breadcrumbs",
+                "org/forgerock/commons/ui/common/components/Footer",
                 "org/forgerock/commons/ui/common/main/Router",
                 "UserDelegate",
                 "org/forgerock/commons/ui/common/main/Configuration",
@@ -49,6 +50,7 @@ define("config/process/UserConfig", [
                     navigation, 
                     popupCtrl, 
                     breadcrumbs, 
+                    footer, 
                     router,
                     userDelegate,
                     conf,
@@ -56,6 +58,7 @@ define("config/process/UserConfig", [
                     sessionManager) {
                               
                 breadcrumbs.init();
+                footer.render();
                 uiUtils.preloadTemplates();
                 
                 sessionManager.getLoggedUser(function(user) {
