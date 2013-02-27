@@ -179,6 +179,7 @@ public class RhinoScript implements CompiledScript {
                                     // harmless
             // ScriptableObject scope = context.initStandardObjects(null, true);
             ScriptableObject scope = new Global(context);
+            //ScriptableList.init(scope, false);
             scope.sealObject(); // seal the whole scope (not just standard
                                 // objects)
             SHARED_SCOPE = scope;

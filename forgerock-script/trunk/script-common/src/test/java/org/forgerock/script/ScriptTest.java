@@ -182,7 +182,7 @@ public abstract class ScriptTest {
         // Set RequestLevel Scope
         script.put("ketto", 2);
         script.putSafe("callback", mock(Function.class));
-        assertThat(script.eval()).isEqualTo("DDOE");
+        script.eval();
     }
 
     @DataProvider(name = "Data-Provider-Function")

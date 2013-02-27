@@ -32,6 +32,7 @@ var scimUser1 = {
         "honorificPrefix": "Ms.",
         "honorificSuffix": "III"
     },
+    "assignedDashboard": ["Salesforce", "Google", "ConstantContact"],
     "displayName": "Babs Jensen",
     "nickName": "Babs",
     "profileUrl": "https://login.example.com/bjensen"
@@ -118,4 +119,28 @@ var userQ4 = router.query("Users", queryParams2, printResult)
  * </pre>
  */
 var userA1 = router.action("Users", "clear", {"_action": "clear"})
-"DDOE"
+
+var arrayVar = ["Salesforce", "Google", "ConstantContact"]
+
+var hasGoogle = (userR1.assignedDashboard.indexOf("Google") !== -1);
+var ccPosition = userR1.assignedDashboard.indexOf("ConstantContact");
+
+if (!userR1.hasOwnProperty("profileUrl")) {
+    throw { "message" : "Property 'profileUrl' expected but not found" };
+}
+
+if (!hasGoogle) {
+    throw { "message": "Google expected but not present" };
+}
+
+if (ccPosition !== 2) {
+    throw { "message" : "Constant Contact expected at position 2, indexOf returned " + ccPosition };
+}
+
+if (userR1.assignedDashboard.join("+") !== "Salesforce+Google+ConstantContact") {
+    throw { "message" : "AssignedDashboard array expected to be joined together into a '+' delimited string"};
+}
+
+if (userR1.name.formatted.split(' ').length !== 5) {
+    throw { "message" : "formatted name '"+ userR1.name.formatted +"' expected to be split into a 5 element array, based on spaces."};
+}

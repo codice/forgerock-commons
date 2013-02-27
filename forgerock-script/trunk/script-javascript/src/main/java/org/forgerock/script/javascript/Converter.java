@@ -34,7 +34,9 @@ import org.forgerock.script.scope.Function;
 import org.forgerock.script.scope.Parameter;
 import org.forgerock.util.Factory;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ScriptRuntime;
 import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.TopLevel;
 import org.mozilla.javascript.Wrapper;
 
 /**
@@ -101,18 +103,28 @@ class Converter {
             return null;
         } else if (value instanceof Map) {
             if (doCopy) {
-                return new ScriptableMap(getMap(parameter, (Map) value));
+                ScriptableMap result = new ScriptableMap(getMap(parameter, (Map) value));
+                ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
+                return result;
             } else {
-                return new ScriptableMap(parameter, (Map) value);
+                ScriptableMap result = new ScriptableMap(parameter, (Map) value);
+                ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
+                return result;
             }
         } else if (value instanceof List) {
             if (doCopy) {
-                return new ScriptableList(getList(parameter, (List) value));
+                ScriptableList result = new ScriptableList(getList(parameter, (List) value));
+                ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Array);
+                return result;
             } else {
-                return new ScriptableList(parameter, (List) value);
+                ScriptableList result = new ScriptableList(parameter, (List) value);
+                ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Array);
+                return result;
             }
         } else if (value instanceof Function) {
-            return new ScriptableFunction(parameter, (Function) value);
+            ScriptableFunction result = new ScriptableFunction(parameter, (Function) value);
+            ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Function);
+            return result;
         } else {
             return Context.javaToJS(value, scope);
         }
