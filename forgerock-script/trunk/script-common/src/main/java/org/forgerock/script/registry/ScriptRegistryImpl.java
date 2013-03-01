@@ -210,6 +210,10 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
         }
         ScriptEntry scriptEntry = takeScript(scriptName);
 
+        if (null == scriptEntry) {
+            throw new ScriptException("Script source not found:" + scriptName);
+        }
+
         for (Map.Entry<String, Object> entry : script.asMap().entrySet()) {
             if (SourceUnit.ATTR_NAME.equals(entry.getKey())
                     || SourceUnit.ATTR_TYPE.equals(entry.getKey())
