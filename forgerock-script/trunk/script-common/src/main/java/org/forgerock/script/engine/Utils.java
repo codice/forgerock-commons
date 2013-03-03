@@ -24,10 +24,14 @@
 
 package org.forgerock.script.engine;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
@@ -97,6 +101,75 @@ public class Utils {
             if (outChannel != null)
                 outChannel.close();
         }
+    }
+
+    /**
+     * Read large > 5Mb text files to String.
+     *
+     * @param file
+     *         source file
+     * @return content of the source {@code file}
+     * @throws IOException
+     *         when the source {@code file} can not be read
+     */
+    public final static String readLargeFile(File file) throws IOException {
+        FileChannel channel = new FileInputStream(file).getChannel();
+        ByteBuffer buffer = ByteBuffer.allocate((int) channel.size());
+        channel.read(buffer);
+        channel.close();
+        return new String(buffer.array());
+    }
+
+    /**
+     * Read small < 5Mb text files to String
+     *
+     * @param file
+     *         source file
+     * @return content of the source {@code file}
+     * @throws IOException
+     *         when the source {@code file} can not be read
+     */
+    public static final String readFile(File file) throws IOException {
+        return readStream(new FileInputStream(file));
+    }
+
+    public static final String readStream(InputStream stream) throws IOException {
+        BufferedInputStream in = new BufferedInputStream(stream);
+        SimpleByteBuffer buffer = new SimpleByteBuffer();
+        /*
+         * if you are reading really large files you might want to up the buffer
+         * from 1024 to a max of 8192.
+         */
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) != -1) {
+            buffer.put(buf, len);
+        }
+        in.close();
+        return new String(buffer.buffer, 0, buffer.write);
+    }
+
+    static class SimpleByteBuffer {
+
+        public byte[] buffer = new byte[256];
+
+        public int write;
+
+        public void put(byte[] buf, int len) {
+            ensure(len);
+            System.arraycopy(buf, 0, buffer, write, len);
+            write += len;
+        }
+
+        private void ensure(int amt) {
+            int req = write + amt;
+            if (buffer.length <= req) {
+                byte[] temp = new byte[req * 2];
+                System.arraycopy(buffer, 0, temp, 0, write);
+                buffer = temp;
+            }
+        }
+
     }
 
     public static ScriptEngineFactory findScriptEngineFactory(String shortName,

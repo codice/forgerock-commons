@@ -25,6 +25,7 @@
 package org.forgerock.script.javascript;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,7 +36,9 @@ import javax.script.Bindings;
 import javax.script.ScriptException;
 
 import org.forgerock.script.engine.CompiledScript;
+import org.forgerock.script.engine.Utils;
 import org.forgerock.script.exception.ScriptThrownException;
+import org.forgerock.script.scope.FunctionFactory;
 import org.forgerock.script.scope.OperationParameter;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.JavaScriptException;
@@ -47,6 +50,8 @@ import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.WrappedException;
 import org.mozilla.javascript.tools.shell.Global;
 import org.mozilla.javascript.tools.shell.QuitAction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A JavaScript script.
@@ -59,6 +64,11 @@ import org.mozilla.javascript.tools.shell.QuitAction;
  * @author aegloff
  */
 public class RhinoScript implements CompiledScript {
+
+    /**
+     * Setup logging for the {@link RhinoScript}.
+     */
+    final static Logger logger = LoggerFactory.getLogger(RhinoScript.class);
 
     /**
      * A sealed shared scope to improve performance; avoids allocating standard
@@ -171,17 +181,28 @@ public class RhinoScript implements CompiledScript {
     // TODO Load RhinoTopLevel scope
     private ScriptableObject getStandardObjects(final Context context) {
         if (!sharedScope) {
-            ScriptableObject scope = context.initStandardObjects(); // somewhat
-                                                                    // expensive
+            // somewhat expensive
+            ScriptableObject scope = context.initStandardObjects();
             return scope;
         }
-        if (SHARED_SCOPE == null) { // lazy initialization race condition is
-                                    // harmless
+        // lazy initialization race condition is harmless
+        if (SHARED_SCOPE == null) {
             // ScriptableObject scope = context.initStandardObjects(null, true);
             ScriptableObject scope = new Global(context);
-            //ScriptableList.init(scope, false);
-            scope.sealObject(); // seal the whole scope (not just standard
-                                // objects)
+            // ScriptableList.init(scope, false);
+
+            InputStream init = RhinoScript.class.getResourceAsStream("/resources/init.js");
+            if (null != init) {
+                try {
+                    context.evaluateString(scope, Utils.readStream(init), "/resources/init.js", 1,
+                            null);
+                } catch (IOException e) {
+                    logger.error("Failed to evaluate init.js", e);
+                }
+            }
+            addLoggerProperty(scope);
+            // seal the whole scope (not just standard objects)
+            scope.sealObject();
             SHARED_SCOPE = scope;
         }
         return SHARED_SCOPE;
@@ -195,10 +216,8 @@ public class RhinoScript implements CompiledScript {
      *            The runtime context of the executing script.
      * @return the context scriptable for this script
      */
-    private Scriptable getScriptScope(Context context) {
+    private Scriptable getScriptScope(final Context context) {
         Scriptable topLevel = getStandardObjects(context);
-        Map<String, Object> scriptScopeMap = new HashMap<String, Object>();
-        addLoggerProperty(scriptScopeMap);
         Scriptable scriptScopeScriptable = context.newObject(topLevel);
 
         // standard objects included with every box
@@ -213,9 +232,9 @@ public class RhinoScript implements CompiledScript {
      * @param scope
      *            to add the property to
      */
-    private void addLoggerProperty(Map<String, Object> scope) {
-        String loggerName = "org.forgerock.openidm.script.javascript.JavaScript." + scriptName;
-        // scope.put("logger", LoggerPropertyFactory.get(loggerName));
+    private void addLoggerProperty(Scriptable scope) {
+        String loggerName = "org.forgerock.script.javascript.JavaScript." + scriptName;
+        scope.put("logger", scope, FunctionFactory.getLogger(loggerName));
     }
 
     @Override

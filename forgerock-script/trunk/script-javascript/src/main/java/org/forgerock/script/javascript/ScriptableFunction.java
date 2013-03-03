@@ -102,8 +102,8 @@ class ScriptableFunction extends BaseFunction implements Wrapper {
             Object result = function.call(parameter, callbackFunction, convert(args).toArray());
             if (null == result) {
                 return null;
-            } else if (result instanceof JsonValue ) {
-                return Converter.wrap(parameter, ((JsonValue)result).getObject(), scope, false);
+            } else if (result instanceof JsonValue) {
+                return Converter.wrap(parameter, ((JsonValue) result).getObject(), scope, false);
             } else {
                 return Converter.wrap(parameter, result, scope, false);
             }

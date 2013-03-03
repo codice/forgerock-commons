@@ -152,6 +152,13 @@
                 <artifactId>json-resource</artifactId>
                 <version>${commons.forgerock-rest.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.forgerock.commons</groupId>
+                <artifactId>json-resource-servlet</artifactId>
+                <version>${commons.forgerock-rest.version}</version>
+                <scope>provided</scope>
+                <optional>true</optional>
+            </dependency>
 
             <dependency>
                 <groupId>org.forgerock.commons</groupId>

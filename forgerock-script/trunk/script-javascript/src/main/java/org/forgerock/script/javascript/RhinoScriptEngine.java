@@ -28,6 +28,8 @@ import java.net.URLDecoder;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.script.Bindings;
+
 import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.script.engine.AbstractScriptEngine;
 import org.forgerock.script.engine.CompilationHandler;
@@ -37,8 +39,6 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.script.Bindings;
 
 /**
  * A NAME does ...
@@ -154,7 +154,8 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
     }
 
     @Override
-    public Bindings compileBindings(org.forgerock.json.resource.Context context, Bindings request, Bindings... value) {
+    public Bindings compileBindings(org.forgerock.json.resource.Context context, Bindings request,
+            Bindings... value) {
         return null;
     }
 

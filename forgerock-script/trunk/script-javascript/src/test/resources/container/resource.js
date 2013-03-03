@@ -126,7 +126,7 @@ var hasGoogle = (userR1.assignedDashboard.indexOf("Google") !== -1);
 var ccPosition = userR1.assignedDashboard.indexOf("ConstantContact");
 
 if (!userR1.hasOwnProperty("profileUrl")) {
-    throw { "message" : "Property 'profileUrl' expected but not found" };
+    throw { "message": "Property 'profileUrl' expected but not found" };
 }
 
 if (!hasGoogle) {
@@ -134,13 +134,50 @@ if (!hasGoogle) {
 }
 
 if (ccPosition !== 2) {
-    throw { "message" : "Constant Contact expected at position 2, indexOf returned " + ccPosition };
+    throw { "message": "Constant Contact expected at position 2, indexOf returned " + ccPosition };
 }
 
 if (userR1.assignedDashboard.join("+") !== "Salesforce+Google+ConstantContact") {
-    throw { "message" : "AssignedDashboard array expected to be joined together into a '+' delimited string"};
+    throw { "message": "AssignedDashboard array expected to be joined together into a '+' delimited string"};
 }
 
 if (userR1.name.formatted.split(' ').length !== 5) {
-    throw { "message" : "formatted name '"+ userR1.name.formatted +"' expected to be split into a 5 element array, based on spaces."};
+    throw { "message": "formatted name '" + userR1.name.formatted + "' expected to be split into a 5 element array, based on spaces."};
+}
+
+if (!createRequest instanceof org.forgerock.json.resource.CreateRequest) {
+    throw { "message": "createRequest type is not match"};
+}
+if (!readRequest instanceof org.forgerock.json.resource.ReadRequest) {
+    throw { "message": "readRequest type is not match"};
+}
+if (!updateRequest instanceof org.forgerock.json.resource.UpdateRequest) {
+    throw { "message": "updateRequest type is not match"};
+}
+if (!patchRequest instanceof org.forgerock.json.resource.PatchRequest) {
+    throw { "message": "patchRequest type is not match"};
+}
+if (!queryRequest instanceof org.forgerock.json.resource.QueryRequest) {
+    throw { "message": "queryRequest type is not match"};
+}
+if (!deleteRequest instanceof org.forgerock.json.resource.DeleteRequest) {
+    throw { "message": "deleteRequest type is not match"};
+}
+if (!actionRequest instanceof org.forgerock.json.resource.ActionRequest) {
+    throw { "message": "actionRequest type is not match"};
+}
+
+var securityContextClass = Packages.org.forgerock.json.resource.SecurityContext;
+if (context.containsContext(securityContextClass)) {
+    var securityContext = context.asContext(securityContextClass);
+    if (!securityContext.authenticationId == "bjensen@example.com") {
+        throw {
+            "code": 401,
+            "reason": "Unauthorized",
+            "message": "context has not SecurityContext",
+            "cause": new Packages.org.forgerock.json.resource.NotFoundException("bjensen@example.com")
+        };
+    }
+} else {
+    throw { "message": "context has not SecurityContext"};
 }

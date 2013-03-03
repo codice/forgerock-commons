@@ -25,18 +25,29 @@
 package org.forgerock.script;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.UUID;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.resource.ActionRequest;
+import org.forgerock.json.resource.ApiInfoContext;
 import org.forgerock.json.resource.Connection;
 import org.forgerock.json.resource.ConnectionProvider;
+import org.forgerock.json.resource.CreateRequest;
+import org.forgerock.json.resource.DeleteRequest;
 import org.forgerock.json.resource.InMemoryBackend;
 import org.forgerock.json.resource.InternalServerErrorException;
+import org.forgerock.json.resource.Patch;
+import org.forgerock.json.resource.PatchRequest;
 import org.forgerock.json.resource.PersistenceConfig;
+import org.forgerock.json.resource.QueryRequest;
+import org.forgerock.json.resource.Requests;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.json.resource.Resources;
 import org.forgerock.json.resource.ReadRequest;
@@ -46,7 +57,9 @@ import org.forgerock.json.resource.RequestHandler;
 import org.forgerock.json.resource.RootContext;
 import org.forgerock.json.resource.Router;
 import org.forgerock.json.resource.RoutingMode;
+import org.forgerock.json.resource.SecurityContext;
 import org.forgerock.json.resource.ServerContext;
+import org.forgerock.json.resource.UpdateRequest;
 import org.forgerock.script.engine.ScriptEngineFactory;
 import org.forgerock.script.exception.ScriptThrownException;
 import org.forgerock.script.registry.ScriptRegistryImpl;
@@ -182,6 +195,36 @@ public abstract class ScriptTest {
         // Set RequestLevel Scope
         script.put("ketto", 2);
         script.putSafe("callback", mock(Function.class));
+
+        JsonValue createContent = new JsonValue(new LinkedHashMap<String, Object>());
+        createContent.put("externalId", "701984");
+        createContent.put("userName", "bjensen@example.com");
+        createContent.put("assignedDashboard", Arrays.asList("Salesforce", "Google", "ConstantContact"));
+        createContent.put("displayName", "Babs Jensen");
+        createContent.put("nickName", "Babs");
+
+        JsonValue updateContent = createContent.copy();
+        updateContent.put("_id", UUID.randomUUID().toString());
+        updateContent.put("profileUrl", "https://login.example.com/bjensen");
+
+
+        script.put("context", new ApiInfoContext(new SecurityContext(new RootContext(),
+                "bjensen@example.com", null), "", ""));
+
+        CreateRequest createRequest = Requests.newCreateRequest("/Users","701984",createContent);
+        script.put("createRequest", createRequest);
+        ReadRequest readRequest = Requests.newReadRequest("/Users/701984");
+        script.put("readRequest", readRequest);
+        UpdateRequest updateRequest = Requests.newUpdateRequest("/Users/701984", updateContent);
+        script.put("updateRequest", updateRequest);
+        PatchRequest patchRequest = Requests.newPatchRequest("/Users/701984", new Patch());
+        script.put("patchRequest", patchRequest);
+        QueryRequest queryRequest = Requests.newQueryRequest("/Users/");
+        script.put("queryRequest", queryRequest);
+        DeleteRequest deleteRequest = Requests.newDeleteRequest("/Users/701984");
+        script.put("deleteRequest", deleteRequest);
+        ActionRequest actionRequest = Requests.newActionRequest("/Users", "clear");
+        script.put("actionRequest", actionRequest);
         script.eval();
     }
 
