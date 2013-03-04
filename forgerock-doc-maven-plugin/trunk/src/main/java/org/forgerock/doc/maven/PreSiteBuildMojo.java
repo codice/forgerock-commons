@@ -8,7 +8,7 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2012 ForgeRock AS
+ *     Copyright 2012-2013 ForgeRock AS
  *
  */
 
@@ -539,7 +539,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * Directory where fonts and font metrics are stored.
      *
      * @parameter default-value="${project.build.directory}/fonts"
-     *            expression="${fontsDirectory}"
+     *            property="fontsDirectory"
      * @required
      */
     private File fontsDirectory;
@@ -557,7 +557,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * <p>
      * docbkx-tools element: &lt;draftMode&gt;
      *
-     * @parameter default-value="yes" expression="${isDraftMode}"
+     * @parameter default-value="yes" property="isDraftMode"
      * @required
      */
     private String isDraftMode;
@@ -569,7 +569,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      *
      * @parameter default-value=
      *            "http://docbook.sourceforge.net/release/images/draft.png"
-     *            expression="${draftWatermarkURL}"
+     *            property="draftWatermarkURL"
      * @required
      */
     private String draftWatermarkURL;
@@ -579,7 +579,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * <p>
      * docbkx-tools element: &lt;highlightSource&gt;
      *
-     * @parameter default-value="1" expression="${useSyntaxHighlighting}"
+     * @parameter default-value="1" property="useSyntaxHighlighting"
      * @required
      */
     private String useSyntaxHighlighting;
@@ -589,7 +589,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * <p>
      * docbkx-tools element: &lt;sectionAutolabel&gt;
      *
-     * @parameter default-value="true" expression="${areSectionsAutolabeled}"
+     * @parameter default-value="true" property="areSectionsAutolabeled"
      * @required
      */
     private String areSectionsAutolabeled;
@@ -601,7 +601,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * docbkx-tools element: &lt;sectionLabelIncludesComponentLabel&gt;
      *
      * @parameter default-value="true"
-     *            expression="${doesSectionLabelIncludeComponentLabel}
+     *            property="doesSectionLabelIncludeComponentLabel"
      * @required
      */
     private String doesSectionLabelIncludeComponentLabel;
@@ -611,7 +611,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * <p>
      * docbkx-tools element: &lt;xincludeSupported&gt;
      *
-     * @parameter default-value="true" expression="${isXincludeSupported}"
+     * @parameter default-value="true" property="isXincludeSupported"
      * @required
      */
     private String isXincludeSupported;

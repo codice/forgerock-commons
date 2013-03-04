@@ -8,7 +8,7 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2012 ForgeRock AS
+ *     Copyright 2012-2013 ForgeRock AS
  *
  */
 
@@ -42,7 +42,7 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
      * File system directory for site build.
      *
      * @parameter default-value="${project.build.directory}/release"
-     *            expression="${releaseDirectory}"
+     *            property="releaseDirectory"
      * @required
      */
     private File releaseDirectory;
@@ -57,7 +57,7 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
     /**
      * Version for this release.
      *
-     * @parameter expression="${releaseVersion}"
+     * @parameter property="releaseVersion"
      * @required
      */
     private String releaseVersion;

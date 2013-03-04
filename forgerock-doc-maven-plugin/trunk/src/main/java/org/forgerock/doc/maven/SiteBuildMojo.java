@@ -8,7 +8,7 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2012 ForgeRock AS
+ *     Copyright 2012-2013 ForgeRock AS
  *
  */
 
@@ -39,7 +39,7 @@ public class SiteBuildMojo extends AbstractBuildMojo {
      * File system directory for site build.
      *
      * @parameter default-value="${project.build.directory}/site"
-     *            expression="${siteDirectory}"
+     *            property="siteDirectory"
      * @required
      */
     private File siteDirectory;

@@ -8,7 +8,7 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2012 ForgeRock AS
+ *     Copyright 2012-2013 ForgeRock AS
  *
  */
 
@@ -35,7 +35,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * Docbkx Tools plugin version to use. Executions seem to hit an NPE when
      * the version is not specified.
      *
-     * @parameter default-value="2.0.14" expression="${docbkxVersion}
+     * @parameter default-value="2.0.14" property="docbkxVersion"
      * @required
      */
     private String docbkxVersion;
@@ -44,7 +44,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * Maven resources plugin version to use. Executions seem to hit an NPE when
      * the version is not specified.
      *
-     * @parameter default-value="2.5" expression="${resourcesVersion}
+     * @parameter default-value="2.5" property="resourcesVersion"
      * @required
      */
     private String resourcesVersion;
@@ -53,7 +53,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * ForgeRock linktester plugin version to use. Executions seem to hit an NPE
      * when the version is not specified.
      *
-     * @parameter default-value="1.1.0" expression="${linkTesterVersion}
+     * @parameter default-value="1.1.0" property="linkTesterVersion"
      * @required
      */
     private String linkTesterVersion;
@@ -64,7 +64,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * href="https://github.com/aldaris/docbook-linktester/">linktester
      * plugin</a>.
      *
-     * @parameter default-value="false" expression="${skipLinkCheck}"
+     * @parameter default-value="false" property="skipLinkCheck"
      */
     private String skipLinkCheck;
 
@@ -72,14 +72,14 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * Whether to run the ForgeRock linktester plugin. You only need to run
      * the linktester plugin from the top level of a project, not the modules.
      *
-     * @parameter default-value="true" expression="${runLinkTester}"
+     * @parameter default-value="true" property="runLinkTester"
      */
     private String runLinkTester;
 
     /**
      * Short name of the project, such as OpenAM, OpenDJ, OpenIDM.
      *
-     * @parameter expression="${projectName}"
+     * @parameter property="projectName"
      * @required
      */
     private String projectName;
@@ -87,7 +87,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     /**
      * Google Analytics identifier for the project.
      *
-     * @parameter expression="${googleAnalyticsId}"
+     * @parameter property="googleAnalyticsId"
      * @required
      */
     private String googleAnalyticsId;
@@ -104,7 +104,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * Process only this format. Choices include: epub, html, man, pdf, rtf.
      * Do not set both excludes and includes in the same configuration.
      *
-     * @parameter expression="${include}"
+     * @parameter property="include"
      */
     private String include;
 
@@ -112,7 +112,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * Base directory for DocBook XML source files.
      *
      * @parameter default-value="${basedir}/src/main/docbkx"
-     *            expression="${docbkxSourceDirectory}"
+     *            property="docbkxSourceDirectory"
      * @required
      */
     private File docbkxSourceDirectory;
@@ -121,7 +121,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * Base directory for built documentation.
      *
      * @parameter default-value="${project.build.directory}/docbkx"
-     *            expression="${docbkxOutputDirectory}"
+     *            property="docbkxOutputDirectory"
      * @required
      */
     private File docbkxOutputDirectory;
@@ -137,7 +137,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     /**
      * The Maven Project Object.
      *
-     * @parameter expression="${project}"
+     * @parameter property="project"
      * @required
      * @readonly
      */
@@ -146,7 +146,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     /**
      * The Maven Session Object.
      *
-     * @parameter expression="${session}"
+     * @parameter property="session"
      * @required
      * @readonly
      */
@@ -191,7 +191,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * The <code>...other files...</code> can have whatever names you want, as
      * long as the name does not conflict with the file name you set here.
      *
-     * @parameter default-value="index.xml" expression="${documentSrcName}"
+     * @parameter default-value="index.xml" property="documentSrcName"
      * @required
      */
     private String documentSrcName;
