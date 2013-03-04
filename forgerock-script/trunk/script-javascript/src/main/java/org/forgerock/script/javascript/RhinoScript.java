@@ -40,6 +40,7 @@ import org.forgerock.script.engine.Utils;
 import org.forgerock.script.exception.ScriptThrownException;
 import org.forgerock.script.scope.FunctionFactory;
 import org.forgerock.script.scope.OperationParameter;
+import org.forgerock.script.scope.Parameter;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.RhinoException;
@@ -234,7 +235,7 @@ public class RhinoScript implements CompiledScript {
      */
     private void addLoggerProperty(Scriptable scope) {
         String loggerName = "org.forgerock.script.javascript.JavaScript." + scriptName;
-        scope.put("logger", scope, FunctionFactory.getLogger(loggerName));
+        scope.put("logger", scope, Converter.wrap(null,FunctionFactory.getLogger(loggerName),scope, false));
     }
 
     @Override
@@ -246,6 +247,7 @@ public class RhinoScript implements CompiledScript {
             Scriptable outer = context.newObject(getStandardObjects(context));
 
             final OperationParameter operationParameter = engine.getOperationParameter(ctx);
+            Context.getCurrentContext().putThreadLocal(Parameter.class.getName(),operationParameter);
 
             Set<String> safeAttributes = null != request ? request.keySet() : Collections.EMPTY_SET;
             Map<String, Object> scope = new HashMap<String, Object>();
@@ -295,12 +297,12 @@ public class RhinoScript implements CompiledScript {
         } catch (WrappedException e) {
             // TODO Implement properly
             if (e.getWrappedException() instanceof NoSuchMethodException) {
-                throw new ScriptThrownException("NoSuchMethodException", (Exception) e
+                throw new ScriptThrownException(e.getMessage(), e
                         .getWrappedException());
             } else if (e.getWrappedException() instanceof Exception) {
-                throw new ScriptThrownException("Exception", (Exception) e.getWrappedException());
+                throw new ScriptThrownException(e.getMessage(),e.getWrappedException());
             } else {
-                throw new ScriptThrownException("Throwable", e.getWrappedException().getMessage());
+                throw new ScriptThrownException(e.getMessage(), e.getWrappedException());
             }
         } catch (RhinoException re) {
             if (re instanceof JavaScriptException) {
@@ -312,6 +314,7 @@ public class RhinoScript implements CompiledScript {
                 throw new ScriptException(re.getMessage());
             }
         } finally {
+            Context.getCurrentContext().removeThreadLocal(Parameter.class.getName());
             Context.exit();
         }
     }

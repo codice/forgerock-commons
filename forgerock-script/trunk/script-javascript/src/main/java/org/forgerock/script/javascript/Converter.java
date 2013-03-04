@@ -24,6 +24,7 @@
 
 package org.forgerock.script.javascript;
 
+import java.lang.Object;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.forgerock.script.scope.Function;
 import org.forgerock.script.scope.Parameter;
 import org.forgerock.util.Factory;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.ScriptRuntime;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.TopLevel;
@@ -146,16 +148,16 @@ class Converter {
         Object result = null;
         if (value == null || value == Context.getUndefinedValue() || value == Scriptable.NOT_FOUND) {
             result = null; // null is how undefined values are manifested
-        } else if (value instanceof Double || value instanceof Float) { // coerce
-                                                                        // to
-                                                                        // integer
-                                                                        // without
-                                                                        // rounding
+        } else if (value instanceof Double || value instanceof Float) {
+            // coerce to integer without rounding
             Number number = (Number) value;
             result = (isInteger(number) ? Integer.valueOf(number.intValue()) : number);
         } else if (value instanceof Scriptable) { // javascript array or object
             Scriptable scriptable = (Scriptable) value;
-            if (value instanceof Wrapper) {
+            if (value instanceof NativeJavaObject) {
+                return ((NativeJavaObject)value).unwrap();
+            } else if (value instanceof Wrapper) {
+                //result = Context.jsToJava(value, Object.class);
                 result = convert(((Wrapper) value).unwrap()); // recursive
             } else if (isArray(scriptable)) {
                 Object o = scriptable.get("length", scriptable);

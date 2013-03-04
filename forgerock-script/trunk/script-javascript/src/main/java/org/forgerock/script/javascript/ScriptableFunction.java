@@ -25,7 +25,9 @@
 package org.forgerock.script.javascript;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ResourceException;
@@ -48,21 +50,21 @@ import org.mozilla.javascript.Wrapper;
 class ScriptableFunction extends BaseFunction implements Wrapper {
 
     /** The request being wrapped. */
-    private final Parameter parameter;
+    private final AtomicReference<Parameter> parameter;
 
     /** The function being wrapped. */
     private final Function<?> function;
 
     ScriptableFunction(final Parameter operationParameter, final Function<?> function) {
         this.function = function;
-        this.parameter = operationParameter;
+        this.parameter = new AtomicReference<Parameter>(operationParameter);
     }
 
     ScriptableFunction(Scriptable scope, Scriptable prototype,
             final OperationParameter operationParameter, final Function<?> function) {
         super(scope, prototype);
         this.function = function;
-        this.parameter = operationParameter;
+        this.parameter = new AtomicReference<Parameter>(operationParameter);
     }
 
     /**
@@ -75,7 +77,7 @@ class ScriptableFunction extends BaseFunction implements Wrapper {
     private List<Object> convert(Object[] args) {
         ArrayList<Object> list = new ArrayList<Object>();
         for (Object object : args) {
-            if (object instanceof NativeFunction) {
+            if (object instanceof BaseFunction) {
                 continue;
             }
             list.add(Converter.convert(object));
@@ -87,29 +89,56 @@ class ScriptableFunction extends BaseFunction implements Wrapper {
     public Object call(final Context cx, final Scriptable scope, final Scriptable thisObj,
             Object[] args) {
         try {
+            Object[] arguments = args;
             Function<?> callbackFunction = null;
             if (args.length > 0 && args[args.length - 1] instanceof NativeFunction) {
-                final NativeFunction nativeFunction = (NativeFunction) args[args.length - 1];
-                callbackFunction = new Function<Void>() {
-                    @Override
-                    public Void call(Parameter scope0, Function<?> callback, Object... arguments)
-                            throws ResourceException, NoSuchMethodException {
-                        nativeFunction.call(cx, scope, thisObj, arguments);
-                        return null;
-                    }
-                };
+                final BaseFunction nativeFunction = (BaseFunction) args[args.length - 1];
+                if (nativeFunction instanceof ScriptableFunction) {
+                    callbackFunction = ((ScriptableFunction) nativeFunction).function;
+                } else {
+                    callbackFunction = new Function<Void>() {
+                        @Override
+                        public Void call(final Parameter scope0, final Function<?> callback,
+                                         final Object... arguments) throws ResourceException,
+                                NoSuchMethodException {
+
+                            try {
+                                nativeFunction.call(cx, scope, thisObj, arguments);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                // TODO do something
+                            }
+                            return null;
+                        }
+                    };
+                }
+                arguments = Arrays.copyOfRange(args, 0, args.length - 1);
             }
-            Object result = function.call(parameter, callbackFunction, convert(args).toArray());
+            Object result = function.call(getParameter(), callbackFunction, convert(arguments).toArray());
             if (null == result) {
                 return null;
             } else if (result instanceof JsonValue) {
-                return Converter.wrap(parameter, ((JsonValue) result).getObject(), scope, false);
+                return Converter.wrap(getParameter(), ((JsonValue) result).getObject(), scope, false);
             } else {
-                return Converter.wrap(parameter, result, scope, false);
+                return Converter.wrap(getParameter(), result, scope, false);
             }
         } catch (Throwable throwable) {
             throw new WrappedException(throwable);
         }
+    }
+
+    protected Parameter getParameter(){
+        Parameter p = parameter.get();
+        if (null == p) {
+            Object o = Context.getCurrentContext().getThreadLocal(Parameter.class.getName());
+            if (o instanceof Parameter) {
+                parameter.lazySet((Parameter)p);
+                return (Parameter) p;
+            }
+        } else {
+            return p;
+        }
+        return null;
     }
 
     @Override

@@ -66,9 +66,6 @@ class ScriptableMap extends NativeObject implements Wrapper {
      *             if the specified map is {@code null}.
      */
     public ScriptableMap(final Parameter parameter, final Map<String, Object> map) {
-        if (null == parameter) {
-            throw new NullPointerException();
-        }
         if (null == map) {
             throw new NullPointerException();
         }
