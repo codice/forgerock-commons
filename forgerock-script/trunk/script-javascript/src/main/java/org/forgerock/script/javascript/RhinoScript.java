@@ -27,6 +27,7 @@ package org.forgerock.script.javascript;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.security.SecureClassLoader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,11 +39,13 @@ import javax.script.ScriptException;
 import org.forgerock.script.engine.CompiledScript;
 import org.forgerock.script.engine.Utils;
 import org.forgerock.script.exception.ScriptThrownException;
+import org.forgerock.script.registry.ThreadClassLoaderManager;
 import org.forgerock.script.scope.FunctionFactory;
 import org.forgerock.script.scope.OperationParameter;
 import org.forgerock.script.scope.Parameter;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.JavaScriptException;
+import org.mozilla.javascript.Kit;
 import org.mozilla.javascript.RhinoException;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.ScriptRuntime;
@@ -188,10 +191,11 @@ public class RhinoScript implements CompiledScript {
         }
         // lazy initialization race condition is harmless
         if (SHARED_SCOPE == null) {
-            // ScriptableObject scope = context.initStandardObjects(null, true);
             ScriptableObject scope = new Global(context);
             // ScriptableList.init(scope, false);
 
+            context.setApplicationClassLoader(new InnerClassLoader(context
+                    .getApplicationClassLoader()));
             InputStream init = RhinoScript.class.getResourceAsStream("/resources/init.js");
             if (null != init) {
                 try {
@@ -235,7 +239,8 @@ public class RhinoScript implements CompiledScript {
      */
     private void addLoggerProperty(Scriptable scope) {
         String loggerName = "org.forgerock.script.javascript.JavaScript." + scriptName;
-        scope.put("logger", scope, Converter.wrap(null,FunctionFactory.getLogger(loggerName),scope, false));
+        scope.put("logger", scope, Converter.wrap(null, FunctionFactory.getLogger(loggerName),
+                scope, false));
     }
 
     @Override
@@ -247,7 +252,8 @@ public class RhinoScript implements CompiledScript {
             Scriptable outer = context.newObject(getStandardObjects(context));
 
             final OperationParameter operationParameter = engine.getOperationParameter(ctx);
-            Context.getCurrentContext().putThreadLocal(Parameter.class.getName(),operationParameter);
+            Context.getCurrentContext().putThreadLocal(Parameter.class.getName(),
+                    operationParameter);
 
             Set<String> safeAttributes = null != request ? request.keySet() : Collections.EMPTY_SET;
             Map<String, Object> scope = new HashMap<String, Object>();
@@ -297,10 +303,9 @@ public class RhinoScript implements CompiledScript {
         } catch (WrappedException e) {
             // TODO Implement properly
             if (e.getWrappedException() instanceof NoSuchMethodException) {
-                throw new ScriptThrownException(e.getMessage(), e
-                        .getWrappedException());
+                throw new ScriptThrownException(e.getMessage(), e.getWrappedException());
             } else if (e.getWrappedException() instanceof Exception) {
-                throw new ScriptThrownException(e.getMessage(),e.getWrappedException());
+                throw new ScriptThrownException(e.getMessage(), e.getWrappedException());
             } else {
                 throw new ScriptThrownException(e.getMessage(), e.getWrappedException());
             }
@@ -318,4 +323,26 @@ public class RhinoScript implements CompiledScript {
             Context.exit();
         }
     }
+
+    private static class InnerClassLoader extends SecureClassLoader {
+
+        public InnerClassLoader(ClassLoader parent) {
+            super(parent);
+        }
+
+        public Class<?> loadClass(String name) throws ClassNotFoundException {
+            // First check whether it's already been loaded, if so use it
+            Class loadedClass = Kit.classOrNull(getParent(), name);
+
+            // Not loaded, try to load it
+            if (loadedClass == null) {
+                loadedClass =
+                        ThreadClassLoaderManager.getInstance().getCurrentClassLoader().loadClass(
+                                name);
+            }
+            // will never return null (ClassNotFoundException will be thrown)
+            return loadedClass;
+        }
+    }
+
 }
