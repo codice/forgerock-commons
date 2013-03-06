@@ -103,9 +103,6 @@
                 <configuration>
                     <instructions>
                         <Private-Package>org.forgerock.script.groovy.internal*</Private-Package>
-                        <!--<Export-Package>
-                            org.forgerock.script.groovy*;version="${project.osgi.version.clean}"
-                        </Export-Package>-->
                         <Bundle-Activator>org.forgerock.script.groovy.internal.Activator</Bundle-Activator>
                     </instructions>
                 </configuration>

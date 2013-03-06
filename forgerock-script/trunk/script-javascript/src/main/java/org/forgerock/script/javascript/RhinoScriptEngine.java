@@ -24,19 +24,28 @@
 
 package org.forgerock.script.javascript;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.net.URLDecoder;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.script.Bindings;
+import javax.script.ScriptException;
 
 import org.forgerock.json.resource.PersistenceConfig;
+import org.forgerock.json.resource.ResourceException;
 import org.forgerock.script.engine.AbstractScriptEngine;
 import org.forgerock.script.engine.CompilationHandler;
 import org.forgerock.script.engine.ScriptEngineFactory;
 import org.forgerock.script.scope.OperationParameter;
+import org.forgerock.script.source.ScriptSource;
+import org.forgerock.script.source.URLScriptSource;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
+import org.mozilla.javascript.Script;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,10 +56,19 @@ import org.slf4j.LoggerFactory;
  */
 public class RhinoScriptEngine extends AbstractScriptEngine {
 
-    // Logger
+    /**
+     * Setup logging for the {@link RhinoScriptEngine}.
+     */
     private static final Logger logger = LoggerFactory.getLogger(RhinoScriptEngine.class);
+
     private ScriptEngineFactory factory;
+
     private AtomicReference<PersistenceConfig> persistenceConfigReference;
+
+    private final ConcurrentMap<String, ScriptCacheEntry> scriptCache =
+            new ConcurrentHashMap<String, ScriptCacheEntry>();
+
+    private long minimumRecompilationInterval = -1;
 
     RhinoScriptEngine(Map<String, Object> configuration, final ScriptEngineFactory factory) {
         this.factory = factory;
@@ -59,24 +77,116 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
         if (debugProperty instanceof String) {
             initDebugListener((String) debugProperty);
         }
+        Object recompile = configuration.get(CONFIG_RECOMPILE_MINIMUM_INTERVAL_PROPERTY);
+        if (recompile instanceof String) {
+            minimumRecompilationInterval = Long.valueOf((String) recompile);
+        }
+    }
+
+    private static class ScriptCacheEntry {
+        private final Script compiledScript;
+        private final URLScriptSource scriptSource;
+        private final long lastModified;
+        private final long lastCheck;
+
+        private ScriptCacheEntry(final Script compiledScript, final URLScriptSource scriptSource,
+                long lastModified, long lastCheck) {
+            this.compiledScript = compiledScript;
+            this.scriptSource = scriptSource;
+            this.lastModified = lastModified;
+            this.lastCheck = lastCheck;
+        }
+    }
+
+    protected ScriptCacheEntry isSourceNewer(final String name, final ScriptCacheEntry entry)
+            throws ScriptException {
+        if (minimumRecompilationInterval < 0)
+            return entry;
+        long nextSourceCheck = entry.lastCheck + minimumRecompilationInterval;
+        long now = System.currentTimeMillis();
+        if (nextSourceCheck < now) {
+            long newModified = URLScriptSource.getURLRevision(entry.scriptSource.getSource(), null);
+            if (entry.lastModified < newModified) {
+                synchronized (scriptCache) {
+                    try {
+                        Script recompiled = compileScript(name, entry.scriptSource.getReader());
+                        ScriptCacheEntry newEntry =
+                                new ScriptCacheEntry(recompiled, entry.scriptSource, newModified,
+                                        now);
+                        scriptCache.put(name, newEntry);
+                        return newEntry;
+                    } catch (IOException e) {
+                        throw new ScriptException(e);
+                    }
+                }
+            }
+        }
+        return entry;
+    }
+
+    /**
+     * Creates a Script with a given scriptName and binding.
+     * 
+     * @param scriptName
+     *            name of the script to run
+     * @return the script object
+     * @throws ResourceException
+     *             if there is a problem accessing the script
+     */
+    Script createScript(String scriptName) throws ScriptException {
+        final ScriptCacheEntry entry = scriptCache.get(scriptName);
+        if (null != entry) {
+            return isSourceNewer(scriptName, entry).compiledScript;
+        }
+        throw new ScriptException("Script is not found:" + scriptName);
     }
 
     public void compileScript(CompilationHandler handler) {
-
-        // TODO Cache the source for debugger
-
         try {
             boolean sharedScope = true;// config.get("sharedScope").defaultTo(true).asBoolean();
             handler.setClassLoader(RhinoScriptEngine.class.getClassLoader());
-            String name = handler.getScriptSource().getName().getName();
-            if (null != handler.getScriptSource().getSource()
-                    && "file".equals(handler.getScriptSource().getSource().getProtocol())) {
-                name = URLDecoder.decode(handler.getScriptSource().getSource().getFile(), "utf-8");
+            RhinoScript rhinoScript = null;
+            if (handler.getScriptSource() instanceof URLScriptSource) {
+                URLScriptSource source = (URLScriptSource) handler.getScriptSource();
+                String name = source.getName().getName();
+                if (null != source.getSource() && "file".equals(source.getSource().getProtocol())) {
+                    name = URLDecoder.decode(source.getSource().getFile(), "utf-8");
+                }
+                Script script = compileScript(name, source.getReader());
+                long now = System.currentTimeMillis();
+                scriptCache.put(name, new ScriptCacheEntry(script, source, now, now));
+                rhinoScript = new RhinoScript(name, this, sharedScope);
+            } else {
+                // TODO Cache the source for debugger
+                ScriptSource source = handler.getScriptSource();
+                String name = source.getName().getName();
+                Script script = compileScript(name, source.getReader());
+                rhinoScript = new RhinoScript(name, script, this, sharedScope);
             }
-            handler.setCompiledScript(new RhinoScript(name, handler.getScriptSource().getReader(),
-                    this, sharedScope));
+            handler.setCompiledScript(rhinoScript);
         } catch (Throwable e) {
             handler.handleException(e);
+        }
+    }
+
+    private Script compileScript(String name, Reader scriptReader) throws IOException {
+        Context cx = Context.enter();
+        try {
+            return cx.compileReader(scriptReader, name, 1, null);
+            /*
+             * } catch (IOException ioe) { throw new ScriptException(ioe); }
+             * catch (RhinoException re) { throw new
+             * ScriptException(re.getMessage());
+             */
+        } finally {
+            Context.exit();
+            if (scriptReader != null) {
+                try {
+                    scriptReader.close();
+                } catch (IOException e) {
+                    // meaningless exception
+                }
+            }
         }
     }
 
@@ -97,7 +207,9 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
 
     private volatile Boolean debugInitialised = null;
 
-    public static final String CONFIG_DEBUG_PROPERTY = "openidm.script.javascript.debug";
+    public static final String CONFIG_DEBUG_PROPERTY = "javascript.debug";
+    public static final String CONFIG_RECOMPILE_MINIMUM_INTERVAL_PROPERTY =
+            "javascript.recompile.minimumInterval";
 
     private synchronized void initDebugListener(String configString) {
         if (null == debugInitialised) {

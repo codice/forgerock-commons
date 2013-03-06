@@ -71,7 +71,7 @@ public class GroovyScriptEngineImpl extends AbstractScriptEngine {
 
     private final GroovyScriptEngine groovyScriptEngine;
 
-    private final AtomicReference<PersistenceConfig> persistenceConfig;
+    private final AtomicReference<PersistenceConfig> persistenceConfigReference;
 
     private final GroovyClassLoader loader;
 
@@ -84,7 +84,7 @@ public class GroovyScriptEngineImpl extends AbstractScriptEngine {
     GroovyScriptEngineImpl(Map<String, Object> configuration, final ScriptEngineFactory factory,
             final AtomicReference<PersistenceConfig> persistenceConfig) {
         this.factory = factory;
-        this.persistenceConfig = persistenceConfig;
+        this.persistenceConfigReference = persistenceConfig;
 
         Properties properties = null;
         for (Map.Entry<String, Object> entry : configuration.entrySet()) {
@@ -228,6 +228,6 @@ public class GroovyScriptEngineImpl extends AbstractScriptEngine {
     }
 
     public PersistenceConfig getPersistenceConfig() {
-        return persistenceConfig.get();
+        return persistenceConfigReference.get();
     }
 }

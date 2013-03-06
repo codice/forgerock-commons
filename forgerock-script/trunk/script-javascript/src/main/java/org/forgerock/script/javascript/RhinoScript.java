@@ -78,7 +78,7 @@ public class RhinoScript implements CompiledScript {
      * A sealed shared scope to improve performance; avoids allocating standard
      * objects on every exec call.
      */
-    private static ScriptableObject SHARED_SCOPE = null; // lazily initialized
+    private /*static*/ ScriptableObject SHARED_SCOPE = null; // lazily initialized
 
     /** The script level scope to use */
     private Scriptable scriptScope = null;
@@ -117,7 +117,7 @@ public class RhinoScript implements CompiledScript {
      * etc.) will be used for script execution; otherwise a new unsealed scope
      * will be allocated for each execution.
      * 
-     * @param source
+     * @param compiledScript
      *            the source code of the JavaScript script.
      * @param sharedScope
      *            if {@code true}, uses the shared scope, otherwise allocates
@@ -126,7 +126,7 @@ public class RhinoScript implements CompiledScript {
      *             if there was an exception encountered while compiling the
      *             script.
      */
-    public RhinoScript(String name, String source, final RhinoScriptEngine engine,
+    public RhinoScript(String name, Script compiledScript, final RhinoScriptEngine engine,
             boolean sharedScope) throws ScriptException {
         this.scriptName = name;
         this.sharedScope = sharedScope;
@@ -134,7 +134,8 @@ public class RhinoScript implements CompiledScript {
         Context cx = Context.enter();
         try {
             scriptScope = getScriptScope(cx);
-            script = cx.compileString(source, name, 1, null);
+            script = compiledScript;
+            //script = cx.compileString(source, name, 1, null);
         } catch (RhinoException re) {
             throw new ScriptException(re.getMessage());
         } finally {
@@ -145,31 +146,19 @@ public class RhinoScript implements CompiledScript {
     /**
      * TEMPORARY
      */
-    public RhinoScript(String name, Reader reader, final RhinoScriptEngine engine,
-            boolean sharedScope) throws ScriptException {
+    public RhinoScript(String name, final RhinoScriptEngine engine, boolean sharedScope)
+            throws ScriptException {
         this.scriptName = name;
         this.sharedScope = sharedScope;
         this.engine = engine;
+        Context cx = Context.enter();
         try {
-            Context cx = Context.enter();
-            try {
-                scriptScope = getScriptScope(cx);
-                script = cx.compileReader(reader, name, 1, null);
-            } catch (RhinoException re) {
-                throw new ScriptException(re);
-            } finally {
-                Context.exit();
-            }
-        } catch (IOException ioe) {
-            throw new ScriptException(ioe);
+            scriptScope = getScriptScope(cx);
+            script = null;// cx.compileReader(reader, name, 1, null);
+        } catch (RhinoException re) {
+            throw new ScriptException(re);
         } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    // meaningless exception
-                }
-            }
+            Context.exit();
         }
     }
 
@@ -191,7 +180,8 @@ public class RhinoScript implements CompiledScript {
         }
         // lazy initialization race condition is harmless
         if (SHARED_SCOPE == null) {
-            ScriptableObject scope = new Global(context);
+            Global scope = new Global(context);
+            scope.initQuitAction(new IProxy());
             // ScriptableList.init(scope, false);
 
             context.setApplicationClassLoader(new InnerClassLoader(context
@@ -298,8 +288,12 @@ public class RhinoScript implements CompiledScript {
                                                          // properties
             inner.setPrototype(outer);
             inner.setParentScope(null);
-            Object result = Converter.convert(script.exec(context, inner));
-            return result;
+
+            final Script _script = null != script ? script : engine.createScript(scriptName);
+            Object result = Converter.convert(_script.exec(context, inner));
+            return result; //Context.jsToJava(result, Object.class);
+        } catch (ScriptException e) {
+          throw e;
         } catch (WrappedException e) {
             // TODO Implement properly
             if (e.getWrappedException() instanceof NoSuchMethodException) {
@@ -309,15 +303,19 @@ public class RhinoScript implements CompiledScript {
             } else {
                 throw new ScriptThrownException(e.getMessage(), e.getWrappedException());
             }
-        } catch (RhinoException re) {
-            if (re instanceof JavaScriptException) {
-                // thrown by the script itself
-                throw new ScriptThrownException(re, Converter.convert(((JavaScriptException) re)
-                        .getValue()));
-            } else {
-                // some other runtime exception encountered
-                throw new ScriptException(re.getMessage());
-            }
+        } catch (JavaScriptException e) {
+            logger.error("Failed to evaluate {} script." , scriptName, e);
+            throw new ScriptThrownException(e, Converter.convert(e.getValue()));
+        }
+        catch (RhinoException e) {
+            logger.error("Failed to evaluate {} script." , scriptName, e);
+            // some other runtime exception encountered
+            final ScriptException _e = new ScriptException(e.getMessage());
+            _e.initCause(e);
+            throw _e;
+        } catch (Exception e) {
+            logger.error("Failed to evaluate {} script." , scriptName, e);
+            throw new ScriptException(e);
         } finally {
             Context.getCurrentContext().removeThreadLocal(Parameter.class.getName());
             Context.exit();

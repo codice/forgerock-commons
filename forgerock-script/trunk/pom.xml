@@ -105,25 +105,30 @@
         <!-- version management -->
         <slf4j.version>1.7.2</slf4j.version>
 
+        <!-- Documentation and site properties -->
+        <siteDistributionURL>scp://forgerock.org/var/www/vhosts/commons.forgerock.org/forgerock-script</siteDistributionURL>
+
         <!-- Commons forgerock-rest versions -->
         <commons.forgerock-rest.version>2.0.0-SNAPSHOT</commons.forgerock-rest.version>
 
         <!-- OSGi bundles properties -->
-        <commons.script.osgi.import.commons.script.version>
-            version="[$(version;==;${project.osgi.version.clean}}),$(version;=+;${project.osgi.version.clean}}))"
-        </commons.script.osgi.import.commons.script.version>
+        <!--<commons.script.osgi.import.commons.script.version>-->
+            <!--version="[$(version;==;${project.osgi.version.clean}}),$(version;=+;${project.osgi.version.clean}}))"-->
+        <!--</commons.script.osgi.import.commons.script.version>-->
 
-        <commons.script.osgi.import.forgerock-rest.version>
-            version="[$(version;===;${commons.forgerock-rest.version.clean}),$(version;==+;${commons.forgerock-rest.version.clean}))"
-        </commons.script.osgi.import.forgerock-rest.version>
+        <!--<commons.script.osgi.import.forgerock-rest.version>-->
+            <!--version="[$(version;===;${commons.forgerock-rest.version.clean}),$(version;==+;${commons.forgerock-rest.version.clean}))"-->
+        <!--</commons.script.osgi.import.forgerock-rest.version>-->
 
-        <commons.script.osgi.import.default.version>
-            [$(version;==;$(@)),$(version;+;$(@)))
-        </commons.script.osgi.import.default.version>
+        <!--<commons.script.osgi.import.default.version>-->
+            <!--[$(version;==;$(@)),$(version;+;$(@)))-->
+        <!--</commons.script.osgi.import.default.version>-->
         <commons.script.osgi.import.before.defaults/>
         <commons.script.osgi.import.defaults/>
         <commons.script.osgi.import.additional/>
         <commons.script.osgi.import>
+            org.forgerock.json.resource*;provide:=true,
+            org.forgerock.script*;provide:=true,
             ${commons.script.osgi.import.before.defaults},
             ${commons.script.osgi.import.defaults},
             ${commons.script.osgi.import.additional},
@@ -229,34 +234,11 @@
                     <configuration>
                         <instructions>
                             <Import-Package>${commons.script.osgi.import}</Import-Package>
-                            <_versionpolicy>${commons.script.osgi.import.default.version}</_versionpolicy>
-                            <SCM-Revision>${ci.svn.revision}</SCM-Revision>
                             <_removeheaders>
                                 Bnd-LastModified,Built-By,Private-Package,Tool,Build-Jdk,Include-Resource,Ignore-Package,Private-Package,Bundle-DocURL
                             </_removeheaders>
-                            <Include-Resource>{maven-resources}</Include-Resource>
                         </instructions>
-                        <versions>
-                            <project.osgi.version.clean>${project.version}</project.osgi.version.clean>
-                            <commons.forgerock-rest.version.clean>${commons.forgerock-rest.version}</commons.forgerock-rest.version.clean>
-                        </versions>
                     </configuration>
-                    <executions>
-                        <execution>
-                            <id>bundle-version</id>
-                            <phase>generate-sources</phase>
-                            <goals>
-                                <goal>cleanVersions</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>bundle-manifest</id>
-                            <phase>process-classes</phase>
-                            <goals>
-                                <goal>manifest</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

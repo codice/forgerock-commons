@@ -26,9 +26,11 @@ package org.forgerock.script.source;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
@@ -57,7 +59,42 @@ public class URLScriptSource implements ScriptSource {
         }
         this.visibility = visibility;
         this.source = source;
-        this.scriptName = new ScriptName(scriptName.getName(), scriptName.getType(), scriptName.getRevision());;
+
+        this.scriptName =
+                new ScriptName(scriptName.getName(), scriptName.getType(), Long
+                        .toHexString(getURLRevision(source, null)));
+    }
+
+    public static long getURLRevision(URL source, String revision) {
+        if (null == source) {
+            throw new NullPointerException();
+        }
+        long lastMod = 0;
+
+        if (null == revision || "0".equals(revision)) {
+            InputStream in = null;
+            try {
+                URLConnection urlConnection = source.openConnection();
+                if (urlConnection != null) {
+                    lastMod = ((urlConnection.getLastModified() / 1000) + 1) * 1000 - 1;
+                    // We need to get the input stream and close it to force the
+                    // open
+                    // file descriptor to be released. Otherwise, we will reach
+                    // the limit
+                    // for number of files open at one time.
+                    in = urlConnection.getInputStream();
+                }
+            } catch (Exception e) {
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                    }
+                }
+            }
+        }
+        return lastMod;
     }
 
     public URLScriptSource(ScriptEntry.Visibility visibility, URL source, ScriptName scriptName,
@@ -70,7 +107,9 @@ public class URLScriptSource implements ScriptSource {
         }
         this.visibility = visibility;
         this.source = source;
-        this.scriptName = new ScriptName(scriptName.getName(), scriptName.getType(), scriptName.getRevision());;
+        this.scriptName =
+                new ScriptName(scriptName.getName(), scriptName.getType(), Long
+                        .toHexString(getURLRevision(source, null)));
         this.parent = parent;
     }
 

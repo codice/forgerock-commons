@@ -137,9 +137,6 @@
                 <configuration>
                     <instructions>
                         <Private-Package>org.forgerock.script.javascript.internal*</Private-Package>
-                        <!--Export-Package>
-                            org.forgerock.script.javascript*;version="${project.osgi.version.clean}"
-                        </Export-Package-->
                         <Bundle-Activator>org.forgerock.script.javascript.internal.Activator</Bundle-Activator>
                     </instructions>
                 </configuration>
