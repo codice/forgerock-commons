@@ -15,7 +15,7 @@
  * enclosed by brackets "[]" replaced with your own identifying information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2011-2012 ForgeRock AS
+ *     Copyright 2011-2013 ForgeRock AS
  *
 */
 
@@ -87,27 +87,27 @@ h1 {
 }
 
 h2 {
-  color: #333
+  color: #333;
   font-size: 1.8em;
 }
 
 h3 {
-  color: #333
+  color: #333;
   font-size: 1.6em;
 }
 
 h4 {
-  color: #333
+  color: #333;
   font-size: 1.4em;
 }
 
 h5 {
-  color: #333
+  color: #333;
   font-size: 1.2em;
 }
 
 h6 {
-  color: #333
+  color: #333;
   font-size: 1em;
 }
 
@@ -139,7 +139,7 @@ div.navheader {
 
 .navheader th {
   color: #fafafa;
-  font-size: 0em;
+  font-size: 0;
 }
 
 .navheader td,
@@ -154,10 +154,7 @@ div.toc {
   border: thin dotted #ccc;
   margin-bottom: 0.25em;
   margin-top: 0.25em;
-  padding-bottom: 0.25em;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  padding-top: 0.75em;
+  padding: 0.75em 0.5em 0.25em 0.5em;
 }
 
 div.important,
@@ -169,10 +166,7 @@ div.warning {
   font-style: italic;
   margin-bottom: 0.25em;
   margin-top: 0.25em;
-  padding-bottom: 0.25em;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  padding-top: 0.25em;
+  padding: 0.25em 0.5em 0.25em 0.5em;
 }
 
 div.appendix,
