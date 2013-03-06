@@ -275,3 +275,25 @@ span.msgexplan-title {
 .toolbar {
   display: none !important;
 }
+
+.cornerBanner {
+  color: #f58220;
+  background-color: #333;
+  -moz-box-shadow: 2px 2px 20px #868686;
+  -moz-transform: rotate(45deg);
+  -moz-transform-origin: 50% 50%;
+  -webkit-transform: rotate(45deg);
+  -webkit-transform-origin: 50% 50%;
+  -ms-transform: rotate(45deg);
+  -ms-transform-origin: 50% 50%;
+  position: absolute;
+  width: 300px;
+  top: 45px;
+  right: -95px;
+  text-align: center;
+}
+
+.cornerBanner a {
+  color: #f58220;
+  text-decoration: none;
+}
