@@ -286,7 +286,7 @@ span.msgexplan-title {
   -webkit-transform-origin: 50% 50%;
   -ms-transform: rotate(45deg);
   -ms-transform-origin: 50% 50%;
-  position: absolute;
+  position: fixed;
   width: 300px;
   top: 45px;
   right: -95px;

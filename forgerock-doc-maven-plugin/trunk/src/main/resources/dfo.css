@@ -99,27 +99,27 @@ h1 {
 }
 
 h2 {
-  color: #333
+  color: #333;
   font-size: 1.8em;
 }
 
 h3 {
-  color: #333
+  color: #333;
   font-size: 1.6em;
 }
 
 h4 {
-  color: #333
+  color: #333;
   font-size: 1.4em;
 }
 
 h5 {
-  color: #333
+  color: #333;
   font-size: 1.2em;
 }
 
 h6 {
-  color: #333
+  color: #333;
   font-size: 1em;
 }
 
@@ -292,4 +292,26 @@ span.msgexplan-title {
 .syntaxhighlighter
 .toolbar {
   display: none !important;
+}
+
+.cornerBanner {
+    color: #f58220;
+    background-color: #333;
+    -moz-box-shadow: 2px 2px 20px #868686;
+    -moz-transform: rotate(45deg);
+    -moz-transform-origin: 50% 50%;
+    -webkit-transform: rotate(45deg);
+    -webkit-transform-origin: 50% 50%;
+    -ms-transform: rotate(45deg);
+    -ms-transform-origin: 50% 50%;
+    position: fixed;
+    width: 300px;
+    top: 45px;
+    right: -95px;
+    text-align: center;
+}
+
+.cornerBanner a {
+    color: #f58220;
+    text-decoration: none;
 }
