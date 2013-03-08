@@ -35,6 +35,7 @@ import java.util.Set;
 
 import javax.script.Bindings;
 import javax.script.ScriptException;
+import javax.script.SimpleBindings;
 
 import org.forgerock.script.engine.CompiledScript;
 import org.forgerock.script.engine.Utils;
@@ -231,6 +232,11 @@ public class RhinoScript implements CompiledScript {
         String loggerName = "org.forgerock.script.javascript.JavaScript." + scriptName;
         scope.put("logger", scope, Converter.wrap(null, FunctionFactory.getLogger(loggerName),
                 scope, false));
+    }
+
+    public Bindings prepareBindings(org.forgerock.json.resource.Context context, Bindings request, Bindings... scopes) {
+        //TODO Fix it later
+        return new SimpleBindings();
     }
 
     @Override

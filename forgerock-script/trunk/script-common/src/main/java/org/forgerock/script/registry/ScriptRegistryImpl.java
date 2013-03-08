@@ -512,6 +512,18 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
                 LibraryRecord.this.deleteScriptListener(o);
             }
 
+            public Bindings getScriptBindings(Context context, Bindings request) {
+                if (null == context) {
+                    throw new NullPointerException();
+                }
+                final ScriptEngine engine = LibraryRecord.this.scriptEngine.get();
+                if (null == engine) {
+                    throw new IllegalStateException("Engine is not available");
+                }
+                return target.prepareBindings(context, request, ServiceScript.this
+                        .getBindings(), ScriptRegistryImpl.this.globalScope.get());
+            }
+
             public Script getScript(final Context context) {
                 if (null == context) {
                     throw new NullPointerException();
@@ -521,13 +533,13 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
                 // new instance for debug mode
                 return new ScriptImpl(context, targetProxy) {
 
-                    protected ScriptEngine getScriptEngine() throws ScriptException {
-                        ScriptEngine engine = LibraryRecord.this.scriptEngine.get();
-                        if (null == engine) {
-                            throw new ScriptException("Engine is not available");
-                        }
-                        return engine;
-                    }
+//                    protected ScriptEngine getScriptEngine() throws ScriptException {
+//                        ScriptEngine engine = LibraryRecord.this.scriptEngine.get();
+//                        if (null == engine) {
+//                            throw new ScriptException("Engine is not available");
+//                        }
+//                        return engine;
+//                    }
 
                     protected Bindings getGlobalBindings() {
                         return ScriptRegistryImpl.this.globalScope.get();

@@ -24,6 +24,8 @@
 
 package org.forgerock.script;
 
+import javax.script.Bindings;
+
 import org.forgerock.json.resource.Context;
 
 /**
@@ -67,6 +69,15 @@ public interface ScriptEntry extends Scope {
      * @return new Script instance
      */
     public Script getScript(Context context);
+
+    /**
+     * Get a JSR223 Script Engine aware binding.
+     * 
+     * @param context
+     *            the request {@code Context}
+     * @return new {@code Bindings} contains the service and global scope.
+     */
+    public Bindings getScriptBindings(Context context, Bindings request);
 
     public ScriptName getName();
 

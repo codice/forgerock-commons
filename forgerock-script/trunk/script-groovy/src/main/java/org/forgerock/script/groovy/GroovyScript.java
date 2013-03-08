@@ -35,8 +35,8 @@ import java.util.Set;
 
 import javax.script.Bindings;
 import javax.script.ScriptException;
+import javax.script.SimpleBindings;
 
-import groovy.util.ResourceException;
 import org.codehaus.groovy.runtime.MetaClassHelper;
 import org.codehaus.groovy.runtime.MethodClosure;
 import org.forgerock.json.resource.Context;
@@ -56,6 +56,7 @@ import groovy.lang.MetaClass;
 import groovy.lang.MissingMethodException;
 import groovy.lang.Script;
 import groovy.lang.Tuple;
+import groovy.util.ResourceException;
 
 /**
  * A JavaScript script.
@@ -69,40 +70,28 @@ import groovy.lang.Tuple;
  */
 public class GroovyScript implements CompiledScript {
 
-    private final String  scriptName;
+    private final String scriptName;
 
     private final GroovyScriptEngineImpl engine;
 
-    public GroovyScript(String  scriptName, final GroovyScriptEngineImpl groovyEngine)
-            throws IllegalAccessException, InstantiationException, ResourceException, groovy.util.ScriptException {
+    public GroovyScript(String scriptName, final GroovyScriptEngineImpl groovyEngine)
+            throws IllegalAccessException, InstantiationException, ResourceException,
+            groovy.util.ScriptException {
         this.scriptName = scriptName;
         engine = groovyEngine;
         engine.createScript(scriptName, new Binding());
     }
 
-    public Object eval(final Context context, final Bindings request, Bindings... scopes)
+    public Bindings prepareBindings(final Context context, final Bindings request,
+            final Bindings... scopes) {
+        final Map<String, Object> b = mergeBindings(context, request, scopes);
+        return b instanceof Bindings ? (Bindings) b : new SimpleBindings(b);
+    }
+
+    public Object eval(final Context context, final Bindings request,final Bindings... scopes)
             throws ScriptException {
 
-        Set<String> safeAttributes = null != request ? request.keySet() : Collections.EMPTY_SET;
-        Map<String, Object> scope = new HashMap<String, Object>();
-        for (Map<String, Object> next : scopes) {
-            if (null == next)
-                continue;
-            for (Map.Entry<String, Object> entry : next.entrySet()) {
-                if (scope.containsKey(entry.getKey()) || safeAttributes.contains(entry.getKey())) {
-                    continue;
-                }
-                scope.put(entry.getKey(), entry.getValue());
-            }
-        }
-
-        scope = new LazyMap<String, Object>(new InnerMapFactory(scope, new OperationParameter(context,"DEFAULT", engine.getPersistenceConfig())));
-
-        final Map<String, Object> bindings = null != request ? request : scope;
-        if (null != request) {
-            // Make a deep copy and merge
-            request.putAll(scope);
-        }
+        final Map<String, Object> bindings = mergeBindings(context, request, scopes);
 
         // Bindings so script has access to this environment.
         // Only initialize once.
@@ -238,6 +227,37 @@ public class GroovyScript implements CompiledScript {
             // ctx.removeAttribute("context",
             // DefaultScriptContext.REQUEST_SCOPE);
             // ctx.removeAttribute("out", DefaultScriptContext.REQUEST_SCOPE);
+        }
+    }
+
+    private Map<String, Object> mergeBindings(final Context context, final Bindings request,
+                                              final Bindings... scopes) {
+        Set<String> safeAttributes = null != request ? request.keySet() : Collections.EMPTY_SET;
+        Map<String, Object> scope = new HashMap<String, Object>();
+        for (Map<String, Object> next : scopes) {
+            if (null == next)
+                continue;
+            for (Map.Entry<String, Object> entry : next.entrySet()) {
+                if (scope.containsKey(entry.getKey()) || safeAttributes.contains(entry.getKey())) {
+                    continue;
+                }
+                scope.put(entry.getKey(), entry.getValue());
+            }
+        }
+        // Make lazy deep copy        
+        if (!scope.isEmpty()) {
+            scope =
+                    new LazyMap<String, Object>(new InnerMapFactory(scope, new OperationParameter(
+                            context, "DEFAULT", engine.getPersistenceConfig())));
+        }
+
+        if (null == request || request.isEmpty()) {
+            return scope;
+        } else if (scope.isEmpty()) {
+            return request;
+        } else {
+            request.putAll(scope);
+            return request;
         }
     }
 

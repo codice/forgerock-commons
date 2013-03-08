@@ -62,4 +62,6 @@ public interface CompiledScript {
     public Object eval(Context context, Bindings request, Bindings... scopes)
             throws ScriptException;
 
+    public Bindings prepareBindings(Context context, Bindings request, Bindings... scopes);
+
 }
