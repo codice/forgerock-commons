@@ -495,8 +495,8 @@ public final class ResourceFunctions {
 
             // warning: if you dont use poll or peek and only iterator()
             // (+.remove()) it will leak memory.
-            ConcurrentLinkedQueue<Resource> results =
-                    null != callback ? null : new ConcurrentLinkedQueue<Resource>();
+            ConcurrentLinkedQueue<Map<String, Object>> results =
+                    null != callback ? null : new ConcurrentLinkedQueue<Map<String, Object>>();
 
             QueryResult queryResult =
                     query(scope, resourceContainer, params, fieldFilter, context, results, callback);
@@ -514,7 +514,7 @@ public final class ResourceFunctions {
 
         private final QueryResult query(final Parameter scope, String resourceContainer,
                 JsonValue params, List<Object> fieldFilter, JsonValue context,
-                final Collection<? super Resource> results, final Function<?> callback)
+                final Collection<Map<String, Object>> results, final Function<?> callback)
                 throws ResourceException {
             if (params.isDefined("_queryId") ^ params.isDefined("_queryExpression")
                     ^ params.isDefined("_filter")) {
@@ -618,7 +618,7 @@ public final class ResourceFunctions {
                                                 return false;
                                             }
                                         } else {
-                                            results.add(resource);
+                                            results.add(resource.getContent().asMap());
                                         }
                                         return true;
                                     }
