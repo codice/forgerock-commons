@@ -52,12 +52,9 @@ define("org/forgerock/commons/ui/common/components/Dialog", [
             "click .dialogContainer": "stop"
         },
         
-        actions: [
-            {
-                "type": "button",
-                "name": "close"
-            }
-        ],
+        actions: {
+            "close": "button"
+        },
         
         stop: function(event) {
             event.stopPropagation();
