@@ -83,7 +83,7 @@ define("org/forgerock/commons/ui/common/main/AbstractDelegate", [
         return this.serviceCall({url: "/" + id, type: "GET", success: successCallback, error: errorCallback});
     };
 
-    obj.prototype.updateEntity = function(objectParam, successCallback, errorCallback) {
+    obj.prototype.updateEntity = function(id, objectParam, successCallback, errorCallback) {
         console.debug("update entity");
         var headers = {};
         
@@ -93,7 +93,7 @@ define("org/forgerock/commons/ui/common/main/AbstractDelegate", [
             headers["If-Match"] = '"' + "*" + '"';
         }
         
-        return this.serviceCall({url: "/" + objectParam._id,
+        return this.serviceCall({url: "/" + id,
             type: "PUT",
             success: successCallback, 
             error: errorCallback, 
