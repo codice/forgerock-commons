@@ -130,14 +130,18 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
      *            Version number to use.
      * @param directory
      *            Directory containing PDFs.
+     * @throws MojoExecutionException Failed to rename a PDF file.
      */
-    final void renamePDFs(final String version, final String directory) {
+    final void renamePDFs(final String version, final String directory)
+            throws MojoExecutionException {
         File dir = new File(directory);
         String[] ext = { "pdf" };
         boolean isRecursive = false;
         for (File pdf : FileUtils.listFiles(dir, ext, isRecursive)) {
             String name = pdf.getName().replaceFirst("-", "-" + version + "-");
-            pdf.renameTo(new File(pdf.getParent() + File.separator + name));
+            if (!pdf.renameTo(new File(pdf.getParent() + File.separator + name))) {
+                throw new MojoExecutionException("Failed to rename PDF: " + name);
+            }
         }
     }
 

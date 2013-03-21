@@ -140,10 +140,8 @@ public final class DocUtils {
             if (isInitial && Character.isLetter(chars[i])) {
                 chars[i] = Character.toUpperCase(chars[i]);
                 isInitial = false;
-            } else if (Character.isLetter(chars[i])) {
-                isInitial = false;
             } else {
-                isInitial = true;
+                isInitial = !Character.isLetter(chars[i]);
             }
         }
 

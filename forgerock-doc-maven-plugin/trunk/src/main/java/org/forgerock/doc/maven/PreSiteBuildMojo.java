@@ -310,12 +310,12 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                 + "olinkdb-single-page-html.xml");
         try {
             StringBuilder content = new StringBuilder();
-            content.append("<?xml version='1.0' encoding='utf-8'?>\n");
-            content.append("<!DOCTYPE targetset[\n");
+            content.append("<?xml version='1.0' encoding='utf-8'?>\n")
+                    .append("<!DOCTYPE targetset[\n");
 
             String targetDbDtd = IOUtils.toString(getClass()
                     .getResourceAsStream("/targetdatabase.dtd"));
-            content.append(targetDbDtd + "\n");
+            content.append(targetDbDtd).append("\n");
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     getDocbkxSourceDirectory(), getDocumentSrcName());
@@ -326,29 +326,29 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             for (String docName : docNames) {
                 String sysId = getBuildDirectory().getAbsolutePath()
                         + File.separator + docName + "-single.target.db";
-                content.append("<!ENTITY " + docName + " SYSTEM '" + sysId
-                        + "'>\n");
+                content.append("<!ENTITY ").append(docName)
+                        .append(" SYSTEM '").append(sysId).append("'>\n");
             }
 
-            content.append("]>\n");
+            content.append("]>\n")
 
-            content.append("<targetset>\n");
-            content.append(" <targetsetinfo>Target DB for ForgeRock DocBook content,\n");
-            content.append(" for use with single page HTML only.</targetsetinfo>\n");
-            content.append(" <sitemap>\n");
-            content.append("  <dir name='doc'>\n");
+                    .append("<targetset>\n")
+                    .append(" <targetsetinfo>Target DB for ForgeRock DocBook content,\n")
+                    .append(" for use with single page HTML only.</targetsetinfo>\n")
+                    .append(" <sitemap>\n")
+                    .append("  <dir name='doc'>\n");
 
             for (String docName : docNames) {
-                content.append("   <document targetdoc='" + docName + "'\n");
-                content.append("             baseuri='../" + docName + "/"
-                        + FilenameUtils.getBaseName(getDocumentSrcName())
-                        + ".html'>\n");
-                content.append("    &" + docName + ";\n");
-                content.append("   </document>\n");
+                content.append("   <document targetdoc='").append(docName).append("'\n")
+                        .append("             baseuri='../").append(docName)
+                        .append("/").append(FilenameUtils.getBaseName(getDocumentSrcName()))
+                        .append(".html'>\n")
+                        .append("    &").append(docName).append(";\n")
+                        .append("   </document>\n");
             }
-            content.append("  </dir>\n");
-            content.append(" </sitemap>\n");
-            content.append("</targetset>\n");
+            content.append("  </dir>\n")
+                    .append(" </sitemap>\n")
+                    .append("</targetset>\n");
 
             FileUtils.writeStringToFile(targetDB, content.toString());
         } catch (IOException e) {
@@ -382,12 +382,12 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                 + "olinkdb-chunked-html.xml");
         try {
             StringBuilder content = new StringBuilder();
-            content.append("<?xml version='1.0' encoding='utf-8'?>\n");
-            content.append("<!DOCTYPE targetset[\n");
+            content.append("<?xml version='1.0' encoding='utf-8'?>\n")
+                    .append("<!DOCTYPE targetset[\n");
 
             String targetDbDtd = IOUtils.toString(getClass()
                     .getResourceAsStream("/targetdatabase.dtd"));
-            content.append(targetDbDtd + "\n");
+            content.append(targetDbDtd).append("\n");
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     getDocbkxSourceDirectory(), getDocumentSrcName());
@@ -398,34 +398,34 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             for (String docName : docNames) {
                 String sysId = getBuildDirectory().getAbsolutePath()
                         + File.separator + docName + "-chunked.target.db";
-                content.append("<!ENTITY " + docName + " SYSTEM '" + sysId
-                        + "'>\n");
+                content.append("<!ENTITY ").append(docName)
+                        .append(" SYSTEM '").append(sysId).append("'>\n");
             }
 
-            content.append("]>\n");
+            content.append("]>\n")
 
-            content.append("<targetset>\n");
-            content.append(" <targetsetinfo>Target DB for ForgeRock DocBook content,\n");
-            content.append(" for use with chunked HTML only.</targetsetinfo>\n");
-            content.append(" <sitemap>\n");
-            content.append("  <dir name='doc'>\n");
+                    .append("<targetset>\n")
+                    .append(" <targetsetinfo>Target DB for ForgeRock DocBook content,\n")
+                    .append(" for use with chunked HTML only.</targetsetinfo>\n")
+                    .append(" <sitemap>\n")
+                    .append("  <dir name='doc'>\n");
 
             String baseName = FilenameUtils.getBaseName(getDocumentSrcName());
             for (String docName : docNames) {
-                content.append("   <dir name='" + docName + "'>\n");
-                content.append("    <dir name='" + baseName + "'>\n");
-                content.append("     <document targetdoc='" + docName + "'\n");
-                content.append("               baseuri='../../" + docName + "/"
-                        + baseName + "/'>\n");
-                content.append("      &" + docName + ";\n");
-                content.append("     </document>\n");
-                content.append("    </dir>\n");
-                content.append("   </dir>\n");
+                content.append("   <dir name='").append(docName).append("'>\n")
+                        .append("    <dir name='").append(baseName).append("'>\n")
+                        .append("     <document targetdoc='").append(docName).append("'\n")
+                        .append("               baseuri='../../")
+                        .append(docName).append("/").append(baseName).append("/'>\n")
+                        .append("      &").append(docName).append(";\n")
+                        .append("     </document>\n")
+                        .append("    </dir>\n")
+                        .append("   </dir>\n");
             }
 
-            content.append("  </dir>\n");
-            content.append(" </sitemap>\n");
-            content.append("</targetset>\n");
+            content.append("  </dir>\n")
+                    .append(" </sitemap>\n")
+                    .append("</targetset>\n");
 
             FileUtils.writeStringToFile(targetDB, content.toString());
         } catch (IOException e) {
