@@ -88,6 +88,12 @@ public class SiteBuildMojo extends AbstractBuildMojo {
             throw new MojoExecutionException("Failed to copy redirect file: "
                     + e.getMessage());
         }
+
+        // Test links in document source, and generate a report.
+        if (!getRunLinkTester().equalsIgnoreCase("false")) {
+            getLog().info("Running linktester...");
+            exec.testLinks();
+        }
     }
 
     /**
@@ -182,6 +188,34 @@ public class SiteBuildMojo extends AbstractBuildMojo {
                     configuration(element(name("encoding"), "UTF-8"),
                             element(name("outputDirectory"), siteDocDirectory),
                             getResources()),
+                    executionEnvironment(getProject(), getSession(),
+                            getPluginManager()));
+        }
+
+        /**
+         * Test links in source documentation.
+         *
+         * @throws MojoExecutionException
+         *             Problem during execution.
+         */
+        void testLinks() throws MojoExecutionException {
+            String log = getDocbkxOutputDirectory().getPath() + File.separator
+                    + "linktester.err";
+
+            executeMojo(
+                    plugin(groupId("org.forgerock.maven.plugins"),
+                            artifactId("linktester-maven-plugin"),
+                            version(getLinkTesterVersion())),
+                    goal("check"),
+                    configuration(
+                            element(name("includes"),
+                                    element(name("include"), "**/"
+                                            + getDocumentSrcName())),
+                            element(name("validating"), "true"),
+                            element(name("skipUrls"), getSkipLinkCheck()),
+                            element(name("xIncludeAware"), "true"),
+                            element(name("failOnError"), "false"),
+                            element(name("outputFile"), log)),
                     executionEnvironment(getProject(), getSession(),
                             getPluginManager()));
         }

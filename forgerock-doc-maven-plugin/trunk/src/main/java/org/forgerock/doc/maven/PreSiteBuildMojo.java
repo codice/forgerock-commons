@@ -109,12 +109,6 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             postProcessHTML(getDocbkxOutputDirectory().getPath()
                     + File.separator + "html");
         }
-
-        // Test links in document source, and generate a report.
-        if (!getRunLinkTester().equalsIgnoreCase("false")) {
-            getLog().info("Running linktester...");
-            exec.testLinks();
-        }
     }
 
     /**
@@ -1247,34 +1241,6 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                             version(getDocbkxVersion())),
                     goal("generate-html"),
                     configuration(cfg.toArray(new Element[0])),
-                    executionEnvironment(getProject(), getSession(),
-                            getPluginManager()));
-        }
-
-        /**
-         * Test links in source documentation.
-         *
-         * @throws MojoExecutionException
-         *             Problem during execution.
-         */
-        void testLinks() throws MojoExecutionException {
-            String log = getDocbkxOutputDirectory().getPath() + File.separator
-                    + "linktester.err";
-
-            executeMojo(
-                    plugin(groupId("org.forgerock.maven.plugins"),
-                            artifactId("linktester-maven-plugin"),
-                            version(getLinkTesterVersion())),
-                    goal("check"),
-                    configuration(
-                            element(name("includes"),
-                                    element(name("include"), "**/"
-                                            + getDocumentSrcName())),
-                            element(name("validating"), "true"),
-                            element(name("skipUrls"), getSkipLinkCheck()),
-                            element(name("xIncludeAware"), "true"),
-                            element(name("failOnError"), "false"),
-                            element(name("outputFile"), log)),
                     executionEnvironment(getProject(), getSession(),
                             getPluginManager()));
         }

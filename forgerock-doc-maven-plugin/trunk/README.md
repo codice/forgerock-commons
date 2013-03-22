@@ -89,15 +89,16 @@ An example project layout looks like this:
 ## Link Checking
 
 By default, the plugin checks links found in the DocBook XML source, including
-Olinks. You can find errors in the `target/linktester.err` file.
+Olinks. You can find errors in the `target/docbkx/linktester.err` file.
 
 If you want to skip the checks for external URLs, pass `-DskipLinkCheck=true`
 to Maven, as in the following example:
 
-    mvn -DskipLinkCheck=true clean pre-site
+    mvn -DskipLinkCheck=true clean site
 
-This capability is provided by Peter Major's
-[linktester](https://github.com/aldaris/docbook-linktester) plugin.
+The check is run at the end of the site layout phase. This capability is
+provided by Peter Major's [linktester](https://github.com/aldaris/docbook-linktester)
+plugin.
 
 Run linktester at the top level of the project, not in modules. 
 
@@ -133,13 +134,13 @@ Formats include `epub`, `html`, `man`, `pdf`, and `rtf`.
 ## Expected Results
 
 When you run the plugin with `mvn pre-site`, it builds the output formats,
-which you find under `target/docbkx`. The plugin also runs the link check.
+which you find under `target/docbkx`.
 
 When you run the plugin with `mvn site`, it takes what was constructed during
 the `pre-site` phase and moves it under `target/site/doc` as expected for a
 Maven project site. The plugin adds an `index.html` in that directory that
 redirects to `http://project.forgerock.org/docs.html`, so you do need one of
-those in your Maven site.
+those in your Maven site. The plugin also runs the link check.
 
 The plugin also adds a `.htaccess` file under `target/site/doc` indicating to
 Apache HTTPD server to compress text files like HTML and CSS.
@@ -187,4 +188,4 @@ To view a copy of this license, visit
 or send a letter to Creative Commons, 444 Castro Street,
 Suite 900, Mountain View, California, 94041, USA.
 
-Copyright 2012 ForgeRock AS
+Copyright 2012-2013 ForgeRock AS
