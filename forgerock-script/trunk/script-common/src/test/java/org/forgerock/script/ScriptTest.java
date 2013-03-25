@@ -106,8 +106,8 @@ public abstract class ScriptTest {
         RequestHandler resource = mock(RequestHandler.class);
 
         final Router router = new Router();
-        router.addRoute("Users", new InMemoryBackend());
-        router.addRoute("Groups", new InMemoryBackend());
+        router.addRoute("/Users", new InMemoryBackend());
+        router.addRoute("/Groups", new InMemoryBackend());
         router.addRoute(RoutingMode.EQUALS, "mock/{id}",resource);
 
         scriptRegistry.setPersistenceConfig(PersistenceConfig.builder().connectionProvider(new ConnectionProvider() {

@@ -98,7 +98,10 @@ public class GroovyScriptEngineImpl extends AbstractScriptEngine {
         final CompilerConfiguration config =
                 null != properties ? new CompilerConfiguration(properties)
                         : new CompilerConfiguration();
-        config.addCompilationCustomizers(GroovyScriptEngineImpl.getImportCustomizer());
+
+        config.addCompilationCustomizers(GroovyScriptEngineImpl
+                .getImportCustomizer((ImportCustomizer) configuration.get(ImportCustomizer.class
+                        .getCanonicalName())));
 
         Object jointCompilationOptions = configuration.get("jointCompilationOptions");
         if (jointCompilationOptions instanceof Map) {
@@ -157,8 +160,8 @@ public class GroovyScriptEngineImpl extends AbstractScriptEngine {
         }
     }
 
-    static ImportCustomizer getImportCustomizer() {
-        final ImportCustomizer ic = new ImportCustomizer();
+    static ImportCustomizer getImportCustomizer(ImportCustomizer parent) {
+        final ImportCustomizer ic = null != parent ? parent : new ImportCustomizer();
         for (final String imp : getImports()) {
             ic.addStarImports(imp.replace(DOT_STAR, EMPTY_STRING));
         }

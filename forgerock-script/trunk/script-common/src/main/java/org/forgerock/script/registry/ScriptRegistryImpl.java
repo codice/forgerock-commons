@@ -162,7 +162,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
     }
 
     public Bindings createBindings() {
-        return new SimpleBindings(new ConcurrentHashMap<String, Object>());
+        return new SimpleBindings();
     }
 
     // ScriptRegistry Methods
@@ -745,7 +745,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
         }
 
         public Bindings createBindings() {
-            return new SimpleBindings(new ConcurrentHashMap<String, Object>());
+            return new SimpleBindings();
         }
 
         public void flush() {

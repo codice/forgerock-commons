@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2013 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -43,7 +43,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import javax.script.ScriptException;
+
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.fluent.JsonValueException;
+import org.forgerock.json.resource.Context;
+import org.forgerock.json.resource.ResourceException;
+import org.forgerock.json.resource.ServiceUnavailableException;
+import org.forgerock.script.Script;
+import org.forgerock.script.ScriptEntry;
+import org.forgerock.script.exception.ScriptThrownException;
 
 /**
  * A NAME does ...
@@ -105,12 +115,12 @@ public class Utils {
 
     /**
      * Read large > 5Mb text files to String.
-     *
+     * 
      * @param file
-     *         source file
+     *            source file
      * @return content of the source {@code file}
      * @throws IOException
-     *         when the source {@code file} can not be read
+     *             when the source {@code file} can not be read
      */
     public final static String readLargeFile(File file) throws IOException {
         FileChannel channel = new FileInputStream(file).getChannel();
@@ -122,12 +132,12 @@ public class Utils {
 
     /**
      * Read small < 5Mb text files to String
-     *
+     * 
      * @param file
-     *         source file
+     *            source file
      * @return content of the source {@code file}
      * @throws IOException
-     *         when the source {@code file} can not be read
+     *             when the source {@code file} can not be read
      */
     public static final String readFile(File file) throws IOException {
         return readStream(new FileInputStream(file));
@@ -227,5 +237,60 @@ public class Utils {
         } else {
             return source;
         }
+    }
+
+    /**
+     * Executes the given script with the appropriate context information
+     * 
+     * @param context
+     * @param scriptPair
+     *            The script to execute
+     * @return
+     * @throws ResourceException
+     */
+    public static Object evaluateScript(final Context context,
+            final Pair<JsonPointer, ScriptEntry> scriptPair) throws ResourceException {
+        if (scriptPair != null) {
+            ScriptEntry scriptEntry = scriptPair.snd;
+            if (scriptEntry.isActive()) {
+                throw new ServiceUnavailableException("Failed to execute inactive script: "
+                        + scriptPair.snd.getName());
+            }
+            Script script = scriptEntry.getScript(context);
+            try {
+                return script.eval();
+            } catch (Throwable t) {
+                throw adapt(t);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Adapts a {@code Throwable} to a {@code ResourceException}. If the
+     * {@code Throwable} is an JSON {@code ScriptException} then an appropriate
+     * {@code ResourceException} is returned, otherwise an
+     * {@code InternalServerErrorException} is returned.
+     * 
+     * @param t
+     *            The {@code Throwable} to be converted.
+     * @return The equivalent resource exception.
+     */
+    public static ResourceException adapt(final Throwable t) {
+        int resourceResultCode;
+        try {
+            throw t;
+        } catch (final ResourceException e) {
+            return e;
+        } catch (final JsonValueException e) {
+            resourceResultCode = ResourceException.BAD_REQUEST;
+        } catch (final ScriptThrownException e) {
+            return e.toResourceException(ResourceException.INTERNAL_ERROR, e.getMessage());
+        } catch (final ScriptException e) {
+            resourceResultCode = ResourceException.INTERNAL_ERROR;
+        } catch (final Throwable tmp) {
+            resourceResultCode = ResourceException.INTERNAL_ERROR;
+        }
+        return ResourceException.getException(resourceResultCode, t.getMessage(), t);
     }
 }
