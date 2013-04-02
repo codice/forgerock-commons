@@ -16,7 +16,7 @@
   ! enclosed by brackets "[]" replaced with your own identifying information:
   !      Portions Copyright [yyyy] [name of copyright owner]
   !
-  !      Copyright 2011-2012 ForgeRock AS
+  !      Copyright 2011-2013 ForgeRock AS
   !
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
