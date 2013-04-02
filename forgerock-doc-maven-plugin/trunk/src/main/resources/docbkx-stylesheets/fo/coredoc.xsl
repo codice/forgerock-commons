@@ -93,10 +93,8 @@
   </xsl:attribute-set>
   <xsl:param name="shade.verbatim" select="1" />
   <xsl:attribute-set name="shade.verbatim.style">
-   <xsl:attribute name="background-color">#fafafa</xsl:attribute>
-   <xsl:attribute name="border-width">0.5pt</xsl:attribute>
-   <xsl:attribute name="border-style">solid</xsl:attribute>
-   <xsl:attribute name="border-color">#e0eeee</xsl:attribute>
+   <xsl:attribute name="background-color">#d4d4d4</xsl:attribute>
+   <xsl:attribute name="border">0.5pt dashed #626d75</xsl:attribute>
    <xsl:attribute name="padding">3pt</xsl:attribute>
    <xsl:attribute name="wrap-option">no-wrap</xsl:attribute>
    <xsl:attribute name="font-size">0.75em</xsl:attribute>
@@ -107,4 +105,15 @@
   <xsl:param name="ulink.hyphenate.chars">:/@&amp;?.#</xsl:param>
 
   <xsl:param name="hyphenate">false</xsl:param>
+
+  <!--
+   When https://code.google.com/p/docbkx-tools/issues/detail?id=35
+   is resolved, it might be nice to use admonition graphics
+   rather than gray backgrounds.
+  -->
+  <xsl:attribute-set name="admonition.properties">
+   <xsl:attribute name="background-color">#d4d4d4</xsl:attribute>
+   <xsl:attribute name="border">0.5pt dashed #626d75</xsl:attribute>
+   <xsl:attribute name="padding">3pt</xsl:attribute>
+  </xsl:attribute-set>
 </xsl:stylesheet>
