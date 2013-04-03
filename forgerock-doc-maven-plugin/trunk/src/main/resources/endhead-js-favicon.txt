@@ -63,29 +63,45 @@ $(document).ready(function() {
     });
   });
 
-    /*
-     * DOCS-57: Add collapse/expand chapter in single-page HTML
-     *
-     * Use [-] image to mean "collapse" and [+] image to mean "expand".
-     * TODO: Top level "collapse" and "expand" for entire single-page HTML
-     */
-    var tocollapse = "<img alt=\"[-]\" class=\"tocollapse\" width=\"18\" height=\"10\" src=\"" + minusPng + "\">";
-    var toexpand = "<img alt=\"[+]\" class=\"toexpand\" width=\"18\" height=\"10\" src=\"" + plusPng + "\">";
-    $("div.chapter,div.reference,div.appendix,div.index").each(function () {
-        $(this).prepend(tocollapse + toexpand)
-    });
-    $(".toexpand").hide();
+  /*
+   * DOCS-57: Add collapse/expand chapter in single-page HTML
+   *
+   * Use [-] image to mean "collapse" and [+] image to mean "expand".
+   */
+  var tocollapse = minus.replace(/toggle/, "tocollapse");
+  var toexpand = plus.replace(/toggle/,"toexpand");
+  $("div.chapter,div.reference,div.appendix,div.index").each(function () {
+      $(this).prepend(tocollapse + toexpand)
+  });
+  $(".toexpand").hide();
 
-    $(".tocollapse").click(function() {
-        $(this).siblings(":not(.titlepage)").hide();
-        $(this).siblings(".toexpand").show();
-        $(this).hide();
-    });
+  $(".tocollapse").click(function() {
+      $(this).siblings(":not(.titlepage)").hide();
+      $(this).siblings(".toexpand").show();
+      $(this).hide();
+  });
 
-    $(".toexpand").click(function() {
-        $(this).siblings("*").show();
-        $(this).hide();
-    });
+  $(".toexpand").click(function() {
+      $(this).siblings("*").show();
+      $(this).hide();
+  });
+
+  var bookcollapse = minus.replace(/toggle/,"bookcollapse");
+  var bookexpand = plus.replace(/toggle/,"bookexpand");
+  $("div.book").prepend(bookcollapse + bookexpand);
+  $(".bookexpand").hide();
+
+  $(".bookcollapse").click(function() {
+      $(".tocollapse").click();
+      $(".bookexpand").show();
+      $(this).hide();
+  });
+
+  $(".bookexpand").click(function() {
+      $(".toexpand").click();
+      $(".bookcollapse").show();
+      $(this).hide();
+  });
 });
 
 /*
