@@ -180,6 +180,35 @@ in HTML.
 Brush support for `aci`, `csv`, `http`, `ini`, and `ldif` is provided by
 [a fork of SyntaxHighlighter](https://github.com/markcraig/SyntaxHighlighter).
 
+## JCite Integration
+
+[JCite](http://arrenbrecht.ch/jcite/) lets you cite, rather than copy and paste,
+Java source code in your documentation, reducing the likelihood that the
+developer examples get out of sync with your documentation.
+
+To run JCite, add an execution like this prior to your pre-site build goal:
+
+    <execution>
+     <id>run-jcite</id>
+     <phase>pre-site</phase>
+     <goals>
+      <goal>jcite</goal>
+     </goals>
+    </execution>
+
+Also make sure that your build uses the sources processed by JCite:
+
+    <useGeneratedSources>true</useGeneratedSources>
+
+Code citations should fit inside ProgramListing elements with language set
+to `java` to pick up syntax highlighting. Use plain citations as in the
+following example:
+
+    <programlisting language="java"
+    >[jcp:org.forgerock.doc.jcite.test.Test:--- mainMethod]</programlisting>
+
+See the `forgerock-doc-maven-plugin-test` project for an example.
+
 * * *
 This work is licensed under the Creative Commons
 Attribution-NonCommercial-NoDerivs 3.0 Unported License.

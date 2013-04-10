@@ -50,6 +50,14 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     private String resourcesVersion;
 
     /**
+     * JCite version to use for code citations.
+     *
+     * @parameter default-value="1.13.0" property="jCiteVersion"
+     * @required
+     */
+    private String jCiteVersion;
+
+    /**
      * ForgeRock linktester plugin version to use. Executions seem to hit an NPE
      * when the version is not specified.
      *
@@ -116,6 +124,23 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * @required
      */
     private File docbkxSourceDirectory;
+
+    /**
+     * Base directory for processed DocBook XML source files.
+     *
+     * @parameter default-value="${project.build.directory}/generated-docbkx"
+     *            property="docbkxGeneratedSourceDirectory"
+     * @required
+     */
+    private File docbkxGeneratedSourceDirectory;
+
+    /**
+     * Whether to use generated sources.
+     *
+     * @parameter default-value="false" property="useGeneratedSources"
+     * @required
+     */
+    private boolean useGeneratedSources;
 
     /**
      * Base directory for built documentation.
@@ -213,6 +238,13 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     /**
      * {@inheritDoc}
      */
+    public String getJCiteVersion() {
+        return jCiteVersion;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getLinkTesterVersion() {
         return linkTesterVersion;
     }
@@ -292,6 +324,27 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      */
     public File getDocbkxSourceDirectory() {
         return docbkxSourceDirectory;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDocbkxSourceDirectory(File directory) {
+        this.docbkxSourceDirectory = directory;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public File getDocbkxGeneratedSourceDirectory() {
+        return docbkxGeneratedSourceDirectory;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean doUseGeneratedSources() {
+        return useGeneratedSources;
     }
 
     /**
