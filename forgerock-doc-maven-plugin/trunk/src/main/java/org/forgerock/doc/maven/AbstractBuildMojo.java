@@ -61,7 +61,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * ForgeRock linktester plugin version to use. Executions seem to hit an NPE
      * when the version is not specified.
      *
-     * @parameter default-value="1.1.0" property="linkTesterVersion"
+     * @parameter default-value="1.2.0-SNAPSHOT" property="linkTesterVersion"
      * @required
      */
     private String linkTesterVersion;
@@ -120,7 +120,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * Base directory for DocBook XML source files.
      *
      * @parameter default-value="${basedir}/src/main/docbkx"
-     *            property="docbkxSourceDirectory"
+     * property="docbkxSourceDirectory"
      * @required
      */
     private File docbkxSourceDirectory;
@@ -129,7 +129,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * Base directory for processed DocBook XML source files.
      *
      * @parameter default-value="${project.build.directory}/generated-docbkx"
-     *            property="docbkxGeneratedSourceDirectory"
+     * property="docbkxGeneratedSourceDirectory"
      * @required
      */
     private File docbkxGeneratedSourceDirectory;
@@ -146,7 +146,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * Base directory for built documentation.
      *
      * @parameter default-value="${project.build.directory}/docbkx"
-     *            property="docbkxOutputDirectory"
+     * property="docbkxOutputDirectory"
      * @required
      */
     private File docbkxOutputDirectory;
@@ -189,12 +189,12 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * Top-level DocBook documents included in the documentation set such as
      * books, articles, and references share a common entry point, which is a
      * file having the name specified by this element.
-     * <p>
+     * <p/>
      * For example, if your documentation set has Release Notes, an Installation
      * Guide, a Developer's Guide, and a Reference, your source layout under the
      * base DocBook XML source directory might look like this, assuming you use
      * the default file name, <code>index.xml</code>.
-     *
+     * <p/>
      * <pre>
      * docbkx/
      *  dev-guide/
@@ -212,7 +212,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      *  shared/
      *   ...other files...
      * </pre>
-     *
+     * <p/>
      * The <code>...other files...</code> can have whatever names you want, as
      * long as the name does not conflict with the file name you set here.
      *
@@ -394,10 +394,9 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * specified, then the default list of formats includes epub, html, man,
      * pdf, rtf.
      *
-     * @param defaults
-     *            (Restricted) list of formats to consider. Set this to limit
-     *            the list of output formats. Formats are passed on to the
-     *            plugin as is.
+     * @param defaults (Restricted) list of formats to consider. Set this to limit
+     *                 the list of output formats. Formats are passed on to the
+     *                 plugin as is.
      * @return List of output formats.
      */
     public List<String> getOutputFormats(final String... defaults)

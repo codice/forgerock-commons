@@ -39,7 +39,7 @@ public class SiteBuildMojo extends AbstractBuildMojo {
      * File system directory for site build.
      *
      * @parameter default-value="${project.build.directory}/site"
-     *            property="siteDirectory"
+     * property="siteDirectory"
      * @required
      */
     private File siteDirectory;
@@ -105,8 +105,7 @@ public class SiteBuildMojo extends AbstractBuildMojo {
          * directory. Man pages are not currently copied anywhere.
          *
          * @return Compound element specifying built documents to copy
-         * @throws MojoExecutionException
-         *             Something went wrong getting document names.
+         * @throws MojoExecutionException Something went wrong getting document names.
          */
         private MojoExecutor.Element getResources() throws MojoExecutionException {
 
@@ -170,8 +169,7 @@ public class SiteBuildMojo extends AbstractBuildMojo {
         /**
          * Lay out docs in site directory under <code>target/site/doc</code>.
          *
-         * @throws MojoExecutionException
-         *             Problem during execution.
+         * @throws MojoExecutionException Problem during execution.
          */
         public void layout() throws MojoExecutionException {
             if (siteDirectory == null) {
@@ -195,12 +193,14 @@ public class SiteBuildMojo extends AbstractBuildMojo {
         /**
          * Test links in source documentation.
          *
-         * @throws MojoExecutionException
-         *             Problem during execution.
+         * @throws MojoExecutionException Problem during execution.
          */
         void testLinks() throws MojoExecutionException {
-            String log = getDocbkxOutputDirectory().getPath() + File.separator
+            final String log = getDocbkxOutputDirectory().getPath() + File.separator
                     + "linktester.err";
+            final String jiraUrlPattern =
+                    "^https://bugster.forgerock.org/jira/browse/OPEN(AM|ICF|IDM|IG|DJ)-[0-9]{1,4}$";
+            final String rfcUrlPattern = "^http://tools.ietf.org/html/rfc[0-9]+$";
 
             executeMojo(
                     plugin(groupId("org.forgerock.maven.plugins"),
@@ -215,7 +215,10 @@ public class SiteBuildMojo extends AbstractBuildMojo {
                             element(name("skipUrls"), getSkipLinkCheck()),
                             element(name("xIncludeAware"), "true"),
                             element(name("failOnError"), "false"),
-                            element(name("outputFile"), log)),
+                            element(name("outputFile"), log),
+                            element(name("skipUrlPatterns"),
+                                    element(name("skipUrlPattern"), jiraUrlPattern),
+                                    element(name("skipUrlPattern"), rfcUrlPattern))),
                     executionEnvironment(getProject(), getSession(),
                             getPluginManager()));
         }
