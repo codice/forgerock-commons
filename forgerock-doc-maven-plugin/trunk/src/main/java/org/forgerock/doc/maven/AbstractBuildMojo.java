@@ -85,6 +85,16 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     private String runLinkTester;
 
     /**
+     * Whether to use common legal notice and front matter to build docs.
+     * Use of common content relies on {@code useGeneratedSources} being
+     * {@code true} as the common content overwrites files of the same
+     * name in the project.
+     *
+     * @parameter default-value="true" property="useSharedContent"
+     */
+    private boolean useSharedContent;
+
+    /**
      * Short name of the project, such as OpenAM, OpenDJ, OpenIDM.
      *
      * @parameter property="projectName"
@@ -137,7 +147,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     /**
      * Whether to use generated sources.
      *
-     * @parameter default-value="false" property="useGeneratedSources"
+     * @parameter default-value="true" property="useGeneratedSources"
      * @required
      */
     private boolean useGeneratedSources;
@@ -209,7 +219,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      *  release-notes/
      *   index.xml
      *   ...other files...
-     *  shared/
+     *  common/
      *   ...other files...
      * </pre>
      * <p/>
@@ -428,5 +438,24 @@ abstract class AbstractBuildMojo extends AbstractMojo {
             formats = includes;
         }
         return formats;
+    }
+
+    /**
+     * Whether to use common legal notice and front matter to build docs.
+     * Use of common content relies on {@code useGeneratedSources} being
+     * {@code true} as the common content overwrites files of the same
+     * name in the project.
+     *
+     * @parameter default-value="true" property="useSharedContent"
+     */
+    public boolean doUseSharedContent() {
+        return useSharedContent;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setUseSharedContent(boolean useSharedContent) {
+        this.useSharedContent = useSharedContent;
     }
 }

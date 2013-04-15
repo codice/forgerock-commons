@@ -27,13 +27,20 @@ POM property called `gaId`, whose value is the Google Analytics ID.
 		  <plugin>
 		   <groupId>org.forgerock.commons</groupId>
 		   <artifactId>forgerock-doc-maven-plugin</artifactId>
-		   <version>1.1.0-SNAPSHOT</version>
+		   <version>${frDocPluginVersion}</version>
 		   <inherited>false</inherited>
 		   <configuration>
 		    <projectName>MyProject</projectName>
 		    <googleAnalyticsId>${gaId}</googleAnalyticsId>
 		   </configuration>
 		   <executions>
+		    <execution>
+		     <id>copy-common</id>
+		     <phase>pre-site</phase>
+		     <goals>
+		      <goal>boilerplate</goal>
+		     </goals>
+		    </execution>
 		    <execution>
 		     <id>build-doc</id>
 		     <phase>pre-site</phase>
@@ -67,6 +74,7 @@ images in an `images` folder inside the document folder.
 An example project layout looks like this:
 
      src/main/docbkx/
+      legal.xml
       dev-guide/
        images/
        index.xml
@@ -83,8 +91,35 @@ An example project layout looks like this:
        images/
        index.xml
        ...other files...
-      shared/
+      common/
+       sec-accessing-doc-online.xml
+       sec-formatting-conventions.xml
+       sec-joining-the-community.xml
        ...other files...
+
+## Using Shared Content
+
+By default the plugin replaces the following common files at build time,
+ensuring your documentation includes the latest versions.
+
+    legal.xml
+    common/sec-accessing-doc-online.xml
+    common/sec-formatting-conventions.xml
+    common/sec-joining-the-community.xml
+
+The plugin does not replace your copies of the files. Instead it copies
+common files to the expected locations in the generated sources.
+
+Be aware that the plugin merely replaces the files in the generated sources,
+and then uses the generated sources to build the documentation. Specifically
+the plugin does not check that you store the files in the expected location.
+
+It also does not check whether you got your executions out of order. Make sure
+the `boilerplate` goal immediately precedes the `build` goal.
+
+To avoid using common content, turn off the feature:
+
+    <useSharedContent>false</useSharedContent> <!-- true by default -->
 
 ## Link Checking
 
@@ -99,8 +134,6 @@ to Maven, as in the following example:
 The check is run at the end of the site layout phase. This capability is
 provided by Peter Major's [linktester](https://github.com/aldaris/docbook-linktester)
 plugin.
-
-Run linktester at the top level of the project, not in modules. 
 
 ## Excluding Output Formats
 
@@ -198,7 +231,7 @@ To run JCite, add an execution like this prior to your pre-site build goal:
 
 Also make sure that your build uses the sources processed by JCite:
 
-    <useGeneratedSources>true</useGeneratedSources>
+    <useGeneratedSources>true</useGeneratedSources> <!-- true by default -->
 
 Code citations should fit inside ProgramListing elements with language set
 to `java` to pick up syntax highlighting. Use plain citations as in the

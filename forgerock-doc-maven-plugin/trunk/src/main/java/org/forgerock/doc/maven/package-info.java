@@ -40,7 +40,7 @@
  *  release-notes/
  *   index.xml
  *   ...other files...
- *  shared/
+ *  common/
  *   ...other files...
  * </pre>
  *
