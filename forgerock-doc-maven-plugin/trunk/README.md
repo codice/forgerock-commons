@@ -103,9 +103,9 @@ By default the plugin replaces the following common files at build time,
 ensuring your documentation includes the latest versions.
 
     legal.xml
-    common/sec-accessing-doc-online.xml
-    common/sec-formatting-conventions.xml
-    common/sec-joining-the-community.xml
+    shared/sec-accessing-doc-online.xml
+    shared/sec-formatting-conventions.xml
+    shared/sec-joining-the-community.xml
 
 The plugin does not replace your copies of the files. Instead it copies
 common files to the expected locations in the generated sources.
