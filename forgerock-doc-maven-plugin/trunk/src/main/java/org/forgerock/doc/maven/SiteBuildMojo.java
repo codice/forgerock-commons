@@ -196,8 +196,14 @@ public class SiteBuildMojo extends AbstractBuildMojo {
          * @throws MojoExecutionException Problem during execution.
          */
         void testLinks() throws MojoExecutionException {
+            String include = "**/" + getDocumentSrcName();
+            if (doUseGeneratedSources()) {
+                include = getDocbkxGeneratedSourceDirectory() + "/" + include;
+            }
+
             final String log = getDocbkxOutputDirectory().getPath() + File.separator
                     + "linktester.err";
+
             final String jiraUrlPattern =
                     "^https://bugster.forgerock.org/jira/browse/OPEN(AM|ICF|IDM|IG|DJ)-[0-9]{1,4}$";
             final String rfcUrlPattern = "^http://tools.ietf.org/html/rfc[0-9]+$";
@@ -209,8 +215,7 @@ public class SiteBuildMojo extends AbstractBuildMojo {
                     goal("check"),
                     configuration(
                             element(name("includes"),
-                                    element(name("include"), "**/"
-                                            + getDocumentSrcName())),
+                                    element(name("include"), include)),
                             element(name("validating"), "true"),
                             element(name("skipUrls"), getSkipLinkCheck()),
                             element(name("xIncludeAware"), "true"),
