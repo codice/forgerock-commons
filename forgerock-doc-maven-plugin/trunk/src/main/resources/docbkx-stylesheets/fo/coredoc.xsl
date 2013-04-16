@@ -19,16 +19,20 @@
   !      Copyright 2011-2013 ForgeRock AS
   !
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+xmlns:d="http://docbook.org/ns/docbook"
+exclude-result-prefixes="d"
+version="1.0">
 
   <xsl:import href="urn:docbkx:stylesheet"/>
   <xsl:import href="titlepages.xsl"/>
-  <xsl:import href="urn:docbkx:stylesheet/highlight.xsl" />
+  <xsl:import href="urn:docbkx:stylesheet/highlight.xsl"/>
 
   <xsl:param name="page.height.portrait">9in</xsl:param>
   <xsl:param name="page.width.portrait">7.5in</xsl:param>
   <xsl:param name="double.sided" select="1"></xsl:param>
-  <xsl:param name="fop1.extensions" select="1" />
+  <xsl:param name="fop1.extensions" select="1"/>
 
   <xsl:param name="body.font.master">9</xsl:param>
   <xsl:param name="body.font.family">DejaVuSerif</xsl:param>
@@ -76,8 +80,8 @@
   </xsl:param>
   <xsl:param name="toc.max.depth">0</xsl:param>
   
-  <xsl:param name="use.extensions" select="1" />
-  <xsl:param name="linenumbering.everyNth" select="1" />
+  <xsl:param name="use.extensions" select="1"/>
+  <xsl:param name="linenumbering.everyNth" select="1"/>
   <xsl:param name="orderedlist.label.width">1.8em</xsl:param>
 
   <xsl:param name="default.table.frame">topbot</xsl:param>
@@ -91,7 +95,7 @@
   <xsl:attribute-set name="monospace.properties">
    <xsl:attribute name="font-size">0.9em</xsl:attribute>
   </xsl:attribute-set>
-  <xsl:param name="shade.verbatim" select="1" />
+  <xsl:param name="shade.verbatim" select="1"/>
   <xsl:attribute-set name="shade.verbatim.style">
    <xsl:attribute name="background-color">#d4d4d4</xsl:attribute>
    <xsl:attribute name="border">0.5pt dashed #626d75</xsl:attribute>
@@ -100,18 +104,48 @@
    <xsl:attribute name="font-size">0.75em</xsl:attribute>
   </xsl:attribute-set>
   
-  <xsl:param name="ulink.footnotes" select="0" />
-  <xsl:param name="ulink.show" select="0" />
-  <xsl:param name="ulink.hyphenate.chars">:/@&amp;?.#</xsl:param>
+  <xsl:param name="ulink.footnotes" select="0"/>
+  <xsl:param name="ulink.show" select="0"/>
 
-  <xsl:param name="hyphenate">false</xsl:param>
+ <!-- Hyphenate long literals at . Adapted from the hyphenate-url template. -->
+ <xsl:param name="literal.hyphenate">&#xAD;</xsl:param>
+ <!-- soft hyphen: &#xAD; -->
 
-  <!--
-   When https://code.google.com/p/docbkx-tools/issues/detail?id=35
-   is resolved, it might be nice to use admonition graphics
-   rather than gray backgrounds.
-  -->
-  <xsl:attribute-set name="admonition.properties">
+ <xsl:template match="d:literal//text()">
+   <xsl:call-template name="hyphenate-literal">
+    <xsl:with-param name="literal" select="."/>
+   </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="hyphenate-literal">
+    <xsl:param name="literal" select="''"/>
+    <xsl:choose>
+      <xsl:when test="string-length($literal) &gt; 1">
+        <xsl:variable name="char" select="substring($literal, 1, 1)"/>
+        <xsl:value-of select="$char"/>
+        <xsl:if test="contains('.', $char)">
+         <xsl:copy-of select="$literal.hyphenate"/>
+        </xsl:if>
+       <!-- recurse to the next character -->
+       <xsl:call-template name="hyphenate-literal">
+          <xsl:with-param name="literal" select="substring($literal, 2)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$literal"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+ <!-- Do not hyphenate in general. -->
+ <xsl:param name="hyphenate">false</xsl:param>
+
+ <!--
+  When https://code.google.com/p/docbkx-tools/issues/detail?id=35
+  is resolved, it might be nice to use admonition graphics
+  rather than gray backgrounds.
+ -->
+ <xsl:attribute-set name="admonition.properties">
    <xsl:attribute name="background-color">#d4d4d4</xsl:attribute>
    <xsl:attribute name="border">0.5pt dashed #626d75</xsl:attribute>
    <xsl:attribute name="padding">3pt</xsl:attribute>
