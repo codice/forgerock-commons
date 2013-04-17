@@ -70,8 +70,11 @@ $(document).ready(function() {
    */
   var tocollapse = minus.replace(/toggle/, "tocollapse");
   var toexpand = plus.replace(/toggle/,"toexpand");
+
+  $(".titlepage").css("clear", "left");   /* Fix for DOCS-70 */
+
   $("div.preface,div.chapter,div.reference,div.appendix,div.index").each(function () {
-      $(this).prepend(tocollapse + toexpand)
+      $(this).prepend(tocollapse + toexpand);
   });
   $(".toexpand").hide();
 
