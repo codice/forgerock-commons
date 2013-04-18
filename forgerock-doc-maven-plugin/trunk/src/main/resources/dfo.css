@@ -247,6 +247,7 @@ div.synopsis {
     position: relative;
     left: -24px;
     float: left;
+    margin-bottom: -10px;
 }
 
 .nodisplay {
