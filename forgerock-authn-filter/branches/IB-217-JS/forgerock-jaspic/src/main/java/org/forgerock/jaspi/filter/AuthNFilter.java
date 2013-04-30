@@ -16,7 +16,7 @@
 
 package org.forgerock.jaspi.filter;
 
-import org.forgerock.jaspi.container.CallbackHandlerImpl;
+import org.forgerock.jaspi.container.callback.CallbackHandlerImpl;
 import org.forgerock.jaspi.container.MessageInfoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,25 +62,35 @@ import static javax.security.auth.message.AuthStatus.SUCCESS;
  */
 public class AuthNFilter implements Filter {
 
-    private final static Logger logger = LoggerFactory.getLogger(AuthNFilter.class);
-    private final static String MESSAGE_LAYER = "HttpServlet";
-    private final static String MODULE_CHAIN_PROPERTY_KEY = "moduleChain";
+    private Logger logger = LoggerFactory.getLogger(AuthNFilter.class);
 
+    private final static String MESSAGE_LAYER = "HttpServlet";
+    private final static String MODULE_CHAIN_PROPERTY = "moduleChain";
+
+    /*
+     * The module chain is configured in the provider to be a specific set of modules that will be executed by the
+     * authContext. The moduleChain value must therefore correspond to a set in the provider configuration. How this is
+     * configured may vary - XML file, JSON via OSGi etc. Note that full support for chains will not be implemented. The
+     * AuthnFilter is only concerned with zero or one session module and zero or one auth module.
+     */
     private String moduleChain;
 
     /**
-     * Called by the web container and sets the module chain to use to authenticate requests.
+     * Called by the web container and gets the correct provider factory to use.
      *
      * @param filterConfig The filter configuration containing the init-param for the module chain name.
      * @throws ServletException If there is no moduleChain set in the init-params in the web.xml.
      */
     public void init(FilterConfig filterConfig) throws ServletException {
-        moduleChain = filterConfig.getInitParameter(MODULE_CHAIN_PROPERTY_KEY);
+
+        // Set the auth module
+        moduleChain = filterConfig.getInitParameter(MODULE_CHAIN_PROPERTY);
         logger.debug("moduleChain set to: {}", moduleChain);
         if (moduleChain == null || moduleChain.length() == 0) {
             logger.error("moduleChain not set in init-param");
             throw new ServletException("moduleChain not set in init-param");
         }
+
     }
 
     /**
@@ -95,105 +106,118 @@ public class AuthNFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
 
-        if ((HttpServletRequest.class.isAssignableFrom(servletRequest.getClass())
-                && HttpServletResponse.class.isAssignableFrom(servletResponse.getClass()))) {
+        if ((!HttpServletRequest.class.isAssignableFrom(servletRequest.getClass())
+                || !HttpServletResponse.class.isAssignableFrom(servletResponse.getClass()))) {
+            throw new ServletException("Unsupported protocol");
+        }
 
-            HttpServletRequest request = (HttpServletRequest) servletRequest;
-            HttpServletResponse response = (HttpServletResponse) servletResponse;
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-            String layer = MESSAGE_LAYER;
-            String appContext = getAppContext(new URL(request.getRequestURL().toString()), request.getContextPath());
+        // Prepare the message info
+        String layer = MESSAGE_LAYER;
+        String appContext = getAppContext(new URL(request.getRequestURL().toString()), request.getContextPath());
+        MessageInfo messageInfo = prepareMessageInfo(request, response);
 
-            Map<String, String> messageProperties = new HashMap<String, String>();
-            messageProperties.put(MODULE_CHAIN_PROPERTY_KEY, moduleChain);
+        // Get the provider
+        AuthConfigProvider authConfigProvider = AuthConfigFactory.getFactory()
+                .getConfigProvider(layer, appContext, null);
 
-            AuthConfigFactory factory = AuthConfigFactory.getFactory();
+        if (authConfigProvider == null) {
+            logger.debug("No AuthConfigProvider found with layer, {} and appContext, {}", layer, appContext);
+            logger.debug("Proceeding with filter chain.");
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-            AuthConfigProvider authConfigProvider = factory.getConfigProvider(layer, appContext, null);
-            //authConfigProvider could be null
-            if (authConfigProvider == null) {
-                logger.debug("No AuthConfigProvider found with layer, {} and appContext, {}", layer, appContext);
+        CallbackHandler handler = new CallbackHandlerImpl();
+
+        try {
+            // Retrieve the appropriate config and obtain a context
+            ServerAuthConfig serverAuthConfig = authConfigProvider.getServerAuthConfig(layer, appContext, handler);
+
+            // Can be null if no details required for service subject.
+            final Subject serviceSubject = null;
+            final String authContextID = serverAuthConfig.getAuthContextID(messageInfo);
+
+            // Now get the context that will execute the modules
+            ServerAuthContext serverAuthContext = serverAuthConfig.getAuthContext(authContextID, serviceSubject,
+                    Collections.emptyMap());
+
+            // Could be null if no modules found
+            if (serverAuthContext == null) {
+                logger.debug("No Authentication Modules found for authContextID, {}", authContextID);
                 logger.debug("Proceeding with filter chain.");
                 filterChain.doFilter(request, response);
                 return;
             }
 
-            CallbackHandler handler = new CallbackHandlerImpl();
+            // Must create new client Subject.
+            final Subject clientSubject = new Subject();
 
-            try {
-                ServerAuthConfig serverAuthConfig = authConfigProvider.getServerAuthConfig(layer, appContext, handler);
+            // This is where the modules are called
+            AuthStatus requestAuthStatus = serverAuthContext.validateRequest(messageInfo, clientSubject,
+                    serviceSubject);
 
-                MessageInfo messageInfo = new MessageInfoImpl(messageProperties);
-                messageInfo.setRequestMessage(request);
-                messageInfo.setResponseMessage(response);
-
-                final String authContextID = serverAuthConfig.getAuthContextID(messageInfo);
-                // Can be null if no details required for service subject.
-                final Subject serviceSubject = null;
-
-                ServerAuthContext serverAuthContext = serverAuthConfig.getAuthContext(authContextID, serviceSubject,
-                        new HashMap());
-                //could be null if no modules found
-                if (serverAuthContext == null) {
-                    logger.debug("No Authentication Modules found for authContextID, {}", authContextID);
-                    logger.debug("Proceeding with filter chain.");
-                    filterChain.doFilter(request, response);
-                    return;
-                }
-
-                // Must create new client Subject.
-                final Subject clientSubject = new Subject();
-
-                AuthStatus requestAuthStatus = serverAuthContext.validateRequest(messageInfo, clientSubject,
-                        serviceSubject);
-
-                if (SUCCESS.equals(requestAuthStatus)) {
-                    // nothing to do here just carry on
-                    logger.debug("Successfully validated request.");
-                } else if (SEND_SUCCESS.equals(requestAuthStatus)) {
-                    // Send HttpServletResponse to client and exit.
-                    logger.debug("Successfully validated request, with response message");
-                    return;
-                } else if (SEND_FAILURE.equals(requestAuthStatus)) {
-                    // Send HttpServletResponse to client and exit.
-                    logger.debug("Failed to validate request, included response message.");
-                    new HttpServletResponseWrapper(response).setStatus(401);
-                    return;
-                } else if (SEND_CONTINUE.equals(requestAuthStatus)) {
-                    // Send HttpServletResponse to client and exit.
-                    logger.debug("Has not finished validating request. Requires more information from client.");
-                    return;
-                } else {
-                    logger.error("Invalid AuthStatus, {}", requestAuthStatus.toString());
-                    throw new AuthException("Invalid AuthStatus from validateRequest: " + requestAuthStatus.toString());
-                }
-
-                filterChain.doFilter(request, response);
-
-                AuthStatus responseAuthStatus = serverAuthContext.secureResponse(messageInfo, serviceSubject);
-
-                if (SEND_SUCCESS.equals(responseAuthStatus)) {
-                    // nothing to do here just carry on
-                    logger.debug("Successfully secured response.");
-                } else if (SEND_FAILURE.equals(responseAuthStatus)) {
-                    // Send HttpServletResponse to client and exit.
-                    logger.debug("Failed to secured response, included response message");
-                    new HttpServletResponseWrapper(response).setStatus(500);
-                    return;
-                } else if (SEND_CONTINUE.equals(responseAuthStatus)) {
-                    // Send HttpServletResponse to client and exit.
-                    logger.debug("Has not finished securing response. Requires more information from client.");
-                    new HttpServletResponseWrapper(response).setStatus(100);
-                    return;
-                } else {
-                    logger.error("Invalid AuthStatus, {}", requestAuthStatus.toString());
-                    throw new AuthException("Invalid AuthStatus from secureResponse: " + responseAuthStatus.toString());
-                }
-
-            } catch (AuthException e) {
-                throw new ServletException(e.getMessage(), e);
+            if (SUCCESS.equals(requestAuthStatus)) {
+                // nothing to do here just carry on
+                logger.debug("Successfully validated request.");
+            } else if (SEND_SUCCESS.equals(requestAuthStatus)) {
+                // Send HttpServletResponse to client and exit.
+                logger.debug("Successfully validated request, with response message");
+                return;
+            } else if (SEND_FAILURE.equals(requestAuthStatus)) {
+                // Send HttpServletResponse to client and exit.
+                logger.debug("Failed to validate request, included response message.");
+                new HttpServletResponseWrapper(response).setStatus(401);
+                return;
+            } else if (SEND_CONTINUE.equals(requestAuthStatus)) {
+                // Send HttpServletResponse to client and exit.
+                logger.debug("Has not finished validating request. Requires more information from client.");
+                return;
+            } else {
+                logger.error("Invalid AuthStatus, {}", requestAuthStatus.toString());
+                throw new AuthException("Invalid AuthStatus from validateRequest: " + requestAuthStatus.toString());
             }
+
+            filterChain.doFilter(request, response);
+
+            // Secure the response (includes adding any session cookies to the response)
+            AuthStatus responseAuthStatus = serverAuthContext.secureResponse(messageInfo, serviceSubject);
+
+            if (SEND_SUCCESS.equals(responseAuthStatus)) {
+                // nothing to do here just carry on
+                logger.debug("Successfully secured response.");
+            } else if (SEND_FAILURE.equals(responseAuthStatus)) {
+                // Send HttpServletResponse to client and exit.
+                logger.debug("Failed to secured response, included response message");
+                new HttpServletResponseWrapper(response).setStatus(500);
+                return;
+            } else if (SEND_CONTINUE.equals(responseAuthStatus)) {
+                // Send HttpServletResponse to client and exit.
+                logger.debug("Has not finished securing response. Requires more information from client.");
+                new HttpServletResponseWrapper(response).setStatus(100);
+                return;
+            } else {
+                logger.error("Invalid AuthStatus, {}", requestAuthStatus.toString());
+                throw new AuthException("Invalid AuthStatus from secureResponse: " + responseAuthStatus.toString());
+            }
+
+        } catch (AuthException e) {
+            throw new ServletException(e.getMessage(), e);
         }
+    }
+
+    private MessageInfo prepareMessageInfo(HttpServletRequest request, HttpServletResponse response) {
+
+        Map<String, String> messageProperties = new HashMap<String, String>();
+        messageProperties.put(MODULE_CHAIN_PROPERTY, moduleChain);
+
+        MessageInfo messageInfo = new MessageInfoImpl(messageProperties);
+        messageInfo.setRequestMessage(request);
+        messageInfo.setResponseMessage(response);
+
+        return messageInfo;
     }
 
     /**

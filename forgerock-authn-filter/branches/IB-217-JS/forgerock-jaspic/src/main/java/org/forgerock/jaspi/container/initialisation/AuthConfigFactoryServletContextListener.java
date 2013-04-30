@@ -16,7 +16,9 @@
 
 package org.forgerock.jaspi.container.initialisation;
 
-import org.forgerock.jaspi.container.AuthConfigFactoryImpl;
+import org.forgerock.jaspi.filter.AuthNFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.security.auth.message.AuthException;
 import javax.security.auth.message.config.AuthConfigFactory;
@@ -25,9 +27,17 @@ import javax.servlet.ServletContextListener;
 
 /**
  * On web container deployment creates an instance of the JASPI AuthConfigFactory and sets in the static singleton
- * factory so that it can be retrieved as required.
+ * factory so that it can be retrieved as required. The class name of the provider to use can be specified in the
+ * servlet context using a context-param with name "auth-config-provider-factory-class".
+ *
+ * The factory creation will cascade, causing the provider to read it's config by whatever means have been implemented.
+ * In practice this means that the module configurations are read at this time.
+ *
  */
 public class AuthConfigFactoryServletContextListener implements ServletContextListener {
+
+    public static final String FACTORY_CLASS = "auth-config-provider-factory-class";
+    private Logger logger = LoggerFactory.getLogger(AuthNFilter.class);
 
     /**
      * On context initialisation will set an implementation of the AuthConfigFactory.
@@ -35,12 +45,38 @@ public class AuthConfigFactoryServletContextListener implements ServletContextLi
      * @param servletContextEvent The ServletContextEvent object.
      */
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        try {
-            AuthConfigFactory factory = new AuthConfigFactoryImpl();
-            AuthConfigFactory.setFactory(factory);
-        } catch (AuthException e) {
-            throw new RuntimeException(e);
+
+        AuthConfigFactory factory = null;
+
+        // See if the provider class has been set
+        String providerClass = servletContextEvent.getServletContext().getInitParameter(FACTORY_CLASS);
+        if (providerClass != null) {
+            try {
+                logger.debug("Trying to load AuthConfigFactory: " + providerClass);
+                factory = (AuthConfigFactory) Class.forName(providerClass).newInstance();
+            } catch (ClassNotFoundException e) {
+                logger.error("Could not find class: " + providerClass, e);
+            } catch (InstantiationException e) {
+                logger.error("Could not instantiate object of class: " + providerClass, e);
+            } catch (IllegalAccessException e) {
+                logger.error("Class has no public noargs constructor: " + providerClass, e);
+            }
         }
+
+/*
+        if (factory == null) {
+            try {
+                logger.debug("Loading default factory");
+                factory = new AuthConfigFactoryImpl();
+            } catch (AuthException e) {
+                // TODO Jonathan: improve this
+                throw new RuntimeException(e);
+            }
+        }
+*/
+
+        // Set the global factory
+        AuthConfigFactory.setFactory(factory);
     }
 
     /**

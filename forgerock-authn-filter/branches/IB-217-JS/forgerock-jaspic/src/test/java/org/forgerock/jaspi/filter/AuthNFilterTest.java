@@ -50,6 +50,7 @@ import static org.testng.AssertJUnit.assertTrue;
 
 public class AuthNFilterTest {
 
+    public static final String MODULE_CHAIN = "moduleChain";
     private AuthNFilter authNFilter;
 
     private HttpServletRequest request;
@@ -77,7 +78,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn(null);
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn(null);
 
         //When
         boolean exceptionCaught = false;
@@ -97,7 +98,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("");
 
         //When
         boolean exceptionCaught = false;
@@ -117,7 +118,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
@@ -138,7 +139,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
@@ -167,7 +168,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
@@ -203,7 +204,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
@@ -239,7 +240,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
@@ -275,7 +276,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
@@ -319,7 +320,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
@@ -362,7 +363,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
@@ -405,7 +406,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
@@ -442,7 +443,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
@@ -479,7 +480,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
@@ -517,7 +518,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
@@ -562,7 +563,55 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
+        authNFilter.init(filterConfig);
+
+        given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
+                ".org/openam/jaspi/1/test"));
+        given(request.getContextPath()).willReturn("/openam");
+        AuthConfigProvider authConfigProvider = mock(AuthConfigProvider.class);
+        given(authConfigFactory.getConfigProvider("HttpServlet", "openam.internal.forgerock.org /openam",
+                null)).willReturn(authConfigProvider);
+        ServerAuthConfig serverAuthConfig = mock(ServerAuthConfig.class);
+        given(authConfigProvider.getServerAuthConfig(eq("HttpServlet"), eq("openam.internal.forgerock.org /openam"),
+                Matchers.<CallbackHandler>anyObject())).willReturn(serverAuthConfig);
+        given(serverAuthConfig.getAuthContextID(Matchers.<MessageInfo>anyObject())).willReturn("AUTH_CONTEXT_ID");
+        ServerAuthContext serverAuthContext = mock(ServerAuthContext.class);
+        given(serverAuthConfig.getAuthContext(eq("AUTH_CONTEXT_ID"), Matchers.<Subject>anyObject(),
+                anyMap())).willReturn(serverAuthContext);
+        given(serverAuthContext.validateRequest(Matchers.<MessageInfo>anyObject(), Matchers.<Subject>anyObject(),
+                Matchers.<Subject>anyObject())).willReturn(AuthStatus.SUCCESS);
+        given(serverAuthContext.secureResponse(Matchers.<MessageInfo>anyObject(),
+                Matchers.<Subject>anyObject())).willReturn(AuthStatus.SUCCESS);
+
+        //When
+        boolean exceptionCaught = false;
+        try {
+            authNFilter.doFilter(request, response, filterChain);
+        } catch (ServletException e) {
+            assertTrue(AuthException.class.isAssignableFrom(e.getCause().getClass()));
+            exceptionCaught = true;
+        }
+
+        //Then
+        Assert.assertTrue(exceptionCaught);
+        verify(serverAuthContext).validateRequest(Matchers.<MessageInfo>anyObject(), Matchers.<Subject>anyObject(),
+                Matchers.<Subject>anyObject());
+        verify(filterChain).doFilter(request, response);
+        verify(serverAuthContext).secureResponse(Matchers.<MessageInfo>anyObject(),
+                Matchers.<Subject>anyObject());
+    }
+
+    @Test
+    public void shouldProvideCorrectResponsesWhenUsingHTTPRedirect() throws IOException,
+            ServletException, AuthException {
+
+        // Tests the particular set of expected responses when using HTTPRedirect callback
+        // In practice this would be HTTP Basic Auth or SPNEGO/Kerberos
+
+        //Given
+        FilterConfig filterConfig = mock(FilterConfig.class);
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +
@@ -608,7 +657,7 @@ public class AuthNFilterTest {
 
         //Given
         FilterConfig filterConfig = mock(FilterConfig.class);
-        given(filterConfig.getInitParameter("moduleChain")).willReturn("MODULE_CHAIN_NAME");
+        given(filterConfig.getInitParameter(MODULE_CHAIN)).willReturn("MODULE_CHAIN_NAME");
         authNFilter.init(filterConfig);
 
         given(request.getRequestURL()).willReturn(new StringBuffer("http://openam.internal.forgerock" +

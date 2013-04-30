@@ -16,6 +16,8 @@
 
 package org.forgerock.jaspi.container;
 
+import org.forgerock.jaspi.container.config.AuthConfigProviderImpl;
+import org.forgerock.jaspi.container.config.AuthConfigProviderMap;
 import org.junit.Before;
 import org.junit.Test;
 

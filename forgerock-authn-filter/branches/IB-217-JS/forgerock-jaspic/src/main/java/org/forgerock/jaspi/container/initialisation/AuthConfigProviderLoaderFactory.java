@@ -21,7 +21,7 @@ package org.forgerock.jaspi.container.initialisation;
  */
 public final class AuthConfigProviderLoaderFactory {
 
-    private static AuthConfigProviderLoader instance;
+    private static volatile AuthConfigProviderLoader instance;
 
     private AuthConfigProviderLoaderFactory() {
     }
