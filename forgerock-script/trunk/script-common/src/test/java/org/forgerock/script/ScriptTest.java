@@ -24,6 +24,11 @@
 
 package org.forgerock.script;
 
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -31,6 +36,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.UUID;
+
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
@@ -41,19 +47,19 @@ import org.forgerock.json.resource.Connection;
 import org.forgerock.json.resource.ConnectionProvider;
 import org.forgerock.json.resource.CreateRequest;
 import org.forgerock.json.resource.DeleteRequest;
-import org.forgerock.json.resource.InMemoryBackend;
 import org.forgerock.json.resource.InternalServerErrorException;
-import org.forgerock.json.resource.Patch;
+import org.forgerock.json.resource.MemoryBackend;
+import org.forgerock.json.resource.PatchOperation;
 import org.forgerock.json.resource.PatchRequest;
 import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.json.resource.QueryRequest;
+import org.forgerock.json.resource.ReadRequest;
+import org.forgerock.json.resource.RequestHandler;
 import org.forgerock.json.resource.Requests;
+import org.forgerock.json.resource.Resource;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.json.resource.Resources;
-import org.forgerock.json.resource.ReadRequest;
-import org.forgerock.json.resource.Resource;
 import org.forgerock.json.resource.ResultHandler;
-import org.forgerock.json.resource.RequestHandler;
 import org.forgerock.json.resource.RootContext;
 import org.forgerock.json.resource.Router;
 import org.forgerock.json.resource.RoutingMode;
@@ -76,11 +82,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-
 /**
  * A NAME does ...
  * 
@@ -99,43 +100,48 @@ public abstract class ScriptTest {
     @BeforeClass
     public void initScriptRegistry() throws Exception {
         Map<String, Object> configuration = new HashMap<String, Object>(1);
-        configuration.put(getLanguageName(),getConfiguration());
+        configuration.put(getLanguageName(), getConfiguration());
 
-        scriptRegistry = new ScriptRegistryImpl(configuration, ServiceLoader.load(ScriptEngineFactory.class),null);
+        scriptRegistry =
+                new ScriptRegistryImpl(configuration,
+                        ServiceLoader.load(ScriptEngineFactory.class), null);
 
         RequestHandler resource = mock(RequestHandler.class);
 
         final Router router = new Router();
-        router.addRoute("/Users", new InMemoryBackend());
-        router.addRoute("/Groups", new InMemoryBackend());
-        router.addRoute(RoutingMode.EQUALS, "mock/{id}",resource);
+        router.addRoute("/Users", new MemoryBackend());
+        router.addRoute("/Groups", new MemoryBackend());
+        router.addRoute(RoutingMode.EQUALS, "mock/{id}", resource);
 
-        scriptRegistry.setPersistenceConfig(PersistenceConfig.builder().connectionProvider(new ConnectionProvider() {
-            @Override
-            public Connection getConnection(String connectionId) throws ResourceException {
-                if ("DEFAULT".equalsIgnoreCase(connectionId)) {
-                    return Resources.newInternalConnection(router);
-                } else {
-                    throw new InternalServerErrorException("Connection not found with id: "
-                            + connectionId);
-                }
-            }
+        scriptRegistry.setPersistenceConfig(PersistenceConfig.builder().connectionProvider(
+                new ConnectionProvider() {
+                    @Override
+                    public Connection getConnection(String connectionId) throws ResourceException {
+                        if ("DEFAULT".equalsIgnoreCase(connectionId)) {
+                            return Resources.newInternalConnection(router);
+                        } else {
+                            throw new InternalServerErrorException("Connection not found with id: "
+                                    + connectionId);
+                        }
+                    }
 
-            @Override
-            public String getConnectionId(Connection connection) throws ResourceException {
-                return "DEFAULT";
-            }
-        }).build());
+                    @Override
+                    public String getConnectionId(Connection connection) throws ResourceException {
+                        return "DEFAULT";
+                    }
+                }).build());
 
         doAnswer(new Answer<Void>() {
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 ReadRequest request = (ReadRequest) invocation.getArguments()[1];
-                ResultHandler<Resource> handler = (ResultHandler<Resource>) invocation.getArguments()[2];
-                handler.handleResult(
-                        new Resource(request.getResourceName(), "1", new JsonValue(new HashMap<String, Object>())));
+                ResultHandler<Resource> handler =
+                        (ResultHandler<Resource>) invocation.getArguments()[2];
+                handler.handleResult(new Resource(request.getResourceName(), "1", new JsonValue(
+                        new HashMap<String, Object>())));
                 return null;
             }
-        }).when(resource).handleRead(any(ServerContext.class),any(ReadRequest.class),any(ResultHandler.class));
+        }).when(resource).handleRead(any(ServerContext.class), any(ReadRequest.class),
+                any(ResultHandler.class));
 
         scriptRegistry.put("router", FunctionFactory.getResource());
 
@@ -144,7 +150,7 @@ public abstract class ScriptTest {
 
         scriptRegistry.addSourceUnit(new DirectoryContainer("container", container));
         scriptRegistry.addSourceUnit(new EmbeddedScriptSource(ScriptEntry.Visibility.PUBLIC,
-                "egy = egy + 2;egy", new ScriptName("test1",getLanguageName())));
+                "egy = egy + 2;egy", new ScriptName("test1", getLanguageName())));
 
     }
 
@@ -154,7 +160,7 @@ public abstract class ScriptTest {
 
     @Test
     public void testEval() throws Exception {
-        ScriptName scriptName = new ScriptName("test1",getLanguageName());
+        ScriptName scriptName = new ScriptName("test1", getLanguageName());
         ScriptEntry scriptEntry = getScriptRegistry().takeScript(scriptName);
         Assert.assertNotNull(scriptEntry);
         scriptEntry.put("egy", 1);
@@ -173,7 +179,6 @@ public abstract class ScriptTest {
         assertThat(script.eval()).isEqualTo(3);
     }
 
-
     protected abstract EmbeddedScriptSource getScriptSourceWithException();
 
     @Test(expectedExceptions = ScriptThrownException.class)
@@ -182,12 +187,13 @@ public abstract class ScriptTest {
 
         getScriptRegistry().addSourceUnit(scriptSource);
         Assert.assertNotNull(getScriptRegistry().takeScript(scriptSource.getName()));
-        getScriptRegistry().takeScript(scriptSource.getName()).getScript(new RootContext()).eval(new SimpleBindings());
+        getScriptRegistry().takeScript(scriptSource.getName()).getScript(new RootContext()).eval(
+                new SimpleBindings());
     }
 
     @Test
     public void testResource() throws Exception {
-        ScriptName scriptName = new ScriptName("resource",getLanguageName());
+        ScriptName scriptName = new ScriptName("resource", getLanguageName());
         ScriptEntry scriptEntry = getScriptRegistry().takeScript(scriptName);
         Assert.assertNotNull(scriptEntry);
 
@@ -199,7 +205,8 @@ public abstract class ScriptTest {
         JsonValue createContent = new JsonValue(new LinkedHashMap<String, Object>());
         createContent.put("externalId", "701984");
         createContent.put("userName", "bjensen@example.com");
-        createContent.put("assignedDashboard", Arrays.asList("Salesforce", "Google", "ConstantContact"));
+        createContent.put("assignedDashboard", Arrays.asList("Salesforce", "Google",
+                "ConstantContact"));
         createContent.put("displayName", "Babs Jensen");
         createContent.put("nickName", "Babs");
 
@@ -207,17 +214,18 @@ public abstract class ScriptTest {
         updateContent.put("_id", UUID.randomUUID().toString());
         updateContent.put("profileUrl", "https://login.example.com/bjensen");
 
-
         script.put("context", new ApiInfoContext(new SecurityContext(new RootContext(),
                 "bjensen@example.com", null), "", ""));
 
-        CreateRequest createRequest = Requests.newCreateRequest("/Users","701984",createContent);
+        CreateRequest createRequest = Requests.newCreateRequest("/Users", "701984", createContent);
         script.put("createRequest", createRequest);
         ReadRequest readRequest = Requests.newReadRequest("/Users/701984");
         script.put("readRequest", readRequest);
         UpdateRequest updateRequest = Requests.newUpdateRequest("/Users/701984", updateContent);
         script.put("updateRequest", updateRequest);
-        PatchRequest patchRequest = Requests.newPatchRequest("/Users/701984", new Patch());
+        PatchRequest patchRequest =
+                Requests.newPatchRequest("/Users/701984", PatchOperation
+                        .replace("userName", "ddoe"));
         script.put("patchRequest", patchRequest);
         QueryRequest queryRequest = Requests.newQueryRequest("/Users/");
         script.put("queryRequest", queryRequest);
@@ -231,7 +239,7 @@ public abstract class ScriptTest {
     @DataProvider(name = "Data-Provider-Function")
     public Object[][] scriptProvider() {
         ScriptEntry scriptEntry =
-                getScriptRegistry().takeScript(new ScriptName("sample",getLanguageName()));
+                getScriptRegistry().takeScript(new ScriptName("sample", getLanguageName()));
         scriptEntry.put("egy", 1);
         return new Object[][] { { scriptEntry } };
     }
@@ -246,7 +254,7 @@ public abstract class ScriptTest {
 
     @Test
     public void testListener() throws Exception {
-        ScriptName scriptName = new ScriptName("listener",getLanguageName());
+        ScriptName scriptName = new ScriptName("listener", getLanguageName());
         final SourceContainer parentContainer =
                 new DirectoryContainer("root", getScriptContainer("/"));
         ScriptSource scriptSource = new EmbeddedScriptSource("2 * 2", scriptName) {
@@ -269,7 +277,7 @@ public abstract class ScriptTest {
         Assert.assertEquals(status[0], ScriptEvent.REGISTERED);
         assertThat(((ScriptEntry) status[1]).getScript(new RootContext()).eval()).isEqualTo(4);
 
-        scriptName = new ScriptName("listener",getLanguageName(), "1");
+        scriptName = new ScriptName("listener", getLanguageName(), "1");
         scriptSource = new EmbeddedScriptSource("2 * 2", scriptName) {
             public ScriptName[] getDependencies() {
                 return new ScriptName[] { parentContainer.getName() };
@@ -306,7 +314,7 @@ public abstract class ScriptTest {
 
     @Test
     public void testCompiler() throws Exception {
-        ScriptName scriptName = new ScriptName("invalid",getLanguageName());
+        ScriptName scriptName = new ScriptName("invalid", getLanguageName());
         ScriptSource scriptSource =
                 new EmbeddedScriptSource("must-fail(\"syntax error')", scriptName);
 

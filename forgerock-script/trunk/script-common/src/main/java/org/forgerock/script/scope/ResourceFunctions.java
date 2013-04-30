@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock AS. All Rights Reserved
+ * Copyright (c) 2012-2013 ForgeRock AS. All Rights Reserved
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -37,7 +37,7 @@ import org.forgerock.json.resource.BadRequestException;
 import org.forgerock.json.resource.CreateRequest;
 import org.forgerock.json.resource.DeleteRequest;
 import org.forgerock.json.resource.FutureResult;
-import org.forgerock.json.resource.Patch;
+import org.forgerock.json.resource.PatchOperation;
 import org.forgerock.json.resource.PatchRequest;
 import org.forgerock.json.resource.QueryFilter;
 import org.forgerock.json.resource.QueryRequest;
@@ -397,7 +397,16 @@ public final class ResourceFunctions {
         private final Resource patch(Parameter scope, String resourceName, String revision,
                 JsonValue patch, List<Object> fieldFilter, JsonValue context,
                 final Function<?> callback) throws ResourceException {
-            PatchRequest pr = Requests.newPatchRequest(resourceName, new Patch());
+            PatchRequest pr = Requests.newPatchRequest(resourceName, null);
+
+            for (JsonValue op : patch) {
+                final String operation =
+                        op.get(PatchOperation.FIELD_OPERATION).required().asString();
+                final String field = op.get(PatchOperation.FIELD_FIELD).required().asString();
+                final JsonValue value = op.get(PatchOperation.FIELD_VALUE).required();
+                pr.addPatchOperation(operation, field, value);
+            }
+
             // add fieldFilter
             pr.addField(fetchFields(fieldFilter));
             // set revision

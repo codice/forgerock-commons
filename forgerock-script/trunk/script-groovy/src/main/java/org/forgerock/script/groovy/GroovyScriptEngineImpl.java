@@ -86,6 +86,17 @@ public class GroovyScriptEngineImpl extends AbstractScriptEngine {
         this.factory = factory;
         this.persistenceConfigReference = persistenceConfig;
 
+/*
+	groovy -cp slf4j-api.jar -configscript config.groovy myscript.groovy
+
+	and in config.groovy:
+
+	withConfig(configuration) {
+	    ast(groovy.util.logging.Slf4j)
+	}
+	
+*/
+
         Properties properties = null;
         for (Map.Entry<String, Object> entry : configuration.entrySet()) {
             if (entry.getKey().startsWith("groovy.") && entry.getValue() instanceof String) {

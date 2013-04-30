@@ -39,7 +39,7 @@ import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.Connection;
 import org.forgerock.json.resource.ConnectionProvider;
-import org.forgerock.json.resource.InMemoryBackend;
+import org.forgerock.json.resource.MemoryBackend;
 import org.forgerock.json.resource.InternalServerErrorException;
 import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.json.resource.RequestHandler;
@@ -68,8 +68,8 @@ public class ResourceFunctionsTest {
     protected PersistenceConfig getPersistenceConfig() {
         // Get the OSGi Router
         final Router router = new Router();
-        router.addRoute("Users", new InMemoryBackend());
-        router.addRoute("Groups", new InMemoryBackend());
+        router.addRoute("Users", new MemoryBackend());
+        router.addRoute("Groups", new MemoryBackend());
         return PersistenceConfig.builder().connectionProvider(new ConnectionProvider() {
             @Override
             public Connection getConnection(String connectionId) throws ResourceException {
