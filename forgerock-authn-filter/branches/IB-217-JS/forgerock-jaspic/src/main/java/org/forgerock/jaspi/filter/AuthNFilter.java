@@ -86,10 +86,10 @@ public class AuthNFilter implements Filter {
         // Set the auth module
         moduleChain = filterConfig.getInitParameter(MODULE_CHAIN_PROPERTY);
         logger.debug("moduleChain set to: {}", moduleChain);
-        if (moduleChain == null || moduleChain.length() == 0) {
-            logger.error("moduleChain not set in init-param");
-            throw new ServletException("moduleChain not set in init-param");
-        }
+//        if (moduleChain == null || moduleChain.length() == 0) {   //TODO need to re-enable of have a different way of configuring
+//            logger.error("moduleChain not set in init-param");
+//            throw new ServletException("moduleChain not set in init-param");
+//        }
 
     }
 
@@ -130,7 +130,7 @@ public class AuthNFilter implements Filter {
             return;
         }
 
-        CallbackHandler handler = new CallbackHandlerImpl();
+        CallbackHandler handler = null;
 
         try {
             // Retrieve the appropriate config and obtain a context

@@ -42,7 +42,7 @@ import java.util.Map;
 @Component(name = OSGiAuthnFilterBuilder.PID, immediate = true, policy = ConfigurationPolicy.REQUIRE)
 public class OSGiAuthnFilterBuilder {
 
-    public static final String PID = "org.forgerock.jaspi.container.authnfilter";
+    public static final String PID = "org.forgerock.openidm.authnfilter";
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
