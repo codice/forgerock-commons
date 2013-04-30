@@ -1,0 +1,9 @@
+{
+    "server-auth-config" : {
+        "iwa-only" : {
+            "auth-module" : {
+                "class-name" : "org.forgerock.jaspi.container.modules.DummyAuthnModule"
+            }
+        }
+    }
+}
