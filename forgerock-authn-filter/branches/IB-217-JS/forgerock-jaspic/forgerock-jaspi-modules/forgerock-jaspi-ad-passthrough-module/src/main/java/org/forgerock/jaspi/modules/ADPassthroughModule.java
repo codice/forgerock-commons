@@ -63,7 +63,6 @@ public class ADPassthroughModule implements ServerAuthModule {
 
     }
 
-    @Override
     public void initialize(MessagePolicy requestPolicy, MessagePolicy responsePolicy, CallbackHandler handler, Map options) throws AuthException {
         this.handler = handler;
     }
@@ -77,12 +76,10 @@ public class ADPassthroughModule implements ServerAuthModule {
      * @return
      */
 
-    @Override
     public Class[] getSupportedMessageTypes() {
         return new Class[]{HttpServletRequest.class, HttpServletResponse.class};
     }
 
-    @Override
     public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject) throws AuthException {
 
         HttpServletRequest request = (HttpServletRequest)messageInfo.getRequestMessage();
@@ -129,12 +126,10 @@ public class ADPassthroughModule implements ServerAuthModule {
 //        return AuthStatus.SEND_FAILURE;
     }
 
-    @Override
     public AuthStatus secureResponse(MessageInfo messageInfo, Subject serviceSubject) throws AuthException {
         return AuthStatus.SEND_SUCCESS;
     }
 
-    @Override
     public void cleanSubject(MessageInfo messageInfo, Subject subject) throws AuthException {
         //To change body of implemented methods use File | Settings | File Templates.
     }

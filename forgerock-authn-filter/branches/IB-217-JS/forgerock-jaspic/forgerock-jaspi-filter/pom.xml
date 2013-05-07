@@ -12,9 +12,19 @@
     </parent>
 
     <artifactId>forgerock-jaspi-filter</artifactId>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
 
     <name>ForgeRock JASPI Filter</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>

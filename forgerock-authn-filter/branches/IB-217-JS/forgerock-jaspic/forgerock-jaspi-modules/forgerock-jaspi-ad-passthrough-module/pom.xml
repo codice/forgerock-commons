@@ -12,9 +12,19 @@
     </parent>
 
     <artifactId>forgerock-jaspi-ad-passthrough-module</artifactId>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
 
     <name>ForgeRock JASPI OpenIDM AD Passthrough Module</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>

@@ -1,9 +1,5 @@
 {
-    "classPathURLs" : [
-        "file:/Users/Phill/ForgeRockDev/forgerock-authn-filter/forgerock-jaspic/forgerock-jaspi-filter/target/forgerock-jaspi-filter-1.1.0.jar",
-        "file:/Users/Phill/.m2/repository/org/glassfish/javax.security.auth.message/3.1/javax.security.auth.message-3.1.jar",
-        "file:/Users/Phill/ForgeRockDev/forgerock-authn-filter/forgerock-jaspic/forgerock-jaspi-container/target/forgerock-jaspi-container-1.1.0.jar"
-    ],
+    "classPathURLs" : [ ],
     "systemProperties" : { },
     "requestAttributes" : { },
     "scriptExtensions" : { },
