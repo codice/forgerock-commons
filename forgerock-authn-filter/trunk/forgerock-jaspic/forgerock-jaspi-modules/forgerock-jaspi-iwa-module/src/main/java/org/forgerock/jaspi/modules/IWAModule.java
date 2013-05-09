@@ -1,5 +1,5 @@
-//package org.forgerock.jaspi.container.modules.openidm;
-//
+package org.forgerock.jaspi.modules;
+
 //import com.sun.identity.shared.encode.Base64;
 //import org.forgerock.dev.filter.wdsso.WDSSO;
 //import org.forgerock.jaspi.container.modules.openidm.wdsso.WDSSO;
@@ -15,8 +15,8 @@
 //import javax.servlet.http.HttpServletResponse;
 //import java.io.IOException;
 //import java.util.Map;
-//
-//public class IWAModule implements ServerAuthModule {
+
+public class IWAModule /*implements ServerAuthModule*/ {
 //
 //    private static final String IWA_FAILED = "iwa-failed";
 //
@@ -84,4 +84,4 @@
 //    public void cleanSubject(MessageInfo messageInfo, Subject subject) throws AuthException {
 //        //To change body of implemented methods use File | Settings | File Templates.
 //    }
-//}
+}
