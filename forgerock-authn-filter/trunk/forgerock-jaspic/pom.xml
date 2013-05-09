@@ -12,9 +12,17 @@
     </parent>
 
     <artifactId>forgerock-jaspic</artifactId>
-    <packaging>jar</packaging>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
 
-    <name>ForgeRock JASPI (JSR-196) Container</name>
+    <name>ForgeRock JASPI (JSR-196) Implementation</name>
+
+    <modules>
+        <module>forgerock-jaspi-container</module>
+        <module>forgerock-jaspi-filter</module>
+        <module>forgerock-jaspi-config</module>
+        <module>forgerock-jaspi-modules</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -52,53 +60,91 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.2</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.0.9</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>1.0.9</version>
-        </dependency>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-scr-plugin</artifactId>
+                    <version>1.7.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>2.3.7</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>provided</scope>
-        </dependency>
-        <!--<dependency>-->
-            <!--<groupId>javax</groupId>-->
-            <!--<artifactId>javaee-web-api</artifactId>-->
-            <!--<version>6.0</version>-->
-            <!--<scope>provided</scope>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>org.ow2.spec.ee</groupId>
-            <artifactId>ow2-jaspic-1.0-spec</artifactId>
-            <version>1.0.12</version>
-            <scope>provided</scope>
-        </dependency>
+    <dependencyManagement>
+        <dependencies>
 
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>6.5.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+            <dependency>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.apache.felix.scr.annotations</artifactId>
+                <version>1.6.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.forgerock.openidm</groupId>
+                <artifactId>openidm-filter</artifactId>
+                <version>2.1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.forgerock.openidm</groupId>
+                <artifactId>openidm-enhanced-config</artifactId>
+                <version>2.1.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.2</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.0.9</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>1.0.9</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>2.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>javax.security.auth.message</artifactId>
+                <version>3.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.forgerock</groupId>
+                <artifactId>forgerock-jaspi-container</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.forgerock</groupId>
+                <artifactId>forgerock-jaspi-filter</artifactId>
+                <version>1.1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>6.5.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>1.9.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 </project>

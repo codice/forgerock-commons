@@ -19,7 +19,7 @@
         "jar://org/forgerock/jaspi/container/providerConfiguration.dtd">
 
 <AuthConfigProviders>
-    <AuthConfigProvider className="org.forgerock.jaspi.container.AuthConfigProviderImpl"
+    <AuthConfigProvider className="org.forgerock.jaspi.container.config.AuthConfigProviderImpl"
                         properties=""
                         layer="HttpServlet"
                         appContext="/jaspi-web"
