@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.forgerock</groupId>
         <artifactId>forgerock-jaspi-modules</artifactId>
-        <version>1.1.0</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>forgerock-jaspi-iwa-module</artifactId>

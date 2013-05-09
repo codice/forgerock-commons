@@ -6,5 +6,6 @@
     "initParams" : {
         "moduleChain" : "ad-passthrough-only"
     },
+    "urlPatterns" : [ "/openidm/*" ],
     "filterClass" : "org.forgerock.jaspi.filter.AuthNFilter"
 }

@@ -180,7 +180,8 @@ public class AuthNFilter implements Filter {
                 throw new AuthException("Invalid AuthStatus from validateRequest: " + requestAuthStatus.toString());
             }
 
-            filterChain.doFilter(request, response);
+            filterChain.doFilter((ServletRequest) messageInfo.getRequestMessage(),
+                    (ServletResponse) messageInfo.getResponseMessage());
 
             // Secure the response (includes adding any session cookies to the response)
             AuthStatus responseAuthStatus = serverAuthContext.secureResponse(messageInfo, serviceSubject);

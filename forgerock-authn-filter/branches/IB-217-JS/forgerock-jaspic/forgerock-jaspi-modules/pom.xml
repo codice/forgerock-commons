@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.forgerock</groupId>
         <artifactId>forgerock-jaspic</artifactId>
-        <version>1.1.0</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>forgerock-jaspi-modules</artifactId>
@@ -17,7 +17,6 @@
     <name>ForgeRock JASPI Modules</name>
 
     <modules>
-        <module>forgerock-jaspi-ad-passthrough-module</module>
         <module>forgerock-jaspi-iwa-module</module>
     </modules>
 

@@ -69,9 +69,9 @@ public class ServerAuthContextImpl implements ServerAuthContext {
     public ServerAuthContextImpl(List<ServerAuthModule> serverAuthModules, MessagePolicy requestPolicy,
                 MessagePolicy responsePolicy, Map properties, CallbackHandler handler) throws AuthException {
         this.serverAuthModules = serverAuthModules;
-        for (ServerAuthModule serverAuthModule : serverAuthModules) {
-            serverAuthModule.initialize(requestPolicy, responsePolicy, handler, properties);
-        }
+//        for (ServerAuthModule serverAuthModule : serverAuthModules) {
+//            serverAuthModule.initialize(requestPolicy, responsePolicy, handler, properties);
+//        }
     }
 
     /**
