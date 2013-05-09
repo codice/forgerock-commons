@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>forgerock-jaspic</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>ForgeRock JASPI (JSR-196) Implementation</name>
@@ -126,12 +126,12 @@
             <dependency>
                 <groupId>org.forgerock</groupId>
                 <artifactId>forgerock-jaspi-container</artifactId>
-                <version>0.1.0</version>
+                <version>0.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.forgerock</groupId>
                 <artifactId>forgerock-jaspi-filter</artifactId>
-                <version>0.1.0</version>
+                <version>0.1.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
