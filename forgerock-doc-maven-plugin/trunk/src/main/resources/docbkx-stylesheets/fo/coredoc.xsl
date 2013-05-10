@@ -34,6 +34,11 @@ version="1.0">
   <xsl:param name="double.sided" select="1"></xsl:param>
   <xsl:param name="fop1.extensions" select="1"/>
 
+  <xsl:attribute-set name="root.properties">
+   <xsl:attribute name="orphans">5</xsl:attribute>
+   <xsl:attribute name="widows">5</xsl:attribute>
+  </xsl:attribute-set>
+
   <xsl:param name="body.font.master">9</xsl:param>
   <xsl:param name="body.font.family">DejaVuSerif</xsl:param>
   <xsl:param name="dingbat.font.family">DejaVuSerif</xsl:param>
