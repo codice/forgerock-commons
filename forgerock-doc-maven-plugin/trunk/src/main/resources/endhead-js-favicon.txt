@@ -73,7 +73,7 @@ $(document).ready(function() {
 
   $(".titlepage").css("clear", "left");   /* Fix for DOCS-70 */
 
-  $("div.preface,div.chapter,div.reference,div.appendix,div.index").each(function () {
+  $("div.preface,div.chapter,div.reference,div.appendix,div.glossary,div.index").each(function () {
       $(this).prepend(tocollapse + toexpand);
   });
   $(".toexpand").hide();
