@@ -263,7 +263,7 @@ public class WDSSO /*extends AMLoginModule*/ {
 //                        debug.message("Context established !");
 //                    }
                     GSSName user = context.getSrcName();
-                    WDSSO.user = user.toString();
+                    WDSSO.user = getUserName(user.toString());
 
                     // Check if the user account from the Kerberos ticket exists 
                     // in the realm. The "Alias Search Attribute Names" will be used to
