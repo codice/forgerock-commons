@@ -8,7 +8,7 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2012 ForgeRock AS
+ *     Copyright 2012-2013 ForgeRock AS
  *
  */
 
@@ -40,7 +40,7 @@
  *  release-notes/
  *   index.xml
  *   ...other files...
- *  common/
+ *  shared/
  *   ...other files...
  * </pre>
  *

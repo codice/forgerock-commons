@@ -625,91 +625,104 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     private String isXincludeSupported;
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #epubCustomization}
      */
     public final File getEpubCustomization() {
         return epubCustomization;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #foCustomization}
      */
     public final File getFoCustomization() {
         return foCustomization;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #manpagesCustomization}
      */
     public final File getManpagesCustomization() {
         return manpagesCustomization;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #singleHTMLCustomization}
      */
     public final File getSingleHTMLCustomization() {
         return singleHTMLCustomization;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #chunkedHTMLCustomization}
      */
     public final File getChunkedHTMLCustomization() {
         return chunkedHTMLCustomization;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #fontsDirectory}
      */
     public final File getFontsDirectory() {
         return fontsDirectory;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #ansi}
      */
     public final String getAnsi() {
         return ansi;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #isDraftMode}
      */
     public final String getIsDraftMode() {
         return isDraftMode;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #draftWatermarkURL}
      */
     public final String getDraftWatermarkURL() {
         return draftWatermarkURL;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #useSyntaxHighlighting}
      */
     public final String getUseSyntaxHighlighting() {
         return useSyntaxHighlighting;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #areSectionsAutolabeled}
      */
     public final String getAreSectionsAutolabeled() {
         return areSectionsAutolabeled;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #doesSectionLabelIncludeComponentLabel}
      */
     public final String getDoesSectionLabelIncludeComponentLabel() {
         return doesSectionLabelIncludeComponentLabel;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #isXincludeSupported}
      */
     public final String getIsXincludeSupported() {
         return isXincludeSupported;

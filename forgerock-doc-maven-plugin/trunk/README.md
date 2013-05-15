@@ -219,7 +219,8 @@ Brush support for `aci`, `csv`, `http`, `ini`, and `ldif` is provided by
 Java source code in your documentation, reducing the likelihood that the
 developer examples get out of sync with your documentation.
 
-To run JCite, add an execution like this prior to your pre-site build goal:
+To run JCite, add an execution like this prior to your pre-site `boilerplate`
+goal:
 
     <execution>
      <id>run-jcite</id>

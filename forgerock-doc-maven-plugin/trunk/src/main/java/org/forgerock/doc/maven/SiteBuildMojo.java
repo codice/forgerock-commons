@@ -45,7 +45,8 @@ public class SiteBuildMojo extends AbstractBuildMojo {
     private File siteDirectory;
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #siteDirectory}
      */
     public final File getSiteDirectory() {
         return siteDirectory;

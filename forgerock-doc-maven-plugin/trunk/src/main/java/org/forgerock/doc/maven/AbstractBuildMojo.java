@@ -219,7 +219,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      *  release-notes/
      *   index.xml
      *   ...other files...
-     *  common/
+     *  shared/
      *   ...other files...
      * </pre>
      * <p/>
@@ -232,168 +232,192 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     private String documentSrcName;
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #docbkxVersion}
      */
     public String getDocbkxVersion() {
         return docbkxVersion;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #resourcesVersion}
      */
     public String getResourcesVersion() {
         return resourcesVersion;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #jCiteVersion}
      */
     public String getJCiteVersion() {
         return jCiteVersion;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #linkTesterVersion}
      */
     public String getLinkTesterVersion() {
         return linkTesterVersion;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #skipLinkCheck}
      */
     public String getSkipLinkCheck() {
         return skipLinkCheck;
     }
 
     /**
-     * {@inheritDoc}
+     * See param.
+     * @param doLinkCheck {@link #skipLinkCheck}
      */
     public void setSkipLinkCheck(String doLinkCheck) {
         this.skipLinkCheck = doLinkCheck;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #runLinkTester}
      */
     public String getRunLinkTester() {
         return runLinkTester;
     }
 
     /**
-     * {@inheritDoc}
+     * See param.
+     * @param runLinkTester {@link #runLinkTester}
      */
     public void setRunLinkTester(String runLinkTester) {
         this.runLinkTester = runLinkTester;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #projectName}
      */
     public String getProjectName() {
         return projectName;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #googleAnalyticsId}
      */
     public String getGoogleAnalyticsId() {
         return googleAnalyticsId;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #excludes}
      */
     public List<String> getExcludes() {
         return excludes;
     }
 
     /**
-     * {@inheritDoc}
+     * See param.
+     * @param excludedFormats {@link #excludes}
      */
     public void setExcludes(final List<String> excludedFormats) {
         this.excludes = excludedFormats;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #include}
      */
     public String getInclude() {
         return include;
     }
 
     /**
-     * {@inheritDoc}
+     * See param.
+     * @param includedFormat {@link #include}
      */
     public void setInclude(String includedFormat) {
         this.include = includedFormat;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #docbkxSourceDirectory}
      */
     public File getDocbkxSourceDirectory() {
         return docbkxSourceDirectory;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @param directory {@link #docbkxSourceDirectory}
      */
     public void setDocbkxSourceDirectory(File directory) {
         this.docbkxSourceDirectory = directory;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #docbkxGeneratedSourceDirectory}
      */
     public File getDocbkxGeneratedSourceDirectory() {
         return docbkxGeneratedSourceDirectory;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #useGeneratedSources}
      */
     public boolean doUseGeneratedSources() {
         return useGeneratedSources;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #docbkxOutputDirectory}
      */
     public File getDocbkxOutputDirectory() {
         return docbkxOutputDirectory;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #buildDirectory}
      */
     public File getBuildDirectory() {
         return buildDirectory;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #project}
      */
     public MavenProject getProject() {
         return project;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #session}
      */
     public MavenSession getSession() {
         return session;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #pluginManager}
      */
     public BuildPluginManager getPluginManager() {
         return pluginManager;
     }
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #documentSrcName}
      */
     public String getDocumentSrcName() {
         return documentSrcName;
@@ -453,7 +477,8 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * {@inheritDoc}
+     * See param.
+     * @param useSharedContent {@link #useSharedContent}
      */
     public void setUseSharedContent(boolean useSharedContent) {
         this.useSharedContent = useSharedContent;

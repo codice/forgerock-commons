@@ -48,7 +48,8 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
     private File releaseDirectory;
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #releaseDirectory}
      */
     public final File getReleaseDirectory() {
         return releaseDirectory;
@@ -63,7 +64,8 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
     private String releaseVersion;
 
     /**
-     * {@inheritDoc}
+     * See return.
+     * @return {@link #releaseVersion}
      */
     public final String getReleaseVersion() {
         return releaseVersion;
