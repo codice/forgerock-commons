@@ -61,7 +61,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * ForgeRock linktester plugin version to use. Executions seem to hit an NPE
      * when the version is not specified.
      *
-     * @parameter default-value="1.2.0-SNAPSHOT" property="linkTesterVersion"
+     * @parameter default-value="1.2.0" property="linkTesterVersion"
      * @required
      */
     private String linkTesterVersion;
