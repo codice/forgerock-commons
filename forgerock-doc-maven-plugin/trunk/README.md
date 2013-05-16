@@ -241,7 +241,7 @@ following example:
     <programlisting language="java"
     >[jcp:org.forgerock.doc.jcite.test.Test:--- mainMethod]</programlisting>
 
-See the `forgerock-doc-maven-plugin-test` project for an example.test commit
+See the `forgerock-doc-maven-plugin-test` project for an example.
 
 * * *
 This work is licensed under the Creative Commons
