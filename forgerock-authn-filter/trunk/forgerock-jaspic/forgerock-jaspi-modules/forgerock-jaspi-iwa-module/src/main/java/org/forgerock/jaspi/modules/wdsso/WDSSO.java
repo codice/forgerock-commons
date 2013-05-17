@@ -123,9 +123,9 @@ public class WDSSO /*extends AMLoginModule*/ {
     }
 
     private static String user;
-    public String process(Map<String, String> options, HttpServletRequest request) throws RuntimeException {
+    public String process(Map<String, String> options, HttpServletRequest request) throws Exception {
 
-        try {
+//        try {
 
 //        int result = ISAuthConstants.LOGIN_IGNORE;
 
@@ -141,8 +141,7 @@ public class WDSSO /*extends AMLoginModule*/ {
         }
 
         // retrieve the spnego token
-        byte[] spnegoToken =
-                getSPNEGOTokenFromHTTPRequest(request);
+        byte[] spnegoToken = getSPNEGOTokenFromHTTPRequest(request);
 //        if (spnegoToken == null) {
 //            spnegoToken = getSPNEGOTokenFromCallback(callbacks);
 //        }
@@ -180,7 +179,7 @@ public class WDSSO /*extends AMLoginModule*/ {
             if( e instanceof GSSException) {
                 int major = ((GSSException)e).getMajor();
                 if (major == GSSException.CREDENTIALS_EXPIRED) {
-                    LOGGER.debug("IWA WDSSO: Credential expired. Re-establish credential...");
+                    LOGGER.debug("IWA WDSSO: Credential expired. Re-establish credential... {}", e.getMessage());
                     serviceLogin();
                     try {
                         authenticateToken(kerberosToken);
@@ -189,12 +188,12 @@ public class WDSSO /*extends AMLoginModule*/ {
 //                            result = ISAuthConstants.LOGIN_SUCCEED;
 //                        }
                     } catch (Exception ee) {
-                        LOGGER.error("IWA WDSSO: Authentication failed with new cred.");
-                        throw new RuntimeException();
+                        LOGGER.error("IWA WDSSO: Authentication failed with new cred. {}", e.getMessage());
+                        throw ee;
 //                        return AuthStatus.SEND_FAILURE;
                     }
                 } else {
-                    LOGGER.error("IWA WDSSO: Authentication failed with GSSException.");
+                    LOGGER.error("IWA WDSSO: Authentication failed with GSSException. {}", e.getMessage());
                     throw new RuntimeException();
 //                    return AuthStatus.SEND_FAILURE;
                 }
@@ -202,7 +201,7 @@ public class WDSSO /*extends AMLoginModule*/ {
         } catch (GSSException e ){
             int major = e.getMajor();
             if (major == GSSException.CREDENTIALS_EXPIRED) {
-                LOGGER.debug("IWA WDSSO: Credential expired. Re-establish credential...");
+                LOGGER.debug("IWA WDSSO: Credential expired. Re-establish credential... {}", e.getMessage());
                 serviceLogin();
                 try {
                     authenticateToken(kerberosToken);
@@ -211,31 +210,32 @@ public class WDSSO /*extends AMLoginModule*/ {
 //                        result = ISAuthConstants.LOGIN_SUCCEED;
 //                    }
                 } catch (Exception ee) {
-                    LOGGER.debug("IWA WDSSO: Authentication failed with new cred.");
-                    throw new RuntimeException();
+                    LOGGER.debug("IWA WDSSO: Authentication failed with new cred. {}", e.getMessage());
+                    throw ee;
 //                    return AuthStatus.SEND_FAILURE;
                 }
             } else {
-                LOGGER.debug("IWA WDSSO: Authentication failed with GSSException.");
+                LOGGER.debug("IWA WDSSO: Authentication failed with GSSException. {}", e.getMessage());
                 throw new RuntimeException();
 //                return AuthStatus.SEND_FAILURE;
             }
         } catch (RuntimeException e) {
+            LOGGER.debug("IWA WDSSO: Authentication failed with generic exception. {}", e.getMessage());
             throw e;
         } catch (Exception e) {
-            LOGGER.debug("IWA WDSSO: Authentication failed with generic exception.");
-            throw new RuntimeException();
+            LOGGER.debug("IWA WDSSO: Authentication failed with generic exception. {}", e.getMessage());
+            throw e;
 //            return AuthStatus.SEND_FAILURE;
         }
 //        return AuthStatus.SUCCESS;
             return user;
 
 
-        } catch (RuntimeException e) {
-            LOGGER.debug("IWA WDSSO: IWA failure!");
-            throw e;
-//            return AuthStatus.SEND_FAILURE;
-        }
+//        } catch (RuntimeException e) {
+//            LOGGER.debug("IWA WDSSO: IWA failure! {}", e.getMessage());
+//            throw e;
+////            return AuthStatus.SEND_FAILURE;
+//        }
     }
 
     private void authenticateToken(final byte[] kerberosToken)
@@ -244,15 +244,16 @@ public class WDSSO /*extends AMLoginModule*/ {
 //        debug.message("In authenticationToken ...");
         Subject.doAs(serviceSubject, new PrivilegedExceptionAction(){
             public Object run() throws Exception {
-                GSSContext context =
-                        GSSManager.getInstance().createContext(
-                                (GSSCredential)null);
+                GSSContext context = GSSManager.getInstance().createContext((GSSCredential)null);
+                LOGGER.debug("IWA WDSSO: GSSContext created");
 //                if (debug.messageEnabled()){
 //                    debug.message("Context created.");
 //                }
                 byte[] outToken = context.acceptSecContext(
                         kerberosToken, 0,kerberosToken.length);
                 if (outToken != null) {
+                    LOGGER.debug("IWA WDSSO: Token returned from acceptSecContext: " +
+                            DerValue.printByteArray(outToken, 0, outToken.length));
 //                    if (debug.messageEnabled()) {
 //                        debug.message(
 //                                "Token returned from acceptSecContext: \n"
@@ -261,14 +262,17 @@ public class WDSSO /*extends AMLoginModule*/ {
 //                    }
                 }
                 if (!context.isEstablished()) {
+                    LOGGER.debug("IWA WDSSO: Cannot establish context!");
 //                    debug.error("Cannot establish context !");
                     throw new RuntimeException();
                 } else {
+                    LOGGER.debug("IWA WDSSO: Context established");
 //                    if (debug.messageEnabled()) {
 //                        debug.message("Context established !");
 //                    }
                     GSSName user = context.getSrcName();
                     WDSSO.user = getUserName(user.toString());
+                    LOGGER.debug("IWA WDSSO: Found user! {}", WDSSO.user);
 
                     // Check if the user account from the Kerberos ticket exists 
                     // in the realm. The "Alias Search Attribute Names" will be used to
@@ -378,14 +382,18 @@ public class WDSSO /*extends AMLoginModule*/ {
         String header = req.getHeader("Authorization");
         if ((header != null) && header.startsWith("Negotiate")) {
             header = header.substring("Negotiate".length()).trim();
+            LOGGER.debug("IWA WDSSO: \"Authorization\" header set, {}", header);
             try {
                 spnegoToken = Base64.decode(header);
             } catch (Exception e) {
+                LOGGER.error("IWA WDSSO: Failed to get SPNEGO Token from request");
 //                debug.error("Decoding token error.");
 //                if (debug.messageEnabled()) {
 //                    debug.message("Stack trace: ", e);
 //                }
             }
+        } else {
+            LOGGER.error("IWA WDSSO: \"Authorization\" header not set in reqest");
         }
         return spnegoToken;
     }
@@ -464,6 +472,7 @@ public class WDSSO /*extends AMLoginModule*/ {
                 }
             }
         } else {
+            LOGGER.debug("IWA WDSSO: SPENGO OID not found in the Auth Token");
 //            if (debug.messageEnabled()) {
 //                debug.message("SPNEGO OID not found in the Auth Token");
 //            }
@@ -474,11 +483,13 @@ public class WDSSO /*extends AMLoginModule*/ {
             }
             tmpInput.read(krb5Oid, i, krb5Oid.length - i);
             if (!Arrays.equals(krb5Oid, KERBEROS_V5_OID)) {
+                LOGGER.debug("IWA WDSSO: Kerberos V5 OID not found in the Auth Token");
 //                if (debug.messageEnabled()) {
 //                    debug.message("Kerberos V5 OID not found in the Auth Token");
 //                }
                 token = null;
             } else {
+                LOGGER.debug("IWA WDSSO: Kerberos V5 OID found in the Auth Token");
 //                if (debug.messageEnabled()) {
 //                    debug.message("Kerberos V5 OID found in the Auth Token");
 //                }
@@ -539,7 +550,7 @@ public class WDSSO /*extends AMLoginModule*/ {
     }
 
     private void initWindowsDesktopSSOAuth(Map options)
-            throws RuntimeException{
+            throws Exception {
 
 //        if (debug.messageEnabled()){
 //            debug.message("Init WindowsDesktopSSO. This should not happen often.");
@@ -563,7 +574,7 @@ public class WDSSO /*extends AMLoginModule*/ {
 //        configTable.put(confIndex, configMap);
     }
 
-    private synchronized void serviceLogin() throws RuntimeException{
+    private synchronized void serviceLogin() throws Exception {
 //        if (debug.messageEnabled()){
 //            debug.message("New Service Login ...");
 //        }
@@ -585,9 +596,10 @@ public class WDSSO /*extends AMLoginModule*/ {
             Configuration.setConfiguration(wtc);
 
             // perform service authentication using JDK Kerberos module
-            LoginContext lc = new LoginContext(
-                    WindowsDesktopSSOConfig.defaultAppName);
+            LoginContext lc = new LoginContext(WindowsDesktopSSOConfig.defaultAppName);
+            LOGGER.debug("IWA WDSSO: Attempting to run login() on the LoginContext");
             lc.login();
+            LOGGER.debug("IWA WDSSO: LoginContext.login() successful");
 
             serviceSubject = lc.getSubject();
 //            if (debug.messageEnabled()){
@@ -598,7 +610,7 @@ public class WDSSO /*extends AMLoginModule*/ {
 //            if (debug.messageEnabled()) {
                 LOGGER.error("IWA WDSSO: Stack trace: ", e);
 //            }
-            throw new RuntimeException();
+            throw e;
         }
     }
 
@@ -608,19 +620,19 @@ public class WDSSO /*extends AMLoginModule*/ {
 
     private void verifyAttributes() throws RuntimeException {
         if (servicePrincipalName == null || servicePrincipalName.length() == 0) {
-            LOGGER.debug("IWA WDSSO: Service Principal Name not set");
+            LOGGER.error("IWA WDSSO: Service Principal Name not set");
             throw new RuntimeException();
         }
         if (keyTabFile == null || keyTabFile.length() == 0) {
-            LOGGER.debug("IWA WDSSO: Key Tab File not set");
+            LOGGER.error("IWA WDSSO: Key Tab File not set");
             throw new RuntimeException();
         }
         if (kdcRealm == null || kdcRealm.length() == 0) {
-            LOGGER.debug("IWA WDSSO: Kerberos Realm not set");
+            LOGGER.error("IWA WDSSO: Kerberos Realm not set");
             throw new RuntimeException();
         }
         if (kdcServer == null || kdcServer.length() == 0) {
-            LOGGER.debug("IWA WDSSO: Kerberos Server Name not set");
+            LOGGER.error("IWA WDSSO: Kerberos Server Name not set");
             throw new RuntimeException();
         }
 //        if (authLevel == null || authLevel.length() == 0){
@@ -630,7 +642,7 @@ public class WDSSO /*extends AMLoginModule*/ {
         if (!(new File(keyTabFile)).exists()) {
             // ibm jdk needs to skip "file://" part in parameter
             if (!(new File(keyTabFile.substring(7))).exists()) {
-                LOGGER.debug("IWA WDSSO: Key Tab File does not exist");
+                LOGGER.error("IWA WDSSO: Key Tab File does not exist");
                 throw new RuntimeException();
             }
         }

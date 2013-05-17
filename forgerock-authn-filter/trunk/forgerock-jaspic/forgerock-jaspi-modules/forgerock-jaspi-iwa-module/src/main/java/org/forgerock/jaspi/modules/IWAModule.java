@@ -60,7 +60,7 @@ public class IWAModule implements ServerAuthModule {
                     response.getWriter().flush();
                     response.getWriter().close();
                 } catch (IOException e) {
-                    LOGGER.debug("IWAModule: Error writing Negotiate header to Response.");
+                    LOGGER.debug("IWAModule: Error writing Negotiate header to Response. {}", e.getMessage());
                     throw new AuthException("Error writing to Response");
                 }
 
@@ -76,8 +76,8 @@ public class IWAModule implements ServerAuthModule {
                             return username;
                         }
                     });
-                } catch (RuntimeException e) {
-                    LOGGER.debug("IWAModule: IWA has failed.");
+                } catch (Exception e) {
+                    LOGGER.debug("IWAModule: IWA has failed. {}", e.getMessage());
                     throw new AuthException("IWA has failed");
                 }
 
