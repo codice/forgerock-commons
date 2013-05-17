@@ -18,7 +18,6 @@
 
     <modules>
         <module>forgerock-jaspi-war-config</module>
-        <module>forgerock-jaspi-osgi-config</module>
     </modules>
 
 </project>
