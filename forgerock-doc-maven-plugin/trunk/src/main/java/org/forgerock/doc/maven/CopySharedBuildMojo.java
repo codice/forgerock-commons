@@ -82,7 +82,9 @@ public class CopySharedBuildMojo extends AbstractBuildMojo {
         final String[] shared = {
             "sec-accessing-doc-online.xml",
             "sec-formatting-conventions.xml",
-            "sec-joining-the-community.xml"
+            "sec-interface-stability.xml",
+            "sec-joining-the-community.xml",
+            "sec-release-levels.xml"
         };
         for (String file : shared) {
             final URL commonFile = getClass().getResource(prefix + file);

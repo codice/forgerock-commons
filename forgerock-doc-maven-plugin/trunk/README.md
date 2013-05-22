@@ -91,10 +91,12 @@ An example project layout looks like this:
        images/
        index.xml
        ...other files...
-      common/
+      shared/
        sec-accessing-doc-online.xml
        sec-formatting-conventions.xml
+       sec-interface-stability.xml
        sec-joining-the-community.xml
+       sec-interface-stability.xml
        ...other files...
 
 ## Using Shared Content
@@ -105,7 +107,9 @@ ensuring your documentation includes the latest versions.
     legal.xml
     shared/sec-accessing-doc-online.xml
     shared/sec-formatting-conventions.xml
+    shared/sec-interface-stability.xml
     shared/sec-joining-the-community.xml
+    shared/sec-interface-stability.xml
 
 The plugin does not replace your copies of the files. Instead it copies
 common files to the expected locations in the generated sources.
