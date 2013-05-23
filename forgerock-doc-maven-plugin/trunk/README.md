@@ -96,7 +96,7 @@ An example project layout looks like this:
        sec-formatting-conventions.xml
        sec-interface-stability.xml
        sec-joining-the-community.xml
-       sec-interface-stability.xml
+       sec-release-levels.xml
        ...other files...
 
 ## Using Shared Content
@@ -109,7 +109,7 @@ ensuring your documentation includes the latest versions.
     shared/sec-formatting-conventions.xml
     shared/sec-interface-stability.xml
     shared/sec-joining-the-community.xml
-    shared/sec-interface-stability.xml
+    shared/sec-release-levels.xml
 
 The plugin does not replace your copies of the files. Instead it copies
 common files to the expected locations in the generated sources.

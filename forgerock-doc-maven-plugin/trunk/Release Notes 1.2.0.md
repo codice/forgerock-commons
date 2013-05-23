@@ -16,8 +16,18 @@ fixes.
 <p>
 To take advantage of the improvements like including common content and
 JCite for code citations, you must let the doc build plugin use
-generated doc sources for the build.
+generated doc sources for the build in a new build goal.
 </p>
+
+<pre>
+    &lt;execution&gt;
+     &lt;id&gt;copy-common&lt;/id&gt;
+     &lt;phase&gt;pre-site&lt;/phase&gt;
+     &lt;goals&gt;
+      &lt;goal&gt;boilerplate&lt;/goal&gt;
+     &lt;/goals&gt;
+    &lt;/execution&gt;
+</pre>
 
 <p>
 As a result you must also adjust any XIncludes referencing generated
@@ -81,7 +91,7 @@ ensuring your documentation includes the latest versions.
     shared/sec-formatting-conventions.xml
     shared/sec-interface-stability.xml
     shared/sec-joining-the-community.xml
-    shared/sec-interface-stability.xml
+    shared/sec-release-levels.xml
 
 The plugin does not replace your copies of the files. Instead it copies
 common files to the expected locations in the generated sources.
