@@ -42,25 +42,7 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
-        <repository>
-            <id>forgerock-snapshots-repository</id>
-            <name>ForgeRock Snapshot Repository</name>
-            <url>http://maven.forgerock.org/repo/snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
     </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>forgerock-plugins-repository</id>
-            <name>ForgeRock Plugin Repository</name>
-            <url>http://maven.forgerock.org/repo/repo</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <build>
         <pluginManagement>
