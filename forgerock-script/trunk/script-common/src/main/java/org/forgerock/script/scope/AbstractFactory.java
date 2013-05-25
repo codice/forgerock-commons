@@ -24,18 +24,18 @@
 
 package org.forgerock.script.scope;
 
+import org.forgerock.util.Factory;
+import org.forgerock.util.LazyList;
+import org.forgerock.util.LazyMap;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.forgerock.util.Factory;
-import org.forgerock.util.LazyList;
-import org.forgerock.util.LazyMap;
-
 /**
  * An AbstractFactory does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public abstract class AbstractFactory<T> implements Factory<T> {
@@ -53,7 +53,7 @@ public abstract class AbstractFactory<T> implements Factory<T> {
      * <p/>
      * If the {@code null} object has special representation in the script scope
      * this method returns with that object.
-     * 
+     *
      * @return {@code null} or representation of {@code null} object.
      */
     protected Object convertNull() {

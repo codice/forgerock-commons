@@ -24,6 +24,18 @@
 
 package org.forgerock.script.engine;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.forgerock.json.fluent.JsonPointer;
+import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.fluent.JsonValueException;
+import org.forgerock.json.resource.Context;
+import org.forgerock.json.resource.ResourceException;
+import org.forgerock.json.resource.ServiceUnavailableException;
+import org.forgerock.script.Script;
+import org.forgerock.script.ScriptEntry;
+import org.forgerock.script.exception.ScriptThrownException;
+
+import javax.script.ScriptException;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,57 +55,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import javax.script.ScriptException;
-
-import org.forgerock.json.fluent.JsonPointer;
-import org.forgerock.json.fluent.JsonValue;
-import org.forgerock.json.fluent.JsonValueException;
-import org.forgerock.json.resource.Context;
-import org.forgerock.json.resource.ResourceException;
-import org.forgerock.json.resource.ServiceUnavailableException;
-import org.forgerock.script.Script;
-import org.forgerock.script.ScriptEntry;
-import org.forgerock.script.exception.ScriptThrownException;
-
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class Utils {
-
-    public static class Pair<A, B> {
-        public final A fst;
-        public final B snd;
-
-        public Pair(final A a, final B b) {
-            fst = a;
-            snd = b;
-        }
-
-        public String toString() {
-            return "Pair[" + fst + "," + snd + "]";
-        }
-
-        private static boolean equals(Object x, Object y) {
-            return (x == null && y == null) || (x != null && x.equals(y));
-        }
-
-        public boolean equals(Object other) {
-            return other instanceof Pair<?, ?> && equals(fst, ((Pair<?, ?>) other).fst)
-                    && equals(snd, ((Pair<?, ?>) other).snd);
-        }
-
-        public int hashCode() {
-            int result = fst != null ? fst.hashCode() : 0;
-            result = 31 * result + (snd != null ? snd.hashCode() : 0);
-            return result;
-        }
-
-        public static <A, B> Pair<A, B> of(final A a, final B b) {
-            return new Pair<A, B>(a, b);
-        }
-    }
 
     private Utils() {
     }
@@ -106,16 +73,16 @@ public class Utils {
         } catch (IOException e) {
             throw e;
         } finally {
-            if (inChannel != null)
+            if (inChannel != null) {
                 inChannel.close();
-            if (outChannel != null)
-                outChannel.close();
+            }
+            outChannel.close();
         }
     }
 
     /**
      * Read large > 5Mb text files to String.
-     * 
+     *
      * @param file
      *            source file
      * @return content of the source {@code file}
@@ -131,8 +98,8 @@ public class Utils {
     }
 
     /**
-     * Read small < 5Mb text files to String
-     * 
+     * Read small < 5Mb text files to String.
+     *
      * @param file
      *            source file
      * @return content of the source {@code file}
@@ -161,9 +128,9 @@ public class Utils {
 
     static class SimpleByteBuffer {
 
-        public byte[] buffer = new byte[256];
+        private byte[] buffer = new byte[256];
 
-        public int write;
+        private int write;
 
         public void put(byte[] buf, int len) {
             ensure(len);
@@ -211,8 +178,8 @@ public class Utils {
         Iterator<Pair<Object, Object>> i = valueStack.iterator();
         while (i.hasNext()) {
             Pair<Object, Object> next = i.next();
-            if (next.fst == source) {
-                return next.snd;
+            if (next.getLeft() == source) {
+                return next.getRight();
             }
         }
 
@@ -240,8 +207,8 @@ public class Utils {
     }
 
     /**
-     * Executes the given script with the appropriate context information
-     * 
+     * Executes the given script with the appropriate context information.
+     *
      * @param context
      * @param scriptPair
      *            The script to execute
@@ -251,10 +218,10 @@ public class Utils {
     public static Object evaluateScript(final Context context,
             final Pair<JsonPointer, ScriptEntry> scriptPair) throws ResourceException {
         if (scriptPair != null) {
-            ScriptEntry scriptEntry = scriptPair.snd;
+            ScriptEntry scriptEntry = scriptPair.getRight();
             if (scriptEntry.isActive()) {
                 throw new ServiceUnavailableException("Failed to execute inactive script: "
-                        + scriptPair.snd.getName());
+                        + scriptPair.getRight().getName());
             }
             Script script = scriptEntry.getScript(context);
             try {
@@ -271,7 +238,7 @@ public class Utils {
      * {@code Throwable} is an JSON {@code ScriptException} then an appropriate
      * {@code ResourceException} is returned, otherwise an
      * {@code InternalServerErrorException} is returned.
-     * 
+     *
      * @param t
      *            The {@code Throwable} to be converted.
      * @return The equivalent resource exception.

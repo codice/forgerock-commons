@@ -24,17 +24,13 @@
 
 package org.forgerock.script.groovy;
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicReference;
-
-import javax.script.Bindings;
-
+import groovy.lang.Binding;
+import groovy.lang.GroovyClassLoader;
+import groovy.lang.GroovyCodeSource;
+import groovy.lang.Script;
+import groovy.util.GroovyScriptEngine;
+import groovy.util.ResourceConnector;
+import groovy.util.ResourceException;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.codehaus.groovy.runtime.InvokerHelper;
@@ -47,17 +43,19 @@ import org.forgerock.script.source.URLScriptSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import groovy.lang.Binding;
-import groovy.lang.GroovyClassLoader;
-import groovy.lang.GroovyCodeSource;
-import groovy.lang.Script;
-import groovy.util.GroovyScriptEngine;
-import groovy.util.ResourceConnector;
-import groovy.util.ResourceException;
+import javax.script.Bindings;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class GroovyScriptEngineImpl extends AbstractScriptEngine {
@@ -86,16 +84,13 @@ public class GroovyScriptEngineImpl extends AbstractScriptEngine {
         this.factory = factory;
         this.persistenceConfigReference = persistenceConfig;
 
-/*
-	groovy -cp slf4j-api.jar -configscript config.groovy myscript.groovy
-
-	and in config.groovy:
-
-	withConfig(configuration) {
-	    ast(groovy.util.logging.Slf4j)
-	}
-	
-*/
+        /*
+         * groovy -cp slf4j-api.jar -configscript config.groovy myscript.groovy
+         *
+         * and in config.groovy:
+         *
+         * withConfig(configuration) { ast(groovy.util.logging.Slf4j) }
+         */
 
         Properties properties = null;
         for (Map.Entry<String, Object> entry : configuration.entrySet()) {
@@ -148,7 +143,7 @@ public class GroovyScriptEngineImpl extends AbstractScriptEngine {
 
     /**
      * Creates a Script with a given scriptName and binding.
-     * 
+     *
      * @param scriptName
      *            name of the script to run
      * @param binding

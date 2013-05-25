@@ -24,21 +24,20 @@
 
 package org.forgerock.script.groovy;
 
+import groovy.lang.GroovySystem;
+import org.forgerock.json.resource.PersistenceConfig;
+import org.forgerock.script.engine.ScriptEngine;
+import org.forgerock.script.engine.ScriptEngineFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.forgerock.json.resource.PersistenceConfig;
-import org.forgerock.script.engine.ScriptEngine;
-import org.forgerock.script.engine.ScriptEngineFactory;
-
-import groovy.lang.GroovySystem;
-
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class GroovyScriptEngineFactory implements ScriptEngineFactory {

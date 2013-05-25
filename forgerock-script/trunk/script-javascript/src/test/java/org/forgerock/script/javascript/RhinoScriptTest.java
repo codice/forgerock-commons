@@ -28,28 +28,14 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.forgerock.json.fluent.JsonValue;
-import org.forgerock.json.resource.ResourceException;
-import org.forgerock.json.resource.RootContext;
-import org.forgerock.script.Script;
-import org.forgerock.script.ScriptEntry;
 import org.forgerock.script.ScriptName;
 import org.forgerock.script.ScriptTest;
-import org.forgerock.script.scope.Function;
-import org.forgerock.script.scope.FunctionFactory;
-import org.forgerock.script.scope.OperationParameter;
 import org.forgerock.script.source.EmbeddedScriptSource;
-import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import javax.script.Bindings;
-import javax.script.SimpleBindings;
-
-import static org.fest.assertions.api.Assertions.assertThat;
 
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 @Test
@@ -75,15 +61,16 @@ public class RhinoScriptTest extends ScriptTest {
         return new EmbeddedScriptSource("throw \"Access denied\";", scriptName);
     }
 
-    //@Test
-    /*public void compileTest() throws Exception {
-        Bindings b= new SimpleBindings();
-        b.put("router", FunctionFactory.getResource());
-
-        b = getScriptRegistry().getEngineByName(RhinoScriptEngineFactory.LANGUAGE_NAME).compileBindings(new RootContext(), b);
-
-        Object o = ((Map)b.get("router")).get("read");
-        o.getClass();
-    }*/
+    // @Test
+    /*
+     * public void compileTest() throws Exception { Bindings b= new
+     * SimpleBindings(); b.put("router", FunctionFactory.getResource());
+     *
+     * b =
+     * getScriptRegistry().getEngineByName(RhinoScriptEngineFactory.LANGUAGE_NAME
+     * ).compileBindings(new RootContext(), b);
+     *
+     * Object o = ((Map)b.get("router")).get("read"); o.getClass(); }
+     */
 
 }

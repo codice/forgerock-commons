@@ -24,13 +24,13 @@
 
 package org.forgerock.script;
 
-import javax.script.Bindings;
-
 import org.forgerock.json.resource.Context;
+
+import javax.script.Bindings;
 
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public interface ScriptEntry extends Scope {
@@ -44,7 +44,7 @@ public interface ScriptEntry extends Scope {
      * it is not the same as some observer already in the set. The order in
      * which notifications will be delivered to multiple observers is not
      * specified. See the class comment.
-     * 
+     *
      * @param hook
      *            an observer to be added.
      * @throws NullPointerException
@@ -55,7 +55,7 @@ public interface ScriptEntry extends Scope {
     /**
      * Deletes an observer from the set of observers of this object. Passing
      * {@code null} to this method will have no effect.
-     * 
+     *
      * @param hook
      *            the observer to be deleted.
      */
@@ -63,7 +63,7 @@ public interface ScriptEntry extends Scope {
 
     /**
      * Get a new {@literal Non-ThreadSafe} Script instance.
-     * 
+     *
      * @param context
      *            the request {@code Context}
      * @return new Script instance
@@ -72,9 +72,11 @@ public interface ScriptEntry extends Scope {
 
     /**
      * Get a JSR223 Script Engine aware binding.
-     * 
+     *
      * @param context
      *            the request {@code Context}
+     * @param request
+     *            the request bindings
      * @return new {@code Bindings} contains the service and global scope.
      */
     public Bindings getScriptBindings(Context context, Bindings request);
@@ -89,7 +91,7 @@ public interface ScriptEntry extends Scope {
      * This method checks the availability of the required
      * {@link org.forgerock.script.engine.ScriptEngine} and the
      * {@link org.forgerock.script.source.SourceUnit}.
-     * 
+     *
      * @return <tt>true</tt> if this script can be evaluated
      */
     public boolean isActive();

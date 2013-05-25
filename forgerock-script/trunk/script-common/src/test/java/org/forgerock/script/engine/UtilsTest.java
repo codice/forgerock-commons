@@ -24,20 +24,16 @@
 
 package org.forgerock.script.engine;
 
+import org.fest.assertions.data.MapEntry;
+import org.testng.annotations.Test;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-import org.fest.assertions.api.MapAssert;
-import org.fest.assertions.data.MapEntry;
-import org.forgerock.json.fluent.JsonValue;
-import org.testng.annotations.Test;
-
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertTrue;
 
 /**
  * A NAME does ...
@@ -48,34 +44,31 @@ public class UtilsTest {
     @Test
     public void testDeepCopy() throws Exception {
 
-        HashMap<String,Object> paper = new HashMap<String, Object>();
-        //JsonValue scissors = new JsonValue(new HashMap<String,Object>());
-        Map<String,Object> scissors = new HashMap<String,Object>();
+        HashMap<String, Object> paper = new HashMap<String, Object>();
+        // JsonValue scissors = new JsonValue(new HashMap<String,Object>());
+        Map<String, Object> scissors = new HashMap<String, Object>();
         List<Object> rock = new ArrayList<Object>();
 
-        //Paper
-        paper.put("rock","crushes");
+        // Paper
+        paper.put("rock", "crushes");
         paper.put("covers", rock);
 
-        //Rock
+        // Rock
         rock.add("crushes");
         rock.add(scissors);
         rock.add(paper);
 
-        //Scissors
-        scissors.put("scissors","crushes");
-        scissors.put("cuts",paper);
-        scissors.put("paper",paper);
-
-
+        // Scissors
+        scissors.put("scissors", "crushes");
+        scissors.put("cuts", paper);
+        scissors.put("paper", paper);
 
         Object copyOfPaper = Utils.deepCopy(paper);
         assertTrue(copyOfPaper instanceof Map);
-        assertThat((Map)copyOfPaper).contains(MapEntry.entry("rock", "crushes")).isNotSameAs(paper);
-
+        assertThat((Map) copyOfPaper).contains(MapEntry.entry("rock", "crushes"))
+                .isNotSameAs(paper);
 
         Object copyOfRock = Utils.deepCopy(rock);
-
 
         Object copyOfScissors = Utils.deepCopy(scissors);
 

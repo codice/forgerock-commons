@@ -24,22 +24,6 @@
 
 package org.forgerock.script;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-
-import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.ServiceLoader;
-import java.util.UUID;
-
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.ApiInfoContext;
@@ -82,9 +66,24 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.ServiceLoader;
+import java.util.UUID;
+
+import static org.fest.assertions.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public abstract class ScriptTest {

@@ -24,14 +24,14 @@
 
 package org.forgerock.script.source;
 
-import java.net.URL;
-
 import org.forgerock.script.ScriptEntry;
 import org.forgerock.script.ScriptName;
 
+import java.net.URL;
+
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public interface SourceUnit {
@@ -51,7 +51,7 @@ public interface SourceUnit {
 
     /**
      * Get the parent container if there is one.
-     * 
+     *
      * @return the parent container where this instance belongs to, or
      *         <tt>null</tt> if there is no parent.
      */

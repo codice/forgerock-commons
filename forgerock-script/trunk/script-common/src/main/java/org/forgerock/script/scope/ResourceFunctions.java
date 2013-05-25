@@ -24,13 +24,6 @@
 
 package org.forgerock.script.scope;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.BadRequestException;
@@ -52,12 +45,22 @@ import org.forgerock.json.resource.ServerContext;
 import org.forgerock.json.resource.ServiceUnavailableException;
 import org.forgerock.json.resource.UpdateRequest;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 /**
  * Exposes a function that can be provided to a script to invoke.
- * 
+ *
  * @author Laszlo Hordos
  */
 public final class ResourceFunctions {
+
+    private ResourceFunctions() {
+    }
 
     public static final CreateFunction CREATE = new CreateFunction();
 
@@ -746,7 +749,7 @@ public final class ResourceFunctions {
                     .getContent();
         }
 
-        private final Resource delete(Parameter scope, String resourceName, String revision,
+        private Resource delete(Parameter scope, String resourceName, String revision,
                 List<Object> fieldFilter, JsonValue context, final Function<?> callback)
                 throws ResourceException {
 

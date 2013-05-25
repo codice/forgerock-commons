@@ -24,6 +24,9 @@
 
 package org.forgerock.script.source;
 
+import org.forgerock.script.ScriptEntry;
+import org.forgerock.script.ScriptName;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,12 +38,9 @@ import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 
-import org.forgerock.script.ScriptEntry;
-import org.forgerock.script.ScriptName;
-
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class URLScriptSource implements ScriptSource {
@@ -84,7 +84,8 @@ public class URLScriptSource implements ScriptSource {
                     // for number of files open at one time.
                     in = urlConnection.getInputStream();
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
+                /* ignore */
             } finally {
                 if (in != null) {
                     try {

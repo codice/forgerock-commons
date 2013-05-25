@@ -24,15 +24,15 @@
 
 package org.forgerock.script.source;
 
-import java.net.URL;
-
 import org.forgerock.script.ScriptEntry;
 import org.forgerock.script.ScriptName;
 import org.osgi.framework.Bundle;
 
+import java.net.URL;
+
 /**
  * A BundleContainer loads the scrips from an OSGi bundle.
- * 
+ *
  * @author Laszlo Hordos
  */
 public class BundleContainer implements SourceContainer {

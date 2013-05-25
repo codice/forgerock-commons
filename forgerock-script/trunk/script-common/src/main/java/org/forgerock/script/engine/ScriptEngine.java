@@ -24,13 +24,13 @@
 
 package org.forgerock.script.engine;
 
-import javax.script.Bindings;
-
 import org.forgerock.json.resource.Context;
+
+import javax.script.Bindings;
 
 /**
  * A ScriptEngine finds the applicable ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public interface ScriptEngine {
@@ -40,16 +40,18 @@ public interface ScriptEngine {
     /**
      * Returns a <code>ScriptEngineFactory</code> for the class to which this
      * <code>ScriptEngine</code> belongs.
-     * 
+     *
      * @return The <code>ScriptEngineFactory</code>
      */
     public ScriptEngineFactory getFactory();
 
     /**
      * Visits a function instance.
-     * 
-     * @param p
+     *
+     * @param context
      *            A visitor specified parameter.
+     * @param request
+     *            The binding of the request
      * @param value
      *            The Bindings instance.
      * @return Returns a visitor specified result.
@@ -58,7 +60,7 @@ public interface ScriptEngine {
 
     /**
      * Visits a function instance.
-     * 
+     *
      * @param context
      *            A visitor specified parameter.
      * @param value

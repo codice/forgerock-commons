@@ -24,11 +24,6 @@
 
 package org.forgerock.script.groovy.internal;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import org.forgerock.script.engine.ScriptEngineFactory;
 import org.forgerock.script.groovy.GroovyScriptEngineFactory;
 import org.osgi.framework.Bundle;
@@ -38,19 +33,24 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceRegistration;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class Activator implements BundleActivator, ServiceFactory<ScriptEngineFactory> {
 
     /**
-     * ScriptEngineFactory registration
+     * ScriptEngineFactory registration.
      */
     private ServiceRegistration<?> serviceRegistration = null;
 
-    private static final ConcurrentMap<Bundle, ScriptEngineFactory> registry =
+    private static final ConcurrentMap<Bundle, ScriptEngineFactory> REGISTRY =
             new ConcurrentHashMap<Bundle, ScriptEngineFactory>();
 
     public void start(BundleContext context) throws Exception {
@@ -75,7 +75,7 @@ public class Activator implements BundleActivator, ServiceFactory<ScriptEngineFa
     public ScriptEngineFactory getService(Bundle bundle,
             ServiceRegistration<ScriptEngineFactory> registration) {
         ScriptEngineFactory factory = new GroovyScriptEngineFactory();
-        ScriptEngineFactory result = registry.putIfAbsent(bundle, factory);
+        ScriptEngineFactory result = REGISTRY.putIfAbsent(bundle, factory);
         if (null == result) {
             result = factory;
         }
@@ -84,6 +84,6 @@ public class Activator implements BundleActivator, ServiceFactory<ScriptEngineFa
 
     public void ungetService(Bundle bundle, ServiceRegistration<ScriptEngineFactory> registration,
             ScriptEngineFactory service) {
-        registry.remove(bundle);
+        REGISTRY.remove(bundle);
     }
 }

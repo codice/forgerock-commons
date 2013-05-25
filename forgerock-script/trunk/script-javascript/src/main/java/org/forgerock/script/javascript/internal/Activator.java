@@ -16,7 +16,7 @@ import org.osgi.framework.ServiceRegistration;
 
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class Activator implements BundleActivator, ServiceFactory<ScriptEngineFactory> {
@@ -26,7 +26,7 @@ public class Activator implements BundleActivator, ServiceFactory<ScriptEngineFa
      */
     private ServiceRegistration<?> serviceRegistration = null;
 
-    private static final ConcurrentMap<Bundle, ScriptEngineFactory> registry =
+    private static final ConcurrentMap<Bundle, ScriptEngineFactory> REGISTRY =
             new ConcurrentHashMap<Bundle, ScriptEngineFactory>();
 
     public void start(BundleContext context) throws Exception {
@@ -51,7 +51,7 @@ public class Activator implements BundleActivator, ServiceFactory<ScriptEngineFa
     public ScriptEngineFactory getService(Bundle bundle,
             ServiceRegistration<ScriptEngineFactory> registration) {
         ScriptEngineFactory factory = new RhinoScriptEngineFactory();
-        ScriptEngineFactory result = registry.putIfAbsent(bundle, factory);
+        ScriptEngineFactory result = REGISTRY.putIfAbsent(bundle, factory);
         if (null == result) {
             result = factory;
         }
@@ -60,6 +60,6 @@ public class Activator implements BundleActivator, ServiceFactory<ScriptEngineFa
 
     public void ungetService(Bundle bundle, ServiceRegistration<ScriptEngineFactory> registration,
             ScriptEngineFactory service) {
-        registry.remove(bundle);
+        REGISTRY.remove(bundle);
     }
 }

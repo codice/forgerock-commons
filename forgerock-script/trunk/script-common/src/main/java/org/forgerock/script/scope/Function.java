@@ -24,26 +24,31 @@
 
 package org.forgerock.script.scope;
 
-import java.io.Serializable;
-
-import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ResourceException;
+
+import java.io.Serializable;
 
 /**
  * Exposes a function that can be provided to a script to invoke.
- * 
+ *
+ * @param <R>
+ *            Type of the return value of this function.
  * @author Laszlo Hordos
  */
 public interface Function<R> extends Serializable {
 
     /**
      * Computes a result, or throws an exception if unable to do so.
-     * 
+     *
+     * @param scope
+     * @param callback
      * @param arguments
      *            could be a single value or a List of values
      * @return computed result
      * @throws Exception
      *             if unable to compute a result
+     * @throws ResourceException
+     * @throws NoSuchMethodException
      */
     public R call(Parameter scope, Function<?> callback, Object... arguments)
             throws ResourceException, NoSuchMethodException;

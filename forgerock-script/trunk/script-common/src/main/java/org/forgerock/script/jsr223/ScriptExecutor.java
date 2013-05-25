@@ -24,9 +24,6 @@
 
 package org.forgerock.script.jsr223;
 
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
-
 import javax.script.Bindings;
 import javax.script.Compilable;
 import javax.script.CompiledScript;
@@ -36,10 +33,12 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 import javax.script.SimpleScriptContext;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * A ScriptExecutor is a placeholder for sample code. This file will be deleted!
- * 
+ *
  * @author Laszlo Hordos
  */
 @Deprecated
@@ -50,7 +49,7 @@ public abstract class ScriptExecutor {
     protected CompiledScript script = null;
     protected final Bindings globalScope = new SimpleBindings();
 
-    private final long refreshDelay = -1l;
+    private final long refreshDelay = -1L;
 
     private long lastModified = -1;
 
@@ -65,7 +64,7 @@ public abstract class ScriptExecutor {
      * System.setProperty("org.jruby.embed.localvariable.behavior",
      * "transient"); System.setProperty("org.jruby.embed.localcontext.scope",
      * "threadsafe"); } }
-     * 
+     *
      * ThreadSafeLocalContextProvider
      */
 
@@ -141,7 +140,7 @@ public abstract class ScriptExecutor {
 
     /**
      * Subclasses may implement this to provide any special handling required
-     * 
+     *
      * @return
      */
     protected abstract Object postProcess(Object result);

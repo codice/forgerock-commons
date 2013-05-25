@@ -24,6 +24,10 @@
 
 package org.forgerock.script.engine;
 
+import org.forgerock.json.resource.Context;
+import org.forgerock.json.resource.Requests;
+import org.forgerock.json.resource.Resources;
+
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
@@ -31,35 +35,31 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.forgerock.json.resource.Context;
-import org.forgerock.json.resource.Requests;
-import org.forgerock.json.resource.Resources;
-
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public abstract class AbstractScriptEngine implements ScriptEngine {
 
-    private static final List<String> imports = new ArrayList<String>();
+    private static final List<String> IMPORTS = new ArrayList<String>();
 
     static {
-        imports.add("org.forgerock.json.resource.*");
-        imports.add("org.forgerock.json.fluent.*");
-        imports.add("static " + Resources.class.getName() + ".*");
-        imports.add("static " + Requests.class.getName() + ".*");
+        IMPORTS.add("org.forgerock.json.resource.*");
+        IMPORTS.add("org.forgerock.json.fluent.*");
+        IMPORTS.add("static " + Resources.class.getName() + ".*");
+        IMPORTS.add("static " + Requests.class.getName() + ".*");
     }
 
     public static List<String> getImports() {
-        return imports;
+        return IMPORTS;
     }
 
     /**
      * This is the writer to be used to output from scripts. By default, a
      * <code>PrintWriter</code> based on <code>System.out</code> is used.
      * Accessor methods getWriter, setWriter are used to manage this field.
-     * 
+     *
      * @see java.lang.System#out
      * @see java.io.PrintWriter
      */
@@ -70,7 +70,7 @@ public abstract class AbstractScriptEngine implements ScriptEngine {
      * a <code>PrintWriter</code> based on <code>System.err</code> is used.
      * Accessor methods getErrorWriter, setErrorWriter are used to manage this
      * field.
-     * 
+     *
      * @see java.lang.System#err
      * @see java.io.PrintWriter
      */
@@ -81,7 +81,7 @@ public abstract class AbstractScriptEngine implements ScriptEngine {
      * <code>InputStreamReader</code> based on <code>System.in</code> is used
      * and default charset is used by this reader. Accessor methods getReader,
      * setReader are used to manage this field.
-     * 
+     *
      * @see java.lang.System#in
      * @see java.io.InputStreamReader
      */
@@ -175,7 +175,7 @@ public abstract class AbstractScriptEngine implements ScriptEngine {
      * <p/>
      * If the {@code null} object has special representation in the script scope
      * this method returns with that object.
-     * 
+     *
      * @return {@code null} or representation of {@code null} object.
      */
     protected Object getNull() {

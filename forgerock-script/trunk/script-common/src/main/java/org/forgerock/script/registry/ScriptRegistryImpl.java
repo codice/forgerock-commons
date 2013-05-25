@@ -24,25 +24,6 @@
 
 package org.forgerock.script.registry;
 
-import java.lang.ref.WeakReference;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
-
-import javax.script.Bindings;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.Context;
 import org.forgerock.json.resource.PersistenceConfig;
@@ -67,9 +48,27 @@ import org.forgerock.script.source.SourceUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.script.Bindings;
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
+import java.lang.ref.WeakReference;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * A ScriptRegistryImpl does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryObserver {
@@ -290,7 +289,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
 
     // private classes
 
-    private class LibraryRecord implements CompilationHandler, InvocationHandler {
+    private final class LibraryRecord implements CompilationHandler, InvocationHandler {
 
         private int status = CompilationHandler.INSTALLED;
 
@@ -369,12 +368,10 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
             if (null == source) {
                 source = findScriptSource(scriptName);
             }
-            if (null != source) {
-                if (engine == null) {
-                    engine = findScriptEngine(source.guessType());
-                    if (null != engine) {
-                        scriptEngine = new WeakReference<ScriptEngine>(engine);
-                    }
+            if ((null != source) && (engine == null)) {
+                engine = findScriptEngine(source.guessType());
+                if (null != engine) {
+                    scriptEngine = new WeakReference<ScriptEngine>(engine);
                 }
             }
             if (null == source || null == engine) {
@@ -400,13 +397,14 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
              */
             Object[] arrLocal = listeners.toArray();
 
-            for (int i = arrLocal.length - 1; i >= 0; i--)
+            for (int i = arrLocal.length - 1; i >= 0; i--) {
                 try {
                     ((ScriptListener) arrLocal[i]).scriptChanged(new ScriptEvent(type,
                             ScriptRegistryImpl.this, scriptName));
                 } catch (Throwable t) {
                     /* ignore */
                 }
+            }
         }
 
         // START CompilationHandler
@@ -446,8 +444,9 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
         // END CompilationHandler
 
         private synchronized void addScriptListener(ScriptListener o) {
-            if (o == null)
+            if (o == null) {
                 throw new NullPointerException();
+            }
             if (!listeners.contains(o)) {
                 listeners.addElement(o);
             }
@@ -496,7 +495,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
             }
         }
 
-        private class ServiceScript extends ScopeHolder implements ScriptEntry {
+        private final class ServiceScript extends ScopeHolder implements ScriptEntry {
 
             private final CompiledScript targetProxy;
 
@@ -520,8 +519,8 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
                 if (null == engine) {
                     throw new IllegalStateException("Engine is not available");
                 }
-                return target.prepareBindings(context, request, ServiceScript.this
-                        .getBindings(), ScriptRegistryImpl.this.globalScope.get());
+                return target.prepareBindings(context, request, ServiceScript.this.getBindings(),
+                        ScriptRegistryImpl.this.globalScope.get());
             }
 
             public Script getScript(final Context context) {
@@ -533,13 +532,15 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
                 // new instance for debug mode
                 return new ScriptImpl(context, targetProxy) {
 
-//                    protected ScriptEngine getScriptEngine() throws ScriptException {
-//                        ScriptEngine engine = LibraryRecord.this.scriptEngine.get();
-//                        if (null == engine) {
-//                            throw new ScriptException("Engine is not available");
-//                        }
-//                        return engine;
-//                    }
+                    // protected ScriptEngine getScriptEngine() throws
+                    // ScriptException {
+                    // ScriptEngine engine =
+                    // LibraryRecord.this.scriptEngine.get();
+                    // if (null == engine) {
+                    // throw new ScriptException("Engine is not available");
+                    // }
+                    // return engine;
+                    // }
 
                     protected Bindings getGlobalBindings() {
                         return ScriptRegistryImpl.this.globalScope.get();
@@ -713,9 +714,6 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
 
         protected abstract Bindings getServiceBindings();
 
-        public void flush() {
-            super.flush();
-        }
     }
 
     abstract static class ScopeHolder implements Scope {

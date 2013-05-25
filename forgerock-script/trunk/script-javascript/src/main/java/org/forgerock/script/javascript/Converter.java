@@ -24,7 +24,6 @@
 
 package org.forgerock.script.javascript;
 
-import java.lang.Object;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,12 +42,12 @@ import org.mozilla.javascript.Wrapper;
 
 /**
  * Converts scriptable types provided by Rhino into standard Java objects.
- * 
+ *
  * @author Paul C. Bryan
  */
 class Converter {
 
-    private final long LONG_HIGH_BITS = 0xFFFFFFFF80000000L;
+    private static final long LONG_HIGH_BITS = 0xFFFFFFFF80000000L;
 
     private int longToInteger(Long number, Integer defaultTo) {
         if ((number & LONG_HIGH_BITS) == 0 || (number & LONG_HIGH_BITS) == LONG_HIGH_BITS) {
@@ -61,7 +60,7 @@ class Converter {
     /**
      * Returns {@code true} if the specified number can be converted to an
      * integer without rounding.
-     * 
+     *
      * @param number
      *            the number to be tested.
      * @return {@code true} if the number is an integer value.
@@ -84,7 +83,7 @@ class Converter {
     /**
      * Returns {@code true} if the specified scriptable object is a JavaScript
      * array.
-     * 
+     *
      * @param scriptable
      *            the scriptable to be tested.
      * @return {@code true} if the scriptable is a JavaScript array.
@@ -139,7 +138,7 @@ class Converter {
      * such assignment, it is returned unmolested. If the value is not suitable,
      * {@code null} is returned. This method performs recursive conversion for
      * any converted array elements or object properties.
-     * 
+     *
      * @param value
      *            the value to be converted.
      * @return the value converted into standard Java object.
@@ -155,9 +154,9 @@ class Converter {
         } else if (value instanceof Scriptable) { // javascript array or object
             Scriptable scriptable = (Scriptable) value;
             if (value instanceof NativeJavaObject) {
-                return ((NativeJavaObject)value).unwrap();
+                return ((NativeJavaObject) value).unwrap();
             } else if (value instanceof Wrapper) {
-                //result = Context.jsToJava(value, Object.class);
+                // result = Context.jsToJava(value, Object.class);
                 result = convert(((Wrapper) value).unwrap()); // recursive
             } else if (isArray(scriptable)) {
                 Object o = scriptable.get("length", scriptable);

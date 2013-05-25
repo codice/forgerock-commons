@@ -28,7 +28,7 @@ import java.util.EventObject;
 
 /**
  * A ScriptEvent does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class ScriptEvent extends EventObject {
@@ -38,9 +38,9 @@ public class ScriptEvent extends EventObject {
     /**
      * Reference to the script that had a change occur in its lifecycle.
      */
-    private final ScriptRegistry reference;
+    private final transient ScriptRegistry reference;
 
-    private final ScriptName name;
+    private final transient ScriptName name;
 
     /**
      * Type of script lifecycle change.
@@ -52,7 +52,7 @@ public class ScriptEvent extends EventObject {
      * <p>
      * This event is synchronously delivered <strong>after</strong> the script
      * has been registered with the Library.
-     * 
+     *
      */
     public final static int REGISTERED = 0x00000001;
 
@@ -61,7 +61,7 @@ public class ScriptEvent extends EventObject {
      * <p>
      * This event is synchronously delivered <strong>after</strong> the script
      * properties have been modified.
-     * 
+     *
      */
     public final static int MODIFIED = 0x00000002;
 
@@ -70,25 +70,27 @@ public class ScriptEvent extends EventObject {
      * <p>
      * This event is synchronously delivered <strong>before</strong> the script
      * has completed unregistering.
-     * 
+     *
      * <p>
      * If a bundle is using a script that is <code>UNREGISTERING</code>, the
      * bundle should release its use of the script when it receives this event.
      * If the bundle does not release its use of the script when it receives
      * this event, the Library will automatically release the bundle's use of
      * the script while completing the script unregistration operation.
-     * 
+     *
      */
     public final static int UNREGISTERING = 0x00000004;
 
     /**
      * Creates a new script event object.
-     * 
+     *
      * @param type
      *            The event type.
      * @param reference
      *            A <code>ScriptLibraryEntry</code> object to the script that
      *            had a lifecycle change.
+     * @param name
+     *            The name of the script
      */
     public ScriptEvent(int type, ScriptRegistry reference, ScriptName name) {
         super(name);
@@ -102,7 +104,7 @@ public class ScriptEvent extends EventObject {
      * lifecycle.
      * <p>
      * This reference is the source of the event.
-     * 
+     *
      * @return Reference to the script that had a lifecycle change.
      */
     public ScriptEntry getScriptLibraryEntry() {
@@ -116,7 +118,7 @@ public class ScriptEvent extends EventObject {
      * <li>{@link #MODIFIED}</li>
      * <li>{@link #UNREGISTERING}</li>
      * </ul>
-     * 
+     *
      * @return Type of script lifecycle change.
      */
 

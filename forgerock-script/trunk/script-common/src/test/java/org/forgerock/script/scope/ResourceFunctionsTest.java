@@ -24,23 +24,12 @@
 
 package org.forgerock.script.scope;
 
-import static org.mockito.Mockito.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ServiceLoader;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.script.Bindings;
-import javax.script.ScriptEngineManager;
-import javax.script.SimpleBindings;
-
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.Connection;
 import org.forgerock.json.resource.ConnectionProvider;
-import org.forgerock.json.resource.MemoryBackend;
 import org.forgerock.json.resource.InternalServerErrorException;
+import org.forgerock.json.resource.MemoryBackend;
 import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.json.resource.RequestHandler;
 import org.forgerock.json.resource.ResourceException;
@@ -58,9 +47,21 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Test;
 
+import javax.script.Bindings;
+import javax.script.ScriptEngineManager;
+import javax.script.SimpleBindings;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.ServiceLoader;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class ResourceFunctionsTest {
@@ -118,6 +119,9 @@ public class ResourceFunctionsTest {
 
         // JSR 223 - 2
         Function custom = new Function<JsonValue>() {
+
+            private static final long serialVersionUID = 1L;
+
             @Override
             public JsonValue call(Parameter scope, Function<?> callback, Object... arguments)
                     throws ResourceException {
@@ -168,21 +172,22 @@ public class ResourceFunctionsTest {
                     }
                 }).build();
 
-        OperationParameter parameter = new OperationParameter(serverContext, "DEFAULT", persistenceConfig);
+        OperationParameter parameter =
+                new OperationParameter(serverContext, "DEFAULT", persistenceConfig);
         /*
          * new OperationParameter(serverContext) {
-         * 
+         *
          * @Override protected Object convertObject(Object source) { return
          * source; }
-         * 
+         *
          * @Override protected Object convertFunction(Function source) { return
          * source; }
-         * 
+         *
          * @Override protected Object convertLazyResource(LazyResource source) {
          * return source; }
-         * 
+         *
          * @Override protected String getConnectionId() { return "DEFAULT"; }
-         * 
+         *
          * @Override public PersistenceConfig getPersistenceConfig() { return
          * persistenceConfig; } };
          */

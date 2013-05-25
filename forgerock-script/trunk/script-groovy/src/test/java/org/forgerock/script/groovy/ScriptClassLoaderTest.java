@@ -27,19 +27,18 @@ package org.forgerock.script.groovy;
 import java.net.URL;
 
 import org.testng.Assert;
-import org.testng.annotations.Test;
 
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class ScriptClassLoaderTest {
 
-    //@Test
+    // @Test
     public void urlTest() throws Exception {
 
         URL[] roots = new URL[] { ScriptClassLoaderTest.class.getResource("/") };

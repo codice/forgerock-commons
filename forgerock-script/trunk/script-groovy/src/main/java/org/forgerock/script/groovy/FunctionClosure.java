@@ -24,18 +24,17 @@
 
 package org.forgerock.script.groovy;
 
-import java.util.Arrays;
-
+import groovy.lang.Closure;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.script.scope.Function;
 import org.forgerock.script.scope.Parameter;
 
-import groovy.lang.Closure;
+import java.util.Arrays;
 
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class FunctionClosure extends Closure<JsonValue> {
@@ -92,7 +91,7 @@ public class FunctionClosure extends Closure<JsonValue> {
             }
             Object result = function.call(parameter, callbackFunction, arguments);
             if (result instanceof JsonValue) {
-                return ((JsonValue)result).getObject();
+                return ((JsonValue) result).getObject();
             }
             return result;
         } catch (Throwable e) {

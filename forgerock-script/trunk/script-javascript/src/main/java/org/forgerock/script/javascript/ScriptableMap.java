@@ -24,8 +24,6 @@
 
 package org.forgerock.script.javascript;
 
-import java.util.Map;
-
 import org.forgerock.script.scope.AbstractFactory;
 import org.forgerock.script.scope.Parameter;
 import org.forgerock.util.LazyMap;
@@ -34,17 +32,21 @@ import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Wrapper;
 
+import java.util.Map;
+
 /**
  * Provides a {@code Scriptable} wrapper for a {@code Map} object.
- * 
+ *
  * Rhino 1.7R3 supports native Map
- * 
+ *
  * @author Paul C. Bryan
  */
 class ScriptableMap extends NativeObject implements Wrapper {
 
+    private static final long serialVersionUID = 1L;
+
     /** The request being wrapped. */
-    private final Parameter parameter;
+    private final transient Parameter parameter;
 
     /** The map being wrapped. */
     private final Map<String, Object> map;
@@ -59,7 +61,7 @@ class ScriptableMap extends NativeObject implements Wrapper {
 
     /**
      * Constructs a new scriptable wrapper around the specified list.
-     * 
+     *
      * @param map
      *            the map to be wrapped.
      * @throws NullPointerException

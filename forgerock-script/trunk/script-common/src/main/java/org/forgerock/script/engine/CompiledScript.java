@@ -24,14 +24,14 @@
 
 package org.forgerock.script.engine;
 
+import org.forgerock.json.resource.Context;
+
 import javax.script.Bindings;
 import javax.script.ScriptException;
 
-import org.forgerock.json.resource.Context;
-
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public interface CompiledScript {
@@ -39,11 +39,11 @@ public interface CompiledScript {
     /**
      * Evaluated the script stored in this {@code CompiledScript} object.
      * <p/>
-     * 
+     *
      * @param context
      *            A {@code context} associated with the
      *            {@link org.forgerock.json.resource.Request}.
-     * 
+     *
      * @param request
      *            A <code>ScriptContext</code> that is used in the same way as
      *            the <code>ScriptContext</code> passed to the <code>eval</code>
@@ -51,11 +51,11 @@ public interface CompiledScript {
      * @param scopes
      *            Additional {@code Bindings} extending the {@code request}
      *            with.
-     * 
+     *
      * @return The value returned by the script execution, if any. Should return
      *         <code>null</code> if no value is returned by the script
      *         execution.
-     * 
+     *
      * @throws javax.script.ScriptException
      *             if an error occurs.
      */

@@ -28,7 +28,7 @@ package org.forgerock.script;
  * A ScriptName identifies a {@code Script} object.
  * <p/>
  * Simple name can not identify a file in a Directory.
- * 
+ *
  * @author Laszlo Hordos
  */
 public final class ScriptName {
@@ -63,17 +63,21 @@ public final class ScriptName {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (!(o instanceof ScriptName))
+        }
+        if (!(o instanceof ScriptName)) {
             return false;
+        }
 
         ScriptName that = (ScriptName) o;
 
-        if (!name.equals(that.name))
+        if (!name.equals(that.name)) {
             return false;
-        if (!type.equals(that.type))
+        }
+        if (!type.equals(that.type)) {
             return false;
+        }
 
         return true;
     }

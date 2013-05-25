@@ -24,17 +24,17 @@
 
 package org.forgerock.script.source;
 
+import org.forgerock.script.ScriptEntry;
+import org.forgerock.script.ScriptName;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URL;
 
-import org.forgerock.script.ScriptEntry;
-import org.forgerock.script.ScriptName;
-
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class EmbeddedScriptSource implements ScriptSource {
@@ -45,14 +45,16 @@ public class EmbeddedScriptSource implements ScriptSource {
 
     public EmbeddedScriptSource(String source, ScriptName scriptName) {
         this.source = source;
-        this.scriptName = new ScriptName(scriptName.getName(), scriptName.getType(), scriptName.getRevision());
+        this.scriptName =
+                new ScriptName(scriptName.getName(), scriptName.getType(), scriptName.getRevision());
     }
 
     public EmbeddedScriptSource(ScriptEntry.Visibility visibility, String source,
             ScriptName scriptName) {
         this.visibility = visibility;
         this.source = source;
-        this.scriptName = new ScriptName(scriptName.getName(), scriptName.getType(), scriptName.getRevision());
+        this.scriptName =
+                new ScriptName(scriptName.getName(), scriptName.getType(), scriptName.getRevision());
     }
 
     public String guessType() {

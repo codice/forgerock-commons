@@ -24,11 +24,6 @@
 
 package org.forgerock.script.javascript;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.script.scope.Function;
@@ -41,13 +36,20 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.WrappedException;
 import org.mozilla.javascript.Wrapper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * Provides a Rhino {@code Function} wrapper for an OpenIDM {@code Function}
  * object.
- * 
+ *
  * @author Paul C. Bryan
  */
 class ScriptableFunction extends BaseFunction implements Wrapper {
+
+    private static final long serialVersionUID = 1L;
 
     /** The request being wrapped. */
     private final AtomicReference<Parameter> parameter;
@@ -69,7 +71,7 @@ class ScriptableFunction extends BaseFunction implements Wrapper {
 
     /**
      * TODO: Description.
-     * 
+     *
      * @param args
      *            TODO.
      * @return TODO.
@@ -99,7 +101,7 @@ class ScriptableFunction extends BaseFunction implements Wrapper {
                     callbackFunction = new Function<Void>() {
                         @Override
                         public Void call(final Parameter scope0, final Function<?> callback,
-                                         final Object... arguments) throws ResourceException,
+                                final Object... arguments) throws ResourceException,
                                 NoSuchMethodException {
 
                             try {
@@ -114,11 +116,13 @@ class ScriptableFunction extends BaseFunction implements Wrapper {
                 }
                 arguments = Arrays.copyOfRange(args, 0, args.length - 1);
             }
-            Object result = function.call(getParameter(), callbackFunction, convert(arguments).toArray());
+            Object result =
+                    function.call(getParameter(), callbackFunction, convert(arguments).toArray());
             if (null == result) {
                 return null;
             } else if (result instanceof JsonValue) {
-                return Converter.wrap(getParameter(), ((JsonValue) result).getObject(), scope, false);
+                return Converter.wrap(getParameter(), ((JsonValue) result).getObject(), scope,
+                        false);
             } else {
                 return Converter.wrap(getParameter(), result, scope, false);
             }
@@ -127,12 +131,12 @@ class ScriptableFunction extends BaseFunction implements Wrapper {
         }
     }
 
-    protected Parameter getParameter(){
+    protected Parameter getParameter() {
         Parameter p = parameter.get();
         if (null == p) {
             Object o = Context.getCurrentContext().getThreadLocal(Parameter.class.getName());
             if (o instanceof Parameter) {
-                parameter.lazySet((Parameter)p);
+                parameter.lazySet((Parameter) p);
                 return (Parameter) p;
             }
         } else {
@@ -148,7 +152,7 @@ class ScriptableFunction extends BaseFunction implements Wrapper {
 
     /**
      * Gets the value returned by calling the typeof operator on this object.
-     * 
+     *
      * @see org.mozilla.javascript.ScriptableObject#getTypeOf()
      * @return "function" or "undefined" if {@link #avoidObjectDetection()}
      *         returns <code>true</code>

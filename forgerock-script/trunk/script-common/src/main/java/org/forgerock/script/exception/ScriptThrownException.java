@@ -24,19 +24,21 @@
 
 package org.forgerock.script.exception;
 
-import static org.forgerock.json.resource.ResourceException.*;
-
-import java.util.Map;
-
-import javax.script.ScriptException;
-
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ResourceException;
+
+import javax.script.ScriptException;
+import java.util.Map;
+
+import static org.forgerock.json.resource.ResourceException.FIELD_CODE;
+import static org.forgerock.json.resource.ResourceException.FIELD_DETAIL;
+import static org.forgerock.json.resource.ResourceException.FIELD_MESSAGE;
+import static org.forgerock.json.resource.ResourceException.getException;
 
 /**
  * An exception that is thrown to indicate that an executed script encountered
  * an exception.
- * 
+ *
  * @author Paul C. Bryan
  */
 public class ScriptThrownException extends ScriptException {
@@ -83,11 +85,11 @@ public class ScriptThrownException extends ScriptException {
 
     /**
      * Converts the script exception to an appropriate json resource exception.
-     * 
+     *
      * The exception message is set to, in order of precedence 1. Specific
      * message set in the thrown script exception 2. Default exception supplied
      * to this method, or if null 3. value toString of this exception
-     * 
+     *
      * @param defaultMsg
      *            a default message to use if no explicit message is set, or
      *            null if value toString shoudl be used instead

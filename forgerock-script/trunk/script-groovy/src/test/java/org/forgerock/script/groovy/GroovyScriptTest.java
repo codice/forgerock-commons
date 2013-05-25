@@ -35,7 +35,7 @@ import org.testng.annotations.Test;
 
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 @Test
@@ -54,7 +54,8 @@ public class GroovyScriptTest extends ScriptTest {
     }
 
     protected EmbeddedScriptSource getScriptSourceWithException() {
-        ScriptName scriptName = new ScriptName("exception", GroovyScriptEngineFactory.LANGUAGE_NAME);
+        ScriptName scriptName =
+                new ScriptName("exception", GroovyScriptEngineFactory.LANGUAGE_NAME);
         return new EmbeddedScriptSource("throw new Exception(\"Access denied\");", scriptName);
     }
 

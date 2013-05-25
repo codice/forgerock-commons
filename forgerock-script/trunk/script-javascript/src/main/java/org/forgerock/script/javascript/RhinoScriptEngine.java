@@ -24,17 +24,6 @@
 
 package org.forgerock.script.javascript;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.net.URLDecoder;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicReference;
-
-import javax.script.Bindings;
-import javax.script.ScriptException;
-
 import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.script.engine.AbstractScriptEngine;
@@ -49,9 +38,19 @@ import org.mozilla.javascript.Script;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.script.Bindings;
+import javax.script.ScriptException;
+import java.io.IOException;
+import java.io.Reader;
+import java.net.URLDecoder;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class RhinoScriptEngine extends AbstractScriptEngine {
@@ -83,7 +82,7 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
         }
     }
 
-    private static class ScriptCacheEntry {
+    private static final class ScriptCacheEntry {
         private final Script compiledScript;
         private final URLScriptSource scriptSource;
         private final long lastModified;
@@ -100,8 +99,9 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
 
     protected ScriptCacheEntry isSourceNewer(final String name, final ScriptCacheEntry entry)
             throws ScriptException {
-        if (minimumRecompilationInterval < 0)
+        if (minimumRecompilationInterval < 0) {
             return entry;
+        }
         long nextSourceCheck = entry.lastCheck + minimumRecompilationInterval;
         long now = System.currentTimeMillis();
         if (nextSourceCheck < now) {
@@ -126,7 +126,7 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
 
     /**
      * Creates a Script with a given scriptName and binding.
-     * 
+     *
      * @param scriptName
      *            name of the script to run
      * @return the script object

@@ -24,10 +24,6 @@
 
 package org.forgerock.script.scope;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.util.Factory;
@@ -35,12 +31,19 @@ import org.forgerock.util.LazyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public class FunctionFactory {
+
+    private FunctionFactory() {
+    }
 
     public static String getNoSuchMethodMessage(String method, Object[] arguments) {
         StringBuilder sb = new StringBuilder("Method not found ").append(method).append('(');
@@ -72,6 +75,9 @@ public class FunctionFactory {
                 // Log a message at the error level according to the specified
                 // format and arguments.
                 loggerWrap.put("error", new Function<Void>() {
+
+                    private static final long serialVersionUID = 1L;
+
                     @Override
                     public Void call(Parameter scope, Function<?> callback, Object... arguments)
                             throws ResourceException, NoSuchMethodException {
@@ -90,6 +96,9 @@ public class FunctionFactory {
                 // Log a message at the warn level according to the specified
                 // format and arguments.
                 loggerWrap.put("warn", new Function<Void>() {
+
+                    private static final long serialVersionUID = 1L;
+
                     @Override
                     public Void call(Parameter scope, Function<?> callback, Object... arguments)
                             throws ResourceException, NoSuchMethodException {
@@ -108,6 +117,9 @@ public class FunctionFactory {
                 // Log a message at the info level according to the specified
                 // format and arguments.
                 loggerWrap.put("info", new Function<Void>() {
+
+                    private static final long serialVersionUID = 1L;
+
                     @Override
                     public Void call(Parameter scope, Function<?> callback, Object... arguments)
                             throws ResourceException, NoSuchMethodException {
@@ -126,6 +138,9 @@ public class FunctionFactory {
                 // Log a message at the debug level according to the specified
                 // format and arguments.
                 loggerWrap.put("debug", new Function<Void>() {
+
+                    private static final long serialVersionUID = 1L;
+
                     @Override
                     public Void call(Parameter scope, Function<?> callback, Object... arguments)
                             throws ResourceException, NoSuchMethodException {
@@ -163,46 +178,48 @@ public class FunctionFactory {
         });
     }
 
-    /**
-     * 
+    /*
+     *
      * action(String endPoint[, String id], String type, Map params, Map
      * content[, List fieldFilter][,Map context])
-     * 
+     *
      * create(String endPoint[, String id], Map content[, List fieldFilter][,Map
      * context])
-     * 
+     *
      * delete(String endPoint, String id[, String rev][, List fieldFilter][,Map
      * context])
-     * 
+     *
      * patch(String endPoint[, String id], Map content [, String rev][, List
      * fieldFilter][,Map context])
-     * 
+     *
      * query(String endPoint[, Map params][, String filter][, List
      * fieldFilter][,Map context])
-     * 
+     *
      * read(String endPoint[, String id][, List fieldFilter][,Map context])
-     * 
+     *
      * update(String endPoint[, String id], Map content [, String rev][, List
      * fieldFilter][,Map context])
-     * 
+     *
      * @return
      */
     public static Map<String, Function<JsonValue>> getResource() {
-        return new LazyMap<String, Function<JsonValue>>(new Factory<Map<String, Function<JsonValue>>>() {
-            @Override
-            public Map<String, Function<JsonValue>> newInstance() {
-                HashMap<String, Function<JsonValue>> functions = new HashMap<String, Function<JsonValue>>(7);
+        return new LazyMap<String, Function<JsonValue>>(
+                new Factory<Map<String, Function<JsonValue>>>() {
+                    @Override
+                    public Map<String, Function<JsonValue>> newInstance() {
+                        HashMap<String, Function<JsonValue>> functions =
+                                new HashMap<String, Function<JsonValue>>(7);
 
-                functions.put("create", ResourceFunctions.CREATE);
-                functions.put("read", ResourceFunctions.READ);
-                functions.put("update", ResourceFunctions.UPDATE);
-                functions.put("patch", ResourceFunctions.PATCH);
-                functions.put("query", ResourceFunctions.QUERY);
-                functions.put("delete", ResourceFunctions.DELETE);
-                functions.put("action", ResourceFunctions.ACTION);
+                        functions.put("create", ResourceFunctions.CREATE);
+                        functions.put("read", ResourceFunctions.READ);
+                        functions.put("update", ResourceFunctions.UPDATE);
+                        functions.put("patch", ResourceFunctions.PATCH);
+                        functions.put("query", ResourceFunctions.QUERY);
+                        functions.put("delete", ResourceFunctions.DELETE);
+                        functions.put("action", ResourceFunctions.ACTION);
 
-                return functions;
-            }
-        });
+                        return functions;
+                    }
+                });
     }
 }

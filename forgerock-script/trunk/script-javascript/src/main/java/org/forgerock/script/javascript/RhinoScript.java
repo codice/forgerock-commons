@@ -26,7 +26,6 @@ package org.forgerock.script.javascript;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.security.SecureClassLoader;
 import java.util.Collections;
 import java.util.HashMap;
@@ -64,7 +63,7 @@ import org.slf4j.LoggerFactory;
  * This implementation pre-compiles the provided script. Any syntax errors in
  * the source code will throw an exception during construction of the object.
  * <p>
- * 
+ *
  * @author Paul C. Bryan
  * @author aegloff
  */
@@ -79,7 +78,8 @@ public class RhinoScript implements CompiledScript {
      * A sealed shared scope to improve performance; avoids allocating standard
      * objects on every exec call.
      */
-    private /*static*/ ScriptableObject SHARED_SCOPE = null; // lazily initialized
+    private/* static */ScriptableObject topSharedScope = null; // lazily
+                                                               // initialized
 
     /** The script level scope to use */
     private Scriptable scriptScope = null;
@@ -93,10 +93,10 @@ public class RhinoScript implements CompiledScript {
     /** The parent ScriptEngin */
     private final RhinoScriptEngine engine;
 
-    public static Global global = new Global();
+    public static final Global GLOBAL = new Global();
 
     static {
-        global.initQuitAction(new IProxy());
+        GLOBAL.initQuitAction(new IProxy());
     }
 
     /**
@@ -117,7 +117,7 @@ public class RhinoScript implements CompiledScript {
      * containing standard JavaScript objects (Object, String, Number, Date,
      * etc.) will be used for script execution; otherwise a new unsealed scope
      * will be allocated for each execution.
-     * 
+     *
      * @param compiledScript
      *            the source code of the JavaScript script.
      * @param sharedScope
@@ -136,7 +136,7 @@ public class RhinoScript implements CompiledScript {
         try {
             scriptScope = getScriptScope(cx);
             script = compiledScript;
-            //script = cx.compileString(source, name, 1, null);
+            // script = cx.compileString(source, name, 1, null);
         } catch (RhinoException re) {
             throw new ScriptException(re.getMessage());
         } finally {
@@ -167,7 +167,7 @@ public class RhinoScript implements CompiledScript {
      * Gets the JavaScript standard objects, either as the shared sealed scope
      * or as a newly allocated set of standard objects, depending on the value
      * of {@code useSharedScope}.
-     * 
+     *
      * @param context
      *            The runtime context of the executing script.
      * @return the JavaScript standard objects.
@@ -180,7 +180,7 @@ public class RhinoScript implements CompiledScript {
             return scope;
         }
         // lazy initialization race condition is harmless
-        if (SHARED_SCOPE == null) {
+        if (topSharedScope == null) {
             Global scope = new Global(context);
             scope.initQuitAction(new IProxy());
             // ScriptableList.init(scope, false);
@@ -199,15 +199,15 @@ public class RhinoScript implements CompiledScript {
             addLoggerProperty(scope);
             // seal the whole scope (not just standard objects)
             scope.sealObject();
-            SHARED_SCOPE = scope;
+            topSharedScope = scope;
         }
-        return SHARED_SCOPE;
+        return topSharedScope;
     }
 
     /**
      * Get the scope scriptable re-used for this script Holds common
      * functionality such as the logger
-     * 
+     *
      * @param context
      *            The runtime context of the executing script.
      * @return the context scriptable for this script
@@ -224,7 +224,7 @@ public class RhinoScript implements CompiledScript {
 
     /**
      * Add the logger property to the JavaScript scope
-     * 
+     *
      * @param scope
      *            to add the property to
      */
@@ -234,8 +234,9 @@ public class RhinoScript implements CompiledScript {
                 scope, false));
     }
 
-    public Bindings prepareBindings(org.forgerock.json.resource.Context context, Bindings request, Bindings... scopes) {
-        //TODO Fix it later
+    public Bindings prepareBindings(org.forgerock.json.resource.Context context, Bindings request,
+            Bindings... scopes) {
+        // TODO Fix it later
         return new SimpleBindings();
     }
 
@@ -254,8 +255,9 @@ public class RhinoScript implements CompiledScript {
             Set<String> safeAttributes = null != request ? request.keySet() : Collections.EMPTY_SET;
             Map<String, Object> scope = new HashMap<String, Object>();
             for (Map<String, Object> next : scopes) {
-                if (null == next)
+                if (null == next) {
                     continue;
+                }
                 for (Map.Entry<String, Object> entry : next.entrySet()) {
                     if (scope.containsKey(entry.getKey())
                             || safeAttributes.contains(entry.getKey())) {
@@ -295,11 +297,11 @@ public class RhinoScript implements CompiledScript {
             inner.setPrototype(outer);
             inner.setParentScope(null);
 
-            final Script _script = null != script ? script : engine.createScript(scriptName);
-            Object result = Converter.convert(_script.exec(context, inner));
-            return result; //Context.jsToJava(result, Object.class);
+            final Script scriptInstance = null != script ? script : engine.createScript(scriptName);
+            Object result = Converter.convert(scriptInstance.exec(context, inner));
+            return result; // Context.jsToJava(result, Object.class);
         } catch (ScriptException e) {
-          throw e;
+            throw e;
         } catch (WrappedException e) {
             // TODO Implement properly
             if (e.getWrappedException() instanceof NoSuchMethodException) {
@@ -310,17 +312,16 @@ public class RhinoScript implements CompiledScript {
                 throw new ScriptThrownException(e.getMessage(), e.getWrappedException());
             }
         } catch (JavaScriptException e) {
-            logger.error("Failed to evaluate {} script." , scriptName, e);
+            logger.error("Failed to evaluate {} script.", scriptName, e);
             throw new ScriptThrownException(e, Converter.convert(e.getValue()));
-        }
-        catch (RhinoException e) {
-            logger.error("Failed to evaluate {} script." , scriptName, e);
+        } catch (RhinoException e) {
+            logger.error("Failed to evaluate {} script.", scriptName, e);
             // some other runtime exception encountered
-            final ScriptException _e = new ScriptException(e.getMessage());
-            _e.initCause(e);
-            throw _e;
+            final ScriptException exception = new ScriptException(e.getMessage());
+            exception.initCause(e);
+            throw exception;
         } catch (Exception e) {
-            logger.error("Failed to evaluate {} script." , scriptName, e);
+            logger.error("Failed to evaluate {} script.", scriptName, e);
             throw new ScriptException(e);
         } finally {
             Context.getCurrentContext().removeThreadLocal(Parameter.class.getName());

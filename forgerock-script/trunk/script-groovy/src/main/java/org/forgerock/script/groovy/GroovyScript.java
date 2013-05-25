@@ -24,19 +24,14 @@
 
 package org.forgerock.script.groovy;
 
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.script.Bindings;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-
+import groovy.lang.Binding;
+import groovy.lang.Closure;
+import groovy.lang.DelegatingMetaClass;
+import groovy.lang.MetaClass;
+import groovy.lang.MissingMethodException;
+import groovy.lang.Script;
+import groovy.lang.Tuple;
+import groovy.util.ResourceException;
 import org.codehaus.groovy.runtime.MetaClassHelper;
 import org.codehaus.groovy.runtime.MethodClosure;
 import org.forgerock.json.resource.Context;
@@ -49,14 +44,17 @@ import org.forgerock.script.scope.Parameter;
 import org.forgerock.util.Factory;
 import org.forgerock.util.LazyMap;
 
-import groovy.lang.Binding;
-import groovy.lang.Closure;
-import groovy.lang.DelegatingMetaClass;
-import groovy.lang.MetaClass;
-import groovy.lang.MissingMethodException;
-import groovy.lang.Script;
-import groovy.lang.Tuple;
-import groovy.util.ResourceException;
+import javax.script.Bindings;
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A JavaScript script.
@@ -64,7 +62,7 @@ import groovy.util.ResourceException;
  * This implementation pre-compiles the provided script. Any syntax errors in
  * the source code will throw an exception during construction of the object.
  * <p>
- * 
+ *
  * @author Paul C. Bryan
  * @author aegloff
  */
@@ -88,7 +86,7 @@ public class GroovyScript implements CompiledScript {
         return b instanceof Bindings ? (Bindings) b : new SimpleBindings(b);
     }
 
-    public Object eval(final Context context, final Bindings request,final Bindings... scopes)
+    public Object eval(final Context context, final Bindings request, final Bindings... scopes)
             throws ScriptException {
 
         final Map<String, Object> bindings = mergeBindings(context, request, scopes);
@@ -231,12 +229,13 @@ public class GroovyScript implements CompiledScript {
     }
 
     private Map<String, Object> mergeBindings(final Context context, final Bindings request,
-                                              final Bindings... scopes) {
+            final Bindings... scopes) {
         Set<String> safeAttributes = null != request ? request.keySet() : Collections.EMPTY_SET;
         Map<String, Object> scope = new HashMap<String, Object>();
         for (Map<String, Object> next : scopes) {
-            if (null == next)
+            if (null == next) {
                 continue;
+            }
             for (Map.Entry<String, Object> entry : next.entrySet()) {
                 if (scope.containsKey(entry.getKey()) || safeAttributes.contains(entry.getKey())) {
                     continue;
@@ -244,7 +243,7 @@ public class GroovyScript implements CompiledScript {
                 scope.put(entry.getKey(), entry.getValue());
             }
         }
-        // Make lazy deep copy        
+        // Make lazy deep copy
         if (!scope.isEmpty()) {
             scope =
                     new LazyMap<String, Object>(new InnerMapFactory(scope, new OperationParameter(

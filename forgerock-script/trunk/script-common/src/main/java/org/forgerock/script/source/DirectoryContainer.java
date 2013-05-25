@@ -24,6 +24,10 @@
 
 package org.forgerock.script.source;
 
+import org.forgerock.script.ScriptEntry;
+import org.forgerock.script.ScriptName;
+import org.forgerock.script.engine.ScriptEngineFactory;
+
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -33,13 +37,9 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.List;
 
-import org.forgerock.script.ScriptEntry;
-import org.forgerock.script.ScriptName;
-import org.forgerock.script.engine.ScriptEngineFactory;
-
 /**
  * A DirectoryContainer loads the scrips from a directory.
- * 
+ *
  * @author Laszlo Hordos
  */
 public class DirectoryContainer implements SourceContainer, ScriptEngineFactoryAware {
@@ -95,8 +95,9 @@ public class DirectoryContainer implements SourceContainer, ScriptEngineFactoryA
                             extension == null ? name : name.replace('.', File.separatorChar) + "."
                                     + extension;
                     URL ret = getResource(filename);
-                    if (isFile(ret) && getFileForUrl(ret, filename) != null)
+                    if (isFile(ret) && getFileForUrl(ret, filename) != null) {
                         return ret;
+                    }
                 } catch (Throwable t) {
                     /* ignore */
                 }
@@ -148,8 +149,9 @@ public class DirectoryContainer implements SourceContainer, ScriptEngineFactoryA
                 // case sensitive match for the filename
                 File parent = file.getParentFile();
                 for (String child : parent.list()) {
-                    if (child.equals(fileWithoutPackage))
+                    if (child.equals(fileWithoutPackage)) {
                         return file;
+                    }
                 }
             }
         }
@@ -178,8 +180,9 @@ public class DirectoryContainer implements SourceContainer, ScriptEngineFactoryA
     }
 
     private static URL[] createRoots(String[] urls) throws MalformedURLException {
-        if (urls == null)
+        if (urls == null) {
             return null;
+        }
         URL[] roots = new URL[urls.length];
         for (int i = 0; i < roots.length; i++) {
             if (urls[i].indexOf("://") != -1) {

@@ -24,11 +24,11 @@
 
 package org.forgerock.script.engine;
 
+import org.forgerock.json.resource.PersistenceConfig;
+
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
-
-import org.forgerock.json.resource.PersistenceConfig;
 
 /**
  * {@code ScriptEngineFactory} is used to describe and instantiate
@@ -40,21 +40,21 @@ import org.forgerock.json.resource.PersistenceConfig;
  * The {@code ScriptEngineManager} uses the service provider mechanism described
  * in the <i>Jar File Specification</i> to obtain instances of all
  * {@code ScriptEngineFactories} available in the current ClassLoader.
- * 
+ *
  */
 public interface ScriptEngineFactory {
     /**
      * Returns the full name of the {@code ScriptEngine}. For instance an
      * implementation based on the Mozilla Rhino Javascript engine might return
      * <i>Rhino Mozilla Javascript Engine</i>.
-     * 
+     *
      * @return The name of the engine implementation.
      */
     public String getEngineName();
 
     /**
      * Returns the version of the {@code ScriptEngine}.
-     * 
+     *
      * @return The {@code ScriptEngine} implementation version.
      */
     public String getEngineVersion();
@@ -65,7 +65,7 @@ public interface ScriptEngineFactory {
      * {@code ScriptEngine}. The array is used by the
      * {@code ScriptEngineManager} to implement its {@code getEngineByExtension}
      * method.
-     * 
+     *
      * @return The list of extensions.
      */
     public List<String> getExtensions();
@@ -75,7 +75,7 @@ public interface ScriptEngineFactory {
      * be executed by the engine. The list is used by the
      * {@code ScriptEngineManager} class to implement its
      * {@code getEngineByMimetype} method.
-     * 
+     *
      * @return The list of mime types.
      */
     public List<String> getMimeTypes();
@@ -92,7 +92,7 @@ public interface ScriptEngineFactory {
     /**
      * Returns the name of the scripting langauge supported by this
      * {@code ScriptEngine}.
-     * 
+     *
      * @return The name of the supported language.
      */
     public String getLanguageName();
@@ -100,7 +100,7 @@ public interface ScriptEngineFactory {
     /**
      * Returns the version of the scripting language supported by this
      * {@code ScriptEngine}.
-     * 
+     *
      * @return The version of the supported language.
      */
     public String getLanguageVersion();
@@ -109,7 +109,7 @@ public interface ScriptEngineFactory {
      * Returns an instance of the {@code ScriptEngine} associated with this
      * {@code ScriptEngineFactory}. A new ScriptEngine is generally returned,
      * but implementations may pool, share or reuse engines.
-     * 
+     *
      * @return A new {@code ScriptEngine} instance.
      */
     public ScriptEngine getScriptEngine(AtomicReference<PersistenceConfig> connectionFactory,

@@ -24,17 +24,16 @@
 
 package org.forgerock.script;
 
-import java.util.Set;
-
-import javax.script.ScriptException;
-
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.script.engine.ScriptEngine;
 import org.forgerock.script.source.SourceUnitObserver;
 
+import javax.script.ScriptException;
+import java.util.Set;
+
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public interface ScriptRegistry extends SourceUnitObserver {
@@ -50,7 +49,7 @@ public interface ScriptRegistry extends SourceUnitObserver {
      * one with the specified name. If a <code>ScriptEngineFactory</code> is
      * found by either method, it is used to create instance of
      * <code>ScriptEngine</code>.
-     * 
+     *
      * @param shortName
      *            The short name of the <code>ScriptEngine</code>
      *            implementation. returned by the <code>getNames</code> method
@@ -68,14 +67,14 @@ public interface ScriptRegistry extends SourceUnitObserver {
 
     /**
      * Lists all {@code ScriptName}s available in the registry.
-     * 
-     * @return
+     *
+     * @return the list of registered
      */
     public Set<ScriptName> listScripts();
 
     /**
      * Takes a {@code ScriptEntry} from this {@code ScriptRegistry}.
-     * 
+     *
      * @param script
      *            The identifier of the {@code ScriptEntry}.
      * @return <tt>null</tt> if the registry does not have the script, else the
@@ -84,12 +83,13 @@ public interface ScriptRegistry extends SourceUnitObserver {
      *             if script is null.
      * @throws org.forgerock.json.fluent.JsonValueException
      * @throws IllegalArgumentException
+     * @throws ScriptException
      */
     public ScriptEntry takeScript(JsonValue script) throws ScriptException;
 
     /**
      * Takes a {@code ScriptEntry} from this {@code ScriptRegistry}.
-     * 
+     *
      * @param name
      *            The identifier of the {@code ScriptEntry}.
      * @return <tt>null</tt> if the registry does not have the script, else the

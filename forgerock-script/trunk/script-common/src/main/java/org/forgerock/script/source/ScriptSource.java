@@ -24,14 +24,14 @@
 
 package org.forgerock.script.source;
 
+import org.forgerock.script.ScriptName;
+
 import java.io.IOException;
 import java.io.Reader;
 
-import org.forgerock.script.ScriptName;
-
 /**
  * A NAME does ...
- * 
+ *
  * @author Laszlo Hordos
  */
 public interface ScriptSource extends SourceUnit {
@@ -41,7 +41,7 @@ public interface ScriptSource extends SourceUnit {
     /**
      * Returns a new Reader on the underlying source object. Returns null if the
      * source can't be reopened.
-     * 
+     *
      * @throws java.io.IOException
      *             if there was an error opening for stream
      * @return the reader to the resource
@@ -49,7 +49,7 @@ public interface ScriptSource extends SourceUnit {
     Reader getReader() throws IOException;
 
     /**
-     * 
+     *
      * @return
      */
     ScriptName[] getDependencies();
