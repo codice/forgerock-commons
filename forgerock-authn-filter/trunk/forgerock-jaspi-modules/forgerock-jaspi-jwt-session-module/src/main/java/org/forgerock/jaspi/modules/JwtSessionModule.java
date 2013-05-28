@@ -16,11 +16,7 @@
 
 package org.forgerock.jaspi.modules;
 
-import org.forgerock.json.fluent.JsonValue;
-import org.forgerock.json.jwt.Jwt;
 import org.forgerock.json.jwt.JwtBuilder;
-import org.forgerock.json.jwt.PlaintextJwt;
-import org.forgerock.json.jwt.SignedJwt;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -31,6 +27,7 @@ import javax.security.auth.message.MessagePolicy;
 import javax.security.auth.message.module.ServerAuthModule;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.Map;
 
 public class JwtSessionModule implements ServerAuthModule {
@@ -40,7 +37,7 @@ public class JwtSessionModule implements ServerAuthModule {
 
     @Override
     public void initialize(MessagePolicy requestPolicy, MessagePolicy responsePolicy, CallbackHandler handler,
-            Map options) throws AuthException {
+                           Map options) throws AuthException {
         this.handler = handler;
         this.options = options;
     }
@@ -55,9 +52,8 @@ public class JwtSessionModule implements ServerAuthModule {
             throws AuthException {
 
         HttpServletRequest request = (HttpServletRequest)messageInfo.getRequestMessage();
-        HttpServletResponse response = (HttpServletResponse)messageInfo.getResponseMessage();
 
-        String sessionJwt = (String) request.getSession().getAttribute("session-jwt");
+        String sessionJwt = request.getHeader("session-jwt");
 
         if (sessionJwt != null && !"".equals(sessionJwt)) {
 
@@ -76,7 +72,10 @@ public class JwtSessionModule implements ServerAuthModule {
     @Override
     public AuthStatus secureResponse(MessageInfo messageInfo, Subject serviceSubject) throws AuthException {
 
-        //TODO need some way of knowing when to set the session jwt....
+        for (Principal principal : serviceSubject.getPrincipals()) {
+//            principal.
+        }
+
 
         String sessionJwt = new JwtBuilder().jwt()
                 .header("HEADER1", "H1")
