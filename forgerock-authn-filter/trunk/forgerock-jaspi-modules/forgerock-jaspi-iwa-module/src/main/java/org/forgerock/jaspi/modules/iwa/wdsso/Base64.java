@@ -30,7 +30,7 @@
 /**
  * Portions Copyrighted 2011 ForgeRock AS
  */
-package org.forgerock.jaspi.modules.wdsso;
+package org.forgerock.jaspi.modules.iwa.wdsso;
 
 import java.util.Arrays;
 

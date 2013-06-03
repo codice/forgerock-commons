@@ -1,6 +1,6 @@
-package org.forgerock.jaspi.modules;
+package org.forgerock.jaspi.modules.iwa;
 
-import org.forgerock.jaspi.modules.wdsso.WDSSO;
+import org.forgerock.jaspi.modules.iwa.wdsso.WDSSO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

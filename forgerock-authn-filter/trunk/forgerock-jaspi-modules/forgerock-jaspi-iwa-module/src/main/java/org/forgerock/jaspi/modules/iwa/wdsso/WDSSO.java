@@ -30,7 +30,7 @@
  * Portions Copyrighted 2011-2013 ForgeRock, Inc
  */
 
-package org.forgerock.jaspi.modules.wdsso;
+package org.forgerock.jaspi.modules.iwa.wdsso;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -38,14 +38,12 @@ import java.security.PrivilegedExceptionAction;
 import java.security.PrivilegedActionException;
 import java.security.Principal;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 import javax.security.auth.Subject;
 import javax.security.auth.login.Configuration;
 import javax.security.auth.login.LoginContext;
-import javax.security.auth.message.AuthStatus;
 import javax.servlet.http.HttpServletRequest;
 import org.ietf.jgss.GSSContext;
 import org.ietf.jgss.GSSCredential;

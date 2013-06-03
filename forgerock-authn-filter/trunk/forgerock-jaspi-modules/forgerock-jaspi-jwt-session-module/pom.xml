@@ -26,13 +26,6 @@
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <extensions>true</extensions>
-                <!--<configuration>-->
-                    <!--<instructions>-->
-                        <!--<Export-Package>-->
-                            <!--org.forgerock.jaspi.modulesjwtjwt;version="${project.version}"-->
-                        <!--</Export-Package>-->
-                    <!--</instructions>-->
-                <!--</configuration>-->
             </plugin>
         </plugins>
     </build>
@@ -50,6 +43,10 @@
         <dependency>
             <groupId>org.forgerock.commons</groupId>
             <artifactId>json-web-token</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
         </dependency>
     </dependencies>
 </project>

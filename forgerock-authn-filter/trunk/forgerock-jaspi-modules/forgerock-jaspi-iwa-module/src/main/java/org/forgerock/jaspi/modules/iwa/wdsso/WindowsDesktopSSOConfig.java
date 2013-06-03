@@ -27,7 +27,7 @@
  */
 
 
-package org.forgerock.jaspi.modules.wdsso;
+package org.forgerock.jaspi.modules.iwa.wdsso;
 
 import javax.security.auth.login.AppConfigurationEntry;
 import javax.security.auth.login.Configuration;
