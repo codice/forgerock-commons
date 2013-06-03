@@ -1,0 +1,195 @@
+version 1.0 (2012-03-01)
+	* First version based on the OpenInfoCard JWT, JWS and JWE code base.
+
+version 1.1 (2012-03-06)
+	* Introduces type-safe enumeration of the JSON Web Algorithms (JWA).
+	* Refactors the JWT class.
+
+version 1.2 (2012-03-08)
+	* Moves JWS and JWE code into separate classes.
+
+version 1.3 (2012-03-09)
+	* Switches to Apache Commons Codec for Base64URL encoding and decoding
+	* Consolidates the crypto utilities within the package.
+	* Introduces a JWT content serialiser class.
+
+version 1.4 (2012-03-09)
+	* Refactoring of JWT class and JUnit tests.
+
+version 1.5 (2012-03-18)
+	* Switches to JSON Smart for JSON serialisation and parsing.
+	* Introduces claims set class with JSON objects, string, Base64URL and
+	  byte array views.
+
+version 1.6 (2012-03-20)
+	* Creates class for representing, serialising and parsing JSON Web Keys
+	  (JWK).
+	* Introduces separate class for representing JWT headers.
+
+version 1.7 (2012-04-01)
+	* Introduces separate classes for plain, JWS and JWE headers.
+	* Introduces separate classes for plain, signed and encrypted JWTs.
+	* Removes the JWTContent class.
+	* Removes password-based (PE820) encryption support.
+
+version 1.8 (2012-04-03)
+	* Adds support for the ZIP JWE header parameter.
+	* Removes unsupported algorithms from the JWA enumeration.
+
+version 1.9 (2012-04-03)
+	* Renames JWEHeader.{get|set}EncryptionAlgorithm() to
+	  JWEHeader.{get|set}EncryptionMethod().
+
+version 1.9.1 (2012-04-03)
+	* Upgrades JSON Smart JAR to 1.1.1.
+
+version 1.10 (2012-04-14)
+	* Introduces serialize() method to base abstract JWT class.
+
+version 1.11 (2012-05-13)
+	* JWT.serialize() throws checked JWTException instead of
+	  IllegalStateException.
+
+version 1.12 (2012-05-21)
+	* Updates the alternative JWT header type ("typ") parameter value to
+	  "urn:ietf:params:oauth:token-type:jwt" (to reflect changes in
+	  draft-jones-json-web-token-10).
+	* Renames the JWS and JWE header parameter "jpk" to "jwk" (to reflect
+	  changes in draft-ietf-jose-json-web-signature-02 and
+	  draft-ietf-jose-json-web-encryption-02).
+	* Changes the JWE compression algorithm to DEFLATE (to reflect changes
+	  in draft-ietf-jose-json-web-encryption-02).
+	* Renames JWK class to JWKSet and JWKKeyObject class to JWK (to reflect 
+	  changes in draft-ietf-jose-json-web-key-02).
+	* Adds toJSONObject() method to the ReadOnlyHeader interface.
+	* Updates JavaDocs.
+
+version 2.0 (2012-09-29)
+	* Full rewrite of 1.* code to decouple plain/JWS/JWE/JWT object 
+	  representation from JWA implementations.
+	* JWS code updated to draft-ietf-jose-json-web-signature-05.
+	* JWE code updated to draft-ietf-jose-json-web-encryption-05.
+	* JWK code updated to draft-ietf-jose-json-web-key-05.
+	* JWA code updated to draft-ietf-jose-json-web-algorithms-05.
+	* JWT code updated to draft-ietf-oauth-json-web-token-03.
+	* Removes existing JWE algorithm implementations since no longer
+	  compatible with newer -05 specs (to be reimplemented).
+
+version 2.0.1 (2012-09-29)
+	* Adds JWS object use example.
+
+version 2.1 (2012-10-07)
+	* Changes naming from "verifier" to "validator" to conform with JWS
+	  terminology.
+	* Refactors library to enforce header parameter checking of signed JWS 
+	  and encrypted JWE objects.
+	* Simplifies package tree.
+
+version 2.1.1 (2012-10-09)
+	* Upgrades BouncyCastle.org JAR to 1.47.
+	* Removes stale RSASSAVerifier.
+
+version 2.2 (2012-10-16)
+	* Updates the library to the latest JWA/JWS/JWE/JWK/JWT -06 draft suite.
+
+version 2.3 (2012-10-23)
+	* Naming changes (validation, verification) according to RFC 4949.
+	* Makes PlainObject, JWSObject and JWEObject thread-safe.
+	* Adds @Immutable and @ThreadSafe annotations (JCIP Annotations JAR).
+	* Adds JOSEObject.getParsedParts() and getParsedString() methods to
+	  get the original parsed Base64URL parts / string representation.
+
+version 2.4 (2012-11-26)
+	* Adds Maven POM support.
+
+version 2.5 (2012-11-26)
+	* Updates the library to the latest JWA/JWS/JWE/JWK -07 draft suite.
+
+version 2.6 (2012-11-19)
+	* Adds support for additional custom JSON Web Key (JWK) set members.
+
+version 2.7 (2012-12-09)
+	* Adds toBaseURL() method to ReadOnlyHeader interface.
+	* Fixes assignment bug in JWEObject Base64URL parts constructor.
+
+version 2.8 (2012-12-17)
+	* Adds getParsedParts() and getParsedString() methods to JWT interface.
+
+version 2.9 (2013-01-08)
+	* Updates the library to the latest JWA/JWS/JWE/JWK -08 draft suite.
+	* Updates the library to the latest JWT -06 draft.
+	* Minor code refactoring and clean up.
+	
+version 2.10 (2013-01-15)
+	* Fixes incorrect null argument treatment in overridden Object.equals() 
+	  methods.
+	* Renames ReadOnlyClaimsSet to ReadOnlyJWTClaimsSet and ClaimsSet to
+	  JWTClaimsSet.
+
+version 2.10.1 (2013-01-16)
+	* Adds Maven support.
+	* Fixes bug in build.xml script.
+
+version 2.11.0 (2013-02-22)
+	* Adds RSA1_5 / RSA OAEP with AES-GCM encryption and decryption.
+	* Refactors JWTClaimsSet.
+	
+version 2.12.0 (2013-03-21)
+	* Adds JSON Private and Symmetric Key (JPSK) support.
+	* Extends HeaderFilter to allow setting of accepted header parameters.
+	* Fixes ECDSA signature R + S part processing for ES384 and ES512.
+	* Removes Ant build script.
+
+version 2.13.0 (2013-03-28)
+	* Adds support for A128CBC+HS256 and A256CBC+HS512 encryption methods.
+	* Implements ECKey export and import.
+	* Adds JWE DEFLATE support.
+	* Implements basic MMA attack protection for RSA1_5 JWE algorithm.
+	* Refactors JOSE header filters.
+	* Refactors crypto package.
+	* Adds support to translate JWKs to and from native Java key objects.
+
+version 2.13.1 (2013-04-15)
+	* Fixes incorrect time unit representation of "iat", "exp" and "nbf" JWT
+	  claims.
+	* If the JOSE header was parsed Header.toBase64URL() returns the 
+	  original Base64URL.
+
+version 2.14 (2013-04-16)
+	* Adds support for direct JWE encryption and decryption.
+	* Adds JWKSet method to lookup a key by its key ID (kid).
+	* Fixes DEFLATE compression by adding nowrap flag to omit headers and
+	  CRC fields.
+
+version 2.15 (2013-05-07)
+	* Adds support for "crit" header parameter introduced in draft 09.
+	* Deprecates JWSObject.getSignableContent() in favour of
+	  JWSObject.getSigningInput() to reflect change in JWS terminology in
+	  draft 09.
+	* Deprecates JWEObject.getIntegrityValue() in favour of
+	  JWEObject.getAuthenticationTag() to reflect change in JWE terminology
+	  in draft 09.
+	* Updates authenticated AES/CBC encryption to new AES_CBC_HMAC_SHA2
+	  method (draft-mcgrew-aead-aes-cbc-hmac-sha2-01).
+	* Updates AES/GCM encryption by removing IV from additional 
+	  authenticated data (AAD) computation.
+	* Adds MIME type constants for the plain, JWS and JWE objects.
+	* Refactors crypto package classes.
+
+version 2.15.1 (2013-05-16)
+	* Makes SecureRandom a static member of RSAEncrypter and DirectEncrypter
+	  to speed up object instantiation (PRNG initialisation may take up to
+	  a second or more).
+	* Adds support for UTF-8 string based shared secrets in MACSigner and
+	  MACVerifier.
+	* Lets Base64URL extend Base64 class.
+
+version 2.15.2 (2013-05-20)
+	* Fixes bug in additional authentication data (AAD) composition for
+	  direct JWE encryption and decryption.
+
+version 2.16 (2013-05-30)
+	* Updates the library to match the latest JOSE -11 and JWT -08 draft 
+	  suite.
+	* Adds builders for constructing RSA, EC and octet sequence JWKs (using
+	  the builder pattern).
