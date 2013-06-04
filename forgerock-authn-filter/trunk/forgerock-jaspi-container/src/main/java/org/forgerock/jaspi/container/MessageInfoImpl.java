@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class MessageInfoImpl implements MessageInfo {
 
-    private Map<String, String> map;
+    private Map<String, Object> map;
     private HttpServletRequestWrapper requestWrapper;
     private HttpServletResponseWrapper responseWrapper;
 
@@ -45,7 +45,7 @@ public class MessageInfoImpl implements MessageInfo {
      *
      * @param map A map of key pairs.
      */
-    public MessageInfoImpl(Map<String, String> map) {
+    public MessageInfoImpl(Map<String, Object> map) {
         this.map = map;
     }
 
@@ -95,9 +95,9 @@ public class MessageInfoImpl implements MessageInfo {
      * @return The Map object of this MessageInfo. This method never returns null. If a Map has not been associated
      * with the MessageInfo, this method instantiates a Map, associates it with this MessageInfo, and then returns it.
      */
-    public Map<String, String> getMap() {
+    public Map<String, Object> getMap() {
         if (map == null) {
-            map = new HashMap<String, String>();
+            map = new HashMap<String, Object>();
         }
         return map;
     }

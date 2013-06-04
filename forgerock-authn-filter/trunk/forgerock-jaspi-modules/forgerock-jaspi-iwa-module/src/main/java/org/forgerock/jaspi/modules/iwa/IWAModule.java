@@ -57,8 +57,6 @@ public class IWAModule implements ServerAuthModule {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 try {
                     response.getWriter().write("{\"failure\":true,\"reason\":\"" + IWA_FAILED + "\"}");
-                    response.getWriter().flush();
-                    response.getWriter().close();
                 } catch (IOException e) {
                     LOGGER.debug("IWAModule: Error writing Negotiate header to Response. {}", e.getMessage());
                     throw new AuthException("Error writing to Response");

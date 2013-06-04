@@ -23,6 +23,7 @@ import com.nimbusds.jose.JWEHeader;
 import com.nimbusds.jose.crypto.RSADecrypter;
 import com.nimbusds.jose.crypto.RSAEncrypter;
 import com.nimbusds.jwt.EncryptedJWT;
+import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.forgerock.json.jwt.keystore.KeystoreManager;
 
@@ -54,6 +55,7 @@ public class JwtSessionModule implements ServerAuthModule {
     private String keystoreType;
     private String keystoreFile;
     private String keystorePassword;
+    private int tokenLife;
 
     @Override
     public void initialize(MessagePolicy requestPolicy, MessagePolicy responsePolicy, CallbackHandler handler,
@@ -65,6 +67,7 @@ public class JwtSessionModule implements ServerAuthModule {
         this.keystoreType = (String) options.get("keystore-type");
         this.keystoreFile = (String) options.get("keystore-file");
         this.keystorePassword = (String) options.get("keystore-password");
+        this.tokenLife = Integer.parseInt((String) options.get("token-life"));
     }
 
     @Override
@@ -77,11 +80,14 @@ public class JwtSessionModule implements ServerAuthModule {
             throws AuthException {
 
         HttpServletRequest request = (HttpServletRequest) messageInfo.getRequestMessage();
+//        HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
 
 //        String sessionJwt = request.getHeader("session-jwt");
         String sessionJwt = null;
+//        Cookie jwtSessionCookie = null;
         for (Cookie cookie : request.getCookies()) {
             if ("session-jwt".equals(cookie.getName())) {
+//                jwtSessionCookie = cookie;
                 sessionJwt = cookie.getValue();
                 break;
             }
@@ -89,14 +95,23 @@ public class JwtSessionModule implements ServerAuthModule {
 
         if (sessionJwt != null && !"".equals(sessionJwt)) {
 
-            if (!verifySessionJwt(sessionJwt)) {
+            JWT jwt;
+            if ((jwt = verifySessionJwt(sessionJwt)) == null) {
+
                 return AuthStatus.SEND_FAILURE;
             } else {
                 //if all goes well!
-                HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
-//                createSessionJwt(response, sessionJwt);
-                Map<String, Object> jwtParameters = new HashMap<String, Object>();//TODO not right
-                createSessionJwt(response, jwtParameters);
+
+                try {
+                    for (String key : jwt.getJWTClaimsSet().getCustomClaims().keySet()) {
+                        request.setAttribute(key, jwt.getJWTClaimsSet().getCustomClaim(key));
+                    }
+                } catch (ParseException e) {
+                    return AuthStatus.SEND_FAILURE;
+                }
+
+//                response.addCookie(jwtSessionCookie);
+
                 return AuthStatus.SUCCESS;
             }
         }
@@ -104,7 +119,7 @@ public class JwtSessionModule implements ServerAuthModule {
         return AuthStatus.SEND_FAILURE;
     }
 
-    private boolean verifySessionJwt(String sessionJwt) throws AuthException {
+    private JWT verifySessionJwt(String sessionJwt) throws AuthException {
 
         KeystoreManager keystoreManager = new KeystoreManager(privateKeyPassword, keystoreType,
                 keystoreFile, keystorePassword);
@@ -125,7 +140,7 @@ public class JwtSessionModule implements ServerAuthModule {
             Date expirationTime = jwt.getJWTClaimsSet().getExpirationTime();
 
             if (System.currentTimeMillis() < expirationTime.getTime()) {
-                return true;
+                return jwt;
             }
 
         } catch (JOSEException e) {
@@ -133,7 +148,7 @@ public class JwtSessionModule implements ServerAuthModule {
         } catch (ParseException e) {
 //            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        return false;
+        return null;
     }
 
     @Override
@@ -141,11 +156,15 @@ public class JwtSessionModule implements ServerAuthModule {
 
         Map<String, Object> jwtParameters = new HashMap<String, Object>();
 
-        if (serviceSubject != null) {
-            for (Principal principal : serviceSubject.getPrincipals()) {
-    //            principal.
-                //add stuff to jwtParameters
-            }
+        Map<String, String> messageInfoParams = messageInfo.getMap();
+        jwtParameters.putAll(messageInfoParams);
+//        for (String key : messageInfoParams.keySet()) {
+//            //add stuff to jwtParameters
+//        }
+
+        if (jwtParameters.containsKey("skipSession") && ((Boolean) jwtParameters.get("skipSession"))) {
+            // TODO log skipping session
+            return AuthStatus.SEND_SUCCESS;
         }
 
         HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
@@ -196,7 +215,7 @@ public class JwtSessionModule implements ServerAuthModule {
 
         // Set expiration in 10 minutes
         final Date NOW =  new Date(new Date().getTime() / 1000 * 1000);
-        Date exp = new Date(NOW.getTime() + 1000 * 60 * 10);
+        Date exp = new Date(NOW.getTime() + 1000 * 60 * tokenLife);
         jwtClaims.setExpirationTime(exp);
 
         Date nbf = NOW;
@@ -207,6 +226,8 @@ public class JwtSessionModule implements ServerAuthModule {
 
         String jti = UUID.randomUUID().toString();
         jwtClaims.setJWTID(jti);
+
+        jwtClaims.setAllClaims(jwtParameters);
 
         JWEHeader header = new JWEHeader(JWEAlgorithm.RSA1_5, EncryptionMethod.A128CBC_HS256);
 
@@ -220,7 +241,10 @@ public class JwtSessionModule implements ServerAuthModule {
             String jwtString = jwt.serialize();
 
 //            response.addHeader("session-jwt", jwtString);
-            response.addCookie(new Cookie("session-jwt", jwtString));
+            Cookie cookie = new Cookie("session-jwt", jwtString);
+            cookie.setDomain("localhost");
+            cookie.setPath("/");
+            response.addCookie(cookie);
 
         } catch (JOSEException e) {
 //            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

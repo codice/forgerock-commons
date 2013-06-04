@@ -37,7 +37,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
@@ -184,13 +183,14 @@ public class AuthNFilter implements Filter {
                 throw new AuthException("Invalid AuthStatus from validateRequest: " + requestAuthStatus.toString());
             }
 
+            // Secure the response (includes adding any session cookies to the response)
+            AuthStatus responseAuthStatus = serverAuthContext.secureResponse(messageInfo, serviceSubject);//TODO moved here so can work with IB
+            //TODO for some reason IDM flushes the response when doFilter is being called so cannot add anything to response after that!!
+
             if (proceedWithCall) {
                 filterChain.doFilter((ServletRequest) messageInfo.getRequestMessage(),
                         (ServletResponse) messageInfo.getResponseMessage());
             }
-
-            // Secure the response (includes adding any session cookies to the response)
-            AuthStatus responseAuthStatus = serverAuthContext.secureResponse(messageInfo, serviceSubject);
 
             if (SEND_SUCCESS.equals(responseAuthStatus)) {
                 // nothing to do here just carry on
@@ -217,7 +217,7 @@ public class AuthNFilter implements Filter {
 
     private MessageInfo prepareMessageInfo(HttpServletRequest request, HttpServletResponse response) {
 
-        Map<String, String> messageProperties = new HashMap<String, String>();
+        Map<String, Object> messageProperties = new HashMap<String, Object>();
         messageProperties.put(MODULE_CONFIGURATION_PROPERTY, moduleConfiguration);
 
         MessageInfo messageInfo = new MessageInfoImpl(messageProperties);
