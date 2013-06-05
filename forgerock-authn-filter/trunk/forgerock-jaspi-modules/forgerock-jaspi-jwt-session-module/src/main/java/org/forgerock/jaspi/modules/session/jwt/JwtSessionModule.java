@@ -37,7 +37,6 @@ import javax.security.auth.message.module.ServerAuthModule;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.Principal;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
@@ -80,14 +79,10 @@ public class JwtSessionModule implements ServerAuthModule {
             throws AuthException {
 
         HttpServletRequest request = (HttpServletRequest) messageInfo.getRequestMessage();
-//        HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
 
-//        String sessionJwt = request.getHeader("session-jwt");
         String sessionJwt = null;
-//        Cookie jwtSessionCookie = null;
         for (Cookie cookie : request.getCookies()) {
             if ("session-jwt".equals(cookie.getName())) {
-//                jwtSessionCookie = cookie;
                 sessionJwt = cookie.getValue();
                 break;
             }
@@ -101,7 +96,6 @@ public class JwtSessionModule implements ServerAuthModule {
                 return AuthStatus.SEND_FAILURE;
             } else {
                 //if all goes well!
-
                 try {
                     for (String key : jwt.getJWTClaimsSet().getCustomClaims().keySet()) {
                         request.setAttribute(key, jwt.getJWTClaimsSet().getCustomClaim(key));
@@ -109,8 +103,6 @@ public class JwtSessionModule implements ServerAuthModule {
                 } catch (ParseException e) {
                     return AuthStatus.SEND_FAILURE;
                 }
-
-//                response.addCookie(jwtSessionCookie);
 
                 return AuthStatus.SUCCESS;
             }
@@ -125,10 +117,6 @@ public class JwtSessionModule implements ServerAuthModule {
                 keystoreFile, keystorePassword);
 
         RSAPrivateKey privateKey = (RSAPrivateKey) keystoreManager.getPrivateKey(keyAlias);
-//        X509Certificate certificate = keystoreManager.getX509Certificate("jwt-test-ks");
-
-//        SignedJwt jwt = (SignedJwt) new JwtBuilder().recontructJwt(sessionJwt);
-//        boolean verified = jwt.verify(privateKey, certificate);
 
         try {
             EncryptedJWT jwt = EncryptedJWT.parse(sessionJwt);
@@ -154,13 +142,7 @@ public class JwtSessionModule implements ServerAuthModule {
     @Override
     public AuthStatus secureResponse(MessageInfo messageInfo, Subject serviceSubject) throws AuthException {
 
-        Map<String, Object> jwtParameters = new HashMap<String, Object>();
-
-        Map<String, String> messageInfoParams = messageInfo.getMap();
-        jwtParameters.putAll(messageInfoParams);
-//        for (String key : messageInfoParams.keySet()) {
-//            //add stuff to jwtParameters
-//        }
+        Map<String, Object> jwtParameters = new HashMap<String, Object>(messageInfo.getMap());
 
         if (jwtParameters.containsKey("skipSession") && ((Boolean) jwtParameters.get("skipSession"))) {
             // TODO log skipping session
@@ -173,47 +155,15 @@ public class JwtSessionModule implements ServerAuthModule {
         return AuthStatus.SEND_SUCCESS;
     }
 
-//    private void createSessionJwt(HttpServletResponse response, String currentSessionJwt) {
-//
-//        SignedJwt jwt = ((SignedJwt) new JwtBuilder().recontructJwt(currentSessionJwt));
-//
-//        String sessionJwt = jwt.getJwt()
-//                .content("issueTimestamp", System.currentTimeMillis())
-//                .build();
-//
-//        response.addHeader("session-jwt", sessionJwt);
-//    }
-
     private void createSessionJwt(HttpServletResponse response, Map<String, Object> jwtParameters) throws AuthException {
 
         KeystoreManager keystoreManager = new KeystoreManager(privateKeyPassword, keystoreType,
                 keystoreFile, keystorePassword);
 
-//        PrivateKey privateKey = keystoreManager.getPrivateKey("jwt-test-ks");
-
         RSAPublicKey publicKey = (RSAPublicKey) keystoreManager.getPublicKey(keyAlias);
-
-//        String sessionJwt = new JwtBuilder().jwt()
-//                .content("issueTimestamp", System.currentTimeMillis())
-//                .content("validity", 300000)
-//                .content(jwtParameters)
-//                .sign(JwsAlgorithm.HS256, privateKey)
-//                .build();
 
         JWTClaimsSet jwtClaims = new JWTClaimsSet();
 
-//        String iss = "https://openid.net";
-//        jwtClaims.setIssuer(iss);
-
-//        String sub = "alice";
-//        jwtClaims.setSubject(sub);
-
-//        List<String> aud = new ArrayList<String>();
-//        aud.add("https://app-one.com");
-//        aud.add("https://app-two.com");
-//        jwtClaims.setAudience(aud);
-
-        // Set expiration in 10 minutes
         final Date NOW =  new Date(new Date().getTime() / 1000 * 1000);
         Date exp = new Date(NOW.getTime() + 1000 * 60 * tokenLife);
         jwtClaims.setExpirationTime(exp);
@@ -240,14 +190,11 @@ public class JwtSessionModule implements ServerAuthModule {
 
             String jwtString = jwt.serialize();
 
-//            response.addHeader("session-jwt", jwtString);
             Cookie cookie = new Cookie("session-jwt", jwtString);
-            cookie.setDomain("localhost");
             cookie.setPath("/");
             response.addCookie(cookie);
 
         } catch (JOSEException e) {
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             throw new AuthException(e.getMessage());
         }
     }
