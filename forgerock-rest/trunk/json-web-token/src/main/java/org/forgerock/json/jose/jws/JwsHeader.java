@@ -14,30 +14,33 @@
  * Copyright 2013 ForgeRock Inc.
  */
 
-package org.forgerock.util.encode;
+package org.forgerock.json.jose.jws;
 
-public class Base64url {
+import org.forgerock.json.fluent.JsonValue;
 
-    public static String encode(byte[] content) {
-        String base64EncodedString = Base64.encode(content);
+import java.util.Map;
 
-        return base64EncodedString.replaceAll("\\+", "-")
-                .replaceAll("/", "_")
-                .replaceAll("=", "");
+public class JwsHeader extends JwtSecureHeader {
+
+    public JwsHeader() {
+        super();
     }
 
-    public static byte[] decode(String content) {
+    public JwsHeader(JsonValue value) {
+        super(value);
+    }
 
-        content = content.replaceAll("-", "+")
-                .replaceAll("_", "/");
+    public JwsHeader(Map<String, Object> headerParameters) {
+        super(headerParameters);
+    }
 
-        int modulus;
-        if ((modulus = content.length() % 4) != 0) {
-            for (int i = 0; i < (4 - modulus); i++) {
-                content += "=";
-            }
+    @Override
+    public JwsAlgorithm getAlgorithm() {
+        String algorithm = getAlgorithmString();
+        if (algorithm == null) {
+            return JwsAlgorithm.NONE;
+        } else {
+            return JwsAlgorithm.valueOf(algorithm);
         }
-
-        return Base64.decode(content);
     }
 }

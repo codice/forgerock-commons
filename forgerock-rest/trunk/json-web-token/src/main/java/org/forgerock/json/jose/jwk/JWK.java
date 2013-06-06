@@ -14,30 +14,7 @@
  * Copyright 2013 ForgeRock Inc.
  */
 
-package org.forgerock.util.encode;
+package org.forgerock.json.jose.jwk;
 
-public class Base64url {
-
-    public static String encode(byte[] content) {
-        String base64EncodedString = Base64.encode(content);
-
-        return base64EncodedString.replaceAll("\\+", "-")
-                .replaceAll("/", "_")
-                .replaceAll("=", "");
-    }
-
-    public static byte[] decode(String content) {
-
-        content = content.replaceAll("-", "+")
-                .replaceAll("_", "/");
-
-        int modulus;
-        if ((modulus = content.length() % 4) != 0) {
-            for (int i = 0; i < (4 - modulus); i++) {
-                content += "=";
-            }
-        }
-
-        return Base64.decode(content);
-    }
+public interface JWK {
 }

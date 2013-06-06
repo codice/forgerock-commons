@@ -14,30 +14,21 @@
  * Copyright 2013 ForgeRock Inc.
  */
 
-package org.forgerock.util.encode;
+package org.forgerock.json.jose.jwe.handlers;
 
-public class Base64url {
+import java.security.Key;
 
-    public static String encode(byte[] content) {
-        String base64EncodedString = Base64.encode(content);
+public interface EncryptionHandler {
 
-        return base64EncodedString.replaceAll("\\+", "-")
-                .replaceAll("/", "_")
-                .replaceAll("=", "");
-    }
+    Key getContentEncryptionKey();
 
-    public static byte[] decode(String content) {
+    byte[] encryptContentEncryptionKey(Key key, Key contentEncryptionKey);
 
-        content = content.replaceAll("-", "+")
-                .replaceAll("_", "/");
+    byte[] generateInitialisationVector();
 
-        int modulus;
-        if ((modulus = content.length() % 4) != 0) {
-            for (int i = 0; i < (4 - modulus); i++) {
-                content += "=";
-            }
-        }
+    Object[] encryptPlaintext(Key contentEncryptionKey, byte[] initialisationVector, byte[] plaintext, byte[] additionalAuthenticatedData);
 
-        return Base64.decode(content);
-    }
+    Key decryptContentEncryptionKey(Key key, byte[] encryptedContentEncryptionKey);
+
+    byte[] decryptCiphertext(Key contentEncryptionKey, byte[] initialisationVector, byte[] ciphertext, byte[] additionalAuthenticatedData);
 }

@@ -14,30 +14,34 @@
  * Copyright 2013 ForgeRock Inc.
  */
 
-package org.forgerock.util.encode;
+package org.forgerock.json.jose.utils;
 
-public class Base64url {
+import java.net.URI;
 
-    public static String encode(byte[] content) {
-        String base64EncodedString = Base64.encode(content);
+public final class StringOrURI {
 
-        return base64EncodedString.replaceAll("\\+", "-")
-                .replaceAll("/", "_")
-                .replaceAll("=", "");
+    private final String string;
+    private final URI uri;
+
+    public StringOrURI(String string) {
+        this(string, null);
     }
 
-    public static byte[] decode(String content) {
+    public StringOrURI(URI uri) {
+        this(null, uri);
+    }
 
-        content = content.replaceAll("-", "+")
-                .replaceAll("_", "/");
+    private StringOrURI(String string, URI uri) {
+        this.string = string;
+        this.uri = uri;
+    }
 
-        int modulus;
-        if ((modulus = content.length() % 4) != 0) {
-            for (int i = 0; i < (4 - modulus); i++) {
-                content += "=";
-            }
+    @Override
+    public String toString() {
+        if (string != null) {
+            return string;
+        } else {
+            return uri.toString();
         }
-
-        return Base64.decode(content);
     }
 }
