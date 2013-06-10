@@ -30,23 +30,22 @@ public final class ConfigurationManager {
 
     private static boolean configured = false;
 
-    public static synchronized void configure(Map<String, Map<String, Object>> authContexts) throws AuthException {
+    public static synchronized void configure(Configuration authContextConfiguration) throws AuthException {
 
         if (!configured) {
             CallbackHandler callbackHandler = new CallbackHandlerImpl();
             ServerAuthConfigImpl serverAuthConfig = new ServerAuthConfigImpl(null, null, callbackHandler);
 
-            for (String authContextId : authContexts.keySet()) {
-                serverAuthConfig.registerAuthContext(authContextId, authContexts.get(authContextId));
+            for (String authContextId : authContextConfiguration.keySet()) {
+                serverAuthConfig.registerAuthContext(authContextId, authContextConfiguration.get(authContextId));
             }
 
             // Now assemble the factory-provider-config-context-module structure
-            AuthConfigFactory authConfigFactory = new AuthConfigFactoryImpl();
+            AuthConfigFactory authConfigFactory = AuthConfigFactoryImpl.getInstance();
             AuthConfigProviderImpl authConfigProvider = new AuthConfigProviderImpl(null, null);
             authConfigProvider.setServerAuthConfig(serverAuthConfig);
             authConfigFactory.registerConfigProvider(authConfigProvider, null, null, null);
 
-            AuthConfigFactory.setFactory(authConfigFactory);
 
             configured = true;
         } else {

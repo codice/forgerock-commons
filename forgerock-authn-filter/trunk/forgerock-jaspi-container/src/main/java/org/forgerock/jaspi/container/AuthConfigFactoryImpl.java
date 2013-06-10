@@ -16,7 +16,6 @@
 
 package org.forgerock.jaspi.container;
 
-import org.forgerock.jaspi.container.RegistrationContextImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,11 +55,15 @@ public class AuthConfigFactoryImpl extends AuthConfigFactory {
     private AuthConfigProviderMap authConfigProviderMap = new AuthConfigProviderMap();
     private RegistrationIdGenerator registrationIdGenerator = new RegistrationIdGenerator();
 
+
+    public static AuthConfigFactory getInstance() {
+        return AuthConfigFactoryHolder.INSTANCE.getInstance();
+    }
+
     /**
      * Registers this instance as the system-wide auth config factory implementation.
      */
-    public AuthConfigFactoryImpl() {
-        AuthConfigFactory.setFactory(this);
+    AuthConfigFactoryImpl() {
     }
 
     /**

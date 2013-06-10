@@ -16,8 +16,19 @@
 
 package org.forgerock.jaspi.inttest;
 
+import org.forgerock.jaspi.container.config.Configuration;
 import org.forgerock.jaspi.container.config.ConfigurationManager;
 import org.forgerock.jaspi.filter.AuthNFilter;
+import org.forgerock.jaspi.inttest.modules.SecureSendContinueAuthModule;
+import org.forgerock.jaspi.inttest.modules.SecureSendFailureAuthModule;
+import org.forgerock.jaspi.inttest.modules.ValidateSendContinueAuthModule;
+import org.forgerock.jaspi.inttest.modules.ValidateSendContinueSessionModule;
+import org.forgerock.jaspi.inttest.modules.ValidateSendFailureAuthModule;
+import org.forgerock.jaspi.inttest.modules.ValidateSendFailureSessionModule;
+import org.forgerock.jaspi.inttest.modules.ValidateSendSuccessAuthModule;
+import org.forgerock.jaspi.inttest.modules.ValidateSendSuccessSessionModule;
+import org.forgerock.jaspi.inttest.modules.ValidateSuccessAuthModule;
+import org.forgerock.jaspi.inttest.modules.ValidateSuccessSessionModule;
 import org.mockito.ArgumentCaptor;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
@@ -31,9 +42,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
@@ -98,8 +107,8 @@ public class IntTest {
     public void shouldThrowAuthExceptionWhenConfigurationEmpty() throws IOException, AuthException, ServletException {
 
         //Given
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        ConfigurationManager.configure(authContexts);
+        Configuration configuration = new Configuration();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -124,15 +133,12 @@ public class IntTest {
             ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSuccessSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-only", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-only")
+                .setSessionModule(ValidateSuccessSessionModule.class, sessionModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -156,15 +162,12 @@ public class IntTest {
             ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendFailureSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-only", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-only")
+                .setSessionModule(ValidateSendFailureSessionModule.class, sessionModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -181,15 +184,12 @@ public class IntTest {
             ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendSuccessSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-only", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-only")
+                .setSessionModule(ValidateSendSuccessSessionModule.class, sessionModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -206,15 +206,12 @@ public class IntTest {
             ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendContinueSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-only", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-only")
+                .setSessionModule(ValidateSendContinueSessionModule.class, sessionModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -231,18 +228,12 @@ public class IntTest {
             ServletException, AuthException {
 
         //Given
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSuccessAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("auth-only", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("auth-only")
+                .addAuthenticationModule(ValidateSuccessAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -266,18 +257,12 @@ public class IntTest {
             ServletException, AuthException {
 
         //Given
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendFailureAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("auth-only", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("auth-only")
+                .addAuthenticationModule(ValidateSendFailureAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -294,18 +279,12 @@ public class IntTest {
             ServletException, AuthException {
 
         //Given
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendSuccessAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("auth-only", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("auth-only")
+                .addAuthenticationModule(ValidateSendSuccessAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -322,18 +301,12 @@ public class IntTest {
             ServletException, AuthException {
 
         //Given
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendContinueAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("auth-only", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("auth-only")
+                .addAuthenticationModule(ValidateSendContinueAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -350,22 +323,14 @@ public class IntTest {
             ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSuccessSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendFailureAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-auth", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-auth")
+                .setSessionModule(ValidateSuccessSessionModule.class, sessionModuleProps)
+                .addAuthenticationModule(ValidateSendFailureAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -389,22 +354,14 @@ public class IntTest {
             throws IOException, ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendSuccessSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSuccessAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-auth", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-auth")
+                .setSessionModule(ValidateSendSuccessSessionModule.class, sessionModuleProps)
+                .addAuthenticationModule(ValidateSuccessAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -421,22 +378,14 @@ public class IntTest {
             throws IOException, ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendContinueSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSuccessAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-auth", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-auth")
+                .setSessionModule(ValidateSendContinueSessionModule.class, sessionModuleProps)
+                .addAuthenticationModule(ValidateSuccessAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -453,22 +402,14 @@ public class IntTest {
             throws IOException, ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendFailureSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSuccessAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-auth", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-auth")
+                .setSessionModule(ValidateSendFailureSessionModule.class, sessionModuleProps)
+                .addAuthenticationModule(ValidateSuccessAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -493,26 +434,15 @@ public class IntTest {
             throws IOException, ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendFailureSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendSuccessAuthModule");
-        authModules.add(moduleProps);
-
-        moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSuccessAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-auth-auth", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-auth-auth")
+                .setSessionModule(ValidateSendFailureSessionModule.class, sessionModuleProps)
+                .addAuthenticationModule(ValidateSendSuccessAuthModule.class, authModuleProps)
+                .addAuthenticationModule(ValidateSuccessAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -531,22 +461,14 @@ public class IntTest {
             throws IOException, ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendFailureSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendFailureAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-auth", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-auth")
+                .setSessionModule(ValidateSendFailureSessionModule.class, sessionModuleProps)
+                .addAuthenticationModule(ValidateSendFailureAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -564,26 +486,15 @@ public class IntTest {
             throws IOException, ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendFailureSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendContinueAuthModule");
-        authModules.add(moduleProps);
-
-        moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSuccessAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-auth", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-auth")
+                .setSessionModule(ValidateSendFailureSessionModule.class, sessionModuleProps)
+                .addAuthenticationModule(ValidateSendContinueAuthModule.class, authModuleProps)
+                .addAuthenticationModule(ValidateSuccessAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -600,26 +511,15 @@ public class IntTest {
             throws IOException, ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendFailureSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendFailureAuthModule");
-        authModules.add(moduleProps);
-
-        moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSuccessAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-auth-auth", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-auth-auth")
+                .setSessionModule(ValidateSendFailureSessionModule.class, sessionModuleProps)
+                .addAuthenticationModule(ValidateSendFailureAuthModule.class, authModuleProps)
+                .addAuthenticationModule(ValidateSuccessAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -645,22 +545,14 @@ public class IntTest {
             ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendFailureSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.SecureSendContinueAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-auth", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-auth")
+                .setSessionModule(ValidateSendFailureSessionModule.class, sessionModuleProps)
+                .addAuthenticationModule(SecureSendContinueAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();
@@ -685,22 +577,14 @@ public class IntTest {
             ServletException, AuthException {
 
         //Given
-        Map<String, String> sessionModuleProps = new HashMap<String, String>();
-        sessionModuleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.ValidateSendFailureSessionModule");
-
-        Map<String, Object> contextProperties = new HashMap<String, Object>();
-        contextProperties.put("session-module", sessionModuleProps);
-
-        List<Map<String, String>> authModules = new ArrayList<Map<String, String>>();
-        contextProperties.put("auth-modules", authModules);
-
-        Map<String, String> moduleProps = new HashMap<String, String>();
-        moduleProps.put("class-name", "org.forgerock.jaspi.inttest.modules.SecureSendFailureAuthModule");
-        authModules.add(moduleProps);
-
-        Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
-        authContexts.put("session-auth", contextProperties);
-        ConfigurationManager.configure(authContexts);
+        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
+        Map<String, Object> authModuleProps = new HashMap<String, Object>();
+        Configuration configuration = new Configuration()
+                .addAuthContext("session-auth")
+                .setSessionModule(ValidateSendFailureSessionModule.class, sessionModuleProps)
+                .addAuthenticationModule(SecureSendFailureAuthModule.class, authModuleProps)
+                .done();
+        ConfigurationManager.configure(configuration);
 
         //When
         FilterRunner filterRunner = new FilterRunner();

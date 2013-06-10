@@ -16,6 +16,7 @@
 
 package org.forgerock.jaspi.filter;
 
+import org.forgerock.jaspi.container.AuthConfigFactoryImpl;
 import org.forgerock.jaspi.container.MessageInfoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,11 +119,8 @@ public class AuthNFilter implements Filter {
         String appContext = getAppContext(new URL(request.getRequestURL().toString()), request.getContextPath());
         MessageInfo messageInfo = prepareMessageInfo(request, response);
 
-        if (AuthConfigFactory.getFactory() == null) {
-            throw new ServletException("AuthConfigFactory not set!");
-        }
         // Get the provider
-        AuthConfigProvider authConfigProvider = AuthConfigFactory.getFactory().getConfigProvider(layer, appContext,
+        AuthConfigProvider authConfigProvider = AuthConfigFactoryImpl.getInstance().getConfigProvider(layer, appContext,
                 null);
 
         if (authConfigProvider == null) {
