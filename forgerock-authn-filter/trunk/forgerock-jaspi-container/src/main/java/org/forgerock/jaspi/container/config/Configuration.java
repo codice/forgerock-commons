@@ -29,6 +29,11 @@ public class Configuration {
         return new AuthContextConfiguration(this, authContextId);
     }
 
+    public Configuration addAuthContext(String authContextId, Map<String, Object> contextProperties) {
+        authContexts.put(authContextId, contextProperties);
+        return this;
+    }
+
     void addAuthContext(String authContextId, Map<String, Object> sessionModule, List<Map<String, Object>> authenticationModules) {
 
         Map<String, Object> authContext = new HashMap<String, Object>();
