@@ -16,18 +16,11 @@
 
 package org.forgerock.jaspi.modules.session.jwt;
 
-import com.nimbusds.jose.EncryptionMethod;
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWEAlgorithm;
-import com.nimbusds.jose.JWEHeader;
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.crypto.RSADecrypter;
-import com.nimbusds.jose.crypto.RSAEncrypter;
-import com.nimbusds.jwt.EncryptedJWT;
-import com.nimbusds.jwt.JWT;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
+import org.forgerock.json.jose.builders.JwtBuilder;
+import org.forgerock.json.jose.jwe.EncryptedJwt;
+import org.forgerock.json.jose.jwe.EncryptionMethod;
+import org.forgerock.json.jose.jwe.JweAlgorithm;
+import org.forgerock.json.jose.jwt.Jwt;
 import org.forgerock.json.jwt.keystore.KeystoreManager;
 
 import javax.security.auth.Subject;
@@ -42,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -105,7 +97,8 @@ public class JwtSessionModule implements ServerAuthModule {
      * @return {@inheritDoc}
      */
     @Override
-    public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject) {
+    public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject)
+            throws AuthException {
 
         HttpServletRequest request = (HttpServletRequest) messageInfo.getRequestMessage();
 
@@ -119,17 +112,14 @@ public class JwtSessionModule implements ServerAuthModule {
 
         if (sessionJwt != null && !"".equals(sessionJwt)) {
 
-            JWT jwt;
+            Jwt jwt;
             if ((jwt = verifySessionJwt(sessionJwt)) == null) {
+
                 return AuthStatus.SEND_FAILURE;
             } else {
                 //if all goes well!
-                try {
-                    for (String key : jwt.getJWTClaimsSet().getCustomClaims().keySet()) {
-                        request.setAttribute(key, jwt.getJWTClaimsSet().getCustomClaim(key));
-                    }
-                } catch (ParseException e) {
-                    return AuthStatus.SEND_FAILURE;
+                for (String key : jwt.getClaimsSet().keys()) {
+                    request.setAttribute(key, jwt.getClaimsSet().get(key));
                 }
 
                 return AuthStatus.SUCCESS;
@@ -146,31 +136,23 @@ public class JwtSessionModule implements ServerAuthModule {
      * @param sessionJwt The JWT string.
      * @return The validated decrypted JWT.
      */
-    private JWT verifySessionJwt(String sessionJwt) {
+    private Jwt verifySessionJwt(String sessionJwt) {
 
         KeystoreManager keystoreManager = new KeystoreManager(privateKeyPassword, keystoreType,
                 keystoreFile, keystorePassword);
 
         RSAPrivateKey privateKey = (RSAPrivateKey) keystoreManager.getPrivateKey(keyAlias);
 
-        try {
-            EncryptedJWT jwt = EncryptedJWT.parse(sessionJwt);
+        JwtBuilder jwtBuilder = new JwtBuilder();
+        EncryptedJwt jwt = jwtBuilder.reconstruct(sessionJwt, EncryptedJwt.class);
+        jwt.decrypt(privateKey);
 
-            RSADecrypter decrypter = new RSADecrypter(privateKey);
+        Date expirationTime = jwt.getClaimsSet().getExpirationTime();
 
-            jwt.decrypt(decrypter);
-
-            Date expirationTime = jwt.getJWTClaimsSet().getExpirationTime();
-
-            if (System.currentTimeMillis() < expirationTime.getTime()) {
-                return jwt;
-            }
-
-        } catch (JOSEException e) {
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (ParseException e) {
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        if (System.currentTimeMillis() < expirationTime.getTime()) {
+            return jwt;
         }
+
         return null;
     }
 
@@ -214,44 +196,34 @@ public class JwtSessionModule implements ServerAuthModule {
 
         RSAPublicKey publicKey = (RSAPublicKey) keystoreManager.getPublicKey(keyAlias);
 
-        JWTClaimsSet jwtClaims = new JWTClaimsSet();
+        JwtBuilder jwtBuilder = new JwtBuilder();
+
 
         final Date NOW =  new Date(new Date().getTime() / 1000 * 1000);
         Date exp = new Date(NOW.getTime() + 1000 * 60 * tokenLife);
-        jwtClaims.setExpirationTime(exp);
-
         Date nbf = NOW;
-        jwtClaims.setNotBeforeTime(nbf);
-
         Date iat = NOW;
-        jwtClaims.setIssueTime(iat);
-
         String jti = UUID.randomUUID().toString();
-        jwtClaims.setJWTID(jti);
 
-        jwtClaims.setAllClaims(jwtParameters);
+        String jwtString = jwtBuilder
+                .jwe(publicKey)
+                    .headers()
+                        .alg(JweAlgorithm.RSAES_PKCS1_V1_5)
+                        .enc(EncryptionMethod.A128CBC_HS256)
+                        .done()
+                    .claims()
+                        .jti(jti)
+                        .exp(exp)
+                        .nbf(nbf)
+                        .iat(iat)
+                        .claims(jwtParameters)
+                        .done()
+                    .build();
 
-        JWEHeader header = new JWEHeader(JWEAlgorithm.RSA1_5, EncryptionMethod.A128CBC_HS256);
 
-        EncryptedJWT jwt = new EncryptedJWT(header, jwtClaims);
-
-        try {
-            RSAEncrypter encrypter = new RSAEncrypter(publicKey);
-
-            jwt.encrypt(encrypter);
-
-            String jwtString = jwt.serialize();
-
-            //TODO need to sign the JWT once encrypted, but the nimbus library we are using doesn't support this.
-            //TODO so will need to be updated once we have finished writing our own JWT Signing and Enryption library.
-
-            Cookie cookie = new Cookie("session-jwt", jwtString);
-            cookie.setPath("/");
-            response.addCookie(cookie);
-
-        } catch (JOSEException e) {
-            throw new AuthException(e.getMessage());
-        }
+        Cookie cookie = new Cookie("session-jwt", jwtString);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 
     /**
