@@ -16,12 +16,16 @@
 
 package org.forgerock.jaspi.modules.session.jwt;
 
+import org.apache.commons.lang3.StringUtils;
 import org.forgerock.json.jose.builders.JwtBuilder;
 import org.forgerock.json.jose.jwe.EncryptedJwt;
 import org.forgerock.json.jose.jwe.EncryptionMethod;
 import org.forgerock.json.jose.jwe.JweAlgorithm;
 import org.forgerock.json.jose.jwt.Jwt;
+import org.forgerock.json.jose.jwt.JwtClaimsSet;
 import org.forgerock.json.jwt.keystore.KeystoreManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -35,6 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,11 +49,16 @@ import java.util.UUID;
  * A JASPI Session Module which creates a JWT when securing the response from a successful authentication and sets it
  * as a Cookie on the response. Then on subsequent requests checks for the presents of the JWT as a Cookie on the
  * request and validates the signature and decrypts it and checks the expiration time of the JWT.
+ *
+ * @author Phill Cunnington
  */
 public class JwtSessionModule implements ServerAuthModule {
 
-    private CallbackHandler handler;
-    private Map options;
+    private Logger logger = LoggerFactory.getLogger(JwtSessionModule.class);
+
+    private static final String JWT_SESSION_COOKIE_NAME = "session-jwt";
+    private static final String SKIP_SESSION_PARAMETER_NAME = "skipSession";
+
     private String keyAlias;
     private String privateKeyPassword;
     private String keystoreType;
@@ -68,8 +78,6 @@ public class JwtSessionModule implements ServerAuthModule {
     @Override
     public void initialize(MessagePolicy requestPolicy, MessagePolicy responsePolicy, CallbackHandler handler,
                            Map options) throws AuthException {
-        this.handler = handler;
-        this.options = options;
         this.keyAlias = (String) options.get("key-alias");
         this.privateKeyPassword = (String) options.get("private-key-password");
         this.keystoreType = (String) options.get("keystore-type");
@@ -87,7 +95,7 @@ public class JwtSessionModule implements ServerAuthModule {
     }
 
     /**
-     * Checks for the presents of the JWT as a Cookie on the request and validates the signature and decrypts it and
+     * Checks for the presence of the JWT as a Cookie on the request and validates the signature and decrypts it and
      * checks the expiration time of the JWT. If all these checks pass then the method return AuthStatus.SUCCESS,
      * otherwise returns AuthStatus.SEND_FAILURE.
      *
@@ -104,22 +112,23 @@ public class JwtSessionModule implements ServerAuthModule {
 
         String sessionJwt = null;
         for (Cookie cookie : request.getCookies()) {
-            if ("session-jwt".equals(cookie.getName())) {
+            if (JWT_SESSION_COOKIE_NAME.equals(cookie.getName())) {
                 sessionJwt = cookie.getValue();
                 break;
             }
         }
 
-        if (sessionJwt != null && !"".equals(sessionJwt)) {
+        if (StringUtils.isEmpty(sessionJwt)) {
 
-            Jwt jwt;
-            if ((jwt = verifySessionJwt(sessionJwt)) == null) {
+            Jwt jwt = verifySessionJwt(sessionJwt);
+            if (jwt == null) {
 
                 return AuthStatus.SEND_FAILURE;
             } else {
                 //if all goes well!
-                for (String key : jwt.getClaimsSet().keys()) {
-                    request.setAttribute(key, jwt.getClaimsSet().get(key));
+                JwtClaimsSet jwtClaimsSet = jwt.getClaimsSet();
+                for (String key : jwtClaimsSet.keys()) {
+                    request.setAttribute(key, jwtClaimsSet.get(key));
                 }
 
                 return AuthStatus.SUCCESS;
@@ -132,6 +141,8 @@ public class JwtSessionModule implements ServerAuthModule {
     /**
      * Verifies that the JWT has a valid signature and can be decrypted and that the JWT expiration time has not
      * passed.
+     *
+     * The method will return null in the case where the JWT is not valid.
      *
      * @param sessionJwt The JWT string.
      * @return The validated decrypted JWT.
@@ -170,13 +181,15 @@ public class JwtSessionModule implements ServerAuthModule {
 
         Map<String, Object> jwtParameters = new HashMap<String, Object>(messageInfo.getMap());
 
-        if (jwtParameters.containsKey("skipSession") && ((Boolean) jwtParameters.get("skipSession"))) {
-            // TODO log skipping session
+        if (jwtParameters.containsKey(SKIP_SESSION_PARAMETER_NAME)
+                && ((Boolean) jwtParameters.get(SKIP_SESSION_PARAMETER_NAME))) {
+            logger.debug("Skipping creating session as jwtParameters contains, " + SKIP_SESSION_PARAMETER_NAME);
             return AuthStatus.SEND_SUCCESS;
         }
 
         HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
-        createSessionJwt(response, jwtParameters);
+        Cookie jwtSessionCookie = createSessionJwtCookie(jwtParameters);
+        response.addCookie(jwtSessionCookie);
 
         return AuthStatus.SEND_SUCCESS;
     }
@@ -185,11 +198,11 @@ public class JwtSessionModule implements ServerAuthModule {
      * Creates the session JWT, including the custom parameters in the payload and adding the expiration time and then
      * sets the JWT onto the response as a Cookie.
      *
-     * @param response The HttpServletResponse.
      * @param jwtParameters The parameters that should be added to the JWT payload.
+     * @return The JWT Session Cookie.
      * @throws AuthException If there is a problem creating and encrypting the JWT.
      */
-    private void createSessionJwt(HttpServletResponse response, Map<String, Object> jwtParameters) throws AuthException {
+    private Cookie createSessionJwtCookie(Map<String, Object> jwtParameters) throws AuthException {
 
         KeystoreManager keystoreManager = new KeystoreManager(privateKeyPassword, keystoreType,
                 keystoreFile, keystorePassword);
@@ -198,11 +211,14 @@ public class JwtSessionModule implements ServerAuthModule {
 
         JwtBuilder jwtBuilder = new JwtBuilder();
 
-
-        final Date NOW =  new Date(new Date().getTime() / 1000 * 1000);
-        Date exp = new Date(NOW.getTime() + 1000 * 60 * tokenLife);
-        Date nbf = NOW;
-        Date iat = NOW;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.MILLISECOND, 0);
+        final Date now = calendar.getTime();
+        calendar.add(Calendar.MINUTE, tokenLife);
+        final Date exp = calendar.getTime();
+        Date nbf = now;
+        Date iat = now;
         String jti = UUID.randomUUID().toString();
 
         String jwtString = jwtBuilder
@@ -221,9 +237,10 @@ public class JwtSessionModule implements ServerAuthModule {
                     .build();
 
 
-        Cookie cookie = new Cookie("session-jwt", jwtString);
+        Cookie cookie = new Cookie(JWT_SESSION_COOKIE_NAME, jwtString);
         cookie.setPath("/");
-        response.addCookie(cookie);
+
+        return cookie;
     }
 
     /**
