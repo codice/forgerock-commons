@@ -73,7 +73,7 @@ public class JwtSessionModule implements ServerAuthModule {
      * @param responsePolicy {@inheritDoc}
      * @param handler {@inheritDoc}
      * @param options {@inheritDoc}
-     * @throws AuthException {@inheritDoc}
+     * @throws AuthException {@inheritDoc}                String tokenLife = (String) options.get("token-life");if (StringUtils.isEmpty(tokenLife)) {tokenLife = "0";}              this.tokenLife = Integer.parseInt(tokenLife);
      */
     @Override
     public void initialize(MessagePolicy requestPolicy, MessagePolicy responsePolicy, CallbackHandler handler,
@@ -118,7 +118,7 @@ public class JwtSessionModule implements ServerAuthModule {
             }
         }
 
-        if (StringUtils.isEmpty(sessionJwt)) {
+        if (!StringUtils.isEmpty(sessionJwt)) {
 
             Jwt jwt = verifySessionJwt(sessionJwt);
             if (jwt == null) {
