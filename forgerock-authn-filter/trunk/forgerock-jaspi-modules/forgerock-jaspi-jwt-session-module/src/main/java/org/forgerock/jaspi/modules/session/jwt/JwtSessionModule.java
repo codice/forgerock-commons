@@ -111,10 +111,13 @@ public class JwtSessionModule implements ServerAuthModule {
         HttpServletRequest request = (HttpServletRequest) messageInfo.getRequestMessage();
 
         String sessionJwt = null;
-        for (Cookie cookie : request.getCookies()) {
-            if (JWT_SESSION_COOKIE_NAME.equals(cookie.getName())) {
-                sessionJwt = cookie.getValue();
-                break;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (JWT_SESSION_COOKIE_NAME.equals(cookie.getName())) {
+                    sessionJwt = cookie.getValue();
+                    break;
+                }
             }
         }
 
