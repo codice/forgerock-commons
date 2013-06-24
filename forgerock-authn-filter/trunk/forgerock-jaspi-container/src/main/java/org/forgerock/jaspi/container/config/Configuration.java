@@ -39,10 +39,10 @@ public class Configuration {
         Map<String, Object> authContext = new HashMap<String, Object>();
 
         if (sessionModule != null) {
-            authContext.put("session-module", sessionModule);
+            authContext.put("sessionModule", sessionModule);
         }
 
-        authContext.put("auth-modules", authenticationModules);
+        authContext.put("authModules", authenticationModules);
 
         authContexts.put(authContextId, authContext);
     }

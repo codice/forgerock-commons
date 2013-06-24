@@ -40,7 +40,7 @@ public class AuthContextConfiguration {
             Map<String, Object> moduleProperties) {
 
         Map<String, Object> moduleProps = new HashMap<String, Object>(moduleProperties);
-        moduleProps.put("class-name", sessionModuleClass.getCanonicalName());
+        moduleProps.put("className", sessionModuleClass.getCanonicalName());
         sessionModule = moduleProps;
 
         return this;
@@ -50,7 +50,7 @@ public class AuthContextConfiguration {
             Class<T> authenticationModuleClass, Map<String, Object> moduleProperties) {
 
         Map<String, Object> moduleProps = new HashMap<String, Object>(moduleProperties);
-        moduleProps.put("class-name", authenticationModuleClass.getCanonicalName());
+        moduleProps.put("className", authenticationModuleClass.getCanonicalName());
         authenticationModules.add(moduleProps);
 
         return this;

@@ -88,10 +88,10 @@ public class ServerAuthConfigImpl implements ServerAuthConfig {
 
         // Create the modules
         List<ServerAuthModule> serverAuthModules = new ArrayList<ServerAuthModule>(2);
-        Map<String, String> sessionModule = (Map<String, String>) contextProperties.get("session-module");
+        Map<String, String> sessionModule = (Map<String, String>) contextProperties.get("sessionModule");
         ServerAuthModule sessionAuthModule = createModule(sessionModule);
 
-        List<Map<String, String>> authModules = (List<Map<String, String>>) contextProperties.get("auth-modules");
+        List<Map<String, String>> authModules = (List<Map<String, String>>) contextProperties.get("authModules");
         if (authModules != null) {
             for (Map<String, String> authModule : authModules) {
                 ServerAuthModule serverAuthModule = createModule(authModule);
@@ -111,7 +111,7 @@ public class ServerAuthConfigImpl implements ServerAuthConfig {
             return null;
         }
 
-        String className = moduleProperties.get("class-name");
+        String className = moduleProperties.get("className");
 
         if (className == null || !className.isEmpty()) {
             try {
@@ -119,11 +119,11 @@ public class ServerAuthConfigImpl implements ServerAuthConfig {
                 module.initialize(createRequestMessagePolicy(), null, handler, moduleProperties);
                 return module;
             } catch (ClassNotFoundException e) {
-                throw new AuthException("Failed to instantiate module, class-name: " + className);
+                throw new AuthException("Failed to instantiate module, className: " + className);
             } catch (IllegalAccessException e) {
-                throw new AuthException("Failed to instantiate module, class-name: " + className);
+                throw new AuthException("Failed to instantiate module, className: " + className);
             } catch (InstantiationException e) {
-                throw new AuthException("Failed to instantiate module, class-name: " + className);
+                throw new AuthException("Failed to instantiate module, className: " + className);
             }
         }
 
@@ -187,20 +187,5 @@ public class ServerAuthConfigImpl implements ServerAuthConfig {
      */
     public boolean isProtected() {
         return false;
-    }
-
-    /**
-     * Represents a ProtectionPolicy for a message authentication policy.
-     */
-    static class ProtectionPolicyImpl implements MessagePolicy.ProtectionPolicy {
-
-        /**
-         * Gets the ProtectionPolicy identifier.
-         *
-         * @return AUTHENTICATE_SENDER ProtectionPolicy.
-         */
-        public String getID() {
-            return MessagePolicy.ProtectionPolicy.AUTHENTICATE_SENDER;
-        }
     }
 }

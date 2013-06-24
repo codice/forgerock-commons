@@ -21,6 +21,7 @@ import org.forgerock.json.jose.builders.JwtBuilder;
 import org.forgerock.json.jose.jwe.EncryptedJwt;
 import org.forgerock.json.jose.jwe.EncryptionMethod;
 import org.forgerock.json.jose.jwe.JweAlgorithm;
+import org.forgerock.json.jose.jwe.JweHeader;
 import org.forgerock.json.jose.jwt.Jwt;
 import org.forgerock.json.jose.jwt.JwtClaimsSet;
 import org.forgerock.json.jwt.keystore.KeystoreManager;
@@ -54,17 +55,27 @@ import java.util.UUID;
  */
 public class JwtSessionModule implements ServerAuthModule {
 
-    private Logger logger = LoggerFactory.getLogger(JwtSessionModule.class);
+    private static final Logger DEBUG = LoggerFactory.getLogger(JwtSessionModule.class);
 
     private static final String JWT_SESSION_COOKIE_NAME = "session-jwt";
     private static final String SKIP_SESSION_PARAMETER_NAME = "skipSession";
+
+    public static final String KEY_ALIAS_KEY = "keyAlias";
+    public static final String PRIVATE_KEY_PASSWORD_KEY = "privateKeyPassword";
+    public static final String KEYSTORE_TYPE_KEY = "keystoreType";
+    public static final String KEYSTORE_FILE_KEY = "keystoreFile";
+    public static final String KEYSTORE_PASSWORD_KEY = "keystorePassword";
+    public static final String TOKEN_IDLE_TIME_CLAIM_KEY = "tokenIdleTime";
+    public static final String MAX_TOKEN_LIFE_KEY = "maxTokenLife";
+    public static final String JWT_VALIDATED_KEY = "jwtValidated";
 
     private String keyAlias;
     private String privateKeyPassword;
     private String keystoreType;
     private String keystoreFile;
     private String keystorePassword;
-    private int tokenLife;
+    private int tokenIdleTime;
+    private int maxTokenLife;
 
     /**
      * Initialises the module by getting the Keystore and Key alias properties out of the module configuration.
@@ -73,17 +84,26 @@ public class JwtSessionModule implements ServerAuthModule {
      * @param responsePolicy {@inheritDoc}
      * @param handler {@inheritDoc}
      * @param options {@inheritDoc}
-     * @throws AuthException {@inheritDoc}                String tokenLife = (String) options.get("token-life");if (StringUtils.isEmpty(tokenLife)) {tokenLife = "0";}              this.tokenLife = Integer.parseInt(tokenLife);
+     * @throws AuthException {@inheritDoc}
      */
     @Override
     public void initialize(MessagePolicy requestPolicy, MessagePolicy responsePolicy, CallbackHandler handler,
                            Map options) throws AuthException {
-        this.keyAlias = (String) options.get("key-alias");
-        this.privateKeyPassword = (String) options.get("private-key-password");
-        this.keystoreType = (String) options.get("keystore-type");
-        this.keystoreFile = (String) options.get("keystore-file");
-        this.keystorePassword = (String) options.get("keystore-password");
-        this.tokenLife = Integer.parseInt((String) options.get("token-life"));
+        this.keyAlias = (String) options.get(KEY_ALIAS_KEY);
+        this.privateKeyPassword = (String) options.get(PRIVATE_KEY_PASSWORD_KEY);
+        this.keystoreType = (String) options.get(KEYSTORE_TYPE_KEY);
+        this.keystoreFile = (String) options.get(KEYSTORE_FILE_KEY);
+        this.keystorePassword = (String) options.get(KEYSTORE_PASSWORD_KEY);
+        String tokenIdleTime = (String) options.get(TOKEN_IDLE_TIME_CLAIM_KEY);
+        if (StringUtils.isEmpty(tokenIdleTime)) {
+            tokenIdleTime = "0";
+        }
+        this.tokenIdleTime = Integer.parseInt(tokenIdleTime);
+        String maxTokenLife = (String) options.get(MAX_TOKEN_LIFE_KEY);
+        if (StringUtils.isEmpty(maxTokenLife)) {
+            maxTokenLife = "0";
+        }
+        this.maxTokenLife = Integer.parseInt(maxTokenLife);
     }
 
     /**
@@ -102,43 +122,63 @@ public class JwtSessionModule implements ServerAuthModule {
      * @param messageInfo {@inheritDoc}
      * @param clientSubject {@inheritDoc}
      * @param serviceSubject {@inheritDoc}
-     * @return {@inheritDoc}
      */
     @Override
-    public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject)
-            throws AuthException {
+    public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject) {
+
+        Jwt jwt = validateJwtSessionCookie(messageInfo);
+        if (jwt == null) {
+            DEBUG.debug("Session JWT NOT valid");
+            return AuthStatus.SEND_FAILURE;
+        } else {
+            DEBUG.debug("Session JWT valid");
+            return AuthStatus.SUCCESS;
+        }
+    }
+
+    public Jwt validateJwtSessionCookie(MessageInfo messageInfo) {
 
         HttpServletRequest request = (HttpServletRequest) messageInfo.getRequestMessage();
 
-        String sessionJwt = null;
+        Cookie jwtSessionCookie = null;
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : request.getCookies()) {
                 if (JWT_SESSION_COOKIE_NAME.equals(cookie.getName())) {
-                    sessionJwt = cookie.getValue();
+                    DEBUG.debug("Session JWT cookie found");
+                    jwtSessionCookie = cookie;
                     break;
                 }
             }
         }
 
-        if (!StringUtils.isEmpty(sessionJwt)) {
+        if (jwtSessionCookie != null && !StringUtils.isEmpty(jwtSessionCookie.getValue())) {
 
-            Jwt jwt = verifySessionJwt(sessionJwt);
-            if (jwt == null) {
-
-                return AuthStatus.SEND_FAILURE;
-            } else {
+            Jwt jwt = verifySessionJwt(jwtSessionCookie.getValue());
+            if (jwt != null) {
                 //if all goes well!
                 JwtClaimsSet jwtClaimsSet = jwt.getClaimsSet();
                 for (String key : jwtClaimsSet.keys()) {
                     request.setAttribute(key, jwtClaimsSet.get(key));
                 }
 
-                return AuthStatus.SUCCESS;
+                if (hasCoolOffPeriodExpired(jwt)) {
+                    // reset tokenIdleTime
+//                    HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
+//                    response.addCookie(
+                            resetIdleTimeout(jwt, jwtSessionCookie);
+//                    );
+                }
+
+                messageInfo.getMap().put(JWT_VALIDATED_KEY, true);
+
+                return jwt;
             }
+        } else {
+            DEBUG.debug("Session JWT cookie not set");
         }
 
-        return AuthStatus.SEND_FAILURE;
+        return null;
     }
 
     /**
@@ -162,12 +202,55 @@ public class JwtSessionModule implements ServerAuthModule {
         jwt.decrypt(privateKey);
 
         Date expirationTime = jwt.getClaimsSet().getExpirationTime();
+        Date tokenIdleTime = new Date(jwt.getClaimsSet().getClaim(TOKEN_IDLE_TIME_CLAIM_KEY, Integer.class).longValue() * 1000L);
 
-        if (System.currentTimeMillis() < expirationTime.getTime()) {
+        Date now = new Date(System.currentTimeMillis());
+
+        if ((now.getTime() < expirationTime.getTime()) && (now.getTime() < tokenIdleTime.getTime())) {
             return jwt;
         }
 
         return null;
+    }
+
+    private boolean hasCoolOffPeriodExpired(Jwt jwt) {
+
+        Date issuedAtTime = jwt.getClaimsSet().getIssuedAtTime();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.add(Calendar.MINUTE, -1);
+
+        return calendar.getTime().compareTo(issuedAtTime) > 0;
+    }
+
+    private Cookie resetIdleTimeout(Jwt jwt, Cookie jwtSessionCookie) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.MILLISECOND, 0);
+        final Date now = calendar.getTime();
+        Date nbf = now;
+        Date iat = now;
+        calendar.add(Calendar.MINUTE, tokenIdleTime);
+        Date tokenIdleTime = calendar.getTime();
+
+        jwt.getClaimsSet().setIssuedAtTime(iat);
+        jwt.getClaimsSet().setNotBeforeTime(nbf);
+        jwt.getClaimsSet().setClaim(TOKEN_IDLE_TIME_CLAIM_KEY, tokenIdleTime.getTime() / 1000L); //TODO maybe get jwt to make conversion?
+
+
+        KeystoreManager keystoreManager = new KeystoreManager(privateKeyPassword, keystoreType,
+                keystoreFile, keystorePassword);
+
+        RSAPublicKey publicKey = (RSAPublicKey) keystoreManager.getPublicKey(keyAlias);
+
+        String jwtString = new EncryptedJwt((JweHeader) jwt.getHeader(), jwt.getClaimsSet(), publicKey).build();
+
+        jwtSessionCookie.setValue(jwtString);
+
+        return jwtSessionCookie;
     }
 
     /**
@@ -186,13 +269,18 @@ public class JwtSessionModule implements ServerAuthModule {
 
         if (jwtParameters.containsKey(SKIP_SESSION_PARAMETER_NAME)
                 && ((Boolean) jwtParameters.get(SKIP_SESSION_PARAMETER_NAME))) {
-            logger.debug("Skipping creating session as jwtParameters contains, " + SKIP_SESSION_PARAMETER_NAME);
+            DEBUG.debug("Skipping creating session as jwtParameters contains, " + SKIP_SESSION_PARAMETER_NAME);
             return AuthStatus.SEND_SUCCESS;
         }
 
-        HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
-        Cookie jwtSessionCookie = createSessionJwtCookie(jwtParameters);
-        response.addCookie(jwtSessionCookie);
+        boolean jwtValidated = messageInfo.getMap().containsKey(JWT_VALIDATED_KEY);
+        if (!jwtValidated) {
+            // create jwt
+            HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
+            Cookie jwtSessionCookie = createSessionJwtCookie(jwtParameters);
+            response.addCookie(jwtSessionCookie);
+        }
+
 
         return AuthStatus.SEND_SUCCESS;
     }
@@ -218,30 +306,35 @@ public class JwtSessionModule implements ServerAuthModule {
         calendar.setTime(new Date());
         calendar.set(Calendar.MILLISECOND, 0);
         final Date now = calendar.getTime();
-        calendar.add(Calendar.MINUTE, tokenLife);
+        calendar.add(Calendar.MINUTE, maxTokenLife);
         final Date exp = calendar.getTime();
         Date nbf = now;
         Date iat = now;
+        calendar.setTime(now);
+        calendar.add(Calendar.MINUTE, tokenIdleTime);
+        Date tokenIdleTime = calendar.getTime();
         String jti = UUID.randomUUID().toString();
 
         String jwtString = jwtBuilder
                 .jwe(publicKey)
-                    .headers()
-                        .alg(JweAlgorithm.RSAES_PKCS1_V1_5)
-                        .enc(EncryptionMethod.A128CBC_HS256)
-                        .done()
-                    .claims()
-                        .jti(jti)
-                        .exp(exp)
-                        .nbf(nbf)
-                        .iat(iat)
-                        .claims(jwtParameters)
-                        .done()
-                    .build();
+                .headers()
+                .alg(JweAlgorithm.RSAES_PKCS1_V1_5)
+                .enc(EncryptionMethod.A128CBC_HS256)
+                .done()
+                .claims()
+                .jti(jti)
+                .exp(exp)
+                .nbf(nbf)
+                .iat(iat)
+                .claim(TOKEN_IDLE_TIME_CLAIM_KEY, tokenIdleTime.getTime() / 1000L) //TODO maybe get jwt to make conversion?
+                .claims(jwtParameters)
+                .done()
+                .build();
 
 
         Cookie cookie = new Cookie(JWT_SESSION_COOKIE_NAME, jwtString);
         cookie.setPath("/");
+        cookie.setMaxAge(new Long(exp.getTime() - now.getTime()).intValue() / 1000);
 
         return cookie;
     }

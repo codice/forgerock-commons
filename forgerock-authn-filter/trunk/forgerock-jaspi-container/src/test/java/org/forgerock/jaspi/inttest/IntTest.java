@@ -129,7 +129,7 @@ public class IntTest {
     }
 
     @Test
-    public void shouldAuthenticateAndNotCallSecureResponseWithValidateSuccessSessionModule() throws IOException,
+    public void shouldAuthenticateAndCallSecureResponseWithValidateSuccessSessionModule() throws IOException,
             ServletException, AuthException {
 
         //Given
@@ -154,7 +154,8 @@ public class IntTest {
                 responseArgumentCaptor.capture());
         assertEquals(requestArgumentCaptor.getValue().getRequest(), filterRunner.getRequest());
         assertEquals(responseArgumentCaptor.getValue().getResponse(), filterRunner.getResponse());
-        verify(filterRunner.getResponse(), never()).addHeader(anyString(), anyString());
+        verify(filterRunner.getResponse()).addHeader("session", ValidateSuccessSessionModule.class.getSimpleName());
+        verifyNoMoreInteractions(filterRunner.getResponse());
     }
 
     @Test
@@ -319,7 +320,7 @@ public class IntTest {
     }
 
     @Test
-    public void shouldAuthenticateJustUsingValidateSuccessSessionModuleAndNotCallAnySecureResponse() throws IOException,
+    public void shouldAuthenticateJustUsingValidateSuccessSessionModuleAndCallAnySecureResponse() throws IOException,
             ServletException, AuthException {
 
         //Given
@@ -346,7 +347,8 @@ public class IntTest {
                 responseArgumentCaptor.capture());
         assertEquals(requestArgumentCaptor.getValue().getRequest(), filterRunner.getRequest());
         assertEquals(responseArgumentCaptor.getValue().getResponse(), filterRunner.getResponse());
-        verify(filterRunner.getResponse(), never()).addHeader(anyString(), anyString());
+        verify(filterRunner.getResponse()).addHeader("session", ValidateSuccessSessionModule.class.getSimpleName());
+        verifyNoMoreInteractions(filterRunner.getResponse());
     }
 
     @Test

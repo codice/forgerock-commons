@@ -133,6 +133,7 @@ public class ServerAuthContextImpl implements ServerAuthContext {
 
             if (AuthStatus.SUCCESS.equals(authStatus)) {
                 // The module has successfully authenticated the client.
+                authenticatingAuthStatus = authStatus;
                 return authStatus;
             } else if (AuthStatus.SEND_SUCCESS.equals(authStatus)) {
                 //TODO what to do here? Session Modules shouldn't return this...
