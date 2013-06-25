@@ -30,9 +30,9 @@ import java.util.Map;
 
 /**
  * Provides methods to register and retrieve AuthConfigProvider instances for a given message layer and application
- * context. This factory is used to obtain the factory -> provider -> config -> context in that order. The context can be
- * used to validate a request and secure the response. A single factory is used by the AuthnFilter; providers need to be
- * populated separately.
+ * context. This factory is used to obtain the factory -> provider -> config -> context in that order. The context can
+ * be used to validate a request and secure the response. A single factory is used by the AuthnFilter; providers need
+ * to be populated separately.
  *
  * The following represents a typical sequence of calls for obtaining a server authentication context, and then using
  * it to secure a request.
@@ -50,12 +50,16 @@ import java.util.Map;
  */
 public class AuthConfigFactoryImpl extends AuthConfigFactory {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final static Logger DEBUG = LoggerFactory.getLogger(AuthConfigFactoryImpl.class);
 
     private AuthConfigProviderMap authConfigProviderMap = new AuthConfigProviderMap();
     private RegistrationIdGenerator registrationIdGenerator = new RegistrationIdGenerator();
 
-
+    /**
+     * Returns the singleton instance of the AuthConfigFactory.
+     *
+     * @return The AuthConfigFactory instance.
+     */
     public static AuthConfigFactory getInstance() {
         return AuthConfigFactoryHolder.INSTANCE.getInstance();
     }
@@ -69,7 +73,7 @@ public class AuthConfigFactoryImpl extends AuthConfigFactory {
     /**
      * Get a registered AuthConfigProvider from the factory, registered for the identified message layer and
      * application context and registers the given RegistrationListener (if non-null), against the message layer and
-     * application context
+     * application context.
      *
      * Rules used to retrieve registered AuthConfigProviders:
      *
@@ -169,7 +173,7 @@ public class AuthConfigFactoryImpl extends AuthConfigFactory {
         try {
             authConfigProvider = constructAuthConfigProvider(className, properties);
         } catch (Exception e) {
-            logger.error("Could not instantiate AuthConfigProvider, {}", className);
+            DEBUG.error("Could not instantiate AuthConfigProvider, {}", className);
             // Cannot throw error message as interface does not allow.
             throw new RuntimeException(MessageFormat.format("Could not instantiate AuthConfigProvider, {0}",
                     className));
@@ -372,7 +376,7 @@ public class AuthConfigFactoryImpl extends AuthConfigFactory {
      */
     @Override
     public void refresh() {
-        // Not required as there is only ever one AuthConfigProvider in this JASPIC implementation.
+        // Not required as there is only ever one AuthConfigProvider in this JASPI Container implementation.
     }
 
     /**

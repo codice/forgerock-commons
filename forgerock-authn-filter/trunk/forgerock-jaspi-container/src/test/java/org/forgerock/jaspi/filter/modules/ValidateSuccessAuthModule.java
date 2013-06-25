@@ -14,7 +14,7 @@
  * Copyright 2013 ForgeRock Inc.
  */
 
-package org.forgerock.jaspi.inttest.modules;
+package org.forgerock.jaspi.filter.modules;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -49,7 +49,7 @@ public class ValidateSuccessAuthModule implements ServerAuthModule {
     @Override
     public AuthStatus secureResponse(MessageInfo messageInfo, Subject serviceSubject) throws AuthException {
 
-        HttpServletResponse response = (HttpServletResponse)messageInfo.getResponseMessage();
+        HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
 
         response.addHeader("AUTH_SUCCESS", ValidateSuccessAuthModule.class.getSimpleName());
 

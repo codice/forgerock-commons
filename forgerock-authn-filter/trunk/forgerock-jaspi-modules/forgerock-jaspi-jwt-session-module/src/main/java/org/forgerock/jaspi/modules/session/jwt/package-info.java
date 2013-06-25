@@ -13,25 +13,8 @@
  *
  * Copyright 2013 ForgeRock Inc.
  */
-package org.forgerock.jaspi.container.modules;
 
 /**
- * Factory class to get the singleton instance implementation of the AuthModuleManager.
+ * This package contains classes for the Jwt Session JASPI Authentication Module.
  */
-public class AuthModuleManagerFactory {
-
-    /**
-     * Gets the AuthModuleManager.
-     *
-     * @return the AuthModuleManager instance.
-     */
-    public static AuthModuleManager getAuthModuleManager() {
-        return SingletonHolder.INSTANCE;
-    }
-
-    private AuthModuleManagerFactory() {}
-
-    private static final class SingletonHolder {
-        static final AuthModuleManager INSTANCE = new AuthModuleManagerImpl();
-    }
-}
+package org.forgerock.jaspi.modules.session.jwt;

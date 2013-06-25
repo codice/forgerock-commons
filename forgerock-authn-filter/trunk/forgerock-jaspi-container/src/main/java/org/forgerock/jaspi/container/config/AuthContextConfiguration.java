@@ -22,6 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A builder class to create the configuration for an Auth Context.
+ */
 public class AuthContextConfiguration {
 
     private final Configuration configuration;
@@ -30,12 +33,25 @@ public class AuthContextConfiguration {
     private Map<String, Object> sessionModule;
     private final List<Map<String, Object>> authenticationModules = new ArrayList<Map<String, Object>>();
 
+    /**
+     * Constructs an instance of the AuthContextConfiguration.
+     *
+     * @param configuration The parent Configuration builder.
+     * @param authContextId The Auth Context Id.
+     */
     public AuthContextConfiguration(Configuration configuration, String authContextId) {
         this.configuration = configuration;
         this.authContextId = authContextId;
     }
 
-
+    /**
+     * Adds a Session Module to the Auth Context configuration.
+     *
+     * @param sessionModuleClass The Session Module class.
+     * @param moduleProperties The configuration properties for the Session Module.
+     * @param <T> The Session Module class as a subtype of a ServerAuthModule.
+     * @return This AuthContextConfiguration instance.
+     */
     public <T extends ServerAuthModule> AuthContextConfiguration setSessionModule(Class<T> sessionModuleClass,
             Map<String, Object> moduleProperties) {
 
@@ -46,6 +62,14 @@ public class AuthContextConfiguration {
         return this;
     }
 
+    /**
+     * Adds an Authentication Module to the Auth Context configuration.
+     *
+     * @param authenticationModuleClass The Authentication Module class.
+     * @param moduleProperties The configuration properties for the Authentication Module.
+     * @param <T> The Authentication Module class as a subtype of a ServerAuthModule.
+     * @return This AuthContextConfiguration instance.
+     */
     public <T extends ServerAuthModule> AuthContextConfiguration addAuthenticationModule(
             Class<T> authenticationModuleClass, Map<String, Object> moduleProperties) {
 
@@ -56,10 +80,13 @@ public class AuthContextConfiguration {
         return this;
     }
 
+    /**
+     * Signals the configuration for the Auth Context is finished.
+     *
+     * @return The Configuration builder instance.
+     */
     public Configuration done() {
-
         configuration.addAuthContext(authContextId, sessionModule, authenticationModules);
-
         return configuration;
     }
 }

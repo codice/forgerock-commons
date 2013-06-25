@@ -14,28 +14,25 @@
  * Copyright 2013 ForgeRock Inc.
  */
 
-package org.forgerock.jaspi.inttest;
+package org.forgerock.jaspi.filter;
 
 import org.forgerock.jaspi.container.config.Configuration;
 import org.forgerock.jaspi.container.config.ConfigurationManager;
-import org.forgerock.jaspi.filter.AuthNFilter;
-import org.forgerock.jaspi.inttest.modules.SecureSendContinueAuthModule;
-import org.forgerock.jaspi.inttest.modules.SecureSendFailureAuthModule;
-import org.forgerock.jaspi.inttest.modules.ValidateSendContinueAuthModule;
-import org.forgerock.jaspi.inttest.modules.ValidateSendContinueSessionModule;
-import org.forgerock.jaspi.inttest.modules.ValidateSendFailureAuthModule;
-import org.forgerock.jaspi.inttest.modules.ValidateSendFailureSessionModule;
-import org.forgerock.jaspi.inttest.modules.ValidateSendSuccessAuthModule;
-import org.forgerock.jaspi.inttest.modules.ValidateSendSuccessSessionModule;
-import org.forgerock.jaspi.inttest.modules.ValidateSuccessAuthModule;
-import org.forgerock.jaspi.inttest.modules.ValidateSuccessSessionModule;
+import org.forgerock.jaspi.filter.modules.SecureSendContinueAuthModule;
+import org.forgerock.jaspi.filter.modules.SecureSendFailureAuthModule;
+import org.forgerock.jaspi.filter.modules.ValidateSendContinueAuthModule;
+import org.forgerock.jaspi.filter.modules.ValidateSendContinueSessionModule;
+import org.forgerock.jaspi.filter.modules.ValidateSendFailureAuthModule;
+import org.forgerock.jaspi.filter.modules.ValidateSendFailureSessionModule;
+import org.forgerock.jaspi.filter.modules.ValidateSendSuccessAuthModule;
+import org.forgerock.jaspi.filter.modules.ValidateSendSuccessSessionModule;
+import org.forgerock.jaspi.filter.modules.ValidateSuccessAuthModule;
+import org.forgerock.jaspi.filter.modules.ValidateSuccessSessionModule;
 import org.mockito.ArgumentCaptor;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import javax.security.auth.message.AuthException;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -45,7 +42,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -604,48 +600,5 @@ public class IntTest {
         assertEquals(responseArgumentCaptor.getValue().getResponse(), filterRunner.getResponse());
         verify(filterRunner.getResponse(), never()).addHeader(anyString(), anyString());
         verify(filterRunner.getResponse()).setStatus(500);
-    }
-}
-
-class FilterRunner {
-
-    private final AuthNFilter authFilter = new AuthNFilter();
-    private final FilterConfig filterConfig;
-    private final HttpServletRequest request;
-    private final HttpServletResponse response;
-    private final FilterChain filterChain;
-
-    public FilterRunner() {
-        filterConfig = mock(FilterConfig.class);
-        request = mock(HttpServletRequest.class);
-        response = mock(HttpServletResponse.class);
-        filterChain = mock(FilterChain.class);
-    }
-
-    public void run() throws IOException, ServletException {
-        run(null);
-    }
-
-    public void run(String moduleConfigurationValue) throws IOException, ServletException {
-
-        given(request.getRequestURL()).willReturn(new StringBuffer("http://localhost:8080/jaspi/resource.jsp"));
-        given(request.getContextPath()).willReturn("CONTEXT_PATH");
-        given(filterConfig.getInitParameter(AuthNFilter.MODULE_CONFIGURATION_PROPERTY))
-                .willReturn(moduleConfigurationValue);
-
-        authFilter.init(filterConfig);
-        authFilter.doFilter(request, response, filterChain);
-    }
-
-    public HttpServletRequest getRequest() {
-        return request;
-    }
-
-    public HttpServletResponse getResponse() {
-        return response;
-    }
-
-    public FilterChain getFilterChain() {
-        return filterChain;
     }
 }

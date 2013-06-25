@@ -27,8 +27,6 @@ import javax.security.auth.message.MessageInfo;
 import javax.security.auth.message.MessagePolicy;
 import javax.security.auth.message.config.ServerAuthContext;
 import javax.security.auth.message.module.ServerAuthModule;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +52,7 @@ import java.util.Map;
  */
 public class ServerAuthContextImpl implements ServerAuthContext {
 
-    private final static Logger logger = LoggerFactory.getLogger(ServerAuthContextImpl.class);
+    private final static Logger DEBUG = LoggerFactory.getLogger(ServerAuthContextImpl.class);
 
     private final ServerAuthModule sessionAuthModule;
     private final List<ServerAuthModule> serverAuthModules;
@@ -64,6 +62,7 @@ public class ServerAuthContextImpl implements ServerAuthContext {
     /**
      * Constructs an instance of ServerAuthContextImpl.
      *
+     * @param sessionAuthModule The SessionAuthModule that this context should run.
      * @param serverAuthModules A List of ServerAuthModules that this context should run.
      * @param requestPolicy The MessagePolicy to be applied to the request.
      * @param responsePolicy The MessagePolicy to be applied to the response.
@@ -72,7 +71,8 @@ public class ServerAuthContextImpl implements ServerAuthContext {
      * @throws AuthException If there is an exception when initialising the ServerAuthModules.
      */
     public ServerAuthContextImpl(ServerAuthModule sessionAuthModule, List<ServerAuthModule> serverAuthModules,
-                MessagePolicy requestPolicy, MessagePolicy responsePolicy, Map properties, CallbackHandler handler) throws AuthException {
+            MessagePolicy requestPolicy, MessagePolicy responsePolicy, Map properties, CallbackHandler handler)
+            throws AuthException {
         this.sessionAuthModule = sessionAuthModule;
         this.serverAuthModules = serverAuthModules;
     }
@@ -136,14 +136,12 @@ public class ServerAuthContextImpl implements ServerAuthContext {
                 authenticatingAuthStatus = authStatus;
                 return authStatus;
             } else if (AuthStatus.SEND_SUCCESS.equals(authStatus)) {
-                //TODO what to do here? Session Modules shouldn't return this...
-                // The module may have completely/partially/not authenticated the client.    //TODO update comment not right
+                // The module may have completely/partially/not authenticated the client.
                 return authStatus;
             } else if (AuthStatus.SEND_FAILURE.equals(authStatus)) {
                 // The module has failed to authenticate the client.
                 // -- In our implementation we will let subsequent modules try before sending the failure.
             } else if (AuthStatus.SEND_CONTINUE.equals(authStatus)) {
-                //TODO what to do here? Session Modules shouldn't return this...
                 // The module has not completed authenticating the client.
                 return authStatus;
             }
@@ -158,7 +156,7 @@ public class ServerAuthContextImpl implements ServerAuthContext {
                 authenticatingAuthStatus = authStatus;
                 break;
             } else if (AuthStatus.SEND_SUCCESS.equals(authStatus)) {
-                // The module may have completely/partially/not authenticated the client.    //TODO update comment not right
+                // The module may have completely/partially/not authenticated the client.
                 authenticatingAuthModule = serverAuthModule;
                 authenticatingAuthStatus = authStatus;
                 break;
@@ -223,9 +221,11 @@ public class ServerAuthContextImpl implements ServerAuthContext {
             authStatus = authenticatingAuthModule.secureResponse(messageInfo, serviceSubject);
         }
 
-        if (sessionAuthModule != null &&
+        boolean authenticatedSuccessfully = AuthStatus.SUCCESS.equals(authenticatingAuthStatus)
+                || AuthStatus.SEND_SUCCESS.equals(authenticatingAuthStatus);
 
-                (((AuthStatus.SUCCESS.equals(authenticatingAuthStatus) || AuthStatus.SEND_SUCCESS.equals(authenticatingAuthStatus)) && authStatus == null) || AuthStatus.SEND_SUCCESS.equals(authStatus))) {
+        if (sessionAuthModule != null && ((authenticatedSuccessfully && authStatus == null)
+                || AuthStatus.SEND_SUCCESS.equals(authStatus))) {
             authStatus = sessionAuthModule.secureResponse(messageInfo, serviceSubject);
         }
 

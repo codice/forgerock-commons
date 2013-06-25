@@ -16,7 +16,6 @@
 
 package org.forgerock.jaspi.container;
 
-import org.forgerock.jaspi.container.ServerAuthContextImpl;
 import org.forgerock.jaspi.filter.AuthNFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +38,7 @@ import java.util.Map;
  */
 public class ServerAuthConfigImpl implements ServerAuthConfig {
 
-    private Logger logger = LoggerFactory.getLogger(ServerAuthConfigImpl.class);
+    private static final Logger DEBUG = LoggerFactory.getLogger(ServerAuthConfigImpl.class);
 
     private final String layer;
     private final String appContext;
@@ -47,6 +46,13 @@ public class ServerAuthConfigImpl implements ServerAuthConfig {
 
     private Map<String, Map<String, Object>> contexts;
 
+    /**
+     * Constructs an instance of the ServerAuthConfigImpl.
+     *
+     * @param layer The layer this ServerAuthConfig should be registered at.
+     * @param appContext The appContext this ServerAuthConfig shoud be registered at.
+     * @param handler The CallbackHandler instance.
+     */
     public ServerAuthConfigImpl(String layer, String appContext, CallbackHandler handler) {
         this.layer = layer;
         this.appContext = appContext;
@@ -55,6 +61,12 @@ public class ServerAuthConfigImpl implements ServerAuthConfig {
         contexts = new HashMap<String, Map<String, Object>>();
     }
 
+    /**
+     * Registers an auth context with the provided context properties.
+     *
+     * @param authContextID The auth context ID used to identify this auth context.
+     * @param contextProperties The properties that will be passed to the AuthModule instance.
+     */
     public void registerAuthContext(String authContextID, Map<String, Object> contextProperties) {
         contexts.put(authContextID, contextProperties);
     }
@@ -106,6 +118,14 @@ public class ServerAuthConfigImpl implements ServerAuthConfig {
                 properties, handler);
     }
 
+    /**
+     * Creates an instance of the Server Auth Module, using the class name in the given module properties and the
+     * remaining module properties to initialise the Server Auth Module.
+     *
+     * @param moduleProperties The module properties.
+     * @return The ServerAuthModule instance.
+     * @throws AuthException If there is an error creating the ServerAuthModule.
+     */
     private ServerAuthModule createModule(Map<String, String> moduleProperties) throws AuthException {
         if (moduleProperties == null) {
             return null;
@@ -117,12 +137,16 @@ public class ServerAuthConfigImpl implements ServerAuthConfig {
             try {
                 ServerAuthModule module = (ServerAuthModule) Class.forName(className).newInstance();
                 module.initialize(createRequestMessagePolicy(), null, handler, moduleProperties);
+                DEBUG.debug("Created module, className: {}", className);
                 return module;
             } catch (ClassNotFoundException e) {
+                DEBUG.debug("Failed to instantiate module, className: {}", className);
                 throw new AuthException("Failed to instantiate module, className: " + className);
             } catch (IllegalAccessException e) {
+                DEBUG.debug("Failed to instantiate module, className: {}", className);
                 throw new AuthException("Failed to instantiate module, className: " + className);
             } catch (InstantiationException e) {
+                DEBUG.debug("Failed to instantiate module, className: {}", className);
                 throw new AuthException("Failed to instantiate module, className: " + className);
             }
         }

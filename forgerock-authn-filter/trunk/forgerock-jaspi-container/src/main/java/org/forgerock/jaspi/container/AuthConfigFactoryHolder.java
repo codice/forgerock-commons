@@ -18,16 +18,28 @@ package org.forgerock.jaspi.container;
 
 import javax.security.auth.message.config.AuthConfigFactory;
 
+/**
+ * Singleton pattern for ensuring only one instance of the AuthConfigFactory is ever created.
+ */
 enum AuthConfigFactoryHolder {
 
+    /** The Singleton instance. */
     INSTANCE;
 
     private AuthConfigFactory authConfigFactory;
 
+    /**
+     * Creates the Enum instance with the AuthConfigFactory instance.
+     */
     private AuthConfigFactoryHolder() {
         authConfigFactory = new AuthConfigFactoryImpl();
     }
 
+    /**
+     * Returns the AuthConfigFactory instance.
+     *
+     * @return The AuthConfigFactory instance.
+     */
     AuthConfigFactory getInstance() {
         return authConfigFactory;
     }

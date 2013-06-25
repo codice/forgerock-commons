@@ -17,6 +17,7 @@
 package org.forgerock.jaspi.modules.session.jwt;
 
 import org.apache.commons.lang3.StringUtils;
+import org.forgerock.json.fluent.JsonException;
 import org.forgerock.json.jose.builders.JwtBuilder;
 import org.forgerock.json.jose.jwe.EncryptedJwt;
 import org.forgerock.json.jose.jwe.EncryptionMethod;
@@ -60,14 +61,24 @@ public class JwtSessionModule implements ServerAuthModule {
     private static final String JWT_SESSION_COOKIE_NAME = "session-jwt";
     private static final String SKIP_SESSION_PARAMETER_NAME = "skipSession";
 
+    /** The Key Alias configuration property key. */
     public static final String KEY_ALIAS_KEY = "keyAlias";
+    /** The Private Key password configuration property key. */
     public static final String PRIVATE_KEY_PASSWORD_KEY = "privateKeyPassword";
+    /** The Keystore type configuration property key. */
     public static final String KEYSTORE_TYPE_KEY = "keystoreType";
+    /** The Keystore file path property key. */
     public static final String KEYSTORE_FILE_KEY = "keystoreFile";
+    /** The Keystore password configuration property key. */
     public static final String KEYSTORE_PASSWORD_KEY = "keystorePassword";
+    /** The Jwt Token Idle timeout configuration property key. */
     public static final String TOKEN_IDLE_TIME_CLAIM_KEY = "tokenIdleTime";
+    /** The Jwt Token Maximum life configuration property key. */
     public static final String MAX_TOKEN_LIFE_KEY = "maxTokenLife";
+    /** The Jwt Validated configuration proprety key. */
     public static final String JWT_VALIDATED_KEY = "jwtValidated";
+
+    private final JwtBuilder jwtBuilder;
 
     private String keyAlias;
     private String privateKeyPassword;
@@ -76,6 +87,22 @@ public class JwtSessionModule implements ServerAuthModule {
     private String keystorePassword;
     private int tokenIdleTime;
     private int maxTokenLife;
+
+    /**
+     * Constructs an instance of the JwtSessionModule.
+     */
+    public JwtSessionModule() {
+        jwtBuilder = new JwtBuilder();
+    }
+
+    /**
+     * Construtcts an instance of the JwtSessionModule.
+     *
+     * @param jwtBuilder An instance of the JwtBuilder.
+     */
+    public JwtSessionModule(JwtBuilder jwtBuilder) {
+        this.jwtBuilder = jwtBuilder;
+    }
 
     /**
      * Initialises the module by getting the Keystore and Key alias properties out of the module configuration.
@@ -122,6 +149,7 @@ public class JwtSessionModule implements ServerAuthModule {
      * @param messageInfo {@inheritDoc}
      * @param clientSubject {@inheritDoc}
      * @param serviceSubject {@inheritDoc}
+     * @return If the Jwt is valid then AuthStatus.SUCCESS is returned, otherwise AuthStatus.SEND_FAILURE is returned.
      */
     @Override
     public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject) {
@@ -136,6 +164,12 @@ public class JwtSessionModule implements ServerAuthModule {
         }
     }
 
+    /**
+     * Validates if the Jwt Session Cookie is valid and the idle timeout or max life has expired.
+     *
+     * @param messageInfo The MessageInfo instance.
+     * @return The Jwt if successfully validated otherwise null.
+     */
     public Jwt validateJwtSessionCookie(MessageInfo messageInfo) {
 
         HttpServletRequest request = (HttpServletRequest) messageInfo.getRequestMessage();
@@ -162,12 +196,12 @@ public class JwtSessionModule implements ServerAuthModule {
                     request.setAttribute(key, jwtClaimsSet.get(key));
                 }
 
+                // If request is made within one minute of the Jwt being issued the idle timeout is not reset.
+                // This helps reduce overheads when the client makes multiple requests for a single operation.
                 if (hasCoolOffPeriodExpired(jwt)) {
                     // reset tokenIdleTime
-//                    HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
-//                    response.addCookie(
-                            resetIdleTimeout(jwt, jwtSessionCookie);
-//                    );
+                    HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
+                    response.addCookie(resetIdleTimeout(jwt, jwtSessionCookie));
                 }
 
                 messageInfo.getMap().put(JWT_VALIDATED_KEY, true);
@@ -197,12 +231,17 @@ public class JwtSessionModule implements ServerAuthModule {
 
         RSAPrivateKey privateKey = (RSAPrivateKey) keystoreManager.getPrivateKey(keyAlias);
 
-        JwtBuilder jwtBuilder = new JwtBuilder();
         EncryptedJwt jwt = jwtBuilder.reconstruct(sessionJwt, EncryptedJwt.class);
-        jwt.decrypt(privateKey);
+        try {
+            jwt.decrypt(privateKey);
+        } catch (JsonException e) {
+            DEBUG.error("Failed to decrypt Jwt");
+            return null;
+        }
 
         Date expirationTime = jwt.getClaimsSet().getExpirationTime();
-        Date tokenIdleTime = new Date(jwt.getClaimsSet().getClaim(TOKEN_IDLE_TIME_CLAIM_KEY, Integer.class).longValue() * 1000L);
+        Date tokenIdleTime = new Date(jwt.getClaimsSet().getClaim(TOKEN_IDLE_TIME_CLAIM_KEY, Integer.class)
+                .longValue() * 1000L);
 
         Date now = new Date(System.currentTimeMillis());
 
@@ -213,6 +252,12 @@ public class JwtSessionModule implements ServerAuthModule {
         return null;
     }
 
+    /**
+     * Determines if the request was made within one minute of the Jwt being issued.
+     *
+     * @param jwt The Jwt, which has been decrypted and validated prior to this call.
+     * @return If the request was made one minute after the Jwt was issued.
+     */
     private boolean hasCoolOffPeriodExpired(Jwt jwt) {
 
         Date issuedAtTime = jwt.getClaimsSet().getIssuedAtTime();
@@ -225,6 +270,13 @@ public class JwtSessionModule implements ServerAuthModule {
         return calendar.getTime().compareTo(issuedAtTime) > 0;
     }
 
+    /**
+     * Resets the idle timeout value on the Jwt, as well as the issued at time and not before time.
+     *
+     * @param jwt The Jwt, which has been decrypted and validated prior to this call.
+     * @param jwtSessionCookie The current existing Jwt Session Cookie.
+     * @return The same cookie with the new Jwt value set.
+     */
     private Cookie resetIdleTimeout(Jwt jwt, Cookie jwtSessionCookie) {
 
         Calendar calendar = Calendar.getInstance();
@@ -238,19 +290,29 @@ public class JwtSessionModule implements ServerAuthModule {
 
         jwt.getClaimsSet().setIssuedAtTime(iat);
         jwt.getClaimsSet().setNotBeforeTime(nbf);
-        jwt.getClaimsSet().setClaim(TOKEN_IDLE_TIME_CLAIM_KEY, tokenIdleTime.getTime() / 1000L); //TODO maybe get jwt to make conversion?
-
+        jwt.getClaimsSet().setClaim(TOKEN_IDLE_TIME_CLAIM_KEY, tokenIdleTime.getTime() / 1000L);
 
         KeystoreManager keystoreManager = new KeystoreManager(privateKeyPassword, keystoreType,
                 keystoreFile, keystorePassword);
 
         RSAPublicKey publicKey = (RSAPublicKey) keystoreManager.getPublicKey(keyAlias);
 
-        String jwtString = new EncryptedJwt((JweHeader) jwt.getHeader(), jwt.getClaimsSet(), publicKey).build();
+        String jwtString = rebuildEncryptedJwt((EncryptedJwt) jwt, publicKey);
 
         jwtSessionCookie.setValue(jwtString);
 
         return jwtSessionCookie;
+    }
+
+    /**
+     * Recreates the Encrypted Session Jwt.
+     *
+     * @param jwt The orginal Session Jwt.
+     * @param publicKey The public key.
+     * @return The Session Jwt.
+     */
+    protected String rebuildEncryptedJwt(EncryptedJwt jwt, RSAPublicKey publicKey) {
+        return new EncryptedJwt((JweHeader) jwt.getHeader(), jwt.getClaimsSet(), publicKey).build();
     }
 
     /**
@@ -300,8 +362,6 @@ public class JwtSessionModule implements ServerAuthModule {
 
         RSAPublicKey publicKey = (RSAPublicKey) keystoreManager.getPublicKey(keyAlias);
 
-        JwtBuilder jwtBuilder = new JwtBuilder();
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.set(Calendar.MILLISECOND, 0);
@@ -326,7 +386,7 @@ public class JwtSessionModule implements ServerAuthModule {
                 .exp(exp)
                 .nbf(nbf)
                 .iat(iat)
-                .claim(TOKEN_IDLE_TIME_CLAIM_KEY, tokenIdleTime.getTime() / 1000L) //TODO maybe get jwt to make conversion?
+                .claim(TOKEN_IDLE_TIME_CLAIM_KEY, tokenIdleTime.getTime() / 1000L)
                 .claims(jwtParameters)
                 .done()
                 .build();

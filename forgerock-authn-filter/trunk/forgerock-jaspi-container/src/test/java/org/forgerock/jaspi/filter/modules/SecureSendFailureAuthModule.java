@@ -14,7 +14,7 @@
  * Copyright 2013 ForgeRock Inc.
  */
 
-package org.forgerock.jaspi.inttest.modules;
+package org.forgerock.jaspi.filter.modules;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-public class ValidateSendFailureAuthModule implements ServerAuthModule {
+public class SecureSendFailureAuthModule implements ServerAuthModule {
 
     @Override
     public void initialize(MessagePolicy requestPolicy, MessagePolicy responsePolicy, CallbackHandler handler,
@@ -43,17 +43,12 @@ public class ValidateSendFailureAuthModule implements ServerAuthModule {
     public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject)
             throws AuthException {
 
-        return AuthStatus.SEND_FAILURE;
+        return AuthStatus.SUCCESS;
     }
 
     @Override
     public AuthStatus secureResponse(MessageInfo messageInfo, Subject serviceSubject) throws AuthException {
-
-        HttpServletResponse response = (HttpServletResponse)messageInfo.getResponseMessage();
-
-        response.addHeader("AUTH_SEND_FAILURE", ValidateSendFailureAuthModule.class.getSimpleName());
-
-        return AuthStatus.SEND_SUCCESS;
+        return AuthStatus.SEND_FAILURE;
     }
 
     @Override

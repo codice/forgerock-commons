@@ -14,7 +14,7 @@
  * Copyright 2013 ForgeRock Inc.
  */
 
-package org.forgerock.jaspi.inttest.modules;
+package org.forgerock.jaspi.filter.modules;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-public class SecureSendContinueAuthModule implements ServerAuthModule {
+public class ValidateSendContinueAuthModule implements ServerAuthModule {
 
     @Override
     public void initialize(MessagePolicy requestPolicy, MessagePolicy responsePolicy, CallbackHandler handler,
@@ -43,12 +43,17 @@ public class SecureSendContinueAuthModule implements ServerAuthModule {
     public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject)
             throws AuthException {
 
-        return AuthStatus.SUCCESS;
+        return AuthStatus.SEND_CONTINUE;
     }
 
     @Override
     public AuthStatus secureResponse(MessageInfo messageInfo, Subject serviceSubject) throws AuthException {
-        return AuthStatus.SEND_CONTINUE;
+
+        HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
+
+        response.addHeader("AUTH_SEND_CONTINUE", ValidateSendContinueAuthModule.class.getSimpleName());
+
+        return AuthStatus.SEND_SUCCESS;
     }
 
     @Override

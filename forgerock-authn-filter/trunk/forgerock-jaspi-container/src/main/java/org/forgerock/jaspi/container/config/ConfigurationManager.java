@@ -19,21 +19,36 @@ package org.forgerock.jaspi.container.config;
 import org.forgerock.jaspi.container.AuthConfigFactoryImpl;
 import org.forgerock.jaspi.container.AuthConfigProviderImpl;
 import org.forgerock.jaspi.container.ServerAuthConfigImpl;
-import org.forgerock.jaspi.container.callback.CallbackHandlerImpl;
 
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.message.AuthException;
 import javax.security.auth.message.config.AuthConfigFactory;
-import java.util.Map;
 
+/**
+ * Responsible for configuring the Auth Contexts for the Authentication Filter.
+ */
 public final class ConfigurationManager {
 
     private static boolean configured = false;
 
+    /**
+     * Private default constructor.
+     */
+    private ConfigurationManager() {
+    }
+
+    /**
+     * Configures the Authentication Filter with the given Auth Context configuration.
+     *
+     * Can only be called once, unless the unconfigure method is called.
+     *
+     * @param authContextConfiguration The Configuration object containing the Auth Context configuration.
+     * @throws AuthException If there is a problem configuring the Authentication Filter.
+     */
     public static synchronized void configure(Configuration authContextConfiguration) throws AuthException {
 
         if (!configured) {
-            CallbackHandler callbackHandler = new CallbackHandlerImpl();
+            CallbackHandler callbackHandler = null;
             ServerAuthConfigImpl serverAuthConfig = new ServerAuthConfigImpl(null, null, callbackHandler);
 
             for (String authContextId : authContextConfiguration.keySet()) {
@@ -46,13 +61,15 @@ public final class ConfigurationManager {
             authConfigProvider.setServerAuthConfig(serverAuthConfig);
             authConfigFactory.registerConfigProvider(authConfigProvider, null, null, null);
 
-
             configured = true;
         } else {
             throw new AuthException("JASPI Authn Filter already configured.");
         }
     }
 
+    /**
+     * Sets the configured flag to false.
+     */
     public static synchronized void unconfigure() {
         configured = false;
     }

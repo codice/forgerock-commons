@@ -14,32 +14,8 @@
  * Copyright 2013 ForgeRock Inc.
  */
 
-package org.forgerock.jaspi.container.modules;
-
 /**
- * This exception signals an error when altering the state of the internal store of Authentication Modules and
- * chains.
+ * This package contains class which are used to configure the JSR-196 Java Authentication Service Provider Interface
+ * container (JASPIC).
  */
-public class ModuleManagerException extends Exception {
-
-    private static final long serialVersionUID = -1L;
-
-    /**
-     * Constructs a ModuleManagerException.
-     *
-     * @param message The exception message.
-     */
-    public ModuleManagerException(String message) {
-        super(message);
-    }
-
-    /**
-     * Constructs a ModuleManagerException.
-     *
-     * @param message The exception message.
-     * @param e The cause of this exception.
-     */
-    public ModuleManagerException(String message, Throwable e) {
-        super(message, e);
-    }
-}
+package org.forgerock.jaspi.container.config;

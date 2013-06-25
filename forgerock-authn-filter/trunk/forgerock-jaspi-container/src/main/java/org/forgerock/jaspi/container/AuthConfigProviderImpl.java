@@ -41,11 +41,6 @@ import java.util.Map;
  * </ol>
  *
  * The initialization component typically performs these calls to set up the provider.
- *
- * <ol>
- *     TODO
- * </ol>
- *
  */
 public class AuthConfigProviderImpl implements AuthConfigProvider {
 
@@ -67,14 +62,13 @@ public class AuthConfigProviderImpl implements AuthConfigProvider {
     }
 
     /**
-     * Primes this provider with the server auth config to return
+     * Primes this provider with the server auth config to return.
      *
      * @param serverAuthConfig The single serverAuthConfig that will always be returned by this provider.
      */
     public void setServerAuthConfig(ServerAuthConfig serverAuthConfig) {
         this.serverAuthConfig = serverAuthConfig;
     }
-
 
     /**
      * This method is not supported!

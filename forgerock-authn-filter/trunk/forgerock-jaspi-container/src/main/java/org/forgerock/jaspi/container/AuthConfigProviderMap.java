@@ -16,9 +16,6 @@
 
 package org.forgerock.jaspi.container;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.security.auth.message.AuthException;
 import javax.security.auth.message.config.AuthConfigFactory;
 import javax.security.auth.message.config.AuthConfigProvider;
@@ -35,8 +32,6 @@ import java.util.Set;
  * registrations keyed by a registration id.
  */
 public class AuthConfigProviderMap {
-
-    private final static Logger logger = LoggerFactory.getLogger(AuthConfigProviderMap.class);
 
     private final Map<String, AuthConfigProvider> authConfigProviders = new HashMap<String, AuthConfigProvider>();
     private final Map<String, Set<RegistrationListener>> registrationListeners =

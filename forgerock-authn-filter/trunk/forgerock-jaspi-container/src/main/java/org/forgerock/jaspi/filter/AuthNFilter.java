@@ -26,7 +26,6 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.message.AuthException;
 import javax.security.auth.message.AuthStatus;
 import javax.security.auth.message.MessageInfo;
-import javax.security.auth.message.config.AuthConfigFactory;
 import javax.security.auth.message.config.AuthConfigProvider;
 import javax.security.auth.message.config.ServerAuthConfig;
 import javax.security.auth.message.config.ServerAuthContext;
@@ -56,14 +55,16 @@ import static javax.security.auth.message.AuthStatus.SUCCESS;
  * The application context is built up from "hostname path", i.e. "openam.forgerock.org /openam/rest/".
  *
  * To select the chain of modules that this Authentication Filter should use to authenticate request is set in the
- * web.xml as an init-param with the name of "moduleConfiguration" the value of this param must match are valid Module Chain
- * name.
+ * web.xml as an init-param with the name of "moduleConfiguration" the value of this param must match are valid Module
+ * Chain name.
  */
 public class AuthNFilter implements Filter {
 
-    private Logger logger = LoggerFactory.getLogger(AuthNFilter.class);
+    private final static Logger DEBUG = LoggerFactory.getLogger(AuthNFilter.class);
 
     private final static String MESSAGE_LAYER = "HttpServlet";
+
+    /** Module Configuration Filter init parameter key. */
     public final static String MODULE_CONFIGURATION_PROPERTY = "moduleConfiguration";
 
     /*
@@ -83,14 +84,12 @@ public class AuthNFilter implements Filter {
      */
     public void init(FilterConfig filterConfig) throws ServletException {
 
-        // Set the auth module
         moduleConfiguration = filterConfig.getInitParameter(MODULE_CONFIGURATION_PROPERTY);
-        logger.debug("moduleConfiguration set to: {}", moduleConfiguration);
+        DEBUG.debug("moduleConfiguration set to: {}", moduleConfiguration);
         if (moduleConfiguration == null || moduleConfiguration.length() == 0) {
-            logger.error("moduleConfiguration not set in init-param");
+            DEBUG.error("moduleConfiguration not set in init-param");
             throw new ServletException("moduleConfiguration not set in init-param");
         }
-
     }
 
     /**
@@ -124,8 +123,8 @@ public class AuthNFilter implements Filter {
                 null);
 
         if (authConfigProvider == null) {
-            logger.debug("No AuthConfigProvider found with layer, {} and appContext, {}", layer, appContext);
-            logger.debug("Proceeding with filter chain.");
+            DEBUG.debug("No AuthConfigProvider found with layer, {} and appContext, {}", layer, appContext);
+            DEBUG.debug("Proceeding with filter chain.");
             filterChain.doFilter(request, response);
             return;
         }
@@ -146,8 +145,8 @@ public class AuthNFilter implements Filter {
 
             // Could be null if no modules found
             if (serverAuthContext == null) {
-                logger.debug("No Authentication Modules found for authContextID, {}", authContextID);
-                logger.debug("Proceeding with filter chain.");
+                DEBUG.debug("No Authentication Modules found for authContextID, {}", authContextID);
+                DEBUG.debug("Proceeding with filter chain.");
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -163,27 +162,29 @@ public class AuthNFilter implements Filter {
             if (SUCCESS.equals(requestAuthStatus)) {
                 // nothing to do here just carry on
                 proceedWithCall = true;
-                logger.debug("Successfully validated request.");
+                DEBUG.debug("Successfully validated request.");
             } else if (SEND_SUCCESS.equals(requestAuthStatus)) {
                 // Send HttpServletResponse to client and exit.
-                logger.debug("Successfully validated request, with response message");
+                DEBUG.debug("Successfully validated request, with response message");
             } else if (SEND_FAILURE.equals(requestAuthStatus)) {
                 // Send HttpServletResponse to client and exit.
-                logger.debug("Failed to validate request, included response message.");
+                DEBUG.debug("Failed to validate request, included response message.");
                 response.setStatus(401);
                 return;
             } else if (SEND_CONTINUE.equals(requestAuthStatus)) {
                 // Send HttpServletResponse to client and exit.
-                logger.debug("Has not finished validating request. Requires more information from client.");
+                DEBUG.debug("Has not finished validating request. Requires more information from client.");
                 return;
             } else {
-                logger.error("Invalid AuthStatus, {}", requestAuthStatus.toString());
+                DEBUG.error("Invalid AuthStatus, {}", requestAuthStatus.toString());
                 throw new AuthException("Invalid AuthStatus from validateRequest: " + requestAuthStatus.toString());
             }
 
             // Secure the response (includes adding any session cookies to the response)
-            AuthStatus responseAuthStatus = serverAuthContext.secureResponse(messageInfo, serviceSubject);//TODO moved here so can work with IB
-            //TODO for some reason IDM flushes the response when doFilter is being called so cannot add anything to response after that!!
+            AuthStatus responseAuthStatus = serverAuthContext.secureResponse(messageInfo, serviceSubject);
+            // If any filter/resource closes the response or redirects the response the secureResponse call cannot add
+            // anything else to the response. Because of this the call to secureResponse has been moved before the
+            // doFilter call to get around this issue.
 
             if (proceedWithCall) {
                 filterChain.doFilter((ServletRequest) messageInfo.getRequestMessage(),
@@ -192,19 +193,19 @@ public class AuthNFilter implements Filter {
 
             if (SEND_SUCCESS.equals(responseAuthStatus)) {
                 // nothing to do here just carry on
-                logger.debug("Successfully secured response.");
+                DEBUG.debug("Successfully secured response.");
             } else if (SEND_FAILURE.equals(responseAuthStatus)) {
                 // Send HttpServletResponse to client and exit.
-                logger.debug("Failed to secured response, included response message");
+                DEBUG.debug("Failed to secured response, included response message");
                 response.setStatus(500);
                 return;
             } else if (SEND_CONTINUE.equals(responseAuthStatus)) {
                 // Send HttpServletResponse to client and exit.
-                logger.debug("Has not finished securing response. Requires more information from client.");
+                DEBUG.debug("Has not finished securing response. Requires more information from client.");
                 response.setStatus(100);
                 return;
             } else {
-                logger.error("Invalid AuthStatus, {}", requestAuthStatus.toString());
+                DEBUG.error("Invalid AuthStatus, {}", requestAuthStatus.toString());
                 throw new AuthException("Invalid AuthStatus from secureResponse: " + responseAuthStatus.toString());
             }
 
@@ -213,6 +214,13 @@ public class AuthNFilter implements Filter {
         }
     }
 
+    /**
+     * Creates a MessageInfo instance containing the HttpServletRequest and HttpServletResponse.
+     *
+     * @param request The HttpServletRequest.
+     * @param response The HttpServletResponse.
+     * @return A MessageInfo instance.
+     */
     private MessageInfo prepareMessageInfo(HttpServletRequest request, HttpServletResponse response) {
 
         Map<String, Object> messageProperties = new HashMap<String, Object>();
