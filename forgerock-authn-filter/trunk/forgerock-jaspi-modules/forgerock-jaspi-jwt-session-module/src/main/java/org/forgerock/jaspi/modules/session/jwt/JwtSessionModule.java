@@ -402,6 +402,19 @@ public class JwtSessionModule implements ServerAuthModule {
     }
 
     /**
+     * Provides a way to delete the Jwt Session Cookie, by setting a new cookie with the same name, null value and
+     * max age 0.
+     *
+     * @param response The HttpServletResponse with the Jwt Session Cookie.
+     */
+    public void deleteSessionJwtCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie(JWT_SESSION_COOKIE_NAME, null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
+    /**
      * No cleaning for the Subject is required for this module.
      *
      * @param messageInfo {@inheritDoc}
