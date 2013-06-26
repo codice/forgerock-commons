@@ -201,7 +201,7 @@ public class JwtSessionModule implements ServerAuthModule {
                 if (hasCoolOffPeriodExpired(jwt)) {
                     // reset tokenIdleTime
                     HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
-                    response.addCookie(resetIdleTimeout(jwt, jwtSessionCookie));
+                    response.addCookie(resetIdleTimeout(jwt));
                 }
 
                 messageInfo.getMap().put(JWT_VALIDATED_KEY, true);
@@ -274,10 +274,9 @@ public class JwtSessionModule implements ServerAuthModule {
      * Resets the idle timeout value on the Jwt, as well as the issued at time and not before time.
      *
      * @param jwt The Jwt, which has been decrypted and validated prior to this call.
-     * @param jwtSessionCookie The current existing Jwt Session Cookie.
      * @return The same cookie with the new Jwt value set.
      */
-    private Cookie resetIdleTimeout(Jwt jwt, Cookie jwtSessionCookie) {
+    private Cookie resetIdleTimeout(Jwt jwt) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -287,6 +286,7 @@ public class JwtSessionModule implements ServerAuthModule {
         Date iat = now;
         calendar.add(Calendar.MINUTE, tokenIdleTime);
         Date tokenIdleTime = calendar.getTime();
+        Date exp = jwt.getClaimsSet().getExpirationTime();
 
         jwt.getClaimsSet().setIssuedAtTime(iat);
         jwt.getClaimsSet().setNotBeforeTime(nbf);
@@ -299,9 +299,11 @@ public class JwtSessionModule implements ServerAuthModule {
 
         String jwtString = rebuildEncryptedJwt((EncryptedJwt) jwt, publicKey);
 
-        jwtSessionCookie.setValue(jwtString);
+        Cookie cookie = new Cookie(JWT_SESSION_COOKIE_NAME, jwtString);
+        cookie.setPath("/");
+        cookie.setMaxAge(new Long(exp.getTime() - now.getTime()).intValue() / 1000);
 
-        return jwtSessionCookie;
+        return cookie;
     }
 
     /**

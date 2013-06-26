@@ -53,6 +53,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 
 public class JwtSessionModuleTest {
 
@@ -519,9 +520,14 @@ public class JwtSessionModuleTest {
 
         //Then
         assertEquals(authStatus, AuthStatus.SUCCESS);
-        verify(jwtSessionCookie).setValue("REBUILT_ENCRYPTED_JWT");
         verify(claimsSet).setIssuedAtTime(Matchers.<Date>anyObject());
-        verify(response).addCookie(jwtSessionCookie);
+        ArgumentCaptor<Cookie> cookieCaptor = ArgumentCaptor.forClass(Cookie.class);
+        verify(response).addCookie(cookieCaptor.capture());
+        Cookie newCookie = cookieCaptor.getValue();
+        assertEquals(newCookie.getValue(), "REBUILT_ENCRYPTED_JWT");
+        assertEquals(newCookie.getPath(), "/");
+        assertNotEquals(newCookie.getMaxAge(), 0);
+        assertNotEquals(newCookie.getMaxAge(), -1);
     }
 
     @Test
