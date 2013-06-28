@@ -180,11 +180,17 @@ public class AuthNFilter implements Filter {
                 throw new AuthException("Invalid AuthStatus from validateRequest: " + requestAuthStatus.toString());
             }
 
-            // Secure the response (includes adding any session cookies to the response)
-            AuthStatus responseAuthStatus = serverAuthContext.secureResponse(messageInfo, serviceSubject);
-            // If any filter/resource closes the response or redirects the response the secureResponse call cannot add
-            // anything else to the response. Because of this the call to secureResponse has been moved before the
-            // doFilter call to get around this issue.
+            AuthException secureResponseException = null;
+            AuthStatus responseAuthStatus = null;
+            try {
+                // Secure the response (includes adding any session cookies to the response)
+                responseAuthStatus = serverAuthContext.secureResponse(messageInfo, serviceSubject);
+                // If any filter/resource closes the response or redirects the response the secureResponse call cannot add
+                // anything else to the response. Because of this the call to secureResponse has been moved before the
+                // doFilter call to get around this issue.
+            } catch (AuthException e) {
+                secureResponseException = e;
+            }
 
             if (proceedWithCall) {
                 filterChain.doFilter((ServletRequest) messageInfo.getRequestMessage(),
@@ -204,6 +210,8 @@ public class AuthNFilter implements Filter {
                 DEBUG.debug("Has not finished securing response. Requires more information from client.");
                 response.setStatus(100);
                 return;
+            } else if (secureResponseException != null) {
+                throw new ServletException(secureResponseException.getMessage(), secureResponseException);
             } else {
                 DEBUG.error("Invalid AuthStatus, {}", requestAuthStatus.toString());
                 throw new AuthException("Invalid AuthStatus from secureResponse: " + responseAuthStatus.toString());

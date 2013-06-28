@@ -16,9 +16,13 @@
 
 package org.forgerock.jaspi.container.config;
 
+import org.forgerock.jaspi.container.AuditLogger;
+import org.forgerock.jaspi.container.AuditLoggerHolder;
 import org.forgerock.jaspi.container.AuthConfigFactoryImpl;
 import org.forgerock.jaspi.container.AuthConfigProviderImpl;
 import org.forgerock.jaspi.container.ServerAuthConfigImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.message.AuthException;
@@ -28,6 +32,8 @@ import javax.security.auth.message.config.AuthConfigFactory;
  * Responsible for configuring the Auth Contexts for the Authentication Filter.
  */
 public final class ConfigurationManager {
+
+    private final static Logger DEBUG = LoggerFactory.getLogger(ConfigurationManager.class);
 
     private static boolean configured = false;
 
@@ -50,6 +56,9 @@ public final class ConfigurationManager {
         if (!configured) {
             CallbackHandler callbackHandler = null;
             ServerAuthConfigImpl serverAuthConfig = new ServerAuthConfigImpl(null, null, callbackHandler);
+            AuditLogger auditLogger = createAuditLogger(
+                    authContextConfiguration.getAuditLoggerClassName());
+            AuditLoggerHolder.INSTANCE.setAuthenticationAuditLogger(auditLogger);
 
             for (String authContextId : authContextConfiguration.keySet()) {
                 serverAuthConfig.registerAuthContext(authContextId, authContextConfiguration.get(authContextId));
@@ -72,5 +81,33 @@ public final class ConfigurationManager {
      */
     public static synchronized void unconfigure() {
         configured = false;
+    }
+
+    /**
+     * Creates an instance of a AuditLogger, if the class name is null then null is returned.
+     *
+     * @param auditLoggerClassName The class name of the AuditLogger implementation.
+     * @return An instance of a AuditLogger
+     * @throws AuthException If the AuditLogger could not be created.
+     */
+    private static AuditLogger createAuditLogger(String auditLoggerClassName)
+            throws AuthException {
+
+        if (auditLoggerClassName == null) {
+            return null;
+        }
+
+        try {
+            return ((Class<? extends AuditLogger>) Class.forName(auditLoggerClassName)).newInstance();
+        } catch (InstantiationException e) {
+            DEBUG.error("Could not create AuditLogger", e);
+            throw new AuthException(e.getMessage());
+        } catch (IllegalAccessException e) {
+            DEBUG.error("Could not create AuditLogger", e);
+            throw new AuthException(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            DEBUG.error("Could not create AuditLogger", e);
+            throw new AuthException(e.getMessage());
+        }
     }
 }

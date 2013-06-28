@@ -30,6 +30,27 @@ public class Configuration {
     private static final String AUTH_MODULES_KEY = "authModules";
 
     private Map<String, Map<String, Object>> authContexts = new HashMap<String, Map<String, Object>>();
+    private String auditLoggerClassName;
+
+    /**
+     * Sets the class name for the Audit Logger to use to audit authentication attempts.
+     *
+     * @param auditLoggerClassName The Audit Logger class name.
+     * @return This configuration object.
+     */
+    public Configuration setAuditLoggerClassName(String auditLoggerClassName) {
+        this.auditLoggerClassName = auditLoggerClassName;
+        return this;
+    }
+
+    /**
+     * Gets the class name for the Audit Logger to use to audit authentication attempts.
+     *
+     * @return The Audit Logger class name.
+     */
+    public String getAuditLoggerClassName() {
+        return auditLoggerClassName;
+    }
 
     /**
      * Adds an AuthContext to this configuration, returning an AuthContextConfiguration instance to configure

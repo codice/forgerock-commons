@@ -22,6 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -33,12 +34,14 @@ public class FilterRunner {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final FilterChain filterChain;
+    private final PrintWriter responseWriter;
 
     public FilterRunner() {
         filterConfig = mock(FilterConfig.class);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
         filterChain = mock(FilterChain.class);
+        responseWriter = mock(PrintWriter.class);
     }
 
     public void run() throws IOException, ServletException {
@@ -51,6 +54,7 @@ public class FilterRunner {
         given(request.getContextPath()).willReturn("CONTEXT_PATH");
         given(filterConfig.getInitParameter(AuthNFilter.MODULE_CONFIGURATION_PROPERTY))
                 .willReturn(moduleConfigurationValue);
+        given(response.getWriter()).willReturn(responseWriter);
 
         authFilter.init(filterConfig);
         authFilter.doFilter(request, response, filterChain);
