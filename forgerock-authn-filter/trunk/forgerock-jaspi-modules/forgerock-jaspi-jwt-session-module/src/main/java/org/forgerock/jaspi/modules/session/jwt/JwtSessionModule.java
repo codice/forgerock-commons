@@ -72,9 +72,9 @@ public class JwtSessionModule implements ServerAuthModule {
     /** The Keystore password configuration property key. */
     public static final String KEYSTORE_PASSWORD_KEY = "keystorePassword";
     /** The Jwt Token Idle timeout configuration property key. */
-    public static final String TOKEN_IDLE_TIME_CLAIM_KEY = "tokenIdleTime";
+    public static final String TOKEN_IDLE_TIME_CLAIM_KEY = "tokenIdleTimeMinutes";
     /** The Jwt Token Maximum life configuration property key. */
-    public static final String MAX_TOKEN_LIFE_KEY = "maxTokenLife";
+    public static final String MAX_TOKEN_LIFE_KEY = "maxTokenLifeMinutes";
     /** The Jwt Validated configuration proprety key. */
     public static final String JWT_VALIDATED_KEY = "jwtValidated";
 
@@ -96,7 +96,7 @@ public class JwtSessionModule implements ServerAuthModule {
     }
 
     /**
-     * Construtcts an instance of the JwtSessionModule.
+     * Constructs an instance of the JwtSessionModule.
      *
      * @param jwtBuilder An instance of the JwtBuilder.
      */
@@ -115,7 +115,7 @@ public class JwtSessionModule implements ServerAuthModule {
      */
     @Override
     public void initialize(MessagePolicy requestPolicy, MessagePolicy responsePolicy, CallbackHandler handler,
-                           Map options) throws AuthException {
+            Map options) throws AuthException {
         this.keyAlias = (String) options.get(KEY_ALIAS_KEY);
         this.privateKeyPassword = (String) options.get(PRIVATE_KEY_PASSWORD_KEY);
         this.keystoreType = (String) options.get(KEYSTORE_TYPE_KEY);
