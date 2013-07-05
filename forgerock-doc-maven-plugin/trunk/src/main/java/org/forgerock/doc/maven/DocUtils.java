@@ -175,7 +175,7 @@ public final class DocUtils {
         };
 
         File[] directories = srcDir.listFiles(filter);
-        if (directories.length > 0) {
+        if (directories != null && directories.length > 0) {
 
             FilenameFilter nameFilter = new FilenameFilter() {
                 @Override
