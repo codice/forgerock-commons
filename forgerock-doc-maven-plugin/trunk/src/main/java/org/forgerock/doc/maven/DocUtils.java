@@ -45,19 +45,19 @@ public final class DocUtils {
      *     <li>OpenTEST-10.1.0-admin-guide</li>
      *     <li>OpenTEST-10.1.0-SNAPSHOT-admin-guide</li>
      *     <li>OpenTEST-10.1.0-Xpress2-admin-guide</li>
+     *     <li>db2-connector-1.1.0.0-SNAPSHOT</li>
      * </ul>
      * <p/>
      * <p> <br>Invalid names:</p>
      * <ul>
-     *     <li>guide1</li>
      *     <li>guide.</li>
      *     <li>guide-1</li>
      *     <li>guide-.</li>
      * </ul>
      */
     public static final Pattern DOCUMENT_FILE_PATTERN = Pattern
-            .compile("^([a-zA-Z]+)(-?[0-9].[0-9\\.]*[0-9])?(-SNAPSHOT|(-Ex|-ex|-X)press[0-9])?"
-                    + "([a-zA-Z-]*)((-?[0-9].[0-9\\.]*[0-9])?-?(SNAPSHOT|(Ex|ex|X)press[0-9]?)?)$");
+            .compile("^([a-zA-Z0-9]+)(-?[0-9].[0-9\\.]*[0-9])?(-SNAPSHOT|(-Ex|-ex|-X)press[0-9])"
+                    + "?([a-zA-Z-]*)((-?[0-9].[0-9\\.]*[0-9])?-?(SNAPSHOT|(Ex|ex|X)press[0-9]?)?)$");
 
     /**
      * Pattern to find version sting.
