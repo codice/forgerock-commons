@@ -134,21 +134,21 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     final void copyResources() throws MojoExecutionException {
         // If you update this method, also see getBaseConfiguration().
         String[] resources = {"/fonts/DejaVuSans-Oblique.ttf",
-                "/fonts/DejaVuSans.ttf", "/fonts/DejaVuSansCondensed-Bold.ttf",
-                "/fonts/DejaVuSansCondensed-BoldOblique.ttf",
-                "/fonts/DejaVuSansMono-Bold.ttf",
-                "/fonts/DejaVuSansMono-BoldOblique.ttf",
-                "/fonts/DejaVuSansMono-Oblique.ttf",
-                "/fonts/DejaVuSansMono.ttf", "/fonts/DejaVuSerif-Italic.ttf",
-                "/fonts/DejaVuSerif.ttf",
-                "/fonts/DejaVuSerifCondensed-Bold.ttf",
-                "/fonts/DejaVuSerifCondensed-BoldItalic.ttf",
-                "/docbkx-stylesheets/epub/coredoc.xsl",
-                "/docbkx-stylesheets/fo/coredoc.xsl",
-                "/docbkx-stylesheets/fo/titlepages.xsl",
-                "/docbkx-stylesheets/html/chunked.xsl",
-                "/docbkx-stylesheets/html/coredoc.xsl",
-                "/docbkx-stylesheets/man/coredoc.xsl"};
+            "/fonts/DejaVuSans.ttf", "/fonts/DejaVuSansCondensed-Bold.ttf",
+            "/fonts/DejaVuSansCondensed-BoldOblique.ttf",
+            "/fonts/DejaVuSansMono-Bold.ttf",
+            "/fonts/DejaVuSansMono-BoldOblique.ttf",
+            "/fonts/DejaVuSansMono-Oblique.ttf",
+            "/fonts/DejaVuSansMono.ttf", "/fonts/DejaVuSerif-Italic.ttf",
+            "/fonts/DejaVuSerif.ttf",
+            "/fonts/DejaVuSerifCondensed-Bold.ttf",
+            "/fonts/DejaVuSerifCondensed-BoldItalic.ttf",
+            "/docbkx-stylesheets/epub/coredoc.xsl",
+            "/docbkx-stylesheets/fo/coredoc.xsl",
+            "/docbkx-stylesheets/fo/titlepages.xsl",
+            "/docbkx-stylesheets/html/chunked.xsl",
+            "/docbkx-stylesheets/html/coredoc.xsl",
+            "/docbkx-stylesheets/man/coredoc.xsl"};
 
         for (String resource : resources) {
             URL src = getClass().getResource(resource);
