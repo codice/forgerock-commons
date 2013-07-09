@@ -129,27 +129,26 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * Copy resources needed from plugin to project build directory. Resources
      * include custom fonts and XSL customization files.
      *
-     * @throws MojoExecutionException
-     *             Copy failed
+     * @throws MojoExecutionException Copy failed
      */
     final void copyResources() throws MojoExecutionException {
         // If you update this method, also see getBaseConfiguration().
-        String[] resources = { "/fonts/DejaVuSans-Oblique.ttf",
-            "/fonts/DejaVuSans.ttf", "/fonts/DejaVuSansCondensed-Bold.ttf",
-            "/fonts/DejaVuSansCondensed-BoldOblique.ttf",
-            "/fonts/DejaVuSansMono-Bold.ttf",
-            "/fonts/DejaVuSansMono-BoldOblique.ttf",
-            "/fonts/DejaVuSansMono-Oblique.ttf",
-            "/fonts/DejaVuSansMono.ttf", "/fonts/DejaVuSerif-Italic.ttf",
-            "/fonts/DejaVuSerif.ttf",
-            "/fonts/DejaVuSerifCondensed-Bold.ttf",
-            "/fonts/DejaVuSerifCondensed-BoldItalic.ttf",
-            "/docbkx-stylesheets/epub/coredoc.xsl",
-            "/docbkx-stylesheets/fo/coredoc.xsl",
-            "/docbkx-stylesheets/fo/titlepages.xsl",
-            "/docbkx-stylesheets/html/chunked.xsl",
-            "/docbkx-stylesheets/html/coredoc.xsl",
-            "/docbkx-stylesheets/man/coredoc.xsl" };
+        String[] resources = {"/fonts/DejaVuSans-Oblique.ttf",
+                "/fonts/DejaVuSans.ttf", "/fonts/DejaVuSansCondensed-Bold.ttf",
+                "/fonts/DejaVuSansCondensed-BoldOblique.ttf",
+                "/fonts/DejaVuSansMono-Bold.ttf",
+                "/fonts/DejaVuSansMono-BoldOblique.ttf",
+                "/fonts/DejaVuSansMono-Oblique.ttf",
+                "/fonts/DejaVuSansMono.ttf", "/fonts/DejaVuSerif-Italic.ttf",
+                "/fonts/DejaVuSerif.ttf",
+                "/fonts/DejaVuSerifCondensed-Bold.ttf",
+                "/fonts/DejaVuSerifCondensed-BoldItalic.ttf",
+                "/docbkx-stylesheets/epub/coredoc.xsl",
+                "/docbkx-stylesheets/fo/coredoc.xsl",
+                "/docbkx-stylesheets/fo/titlepages.xsl",
+                "/docbkx-stylesheets/html/chunked.xsl",
+                "/docbkx-stylesheets/html/coredoc.xsl",
+                "/docbkx-stylesheets/man/coredoc.xsl"};
 
         for (String resource : resources) {
             URL src = getClass().getResource(resource);
@@ -166,11 +165,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * EPUB XSL stylesheet customization file.
-     * <p>
+     * <p/>
      * docbkx-tools element: &lt;epubCustomization&gt;
      *
      * @parameter default-value=
-     *            "${project.build.directory}/docbkx-stylesheets/epub/coredoc.xsl"
+     * "${project.build.directory}/docbkx-stylesheets/epub/coredoc.xsl"
      * @required
      */
     private File epubCustomization;
@@ -179,10 +178,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * Prepare built EPUB documents for publication. Currently this method
      * renames the files.
      *
-     * @param epubDir
-     *            Directory under which to find the built files
-     * @throws MojoExecutionException
-     *             Something went wrong updating files.
+     * @param epubDir Directory under which to find the built files
+     * @throws MojoExecutionException Something went wrong updating files.
      */
     final void postProcessEPUB(final String epubDir) throws MojoExecutionException {
         renameDocuments(epubDir, "epub");
@@ -193,12 +190,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * example, rename <code>admin-guide/index.epub</code> to
      * <code>admin-guide/OpenAM-Admin-Guide.epub</code>.
      *
-     * @param base
-     *            Directory under which to find the built documents
-     * @param ext
-     *            File name extension including the dot, e.g. .pdf
-     * @throws MojoExecutionException
-     *             Something went wrong renaming files.
+     * @param base Directory under which to find the built documents
+     * @param ext  File name extension including the dot, e.g. .pdf
+     * @throws MojoExecutionException Something went wrong renaming files.
      */
     final void renameDocuments(final String base, final String ext) throws MojoExecutionException {
         String s = File.separator;
@@ -216,7 +210,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             File dest = new File(base + s + docName + s + newName);
             if (newName.equals("") || !src.renameTo(dest)) {
                 throw new MojoExecutionException("Failed to rename "
-                        + src.getPath());
+                        + src.getPath() + " to " + dest.getPath());
             }
         }
     }
@@ -226,12 +220,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * example, rename <code>index.pdf</code> to
      * <code>OpenAM-Admin-Guide.pdf</code>.
      *
-     * @param file
-     *            File to rename, such as <code>index.pdf</code>
-     * @param docName
-     *            Simple document name such as <code>admin-guide</code>
-     * @throws MojoExecutionException
-     *             Something went wrong renaming the file.
+     * @param file    File to rename, such as <code>index.pdf</code>
+     * @param docName Simple document name such as <code>admin-guide</code>
+     * @throws MojoExecutionException Something went wrong renaming the file.
      */
     final void renameDocument(final File file, final String docName) throws MojoExecutionException {
 
@@ -250,11 +241,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * FO XSL stylesheet customization file (for PDF, RTF).
-     * <p>
+     * <p/>
      * docbkx-tools element: &lt;foCustomization&gt;
      *
      * @parameter default-value=
-     *            "${project.build.directory}/docbkx-stylesheets/fo/coredoc.xsl"
+     * "${project.build.directory}/docbkx-stylesheets/fo/coredoc.xsl"
      * @required
      */
     private File foCustomization;
@@ -263,10 +254,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * Prepare built PDF documents for publication. Currently this method does
      * not do anything.
      *
-     * @param pdfDir
-     *            Directory under which to find the built files
-     * @throws MojoExecutionException
-     *             Something went wrong updating files.
+     * @param pdfDir Directory under which to find the built files
+     * @throws MojoExecutionException Something went wrong updating files.
      */
     final void postProcessPDF(final String pdfDir) throws MojoExecutionException {
     }
@@ -275,32 +264,30 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * Prepare built RTF documents for publication. Currently this method does
      * not do anything.
      *
-     * @param rtfDir
-     *            Directory under which to find the built files
-     * @throws MojoExecutionException
-     *             Something went wrong updating files.
+     * @param rtfDir Directory under which to find the built files
+     * @throws MojoExecutionException Something went wrong updating files.
      */
     final void postProcessRTF(final String rtfDir) throws MojoExecutionException {
     }
 
     /**
      * Man page XSL stylesheet customization file.
-     * <p>
+     * <p/>
      * docbkx-tools element: &lt;manpagesCustomization&gt;
      *
      * @parameter default-value=
-     *            "${project.build.directory}/docbkx-stylesheets/man/coredoc.xsl"
+     * "${project.build.directory}/docbkx-stylesheets/man/coredoc.xsl"
      * @required
      */
     private File manpagesCustomization;
 
     /**
      * Single page HTML XSL stylesheet customization file.
-     * <p>
+     * <p/>
      * docbkx-tools element: &lt;htmlCustomization&gt;
      *
      * @parameter default-value=
-     *            "${project.build.directory}/docbkx-stylesheets/html/coredoc.xsl"
+     * "${project.build.directory}/docbkx-stylesheets/html/coredoc.xsl"
      * @required
      */
     private File singleHTMLCustomization;
@@ -310,8 +297,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * points to the individual generated Olink DB files, for single page HTML.
      *
      * @return Absolute path to the temporary file
-     * @throws MojoExecutionException
-     *             Could not write target DB file.
+     * @throws MojoExecutionException Could not write target DB file.
      */
     final String buildSingleHTMLTargetDB() throws MojoExecutionException {
         File targetDB = new File(getBuildDirectory() + File.separator
@@ -368,11 +354,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * Chunked HTML XSL stylesheet customization file.
-     * <p>
+     * <p/>
      * docbkx-tools element: &lt;htmlCustomization&gt;
      *
      * @parameter default-value=
-     *            "${project.build.directory}/docbkx-stylesheets/html/chunked.xsl"
+     * "${project.build.directory}/docbkx-stylesheets/html/chunked.xsl"
      * @required
      */
     private File chunkedHTMLCustomization;
@@ -382,8 +368,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * points to the individual generated Olink DB files, for chunked HTML.
      *
      * @return Absolute path to the temporary file
-     * @throws MojoExecutionException
-     *             Could not write target DB file.
+     * @throws MojoExecutionException Could not write target DB file.
      */
     final String buildChunkedHTMLTargetDB() throws MojoExecutionException {
         File targetDB = new File(getBuildDirectory() + File.separator
@@ -445,7 +430,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * Prepare single and chunked HTML for publication.
-     * <p>
+     * <p/>
      * The HTML built by docbkx-tools does not currently include the following,
      * which this method adds.
      * <ul>
@@ -458,10 +443,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * <li>CSS to style the HTML</li>
      * </ul>
      *
-     * @param htmlDir
-     *            Directory under which to find HTML output
-     * @throws MojoExecutionException
-     *             Something went wrong when updating HTML.
+     * @param htmlDir Directory under which to find HTML output
+     * @throws MojoExecutionException Something went wrong when updating HTML.
      */
     final void postProcessHTML(final String htmlDir) throws MojoExecutionException {
         try {
@@ -502,6 +485,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     /**
      * Return a &lt;p&gt; containing a link to log a bug in Jira. The string
      * is not localized.
+     *
      * @return &lt;p&gt; containing a link to log a bug in Jira
      */
     final String getLinkToJira() {
@@ -547,7 +531,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * Directory where fonts and font metrics are stored.
      *
      * @parameter default-value="${project.build.directory}/fonts"
-     *            property="fontsDirectory"
+     * property="fontsDirectory"
      * @required
      */
     private File fontsDirectory;
@@ -562,7 +546,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * Are these draft documents, rather than final documents?
-     * <p>
+     * <p/>
      * docbkx-tools element: &lt;draftMode&gt;
      *
      * @parameter default-value="yes" property="isDraftMode"
@@ -572,19 +556,19 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * For draft mode, URL to the background watermark image.
-     * <p>
+     * <p/>
      * docbkx-tools element: &lt;draftWatermarkImage&gt;
      *
      * @parameter default-value=
-     *            "http://docbook.sourceforge.net/release/images/draft.png"
-     *            property="draftWatermarkURL"
+     * "http://docbook.sourceforge.net/release/images/draft.png"
+     * property="draftWatermarkURL"
      * @required
      */
     private String draftWatermarkURL;
 
     /**
      * Should &lt;programlisting&gt; content have syntax highlighting?
-     * <p>
+     * <p/>
      * docbkx-tools element: &lt;highlightSource&gt;
      *
      * @parameter default-value="1" property="useSyntaxHighlighting"
@@ -594,7 +578,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * Should sections have numeric labels?
-     * <p>
+     * <p/>
      * docbkx-tools element: &lt;sectionAutolabel&gt;
      *
      * @parameter default-value="true" property="areSectionsAutolabeled"
@@ -605,18 +589,18 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     /**
      * Should section labels include parent numbers, like 1.1, 1.2, 1.2.1,
      * 1.2.2?
-     * <p>
+     * <p/>
      * docbkx-tools element: &lt;sectionLabelIncludesComponentLabel&gt;
      *
      * @parameter default-value="true"
-     *            property="doesSectionLabelIncludeComponentLabel"
+     * property="doesSectionLabelIncludeComponentLabel"
      * @required
      */
     private String doesSectionLabelIncludeComponentLabel;
 
     /**
      * Should documents be allowed to include other documents?
-     * <p>
+     * <p/>
      * docbkx-tools element: &lt;xincludeSupported&gt;
      *
      * @parameter default-value="true" property="isXincludeSupported"
@@ -626,6 +610,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * See return.
+     *
      * @return {@link #epubCustomization}
      */
     public final File getEpubCustomization() {
@@ -634,6 +619,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * See return.
+     *
      * @return {@link #foCustomization}
      */
     public final File getFoCustomization() {
@@ -642,6 +628,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * See return.
+     *
      * @return {@link #manpagesCustomization}
      */
     public final File getManpagesCustomization() {
@@ -650,6 +637,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * See return.
+     *
      * @return {@link #singleHTMLCustomization}
      */
     public final File getSingleHTMLCustomization() {
@@ -658,6 +646,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * See return.
+     *
      * @return {@link #chunkedHTMLCustomization}
      */
     public final File getChunkedHTMLCustomization() {
@@ -666,6 +655,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * See return.
+     *
      * @return {@link #fontsDirectory}
      */
     public final File getFontsDirectory() {
@@ -674,6 +664,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * See return.
+     *
      * @return {@link #ansi}
      */
     public final String getAnsi() {
@@ -682,6 +673,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * See return.
+     *
      * @return {@link #isDraftMode}
      */
     public final String getIsDraftMode() {
@@ -690,6 +682,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * See return.
+     *
      * @return {@link #draftWatermarkURL}
      */
     public final String getDraftWatermarkURL() {
@@ -698,6 +691,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * See return.
+     *
      * @return {@link #useSyntaxHighlighting}
      */
     public final String getUseSyntaxHighlighting() {
@@ -706,6 +700,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * See return.
+     *
      * @return {@link #areSectionsAutolabeled}
      */
     public final String getAreSectionsAutolabeled() {
@@ -714,6 +709,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * See return.
+     *
      * @return {@link #doesSectionLabelIncludeComponentLabel}
      */
     public final String getDoesSectionLabelIncludeComponentLabel() {
@@ -722,6 +718,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * See return.
+     *
      * @return {@link #isXincludeSupported}
      */
     public final String getIsXincludeSupported() {
@@ -736,8 +733,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
          * Prepare Apache FOP for output formats like PDF. This step involves
          * font metrics generation.
          *
-         * @throws MojoExecutionException
-         *             Failed to prepare FOP.
+         * @throws MojoExecutionException Failed to prepare FOP.
          */
         void prepareFOP() throws MojoExecutionException {
             String fontsDir = FilenameUtils.separatorsToUnix(fontsDirectory
@@ -779,13 +775,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Build EPUB documents from DocBook XML sources.
          *
-         * @param baseConfiguration
-         *            Common configuration for all executions
-         * @throws MojoExecutionException
-         *             Failed to build the output.
+         * @param baseConfiguration Common configuration for all executions
+         * @throws MojoExecutionException Failed to build the output.
          */
         void buildEPUB(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-            MojoExecutionException {
+                MojoExecutionException {
 
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.addAll(baseConfiguration);
@@ -835,15 +829,12 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Build FO documents from DocBook XML sources, including fonts.
          *
-         * @param baseConfiguration
-         *            Common configuration for all executions
-         * @param format
-         *            Specific output format (pdf, rtf)
-         * @throws MojoExecutionException
-         *             Failed to build the output.
+         * @param baseConfiguration Common configuration for all executions
+         * @param format            Specific output format (pdf, rtf)
+         * @throws MojoExecutionException Failed to build the output.
          */
         void buildFO(final ArrayList<MojoExecutor.Element> baseConfiguration,
-            final String format) throws MojoExecutionException {
+                     final String format) throws MojoExecutionException {
             if (!(format.equalsIgnoreCase("pdf") || format
                     .equalsIgnoreCase("rtf"))) {
                 throw new MojoExecutionException("Output format " + format
@@ -1016,39 +1007,33 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Build PDF documents from DocBook XML sources.
          *
-         * @param baseConfiguration
-         *            Common configuration for all executions
-         * @throws MojoExecutionException
-         *             Failed to build the output.
+         * @param baseConfiguration Common configuration for all executions
+         * @throws MojoExecutionException Failed to build the output.
          */
         void buildPDF(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-             MojoExecutionException {
+                MojoExecutionException {
             buildFO(baseConfiguration, "pdf");
         }
 
         /**
          * Build RTF documents from DocBook XML sources.
          *
-         * @param baseConfiguration
-         *            Common configuration for all executions
-         * @throws MojoExecutionException
-         *             Failed to build the output.
+         * @param baseConfiguration Common configuration for all executions
+         * @throws MojoExecutionException Failed to build the output.
          */
         void buildRTF(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-            MojoExecutionException {
+                MojoExecutionException {
             buildFO(baseConfiguration, "rtf");
         }
 
         /**
          * Build reference manual pages from DocBook XML sources.
          *
-         * @param baseConfiguration
-         *            Common configuration for all executions
-         * @throws MojoExecutionException
-         *             Failed to build the output.
+         * @param baseConfiguration Common configuration for all executions
+         * @throws MojoExecutionException Failed to build the output.
          */
         void buildManpages(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-            MojoExecutionException {
+                MojoExecutionException {
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.addAll(baseConfiguration);
             cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
@@ -1068,13 +1053,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Prepare Olink database files for single page HTML output.
          *
-         * @param baseConfiguration
-         *            Common configuration for all executions
-         * @throws MojoExecutionException
-         *             Failed to prepare the target DB files.
+         * @param baseConfiguration Common configuration for all executions
+         * @throws MojoExecutionException Failed to prepare the target DB files.
          */
         void buildSingleHTMLOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-            MojoExecutionException {
+                MojoExecutionException {
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.add(element(name("xincludeSupported"), isXincludeSupported));
             cfg.add(element(name("sourceDirectory"), FilenameUtils
@@ -1121,13 +1104,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Build single page HTML from DocBook XML sources.
          *
-         * @param baseConfiguration
-         *            Common configuration for all executions
-         * @throws MojoExecutionException
-         *             Failed to build the output.
+         * @param baseConfiguration Common configuration for all executions
+         * @throws MojoExecutionException Failed to build the output.
          */
         void buildSingleHTML(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-            MojoExecutionException {
+                MojoExecutionException {
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.addAll(baseConfiguration);
             cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
@@ -1176,13 +1157,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Prepare Olink database files for chunked HTML output.
          *
-         * @param baseConfiguration
-         *            Common configuration for all executions
-         * @throws MojoExecutionException
-         *             Failed to prepare the target DB files.
+         * @param baseConfiguration Common configuration for all executions
+         * @throws MojoExecutionException Failed to prepare the target DB files.
          */
         void buildChunkedHTMLOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-            MojoExecutionException {
+                MojoExecutionException {
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.add(element(name("xincludeSupported"), isXincludeSupported));
             cfg.add(element(name("sourceDirectory"), FilenameUtils
@@ -1234,13 +1213,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Build chunked HTML pages from DocBook XML sources.
          *
-         * @param baseConfiguration
-         *            Common configuration for all executions
-         * @throws MojoExecutionException
-         *             Failed to build the output.
+         * @param baseConfiguration Common configuration for all executions
+         * @throws MojoExecutionException Failed to build the output.
          */
         void buildChunkedHTML(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-            MojoExecutionException {
+                MojoExecutionException {
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.addAll(baseConfiguration);
             cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
