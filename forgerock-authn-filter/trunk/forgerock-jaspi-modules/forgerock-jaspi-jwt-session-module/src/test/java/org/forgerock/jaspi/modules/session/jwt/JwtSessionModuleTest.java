@@ -32,14 +32,18 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import javax.security.auth.Subject;
+import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.message.AuthException;
 import javax.security.auth.message.AuthStatus;
 import javax.security.auth.message.MessageInfo;
 import javax.security.auth.message.MessagePolicy;
+import javax.security.auth.message.callback.CallerPrincipalCallback;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.security.Key;
@@ -54,6 +58,7 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNull;
 
 public class JwtSessionModuleTest {
 
@@ -402,17 +407,19 @@ public class JwtSessionModuleTest {
 
     @Test
     public void shouldValidateRequestWhenJwtSessionCookiePresentAndValidCoolOffPeriodNotExpired() throws AuthException,
-            UnsupportedEncodingException {
+            IOException, UnsupportedCallbackException {
 
         //Given
         MessagePolicy requestPolicy = null;
         MessagePolicy responsePolicy = null;
-        CallbackHandler callbackHandler = null;
+        CallbackHandler callbackHandler = mock(CallbackHandler.class);
         Map<String, Object> options = getOptionsMap(1, 2);
 
         jwtSessionModule.initialize(requestPolicy, responsePolicy, callbackHandler, options);
 
         MessageInfo messageInfo = mock(MessageInfo.class);
+        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> contextMap = new HashMap<String, Object>();
         Subject clientSubject = null;
         Subject serviceSubject = null;
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -440,6 +447,8 @@ public class JwtSessionModuleTest {
 
         given(messageInfo.getRequestMessage()).willReturn(request);
         given(messageInfo.getResponseMessage()).willReturn(response);
+        given(messageInfo.getMap()).willReturn(map);
+        map.put("org.forgerock.security.context", contextMap);
 
         given(request.getCookies()).willReturn(cookies);
         given(cookie1.getName()).willReturn("COOKIE1");
@@ -452,6 +461,10 @@ public class JwtSessionModuleTest {
         given(claimsSet.getClaim(JwtSessionModule.TOKEN_IDLE_TIME_CLAIM_KEY, Integer.class))
                 .willReturn(idleTimeoutSeconds);
         given(claimsSet.getIssuedAtTime()).willReturn(issuedAtTime);
+        given(claimsSet.getClaim("prn", String.class)).willReturn("PRINCIPAL");
+        Map<String, Object> newContext = new HashMap<String, Object>();
+        newContext.put("KEY", "VALUE");
+        given(claimsSet.getClaim("context", Map.class)).willReturn(newContext);
 
         //When
         AuthStatus authStatus = jwtSessionModule.validateRequest(messageInfo, clientSubject, serviceSubject);
@@ -459,22 +472,33 @@ public class JwtSessionModuleTest {
         //Then
         assertEquals(authStatus, AuthStatus.SUCCESS);
         verifyZeroInteractions(response);
+        ArgumentCaptor<Callback[]> callbackCaptor =
+                ArgumentCaptor.forClass(Callback[].class);
+        verify(callbackHandler).handle(callbackCaptor.capture());
+        Callback[] callbacks = callbackCaptor.getValue();
+        assertEquals(callbacks.length, 1);
+        assertEquals(((CallerPrincipalCallback) callbacks[0]).getName(), "PRINCIPAL");
+        assertNull(((CallerPrincipalCallback) callbacks[0]).getPrincipal());
+        assertEquals(((CallerPrincipalCallback) callbacks[0]).getSubject(), clientSubject);
+        assertEquals(contextMap.size(), 1);
     }
 
     @Test
     public void shouldValidateRequestWhenJwtSessionCookiePresentAndValidCoolOffPeriodExpired() throws AuthException,
-            UnsupportedEncodingException {
+            IOException, UnsupportedCallbackException {
 
         //Given
         MessagePolicy requestPolicy = null;
         MessagePolicy responsePolicy = null;
-        CallbackHandler callbackHandler = null;
+        CallbackHandler callbackHandler = mock(CallbackHandler.class);
         Map<String, Object> options = getOptionsMap(1, 2);
 
         jwtSessionModule.initialize(requestPolicy, responsePolicy, callbackHandler, options);
 
         MessageInfo messageInfo = mock(MessageInfo.class);
-        Subject clientSubject = null;
+        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> contextMap = new HashMap<String, Object>();
+        Subject clientSubject = new Subject();
         Subject serviceSubject = null;
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -502,6 +526,8 @@ public class JwtSessionModuleTest {
 
         given(messageInfo.getRequestMessage()).willReturn(request);
         given(messageInfo.getResponseMessage()).willReturn(response);
+        given(messageInfo.getMap()).willReturn(map);
+        map.put("org.forgerock.security.context", contextMap);
 
         given(request.getCookies()).willReturn(cookies);
         given(cookie1.getName()).willReturn("COOKIE1");
@@ -514,6 +540,10 @@ public class JwtSessionModuleTest {
         given(claimsSet.getClaim(JwtSessionModule.TOKEN_IDLE_TIME_CLAIM_KEY, Integer.class))
                 .willReturn(idleTimeoutSeconds);
         given(claimsSet.getIssuedAtTime()).willReturn(issuedAtTime);
+        given(claimsSet.getClaim("prn", String.class)).willReturn("PRINCIPAL");
+        Map<String, Object> newContext = new HashMap<String, Object>();
+        newContext.put("KEY", "VALUE");
+        given(claimsSet.getClaim("context", Map.class)).willReturn(newContext);
 
         //When
         AuthStatus authStatus = jwtSessionModule.validateRequest(messageInfo, clientSubject, serviceSubject);
@@ -528,6 +558,15 @@ public class JwtSessionModuleTest {
         assertEquals(newCookie.getPath(), "/");
         assertNotEquals(newCookie.getMaxAge(), 0);
         assertNotEquals(newCookie.getMaxAge(), -1);
+        ArgumentCaptor<Callback[]> callbackCaptor =
+                ArgumentCaptor.forClass(Callback[].class);
+        verify(callbackHandler).handle(callbackCaptor.capture());
+        Callback[] callbacks = callbackCaptor.getValue();
+        assertEquals(callbacks.length, 1);
+        assertEquals(((CallerPrincipalCallback) callbacks[0]).getName(), "PRINCIPAL");
+        assertNull(((CallerPrincipalCallback) callbacks[0]).getPrincipal());
+        assertEquals(((CallerPrincipalCallback) callbacks[0]).getSubject(), clientSubject);
+        assertEquals(contextMap.size(), 1);
     }
 
     @Test

@@ -21,6 +21,7 @@ import org.forgerock.jaspi.container.AuditLoggerHolder;
 import org.forgerock.jaspi.container.AuthConfigFactoryImpl;
 import org.forgerock.jaspi.container.AuthConfigProviderImpl;
 import org.forgerock.jaspi.container.ServerAuthConfigImpl;
+import org.forgerock.jaspi.container.callback.CallbackHandlerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +55,7 @@ public final class ConfigurationManager {
     public static synchronized void configure(Configuration authContextConfiguration) throws AuthException {
 
         if (!configured) {
-            CallbackHandler callbackHandler = null;
+            CallbackHandler callbackHandler = new CallbackHandlerImpl();
             ServerAuthConfigImpl serverAuthConfig = new ServerAuthConfigImpl(null, null, callbackHandler);
             AuditLogger auditLogger = createAuditLogger(
                     authContextConfiguration.getAuditLoggerClassName());

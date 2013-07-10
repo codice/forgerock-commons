@@ -32,6 +32,8 @@ public enum AuditLoggerHolder {
 
     /**
      * Creates the Enum instance with the AuditLogger instance.
+     *
+     * @param auditLogger The AuditLogger instance.
      */
     public void setAuthenticationAuditLogger(AuditLogger auditLogger) {
         this.authenticationAuditLogger = auditLogger;

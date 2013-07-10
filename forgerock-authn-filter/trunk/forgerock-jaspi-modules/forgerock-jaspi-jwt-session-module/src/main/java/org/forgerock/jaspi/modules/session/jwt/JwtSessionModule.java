@@ -30,15 +30,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.security.auth.Subject;
+import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.message.AuthException;
 import javax.security.auth.message.AuthStatus;
 import javax.security.auth.message.MessageInfo;
 import javax.security.auth.message.MessagePolicy;
+import javax.security.auth.message.callback.CallerPrincipalCallback;
 import javax.security.auth.message.module.ServerAuthModule;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Calendar;
@@ -61,6 +65,10 @@ public class JwtSessionModule implements ServerAuthModule {
     private static final String JWT_SESSION_COOKIE_NAME = "session-jwt";
     private static final String SKIP_SESSION_PARAMETER_NAME = "skipSession";
 
+    //TODO change to CREST constant when AM and IDM have been updated to use 2.0.0 version
+    private static final String AUTHC_ID_REQUEST_KEY = "org.forgerock.security.authcid";
+    private static final String CONTEXT_REQUEST_KEY = "org.forgerock.security.context";
+
     /** The Key Alias configuration property key. */
     public static final String KEY_ALIAS_KEY = "keyAlias";
     /** The Private Key password configuration property key. */
@@ -79,6 +87,8 @@ public class JwtSessionModule implements ServerAuthModule {
     public static final String JWT_VALIDATED_KEY = "jwtValidated";
 
     private final JwtBuilder jwtBuilder;
+
+    private CallbackHandler handler;
 
     private String keyAlias;
     private String privateKeyPassword;
@@ -116,6 +126,7 @@ public class JwtSessionModule implements ServerAuthModule {
     @Override
     public void initialize(MessagePolicy requestPolicy, MessagePolicy responsePolicy, CallbackHandler handler,
             Map options) throws AuthException {
+        this.handler = handler;
         this.keyAlias = (String) options.get(KEY_ALIAS_KEY);
         this.privateKeyPassword = (String) options.get(PRIVATE_KEY_PASSWORD_KEY);
         this.keystoreType = (String) options.get(KEYSTORE_TYPE_KEY);
@@ -150,9 +161,11 @@ public class JwtSessionModule implements ServerAuthModule {
      * @param clientSubject {@inheritDoc}
      * @param serviceSubject {@inheritDoc}
      * @return If the Jwt is valid then AuthStatus.SUCCESS is returned, otherwise AuthStatus.SEND_FAILURE is returned.
+     * @throws AuthException If there is a problem validating the request.
      */
     @Override
-    public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject) {
+    public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject)
+            throws AuthException {
 
         Jwt jwt = validateJwtSessionCookie(messageInfo);
         if (jwt == null) {
@@ -160,6 +173,19 @@ public class JwtSessionModule implements ServerAuthModule {
             return AuthStatus.SEND_FAILURE;
         } else {
             DEBUG.debug("Session JWT valid");
+            try {
+                handler.handle(new Callback[]{
+                    new CallerPrincipalCallback(clientSubject, jwt.getClaimsSet().getClaim("prn", String.class))
+                });
+                Map<String, Object> context = (Map<String, Object>) messageInfo.getMap().get(CONTEXT_REQUEST_KEY);
+                context.putAll(jwt.getClaimsSet().getClaim("context", Map.class));
+            } catch (IOException e) {
+                DEBUG.error("Error setting user principal", e);
+                throw new AuthException(e.getMessage());
+            } catch (UnsupportedCallbackException e) {
+                DEBUG.error("Error setting user principal", e);
+                throw new AuthException(e.getMessage());
+            }
             return AuthStatus.SUCCESS;
         }
     }
@@ -329,10 +355,19 @@ public class JwtSessionModule implements ServerAuthModule {
     @Override
     public AuthStatus secureResponse(MessageInfo messageInfo, Subject serviceSubject) throws AuthException {
 
-        Map<String, Object> jwtParameters = new HashMap<String, Object>(messageInfo.getMap());
+        Map<String, Object> jwtParameters = new HashMap<String, Object>();
 
-        if (jwtParameters.containsKey(SKIP_SESSION_PARAMETER_NAME)
-                && ((Boolean) jwtParameters.get(SKIP_SESSION_PARAMETER_NAME))) {
+        Map<String, Object> map = messageInfo.getMap();
+        HttpServletRequest request = (HttpServletRequest) messageInfo.getRequestMessage();
+        Object authcid = request.getAttribute(AUTHC_ID_REQUEST_KEY);
+        if (authcid != null) {
+            jwtParameters.put("prn", authcid);
+        }
+        if (map.containsKey("context")) {
+            jwtParameters.put("context", map.get("context"));
+        }
+
+        if (map.containsKey(SKIP_SESSION_PARAMETER_NAME) && ((Boolean) map.get(SKIP_SESSION_PARAMETER_NAME))) {
             DEBUG.debug("Skipping creating session as jwtParameters contains, " + SKIP_SESSION_PARAMETER_NAME);
             return AuthStatus.SEND_SUCCESS;
         }

@@ -28,8 +28,11 @@ import javax.security.auth.message.MessageInfo;
 import javax.security.auth.message.MessagePolicy;
 import javax.security.auth.message.config.ServerAuthContext;
 import javax.security.auth.message.module.ServerAuthModule;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +58,11 @@ import java.util.Map;
  */
 public class ServerAuthContextImpl implements ServerAuthContext {
 
-    private final static Logger DEBUG = LoggerFactory.getLogger(ServerAuthContextImpl.class);
+    private static final Logger DEBUG = LoggerFactory.getLogger(ServerAuthContextImpl.class);
+
+    //TODO change to CREST constant when AM and IDM have been updated to use 2.0.0 version
+    private static final String AUTHC_ID_REQUEST_KEY = "org.forgerock.security.authcid";
+    private static final String CONTEXT_REQUEST_KEY = "org.forgerock.security.context";
 
     private final ServerAuthModule sessionAuthModule;
     private final List<ServerAuthModule> serverAuthModules;
@@ -130,6 +137,8 @@ public class ServerAuthContextImpl implements ServerAuthContext {
     public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject)
             throws AuthException {
 
+        messageInfo.getMap().put(CONTEXT_REQUEST_KEY, new HashMap<String, Object>());
+
         AuthStatus authStatus = null;
         if (sessionAuthModule != null) {
             authStatus = sessionAuthModule.validateRequest(messageInfo, clientSubject, serviceSubject);
@@ -137,9 +146,11 @@ public class ServerAuthContextImpl implements ServerAuthContext {
             if (AuthStatus.SUCCESS.equals(authStatus)) {
                 // The module has successfully authenticated the client.
                 authenticatingAuthStatus = authStatus;
+                setAuthenticationRequestAttributes(messageInfo, clientSubject);
                 return authStatus;
             } else if (AuthStatus.SEND_SUCCESS.equals(authStatus)) {
                 // The module may have completely/partially/not authenticated the client.
+                setAuthenticationRequestAttributes(messageInfo, clientSubject);
                 return authStatus;
             } else if (AuthStatus.SEND_FAILURE.equals(authStatus)) {
                 // The module has failed to authenticate the client.
@@ -184,6 +195,8 @@ public class ServerAuthContextImpl implements ServerAuthContext {
             } catch (IOException e) {
                 throw new AuthException(e.getMessage());
             }
+        } else {
+            setAuthenticationRequestAttributes(messageInfo, clientSubject);
         }
 
         // Once all Auth modules have had the chance to authenticate, audit the attempt.
@@ -194,6 +207,28 @@ public class ServerAuthContextImpl implements ServerAuthContext {
         }
 
         return authStatus;
+    }
+
+    /**
+     * Sets the authentication id and context map into the HttpServletRequest for use by other filters and resources.
+     * <p>
+     * Will take the first Principal it finds in the client Subject and add the Principal's name to the authentication
+     * context.
+     *
+     * @param messageInfo The MessageInfo object.
+     * @param clientSubject The Client Subject.
+     */
+    private void setAuthenticationRequestAttributes(MessageInfo messageInfo, Subject clientSubject) {
+
+        HttpServletRequest request = (HttpServletRequest) messageInfo.getRequestMessage();
+        String authnId = null;
+        for (Principal principal : clientSubject.getPrincipals()) {
+            authnId = principal.getName();
+            break;
+        }
+        request.setAttribute(AUTHC_ID_REQUEST_KEY, authnId);
+        Map<String, Object> context = (Map<String, Object>) messageInfo.getMap().get(CONTEXT_REQUEST_KEY);
+        request.setAttribute(CONTEXT_REQUEST_KEY, context);
     }
 
     /**

@@ -185,9 +185,9 @@ public class AuthNFilter implements Filter {
             try {
                 // Secure the response (includes adding any session cookies to the response)
                 responseAuthStatus = serverAuthContext.secureResponse(messageInfo, serviceSubject);
-                // If any filter/resource closes the response or redirects the response the secureResponse call cannot add
-                // anything else to the response. Because of this the call to secureResponse has been moved before the
-                // doFilter call to get around this issue.
+                // If any filter/resource closes the response or redirects the response the secureResponse call cannot
+                // add anything else to the response. Because of this the call to secureResponse has been moved before
+                // the doFilter call to get around this issue.
             } catch (AuthException e) {
                 secureResponseException = e;
             }
