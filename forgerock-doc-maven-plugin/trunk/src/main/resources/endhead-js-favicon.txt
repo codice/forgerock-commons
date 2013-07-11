@@ -46,13 +46,23 @@ $(document).ready(function() {
    *
    * On mouseover, prepend a ↪ to titles which links to the element.
    *
-   * This code works for elements that are class="title". To affect procedures
-   * as well for example, change $(".title") to $(".title, .procedure"). Then
-   * also change the code to insert the ↪ in the procedure title, rather than
-   * outside the entire procedure, which is a block. The same applies to
-   * example and probably other block-formatted elements.
+   * DOCS-85: Make it easy to get the link to other titled block elements
+   *
+   * It appears that the classes for all title elements do end in "title".
+   * Some of the anchors are children, but some are siblings. And some just
+   * do not have name anchors.
+   *
    */
-  $(".title").each(function() {
+  $("[class$=title]").each(function() {
+    var href = $(this).children("a").attr("name");
+    if (href === undefined) {
+        href = $(this).siblings("a").attr("name");
+    }
+
+    if (href === undefined) { // Name anchor seems to be missing.
+        return;
+    }
+
     var href = $(this).children("a").attr("name");
     $(this).prepend('<a href=\"#' + href
       + '\" class=\"showlink\" style=\"display: none;\">&#x021AA; </a>');
