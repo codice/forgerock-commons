@@ -155,4 +155,7 @@ version="1.0">
    <xsl:attribute name="border">0.5pt dashed #626d75</xsl:attribute>
    <xsl:attribute name="padding">3pt</xsl:attribute>
   </xsl:attribute-set>
+
+ <!-- DOCS-75: Wide programlisting shading extends to the right edge of the page in PDF -->
+ <xsl:param name="monospace.verbatim.font.width">0.445em</xsl:param>
 </xsl:stylesheet>
