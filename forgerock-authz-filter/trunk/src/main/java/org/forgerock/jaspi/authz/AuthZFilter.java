@@ -36,6 +36,7 @@ public class AuthZFilter implements Filter {
     private AuthorizationFilter authorizationFilter;
 
     @Override
+    @SuppressWarnings("unchecked")
     public void init(FilterConfig filterConfig) throws ServletException {
         String configurationClassName = filterConfig.getInitParameter("configurationImpl");
 
@@ -52,11 +53,14 @@ public class AuthZFilter implements Filter {
             authorizationFilter.initialise(auditLogger, debugLogger);
 
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);   //TODO
+            //TODO log
+            throw new ServletException(e);
         } catch (InstantiationException e) {
-            throw new RuntimeException(e);   //TODO
+            //TODO log
+            throw new ServletException(e);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);   //TODO
+            //TODO log
+            throw new ServletException(e);
         }
     }
 
@@ -71,7 +75,7 @@ public class AuthZFilter implements Filter {
         }
     }
 
-    private void handleUnauthorisedException(ServletResponse servletResponse) {
+    private void handleUnauthorisedException(ServletResponse servletResponse) throws ServletException {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         JsonResourceException jre = new JsonResourceException(403, "Access denied");
         try {
@@ -82,14 +86,15 @@ public class AuthZFilter implements Filter {
         }
     }
 
-    private void handleServerException(ServletResponse servletResponse) {
+    private void handleServerException(ServletResponse servletResponse) throws ServletException {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         JsonResourceException jre = new JsonResourceException(500, "Server Error");
         try {
             response.getWriter().write(jre.toJsonValue().toString());
             response.setContentType("application/json");
         } catch (IOException e) {
-            handleServerException(servletResponse);
+            //TODO log
+            throw new ServletException(e);
         }
     }
 
