@@ -111,9 +111,12 @@ version="1.0">
   
   <xsl:param name="ulink.footnotes" select="0"/>
   <xsl:param name="ulink.show" select="0"/>
+  <xsl:param name="ulink.hyphenate">&#xAD;</xsl:param>
 
-  <!-- Hyphenate long literals at . Adapted from the hyphenate-url template. -->
+  <!-- Hyphenate long literals at . and /
+       Adapted from the hyphenate-url template. -->
   <xsl:param name="literal.hyphenate">&#xAD;</xsl:param>
+  <xsl:param name="literal.hyphenate.chars">./</xsl:param>
   <!-- soft hyphen: &#xAD; -->
 
   <xsl:template match="d:literal//text()">
@@ -128,8 +131,11 @@ version="1.0">
       <xsl:when test="string-length($literal) &gt; 1">
         <xsl:variable name="char" select="substring($literal, 1, 1)"/>
         <xsl:value-of select="$char"/>
-        <xsl:if test="contains('.', $char)">
-          <xsl:copy-of select="$literal.hyphenate"/>
+        <xsl:if test="contains($literal.hyphenate.chars, $char)">
+          <!-- Do not hyphen in-between // -->
+          <xsl:if test="not($char = '/' and substring($literal,2,1) = '/')">
+            <xsl:copy-of select="$literal.hyphenate"/>
+          </xsl:if>
         </xsl:if>
         <!-- recurse to the next character -->
         <xsl:call-template name="hyphenate-literal">
