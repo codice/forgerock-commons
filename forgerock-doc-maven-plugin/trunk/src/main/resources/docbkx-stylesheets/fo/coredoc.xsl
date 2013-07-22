@@ -113,10 +113,10 @@ version="1.0">
   <xsl:param name="ulink.show" select="0"/>
   <xsl:param name="ulink.hyphenate">&#xAD;</xsl:param>
 
-  <!-- Hyphenate long literals at . and /
+  <!-- Hyphenate long literals at literal.hyphenate.chars
        Adapted from the hyphenate-url template. -->
   <xsl:param name="literal.hyphenate">&#xAD;</xsl:param>
-  <xsl:param name="literal.hyphenate.chars">./</xsl:param>
+  <xsl:param name="literal.hyphenate.chars">./,</xsl:param>
   <!-- soft hyphen: &#xAD; -->
 
   <xsl:template match="d:literal//text()">
