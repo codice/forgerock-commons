@@ -39,7 +39,8 @@
  </mediaobject>
  
  <para>To view a copy of this license, visit
- <link>http://creativecommons.org/licenses/by-nc-nd/3.0/</link> or send a
+ <link xlink:href="http://creativecommons.org/licenses/by-nc-nd/3.0/"
+ xlink:show="new" /> or send a
  letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View,
  California, 94041, USA.</para>
   
