@@ -276,6 +276,10 @@ span.msgexplan-title {
     font-weight: bold;
 }
 
+table.simplelist {
+    width: 100%;
+}
+
 #footer {
     background-color: cornsilk;
     border-top: thin solid gainsboro;

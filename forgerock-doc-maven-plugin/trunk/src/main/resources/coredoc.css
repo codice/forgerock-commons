@@ -259,6 +259,10 @@ span.msgexplan-title {
     font-weight: bold;
 }
 
+table.simplelist {
+    width: 100%;
+}
+
 #footer {
     background-color: white;
     border-top: thin solid whitesmoke;
