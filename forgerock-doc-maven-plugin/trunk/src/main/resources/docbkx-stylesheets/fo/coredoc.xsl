@@ -112,14 +112,14 @@ version="1.0">
   <xsl:param name="ulink.footnotes" select="0"/>
   <xsl:param name="ulink.show" select="0"/>
 
- <!-- Hyphenate long literals at . Adapted from the hyphenate-url template. -->
- <xsl:param name="literal.hyphenate">&#xAD;</xsl:param>
- <!-- soft hyphen: &#xAD; -->
+  <!-- Hyphenate long literals at . Adapted from the hyphenate-url template. -->
+  <xsl:param name="literal.hyphenate">&#xAD;</xsl:param>
+  <!-- soft hyphen: &#xAD; -->
 
- <xsl:template match="d:literal//text()">
-   <xsl:call-template name="hyphenate-literal">
-    <xsl:with-param name="literal" select="."/>
-   </xsl:call-template>
+  <xsl:template match="d:literal//text()">
+    <xsl:call-template name="hyphenate-literal">
+     <xsl:with-param name="literal" select="."/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="hyphenate-literal">
@@ -129,10 +129,10 @@ version="1.0">
         <xsl:variable name="char" select="substring($literal, 1, 1)"/>
         <xsl:value-of select="$char"/>
         <xsl:if test="contains('.', $char)">
-         <xsl:copy-of select="$literal.hyphenate"/>
+          <xsl:copy-of select="$literal.hyphenate"/>
         </xsl:if>
-       <!-- recurse to the next character -->
-       <xsl:call-template name="hyphenate-literal">
+        <!-- recurse to the next character -->
+        <xsl:call-template name="hyphenate-literal">
           <xsl:with-param name="literal" select="substring($literal, 2)"/>
         </xsl:call-template>
       </xsl:when>
@@ -142,20 +142,20 @@ version="1.0">
     </xsl:choose>
   </xsl:template>
 
- <!-- Do not hyphenate in general. -->
- <xsl:param name="hyphenate">false</xsl:param>
+  <!-- Do not hyphenate in general. -->
+  <xsl:param name="hyphenate">false</xsl:param>
 
- <!--
-  When https://code.google.com/p/docbkx-tools/issues/detail?id=35
-  is resolved, it might be nice to use admonition graphics
-  rather than gray backgrounds.
- -->
- <xsl:attribute-set name="admonition.properties">
-   <xsl:attribute name="background-color">#d4d4d4</xsl:attribute>
-   <xsl:attribute name="border">0.5pt dashed #626d75</xsl:attribute>
-   <xsl:attribute name="padding">3pt</xsl:attribute>
+  <!--
+   When https://code.google.com/p/docbkx-tools/issues/detail?id=35
+   is resolved, it might be nice to use admonition graphics
+   rather than gray backgrounds.
+  -->
+  <xsl:attribute-set name="admonition.properties">
+    <xsl:attribute name="background-color">#d4d4d4</xsl:attribute>
+    <xsl:attribute name="border">0.5pt dashed #626d75</xsl:attribute>
+    <xsl:attribute name="padding">3pt</xsl:attribute>
   </xsl:attribute-set>
 
- <!-- DOCS-75: Wide programlisting shading extends to the right edge of the page in PDF -->
- <xsl:param name="monospace.verbatim.font.width">0.445em</xsl:param>
+  <!-- DOCS-75: Wide programlisting shading extends to the right edge of the page in PDF -->
+  <xsl:param name="monospace.verbatim.font.width">0.445em</xsl:param>
 </xsl:stylesheet>
