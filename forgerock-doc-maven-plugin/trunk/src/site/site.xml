@@ -48,6 +48,7 @@
       <item name="Issue Tracking" href="issue-tracking.html"/>
       <item name="License" href="license.html"/>
       <item name="Source Repository" href="source-repository.html"/>
+      <item name="Javadoc" href="apidocs/index.html" />
     </menu>
 
     <menu ref="reports"/>
