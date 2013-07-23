@@ -20,6 +20,8 @@
 */
 
 body {
+    background-attachment: fixed !important;
+    background-position: center center !important;
     color: #333;
     font-family: DejaVu, Verdana, Helvetica, Arial, sans-serif;
     font-size: 84%; /* 100% would be medium, 16px. */

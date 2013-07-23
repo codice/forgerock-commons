@@ -30,6 +30,8 @@ body {
     -moz-border-radius: 15px;
     border-radius: 15px;
     background-color: #fff;
+    background-attachment: fixed !important;
+    background-position: center center !important;
     padding: 15px;
     color: #333;
     font-family: DejaVu, Verdana, Helvetica, Arial, sans-serif;
