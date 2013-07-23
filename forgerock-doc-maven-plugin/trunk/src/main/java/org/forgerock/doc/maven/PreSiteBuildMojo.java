@@ -495,27 +495,27 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         // https://confluence.atlassian.com/display/JIRA/Creating+Issues+via+direct+HTML+links
         String jiraURL = "";
         if (getProjectName().equalsIgnoreCase("OpenAM")) {
-            jiraURL = "https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?"
+            jiraURL = "https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?"
                     + "pid=10000&components=10007&issuetype=1";
         }
         if (getProjectName().equalsIgnoreCase("OpenDJ")) {
-            jiraURL = "https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?"
+            jiraURL = "https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?"
                     + "pid=10040&components=10132&issuetype=1";
         }
         if (getProjectName().equalsIgnoreCase("OpenICF")) {
-            jiraURL = "https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?"
+            jiraURL = "https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?"
                     + "pid=10041&components=10170&issuetype=1";
         }
         if (getProjectName().equalsIgnoreCase("OpenIDM")) {
-            jiraURL = "https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?"
+            jiraURL = "https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?"
                     + "pid=10020&components=10164&issuetype=1";
         }
         if (getProjectName().equalsIgnoreCase("OpenIG")) {
-            jiraURL = "https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?"
+            jiraURL = "https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?"
                     + "pid=10060&components=10220&issuetype=1";
         }
         if (getProjectName().equalsIgnoreCase("ForgeRock")) { // Just testing
-            jiraURL = "https://bugster.forgerock.org/jira/secure/CreateIssue.jspa?"
+            jiraURL = "https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?"
                     + "pid=10010&issuetype=1";
         }
 
