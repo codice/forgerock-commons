@@ -134,21 +134,23 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     final void copyResources() throws MojoExecutionException {
         // If you update this method, also see getBaseConfiguration().
         String[] resources = {"/fonts/DejaVuSans-Oblique.ttf",
-            "/fonts/DejaVuSans.ttf", "/fonts/DejaVuSansCondensed-Bold.ttf",
-            "/fonts/DejaVuSansCondensed-BoldOblique.ttf",
-            "/fonts/DejaVuSansMono-Bold.ttf",
-            "/fonts/DejaVuSansMono-BoldOblique.ttf",
-            "/fonts/DejaVuSansMono-Oblique.ttf",
-            "/fonts/DejaVuSansMono.ttf", "/fonts/DejaVuSerif-Italic.ttf",
-            "/fonts/DejaVuSerif.ttf",
-            "/fonts/DejaVuSerifCondensed-Bold.ttf",
-            "/fonts/DejaVuSerifCondensed-BoldItalic.ttf",
-            "/docbkx-stylesheets/epub/coredoc.xsl",
-            "/docbkx-stylesheets/fo/coredoc.xsl",
-            "/docbkx-stylesheets/fo/titlepages.xsl",
-            "/docbkx-stylesheets/html/chunked.xsl",
-            "/docbkx-stylesheets/html/coredoc.xsl",
-            "/docbkx-stylesheets/man/coredoc.xsl"};
+                "/fonts/DejaVuSans.ttf",
+                "/fonts/DejaVuSansCondensed-Bold.ttf",
+                "/fonts/DejaVuSansCondensed-BoldOblique.ttf",
+                "/fonts/DejaVuSansMono-Bold.ttf",
+                "/fonts/DejaVuSansMono-BoldOblique.ttf",
+                "/fonts/DejaVuSansMono-Oblique.ttf",
+                "/fonts/DejaVuSansMono.ttf",
+                "/fonts/DejaVuSerif-Italic.ttf",
+                "/fonts/DejaVuSerif.ttf",
+                "/fonts/DejaVuSerifCondensed-Bold.ttf",
+                "/fonts/DejaVuSerifCondensed-BoldItalic.ttf",
+                "/docbkx-stylesheets/epub/coredoc.xsl",
+                "/docbkx-stylesheets/fo/coredoc.xsl",
+                "/docbkx-stylesheets/fo/titlepages.xsl",
+                "/docbkx-stylesheets/html/chunked.xsl",
+                "/docbkx-stylesheets/html/coredoc.xsl",
+                "/docbkx-stylesheets/man/coredoc.xsl"};
 
         for (String resource : resources) {
             URL src = getClass().getResource(resource);
@@ -164,15 +166,14 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * EPUB XSL stylesheet customization file.
+     * EPUB XSL stylesheet customization file, relative to the build directory.
      * <p/>
      * docbkx-tools element: &lt;epubCustomization&gt;
      *
-     * @parameter default-value=
-     * "${project.build.directory}/docbkx-stylesheets/epub/coredoc.xsl"
+     * @parameter default-value="docbkx-stylesheets/epub/coredoc.xsl"
      * @required
      */
-    private File epubCustomization;
+    private String epubCustomization;
 
     /**
      * Prepare built EPUB documents for publication. Currently this method
@@ -240,15 +241,15 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * FO XSL stylesheet customization file (for PDF, RTF).
+     * FO XSL stylesheet customization file (for PDF, RTF), relative to the
+     * build directory.
      * <p/>
      * docbkx-tools element: &lt;foCustomization&gt;
      *
-     * @parameter default-value=
-     * "${project.build.directory}/docbkx-stylesheets/fo/coredoc.xsl"
+     * @parameter default-value="docbkx-stylesheets/fo/coredoc.xsl"
      * @required
      */
-    private File foCustomization;
+    private String foCustomization;
 
     /**
      * Prepare built PDF documents for publication. Currently this method does
@@ -271,26 +272,26 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * Man page XSL stylesheet customization file.
+     * Man page XSL stylesheet customization file, relative to the build
+     * directory.
      * <p/>
      * docbkx-tools element: &lt;manpagesCustomization&gt;
      *
-     * @parameter default-value=
-     * "${project.build.directory}/docbkx-stylesheets/man/coredoc.xsl"
+     * @parameter default-value="docbkx-stylesheets/man/coredoc.xsl"
      * @required
      */
-    private File manpagesCustomization;
+    private String manpagesCustomization;
 
     /**
-     * Single page HTML XSL stylesheet customization file.
+     * Single page HTML XSL stylesheet customization file, relative to the build
+     * directory.
      * <p/>
      * docbkx-tools element: &lt;htmlCustomization&gt;
      *
-     * @parameter default-value=
-     * "${project.build.directory}/docbkx-stylesheets/html/coredoc.xsl"
+     * @parameter default-value="/docbkx-stylesheets/html/coredoc.xsl"
      * @required
      */
-    private File singleHTMLCustomization;
+    private String singleHTMLCustomization;
 
     /**
      * Get absolute path to a temporary Olink target database XML document that
@@ -347,21 +348,21 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             FileUtils.writeStringToFile(targetDB, content.toString());
         } catch (IOException e) {
             throw new MojoExecutionException(
-                    "Failed to write Olink target database: " + e.getMessage());
+                    "Failed to write link target database: " + e.getMessage());
         }
         return targetDB.getPath();
     }
 
     /**
-     * Chunked HTML XSL stylesheet customization file.
+     * Chunked HTML XSL stylesheet customization file, relative to the build
+     * directory.
      * <p/>
      * docbkx-tools element: &lt;htmlCustomization&gt;
      *
-     * @parameter default-value=
-     * "${project.build.directory}/docbkx-stylesheets/html/chunked.xsl"
+     * @parameter default-value="docbkx-stylesheets/html/chunked.xsl"
      * @required
      */
-    private File chunkedHTMLCustomization;
+    private String chunkedHTMLCustomization;
 
     /**
      * Get absolute path to a temporary Olink target database XML document that
@@ -423,7 +424,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             FileUtils.writeStringToFile(targetDB, content.toString());
         } catch (IOException e) {
             throw new MojoExecutionException(
-                    "Failed to write Olink target database: " + e.getMessage());
+                    "Failed to write link target database: " + e.getMessage());
         }
         return targetDB.getPath();
     }
@@ -528,13 +529,13 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * Directory where fonts and font metrics are stored.
+     * Directory where fonts and font metrics are stored, relative to the build
+     * directory.
      *
-     * @parameter default-value="${project.build.directory}/fonts"
-     * property="fontsDirectory"
+     * @parameter default-value="fonts" property="fontsDirectory"
      * @required
      */
-    private File fontsDirectory;
+    private String fontsDirectory;
 
     /**
      * Should WinAnsi encoding be used for embedded fonts?
@@ -609,61 +610,76 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     private String isXincludeSupported;
 
     /**
-     * See return.
+     * EPUB XSL stylesheet customization file, relative to the build directory.
+     * <p/>
+     * docbkx-tools element: &lt;epubCustomization&gt;
      *
      * @return {@link #epubCustomization}
      */
     public final File getEpubCustomization() {
-        return epubCustomization;
+        return new File(getBuildDirectory(), epubCustomization);
     }
 
     /**
-     * See return.
+     * FO XSL stylesheet customization file (for PDF, RTF), relative to the
+     * build directory.
+     * <p/>
+     * docbkx-tools element: &lt;foCustomization&gt;
      *
      * @return {@link #foCustomization}
      */
     public final File getFoCustomization() {
-        return foCustomization;
+        return new File(getBuildDirectory(), foCustomization);
     }
 
     /**
-     * See return.
+     * Man page XSL stylesheet customization file, relative to the build
+     * directory.
+     * <p/>
+     * docbkx-tools element: &lt;manpagesCustomization&gt;
      *
      * @return {@link #manpagesCustomization}
      */
     public final File getManpagesCustomization() {
-        return manpagesCustomization;
+        return new File(getBuildDirectory(), manpagesCustomization);
     }
 
     /**
-     * See return.
+     * Single page HTML XSL stylesheet customization file, relative to the build
+     * directory.
+     * <p/>
+     * docbkx-tools element: &lt;htmlCustomization&gt;
      *
      * @return {@link #singleHTMLCustomization}
      */
     public final File getSingleHTMLCustomization() {
-        return singleHTMLCustomization;
+        return new File(getBuildDirectory(), singleHTMLCustomization);
     }
 
     /**
-     * See return.
+     * Chunked HTML XSL stylesheet customization file, relative to the build
+     * directory.
+     * <p/>
+     * docbkx-tools element: &lt;htmlCustomization&gt;
      *
      * @return {@link #chunkedHTMLCustomization}
      */
     public final File getChunkedHTMLCustomization() {
-        return chunkedHTMLCustomization;
+        return new File(getBuildDirectory(), chunkedHTMLCustomization);
     }
 
     /**
-     * See return.
+     * Directory where fonts and font metrics are stored, relative to the build
+     * directory.
      *
      * @return {@link #fontsDirectory}
      */
     public final File getFontsDirectory() {
-        return fontsDirectory;
+        return new File(getBuildDirectory(), fontsDirectory);
     }
 
     /**
-     * See return.
+     * Should WinAnsi encoding be used for embedded fonts?
      *
      * @return {@link #ansi}
      */
@@ -672,7 +688,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * See return.
+     * Are these draft documents, rather than final documents?
+     * <p/>
+     * docbkx-tools element: &lt;draftMode&gt;
      *
      * @return {@link #isDraftMode}
      */
@@ -681,7 +699,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * See return.
+     * For draft mode, URL to the background watermark image.
+     * <p/>
+     * docbkx-tools element: &lt;draftWatermarkImage&gt;
      *
      * @return {@link #draftWatermarkURL}
      */
@@ -690,7 +710,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * See return.
+     * Should &lt;programlisting&gt; content have syntax highlighting?
+     * <p/>
+     * docbkx-tools element: &lt;highlightSource&gt;
      *
      * @return {@link #useSyntaxHighlighting}
      */
@@ -699,7 +721,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * See return.
+     * Should sections have numeric labels?
+     * <p/>
+     * docbkx-tools element: &lt;sectionAutolabel&gt;
      *
      * @return {@link #areSectionsAutolabeled}
      */
@@ -708,7 +732,10 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * See return.
+     * Should section labels include parent numbers, like 1.1, 1.2, 1.2.1,
+     * 1.2.2?
+     * <p/>
+     * docbkx-tools element: &lt;sectionLabelIncludesComponentLabel&gt;
      *
      * @return {@link #doesSectionLabelIncludeComponentLabel}
      */
@@ -717,7 +744,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * See return.
+     * Should documents be allowed to include other documents?
+     * <p/>
+     * docbkx-tools element: &lt;xincludeSupported&gt;
      *
      * @return {@link #isXincludeSupported}
      */
@@ -786,6 +815,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
             cfg.add(element(name("epubCustomization"), FilenameUtils
                     .separatorsToUnix(getEpubCustomization().getPath())));
+            cfg.add(element(name("targetDirectory"), FilenameUtils
+                    .separatorsToUnix(getDocbkxOutputDirectory().getPath()
+                            + File.separator + "epub")));
 
             // Copy images from source to build. DocBook XSL does not copy the
             // images, because XSL does not have a facility for copying files.
@@ -845,6 +877,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             cfg.addAll(baseConfiguration);
             cfg.add(element(name("foCustomization"),
                     FilenameUtils.separatorsToUnix(getFoCustomization().getPath())));
+            cfg.add(element(name("targetDirectory"), FilenameUtils
+                    .separatorsToUnix(getDocbkxOutputDirectory().getPath()
+                            + File.separator + format.toLowerCase())));
 
             // If you update this list, also see copyFonts().
             String fontDir = FilenameUtils.separatorsToUnix(
@@ -1039,6 +1074,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
             cfg.add(element(name("manpagesCustomization"), FilenameUtils
                     .separatorsToUnix(getManpagesCustomization().getPath())));
+            cfg.add(element(name("targetDirectory"), FilenameUtils
+                    .separatorsToUnix(getDocbkxOutputDirectory().getPath()
+                            + File.separator + "manpages")));
 
             executeMojo(
                     plugin(groupId("com.agilejava.docbkx"),
@@ -1117,6 +1155,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                     .separatorsToUnix(getSingleHTMLCustomization().getPath())));
             cfg.add(element(name("targetDatabaseDocument"),
                     buildSingleHTMLTargetDB()));
+            cfg.add(element(name("targetDirectory"), FilenameUtils
+                    .separatorsToUnix(getDocbkxOutputDirectory().getPath()
+                            + File.separator + "html")));
 
             // Copy images from source to build. DocBook XSL does not copy the
             // images, because XSL does not have a facility for copying files.
@@ -1226,6 +1267,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                     .separatorsToUnix(getChunkedHTMLCustomization().getPath())));
             cfg.add(element(name("targetDatabaseDocument"),
                     buildChunkedHTMLTargetDB()));
+            cfg.add(element(name("targetDirectory"), FilenameUtils
+                    .separatorsToUnix(getDocbkxOutputDirectory().getPath()
+                            + File.separator + "html")));
 
             // Copy images from source to build. DocBook XSL does not copy the
             // images, because XSL does not have a facility for copying files.

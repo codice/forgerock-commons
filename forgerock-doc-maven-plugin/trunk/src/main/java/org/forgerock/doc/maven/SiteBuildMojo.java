@@ -36,20 +36,20 @@ import org.twdata.maven.mojoexecutor.MojoExecutor;
  */
 public class SiteBuildMojo extends AbstractBuildMojo {
     /**
-     * File system directory for site build.
+     * File system directory for site content, relative to the build directory.
      *
-     * @parameter default-value="${project.build.directory}/site"
-     * property="siteDirectory"
+     * @parameter default-value="site" property="siteDirectory"
      * @required
      */
-    private File siteDirectory;
+    private String siteDirectory;
 
     /**
-     * See return.
+     * File system directory for site content, relative to the build directory.
+     *
      * @return {@link #siteDirectory}
      */
     public final File getSiteDirectory() {
-        return siteDirectory;
+        return new File(getBuildDirectory(), siteDirectory);
     }
 
     /**
@@ -91,7 +91,7 @@ public class SiteBuildMojo extends AbstractBuildMojo {
         }
 
         // Test links in document source, and generate a report.
-        if (!getRunLinkTester().equalsIgnoreCase("false")) {
+        if (!runLinkTester().equalsIgnoreCase("false")) {
             getLog().info("Running linktester...");
             exec.testLinks();
         }
@@ -173,12 +173,12 @@ public class SiteBuildMojo extends AbstractBuildMojo {
          * @throws MojoExecutionException Problem during execution.
          */
         public void layout() throws MojoExecutionException {
-            if (siteDirectory == null) {
+            if (getSiteDirectory() == null) {
                 throw new MojoExecutionException("<siteDirectory> must be set.");
             }
 
             String siteDocDirectory = FilenameUtils
-                    .separatorsToUnix(siteDirectory.getPath()) + "/doc";
+                    .separatorsToUnix(getSiteDirectory().getPath()) + "/doc";
             executeMojo(
                     plugin(groupId("org.apache.maven.plugins"),
                             artifactId("maven-resources-plugin"),
@@ -218,7 +218,7 @@ public class SiteBuildMojo extends AbstractBuildMojo {
                             element(name("includes"),
                                     element(name("include"), include)),
                             element(name("validating"), "true"),
-                            element(name("skipUrls"), getSkipLinkCheck()),
+                            element(name("skipUrls"), skipLinkCheck()),
                             element(name("xIncludeAware"), "true"),
                             element(name("failOnError"), "false"),
                             element(name("outputFile"), log),

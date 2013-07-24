@@ -58,8 +58,8 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     private String jCiteVersion;
 
     /**
-     * ForgeRock linktester plugin version to use. Executions seem to hit an NPE
-     * when the version is not specified.
+     * ForgeRock link tester plugin version to use. Executions seem to hit an
+     * NPE when the version is not specified.
      *
      * @parameter default-value="1.2.0" property="linkTesterVersion"
      * @required
@@ -67,9 +67,9 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     private String linkTesterVersion;
 
     /**
-     * Whether the ForgeRock linktester plugin should skip checking that
+     * Whether the ForgeRock link tester plugin should skip checking that
      * external URLs are valid. See the {@code skipUrls} parameter of the <a
-     * href="https://github.com/aldaris/docbook-linktester/">linktester
+     * href="https://github.com/aldaris/docbook-linktester/">link tester
      * plugin</a>.
      *
      * @parameter default-value="false" property="skipLinkCheck"
@@ -77,8 +77,8 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     private String skipLinkCheck;
 
     /**
-     * Whether to run the ForgeRock linktester plugin. You only need to run
-     * the linktester plugin from the top level of a project, not the modules.
+     * Whether to run the ForgeRock link tester plugin. You only need to run the
+     * link tester plugin from the top level of a project, not the modules.
      *
      * @parameter default-value="true" property="runLinkTester"
      */
@@ -105,7 +105,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     /**
      * Google Analytics identifier for the project.
      *
-     * @parameter property="googleAnalyticsId"
+     * @parameter default-value="UA-23412190-14" property="googleAnalyticsId"
      * @required
      */
     private String googleAnalyticsId;
@@ -136,13 +136,14 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     private File docbkxSourceDirectory;
 
     /**
-     * Base directory for processed DocBook XML source files.
+     * Base directory for processed DocBook XML source files, relative to the
+     * build directory.
      *
-     * @parameter default-value="${project.build.directory}/generated-docbkx"
+     * @parameter default-value="generated-docbkx"
      * property="docbkxGeneratedSourceDirectory"
      * @required
      */
-    private File docbkxGeneratedSourceDirectory;
+    private String docbkxGeneratedSourceDirectory;
 
     /**
      * Whether to use generated sources.
@@ -153,16 +154,16 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     private boolean useGeneratedSources;
 
     /**
-     * Base directory for built documentation.
+     * Base directory for built documentation, relative to the build directory.
      *
-     * @parameter default-value="${project.build.directory}/docbkx"
+     * @parameter default-value="docbkx"
      * property="docbkxOutputDirectory"
      * @required
      */
-    private File docbkxOutputDirectory;
+    private String docbkxOutputDirectory;
 
     /**
-     * Target directory for this plugin.
+     * Build directory for this plugin, usually {@code ${project.build.directory}.
      *
      * @parameter default-value="${project.build.directory}"
      * @required
@@ -232,7 +233,8 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     private String documentSrcName;
 
     /**
-     * See return.
+     * Docbkx Tools plugin version to use.
+     *
      * @return {@link #docbkxVersion}
      */
     public String getDocbkxVersion() {
@@ -240,7 +242,8 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * Maven resources plugin version to use.
+     *
      * @return {@link #resourcesVersion}
      */
     public String getResourcesVersion() {
@@ -248,7 +251,8 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * JCite plugin version to use.
+     *
      * @return {@link #jCiteVersion}
      */
     public String getJCiteVersion() {
@@ -256,7 +260,8 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * ForgeRock link tester plugin version to use.
+     *
      * @return {@link #linkTesterVersion}
      */
     public String getLinkTesterVersion() {
@@ -264,23 +269,30 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * Whether the ForgeRock link tester plugin should skip checking that
+     * external URLs are valid. See the {@code skipUrls} parameter of the <a
+     * href="https://github.com/aldaris/docbook-linktester/">link tester
+     * plugin</a>.
+     *
      * @return {@link #skipLinkCheck}
      */
-    public String getSkipLinkCheck() {
+    public String skipLinkCheck() {
         return skipLinkCheck;
     }
 
     /**
-     * See return.
+     * Whether to run the ForgeRock link tester plugin. You only need to run the
+     * link tester plugin from the top level of a project, not the modules.
+     *
      * @return {@link #runLinkTester}
      */
-    public String getRunLinkTester() {
+    public String runLinkTester() {
         return runLinkTester;
     }
 
     /**
-     * See return.
+     * Short name of the project, such as OpenAM, OpenDJ, OpenIDM.
+     *
      * @return {@link #projectName}
      */
     public String getProjectName() {
@@ -288,7 +300,8 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * Google Analytics identifier for the project.
+     *
      * @return {@link #googleAnalyticsId}
      */
     public String getGoogleAnalyticsId() {
@@ -296,7 +309,9 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * Do not process these formats. Choices include: epub, html, man, pdf, rtf.
+     * Do not set both excludes and includes in the same configuration.
+     *
      * @return {@link #excludes}
      */
     public List<String> getExcludes() {
@@ -304,7 +319,9 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * Process only this format. Choices include: epub, html, man, pdf, rtf.
+     * Do not set both excludes and includes in the same configuration.
+     *
      * @return {@link #include}
      */
     public String getInclude() {
@@ -312,7 +329,8 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * Base directory for DocBook XML source files.
+     *
      * @return {@link #docbkxSourceDirectory}
      */
     public File getDocbkxSourceDirectory() {
@@ -320,15 +338,18 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * Base directory for processed DocBook XML source files, relative to the
+     * build directory.
+     *
      * @return {@link #docbkxGeneratedSourceDirectory}
      */
     public File getDocbkxGeneratedSourceDirectory() {
-        return docbkxGeneratedSourceDirectory;
+        return new File(buildDirectory, docbkxGeneratedSourceDirectory);
     }
 
     /**
-     * See return.
+     * Whether to use generated sources.
+     *
      * @return {@link #useGeneratedSources}
      */
     public boolean doUseGeneratedSources() {
@@ -336,15 +357,17 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * Base directory for built documentation, relative to the build directory.
+     *
      * @return {@link #docbkxOutputDirectory}
      */
     public File getDocbkxOutputDirectory() {
-        return docbkxOutputDirectory;
+        return new File(buildDirectory, docbkxOutputDirectory);
     }
 
     /**
-     * See return.
+     * Build directory for this plugin, usually {@code ${project.build.directory}.
+     *
      * @return {@link #buildDirectory}
      */
     public File getBuildDirectory() {
@@ -352,7 +375,8 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * The Maven Project Object.
+     *
      * @return {@link #project}
      */
     public MavenProject getProject() {
@@ -360,7 +384,8 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * The Maven Session Object.
+     *
      * @return {@link #session}
      */
     public MavenSession getSession() {
@@ -368,7 +393,8 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * The Maven PluginManager Object.
+     *
      * @return {@link #pluginManager}
      */
     public BuildPluginManager getPluginManager() {
@@ -376,7 +402,36 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See return.
+     * Top-level DocBook documents included in the documentation set such as
+     * books, articles, and references share a common entry point, which is a
+     * file having the name specified by this element.
+     * <p/>
+     * For example, if your documentation set has Release Notes, an Installation
+     * Guide, a Developer's Guide, and a Reference, your source layout under the
+     * base DocBook XML source directory might look like this, assuming you use
+     * the default file name, <code>index.xml</code>.
+     * <p/>
+     * <pre>
+     * docbkx/
+     *  dev-guide/
+     *   index.xml
+     *   ...other files...
+     *  install-guide/
+     *   index.xml
+     *   ...other files...
+     *  reference/
+     *   index.xml
+     *   ...other files...
+     *  release-notes/
+     *   index.xml
+     *   ...other files...
+     *  shared/
+     *   ...other files...
+     * </pre>
+     * <p/>
+     * The <code>...other files...</code> can have whatever names you want, as
+     * long as the name does not conflict with the file name you set here.
+     *
      * @return {@link #documentSrcName}
      */
     public String getDocumentSrcName() {

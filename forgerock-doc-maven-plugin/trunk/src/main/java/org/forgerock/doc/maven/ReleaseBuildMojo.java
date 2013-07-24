@@ -29,7 +29,7 @@ import org.twdata.maven.mojoexecutor.MojoExecutor;
 /**
  * Layout documentation for release. The resulting documentation set is found
  * under {@code ${project.build.directory}/release} by default.
- * <p>
+ * <p/>
  * You still have some work to do at the top level in docs.forgerock.com before
  * publishing the result.
  *
@@ -39,20 +39,23 @@ import org.twdata.maven.mojoexecutor.MojoExecutor;
  */
 public class ReleaseBuildMojo extends AbstractBuildMojo {
     /**
-     * File system directory for site build.
+     * File system directory for release layout documentation, relative to the
+     * build directory.
      *
-     * @parameter default-value="${project.build.directory}/release"
-     *            property="releaseDirectory"
+     * @parameter default-value="release"
+     * property="releaseDirectory"
      * @required
      */
-    private File releaseDirectory;
+    private String releaseDirectory;
 
     /**
-     * See return.
+     * File system directory for release layout documentation, relative to the
+     * build directory.
+     *
      * @return {@link #releaseDirectory}
      */
     public final File getReleaseDirectory() {
-        return releaseDirectory;
+        return new File(getBuildDirectory(), releaseDirectory);
     }
 
     /**
@@ -64,7 +67,8 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
     private String releaseVersion;
 
     /**
-     * See return.
+     * Version for this release.
+     *
      * @return {@link #releaseVersion}
      */
     public final String getReleaseVersion() {
@@ -107,10 +111,8 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
     /**
      * Add index.html to redirect according to docs.forgerock.org site policy.
      *
-     * @param directory
-     *            Directory under which to add the index.html file.
-     * @throws IOException
-     *             Failed to write the index.html file.
+     * @param directory Directory under which to add the index.html file.
+     * @throws IOException Failed to write the index.html file.
      */
     final void addIndexHtml(final String directory) throws IOException {
         File indexHtml = new File(directory + File.separator + "index.html");
@@ -128,16 +130,14 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
      * Add version number to PDF file names of the form PRODUCT-DOC-NAME.pdf, to
      * make them PRODUCT-VERSION-DOC-NAME.pdf.
      *
-     * @param version
-     *            Version number to use.
-     * @param directory
-     *            Directory containing PDFs.
+     * @param version   Version number to use.
+     * @param directory Directory containing PDFs.
      * @throws MojoExecutionException Failed to rename a PDF file.
      */
     final void renamePDFs(final String version, final String directory)
             throws MojoExecutionException {
         File dir = new File(directory);
-        String[] ext = { "pdf" };
+        String[] ext = {"pdf"};
         boolean isRecursive = false;
         for (File pdf : FileUtils.listFiles(dir, ext, isRecursive)) {
             String name = pdf.getName().replaceFirst("-", "-" + version + "-");
@@ -150,14 +150,12 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
     /**
      * Replace CSS files for released documentation.
      *
-     * @param directory
-     *            Directory enclosing HTML documents with CSS.
-     * @throws IOException
-     *             Could not replace CSS file with new content.
+     * @param directory Directory enclosing HTML documents with CSS.
+     * @throws IOException Could not replace CSS file with new content.
      */
     final void replaceCSS(final String directory) throws IOException {
         File dir = new File(directory);
-        String[] ext = { "css" };
+        String[] ext = {"css"};
         boolean isRecursive = true;
         for (File css : FileUtils.listFiles(dir, ext, isRecursive)) {
             FileUtils.deleteQuietly(css);
@@ -174,8 +172,7 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
          * directory. Currently only HTML and PDF are copied.
          *
          * @return Compound element specifying built documents to copy
-         * @throws MojoExecutionException
-         *             Something went wrong getting document names.
+         * @throws MojoExecutionException Something went wrong getting document names.
          */
         private MojoExecutor.Element getResources() throws MojoExecutionException {
 
@@ -213,10 +210,9 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
         }
 
         /**
-         * Lay out documentation under <code>target/release</code>.
+         * Lay out documentation under the release directory.
          *
-         * @throws MojoExecutionException
-         *             Problem during execution.
+         * @throws MojoExecutionException Problem during execution.
          */
         public void layout() throws MojoExecutionException {
             if (getReleaseDirectory() == null) {
