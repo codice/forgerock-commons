@@ -304,27 +304,11 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See param.
-     * @param excludedFormats {@link #excludes}
-     */
-    public void setExcludes(final List<String> excludedFormats) {
-        this.excludes = excludedFormats;
-    }
-
-    /**
      * See return.
      * @return {@link #include}
      */
     public String getInclude() {
         return include;
-    }
-
-    /**
-     * See param.
-     * @param includedFormat {@link #include}
-     */
-    public void setInclude(String includedFormat) {
-        this.include = includedFormat;
     }
 
     /**
@@ -411,31 +395,36 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      */
     public List<String> getOutputFormats(final String... defaults)
             throws MojoExecutionException {
-        List<String> formats = Arrays.asList("epub", "html", "man", "pdf", "rtf");
+        ArrayList<String> formats = new ArrayList<String>();
+
         if (defaults.length != 0) {                      // Restrict list.
-            formats = Arrays.asList(defaults);
+            formats.addAll(Arrays.asList(defaults));
+        } else {
+            formats.addAll(Arrays.asList("epub", "html", "man", "pdf", "rtf"));
         }
 
-        if (getExcludes() == null) {
-            setExcludes(new ArrayList<String>());
+        ArrayList<String> excludes = new ArrayList<String>();
+        String include = "";
+
+        if (getExcludes() != null) {
+            excludes = (ArrayList<String>) getExcludes();
         }
 
-        if (getInclude() == null) {
-            setInclude("");
+        if (getInclude() != null) {
+            include = getInclude();
         }
 
-        if (!getExcludes().isEmpty() && !getInclude().equals("")) {
-            throw new MojoExecutionException("Do not set both <excludes> and"
+        if (!excludes.isEmpty() && !include.equals("")) {
+            throw new MojoExecutionException("Do not set both <excludes> and "
                     + "<include> in the same configuration.");
 
-        } else if (!getExcludes().isEmpty()) {          // Exclude formats.
-            for (String format : getExcludes()) {
+        } else if (!excludes.isEmpty()) {          // Exclude formats.
+            for (String format : excludes) {
                 formats.remove(format);
             }
         } else if (formats.contains(getInclude())) {    // Include one format.
-            List<String> includes = new ArrayList<String>();
-            includes.add(getInclude());
-            formats = includes;
+            formats.clear();
+            formats.add(include);
         }
         return formats;
     }
