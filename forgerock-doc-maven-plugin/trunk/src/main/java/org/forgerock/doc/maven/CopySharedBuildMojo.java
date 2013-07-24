@@ -38,7 +38,7 @@ public class CopySharedBuildMojo extends AbstractBuildMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
 
-        if (doUseSharedContent()) {
+        if (useSharedContent()) {
             if (!doUseGeneratedSources()) {
                 throw new MojoExecutionException("<useGeneratedSources> must"
                         + " be set to true to use common content.");

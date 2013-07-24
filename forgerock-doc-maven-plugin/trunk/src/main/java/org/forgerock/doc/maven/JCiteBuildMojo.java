@@ -62,6 +62,8 @@ public class JCiteBuildMojo extends AbstractBuildMojo {
      * When running JCite, the set of source paths where cited Java files are to
      * be found.
      *
+     * If source paths are not set, {@code src/main/java} is used.
+     *
      * @parameter
      */
     private List<File> sourcePaths;

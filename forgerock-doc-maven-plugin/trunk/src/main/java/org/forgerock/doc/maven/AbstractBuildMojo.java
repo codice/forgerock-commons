@@ -272,27 +272,11 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * See param.
-     * @param doLinkCheck {@link #skipLinkCheck}
-     */
-    public void setSkipLinkCheck(String doLinkCheck) {
-        this.skipLinkCheck = doLinkCheck;
-    }
-
-    /**
      * See return.
      * @return {@link #runLinkTester}
      */
     public String getRunLinkTester() {
         return runLinkTester;
-    }
-
-    /**
-     * See param.
-     * @param runLinkTester {@link #runLinkTester}
-     */
-    public void setRunLinkTester(String runLinkTester) {
-        this.runLinkTester = runLinkTester;
     }
 
     /**
@@ -349,14 +333,6 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      */
     public File getDocbkxSourceDirectory() {
         return docbkxSourceDirectory;
-    }
-
-    /**
-     * See return.
-     * @param directory {@link #docbkxSourceDirectory}
-     */
-    public void setDocbkxSourceDirectory(File directory) {
-        this.docbkxSourceDirectory = directory;
     }
 
     /**
@@ -472,15 +448,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      *
      * @parameter default-value="true" property="useSharedContent"
      */
-    public boolean doUseSharedContent() {
+    public boolean useSharedContent() {
         return useSharedContent;
-    }
-
-    /**
-     * See param.
-     * @param useSharedContent {@link #useSharedContent}
-     */
-    public void setUseSharedContent(boolean useSharedContent) {
-        this.useSharedContent = useSharedContent;
     }
 }

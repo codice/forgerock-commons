@@ -667,7 +667,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      *
      * @return {@link #ansi}
      */
-    public final String getAnsi() {
+    public final String useAnsi() {
         return ansi;
     }
 
@@ -676,7 +676,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      *
      * @return {@link #isDraftMode}
      */
-    public final String getIsDraftMode() {
+    public final String isDraftMode() {
         return isDraftMode;
     }
 
@@ -694,7 +694,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      *
      * @return {@link #useSyntaxHighlighting}
      */
-    public final String getUseSyntaxHighlighting() {
+    public final String useSyntaxHighlighting() {
         return useSyntaxHighlighting;
     }
 
@@ -703,7 +703,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      *
      * @return {@link #areSectionsAutolabeled}
      */
-    public final String getAreSectionsAutolabeled() {
+    public final String areSectionsAutolabeled() {
         return areSectionsAutolabeled;
     }
 
@@ -712,7 +712,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      *
      * @return {@link #doesSectionLabelIncludeComponentLabel}
      */
-    public final String getDoesSectionLabelIncludeComponentLabel() {
+    public final String doesSectionLabelIncludeComponentLabel() {
         return doesSectionLabelIncludeComponentLabel;
     }
 
@@ -721,7 +721,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      *
      * @return {@link #isXincludeSupported}
      */
-    public final String getIsXincludeSupported() {
+    public final String isXincludeSupported() {
         return isXincludeSupported;
     }
 
@@ -736,14 +736,14 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
          * @throws MojoExecutionException Failed to prepare FOP.
          */
         void prepareFOP() throws MojoExecutionException {
-            String fontsDir = FilenameUtils.separatorsToUnix(fontsDirectory
-                    .getPath());
+            String fontsDir = FilenameUtils.separatorsToUnix(
+                    getFontsDirectory().getPath());
             executeMojo(
                     plugin(groupId("com.agilejava.docbkx"),
                             artifactId("docbkx-fop-support"),
                             version(getDocbkxVersion())),
                     goal("generate"),
-                    configuration(element(name("ansi"), ansi),
+                    configuration(element(name("ansi"), useAnsi()),
                             element(name("sourceDirectory"), fontsDir),
                             element(name("targetDirectory"), fontsDir)),
                     executionEnvironment(getProject(), getSession(),
@@ -759,13 +759,13 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         ArrayList<MojoExecutor.Element> getBaseConfiguration() {
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
 
-            cfg.add(element(name("draftMode"), isDraftMode));
-            cfg.add(element(name("draftWatermarkImage"), draftWatermarkURL));
-            cfg.add(element(name("highlightSource"), useSyntaxHighlighting));
-            cfg.add(element(name("sectionAutolabel"), areSectionsAutolabeled));
+            cfg.add(element(name("draftMode"), isDraftMode()));
+            cfg.add(element(name("draftWatermarkImage"), getDraftWatermarkURL()));
+            cfg.add(element(name("highlightSource"), useSyntaxHighlighting()));
+            cfg.add(element(name("sectionAutolabel"), areSectionsAutolabeled()));
             cfg.add(element(name("sectionLabelIncludesComponentLabel"),
-                    doesSectionLabelIncludeComponentLabel));
-            cfg.add(element(name("xincludeSupported"), isXincludeSupported));
+                    doesSectionLabelIncludeComponentLabel()));
+            cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
             cfg.add(element(name("sourceDirectory"), FilenameUtils
                     .separatorsToUnix(xmlSourceDirectory.getPath())));
 
@@ -821,7 +821,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                             artifactId("docbkx-maven-plugin"),
                             version(getDocbkxVersion())),
                     goal("generate-epub"),
-                    configuration(cfg.toArray(new Element[0])),
+                    configuration(cfg.toArray(new Element[cfg.size()])),
                     executionEnvironment(getProject(), getSession(),
                             getPluginManager()));
         }
@@ -844,11 +844,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.addAll(baseConfiguration);
             cfg.add(element(name("foCustomization"),
-                    FilenameUtils.separatorsToUnix(foCustomization.getPath())));
+                    FilenameUtils.separatorsToUnix(getFoCustomization().getPath())));
 
             // If you update this list, also see copyFonts().
-            String fontDir = FilenameUtils.separatorsToUnix(fontsDirectory
-                    .getPath());
+            String fontDir = FilenameUtils.separatorsToUnix(
+                    getFontsDirectory().getPath());
             cfg.add(element(
                     name("fonts"),
                     element(name("font"),
@@ -991,7 +991,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                 executeMojo(
                         plugin,
                         goal("generate-" + format),
-                        configuration(cfg.toArray(new Element[0])),
+                        configuration(cfg.toArray(new Element[cfg.size()])),
                         executionEnvironment(getProject(), getSession(),
                                 getPluginManager()));
 
@@ -1038,14 +1038,14 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             cfg.addAll(baseConfiguration);
             cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
             cfg.add(element(name("manpagesCustomization"), FilenameUtils
-                    .separatorsToUnix(manpagesCustomization.getPath())));
+                    .separatorsToUnix(getManpagesCustomization().getPath())));
 
             executeMojo(
                     plugin(groupId("com.agilejava.docbkx"),
                             artifactId("docbkx-maven-plugin"),
                             version(getDocbkxVersion())),
                     goal("generate-manpages"),
-                    configuration(cfg.toArray(new Element[0])),
+                    configuration(cfg.toArray(new Element[cfg.size()])),
                     executionEnvironment(getProject(), getSession(),
                             getPluginManager()));
         }
@@ -1059,7 +1059,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         void buildSingleHTMLOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
                 MojoExecutionException {
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
-            cfg.add(element(name("xincludeSupported"), isXincludeSupported));
+            cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
             cfg.add(element(name("sourceDirectory"), FilenameUtils
                     .separatorsToUnix(xmlSourceDirectory.getPath())));
 
@@ -1086,7 +1086,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                                 artifactId("docbkx-maven-plugin"),
                                 version(getDocbkxVersion())),
                         goal("generate-html"),
-                        configuration(cfg.toArray(new Element[0])),
+                        configuration(cfg.toArray(new Element[cfg.size()])),
                         executionEnvironment(getProject(), getSession(),
                                 getPluginManager()));
 
@@ -1114,7 +1114,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
             cfg.add(element(name("chunkedOutput"), "false"));
             cfg.add(element(name("htmlCustomization"), FilenameUtils
-                    .separatorsToUnix(singleHTMLCustomization.getPath())));
+                    .separatorsToUnix(getSingleHTMLCustomization().getPath())));
             cfg.add(element(name("targetDatabaseDocument"),
                     buildSingleHTMLTargetDB()));
 
@@ -1149,7 +1149,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                             artifactId("docbkx-maven-plugin"),
                             version(getDocbkxVersion())),
                     goal("generate-html"),
-                    configuration(cfg.toArray(new Element[0])),
+                    configuration(cfg.toArray(new Element[cfg.size()])),
                     executionEnvironment(getProject(), getSession(),
                             getPluginManager()));
         }
@@ -1163,12 +1163,12 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         void buildChunkedHTMLOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
                 MojoExecutionException {
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
-            cfg.add(element(name("xincludeSupported"), isXincludeSupported));
+            cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
             cfg.add(element(name("sourceDirectory"), FilenameUtils
                     .separatorsToUnix(xmlSourceDirectory.getPath())));
             cfg.add(element(name("chunkedOutput"), "true"));
             cfg.add(element(name("htmlCustomization"), FilenameUtils
-                    .separatorsToUnix(chunkedHTMLCustomization.getPath())));
+                    .separatorsToUnix(getChunkedHTMLCustomization().getPath())));
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     xmlSourceDirectory, getDocumentSrcName());
@@ -1194,7 +1194,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                                 artifactId("docbkx-maven-plugin"),
                                 version(getDocbkxVersion())),
                         goal("generate-html"),
-                        configuration(cfg.toArray(new Element[0])),
+                        configuration(cfg.toArray(new Element[cfg.size()])),
                         executionEnvironment(getProject(), getSession(),
                                 getPluginManager()));
 
@@ -1223,7 +1223,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
             cfg.add(element(name("chunkedOutput"), "true"));
             cfg.add(element(name("htmlCustomization"), FilenameUtils
-                    .separatorsToUnix(chunkedHTMLCustomization.getPath())));
+                    .separatorsToUnix(getChunkedHTMLCustomization().getPath())));
             cfg.add(element(name("targetDatabaseDocument"),
                     buildChunkedHTMLTargetDB()));
 
@@ -1261,7 +1261,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                             artifactId("docbkx-maven-plugin"),
                             version(getDocbkxVersion())),
                     goal("generate-html"),
-                    configuration(cfg.toArray(new Element[0])),
+                    configuration(cfg.toArray(new Element[cfg.size()])),
                     executionEnvironment(getProject(), getSession(),
                             getPluginManager()));
         }

@@ -28,7 +28,7 @@ import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 /**
  * Layout documentation for release. The resulting documentation set is found
- * under <code>target/release/</code> by default.
+ * under {@code ${project.build.directory}/release} by default.
  * <p>
  * You still have some work to do at the top level in docs.forgerock.com before
  * publishing the result.
@@ -209,7 +209,7 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
                                 element(name("include"), "**/*.pdf"))));
             }
 
-            return element("resources", r.toArray(new Element[0]));
+            return element("resources", r.toArray(new Element[r.size()]));
         }
 
         /**
@@ -219,12 +219,12 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
          *             Problem during execution.
          */
         public void layout() throws MojoExecutionException {
-            if (releaseDirectory == null) {
-                throw new MojoExecutionException("<siteDirectory> must be set.");
+            if (getReleaseDirectory() == null) {
+                throw new MojoExecutionException("<releaseDirectory> must be set.");
             }
 
             String releaseDocDirectory = FilenameUtils
-                    .separatorsToUnix(releaseDirectory.getPath())
+                    .separatorsToUnix(getReleaseDirectory().getPath())
                     + "/"
                     + getReleaseVersion();
             executeMojo(

@@ -28,7 +28,7 @@ import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 /**
  * Layout built documentation. The resulting documentation set is found under
- * <code>target/site/doc</code>.
+ * {@code ${project.build.directory}/site/doc}.
  *
  * @Checkstyle:ignoreFor 2
  * @goal layout
@@ -164,7 +164,7 @@ public class SiteBuildMojo extends AbstractBuildMojo {
                                 element(name("include"), "**/*.rtf"))));
             }
 
-            return element("resources", r.toArray(new Element[0]));
+            return element("resources", r.toArray(new Element[r.size()]));
         }
 
         /**
