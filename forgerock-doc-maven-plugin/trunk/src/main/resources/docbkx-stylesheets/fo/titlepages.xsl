@@ -550,7 +550,7 @@
 
 <xsl:template match="d:date" mode="book.titlepage.recto.auto.mode">
 <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="book.titlepage.recto.style" font-size="12pt" space-before="9pt" keep-with-next.within-column="always">
-<xsl:text>Publication date: </xsl:text><xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
+<xsl:apply-templates select="." mode="book.titlepage.recto.mode"/>
 </fo:block>
 </xsl:template>
 

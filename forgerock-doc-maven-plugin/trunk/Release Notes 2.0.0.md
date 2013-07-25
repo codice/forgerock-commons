@@ -42,6 +42,30 @@ The fix helps, but for page-wide listings, use this suggestion from Bob Stayton:
 
 **DOCS-94: Version numbers on draft docs are confusing**
 
+**DOCS-95: Do not set publication date on in-progress documentation**
+
+This is fixed in the doc build plugin, but requires changes to the product POM:
+
+      <!--
+        Release date and publication date are set at release build time.
+          -D"releaseDate=Software release date: January 1, 1970"
+          -D"pubDate=Publication date: December 31, 1969"
+        At all other times, the dates should be empty.
+      -->
+      <releaseDate />
+      <softwareReleaseDate>${releaseDate}</softwareReleaseDate>
+      <pubDate />
+      <publicationDate>${pubDate}</publicationDate>
+
+And to the top level document files, such as `index.xml`:
+
+      <date><?eval ${publicationDate}?></date>
+      <pubdate><?eval ${publicationDate}?></pubdate>
+      <releaseinfo><?eval ${softwareReleaseDate}?></releaseinfo>
+
+Once these are changed in the product docs and this version of the doc build
+plugin is used, the publication date only appears in output when set.
+
 
 ## Known Issues
 

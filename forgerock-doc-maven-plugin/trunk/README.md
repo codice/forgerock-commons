@@ -191,7 +191,12 @@ ID using the property.
 
      mvn -DisDraftMode=no -DreleaseVersion=1.0.0 -D"gaId=UA-23412190-14" \
      -D"releaseDate=Software release date: January 1, 1970" \
+     -D"pubDate=Publication date: December 31, 1969" \
      clean site org.forgerock.commons:forgerock-doc-maven-plugin:release
+
+Both dates are reflected in the documents to publish.
+* The `releaseDate` indicates the date the software was released.
+* The `pubDate` indicates the date you published the documentation.
 
 ## Notes on Syntax Highlighting
 
