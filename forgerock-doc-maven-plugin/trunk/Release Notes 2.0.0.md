@@ -1,0 +1,71 @@
+#DRAFT 2.0.0 is currently in progress and not yet released
+
+# ForgeRock Documentation Tools 2.0.0 Release Notes
+
+ForgeRock Documentation Tools is a catch all for the doc build plugin,
+sites where we post documentation, and the documentation about
+documentation. The link to the online issue tracker is
+<https://bugster.forgerock.org/jira/browse/DOCS>.
+
+This release includes the following improvements, new features, and bug
+fixes.
+
+## Improvements & New Features
+
+**DOCS-78: Include hyphen when splitting URL across lines**
+
+**DOCS-85: Make it easy to get the link to other titled block elements**
+
+Added ↪ on mouseover in HTML for all titles with anchors.
+
+**DOCS-87: Allow soft hyphens at commas in long literals**
+
+**DOCS-88: Style more width in HTML table rendering of simplelist**
+
+
+## Bugs Fixed
+
+**DOCS-75: Wide programlisting shading extends to the right edge of the page in PDF**
+
+The fix helps, but for page-wide listings, use this suggestion from Bob Stayton:
+
+    <informalexample>
+    <?dbfo pgwide="1"?>
+    <programlisting>Wide listing that needs full-page width ...</programlisting>
+    </informalexample>
+
+**DOCS-91: Doc build plugin fails when project names include numbers**
+
+**DOCS-92: Doc build plugin NPE when source directory contains no directories**
+
+**DOCS-93: Doc build plugin does not properly use configuration settings**
+
+**DOCS-94: Version numbers on draft docs are confusing**
+
+
+## Known Issues
+
+**DOCS-71: Soft hyphens displayed in mid line in PDF**
+
+See <https://issues.apache.org/jira/browse/FOP-2239>.
+
+Workaround: The problem might arise when you are documenting a synopsis
+manually, as the markup is not available in the context where you want
+to add a synopsis.
+
+First, you can use `&#8230;` for horizontal ellipsis rather than `...`.
+
+Second, if you have a construction like `.]` where brackets mean
+optional, then add an extra space. It's technically wrong, but readers
+will have to interpret the optional characters anyway.
+
+
+* * *
+This work is licensed under the Creative Commons
+Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+To view a copy of this license, visit
+<http://creativecommons.org/licenses/by-nc-nd/3.0/>
+or send a letter to Creative Commons, 444 Castro Street,
+Suite 900, Mountain View, California, 94041, USA.
+
+Copyright 2012-2013 ForgeRock AS
