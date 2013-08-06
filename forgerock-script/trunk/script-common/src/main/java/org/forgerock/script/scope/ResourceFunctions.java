@@ -831,8 +831,7 @@ public final class ResourceFunctions {
                         break;
                     } else if (null == value) {
                         break;
-                    } else if (value instanceof Map == false || value instanceof JsonValue == false
-                            || !((JsonValue) value).isMap()) {
+                    } else if (!(value instanceof Map) && (value instanceof JsonValue && !((JsonValue) value).isMap())) {
                         throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
                                 "action", arguments));
                     } else {
