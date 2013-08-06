@@ -202,13 +202,13 @@ public class FunctionFactory {
      *
      * @return
      */
-    public static Map<String, Function<JsonValue>> getResource() {
-        return new LazyMap<String, Function<JsonValue>>(
-                new Factory<Map<String, Function<JsonValue>>>() {
+    public static Map<String, Function<Object>> getResource() {
+        return new LazyMap<String, Function<Object>>(
+                new Factory<Map<String, Function<Object>>>() {
                     @Override
-                    public Map<String, Function<JsonValue>> newInstance() {
-                        HashMap<String, Function<JsonValue>> functions =
-                                new HashMap<String, Function<JsonValue>>(7);
+                    public Map<String, Function<Object>> newInstance() {
+                        HashMap<String, Function<Object>> functions =
+                                new HashMap<String, Function<Object>>(7);
 
                         functions.put("create", ResourceFunctions.CREATE);
                         functions.put("read", ResourceFunctions.READ);
