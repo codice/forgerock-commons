@@ -25,7 +25,7 @@ import org.forgerock.json.jose.jwe.JweAlgorithm;
 import org.forgerock.json.jose.jwe.JweHeader;
 import org.forgerock.json.jose.jwt.Jwt;
 import org.forgerock.json.jose.jwt.JwtClaimsSet;
-import org.forgerock.util.KeystoreManager;
+import org.forgerock.common.util.KeystoreManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
