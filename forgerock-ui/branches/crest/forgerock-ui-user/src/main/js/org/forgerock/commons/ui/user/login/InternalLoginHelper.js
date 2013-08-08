@@ -36,9 +36,9 @@ define("org/forgerock/commons/ui/user/login/InternalLoginHelper", [
 
     obj.login = function(params, successCallback, errorCallback) {
         userDelegate.login(params.userName, params.password, function(user) {
-            conf.globalData.userComponent = user.userid.component;
+            conf.globalData.userComponent = user.authorizationId.component;
             
-            userDelegate.getUserById(user.userid.id, user.userid.component, successCallback, errorCallback);
+            userDelegate.getUserById(user.authorizationId.id, user.authorizationId.component, successCallback, errorCallback);
         }, function() {
             errorCallback();
         }, {"unauthorized": { status: "401"}});
@@ -51,9 +51,9 @@ define("org/forgerock/commons/ui/user/login/InternalLoginHelper", [
     obj.getLoggedUser = function(successCallback, errorCallback) {
         try{
             userDelegate.getProfile(function(user) {
-                conf.globalData.userComponent = user.userid.component;
+                conf.globalData.userComponent = user.authorizationId.component;
                 
-                userDelegate.getUserById(user.userid.id, user.userid.component, successCallback, errorCallback);
+                userDelegate.getUserById(user.authorizationId.id, user.authorizationId.component, successCallback, errorCallback);
             }, function() {
                 errorCallback();
             }, {"serverError": {status: "503"}, "unauthorized": {status: "401"}});
