@@ -31,20 +31,20 @@
  <title>Joining the ForgeRock Community</title>
 
  <para>After you <link xlink:show="new"
-                       xlink:href="https://idp.forgerock.org/openam/UI/Login?service=register"
- >sign up</link> to join the ForgeRock community, you can edit the Community
+ xlink:href="https://sso.forgerock.com/openam/UI/Login">sign up</link> to join
+ the ForgeRock community, you can edit the Community
  <link xlink:href="https://wikis.forgerock.org/" xlink:show="new">Wikis</link>,
  and also log bugs and feature requests in the <link xlink:show="new"
-                                                     xlink:href="https://bugster.forgerock.org/">issue tracker</link>.</para>
+ xlink:href="https://bugster.forgerock.org/">issue tracker</link>.</para>
 
  <para>If you have a question regarding a project but cannot find an answer in
  the project documentation or Wiki, browse to the <link xlink:show="new"
-                                                        xlink:href="http://forgerock.org">Developer Community</link> page for the
+ xlink:href="http://forgerock.org">Developer Community</link> page for the
  project, where you can find details on joining the project mailing lists, and
- find links to mailing list archives. You can also suggest updates to documentation
- through the <link
-  xlink:href="https://lists.forgerock.org/mailman/listinfo/docs"
-  xlink:show="new">ForgeRock docs mailing list</link>.</para>
+ find links to mailing list archives. You can also suggest updates to
+ documentation through the <link xlink:show="new"
+ xlink:href="https://lists.forgerock.org/mailman/listinfo/docs">ForgeRock docs
+ mailing list</link>.</para>
 
  <para>The Community Wikis describe how to check out and build source code.
  Should you want to contribute a patch, test, or feature, or want to author
