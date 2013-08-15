@@ -13,7 +13,7 @@
 
     <groupId>org.forgerock.commons</groupId>
     <artifactId>forgerock-auth-filters</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
     <name>ForgeRock Auth Filters</name>
@@ -78,7 +78,7 @@
             <dependency>
                 <groupId>org.forgerock.commons</groupId>
                 <artifactId>json-web-token</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
+                <version>1.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.forgerock.commons</groupId>
