@@ -26,7 +26,7 @@
     <groupId>org.forgerock.commons</groupId>
     <artifactId>json-web-token</artifactId>
     <name>JSON Web Token</name>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <description>ForgeRock JSON Web Token library which uses the pre-2.0.0 version of CREST</description>
     <packaging>bundle</packaging>
 
