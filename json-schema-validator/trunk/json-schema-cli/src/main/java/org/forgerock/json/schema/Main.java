@@ -235,7 +235,7 @@ public class Main {
         if (null != validator) {
             if (verbose) {
                 final boolean[] valid = new boolean[1];
-                validator.validate(value.getValue(), null, new ErrorHandler() {
+                validator.validate(value.getObject(), null, new ErrorHandler() {
                     @Override
                     public void error(ValidationException exception) throws SchemaException {
                         valid[0] = false;
@@ -250,7 +250,7 @@ public class Main {
                     System.out.println("OK - Object is valid!");
                 }
             } else {
-                validator.validate(value.getValue(), null, new FailFastErrorHandler());
+                validator.validate(value.getObject(), null, new FailFastErrorHandler());
                 System.out.println("OK - Object is valid!");
             }
         } else {

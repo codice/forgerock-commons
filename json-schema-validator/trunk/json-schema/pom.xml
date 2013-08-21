@@ -3,7 +3,7 @@
 <!--
  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
- Copyright © 2011 ForgeRock AS. All rights reserved.
+ Copyright © 2011-2013 ForgeRock AS. All rights reserved.
 
  The contents of this file are subject to the terms
  of the Common Development and Distribution License
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>org.forgerock.commons</groupId>
             <artifactId>json-fluent</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
+            <version>1.2.0</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
@@ -69,7 +69,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>org.forgerock.json.schema.validator.*</Export-Package>
+                        <Export-Package>org.forgerock.json.schema.validator.*;version=${project.version}</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>
