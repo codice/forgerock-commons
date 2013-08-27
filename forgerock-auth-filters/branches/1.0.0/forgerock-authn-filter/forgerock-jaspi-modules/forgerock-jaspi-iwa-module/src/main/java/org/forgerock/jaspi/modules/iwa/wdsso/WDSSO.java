@@ -86,6 +86,7 @@ public class WDSSO /*extends AMLoginModule*/ {
     private String keyTabFile = null;
     private String kdcRealm   = null;
     private String kdcServer  = null;
+    private String loginConfig = null;
     private boolean returnRealm = false;
     private String authLevel  = null;
     private Map    options    = null;
@@ -331,6 +332,7 @@ public class WDSSO /*extends AMLoginModule*/ {
         keyTabFile = null;
         kdcRealm = null;
         kdcServer = null;
+        loginConfig = null;
         authLevel = null;
         options = null;
         confIndex = null;
@@ -502,6 +504,7 @@ public class WDSSO /*extends AMLoginModule*/ {
         keyTabFile = options.get("keytabFileName");//getMapAttr(options, KEYTAB);
         kdcRealm = options.get("kerberosRealm");//getMapAttr(options, REALM);
         kdcServer = options.get("kerberosServerName");//getMapAttr(options, KDC);
+        loginConfig = options.get("kerberosLoginConfig");
 //        authLevel = options.get("authLevel");//getMapAttr(options, AUTHLEVEL);
 //        returnRealm = Boolean.valueOf(options.get("RETURNREALM")/*getMapAttr(options,RETURNREALM)*/).booleanValue();
 //        lookupUserInRealm = Boolean.valueOf(options.get("LOOKUPUSERINREALM")/*getMapAttr(options,LOOKUPUSER)*/).booleanValue();
@@ -578,7 +581,6 @@ public class WDSSO /*extends AMLoginModule*/ {
 //        }
         System.setProperty("java.security.krb5.realm", kdcRealm);
         System.setProperty("java.security.krb5.kdc", kdcServer);
-        System.setProperty("java.security.auth.login.config", "/dev/null");
 
         try {
             Configuration config = Configuration.getConfiguration();
@@ -644,6 +646,14 @@ public class WDSSO /*extends AMLoginModule*/ {
                 throw new RuntimeException();
             }
         }
+
+//        if (loginConfig != null && !(new File(loginConfig)).exists()) {
+//            // ibm jdk needs to skip "file://" part in parameter
+//            if (!(new File(loginConfig.substring(7))).exists()) {
+//                LOGGER.error("IWA WDSSO: Login Config does not exist");
+//                throw new RuntimeException();
+//            }
+//        }
 
 //        try {
 //            setAuthLevel(Integer.parseInt(authLevel));
