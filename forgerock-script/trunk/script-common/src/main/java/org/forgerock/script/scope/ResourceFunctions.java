@@ -79,7 +79,7 @@ public final class ResourceFunctions {
         }
 
         @Override
-        public Object call(Parameter scope, Function<?> callback, Object... arguments)
+        public JsonValue call(Parameter scope, Function<?> callback, Object... arguments)
                 throws ResourceException, NoSuchMethodException {
             String resourceContainer = null;
             String newResourceId = null;
@@ -147,7 +147,7 @@ public final class ResourceFunctions {
             }
 
             return create(scope, resourceContainer, newResourceId, content, fieldFilter, context,
-                    callback).getContent().getWrappedObject();
+                    callback).getContent();
         }
 
         public Resource create(final Parameter scope, String resourceContainer,
@@ -191,7 +191,7 @@ public final class ResourceFunctions {
         }
 
         @Override
-        public Object call(final Parameter scope, final Function<?> callback,
+        public JsonValue call(final Parameter scope, final Function<?> callback,
                 Object... arguments) throws ResourceException, NoSuchMethodException {
             String resourceName = null;
             List<Object> fieldFilter = null;
@@ -244,7 +244,7 @@ public final class ResourceFunctions {
 				// indicates no such record without throwing exception
 				return null;
 			}
-            return result.getWrappedObject();
+            return result;
         }
 
         public Resource read(final Parameter parameter, String resourceName,
@@ -286,7 +286,7 @@ public final class ResourceFunctions {
         }
 
         @Override
-        public Object call(final Parameter scope, final Function<?> callback,
+        public JsonValue call(final Parameter scope, final Function<?> callback,
                 final Object... arguments) throws ResourceException, NoSuchMethodException {
 
             String resourceName = null;
@@ -355,7 +355,7 @@ public final class ResourceFunctions {
             }
 
             return update(scope, resourceName, revision, content, fieldFilter, context, callback)
-                    .getContent().getWrappedObject();
+                    .getContent();
         }
 
         private final Resource update(final Parameter scope, String resourceName, String revision,
@@ -399,7 +399,7 @@ public final class ResourceFunctions {
         }
 
         @Override
-        public Object call(Parameter scope, Function<?> callback, Object... arguments)
+        public JsonValue call(Parameter scope, Function<?> callback, Object... arguments)
                 throws ResourceException {
             return null; // To change body of implemented methods use File |
                          // Settings | File Templates.
@@ -454,7 +454,7 @@ public final class ResourceFunctions {
         }
 
         @Override
-        public Object call(Parameter scope, final Function<?> callback, Object... arguments)
+        public JsonValue call(Parameter scope, final Function<?> callback, Object... arguments)
                 throws ResourceException, NoSuchMethodException {
 
             String resourceContainer = null;
@@ -529,7 +529,7 @@ public final class ResourceFunctions {
             if (null != results) {
                 result.put("result", results);
             }
-            return result.getWrappedObject();
+            return result;
         }
 
         private final QueryResult query(final Parameter scope, String resourceContainer,
@@ -698,7 +698,7 @@ public final class ResourceFunctions {
         }
 
         @Override
-        public Object call(Parameter scope, Function<?> callback, Object... arguments)
+        public JsonValue call(Parameter scope, Function<?> callback, Object... arguments)
                 throws ResourceException, NoSuchMethodException {
             String resourceName = null;
             String revision = null;
@@ -754,7 +754,7 @@ public final class ResourceFunctions {
                 }
             }
             return delete(scope, resourceName, revision, fieldFilter, context, callback)
-                    .getContent().getWrappedObject();
+                    .getContent();
         }
 
         private Resource delete(Parameter scope, String resourceName, String revision,
@@ -923,7 +923,7 @@ public final class ResourceFunctions {
         }
     }
 
-    private static abstract class AbstractFunction implements Function<Object> {
+    private static abstract class AbstractFunction implements Function<JsonValue> {
 
         /** Serializable class a version number. */
         static final long serialVersionUID = 1L;
