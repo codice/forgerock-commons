@@ -13,7 +13,7 @@
 
     <groupId>org.forgerock.commons</groupId>
     <artifactId>forgerock-auth-filters</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.2.0-r1044</version>
     <packaging>pom</packaging>
 
     <name>ForgeRock Auth Filters</name>
@@ -31,7 +31,7 @@
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.source>1.6</maven.compiler.source>
 
-        <forgerock-rest.version>2.0.1-SNAPSHOT</forgerock-rest.version>
+        <forgerock-rest.version>2.0.1-r1044</forgerock-rest.version>
     </properties>
 
     <repositories>
