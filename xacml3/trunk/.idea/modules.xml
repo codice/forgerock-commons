@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/shared/shared.iml" filepath="$PROJECT_DIR$/shared/shared.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xacml-core/xacml-core.iml" filepath="$PROJECT_DIR$/xacml-core/xacml-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xacml-engine.iml" filepath="$PROJECT_DIR$/xacml-engine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xacml-openam/xacml-openam.iml" filepath="$PROJECT_DIR$/xacml-openam/xacml-openam.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xacml-reference/xacml-reference.iml" filepath="$PROJECT_DIR$/xacml-reference/xacml-reference.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xacml-server/xacml-server.iml" filepath="$PROJECT_DIR$/xacml-server/xacml-server.iml" />
+    </modules>
+  </component>
+</project>
+

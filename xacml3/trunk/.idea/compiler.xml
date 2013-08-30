@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="Javac" />
+    <resourceExtensions />
+    <wildcardResourcePatterns>
+      <entry name="?*.properties" />
+      <entry name="?*.xml" />
+      <entry name="?*.gif" />
+      <entry name="?*.png" />
+      <entry name="?*.jpeg" />
+      <entry name="?*.jpg" />
+      <entry name="?*.html" />
+      <entry name="?*.dtd" />
+      <entry name="?*.tld" />
+      <entry name="?*.ftl" />
+    </wildcardResourcePatterns>
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="false">
+        <processorPath useClasspath="true" />
+      </profile>
+      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="os-xacml" />
+        <module name="shared" />
+        <module name="xacml-core" />
+        <module name="xacml-openam" />
+        <module name="xacml-reference" />
+        <module name="xacml-server" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="os-xacml" target="1.6" />
+      <module name="shared" target="1.5" />
+      <module name="xacml-core" target="1.6" />
+      <module name="xacml-engine" target="1.5" />
+      <module name="xacml-openam" target="1.5" />
+      <module name="xacml-reference" target="1.5" />
+      <module name="xacml-server" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
+

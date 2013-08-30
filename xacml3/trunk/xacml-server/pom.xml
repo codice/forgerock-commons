@@ -1,0 +1,143 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>xacml3</artifactId>
+        <groupId>org.forgerock.xacml</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>xacml-server</name>
+    <description>XACML Reference</description>
+    <artifactId>xacml-server</artifactId>
+    <packaging>war</packaging>
+
+    <url>http://maven.apache.org</url>
+    <dependencies>
+        <dependency>
+            <groupId>org.forgerock.openam</groupId>
+            <artifactId>openam-xacml3-schema</artifactId>
+            <version>10.2.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.forgerock.xacml</groupId>
+            <artifactId>xacml-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.forgerock.xacml</groupId>
+            <artifactId>shared</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.forgerock.xacml</groupId>
+            <artifactId>xacml-reference</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>1.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+
+
+    </dependencies>
+    <build>
+        <finalName>xacml-server</finalName>
+        <plugins>
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <configuration>
+                <packagingExcludes>
+                    WEB-INF/lib/ant-contrib-1.0b3.jar,
+                    WEB-INF/lib/jersey-core-1.1.5.2.jar,
+                    WEB-INF/lib/jaxb-api-1.0.6.jar,
+                    WEB-INF/lib/jaxb-impl-1.0.6.jar,
+                    WEB-INF/lib/jaxb-libs-1.0.6.jar,
+                    WEB-INF/lib/jaxb-xjc-1.0.6.jar,
+                    WEB-INF/lib/jdom-2.0.1.jar,
+                    WEB-INF/lib/jaxp-api-1.4.2.jar,
+                    WEB-INF/lib/jaxws-api-2.2.8.jar,
+                    WEB-INF/lib/jaxws-rt-2.2.7-promoted-b73.jar,
+                    WEB-INF/lib/stax-api-1.0-2.jar,
+                    WEB-INF/lib/webservices-api-2.1-b16.jar
+                </packagingExcludes>
+                <archive>
+                    <manifestEntries>
+                        <Specification-Title>XACML3 Server</Specification-Title>
+                        <Specification-Version>${project.version} - ${maven.build.timestamp}</Specification-Version>
+                        <Specification-Vendor>ForgeRock</Specification-Vendor>
+                        <Implementation-Title>XACML3 Server</Implementation-Title>
+                        <Implementation-Version>${project.version} - ${maven.build.timestamp}
+                        </Implementation-Version>
+                        <Implementation-Vendor>ForgeRock</Implementation-Vendor>
+                        <Build-Time>${maven.build.timestamp}</Build-Time>
+                    </manifestEntries>
+                </archive>
+                <nonFilteredFileExtensions>
+                    <!-- Exclude any binary files based upon File Types. -->
+                    <nonFilteredFileExtension>bin</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>bkf</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>bmp</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>bz2</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>deb</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>dll</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>dmg</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>ear</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>exe</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>gif</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>gz</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>gzip</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>ico</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>jar</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>jks</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>jpg</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>jpeg</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>lz</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>png</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>pdf</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>rar</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>rpm</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>tar</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>tgz</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>war</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>zip</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>7z</nonFilteredFileExtension>
+                    <!-- See: http://en.wikipedia.org/wiki/List_of_file_formats -->
+                </nonFilteredFileExtensions>
+                <webResources>
+                    <webResource>
+                        <directory>${basedir}/src/main/webapp</directory>
+                        <includes>
+                            <include>**/**</include>
+                        </includes>
+                        <excludes>
+                            <exclude>META-INF</exclude>
+                            <exclude>WEB-INF</exclude>
+                            <exclude>com_sun_web_ui/images</exclude>
+                        </excludes>
+                        <targetPath/>
+                        <filtering>true</filtering>
+                    </webResource>
+                    <webResource>
+                        <directory>${project.basedir}/src/main/webapp/WEB-INF</directory>
+                        <includes>
+                            <include>**/**</include>
+                        </includes>
+                        <targetPath>WEB-INF</targetPath>
+                        <filtering>true</filtering>
+                    </webResource>
+                </webResources>
+            </configuration>
+
+        </plugin>
+        </plugins>
+    </build>
+</project>

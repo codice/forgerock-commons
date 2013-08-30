@@ -1,0 +1,50 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="xacml-server:war exploded">
+    <output-path>$PROJECT_DIR$/xacml-server/target/xacml-server</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="xacml-server/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="xacml-server" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.forgerock.openam:openam-xacml3-schema:10.2.0-SNAPSHOT" />
+          <element id="library" level="project" name="Maven: com.sun.xml.bind:jaxb-libs:1.0.6" />
+          <element id="library" level="project" name="Maven: com.sun.msv.datatype.xsd:xsdlib:20060615" />
+          <element id="library" level="project" name="Maven: isorelax:isorelax:20030108" />
+          <element id="library" level="project" name="Maven: relaxngDatatype:relaxngDatatype:20020414" />
+          <element id="archive" name="xacml-core-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="xacml-core" />
+          </element>
+          <element id="archive" name="shared-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="shared" />
+          </element>
+          <element id="library" level="project" name="Maven: org.json:json:20090211" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.6" />
+          <element id="library" level="project" name="Maven: javax.ws.rs:jsr311-api:1.1.1" />
+          <element id="library" level="project" name="Maven: javax.xml.bind:jaxb-api:2.1" />
+          <element id="library" level="project" name="Maven: javax.xml.stream:stax-api:1.0-2" />
+          <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
+          <element id="library" level="project" name="Maven: org.codehaus.jettison:jettison:1.3.3" />
+          <element id="library" level="project" name="Maven: stax:stax-api:1.0.1" />
+          <element id="library" level="project" name="Maven: joda-time:joda-time:2.2" />
+          <element id="library" level="project" name="Maven: com.google.inject:guice:3.0" />
+          <element id="library" level="project" name="Maven: javax.inject:javax.inject:1" />
+          <element id="library" level="project" name="Maven: aopalliance:aopalliance:1.0" />
+          <element id="archive" name="xacml-reference-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="xacml-reference" />
+          </element>
+          <element id="library" level="project" name="Maven: com.sun.jersey:jersey-server:1.8" />
+          <element id="library" level="project" name="Maven: asm:asm:3.1" />
+          <element id="library" level="project" name="Maven: com.sun.jersey:jersey-core:1.8" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.2.3" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.2.3" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.2.3" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.2.3" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.2.3" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.2.3" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
