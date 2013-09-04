@@ -164,4 +164,12 @@ version="1.0">
 
   <!-- DOCS-75: Wide programlisting shading extends to the right edge of the page in PDF -->
   <xsl:param name="monospace.verbatim.font.width">0.445em</xsl:param>
+
+  <!-- DOCS-86: Leave more space between table cells in PDF -->
+  <xsl:attribute-set name="table.cell.padding">
+    <xsl:attribute name="padding-left">4pt</xsl:attribute>
+    <xsl:attribute name="padding-right">4pt</xsl:attribute>
+    <xsl:attribute name="padding-top">2pt</xsl:attribute>
+    <xsl:attribute name="padding-bottom">2pt</xsl:attribute>
+  </xsl:attribute-set>
 </xsl:stylesheet>
