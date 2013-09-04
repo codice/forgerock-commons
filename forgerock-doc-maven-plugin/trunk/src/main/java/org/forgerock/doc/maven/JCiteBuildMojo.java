@@ -18,8 +18,6 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -130,23 +128,17 @@ public class JCiteBuildMojo extends AbstractBuildMojo {
             Xpp3Dom configuration = new Xpp3Dom("configuration");
             configuration.addChild(target);
 
-            // mojo-executor lacks fluent support for dependencies.
-            // The antrun plugin needs JCite in its runtime classpath.
-            Plugin antrun = MojoExecutor.plugin(
-                    "org.apache.maven.plugins",
-                    "maven-antrun-plugin",
-                    "1.7");
-
-            // See https://code.google.com/r/markcraig-jcite/.
-            Dependency jCitePlugin = new Dependency();
-            jCitePlugin.setGroupId("org.mcraig");
-            jCitePlugin.setArtifactId("jcite");
-            jCitePlugin.setVersion(getJCiteVersion());
-
-            antrun.addDependency(jCitePlugin);
-
             executeMojo(
-                    antrun,
+                    plugin(
+                            groupId("org.apache.maven.plugins"),
+                            artifactId("maven-antrun-plugin"),
+                            version("1.7"),
+                            dependencies(
+                                    dependency(
+                                    // See https://code.google.com/r/markcraig-jcite/.
+                                            groupId("org.mcraig"),
+                                            artifactId("jcite"),
+                                            version(getJCiteVersion())))),
                     goal("run"),
                     configuration,
                     executionEnvironment(

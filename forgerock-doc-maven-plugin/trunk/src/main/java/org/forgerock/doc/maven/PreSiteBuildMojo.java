@@ -25,8 +25,6 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
@@ -1012,19 +1010,16 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                 cfg.add(element(name("includes"), docName + "/"
                         + getDocumentSrcName()));
 
-                // Permit hyphenation.
-                Dependency offo = new Dependency();
-                offo.setGroupId("net.sf.offo");
-                offo.setArtifactId("fop-hyph");
-                offo.setVersion("1.2");
-                offo.setScope("runtime");
-                Plugin plugin = plugin(groupId("com.agilejava.docbkx"),
-                        artifactId("docbkx-maven-plugin"),
-                        version(getDocbkxVersion()));
-                plugin.addDependency(offo);
-
                 executeMojo(
-                        plugin,
+                        plugin(
+                                groupId("com.agilejava.docbkx"),
+                                artifactId("docbkx-maven-plugin"),
+                                version(getDocbkxVersion()),
+                                dependencies(
+                                        dependency(
+                                                groupId("net.sf.offo"),
+                                                artifactId("fop-hyph"),
+                                                version("1.2")))),
                         goal("generate-" + format),
                         configuration(cfg.toArray(new Element[cfg.size()])),
                         executionEnvironment(getProject(), getSession(),
