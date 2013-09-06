@@ -12,16 +12,31 @@ fixes.
 
 ## Improvements & New Features
 
+**DOCS-65: Move to mojo-executor 2.1.0 to take advantage of support for dependencies**
+
 **DOCS-78: Include hyphen when splitting URL across lines**
 
 **DOCS-85: Make it easy to get the link to other titled block elements**
 
 Added ↪ on mouseover in HTML for all titles with anchors.
 
+**DOCS-86: Leave more space between table cells in PDF**
+
 **DOCS-87: Allow soft hyphens at commas in long literals**
 
 **DOCS-88: Style more width in HTML table rendering of simplelist**
 
+**DOCS-89: Simplify use of Maven properties in XML attribute values**
+
+The fix requires that you insert a new execution as the first `pre-site` goal:
+
+    <execution>
+        <id>filter-sources</id>
+        <phase>pre-site</phase>
+        <goals>
+            <goal>filter</goal>
+        </goals>
+    </execution>
 
 ## Bugs Fixed
 
