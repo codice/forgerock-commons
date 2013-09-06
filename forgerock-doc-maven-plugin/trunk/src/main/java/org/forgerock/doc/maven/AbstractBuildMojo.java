@@ -146,6 +146,23 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     private String docbkxGeneratedSourceDirectory;
 
     /**
+     * Base directory for filtered DocBook XML source files, relative to the
+     * build directory.
+     *
+     * @parameter default-value="docbkx-filtered"
+     * property="filteredDocbkxSourceDirectory"
+     * @required
+     */
+    private String filteredDocbkxSourceDirectory;
+
+    /**
+     * Whether to use filtered sources.
+     * @parameter default-value="true" property="useFilteredSources"
+     * @required
+     */
+    private boolean useFilteredSources;
+
+    /**
      * Whether to use generated sources.
      *
      * @parameter default-value="true" property="useGeneratedSources"
@@ -335,6 +352,25 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      */
     public File getDocbkxSourceDirectory() {
         return docbkxSourceDirectory;
+    }
+
+    /**
+     * Base directory for filtered DocBook XML source files, relative to the
+     * build directory.
+     *
+     * @return {@link #filteredDocbkxSourceDirectory}
+     */
+    public File getFilteredDocbkxSourceDirectory() {
+        return new File(getBuildDirectory(), filteredDocbkxSourceDirectory);
+    }
+
+    /**
+     * Whether to use filtered sources.
+     *
+     * @return {@link #useFilteredSources}
+     */
+    public boolean doUseFilteredSources() {
+        return useFilteredSources;
     }
 
     /**

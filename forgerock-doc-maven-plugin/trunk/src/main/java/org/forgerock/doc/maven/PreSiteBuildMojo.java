@@ -59,6 +59,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         if (doUseGeneratedSources()) {
             xmlSourceDirectory = getDocbkxGeneratedSourceDirectory();
             imageSourceDirectory = getDocbkxSourceDirectory();
+        } else if (doUseFilteredSources()) {
+            xmlSourceDirectory = getFilteredDocbkxSourceDirectory();
+            imageSourceDirectory = getDocbkxSourceDirectory();
         } else {
             xmlSourceDirectory = getDocbkxSourceDirectory();
             imageSourceDirectory = getDocbkxSourceDirectory();

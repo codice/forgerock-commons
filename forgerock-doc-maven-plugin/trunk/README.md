@@ -35,6 +35,13 @@ POM property called `gaId`, whose value is the Google Analytics ID.
 		   </configuration>
 		   <executions>
 		    <execution>
+		     <id>filter-sources</id>
+		     <phase>pre-site</phase>
+		     <goals>
+		      <goal>filter</goal>
+		     </goals>
+		    </execution>
+		    <execution>
 		     <id>copy-common</id>
 		     <phase>pre-site</phase>
 		     <goals>
@@ -98,6 +105,17 @@ An example project layout looks like this:
        sec-joining-the-community.xml
        sec-release-levels.xml
        ...other files...
+
+## Resolving Maven Properties
+
+The `pre-site` goal of `filter` uses the Maven resources plugin to replace
+Maven properties like `${myProperty}` with their values. This allows you to
+use Maven properties in attribute value, such as `xlink:href="${myURL}"`
+where the form using a processing instruction `xlink:href="<?eval ${myURL}"?>`
+is not valid XML.
+
+The execution of the `filter` goal must be the first in the list of `pre-site`
+phase goals for this plugin as shown in the example above.
 
 ## Using Shared Content
 

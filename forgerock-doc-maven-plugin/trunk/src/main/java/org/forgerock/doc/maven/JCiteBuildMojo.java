@@ -81,6 +81,10 @@ public class JCiteBuildMojo extends AbstractBuildMojo {
                     getDocbkxGeneratedSourceDirectory().getPath());
             String sourceDir = FilenameUtils.separatorsToUnix(
                     getDocbkxSourceDirectory().getPath());
+            if (doUseFilteredSources()) {
+                sourceDir = FilenameUtils.separatorsToUnix(
+                        getFilteredDocbkxSourceDirectory().getPath());
+            }
 
             // mojo-executor lacks fluent support for element attributes.
             // You can hack around this by including attributes in the name
