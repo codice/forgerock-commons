@@ -117,15 +117,16 @@ public class XACML3Obligation {
         return null;
     }
 
-    public ObligationExpression getXACML(XACMLEvalContext pip) {
-        ObligationExpression ret = new ObligationExpression();
-        ret.setFulfillOn(EffectType.fromValue(fullFillOn));
-        ret.setObligationId(obligationID);
-        List<AttributeAssignmentExpression> exp = ret.getAttributeAssignmentExpression();
 
-        for( DataAssignment d : assignments) {
-            exp.add(d.getXACML(pip));
+    public Obligation getObligation(XACMLEvalContext pip) {
+        Obligation result = new Obligation();
+
+        result.setObligationId(obligationID);
+        for (DataAssignment das : assignments) {
+            result.getAttributeAssignment().add(das.getAssignment(pip)) ;
         }
-        return ret;
+
+        return result;
     }
+
 }

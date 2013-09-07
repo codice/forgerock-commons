@@ -97,21 +97,11 @@ public class XACML3PolicyRule {
                     }
 
                     if (obligations != null) {
-                        ObligationExpressions ob = new ObligationExpressions();
-                        List<ObligationExpression> obs = ob.getObligationExpression();
-                        for (XACML3Obligation o : obligations) {
-                            obs.add(o.getXACML(pip));
-                        }
-                        result.setObligations(ob);
+                        result.getObligations().addAll(obligations);
                     }
 
                     if (advices != null) {
-                        AdviceExpressions ad = new AdviceExpressions();
-                        List<AdviceExpression> adv = ad.getAdviceExpression();
-                        for (XACML3Advice o : advices) {
-                            adv.add(o.getXACML(pip));
-                        }
-                        result.setAdvices(ad);
+                        result.getAdvices().addAll(advices);
                     }
                     return result;
                 }

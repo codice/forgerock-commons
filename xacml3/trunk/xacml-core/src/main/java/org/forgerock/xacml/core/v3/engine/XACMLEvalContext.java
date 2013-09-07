@@ -110,7 +110,7 @@ public class XACMLEvalContext  {
         } catch (Exception ex) {
 
         }
-        return response.asResponse();
+        return response.asResponse(eContext);
     }
 
 }

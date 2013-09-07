@@ -55,6 +55,7 @@ package org.forgerock.xacml.rest;
 
 
 import org.forgerock.xacml.core.v3.rest.XACML3RequestHandler;
+import org.forgerock.xacml.reference.Services.CombinerLoader;
 import org.forgerock.xacml.reference.rest.ReferenceRequestHandler;
 
 import java.util.HashSet;
@@ -66,12 +67,17 @@ import javax.ws.rs.core.Application;
  * @author dennis
  */
 public class RestService extends Application {
+    public RestService() {
+        CombinerLoader.startup();
+    }
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> s = new HashSet<Class<?>>();
 
         s.add(ReferenceRequestHandler.class);
         s.add(XACML3RequestHandler.class);
+
+        s.add(XACML3ContextResolver.class);
 
         return s;
     }

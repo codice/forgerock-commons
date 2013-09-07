@@ -40,11 +40,14 @@ public class XACML3Response {
         decisions = new ArrayList<XACML3Decision>();
     }
 
+    public void add(XACML3Decision desc) {
+        decisions.add(desc);
+    }
     public void addAll(Collection<? extends XACML3Decision> descs ) {
         decisions.addAll(descs);
     }
 
-    public Response asResponse() {
+    public Response asResponse(XACMLEvalContext pip) {
         Response theResponse = new Response();
 
         for (XACML3Decision xd : decisions) {
@@ -66,8 +69,8 @@ public class XACML3Response {
 
             r.setPolicyIdentifierList(pd);
 
-     //       r.setAssociatedAdvice(getReturnAdvice(xd.getAdvices()));
-     //       r.setObligations(getReturnObligations(xd.getObligations()));
+            r.setAssociatedAdvice(getReturnAdvice(xd.getAdvices(),pip));
+            r.setObligations(getReturnObligations(xd.getObligations(),pip));
 
             theResponse.getResult().add(r);
 
@@ -76,42 +79,20 @@ public class XACML3Response {
     }
 
 
-    public AssociatedAdvice getReturnAdvice(AdviceExpressions advice) {
-        List<AdviceExpression> advList = advice.getAdviceExpression();
+    public AssociatedAdvice getReturnAdvice(List<XACML3Advice> adviceList, XACMLEvalContext pip) {
         AssociatedAdvice result = new AssociatedAdvice();
 
-        for (AdviceExpression ad : advList) {
-            Advice item = new Advice();
-            item.setAdviceId(ad.getAdviceId());
-            List<AttributeAssignmentExpression> aae = ad.getAttributeAssignmentExpression();
-            for (AttributeAssignmentExpression ae : aae) {
-                AttributeAssignment att = new AttributeAssignment();
-                att.setAttributeId(ae.getAttributeId());
-                att.setCategory(ae.getCategory());
-                att.setIssuer(ae.getIssuer());
-                item.getAttributeAssignment().add(att);
-            }
-            result.getAdvice().add(item);
+        for (XACML3Advice ad : adviceList) {
+            result.getAdvice().add(ad.getAdvice(pip));
         }
         return result;
     }
 
-    public Obligations getReturnObligations(ObligationExpressions obligations) {
-        List<ObligationExpression> oblList = obligations.getObligationExpression();
+    public Obligations getReturnObligations(List<XACML3Obligation> obligations,XACMLEvalContext pip) {
         Obligations result = new Obligations();
 
-        for (ObligationExpression ob : oblList) {
-            Obligation item = new Obligation();
-            item.setObligationId(ob.getObligationId());
-            List<AttributeAssignmentExpression> aae = ob.getAttributeAssignmentExpression();
-            for (AttributeAssignmentExpression ae : aae) {
-                AttributeAssignment att = new AttributeAssignment();
-                att.setAttributeId(ae.getAttributeId());
-                att.setCategory(ae.getCategory());
-                att.setIssuer(ae.getIssuer());
-                item.getAttributeAssignment().add(att);
-            }
-            result.getObligation().add(item);
+        for (XACML3Obligation ob : obligations) {
+            result.getObligation().add(ob.getObligation(pip));
         }
         return result;
     }

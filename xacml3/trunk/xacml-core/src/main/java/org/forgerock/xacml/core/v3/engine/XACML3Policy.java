@@ -25,10 +25,11 @@
  */
 package org.forgerock.xacml.core.v3.engine;
 
-//import com.sun.identity.entitlement.Entitlement;
 import com.sun.identity.shared.debug.Debug;
+import org.forgerock.xacml.core.v3.ImplementationManagers.CombinerManager;
 import org.forgerock.xacml.core.v3.interfaces.Entitlement;
 import com.sun.identity.entitlement.xacml3.core.*;
+import org.forgerock.xacml.core.v3.interfaces.EntitlementCombiner;
 import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -99,11 +100,11 @@ public class XACML3Policy implements XACML3PolicyItem {
         resourceSelectors = rSel;
     }
 
-    public List<XACML3Decision> evaluate(XACMLEvalContext pip) {
+    public EntitlementCombiner evaluate(XACMLEvalContext pip) {
 
         boolean indeterminate = true;
         FunctionArgument evalResult;
-        List<XACML3Decision> results = new ArrayList<XACML3Decision>();
+        EntitlementCombiner results = CombinerManager.getInstance(ruleCombiner);
         pip.setPolicyRef(this);
         try {
             evalResult = target.evaluate(pip);

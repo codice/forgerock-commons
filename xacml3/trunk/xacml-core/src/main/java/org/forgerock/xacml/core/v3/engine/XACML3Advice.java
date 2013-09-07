@@ -57,6 +57,16 @@ public class XACML3Advice {
     public XACML3Advice() {
     }
 
+    public String getAdviceID() {
+        return adviceID;
+    }
+    public String getAppliesTo() {
+        return appliesTo;
+    }
+    public List<DataAssignment> getAdvices() {
+        return advices;
+    }
+
 
     public XACML3Decision evaluate(XACMLEvalContext pip) {
         return null;
@@ -116,16 +126,19 @@ public class XACML3Advice {
         }
         return null;
     }
-    public AdviceExpression getXACML(XACMLEvalContext pip) {
-        AdviceExpression ret = new AdviceExpression();
-        ret.setAdviceId(adviceID);
-        ret.setAppliesTo(EffectType.fromValue(appliesTo));
-        List<AttributeAssignmentExpression> exp = ret.getAttributeAssignmentExpression();
 
-        for( DataAssignment d : advices) {
-            exp.add(d.getXACML(pip));
+    public Advice getAdvice(XACMLEvalContext pip) {
+        Advice result = new Advice();
+
+        result.setAdviceId(adviceID);
+
+        for (DataAssignment das : advices) {
+            result.getAttributeAssignment().add(das.getAssignment(pip)) ;
         }
-        return ret;
+
+        return result;
     }
+
+
 
 }

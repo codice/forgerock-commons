@@ -26,6 +26,9 @@
 package org.forgerock.xacml.core.v3.engine;
 
 import com.sun.identity.entitlement.xacml3.core.*;
+import com.sun.identity.shared.debug.Debug;
+import org.forgerock.xacml.core.v3.ImplementationManagers.CombinerManager;
+import org.forgerock.xacml.core.v3.interfaces.EntitlementCombiner;
 import org.forgerock.xacml.core.v3.interfaces.PolicyStore;
 import org.forgerock.xacml.core.v3.model.FunctionArgument;
 
@@ -35,6 +38,8 @@ import java.util.HashSet;
 import java.util.List;
 
 public class XACML3PolicySet implements XACML3PolicyItem{
+
+    private static Debug debug = Debug.getInstance("Xacml3");
 
     private PolicySet policySet;
     private String policySetName;
@@ -122,11 +127,11 @@ public class XACML3PolicySet implements XACML3PolicyItem{
         return pset.getPolicySetName();
     }
 
-    public List<XACML3Decision> evaluate(XACMLEvalContext pip) {
+    public EntitlementCombiner evaluate(XACMLEvalContext pip) {
 
         boolean indeterminate = true;
         FunctionArgument evalResult;
-        List<XACML3Decision> results = new ArrayList<XACML3Decision>();
+        EntitlementCombiner  results = CombinerManager.getInstance(combiner);
 
             try {
                 evalResult = target.evaluate(pip);

@@ -25,8 +25,12 @@
  */
 package org.forgerock.xacml.core.v3.engine;
 
+
+/*
 public class XACML3CombinerPermitOverride extends XACML3EntitlementCombiner {
     public    XACML3CombinerPermitOverride() {
         overRideType = "Permit";
     }
 }
+
+*/

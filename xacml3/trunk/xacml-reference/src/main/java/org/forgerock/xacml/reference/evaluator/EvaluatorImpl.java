@@ -37,7 +37,7 @@ public class EvaluatorImpl implements Evaluator {
 
         XACML3PolicyItem pSet = context.getPolicyForEval(scope);
 
-        List<XACML3Decision> results = pSet.evaluate(context);
+        List<XACML3Decision> results = pSet.evaluate(context).getResult();
 
         XACML3Response resp = new XACML3Response();
         resp.addAll(results);

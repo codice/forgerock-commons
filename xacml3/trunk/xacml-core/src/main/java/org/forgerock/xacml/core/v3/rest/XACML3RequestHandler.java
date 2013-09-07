@@ -214,6 +214,40 @@ public class XACML3RequestHandler {
         return objectFactory.createResponse(response);
     }
 
+    @POST
+    @Consumes({"application/xml", "application/xacml+xml", "application/json", "application/xacml+json"})
+    @Produces({"application/xml", "application/xacml+xml", "application/json", "application/xacml+json"})
+    @Path("pdpr/{appname}")
+    public Response getDecisionR(JAXBElement<Request> req, @PathParam("appname") String appname) {
+        final String methodName = "XACML3RequestHandler.getXMLDecision: ";
+        Response response = null;
+        try {
+            Request request = req.getValue();
+            response = XACMLEvalContext.XACMLEvaluate(request, appname);
+        } catch (Exception exception) {
+            if (exception instanceof XACML3EntitlementException) {
+                DEBUG.error(methodName + "Entitlement Exception Occurred: " + exception.getMessage(), exception);
+                if (exception instanceof NotApplicableException) {
+                    response = new XACML3NotApplicableResponse();
+                } else {
+                    response = new XACML3IndeterminateResponse();
+                }
+            } else {
+                DEBUG.error(methodName + "Exception Occurred: " + exception.getMessage() + ", Returning Indeterminate.",
+                        exception);
+                response = new XACML3IndeterminateResponse();
+            }
+        }
+        // If we have a unknown Response, indicate that the response is Indeterminate
+        if ((response == null) || (response.getResult() == null) || (response.getResult().size() <= 0)) {
+            response = new XACML3IndeterminateResponse();
+        }
+        // Marshal Response.
+        ObjectFactory objectFactory = new ObjectFactory();
+        return response;
+        //objectFactory.createResponse(response);
+    }
+
 
     /**
      * POST

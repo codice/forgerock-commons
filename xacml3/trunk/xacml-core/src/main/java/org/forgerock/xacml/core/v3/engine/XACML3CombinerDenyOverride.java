@@ -26,8 +26,13 @@
 package org.forgerock.xacml.core.v3.engine;
 
 
+/*
+
 public class XACML3CombinerDenyOverride extends XACML3EntitlementCombiner {
     public    XACML3CombinerDenyOverride() {
         overRideType = "Deny";
     }
 }
+
+
+*/

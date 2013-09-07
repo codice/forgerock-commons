@@ -28,7 +28,9 @@ package org.forgerock.xacml.core.v3.engine;
 import org.forgerock.xacml.core.v3.interfaces.Entitlement;
 import com.sun.identity.entitlement.xacml3.core.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /* A decision encapsulates a
@@ -44,8 +46,8 @@ public class XACML3Decision {
     private DecisionType decision;
 
     private Status status;
-    private ObligationExpressions obligations;
-    private AdviceExpressions advices;
+    private List<XACML3Obligation> obligations;
+    private List<XACML3Advice> advices;
 
     private String ruleID;
     private String resourceID;
@@ -56,17 +58,27 @@ public class XACML3Decision {
     public static final String PROECESSING_ERROR = "urn:oasis:names:tc:xacml:1.0:status:processing-error";
 
     public  XACML3Decision() {
+        obligations = new ArrayList<XACML3Obligation>();
+        advices = new ArrayList<XACML3Advice>();
+    }
+
+    public XACML3Decision(DecisionType type) {
+        obligations = new ArrayList<XACML3Obligation>();
+        advices = new ArrayList<XACML3Advice>();
+        decision = type;
     }
 
     public  XACML3Decision(String ruleid, String resid, String effect) {
+        obligations = new ArrayList<XACML3Obligation>();
+        advices = new ArrayList<XACML3Advice>();
         ruleID = ruleid;
         resourceID = resid;
-        if (effect.equals("Permit")) {
-            trueDecision = DecisionType.fromValue("Permit");
-            falseDecision = DecisionType.fromValue("Deny");
+        if (effect.equals(DecisionType.PERMIT)) {
+            trueDecision = DecisionType.PERMIT;
+            falseDecision = DecisionType.DENY;
         } else {
-            trueDecision = DecisionType.fromValue("Deny");
-            falseDecision = DecisionType.fromValue("Permit");
+            trueDecision = DecisionType.DENY;
+            falseDecision = DecisionType.PERMIT;
         }
         setStatus(OK);
     }
@@ -85,7 +97,7 @@ public class XACML3Decision {
 
     public DecisionType getDecision() {
         if (decision == null) {
-            setDecision("Indeterminate");
+            decision = DecisionType.INDETERMINATE;
         }
         return decision;
     }
@@ -101,16 +113,16 @@ public class XACML3Decision {
         }
     }
 
-    public ObligationExpressions getObligations() {
+    public List<XACML3Obligation> getObligations() {
         return obligations;
     }
-    public void setObligations(ObligationExpressions ob) {
+    public void setObligations(List<XACML3Obligation> ob) {
         obligations = ob;
     }
-    public AdviceExpressions getAdvices() {
+    public List<XACML3Advice> getAdvices() {
         return advices;
     }
-    public void setAdvices(AdviceExpressions ad) {
+    public void setAdvices(List<XACML3Advice> ad) {
         advices = ad;
     }
     public void setRuleID(String ruleid) {

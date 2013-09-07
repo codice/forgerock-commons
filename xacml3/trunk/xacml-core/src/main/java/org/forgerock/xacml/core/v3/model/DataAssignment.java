@@ -78,19 +78,17 @@ public class DataAssignment extends FunctionArgument {
         return;
     };
 
-    public AttributeAssignmentExpression getXACML(XACMLEvalContext pip) {
-        ObjectFactory objectFactory = new ObjectFactory();
-        AttributeAssignmentExpression ret = new AttributeAssignmentExpression();
-        ret.setCategory(category);
-        ret.setAttributeId(attributeID);
-        AttributeValue av = new AttributeValue();
+    public AttributeAssignment getAssignment(XACMLEvalContext pip) {
+        AttributeAssignment result = new AttributeAssignment();
+
+        result.setCategory(category);
+        result.setAttributeId(attributeID);
         try {
-        av.getContent().add(expression.getValue(pip));
+            result.getContent().add( expression.getValue(pip));
         } catch (XACML3EntitlementException ex) {
-            av.getContent().add("null");
+
         }
-        ret.setExpression(objectFactory.createAttributeValue(av));
-        return ret;
+        return result;
     }
 
 

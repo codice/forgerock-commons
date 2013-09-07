@@ -31,7 +31,7 @@
 
     <servlet-mapping>
         <servlet-name>ws</servlet-name>
-        <url-pattern>/xacml/*</url-pattern>
+        <url-pattern>/engine/*</url-pattern>
     </servlet-mapping>
 
 </web-app>

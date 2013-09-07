@@ -51,7 +51,7 @@ package org.forgerock.xacml.core.v3.engine;
  *
  */
 
-
+           /*
 import org.forgerock.xacml.core.v3.interfaces.Entitlement;
 import org.forgerock.xacml.core.v3.interfaces.EntitlementCombiner;
 
@@ -60,7 +60,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class XACML3EntitlementCombiner extends EntitlementCombiner {
+public class XACML3EntitlementCombiner implements EntitlementCombiner  {
     private Entitlement currentResult = null;
     private boolean atDescision = false;
     private String applicationName;
@@ -83,7 +83,7 @@ public class XACML3EntitlementCombiner extends EntitlementCombiner {
      * entitlements will be combined with existing decision.
      *
      * @param entitlements Set of entitlements.
-     */
+     *
     public void add(List<Entitlement> entitlements) {
 
         for (Entitlement e : entitlements) {
@@ -104,12 +104,13 @@ public class XACML3EntitlementCombiner extends EntitlementCombiner {
             }
         }
     }
-    /**
+    public void add
+   /**
      * Returns entitlements which is the result of combining a set of
      * entitlement.
      *
-     * @return entitlement results.
-     */
+     *@return entitlement results.
+     *
     public List<Entitlement> getResults() {
         List<Entitlement> res = new ArrayList<Entitlement>();
         currentResult.setApplicationName(applicationName);
@@ -117,3 +118,4 @@ public class XACML3EntitlementCombiner extends EntitlementCombiner {
         return res;
     }
 }
+             */
