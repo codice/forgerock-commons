@@ -80,14 +80,15 @@ public class Rfc822NameMatch extends XACMLFunction {
     }
 
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument retVal = FunctionArgument.falseObject;
         // Validate argument List
         if (getArgCount() != 2) {
             return retVal;
         }
         // Check and Cast arguments.
-        DataValue cop_rfc822NameValue = (DataValue) getArg(0).evaluate(pip);
-        DataValue rfc822NameValue = (DataValue) getArg(1).evaluate(pip);
+        DataValue cop_rfc822NameValue = (DataValue) getArg(0).doEvaluate(pip);
+        DataValue rfc822NameValue = (DataValue) getArg(1).doEvaluate(pip);
         if ((cop_rfc822NameValue == null) || (rfc822NameValue == null)) {
             throw new XACML3EntitlementException("No Pattern or Data Value Specified");
         }

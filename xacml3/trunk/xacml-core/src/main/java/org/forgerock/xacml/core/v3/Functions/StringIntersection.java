@@ -43,6 +43,7 @@ public class StringIntersection extends XACMLFunction {
     }
 
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+
         int args = getArgCount();
         if (args != 2) {
             throw new IndeterminateException("Function Requires 2 arguments, " +
@@ -53,8 +54,8 @@ public class StringIntersection extends XACMLFunction {
         // Iterate Over the 2 DataBag's in Stack, Evaluate and create an Intersection of all common unique Objects.
         try {
             DataBag[] bags = new DataBag[2];
-            bags[0] = (DataBag) getArg(0).evaluate(pip);
-            bags[1] = (DataBag) getArg(1).evaluate(pip);
+            bags[0] = (DataBag) getArg(0).doEvaluate(pip);
+            bags[1] = (DataBag) getArg(1).doEvaluate(pip);
 
             // Verify our Data Type with First Data Bag's Data Type.
             if (bags[0].getType().getIndex() != bags[1].getType().getIndex()) {
@@ -65,7 +66,7 @@ public class StringIntersection extends XACMLFunction {
 
             // Iterate over the current Bag.
             for (int b = 0; b < bags[0].size(); b++) {
-                DataValue dataValue = (DataValue) bags[0].get(b).evaluate(pip);
+                DataValue dataValue = (DataValue) bags[0].get(b).doEvaluate(pip);
                 boolean contained = false;
                 for (int z=0; z<intersection.size(); z++) {
                     // Apply the Typed Equal Function to determine if

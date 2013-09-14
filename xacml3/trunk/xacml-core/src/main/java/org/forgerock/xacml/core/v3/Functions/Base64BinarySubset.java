@@ -42,6 +42,7 @@ public class Base64BinarySubset extends XACMLFunction {
     public Base64BinarySubset()  {
     }
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+
         int args = getArgCount();
         if (args != 2) {
             throw new IndeterminateException("Function Requires 2 arguments, " +
@@ -52,8 +53,8 @@ public class Base64BinarySubset extends XACMLFunction {
         DataBag potentialSubset = null;
         DataBag fullSet = null;
         try {
-            potentialSubset = (DataBag) getArg(0).evaluate(pip);
-            fullSet = (DataBag) getArg(1).evaluate(pip);
+            potentialSubset = (DataBag) getArg(0).doEvaluate(pip);
+            fullSet = (DataBag) getArg(1).doEvaluate(pip);
 
             // Verify our Data Type with First Data Bag's Data Type.
             if (potentialSubset.getType().getIndex() != fullSet.getType().getIndex()) {
@@ -83,14 +84,14 @@ public class Base64BinarySubset extends XACMLFunction {
         int subSetCount = 0;
         // Iterate over the First Bag.
         for (int b = 0; b < firstBag.size(); b++) {
-            DataValue dataValue1 = (DataValue) firstBag.get(b).evaluate(pip);
+            DataValue dataValue1 = (DataValue) firstBag.get(b).doEvaluate(pip);
             for (int z = 0; z<secondBag.size(); z++) {
-                DataValue dataValue2 = (DataValue) secondBag.get(z).evaluate(pip);
+                DataValue dataValue2 = (DataValue) secondBag.get(z).doEvaluate(pip);
                 // Check Equality by using this Types Equality Function.
                 Base64BinaryEqual fEquals = new Base64BinaryEqual();
                 fEquals.addArgument(dataValue2);
                 fEquals.addArgument(dataValue1);
-                FunctionArgument result = fEquals.evaluate(pip);
+                FunctionArgument result = fEquals.doEvaluate(pip);
                 if (result.isTrue()) {
                     subSetCount++;
                     break;

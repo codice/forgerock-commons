@@ -72,6 +72,7 @@ public class AccessPermitted extends XACMLFunction {
     }
 
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument retVal =  FunctionArgument.falseObject;
         return retVal;
     }

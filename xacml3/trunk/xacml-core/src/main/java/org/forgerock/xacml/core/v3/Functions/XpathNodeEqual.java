@@ -47,6 +47,7 @@ public class XpathNodeEqual extends XACMLFunction {
     public XpathNodeEqual()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument retVal =  FunctionArgument.falseObject;
 
         if ( getArgCount() != 2) {

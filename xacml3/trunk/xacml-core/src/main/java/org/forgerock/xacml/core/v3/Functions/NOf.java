@@ -58,6 +58,7 @@ public class NOf extends XACMLFunction {
     public NOf()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         int args = getArgCount();
         if ( args == 0) {
             return FunctionArgument.falseObject;

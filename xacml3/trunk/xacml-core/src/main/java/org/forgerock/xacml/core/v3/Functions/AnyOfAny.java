@@ -75,6 +75,7 @@ public class AnyOfAny extends XACMLFunction {
     }
 
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+
         // Initialize
         XACMLFunction func;
         int args = getArgCount();
@@ -94,7 +95,7 @@ public class AnyOfAny extends XACMLFunction {
 
         // Iterate over all argument to create necessary Argument Stack.
         for (int i = 1; i < args-1; i++) {
-            FunctionArgument functionArgument = getArg(i).evaluate(pip);
+            FunctionArgument functionArgument = getArg(i).doEvaluate(pip);
             Object topDataValue = functionArgument.getValue(pip);
 
             // Check for Collection
@@ -136,7 +137,7 @@ public class AnyOfAny extends XACMLFunction {
                     functionArguments++;
                 } else {
                     // Evaluate the Function with required Arguments.
-                    FunctionArgument result = func.evaluate(pip);
+                    FunctionArgument result = func.doEvaluate(pip);
                     results.add((DataValue) result);
 
                     func.clearArguments();
@@ -148,7 +149,7 @@ public class AnyOfAny extends XACMLFunction {
             }
             // Anything left to be evaluated?
             if (func.getArgCount() == args-1) {
-                FunctionArgument result = func.evaluate(pip);
+                FunctionArgument result = func.doEvaluate(pip);
                 results.add((DataValue) result);
             }
         } // End of For Each Loop for Data Argument Stack.
@@ -158,7 +159,7 @@ public class AnyOfAny extends XACMLFunction {
         for (DataValue result : results) {
             _OrFunction.addArgument(result);
         }
-        FunctionArgument result = _OrFunction.evaluate(pip);
+        FunctionArgument result = _OrFunction.doEvaluate(pip);
         if ((result == null) || (!(result instanceof DataValue))) {
             throw new NotApplicableException("AnyOfAny Resultant Function Argument is Invalid");
         }
@@ -181,7 +182,7 @@ public class AnyOfAny extends XACMLFunction {
         List<DataValue>  crossArgumentArray = new ArrayList<DataValue>();
         // Iterate over Values for Prior Value.
         for (int i = start; i < end; i++) {
-            FunctionArgument functionArgument = getArg(i).evaluate(pip);
+            FunctionArgument functionArgument = getArg(i).doEvaluate(pip);
             Object dataValue = functionArgument.getValue(pip);
             if (dataValue instanceof Collection) {
                 // Iterate over Collection DataValue Contents.

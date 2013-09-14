@@ -31,6 +31,7 @@ import org.forgerock.xacml.core.v3.ImplementationManagers.CombinerManager;
 import org.forgerock.xacml.core.v3.interfaces.EntitlementCombiner;
 import org.forgerock.xacml.core.v3.interfaces.PolicyStore;
 import org.forgerock.xacml.core.v3.model.FunctionArgument;
+import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
@@ -130,6 +131,8 @@ public class XACML3PolicySet implements XACML3PolicyItem{
     public EntitlementCombiner evaluate(XACMLEvalContext pip) {
 
         boolean indeterminate = true;
+        XACMLFunction.indent = 0;
+
         FunctionArgument evalResult;
         EntitlementCombiner  results = CombinerManager.getInstance(combiner);
 

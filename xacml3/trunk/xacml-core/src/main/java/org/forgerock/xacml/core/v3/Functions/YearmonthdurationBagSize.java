@@ -44,6 +44,7 @@ public class YearmonthdurationBagSize extends XACMLFunction {
     }
 
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         // Only should have one Argument, a Bag of the applicable type.
         int args = getArgCount();
         if (args != 1) {

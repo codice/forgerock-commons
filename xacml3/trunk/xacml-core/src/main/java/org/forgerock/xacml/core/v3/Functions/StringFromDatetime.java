@@ -49,6 +49,7 @@ public class StringFromDatetime extends XACMLFunction {
     }
 
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         if (getArgCount() != 1) {
             throw new XACML3EntitlementException("Not Correct Number of Arguments");
         }

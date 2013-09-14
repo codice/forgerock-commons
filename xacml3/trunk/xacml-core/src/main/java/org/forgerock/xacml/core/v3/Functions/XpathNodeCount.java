@@ -47,6 +47,7 @@ public class XpathNodeCount extends XACMLFunction {
     }
 
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+
         return FunctionArgument.falseObject;
     }
 }

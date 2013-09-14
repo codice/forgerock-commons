@@ -89,6 +89,10 @@ public class DataValue extends FunctionArgument {
         return includeInResult;
     }
 
+    public String printDebugItem() {
+        return " \"" + this.data + "\"";
+    }
+
     /**
      * Evaluate the Function Argument Set.
      *

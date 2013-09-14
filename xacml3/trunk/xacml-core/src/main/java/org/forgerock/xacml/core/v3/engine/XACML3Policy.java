@@ -103,9 +103,11 @@ public class XACML3Policy implements XACML3PolicyItem {
     public EntitlementCombiner evaluate(XACMLEvalContext pip) {
 
         boolean indeterminate = true;
-        FunctionArgument evalResult;
+        FunctionArgument evalResult = null;
         EntitlementCombiner results = CombinerManager.getInstance(ruleCombiner);
         pip.setPolicyRef(this);
+
+        System.out.println("Evaluating Policy "+policyName);
         try {
             evalResult = target.evaluate(pip);
         } catch (XACML3EntitlementException ex) {
@@ -115,6 +117,7 @@ public class XACML3Policy implements XACML3PolicyItem {
         }
 
         if (evalResult.isTrue())        {    // we  match,  so evaluate
+            System.out.println("Target true, evaluating rules ");
             for (XACML3PolicyRule r : rules) {
                 XACML3Decision decision = r.evaluate(pip);
                 results.add(decision);

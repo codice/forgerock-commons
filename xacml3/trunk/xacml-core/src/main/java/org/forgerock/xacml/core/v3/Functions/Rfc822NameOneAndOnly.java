@@ -44,6 +44,7 @@ public class Rfc822NameOneAndOnly extends XACMLFunction {
     public Rfc822NameOneAndOnly()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         // Only should have one Argument, a Bag of the applicable type.
         int args = getArgCount();
         if (args != 1) {
@@ -51,7 +52,7 @@ public class Rfc822NameOneAndOnly extends XACMLFunction {
                     "however " + getArgCount() + " in stack.");
         }
         // Ensure Contents are of Applicable Type.
-        FunctionArgument functionArgument = getArg(0).evaluate(pip);
+        FunctionArgument functionArgument = getArg(0).doEvaluate(pip);
         if (!functionArgument.getType().isType(DataType.Type.XACMLRFC822NAMETYPE)) {
             throw new IndeterminateException("Expecting a RFC822 Name Type of Bag, but encountered a "+
                     functionArgument.getType().getTypeName());
@@ -63,7 +64,7 @@ public class Rfc822NameOneAndOnly extends XACMLFunction {
         }
         // return the one and Only Entry, if Applicable.
         if ( ((DataBag) functionArgument).size() == 1  ) {
-            return ((DataBag) functionArgument).get(0).evaluate(pip);
+            return ((DataBag) functionArgument).get(0).doEvaluate(pip);
         } else if ( ((DataBag) functionArgument).size() > 1  ) {
             throw new IndeterminateException("Multiple Values in Bag: "+((DataBag) functionArgument).size());
         } else {

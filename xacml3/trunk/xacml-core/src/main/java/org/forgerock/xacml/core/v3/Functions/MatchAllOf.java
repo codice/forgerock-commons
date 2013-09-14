@@ -37,10 +37,11 @@ import org.forgerock.xacml.core.v3.model.XACMLFunction;
 public class MatchAllOf extends XACMLFunction {
 
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument retVal = FunctionArgument.trueObject;
 
         for (int i = 0; i < getArgCount(); i++) {
-            FunctionArgument res = getArg(i).evaluate(pip);
+            FunctionArgument res = getArg(i).doEvaluate(pip);
             if (!res.isTrue()) {
                 retVal = FunctionArgument.falseObject;
             }

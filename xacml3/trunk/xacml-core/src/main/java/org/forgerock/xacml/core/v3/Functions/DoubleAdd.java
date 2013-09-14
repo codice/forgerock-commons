@@ -52,6 +52,7 @@ public class DoubleAdd extends XACMLFunction {
     }
 
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument retVal = new DataValue(DataType.XACMLDOUBLE, 0D, true);
         if ( getArgCount() < 2) {
             throw new XACML3EntitlementException("Function Requires 2 or more arguments, " +

@@ -56,14 +56,15 @@ public class StringRegexpMatch extends XACMLFunction {
     }
 
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument retVal = FunctionArgument.falseObject;
         // Validate argument List
         if (getArgCount() != 2) {
             return retVal;
         }
         // Check and Cast arguments.
-        DataValue patternValue = (DataValue) getArg(0).evaluate(pip);
-        DataValue dataValue = (DataValue) getArg(1).evaluate(pip);
+        DataValue patternValue = (DataValue) getArg(0).doEvaluate(pip);
+        DataValue dataValue = (DataValue) getArg(1).doEvaluate(pip);
         if ((patternValue == null) || (dataValue == null)) {
             throw new XACML3EntitlementException("No Pattern or Data Value Specified");
         }

@@ -86,9 +86,11 @@ public class XACML3PolicyRule {
             FunctionArgument evalResult = target.evaluate(pip);
 
             if (evalResult.isTrue()) {    // we match on target,  so evaluate
+                System.out.println("Evaluating Rule "+ruleName+" target true ");
 
                 evalResult = condition.evaluate(pip);
                 if (evalResult.isTrue() || evalResult.isFalse()) {    // we Match Target,  and Condition
+                    System.out.println(ruleName+" conditions true ");
 
                     if (evalResult.isTrue()) {
                         result.setEffect(true);

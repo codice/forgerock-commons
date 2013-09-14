@@ -44,6 +44,7 @@ public class StringNormalizeSpace extends XACMLFunction {
     public StringNormalizeSpace()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         if (getArgCount() != 1) {
             throw new XACML3EntitlementException("Function Requires 1 argument, " +
                     "however " + getArgCount() + " in stack.");

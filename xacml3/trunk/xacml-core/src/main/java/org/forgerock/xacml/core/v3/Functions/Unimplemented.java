@@ -43,6 +43,7 @@ public class Unimplemented extends XACMLFunction {
     public Unimplemented()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         return FunctionArgument.falseObject;
     }
 }

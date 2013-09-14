@@ -45,6 +45,7 @@ public class StringIsIn extends XACMLFunction {
     public StringIsIn()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument returnValue = FunctionArgument.falseObject;
         if ( getArgCount() != 2) {
             throw new IndeterminateException("Function Requires 2 arguments, " +
@@ -54,8 +55,8 @@ public class StringIsIn extends XACMLFunction {
         DataBag bag = null;
         DataValue bagElement = null;
         try {
-             bagElement = (DataValue) getArg(0).evaluate(pip);
-             bag = (DataBag) getArg(1).evaluate(pip);
+             bagElement = (DataValue) getArg(0).doEvaluate(pip);
+             bag = (DataBag) getArg(1).doEvaluate(pip);
         } catch (Exception e) {
             throw new IndeterminateException("Accessing Arguments Exception: "+e.getMessage());
         }

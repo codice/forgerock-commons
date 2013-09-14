@@ -55,6 +55,7 @@ public class AnyUriSubString extends XACMLFunction {
     }
 
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument retVal =  FunctionArgument.falseObject;
         if ( getArgCount() != 3) {
             return retVal;

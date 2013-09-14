@@ -56,6 +56,7 @@ public class DatetimeSubtractDaytimeduration extends XACMLFunction {
     }
 
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         if ( getArgCount() != 2) {
             throw new XACML3EntitlementException("Function Requires 2 Arguments");
         }

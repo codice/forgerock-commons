@@ -73,7 +73,7 @@ public class XACML3Decision {
         advices = new ArrayList<XACML3Advice>();
         ruleID = ruleid;
         resourceID = resid;
-        if (effect.equals(DecisionType.PERMIT)) {
+        if (effect.equalsIgnoreCase(DecisionType.PERMIT.value())) {
             trueDecision = DecisionType.PERMIT;
             falseDecision = DecisionType.DENY;
         } else {

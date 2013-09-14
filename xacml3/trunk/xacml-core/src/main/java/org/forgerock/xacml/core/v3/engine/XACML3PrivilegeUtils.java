@@ -69,8 +69,8 @@ public class XACML3PrivilegeUtils {
 
         for (AnyOf anyOf : anyOfList) {
             List<AllOf> allOfList = anyOf.getAllOf();
-            XACMLFunction parent = XACMLFunction.getInstance("urn:forgerock:xacml:1.0:function:MatchAllOf");
             for (AllOf allOf : allOfList) {
+                XACMLFunction parent = XACMLFunction.getInstance("urn:forgerock:xacml:1.0:function:MatchAllOf");
                 List<Match> matchList = allOf.getMatch();
                 for (Match match : matchList) {
                     String mName = match.getMatchId();
@@ -90,8 +90,8 @@ public class XACML3PrivilegeUtils {
                             .addArgument(dd));
 
                 }
+                retVal.addArgument(parent);
             }
-            retVal.addArgument(parent);
         }
         if (retVal.getArgCount() == 0) {
             retVal.addArgument(new DataValue(DataType.XACMLBOOLEAN,"true"));

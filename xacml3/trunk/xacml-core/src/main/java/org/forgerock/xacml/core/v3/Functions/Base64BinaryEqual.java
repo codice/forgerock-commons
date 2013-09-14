@@ -52,6 +52,7 @@ public class Base64BinaryEqual extends XACMLFunction {
     public Base64BinaryEqual()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument retVal =  FunctionArgument.falseObject;
 
         if ( getArgCount() != 2) {

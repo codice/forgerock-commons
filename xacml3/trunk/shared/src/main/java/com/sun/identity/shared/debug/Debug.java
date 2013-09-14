@@ -175,8 +175,8 @@ public class Debug {
      * Constant string used as property key to look up the debug provider class
      * name.
      */
-    private static final String CONFIG_DEBUG_PROVIDER = 
-        "com.sun.identity.util.debug.provider";
+    private static final String CONFIG_DEBUG_PROVIDER =  "com.sun.identity.shared.debug.impl.DebugProviderImpl";
+    private static final String oldConfig =    "com.sun.identity.util.debug.provider";
 
     /**
      * Gets an existing instance of Debug for the specified debug name or a new
@@ -248,8 +248,7 @@ public class Debug {
      */
     private static synchronized void initialize() {
         if (!serviceInitialized) {
-            String providerName = SystemPropertiesManager.get(
-                CONFIG_DEBUG_PROVIDER);
+            String providerName = CONFIG_DEBUG_PROVIDER;
             IDebugProvider provider = null;
             boolean providerLoadFailed = false;
             if (providerName != null && providerName.trim().length() > 0) {

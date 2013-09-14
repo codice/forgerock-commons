@@ -5,9 +5,9 @@
     <ignored path="OS-XACML.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/pom.xml" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377791453596" ignored="false" />
-    <file path="/XACML3Policy.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378540515686" ignored="false" />
+    <file path="/XACML3Policy.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379085488871" ignored="false" />
     <file path="/XACML3Entitlement.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377096045955" ignored="false" />
-    <file path="/fragment.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378547879274" ignored="false" />
+    <file path="/fragment.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378553765381" ignored="false" />
     <file path="/Entitlement.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377096105976" ignored="false" />
     <file path="/XACML3RequestHandler.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377979348822" ignored="false" />
     <file path="/XACML3EntitlementCombiner.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378540421561" ignored="false" />
@@ -56,39 +56,16 @@
     <file path="$PROJECT_DIR$/os-xacml/src/main/java/org/forgerock/xacml/xacml/v3/resources/XACML3HomeResource.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377129554405" ignored="false" />
     <file path="$PROJECT_DIR$/os-xacml/src/main/java/org/forgerock/xacml/xacml/v3/resources/package-info.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377129554405" ignored="false" />
     <file path="$PROJECT_DIR$/os-xacml/src/main/java/org/forgerock/xacml/xacml/v3/interfaces/Entitlement.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377129554405" ignored="false" />
-    <file path="/a.dummy" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378551738722" ignored="false" />
-    <file path="/XACML3PolicyRule.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377968926542" ignored="false" />
-    <file path="/XACML3PrivilegeUtils.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377815628466" ignored="false" />
+    <file path="/a.dummy" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379083808168" ignored="false" />
+    <file path="/XACML3PolicyRule.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379085559326" ignored="false" />
+    <file path="/XACML3PrivilegeUtils.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379101770810" ignored="false" />
     <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/model/TestURNValidation.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377130992312" ignored="false" />
     <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/model/TestDNValidation.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377130992312" ignored="false" />
     <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/commons/TestContentType.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377130992312" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlAccessPermitted.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726157" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlOtherFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726157" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlBagSetFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307808371" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlCombinedNestedFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726157" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlHigherOrderBagFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726157" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlEqualityPredicateFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307808371" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlStringConversionFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726157" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlStringFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307808371" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlBagFunctionsGroup3.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307808371" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlNumericConversionFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726157" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlLogicalFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726157" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlBagFunctionsGroup4.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307808370" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlArithmeticFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726158" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlSpecialMatchFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726158" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlRegularExpressionBasedFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726158" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlNumericComparisonFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726158" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlBagFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726158" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlDateAndTimeArithmetricFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307808370" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlBagFunctionsGroup2.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307808370" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlStringFunctionsGroup2.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726158" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlNonNumericComparisonFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726158" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlXPathFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726158" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlDataUtils.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377307726158" ignored="false" />
     <file path="/PolicyStore.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377803182398" ignored="false" />
     <file path="/ReferenceRequestHandler.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377885670995" ignored="false" />
     <file path="/RestService.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378549351511" ignored="false" />
-    <file path="/XACML3PolicySet.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378540655360" ignored="false" />
+    <file path="/XACML3PolicySet.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379090805023" ignored="false" />
     <file path="/XACML3PolicyItem.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377885855066" ignored="false" />
     <file path="$MAVEN_REPOSITORY$/org/forgerock/forgerock-parent/1.0.0/forgerock-parent-1.0.0.pom" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377269519785" ignored="false" />
     <file path="/PolicyStoreManager.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377736837940" ignored="false" />
@@ -104,18 +81,28 @@
     <file path="$MAVEN_REPOSITORY$/org/forgerock/openam/openam-xacml3-schema/10.2.0-SNAPSHOT/openam-xacml3-schema-10.2.0-SNAPSHOT.jar!/xsd/xacml-core-v3-schema-wd-17.xsd" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378540905997" ignored="false" />
     <file path="/JaxbJacksonObjectMapper.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377924028360" ignored="false" />
     <file path="/XACML3ContextResolver.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377924096873" ignored="false" />
-    <file path="/XACML3Decision.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378545870155" ignored="false" />
+    <file path="/XACML3Decision.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378553451832" ignored="false" />
     <file path="/XACML3Advice.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377975575417" ignored="false" />
     <file path="/DataAssignment.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377975824162" ignored="false" />
     <file path="/XACML3Obligation.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377976280172" ignored="false" />
     <file path="/CombinerManager.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378549974997" ignored="false" />
     <file path="/CombinerBase.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378550025138" ignored="false" />
-    <file path="/DenyOverrides.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378547742789" ignored="false" />
-    <file path="/DenyUnlessPermit.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378546381744" ignored="false" />
-    <file path="/PermitOverrides.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378546296579" ignored="false" />
-    <file path="/PermitUnlessDeny.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378546320992" ignored="false" />
+    <file path="/DenyOverrides.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378554596615" ignored="false" />
+    <file path="/DenyUnlessPermit.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378554625207" ignored="false" />
+    <file path="/PermitOverrides.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378554706878" ignored="false" />
+    <file path="/PermitUnlessDeny.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378554729165" ignored="false" />
     <file path="/CombinerLoader.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378548797967" ignored="false" />
     <file path="/org.forgerock.xacml.core.v3.interfaces.EntitlementCombiner" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378549057627" ignored="false" />
+    <file path="/FirstApplicable.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378554660911" ignored="false" />
+    <file path="/OnlyOneApplicable.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378554682982" ignored="false" />
+    <file path="/XACMLFunction.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379083849176" ignored="false" />
+    <file path="/AnyOfAny.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379008483434" ignored="false" />
+    <file path="/AnyOf.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379018632556" ignored="false" />
+    <file path="/FunctionArgument.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379081543127" ignored="false" />
+    <file path="/DataValue.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379058940138" ignored="false" />
+    <file path="/MatchAllOf.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379064399105" ignored="false" />
+    <file path="/DataDesignator.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379083883478" ignored="false" />
+    <file path="/Debug.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379164187076" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,6 +118,40 @@
   </component>
   <component name="DebuggerManager">
     <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
+    <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint>
+        <option name="NOTIFY_CAUGHT" value="true" />
+        <option name="NOTIFY_UNCAUGHT" value="true" />
+        <option name="ENABLED" value="false" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </breakpoint_any>
     <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint url="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/rest/XACML3RequestHandler.java" line="137" class="org.forgerock.xacml.core.v3.rest.XACML3RequestHandler" package="org.forgerock.xacml.core.v3.rest">
         <option name="ENABLED" value="true" />
@@ -174,105 +195,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACMLEvalContext.java" line="112" class="org.forgerock.xacml.core.v3.engine.XACMLEvalContext" package="org.forgerock.xacml.core.v3.engine">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
       <breakpoint url="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/rest/ReferenceRequestHandler.java" line="98" class="org.forgerock.xacml.reference.rest.ReferenceRequestHandler" package="org.forgerock.xacml.reference.rest">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACMLEvalContext.java" line="107" class="org.forgerock.xacml.core.v3.engine.XACMLEvalContext" package="org.forgerock.xacml.core.v3.engine">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/Services/CombinerLoader.java" line="22" class="org.forgerock.xacml.reference.Services.CombinerLoader" package="org.forgerock.xacml.reference.Services">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/xacml-server/src/main/java/org/forgerock/xacml/rest/RestService.java" line="70" class="org.forgerock.xacml.rest.RestService" package="org.forgerock.xacml.rest">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/ImplementationManagers/CombinerManager.java" line="28" class="org.forgerock.xacml.core.v3.ImplementationManagers.CombinerManager" package="org.forgerock.xacml.core.v3.ImplementationManagers">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/DenyOverrides.java" line="19" class="org.forgerock.xacml.reference.combiner.DenyOverrides" package="org.forgerock.xacml.reference.combiner">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/DenyUnlessPermit.java" line="20" class="org.forgerock.xacml.reference.combiner.DenyUnlessPermit" package="org.forgerock.xacml.reference.combiner">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -314,41 +237,21 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3Policy.java" line="128" class="org.forgerock.xacml.core.v3.engine.XACML3Policy" package="org.forgerock.xacml.core.v3.engine">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
     </line_breakpoints>
-    <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
-      <breakpoint>
-        <option name="NOTIFY_CAUGHT" value="true" />
-        <option name="NOTIFY_UNCAUGHT" value="true" />
-        <option name="ENABLED" value="false" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint>
-        <option name="NOTIFY_CAUGHT" value="true" />
-        <option name="NOTIFY_UNCAUGHT" value="true" />
-        <option name="ENABLED" value="false" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-    </breakpoint_any>
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -359,105 +262,94 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="CombinerManager.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/ImplementationManagers/CombinerManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="0" selection-start="857" selection-end="857" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#483#498#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DenyOverrides.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/DenyOverrides.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="0" selection-start="559" selection-end="559" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1042#1058#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CombinerBase.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/CombinerBase.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="28" column="0" selection-start="811" selection-end="811" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DenyUnlessPermit.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/DenyUnlessPermit.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="0" selection-start="553" selection-end="553" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1030#1046#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="XACML3Policy.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="XACML3Policy.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3Policy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="119" column="0" selection-start="3844" selection-end="3844" vertical-scroll-proportion="0.0">
+            <state line="128" column="0" selection-start="4208" selection-end="4208" vertical-scroll-proportion="0.33023256">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EvaluatorImpl.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/evaluator/EvaluatorImpl.java">
+      <file leaf-file-name="Debug.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/debug/Debug.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="0" selection-start="1289" selection-end="1289" vertical-scroll-proportion="0.0">
+            <state line="178" column="43" selection-start="6998" selection-end="6998" vertical-scroll-proportion="-4.64">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="XACML3PolicySet.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicySet.java">
+      <file leaf-file-name="DebugProviderImpl.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/debug/impl/DebugProviderImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="137" column="0" selection-start="4520" selection-end="4520" vertical-scroll-proportion="0.3181818">
+            <state line="39" column="30" selection-start="1260" selection-end="1277" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="XACML3Advice.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3Advice.java">
+      <file leaf-file-name="IDebug.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/debug/IDebug.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="46" selection-start="1300" selection-end="1362" vertical-scroll-proportion="0.0">
+            <state line="38" column="17" selection-start="1370" selection-end="1370" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PermitUnlessDeny.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/PermitUnlessDeny.java">
+      <file leaf-file-name="XACML3PolicyRule.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicyRule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="0" selection-start="554" selection-end="554" vertical-scroll-proportion="0.0">
+            <state line="57" column="55" selection-start="1779" selection-end="1796" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="XACML3PrivilegeUtils.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PrivilegeUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="94" column="0" selection-start="3962" selection-end="3962" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MatchAnyOf.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/MatchAnyOf.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="50" column="0" selection-start="1733" selection-end="1733" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="XACMLFunction.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/XACMLFunction.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="170" column="0" selection-start="4807" selection-end="4807" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="2013-RSA-XACML-Demo-PolicySet.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/2013-RSA-XACML-Demo-PolicySet.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="353" column="0" selection-start="25378" selection-end="25378" vertical-scroll-proportion="0.0">
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1031#1047#0" expanded="true" />
+                <element signature="tag#Policy#0;tag#PolicySet#0" expanded="false" />
+                <element signature="tag#VariableDefinition#0;tag#Policy#1;tag#PolicySet#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="XACMLEvalContext.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACMLEvalContext.java">
+      <file leaf-file-name="XACML3RequestHandler.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/rest/XACML3RequestHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="112" column="0" selection-start="3674" selection-end="3674" vertical-scroll-proportion="0.0">
+            <state line="191" column="0" selection-start="7478" selection-end="7478" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -473,22 +365,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/evaluator/EvaluatorImpl.java" />
-        <option value="$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/Combinerbase.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3Decision.java" />
-        <option value="$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/DenyUnlessPermit.java" />
-        <option value="$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/FirstApplicable.java" />
-        <option value="$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/OnlyOneApplicable.java" />
-        <option value="$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/PermitOverrides.java" />
-        <option value="$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/DenyOverrides.java" />
-        <option value="$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/Services/CombinerLoader.java" />
-        <option value="$PROJECT_DIR$/xacml-reference/src/main/resources/META-INF/services/org.forgerock.xacml.core.v3.interfaces.EntitlementCombiner" />
-        <option value="$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/PermitUnlessDeny.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/ImplementationManagers/CombinerManager.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/interfaces/EntitlementCombiner.java" />
-        <option value="$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/CombinerBase.java" />
-        <option value="$PROJECT_DIR$/xacml-server/src/main/java/org/forgerock/xacml/rest/RestService.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/AnyuriEqual.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/AnyuriFromString.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/DataValue.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/AccessPermitted.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/AllOf.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/AllOfAll.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/MatchAllOf.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/MatchAnyOf.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/FunctionArgument.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/XACMLFunction.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/DataDesignator.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3Policy.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicyRule.java" />
         <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicySet.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PrivilegeUtils.java" />
+        <option value="$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/debug/Debug.java" />
       </list>
     </option>
   </component>
@@ -505,6 +397,16 @@
         <option name="importAutomatically" value="true" />
       </MavenImportingSettings>
     </option>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+      </PATH>
+    </treeState>
   </component>
   <component name="ProjectFrameBounds">
     <option name="y" value="22" />
@@ -539,6 +441,8 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -622,6 +526,36 @@
               <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="samples" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="XACML-Engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trunk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="xacml-server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -663,7 +597,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="xacml-reference" />
+              <option name="myItemId" value="xacml-core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -677,25 +611,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="xacml-reference" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="XACML-Engine" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="trunk" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xacml-reference" />
+              <option name="myItemId" value="xacml-core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -703,7 +619,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
+              <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -711,85 +627,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="services" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="XACML-Engine" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="trunk" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xacml-reference" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="reference" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="XACML-Engine" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="trunk" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xacml-reference" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="reference" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Services" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="XACML-Engine" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="trunk" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xacml-core" />
+              <option name="myItemId" value="test_data" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -808,6 +646,10 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -830,36 +672,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="XACML-Engine" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="trunk" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xacml-core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="services" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -923,7 +735,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="interfaces" />
+              <option name="myItemId" value="model" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -957,7 +769,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ImplementationManagers" />
+              <option name="myItemId" value="Functions" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -995,10 +807,146 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="XACML-Engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trunk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shared" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="XACML-Engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trunk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shared" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="XACML-Engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trunk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shared" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shared" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="XACML-Engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trunk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shared" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shared" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="debug" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="XACML-Engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trunk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shared" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shared" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="debug" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="impl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1018,8 +966,8 @@
     <property name="restartRequiresConfirmation" value="true" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -1046,6 +994,19 @@
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="9009" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
@@ -1076,19 +1037,6 @@
       <listeners />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method />
-    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" />
@@ -1106,7 +1054,7 @@
     </configuration>
     <configuration default="true" type="JavascriptDebugSession" factoryName="Remote" singleton="true">
       <JSRemoteDebuggerConfigurationSettings>
-        <option name="engineId" />
+        <option name="engineId" value="embedded" />
         <option name="fileUrl" />
       </JSRemoteDebuggerConfigurationSettings>
       <method />
@@ -1250,10 +1198,10 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32566372" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32566372" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39823008" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.52920353" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -1263,10 +1211,10 @@
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.6017699" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329806" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24924242" sideWeight="0.67433625" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32920355" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24924242" sideWeight="0.47079647" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32920355" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -1335,32 +1283,103 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/xacml-server/src/main/java/org/forgerock/xacml/rest/RestService.java">
+    <entry file="file://$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/debug/IDebugProvider.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="0" selection-start="2319" selection-end="2319" vertical-scroll-proportion="0.0">
+        <state line="37" column="17" selection-start="1362" selection-end="1362" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/Services/CombinerLoader.java">
+    <entry file="file://$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/configuration/SystemPropertiesManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="0" selection-start="531" selection-end="531" vertical-scroll-proportion="0.0">
+        <state line="44" column="19" selection-start="1638" selection-end="1638" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/debug/impl/DebugImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="424" column="58" selection-start="13232" selection-end="13275" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicySet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="134" column="0" selection-start="4425" selection-end="4425" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/AnyOf.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="101" column="0" selection-start="4226" selection-end="4226" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/MatchAllOf.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="0" selection-start="1710" selection-end="1710" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/XACMLFunction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="170" column="0" selection-start="4807" selection-end="4807" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/MatchAnyOf.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="0" selection-start="1733" selection-end="1733" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicyRule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="55" selection-start="1779" selection-end="1796" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/2013-RSA-XACML-Demo-PolicySet.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="353" column="0" selection-start="25378" selection-end="25378" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="tag#Policy#0;tag#PolicySet#0" expanded="false" />
+            <element signature="tag#VariableDefinition#0;tag#Policy#1;tag#PolicySet#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/rest/ReferenceRequestHandler.java">
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PrivilegeUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="63" column="0" selection-start="1957" selection-end="1957" vertical-scroll-proportion="0.0">
+        <state line="94" column="0" selection-start="3962" selection-end="3962" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/storage/PolicyStoreImpl.java">
+    <entry file="file://$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/debug/impl/DebugProviderImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="77" column="0" selection-start="2389" selection-end="2389" vertical-scroll-proportion="0.0">
+        <state line="39" column="30" selection-start="1260" selection-end="1277" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/debug/IDebug.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="17" selection-start="1370" selection-end="1370" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/debug/Debug.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="178" column="43" selection-start="6998" selection-end="6998" vertical-scroll-proportion="-4.64">
           <folding />
         </state>
       </provider>
@@ -1368,102 +1387,13 @@
     <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/rest/XACML3RequestHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="191" column="0" selection-start="7478" selection-end="7478" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/PermitOverrides.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="561" selection-end="561" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1038#1054#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/PermitUnlessDeny.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="0" selection-start="554" selection-end="554" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1031#1047#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/evaluator/EvaluatorImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="0" selection-start="1289" selection-end="1289" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3Policy.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="119" column="0" selection-start="3844" selection-end="3844" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/CombinerBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="0" selection-start="811" selection-end="811" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/ImplementationManagers/CombinerManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="0" selection-start="857" selection-end="857" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#483#498#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/DenyUnlessPermit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="553" selection-end="553" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1030#1046#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/DenyOverrides.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="0" selection-start="559" selection-end="559" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1042#1058#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACMLEvalContext.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="112" column="0" selection-start="3674" selection-end="3674" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3Advice.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="46" selection-start="1300" selection-end="1362" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicySet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="137" column="0" selection-start="4520" selection-end="4520" vertical-scroll-proportion="0.3181818">
+        <state line="128" column="0" selection-start="4208" selection-end="4208" vertical-scroll-proportion="0.33023256">
           <folding />
         </state>
       </provider>

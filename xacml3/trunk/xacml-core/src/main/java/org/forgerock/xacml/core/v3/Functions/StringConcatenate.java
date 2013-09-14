@@ -49,6 +49,7 @@ public class StringConcatenate extends XACMLFunction {
 
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
 
+
         if ( getArgCount() < 2) {
             if (getArgCount() == 1) {
                 return new DataValue(DataType.XACMLSTRING, getArg(0).asString(pip));

@@ -38,10 +38,11 @@ public class MatchAnyOf extends XACMLFunction {
 
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
 
+
         FunctionArgument retVal = FunctionArgument.falseObject;
 
         for (int i = 0; i < getArgCount(); i++) {
-            FunctionArgument res = getArg(i).evaluate(pip);
+            FunctionArgument res = getArg(i).doEvaluate(pip);
             if (res.isTrue()) {
                 retVal = FunctionArgument.trueObject;
                 break;

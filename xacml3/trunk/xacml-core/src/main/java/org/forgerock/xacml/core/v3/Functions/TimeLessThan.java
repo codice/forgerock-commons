@@ -52,6 +52,7 @@ public class TimeLessThan extends XACMLFunction {
     public TimeLessThan()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument retVal = FunctionArgument.falseObject;
         if ( getArgCount() != 2) {
             return retVal;

@@ -47,13 +47,14 @@ public class AnyUriContains extends XACMLFunction {
     }
 
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument retVal =  FunctionArgument.falseObject;
         if ( getArgCount() != 2) {
             return retVal;
         }
         StringFromAnyURI function = new StringFromAnyURI();
         function.addArgument(new DataValue(DataType.XACMLANYURI, getArg(1).asAnyURI(pip)));
-        FunctionArgument result = function.evaluate(pip);
+        FunctionArgument result = function.doEvaluate(pip);
         String value = result.asString(pip);
         if ( value.contains(getArg(0).asString(pip)) ) {
             retVal =   FunctionArgument.trueObject;

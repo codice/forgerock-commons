@@ -80,6 +80,7 @@ public class AllOfAll extends XACMLFunction {
     }
 
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+
         // Initialize
         XACMLFunction func = null;
         DataBag bagOne = null;
@@ -101,8 +102,8 @@ public class AllOfAll extends XACMLFunction {
         }
         // Cast our Arguments...
         func = (XACMLFunction) getArg(0);
-        bagOne = (DataBag) getArg(1).evaluate(pip);
-        bagTwo = (DataBag) getArg(2).evaluate(pip);
+        bagOne = (DataBag) getArg(1).doEvaluate(pip);
+        bagTwo = (DataBag) getArg(2).doEvaluate(pip);
 
         // Create our Result List for Applying an And against all results.
         List<DataValue> results = new ArrayList<DataValue>();
@@ -111,14 +112,14 @@ public class AllOfAll extends XACMLFunction {
         List<DataValue> bagTwoValues = bagTwo.getValue(pip);
         // Iterate over our First Bag against our Second Bag.
         for (DataValue dataValue1 : bagOneValues) {
-            dataValue1.evaluate(pip);
+            dataValue1.doEvaluate(pip);
             for (DataValue dataValue2 : bagTwoValues) {
-                dataValue1.evaluate(pip);
+                dataValue1.doEvaluate(pip);
                 // Perform the Function upon our two Arguments.
                 func.clearArguments();
                 func.addArgument(dataValue1);
                 func.addArgument(dataValue2);
-                FunctionArgument result = func.evaluate(pip);
+                FunctionArgument result = func.doEvaluate(pip);
                 if ((result == null) || (!(result instanceof DataValue))) {
                     throw new NotApplicableException("AllOfAll Resultant Function Argument is Invalid");
                 }
@@ -131,7 +132,7 @@ public class AllOfAll extends XACMLFunction {
         for(DataValue result : results) {
             fAnd.addArgument(result);
         }
-        FunctionArgument result = fAnd.evaluate(pip);
+        FunctionArgument result = fAnd.doEvaluate(pip);
         if ((result == null) || (!(result instanceof DataValue))) {
             throw new NotApplicableException("AllOfAll Resultant Function Argument is Invalid");
         }

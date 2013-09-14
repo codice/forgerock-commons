@@ -53,6 +53,7 @@ public class XpathNodeMatch extends XACMLFunction {
     public XpathNodeMatch()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         return FunctionArgument.falseObject;
     }
 }

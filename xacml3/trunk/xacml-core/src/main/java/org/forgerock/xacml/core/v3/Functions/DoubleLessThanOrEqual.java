@@ -44,6 +44,7 @@ public class DoubleLessThanOrEqual extends XACMLFunction {
     public DoubleLessThanOrEqual()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument retVal =  FunctionArgument.falseObject;
 
         if ( getArgCount() != 2) {

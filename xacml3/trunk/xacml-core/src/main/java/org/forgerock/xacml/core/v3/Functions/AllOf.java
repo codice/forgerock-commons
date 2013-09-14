@@ -65,12 +65,13 @@ public class AllOf extends XACMLFunction {
 
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
 
+
         int args = getArgCount();
         if (args < 3) {
             throw new NotApplicableException("Not enough arguments");
         }
         XACMLFunction func = (XACMLFunction) getArg(0);
-        FunctionArgument bag = getArg(args - 1).evaluate(pip);
+        FunctionArgument bag = getArg(args - 1).doEvaluate(pip);
         if (bag instanceof DataValue) {
             bag = new DataBag((DataValue) bag);
         }
@@ -79,13 +80,13 @@ public class AllOf extends XACMLFunction {
         }
 
         for (int i = 1; i < args - 1; i++) {
-            FunctionArgument res = getArg(i).evaluate(pip);
+            FunctionArgument res = getArg(i).doEvaluate(pip);
             List<DataValue> bagVals = (List<DataValue>) bag.getValue(pip);
 
             for (DataValue dv : bagVals) {
                 func.clearArguments();
                 func.addArgument(res).addArgument(dv);
-                FunctionArgument result = func.evaluate(pip);
+                FunctionArgument result = func.doEvaluate(pip);
                 if (result.isFalse()) {
                     return FunctionArgument.falseObject;
                 }

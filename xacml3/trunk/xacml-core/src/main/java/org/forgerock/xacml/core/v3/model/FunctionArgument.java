@@ -226,9 +226,26 @@ public abstract class FunctionArgument {
         if ((this instanceof DataDesignator) || (this instanceof DataValue)) {
             return this;
         } else {
-            return this.evaluate(pip);
+            return this.doEvaluate(pip);
         }
     }
+
+    public String printDebugItem() {
+        return this.dataType.getTypeName();
+    }
+
+    /**
+     * PEP Evaluate Method to obtain a evaluation result.
+     *
+     * @param pip
+     * @return
+     * @throws XACML3EntitlementException
+     */
+    public FunctionArgument doEvaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+        FunctionArgument result = evaluate(pip);
+        return result;
+    };
+
 
     /**
      * Return DataValue as a String.

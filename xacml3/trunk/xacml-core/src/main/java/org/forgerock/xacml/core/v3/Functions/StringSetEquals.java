@@ -44,6 +44,7 @@ public class StringSetEquals extends XACMLFunction {
     }
 
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+
         int args = getArgCount();
         if (args != 2) {
             throw new IndeterminateException("Function Requires 2 arguments, " +
@@ -57,8 +58,8 @@ public class StringSetEquals extends XACMLFunction {
         DataBag firstBag = null;
         DataBag secondBag = null;
         try {
-            firstBag = (DataBag) getArg(0).evaluate(pip);
-            secondBag = (DataBag) getArg(1).evaluate(pip);
+            firstBag = (DataBag) getArg(0).doEvaluate(pip);
+            secondBag = (DataBag) getArg(1).doEvaluate(pip);
 
             // Verify our Data Type with First Data Bag's Data Type.
             if (firstBag.getType().getIndex() != secondBag.getType().getIndex()) {
@@ -90,14 +91,14 @@ public class StringSetEquals extends XACMLFunction {
         int subSetCount = 0;
         // Iterate over the First Bag.
         for (int b = 0; b < firstBag.size(); b++) {
-            DataValue dataValue1 = (DataValue) firstBag.get(b).evaluate(pip);
+            DataValue dataValue1 = (DataValue) firstBag.get(b).doEvaluate(pip);
             for (int z = 0; z<secondBag.size(); z++) {
-                DataValue dataValue2 = (DataValue) secondBag.get(z).evaluate(pip);
+                DataValue dataValue2 = (DataValue) secondBag.get(z).doEvaluate(pip);
                 // Check Equality by using this Types Equality Function.
                 StringEqual fEquals = new StringEqual();
                 fEquals.addArgument(dataValue2);
                 fEquals.addArgument(dataValue1);
-                FunctionArgument result = fEquals.evaluate(pip);
+                FunctionArgument result = fEquals.doEvaluate(pip);
                 if (result.isTrue()) {
                     subSetCount++;
                     break;

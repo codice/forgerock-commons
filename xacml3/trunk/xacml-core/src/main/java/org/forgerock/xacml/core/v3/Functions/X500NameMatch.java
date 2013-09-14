@@ -56,14 +56,15 @@ public class X500NameMatch extends XACMLFunction {
     }
 
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument retVal = FunctionArgument.falseObject;
         // Validate argument List
         if (getArgCount() != 2) {
             return retVal;
         }
         // Check and Cast arguments.
-        DataValue rndValue = (DataValue) getArg(0).evaluate(pip);
-        DataValue x500NameValue = (DataValue) getArg(1).evaluate(pip);
+        DataValue rndValue = (DataValue) getArg(0).doEvaluate(pip);
+        DataValue x500NameValue = (DataValue) getArg(1).doEvaluate(pip);
         if ((rndValue == null) || (x500NameValue == null)) {
             throw new XACML3EntitlementException("No Pattern or Data Value Specified");
         }

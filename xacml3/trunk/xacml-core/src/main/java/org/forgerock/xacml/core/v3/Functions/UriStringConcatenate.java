@@ -46,6 +46,7 @@ public class UriStringConcatenate extends XACMLFunction {
     public UriStringConcatenate()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         return FunctionArgument.falseObject;
     }
 }

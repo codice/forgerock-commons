@@ -42,6 +42,7 @@ public class Base64BinaryUnion extends XACMLFunction {
     public Base64BinaryUnion()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         int args = getArgCount();
         if ( args < 2) {
             throw new IndeterminateException("Function Requires at least 2 arguments, " +
@@ -52,7 +53,7 @@ public class Base64BinaryUnion extends XACMLFunction {
         // Iterate Over All DataBag's in Stack, Evaluate and create a Union of all Bags with Unique Objects.
         try {
             for (int i=0; i<args; i++) {
-                DataBag bag  = (DataBag) getArg(i).evaluate(pip);
+                DataBag bag  = (DataBag) getArg(i).doEvaluate(pip);
                 if (bag == null) {
                     continue;
                 }
@@ -69,7 +70,7 @@ public class Base64BinaryUnion extends XACMLFunction {
                 }
                 // Iterate over the current Bag.
                 for (int b=0; b<bag.size(); b++) {
-                    DataValue dataValue = (DataValue) bag.get(b).evaluate(pip);
+                    DataValue dataValue = (DataValue) bag.get(b).doEvaluate(pip);
                     boolean contained = false;
                     for (int z=0; z<unionBag.size(); z++) {
                         // Apply the Typed Equal Function to determine if
@@ -77,7 +78,7 @@ public class Base64BinaryUnion extends XACMLFunction {
                        Base64BinaryEqual fEquals = new Base64BinaryEqual();
                         fEquals.addArgument(unionBag.get(z));
                         fEquals.addArgument(dataValue);
-                        FunctionArgument result = fEquals.evaluate(pip);
+                        FunctionArgument result = fEquals.doEvaluate(pip);
                         if (result.isTrue()) {
                             contained=true;
                             break;

@@ -62,6 +62,10 @@ public class DataDesignator extends FunctionArgument {
     public boolean mustExist() {
         return mustExist;
     }
+    public String printDebugItem() {
+        return (String) this.attributeID;
+    }
+
 
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
         //return pip.resolve(category,attributeID);
@@ -69,7 +73,7 @@ public class DataDesignator extends FunctionArgument {
     }
 
     public Object getValue(XACMLEvalContext pip) throws XACML3EntitlementException {
-        FunctionArgument fArg = evaluate(pip);
+        FunctionArgument fArg = doEvaluate(pip);
         if (fArg == null) {
             if (mustExist) {
                 throw new IndeterminateException("Required attrib not found");

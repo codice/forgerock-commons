@@ -47,6 +47,7 @@ public class Not extends XACMLFunction {
     public Not()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         if ( getArgCount() != 1) {
             return FunctionArgument.falseObject;
         }

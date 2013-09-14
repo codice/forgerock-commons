@@ -67,6 +67,7 @@ public class Map extends XACMLFunction {
     }
 
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+
         // Initialize
         XACMLFunction func = null;
         int args = getArgCount();
@@ -86,7 +87,7 @@ public class Map extends XACMLFunction {
         // Iterate over all arguments within the Argument Stack.
         for (int i = 1; i < args; i++) {
             func.clearArguments();
-            FunctionArgument functionArgument = getArg(i).evaluate(pip);
+            FunctionArgument functionArgument = getArg(i).doEvaluate(pip);
             Object topDataValue = functionArgument.getValue(pip);
 
             // Check for Collection
@@ -96,14 +97,14 @@ public class Map extends XACMLFunction {
                     func.clearArguments();
                     func.addArgument(innerDataValue);
                     // Evaluate the Function with required Arguments and Save Results.
-                    FunctionArgument result = func.evaluate(pip);
+                    FunctionArgument result = func.doEvaluate(pip);
                     results.add((DataValue) result);
                 } // End of Inner While Loop.
             } else {
                 func.clearArguments();
                 func.addArgument((DataValue) topDataValue);
                 // Evaluate the Function with required Argument and Save Result.
-                FunctionArgument result = func.evaluate(pip);
+                FunctionArgument result = func.doEvaluate(pip);
                 results.add((DataValue) result);
             } // End of Else.
 

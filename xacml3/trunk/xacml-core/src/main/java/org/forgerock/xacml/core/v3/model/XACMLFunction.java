@@ -49,6 +49,9 @@ public abstract class XACMLFunction extends FunctionArgument {
     public static final String URN_SYNTAX_ERROR = "urn:oasis:names:tc:xacml:1.0:status:syntax-error";
     public static final String URN_PROCESSING_ERROR = "urn:oasis:names:tc:xacml:1.0:status:processing-error";
 
+    public static String spaces = "                                                                                                                                                                             ";
+    public static int indent = 0;
+
     /**
      * Globals
      */
@@ -112,7 +115,7 @@ public abstract class XACMLFunction extends FunctionArgument {
      * @throws org.forgerock.xacml.core.v3.engine.XACML3EntitlementException
      */
     public Object getValue(XACMLEvalContext pip) throws XACML3EntitlementException {
-        return evaluate(pip).getValue(pip);
+        return doEvaluate(pip).getValue(pip);
     }
 
     /**
@@ -123,6 +126,50 @@ public abstract class XACMLFunction extends FunctionArgument {
      * @throws XACML3EntitlementException
      */
     public abstract FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException;
+
+    private String functionName() {
+        return functionID.substring(functionID.lastIndexOf(':')+1);
+    }
+    public String printDebugItem() {
+        return " " + functionName()  ;
+    }
+
+    private String printIndent() {
+        return  spaces.substring(0,indent);
+    }
+
+    public void printDebugEntry() {
+
+        System.out.print(printIndent() + functionName()+ "( ");
+        String sep = " ";
+        for (FunctionArgument f : arguments) {
+            System.out.print(sep +f.printDebugItem());
+            sep = ", ";
+        }
+        System.out.println(")");
+        indent+= 2;
+    }
+    public void printDebugExit( FunctionArgument res) {
+
+        indent-= 2;
+        System.out.print(printIndent() +"=" +res.printDebugItem());
+        System.out.println("");
+    }
+
+
+    /**
+     * PEP Evaluate Method to obtain a evaluation result.
+     *
+     * @param pip
+     * @return
+     * @throws XACML3EntitlementException
+     */
+    public FunctionArgument doEvaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+        printDebugEntry();
+        FunctionArgument result = evaluate(pip);
+        printDebugExit( result) ;
+        return result;
+    };
 
     /**
      * Protected methods only for subclasses to

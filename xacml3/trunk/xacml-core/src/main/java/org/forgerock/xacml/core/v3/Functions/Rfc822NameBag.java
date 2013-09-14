@@ -43,6 +43,7 @@ public class Rfc822NameBag extends XACMLFunction {
     public Rfc822NameBag()  {
     }
     public FunctionArgument evaluate( XACMLEvalContext pip) throws XACML3EntitlementException {
+
         // Initialize Empty Bag.
         DataBag dataBag = new DataBag();
         // Set the Type of the Contents.
@@ -50,7 +51,7 @@ public class Rfc822NameBag extends XACMLFunction {
         // Loop Through Arguments in stack and evaluate to Build up Final Content, if any exists.
         int args = getArgCount();
         for (int i=0; i<args; i++) {
-            FunctionArgument result = getArg(i).evaluate(pip);
+            FunctionArgument result = getArg(i).doEvaluate(pip);
             if (!(result instanceof DataValue)) {
                 throw new IndeterminateException("Not a DataValue");
             }

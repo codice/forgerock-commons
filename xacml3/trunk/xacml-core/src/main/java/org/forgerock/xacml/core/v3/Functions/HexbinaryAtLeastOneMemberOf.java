@@ -43,6 +43,7 @@ public class HexbinaryAtLeastOneMemberOf extends XACMLFunction {
     }
 
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+
         FunctionArgument retVal = FunctionArgument.falseObject;
         int args = getArgCount();
         if (args != 2) {
@@ -52,8 +53,8 @@ public class HexbinaryAtLeastOneMemberOf extends XACMLFunction {
         // Iterate Over the 2 DataBag's in Stack, Evaluate and determine if the Contents of a Another Bag contains
         // At least one Member of the First.
         try {
-            DataBag firstBag = (DataBag) getArg(0).evaluate(pip);
-            DataBag secondBag = (DataBag) getArg(1).evaluate(pip);
+            DataBag firstBag = (DataBag) getArg(0).doEvaluate(pip);
+            DataBag secondBag = (DataBag) getArg(1).doEvaluate(pip);
 
             // Verify our Data Type with First Data Bag's Data Type.
             if (firstBag.getType().getIndex() != secondBag.getType().getIndex()) {
@@ -64,14 +65,14 @@ public class HexbinaryAtLeastOneMemberOf extends XACMLFunction {
             // Iterate over the First Bag.
             boolean breakIt = false;
             for (int b = 0; b < firstBag.size(); b++) {
-                DataValue dataValue1 = (DataValue) firstBag.get(b).evaluate(pip);
+                DataValue dataValue1 = (DataValue) firstBag.get(b).doEvaluate(pip);
                 for (int z = 0; z < secondBag.size(); z++) {
-                    DataValue dataValue2 = (DataValue) secondBag.get(z).evaluate(pip);
+                    DataValue dataValue2 = (DataValue) secondBag.get(z).doEvaluate(pip);
                     // Check Equality by using this Types Equality Function.
                     HexbinaryEqual fEquals = new HexbinaryEqual();
                     fEquals.addArgument(dataValue2);
                     fEquals.addArgument(dataValue1);
-                    FunctionArgument result = fEquals.evaluate(pip);
+                    FunctionArgument result = fEquals.doEvaluate(pip);
                     if (result.isTrue()) {
                         retVal = FunctionArgument.trueObject;
                         breakIt = true;
