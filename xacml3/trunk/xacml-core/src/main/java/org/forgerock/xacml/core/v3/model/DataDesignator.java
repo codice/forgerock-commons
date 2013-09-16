@@ -69,7 +69,13 @@ public class DataDesignator extends FunctionArgument {
 
     public FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
         //return pip.resolve(category,attributeID);
-        return pip.resolve(this);
+        FunctionArgument retVal = pip.resolve(this);
+        if (retVal == null) {
+            if (!mustExist) {
+                retVal = new DataBag();
+            }
+        }
+        return retVal;
     }
 
     public Object getValue(XACMLEvalContext pip) throws XACML3EntitlementException {

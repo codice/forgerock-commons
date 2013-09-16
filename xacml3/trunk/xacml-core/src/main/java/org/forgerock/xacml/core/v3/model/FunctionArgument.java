@@ -50,6 +50,8 @@ public abstract class FunctionArgument {
     public static FunctionArgument trueObject = new DataValue(DataType.XACMLBOOLEAN, "true");
     public static FunctionArgument falseObject = new DataValue(DataType.XACMLBOOLEAN, "false");
     private static Debug debug = Debug.getInstance("Xacml3");
+    public static int indent = 0;
+
 
     private DataType dataType;
     private String issuer;

@@ -90,7 +90,7 @@ public class XACML3PrivilegeUtils {
                             .addArgument(dd));
 
                 }
-                retVal.addArgument(parent);
+            retVal.addArgument(parent);
             }
         }
         if (retVal.getArgCount() == 0) {

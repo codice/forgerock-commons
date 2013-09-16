@@ -131,10 +131,11 @@ public class XACML3PolicySet implements XACML3PolicyItem{
     public EntitlementCombiner evaluate(XACMLEvalContext pip) {
 
         boolean indeterminate = true;
-        XACMLFunction.indent = 0;
+        FunctionArgument.indent = 2;
 
         FunctionArgument evalResult;
         EntitlementCombiner  results = CombinerManager.getInstance(combiner);
+        System.out.println("Evaluating PolicySet "+policySetName);
 
             try {
                 evalResult = target.evaluate(pip);
@@ -145,6 +146,8 @@ public class XACML3PolicySet implements XACML3PolicyItem{
             }
 
         if (evalResult.isTrue())        {    // we  match,  so evaluate
+            System.out.println("Target true, evaluating Policies ");
+
             for (String s : items) {
                 XACML3PolicyItem pSet = pip.getPolicyForEval(s);
                 results.addAll(pSet.evaluate(pip));
@@ -153,6 +156,7 @@ public class XACML3PolicySet implements XACML3PolicyItem{
             XACML3Decision result = new XACML3Decision(policySetName,pip.getRequest().getContextID(),"NotApplicable");
             results.add(result);
         }
+        System.out.println("Evaluating PolicySet "+policySetName +" Completed");
         return results;
     }
 

@@ -50,7 +50,6 @@ public abstract class XACMLFunction extends FunctionArgument {
     public static final String URN_PROCESSING_ERROR = "urn:oasis:names:tc:xacml:1.0:status:processing-error";
 
     public static String spaces = "                                                                                                                                                                             ";
-    public static int indent = 0;
 
     /**
      * Globals
@@ -165,9 +164,16 @@ public abstract class XACMLFunction extends FunctionArgument {
      * @throws XACML3EntitlementException
      */
     public FunctionArgument doEvaluate(XACMLEvalContext pip) throws XACML3EntitlementException {
+        FunctionArgument result = null;
         printDebugEntry();
-        FunctionArgument result = evaluate(pip);
-        printDebugExit( result) ;
+        try {
+            result = evaluate(pip);
+        } catch (XACML3EntitlementException ex)  {
+            System.out.println("!!Exception");
+            throw ex;
+        } finally  {
+            printDebugExit( result) ;
+        }
         return result;
     };
 

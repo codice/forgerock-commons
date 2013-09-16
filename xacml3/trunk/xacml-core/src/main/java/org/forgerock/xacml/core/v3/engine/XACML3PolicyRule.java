@@ -81,21 +81,25 @@ public class XACML3PolicyRule {
     public XACML3Decision evaluate(XACMLEvalContext pip) {
 
         XACML3Decision result = new XACML3Decision(getName(),pip.getRequest().getContextID(),effect);
+        System.out.println("Evaluating Rule "+ruleName+"  ");
 
         try {
             FunctionArgument evalResult = target.evaluate(pip);
 
             if (evalResult.isTrue()) {    // we match on target,  so evaluate
+                boolean effect= false;
                 System.out.println("Evaluating Rule "+ruleName+" target true ");
 
                 evalResult = condition.evaluate(pip);
                 if (evalResult.isTrue() || evalResult.isFalse()) {    // we Match Target,  and Condition
-                    System.out.println(ruleName+" conditions true ");
+                    System.out.println("Evaluating Rule "+ruleName+" conditions true ");
 
                     if (evalResult.isTrue()) {
                         result.setEffect(true);
+                        effect = true;
                     } else {
                         result.setEffect(false);
+                        effect = false;
                     }
 
                     if (obligations != null) {
@@ -105,6 +109,8 @@ public class XACML3PolicyRule {
                     if (advices != null) {
                         result.getAdvices().addAll(advices);
                     }
+                    System.out.println("Evaluating Rule "+ruleName+" completed  " + effect);
+                    System.out.println(" ");
                     return result;
                 }
             } else {
@@ -113,6 +119,8 @@ public class XACML3PolicyRule {
         } catch (XACML3EntitlementException ex) {
             result.setDecision("Indeterminate");
         }
+        System.out.println("Evaluating Rule "+ruleName+" completed FALSE");
+        System.out.println(" ");
 
         return result;
     }
