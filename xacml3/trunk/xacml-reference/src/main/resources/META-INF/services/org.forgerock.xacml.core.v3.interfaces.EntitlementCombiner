@@ -1,0 +1,6 @@
+org.forgerock.xacml.reference.combiner.DenyOverrides
+org.forgerock.xacml.reference.combiner.DenyUnlessPermit
+org.forgerock.xacml.reference.combiner.FirstApplicable
+org.forgerock.xacml.reference.combiner.OnlyOneApplicable
+org.forgerock.xacml.reference.combiner.PermitOverrides
+org.forgerock.xacml.reference.combiner.PermitUnlessDeny
