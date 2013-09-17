@@ -1,7 +1,7 @@
 # ForgeRock Doc Build Maven Plugin
 
 This Maven plugin centralizes configuration of core documentation, to ensure
-that output documents are formatted uniformly.
+that documents are formatted uniformly.
 
 With centralized configuration handled by this Maven plugin, the core
 documentation-related project configuration takes at least two arguments:
