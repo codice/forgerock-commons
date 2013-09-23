@@ -84,8 +84,10 @@ public class JwtSessionModule implements ServerAuthModule {
     public static final String TOKEN_IDLE_TIME_CLAIM_KEY = "tokenIdleTimeMinutes";
     /** The Jwt Token Maximum life configuration property key. */
     public static final String MAX_TOKEN_LIFE_KEY = "maxTokenLifeMinutes";
-    /** The Jwt Validated configuration proprety key. */
+    /** The Jwt Validated configuration property key. */
     public static final String JWT_VALIDATED_KEY = "jwtValidated";
+    /** Whether the JWT should persist between browser restarts property key. */
+    public static final String BROWSER_SESSION_ONLY_KEY = "browserSessionOnly";
 
     private final JwtBuilderFactory jwtBuilderFactory;
 
@@ -98,6 +100,7 @@ public class JwtSessionModule implements ServerAuthModule {
     private String keystorePassword;
     private int tokenIdleTime;
     private int maxTokenLife;
+    private boolean browserSessionOnly;
 
     /**
      * Constructs an instance of the JwtSessionModule.
@@ -143,6 +146,8 @@ public class JwtSessionModule implements ServerAuthModule {
             maxTokenLife = "0";
         }
         this.maxTokenLife = Integer.parseInt(maxTokenLife);
+        Boolean sessionOnly = (Boolean) options.get(BROWSER_SESSION_ONLY_KEY);
+        this.browserSessionOnly = sessionOnly == null ? false : sessionOnly;
     }
 
     /**
@@ -437,7 +442,12 @@ public class JwtSessionModule implements ServerAuthModule {
 
         Cookie cookie = new Cookie(JWT_SESSION_COOKIE_NAME, jwtString);
         cookie.setPath("/");
-        cookie.setMaxAge(new Long(exp.getTime() - now.getTime()).intValue() / 1000);
+        if (browserSessionOnly) {
+            // Cookie should persist only until browser is closed.
+            cookie.setMaxAge(-1);
+        } else {
+            cookie.setMaxAge(new Long(exp.getTime() - now.getTime()).intValue() / 1000);
+        }
 
         return cookie;
     }
