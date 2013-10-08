@@ -95,5 +95,15 @@ public class CopySharedBuildMojo extends AbstractBuildMojo {
                 throw new MojoExecutionException("Failed to copy: " + file, e);
             }
         }
+
+        prefix = prefix + "images/";
+        final String cc = "cc-by-nc-nd.png";
+        try {
+            final URL ccImage = getClass().getResource(prefix + cc);
+            final File output = new File(outputDir.getPath() + "/shared/images/", cc);
+            FileUtils.copyURLToFile(ccImage, output);
+        } catch (IOException e) {
+            throw new MojoExecutionException("Failed to copy: " + cc, e);
+        }
     }
 }

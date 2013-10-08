@@ -29,11 +29,10 @@
 
  <mediaobject xml:id="figure-cc-logo">
   <imageobject>
-   <imagedata fileref="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"
-              format="PNG" align="center"/>
+   <imagedata fileref="shared/images/cc-by-nc-nd.png" format="PNG" align="center" />
   </imageobject>
   <caption><para>This work is licensed under the <link xlink:show="new"
-                                                       xlink:href="http://creativecommons.org/licenses/by-nc-nd/3.0/"
+  xlink:href="http://creativecommons.org/licenses/by-nc-nd/3.0/"
   >Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported
   License</link>.</para></caption>
  </mediaobject>
