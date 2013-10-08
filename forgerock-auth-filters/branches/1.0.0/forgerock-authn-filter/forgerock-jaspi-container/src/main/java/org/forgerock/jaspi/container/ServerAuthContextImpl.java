@@ -140,76 +140,79 @@ public class ServerAuthContextImpl implements ServerAuthContext {
     public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject)
             throws AuthException {
 
-        messageInfo.getMap().put(CONTEXT_REQUEST_KEY, new HashMap<String, Object>());
+        try {
+            messageInfo.getMap().put(CONTEXT_REQUEST_KEY, new HashMap<String, Object>());
 
-        AuthStatus authStatus = null;
-        if (sessionAuthModule != null) {
-            authStatus = sessionAuthModule.validateRequest(messageInfo, clientSubject, serviceSubject);
+            AuthStatus authStatus = null;
+            if (sessionAuthModule != null) {
+                authStatus = sessionAuthModule.validateRequest(messageInfo, clientSubject, serviceSubject);
 
-            if (AuthStatus.SUCCESS.equals(authStatus)) {
-                // The module has successfully authenticated the client.
-                authenticatingAuthStatus = authStatus;
+                if (AuthStatus.SUCCESS.equals(authStatus)) {
+                    // The module has successfully authenticated the client.
+                    authenticatingAuthStatus = authStatus;
+                    setAuthenticationRequestAttributes(messageInfo, clientSubject);
+                    return authStatus;
+                } else if (AuthStatus.SEND_SUCCESS.equals(authStatus)) {
+                    // The module may have completely/partially/not authenticated the client.
+                    setAuthenticationRequestAttributes(messageInfo, clientSubject);
+                    return authStatus;
+                } else if (AuthStatus.SEND_FAILURE.equals(authStatus)) {
+                    // The module has failed to authenticate the client.
+                    // -- In our implementation we will let subsequent modules try before sending the failure.
+                } else if (AuthStatus.SEND_CONTINUE.equals(authStatus)) {
+                    // The module has not completed authenticating the client.
+                    return authStatus;
+                }
+            }
+
+            for (ServerAuthModule serverAuthModule : serverAuthModules) {
+                authStatus = serverAuthModule.validateRequest(messageInfo, clientSubject, serviceSubject);
+                // Record the AuthModules AuthStatus to decided later whether to call secureResponse on the AuthModule.
+                if (AuthStatus.SUCCESS.equals(authStatus)) {
+                    // The module has successfully authenticated the client.
+                    authenticatingAuthModule = serverAuthModule;
+                    authenticatingAuthStatus = authStatus;
+                    break;
+                } else if (AuthStatus.SEND_SUCCESS.equals(authStatus)) {
+                    // The module may have completely/partially/not authenticated the client.
+                    authenticatingAuthModule = serverAuthModule;
+                    authenticatingAuthStatus = authStatus;
+                    break;
+                } else if (AuthStatus.SEND_FAILURE.equals(authStatus)) {
+                    // The module has failed to authenticate the client.
+                    // -- In our implementation we will let subsequent modules try before sending the failure.
+                    continue;
+                } else if (AuthStatus.SEND_CONTINUE.equals(authStatus)) {
+                    // The module has not completed authenticating the client.
+                    authenticatingAuthStatus = authStatus;
+                    break;
+                }
+            }
+
+            // Once all the Auth modules have had the change to authenticate, set error message in response if failed.
+            if (authenticatingAuthStatus == null) {
+                HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
+                JsonResourceException jre = new JsonResourceException(401, "Access denied");
+                try {
+                    response.getWriter().write(jre.toJsonValue().toString());
+                    response.setContentType("application/json");
+                } catch (IOException e) {
+                    throw new AuthException(e.getMessage());
+                }
+            } else {
                 setAuthenticationRequestAttributes(messageInfo, clientSubject);
-                return authStatus;
-            } else if (AuthStatus.SEND_SUCCESS.equals(authStatus)) {
-                // The module may have completely/partially/not authenticated the client.
-                setAuthenticationRequestAttributes(messageInfo, clientSubject);
-                return authStatus;
-            } else if (AuthStatus.SEND_FAILURE.equals(authStatus)) {
-                // The module has failed to authenticate the client.
-                // -- In our implementation we will let subsequent modules try before sending the failure.
-            } else if (AuthStatus.SEND_CONTINUE.equals(authStatus)) {
-                // The module has not completed authenticating the client.
-                return authStatus;
+            }
+
+            return authStatus;
+
+        } finally {
+            // Once all Auth modules have had the chance to authenticate, audit the attempt.
+            if (AuditLoggerHolder.INSTANCE.getInstance() != null) {
+                AuditLoggerHolder.INSTANCE.getInstance().audit(messageInfo);
+            } else {
+                DEBUG.warn("Failed to log entry for authentication attempt as router is null.");
             }
         }
-
-        for (ServerAuthModule serverAuthModule : serverAuthModules) {
-            authStatus = serverAuthModule.validateRequest(messageInfo, clientSubject, serviceSubject);
-            // Record the AuthModules AuthStatus to decided later whether to call secureResponse on the AuthModule.
-            if (AuthStatus.SUCCESS.equals(authStatus)) {
-                // The module has successfully authenticated the client.
-                authenticatingAuthModule = serverAuthModule;
-                authenticatingAuthStatus = authStatus;
-                break;
-            } else if (AuthStatus.SEND_SUCCESS.equals(authStatus)) {
-                // The module may have completely/partially/not authenticated the client.
-                authenticatingAuthModule = serverAuthModule;
-                authenticatingAuthStatus = authStatus;
-                break;
-            } else if (AuthStatus.SEND_FAILURE.equals(authStatus)) {
-                // The module has failed to authenticate the client.
-                // -- In our implementation we will let subsequent modules try before sending the failure.
-                continue;
-            } else if (AuthStatus.SEND_CONTINUE.equals(authStatus)) {
-                // The module has not completed authenticating the client.
-                authenticatingAuthStatus = authStatus;
-                break;
-            }
-        }
-
-        // Once all the Auth modules have had the change to authenticate, set error message in response if failed.
-        if (authenticatingAuthStatus == null) {
-            HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
-            JsonResourceException jre = new JsonResourceException(401, "Access denied");
-            try {
-                response.getWriter().write(jre.toJsonValue().toString());
-                response.setContentType("application/json");
-            } catch (IOException e) {
-                throw new AuthException(e.getMessage());
-            }
-        } else {
-            setAuthenticationRequestAttributes(messageInfo, clientSubject);
-        }
-
-        // Once all Auth modules have had the chance to authenticate, audit the attempt.
-        if (AuditLoggerHolder.INSTANCE.getInstance() != null) {
-            AuditLoggerHolder.INSTANCE.getInstance().audit(messageInfo);
-        } else {
-            DEBUG.warn("Failed to log entry for authentication attempt as router is null.");
-        }
-
-        return authStatus;
     }
 
     /**
