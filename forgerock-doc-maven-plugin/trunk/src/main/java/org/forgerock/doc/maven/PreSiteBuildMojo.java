@@ -42,9 +42,9 @@ import org.twdata.maven.mojoexecutor.MojoExecutor;
  */
 public class PreSiteBuildMojo extends AbstractBuildMojo {
 
-    // XML sources might be preprocessed, and image sources might not be.
-    private File xmlSourceDirectory;
-    private File imageSourceDirectory;
+    // Where the sources are currently depends on what has been done.
+    // If I relied on developer skills to feed my family, we'd starve.
+    private File sourceDirectory;
 
     /**
      * {@inheritDoc}
@@ -57,14 +57,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         // If sources are generated, for example for JCite, build documentation
         // from the generated sources, rather than the original sources.
         if (doUseGeneratedSources()) {
-            xmlSourceDirectory = getDocbkxGeneratedSourceDirectory();
-            imageSourceDirectory = getDocbkxSourceDirectory();
+            sourceDirectory = getDocbkxGeneratedSourceDirectory();
         } else if (doUseFilteredSources()) {
-            xmlSourceDirectory = getFilteredDocbkxSourceDirectory();
-            imageSourceDirectory = getFilteredDocbkxSourceDirectory();
+            sourceDirectory = getFilteredDocbkxSourceDirectory();
         } else {
-            xmlSourceDirectory = getDocbkxSourceDirectory();
-            imageSourceDirectory = getDocbkxSourceDirectory();
+            sourceDirectory = getDocbkxSourceDirectory();
         }
 
         // The Executor is what actually calls other plugins.
@@ -201,7 +198,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         String baseName = FilenameUtils.getBaseName(getDocumentSrcName());
 
         Set<String> docNames = DocUtils.getDocumentNames(
-                xmlSourceDirectory, getDocumentSrcName());
+                sourceDirectory, getDocumentSrcName());
         if (docNames.isEmpty()) {
             throw new MojoExecutionException("No document names found.");
         }
@@ -314,7 +311,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             content.append(targetDbDtd).append("\n");
 
             Set<String> docNames = DocUtils.getDocumentNames(
-                    xmlSourceDirectory, getDocumentSrcName());
+                    sourceDirectory, getDocumentSrcName());
             if (docNames.isEmpty()) {
                 throw new MojoExecutionException("No document names found.");
             }
@@ -385,7 +382,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             content.append(targetDbDtd).append("\n");
 
             Set<String> docNames = DocUtils.getDocumentNames(
-                    xmlSourceDirectory, getDocumentSrcName());
+                    sourceDirectory, getDocumentSrcName());
             if (docNames.isEmpty()) {
                 throw new MojoExecutionException("No document names found.");
             }
@@ -797,7 +794,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                     doesSectionLabelIncludeComponentLabel()));
             cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
             cfg.add(element(name("sourceDirectory"), FilenameUtils
-                    .separatorsToUnix(xmlSourceDirectory.getPath())));
+                    .separatorsToUnix(sourceDirectory.getPath())));
 
             return cfg;
         }
@@ -827,13 +824,13 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             String baseName = FilenameUtils.getBaseName(getDocumentSrcName());
 
             Set<String> docNames = DocUtils.getDocumentNames(
-                    xmlSourceDirectory, getDocumentSrcName());
+                    sourceDirectory, getDocumentSrcName());
             if (docNames.isEmpty()) {
                 throw new MojoExecutionException("No document names found.");
             }
 
             for (String docName : docNames) {
-                File srcDir = new File(imageSourceDirectory, docName
+                File srcDir = new File(sourceDirectory, docName
                         + File.separator + "images");
                 File destDir = new File(getDocbkxOutputDirectory(), "epub"
                         + File.separator + docName + File.separator + baseName
@@ -985,28 +982,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                                     + "/DejaVuSerifCondensed-BoldItalic-metrics.xml"))));
 
             Set<String> docNames = DocUtils.getDocumentNames(
-                    xmlSourceDirectory, getDocumentSrcName());
+                    sourceDirectory, getDocumentSrcName());
             if (docNames.isEmpty()) {
                 throw new MojoExecutionException("No document names found.");
-            }
-
-            // When using generated sources, copy the images manually.
-            if (xmlSourceDirectory != getDocbkxSourceDirectory()) {
-                for (String docName : docNames) {
-                    File srcDir = new File(imageSourceDirectory, docName
-                            + File.separator + "images");
-                    File destDir = new File(xmlSourceDirectory, docName
-                            + File.separator + "images");
-                    try {
-                        if (srcDir.exists()) {
-                            FileUtils.copyDirectory(srcDir, destDir);
-                        }
-                    } catch (IOException e) {
-                        throw new MojoExecutionException(
-                                "Failed to copy images from " + srcDir + " to "
-                                        + destDir);
-                    }
-                }
             }
 
             for (String docName : docNames) {
@@ -1097,10 +1075,10 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
             cfg.add(element(name("sourceDirectory"), FilenameUtils
-                    .separatorsToUnix(xmlSourceDirectory.getPath())));
+                    .separatorsToUnix(sourceDirectory.getPath())));
 
             Set<String> docNames = DocUtils.getDocumentNames(
-                    xmlSourceDirectory, getDocumentSrcName());
+                    sourceDirectory, getDocumentSrcName());
             if (docNames.isEmpty()) {
                 throw new MojoExecutionException("No document names found.");
             }
@@ -1162,13 +1140,13 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             // Unfortunately, neither does docbkx-tools.
 
             Set<String> docNames = DocUtils.getDocumentNames(
-                    xmlSourceDirectory, getDocumentSrcName());
+                    sourceDirectory, getDocumentSrcName());
             if (docNames.isEmpty()) {
                 throw new MojoExecutionException("No document names found.");
             }
 
             for (String docName : docNames) {
-                File srcDir = new File(imageSourceDirectory, docName
+                File srcDir = new File(sourceDirectory, docName
                         + File.separator + "images");
                 File destDir = new File(getDocbkxOutputDirectory(), "html"
                         + File.separator + docName + File.separator + "images");
@@ -1204,13 +1182,13 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
             cfg.add(element(name("sourceDirectory"), FilenameUtils
-                    .separatorsToUnix(xmlSourceDirectory.getPath())));
+                    .separatorsToUnix(sourceDirectory.getPath())));
             cfg.add(element(name("chunkedOutput"), "true"));
             cfg.add(element(name("htmlCustomization"), FilenameUtils
                     .separatorsToUnix(getChunkedHTMLCustomization().getPath())));
 
             Set<String> docNames = DocUtils.getDocumentNames(
-                    xmlSourceDirectory, getDocumentSrcName());
+                    sourceDirectory, getDocumentSrcName());
             if (docNames.isEmpty()) {
                 throw new MojoExecutionException("No document names found.");
             }
@@ -1276,13 +1254,13 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             String baseName = FilenameUtils.getBaseName(getDocumentSrcName());
 
             Set<String> docNames = DocUtils.getDocumentNames(
-                    xmlSourceDirectory, getDocumentSrcName());
+                    sourceDirectory, getDocumentSrcName());
             if (docNames.isEmpty()) {
                 throw new MojoExecutionException("No document names found.");
             }
 
             for (String docName : docNames) {
-                File srcDir = new File(imageSourceDirectory, docName
+                File srcDir = new File(sourceDirectory, docName
                         + File.separator + "images");
                 File destDir = new File(getDocbkxOutputDirectory(), "html"
                         + File.separator + docName + File.separator + baseName

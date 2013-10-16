@@ -15,9 +15,16 @@
 package org.forgerock.doc.maven;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.FileFileFilter;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -149,6 +156,21 @@ public class JCiteBuildMojo extends AbstractBuildMojo {
                             getProject(),
                             getSession(),
                             getPluginManager()));
+
+            // Copy non-XML files to the generated sources directory as well.
+            IOFileFilter nonXMLFilter = FileFilterUtils.notFileFilter(
+                    FileFilterUtils.suffixFileFilter(".xml"));
+            IOFileFilter nonXMLFiles = FileFilterUtils.and(
+                    FileFileFilter.FILE, nonXMLFilter);
+            FileFilter filter = FileFilterUtils.or(
+                    DirectoryFileFilter.DIRECTORY, nonXMLFiles);
+            try {
+                FileUtils.copyDirectory(
+                        new File(sourceDir), new File(outputDir), filter);
+            } catch (IOException ioe) {
+                throw new MojoExecutionException(
+                        "Failed to copy non-XML files.", ioe);
+            }
         }
     }
 }
