@@ -12,6 +12,19 @@ fixes.
 
 ## Improvements & New Features
 
+**DOCS-51: Automatically set DPI appropriately on raster graphics
+
+The fix affects only PNG files. It requires a new `pre-site` goal after the
+sources have been pre-processed:
+
+    <execution>
+     <id>prepare-sources</id>
+     <phase>pre-site</phase>
+     <goals>
+      <goal>prepare</goal>
+     </goals>
+    </execution>
+
 **DOCS-65: Move to mojo-executor 2.1.0 to take advantage of support for dependencies**
 
 **DOCS-78: Include hyphen when splitting URL across lines**
