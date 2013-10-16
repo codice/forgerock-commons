@@ -49,6 +49,13 @@ POM property called `gaId`, whose value is the Google Analytics ID.
 		     </goals>
 		    </execution>
 		    <execution>
+		     <id>prepare-sources</id>
+		     <phase>pre-site</phase>
+		     <goals>
+		      <goal>prepare</goal>
+		     </goals>
+		    </execution>
+		    <execution>
 		     <id>build-doc</id>
 		     <phase>pre-site</phase>
 		     <goals>
