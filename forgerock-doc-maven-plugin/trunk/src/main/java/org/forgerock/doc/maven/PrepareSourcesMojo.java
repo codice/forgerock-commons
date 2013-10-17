@@ -15,6 +15,7 @@
 package org.forgerock.doc.maven;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.HiddenFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -27,6 +28,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.List;
 
+import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 /**
  * Adapt source files in preparation for output generation.
@@ -38,7 +40,9 @@ import java.util.List;
 public class PrepareSourcesMojo extends AbstractBuildMojo {
 
     /**
-     * Transform ImageData elements in the XML and set DPI on PNGs.
+     * Transform ImageData elements in the XML, generate PNG images from
+     * <a href="http://plantuml.sourceforge.net/">PlantUML</a> text files,
+     * and set DPI on PNGs.
      *
      * @throws MojoExecutionException Failed to transform an XML file or failed to set DPI on a PNG.
      */
@@ -72,6 +76,11 @@ public class PrepareSourcesMojo extends AbstractBuildMojo {
                     + " element in XML file", ie);
         }
 
+        // Generate PNG images from PlantUML text files in generated sources.
+        Executor exec = new Executor();
+        getLog().info("Generating PNG images from PlantUML text files:");
+        exec.runPlantUML();
+
         // Set DPI on PNGs.
         try {
 
@@ -87,7 +96,6 @@ public class PrepareSourcesMojo extends AbstractBuildMojo {
         } catch (IOException ie) {
             throw new MojoExecutionException("Failed to set DPI in PNG file", ie);
         }
-
     }
 
     /**
@@ -110,5 +118,42 @@ public class PrepareSourcesMojo extends AbstractBuildMojo {
         // Update XML files.
         ImageDataTransformer idt = new ImageDataTransformer(filterToMatch);
         return idt.update(xmlSourceDirectory);
+    }
+
+    class Executor extends MojoExecutor {
+
+        /**
+         * Generate PNG images next to PlantUML text files in generated sources.
+         *
+         * @throws MojoExecutionException Something went wrong generating images.
+         */
+        void runPlantUML() throws MojoExecutionException {
+            final String directory = FilenameUtils.separatorsToUnix(
+                    getDocbkxGeneratedSourceDirectory().getPath());
+
+            executeMojo(
+                    plugin(
+                            groupId("com.github.jeluard"),
+                            artifactId("maven-plantuml-plugin"),
+                            version("7940"),
+                            dependencies(
+                                    dependency(
+                                            groupId("net.sourceforge.plantuml"),
+                                            artifactId("plantuml"),
+                                            version("7940")))),
+                    goal("generate"),
+                    configuration(
+                            element(name("sourceFiles"),
+                                    element(name("directory"), directory),
+                                    element(name("includes"),
+                                            element(name("include"), "**/*.txt"))),
+                            element(name("outputInSourceDirectory"), "true"),
+                            element(name("verbose"), "true")),
+                    executionEnvironment(
+                            getProject(),
+                            getSession(),
+                            getPluginManager()));
+
+        }
     }
 }
