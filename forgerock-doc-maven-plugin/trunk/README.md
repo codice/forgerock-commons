@@ -22,57 +22,57 @@ The project then runs two plugin executions:
 You call the plugin from your `pom.xml` as follows. This example uses a
 POM property called `gaId`, whose value is the Google Analytics ID.
 
-		<build>
-		 <plugins>
-		  <plugin>
-		   <groupId>org.forgerock.commons</groupId>
-		   <artifactId>forgerock-doc-maven-plugin</artifactId>
-		   <version>${frDocPluginVersion}</version>
-		   <inherited>false</inherited>
-		   <configuration>
-		    <projectName>MyProject</projectName>
-		    <googleAnalyticsId>${gaId}</googleAnalyticsId>
-		   </configuration>
-		   <executions>
-		    <execution>
-		     <id>filter-sources</id>
-		     <phase>pre-site</phase>
-		     <goals>
-		      <goal>filter</goal>
-		     </goals>
-		    </execution>
-		    <execution>
-		     <id>copy-common</id>
-		     <phase>pre-site</phase>
-		     <goals>
-		      <goal>boilerplate</goal>
-		     </goals>
-		    </execution>
-		    <execution>
-		     <id>prepare-sources</id>
-		     <phase>pre-site</phase>
-		     <goals>
-		      <goal>prepare</goal>
-		     </goals>
-		    </execution>
-		    <execution>
-		     <id>build-doc</id>
-		     <phase>pre-site</phase>
-		     <goals>
-		      <goal>build</goal>
-		     </goals>
-		    </execution>
-		    <execution>
-		     <id>layout-doc</id>
-		     <phase>site</phase>
-		     <goals>
-		      <goal>layout</goal>
-		     </goals>
-		    </execution>
-		   </executions>
-		  </plugin>
-		 </plugins>
-		</build>
+        <build>
+         <plugins>
+          <plugin>
+           <groupId>org.forgerock.commons</groupId>
+           <artifactId>forgerock-doc-maven-plugin</artifactId>
+           <version>${frDocPluginVersion}</version>
+           <inherited>false</inherited>
+           <configuration>
+            <projectName>MyProject</projectName>
+            <googleAnalyticsId>${gaId}</googleAnalyticsId>
+           </configuration>
+           <executions>
+            <execution>
+             <id>filter-sources</id>
+             <phase>pre-site</phase>
+             <goals>
+              <goal>filter</goal>
+             </goals>
+            </execution>
+            <execution>
+             <id>copy-common</id>
+             <phase>pre-site</phase>
+             <goals>
+              <goal>boilerplate</goal>
+             </goals>
+            </execution>
+            <execution>
+             <id>prepare-sources</id>
+             <phase>pre-site</phase>
+             <goals>
+              <goal>prepare</goal>
+             </goals>
+            </execution>
+            <execution>
+             <id>build-doc</id>
+             <phase>pre-site</phase>
+             <goals>
+              <goal>build</goal>
+             </goals>
+            </execution>
+            <execution>
+             <id>layout-doc</id>
+             <phase>site</phase>
+             <goals>
+              <goal>layout</goal>
+             </goals>
+            </execution>
+           </executions>
+          </plugin>
+         </plugins>
+        </build>
 
 ## Source Layout Requirements
 
@@ -149,6 +149,51 @@ the `boilerplate` goal immediately precedes the `build` goal.
 To avoid using common content, turn off the feature:
 
     <useSharedContent>false</useSharedContent> <!-- true by default -->
+
+## PNG Image Manipulation
+
+Getting screenshots and other images to look okay in PDF can be a hassle.
+The plugin therefore adjusts the XML to make large PNG images fit in the page,
+and adjusts dots-per-inch on PNG images to make them look okay in print.
+
+To take advantage of this feature, you must include a new `pre-site` goal
+after the sources have been pre-processed:
+
+    <execution>
+     <id>prepare-sources</id>
+     <phase>pre-site</phase>
+     <goals>
+      <goal>prepare</goal>
+     </goals>
+    </execution>
+
+Furthermore, you can provide PlantUML text files instead of images.
+[PlantUML](http://plantuml.sourceforge.net/)
+is an open source tool written in Java to create UML diagrams from text files.
+Using UML instead of drawing images can be particularly useful
+when constructing complicated sequence diagrams.
+
+The text files are rendered as PNG images where they are found,
+so put your PlantUML `.txt` files in the `images/` directory for your book.
+Then reference the `.png` version as if it existed already.
+
+    <mediaobject xml:id="figure-openid-connect-basic">
+     <alt>Generated sequence diagram</alt>
+     <imageobject>
+      <imagedata fileref="images/openid-connect-basic.png" format="PNG" />
+     </imageobject>
+     <textobject>
+      <para>
+       The sequence diagram is described in images/openid-connect-basic.txt.
+      </para>
+     </textobject>
+    </mediaobject>
+
+Your PlantUML text files must have extension `.txt`.
+
+While creating images, you can generate them with PlantUML by hand.
+
+    java -jar plantuml.jar image.txt
 
 ## Link Checking
 
@@ -230,19 +275,19 @@ rather than DocBook's syntax highlighting capabilities for HTML output, as
 SyntaxHighlighter includes handy features for selecting and numbering lines
 in HTML.
 
-	 Source			SyntaxHighlighter	Brush Name
-	 ---			---					---
-	 aci			aci					shBrushAci.js
-	 csv			csv					shBrushCsv.js
-	 html			html				shBrushXml.js
-	 http			http				shBrushHttp.js
-	 ini			ini					shBrushProperties.js
-	 java			java				shBrushJava.js
-	 javascript		javascript			shBrushJScript.js
-	 ldif			ldif				shBrushLDIF.js
-	 none			plain				shBrushPlain.js
-	 shell			shell				shBrushBash.js
-	 xml			xml					shBrushXml.js
+     Source         SyntaxHighlighter   Brush Name
+     ---            ---                 ---
+     aci            aci                 shBrushAci.js
+     csv            csv                 shBrushCsv.js
+     html           html                shBrushXml.js
+     http           http                shBrushHttp.js
+     ini            ini                 shBrushProperties.js
+     java           java                shBrushJava.js
+     javascript     javascript          shBrushJScript.js
+     ldif           ldif                shBrushLDIF.js
+     none           plain               shBrushPlain.js
+     shell          shell               shBrushBash.js
+     xml            xml                 shBrushXml.js
 
 Brush support for `aci`, `csv`, `http`, `ini`, and `ldif` is provided by
 [a fork of SyntaxHighlighter](https://github.com/markcraig/SyntaxHighlighter).

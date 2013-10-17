@@ -12,7 +12,49 @@ fixes.
 
 ## Improvements & New Features
 
-**DOCS-51: Automatically set DPI appropriately on raster graphics
+**DOCS-35: Integrate support for text-based sequence diagram sources**
+
+`forgerock-doc-maven-plugin` now lets you provide PlantUML text files
+instead of images. [PlantUML](http://plantuml.sourceforge.net/) is an
+open source tool written in Java to create UML diagrams from text
+specifications.
+
+To take advantage of this feature, you must include a new `pre-site` goal
+after the sources have been pre-processed:
+
+    <execution>
+     <id>prepare-sources</id>
+     <phase>pre-site</phase>
+     <goals>
+      <goal>prepare</goal>
+     </goals>
+    </execution>
+
+The text files are rendered as PNG images where they are found,
+so put your PlantUML `.txt` files in the `images/` directory for your book.
+Then reference the `.png` version as if it existed already.
+
+    <mediaobject xml:id="figure-openid-connect-basic">
+     <alt>Generated sequence diagram</alt>
+     <imageobject>
+      <imagedata fileref="images/openid-connect-basic.png" format="PNG" />
+     </imageobject>
+     <textobject>
+      <para>
+       The sequence diagram is described in images/openid-connect-basic.txt.
+      </para>
+     </textobject>
+    </mediaobject>
+
+Your PlantUML text files must have extension `.txt`.
+
+If you are having problems getting the doc build plugin to generate
+`.png` files from your `.txt` files, have you made sure that PlantUML
+can convert them?
+
+Try `java -jar plantuml.jar file.txt` to make sure generation works fine.
+
+**DOCS-51: Automatically set DPI appropriately on raster graphics**
 
 The fix affects only PNG files. It requires a new `pre-site` goal after the
 sources have been pre-processed:
