@@ -22,6 +22,7 @@
 <xsl:stylesheet
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 xmlns:d="http://docbook.org/ns/docbook"
+xmlns:xlink="http://www.w3.org/1999/xlink"
 exclude-result-prefixes="d"
 version="1.0">
 
@@ -171,5 +172,13 @@ version="1.0">
     <xsl:attribute name="padding-right">4pt</xsl:attribute>
     <xsl:attribute name="padding-top">2pt</xsl:attribute>
     <xsl:attribute name="padding-bottom">2pt</xsl:attribute>
+  </xsl:attribute-set>
+  <xsl:attribute-set name="xref.properties">
+    <xsl:attribute name="color">
+      <xsl:choose>
+        <xsl:when test="self::d:link and @xlink:href and not(@xlink:role)">blue</xsl:when>
+        <xsl:otherwise>inherit</xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
   </xsl:attribute-set>
 </xsl:stylesheet>
