@@ -93,6 +93,8 @@ The fix requires that you insert a new execution as the first `pre-site` goal:
         </goals>
     </execution>
 
+**DOCS-105: Color link text in printable formats**
+
 ## Bugs Fixed
 
 **DOCS-75: Wide programlisting shading extends to the right edge of the page in PDF**
