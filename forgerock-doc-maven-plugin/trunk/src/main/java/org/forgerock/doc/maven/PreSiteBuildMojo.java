@@ -15,6 +15,7 @@
 package org.forgerock.doc.maven;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
@@ -756,6 +758,82 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * Enclose methods to run plugins.
      */
     class Executor extends MojoExecutor {
+
+        /**
+         * Support a subset of formats described in the documentation for the <a
+         * href="http://www.docbook.org/tdg/en/html/imagedata.html">ImageData</a>
+         * element.
+         */
+        private final String[] imageFileSuffixes =
+        {".bmp", ".eps", ".gif", ".jpeg", ".jpg", ".png", ".svg", ".tiff"};
+
+        /**
+         * Copy images from source to destination.
+         * <p>
+         * DocBook XSL does not copy the images,
+         * because XSL does not have a facility for copying files.
+         * Unfortunately, neither does docbkx-tools.
+         *
+         * @param docType Type of output document such as {@code epub} or {@code html}
+         * @param baseName Directory name to add, such as {@code index}.
+         *
+         * @throws MojoExecutionException Something went wrong copying images.
+         */
+        private void copyImages(final String docType,
+                                final String baseName)
+                throws MojoExecutionException {
+
+
+            Set<String> docNames = DocUtils.getDocumentNames(
+                    sourceDirectory, getDocumentSrcName());
+            if (docNames.isEmpty()) {
+                throw new MojoExecutionException("No document names found.");
+            }
+
+            String s = File.separator;
+            String extra = "";
+            if (!baseName.equalsIgnoreCase("")) {
+                extra = s + baseName;
+            }
+
+            FileFilter onlyImages = new SuffixFileFilter(imageFileSuffixes);
+
+            for (String docName : docNames) {
+
+                // Copy images specific to the document.
+                File srcDir = new File(sourceDirectory, docName + s + "images");
+                File destDir = new File(getDocbkxOutputDirectory(),
+                        docType + s + docName + extra + s + "images");
+                try {
+                    if (srcDir.exists()) {
+                        FileUtils.copyDirectory(srcDir, destDir, onlyImages);
+                    }
+                } catch (IOException e) {
+                    throw new MojoExecutionException(
+                            "Failed to copy images from " + srcDir + " to " + destDir);
+                }
+
+                // Copy any shared images.
+                String shared = "shared" + s + "images";
+                srcDir = new File(sourceDirectory, shared);
+                destDir = new File(getDocbkxOutputDirectory(),
+                        docType + s + docName + extra + s + shared);
+                try {
+                    if (srcDir.exists()) {
+                        FileUtils.copyDirectory(srcDir, destDir, onlyImages);
+                    }
+                } catch (IOException ioe) {
+                    throw new MojoExecutionException(
+                            "Failed to copy images from " + srcDir + " to " + destDir);
+                }
+            }
+        }
+
+        private void copyImages(final String docType) throws MojoExecutionException {
+            copyImages(docType, "");
+        }
+
+
         /**
          * Prepare Apache FOP for output formats like PDF. This step involves
          * font metrics generation.
@@ -817,34 +895,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                     .separatorsToUnix(getDocbkxOutputDirectory().getPath()
                             + File.separator + "epub")));
 
-            // Copy images from source to build. DocBook XSL does not copy the
-            // images, because XSL does not have a facility for copying files.
-            // Unfortunately, neither does docbkx-tools.
-
-            String baseName = FilenameUtils.getBaseName(getDocumentSrcName());
-
-            Set<String> docNames = DocUtils.getDocumentNames(
-                    sourceDirectory, getDocumentSrcName());
-            if (docNames.isEmpty()) {
-                throw new MojoExecutionException("No document names found.");
-            }
-
-            for (String docName : docNames) {
-                File srcDir = new File(sourceDirectory, docName
-                        + File.separator + "images");
-                File destDir = new File(getDocbkxOutputDirectory(), "epub"
-                        + File.separator + docName + File.separator + baseName
-                        + File.separator + "images");
-                try {
-                    if (srcDir.exists()) {
-                        FileUtils.copyDirectory(srcDir, destDir);
-                    }
-                } catch (IOException e) {
-                    throw new MojoExecutionException(
-                            "Failed to copy images from " + srcDir + " to "
-                                    + destDir);
-                }
-            }
+            copyImages("epub", FilenameUtils.getBaseName(getDocumentSrcName()));
 
             executeMojo(
                     plugin(groupId("com.agilejava.docbkx"),
@@ -1135,31 +1186,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                     .separatorsToUnix(getDocbkxOutputDirectory().getPath()
                             + File.separator + "html")));
 
-            // Copy images from source to build. DocBook XSL does not copy the
-            // images, because XSL does not have a facility for copying files.
-            // Unfortunately, neither does docbkx-tools.
-
-            Set<String> docNames = DocUtils.getDocumentNames(
-                    sourceDirectory, getDocumentSrcName());
-            if (docNames.isEmpty()) {
-                throw new MojoExecutionException("No document names found.");
-            }
-
-            for (String docName : docNames) {
-                File srcDir = new File(sourceDirectory, docName
-                        + File.separator + "images");
-                File destDir = new File(getDocbkxOutputDirectory(), "html"
-                        + File.separator + docName + File.separator + "images");
-                try {
-                    if (srcDir.exists()) {
-                        FileUtils.copyDirectory(srcDir, destDir);
-                    }
-                } catch (IOException e) {
-                    throw new MojoExecutionException(
-                            "Failed to copy images from " + srcDir + " to "
-                                    + destDir);
-                }
-            }
+            copyImages("html");
 
             executeMojo(
                     plugin(groupId("com.agilejava.docbkx"),
@@ -1247,34 +1274,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                     .separatorsToUnix(getDocbkxOutputDirectory().getPath()
                             + File.separator + "html")));
 
-            // Copy images from source to build. DocBook XSL does not copy the
-            // images, because XSL does not have a facility for copying files.
-            // Unfortunately, neither does docbkx-tools.
-
-            String baseName = FilenameUtils.getBaseName(getDocumentSrcName());
-
-            Set<String> docNames = DocUtils.getDocumentNames(
-                    sourceDirectory, getDocumentSrcName());
-            if (docNames.isEmpty()) {
-                throw new MojoExecutionException("No document names found.");
-            }
-
-            for (String docName : docNames) {
-                File srcDir = new File(sourceDirectory, docName
-                        + File.separator + "images");
-                File destDir = new File(getDocbkxOutputDirectory(), "html"
-                        + File.separator + docName + File.separator + baseName
-                        + File.separator + "images");
-                try {
-                    if (srcDir.exists()) {
-                        FileUtils.copyDirectory(srcDir, destDir);
-                    }
-                } catch (IOException e) {
-                    throw new MojoExecutionException(
-                            "Failed to copy images from " + srcDir + " to "
-                                    + destDir);
-                }
-            }
+            copyImages("html", FilenameUtils.getBaseName(getDocumentSrcName()));
 
             executeMojo(
                     plugin(groupId("com.agilejava.docbkx"),
