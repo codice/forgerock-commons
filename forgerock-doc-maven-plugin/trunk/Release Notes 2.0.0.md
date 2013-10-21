@@ -136,6 +136,7 @@ And to the top level document files, such as `index.xml`:
 Once these are changed in the product docs and this version of the doc build
 plugin is used, the publication date only appears in output when set.
 
+**DOCS-109: CC image not included in HTML legal notice page**
 
 ## Known Issues
 
