@@ -174,11 +174,6 @@ version="1.0">
     <xsl:attribute name="padding-bottom">2pt</xsl:attribute>
   </xsl:attribute-set>
   <xsl:attribute-set name="xref.properties">
-    <xsl:attribute name="color">
-      <xsl:choose>
-        <xsl:when test="self::d:link and @xlink:href and not(@xlink:role)">blue</xsl:when>
-        <xsl:otherwise>inherit</xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>
+    <xsl:attribute name="color">#47a</xsl:attribute>
   </xsl:attribute-set>
 </xsl:stylesheet>

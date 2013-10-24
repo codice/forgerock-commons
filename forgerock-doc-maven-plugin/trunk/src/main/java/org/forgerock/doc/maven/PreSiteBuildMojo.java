@@ -92,6 +92,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         // Build and prepare PDF for publishing.
         if (formats.contains("pdf")) {
             getLog().info("Building PDF...");
+            exec.buildFoOlinkDB(baseConf, "pdf");
             exec.buildPDF(baseConf);
             postProcessPDF(getDocbkxOutputDirectory().getPath()
                     + File.separator + "pdf");
@@ -100,6 +101,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         // Build and prepare RTF for publishing.
         if (formats.contains("rtf")) {
             getLog().info("Building RTF...");
+            exec.buildFoOlinkDB(baseConf, "rtf");
             exec.buildRTF(baseConf);
             postProcessRTF(getDocbkxOutputDirectory().getPath()
                     + File.separator + "rtf");
@@ -235,9 +237,75 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             if (!newFile.exists()) {
                 FileUtils.moveFile(file, newFile);
             }
+            getLog().info("Renamed " + file.getName() + " to " + newFile);
         } catch (IOException e) {
             throw new MojoExecutionException("Failed to rename " + file);
         }
+    }
+
+    /**
+     * Get absolute path to a temporary Olink target database XML document that
+     * points to the individual generated Olink DB files, for FO (PDF, RTF).
+     *
+     * @param extension File extension without the ., such as "pdf" or "rtf"
+     * @return Absolute path to the temporary file
+     * @throws MojoExecutionException Could not write target DB file.
+     */
+    final String buildFOTargetDB(final String extension) throws MojoExecutionException {
+        File targetDB = new File(getBuildDirectory(), "olinkdb-" + extension + ".xml");
+
+        try {
+            StringBuilder content = new StringBuilder();
+            content.append("<?xml version='1.0' encoding='utf-8'?>\n")
+                    .append("<!DOCTYPE targetset[\n");
+
+            String targetDbDtd = IOUtils.toString(getClass()
+                    .getResourceAsStream("/targetdatabase.dtd"));
+            content.append(targetDbDtd).append("\n");
+
+            Set<String> docNames = DocUtils.getDocumentNames(
+                    sourceDirectory, getDocumentSrcName());
+            if (docNames.isEmpty()) {
+                throw new MojoExecutionException("No document names found.");
+            }
+
+            for (String docName : docNames) {
+                String sysId = getBuildDirectory().getAbsolutePath()
+                        + File.separator + docName + "-" + extension + ".target.db";
+                content.append("<!ENTITY ").append(docName)
+                        .append(" SYSTEM '").append(sysId).append("'>\n");
+            }
+
+            content.append("]>\n")
+
+                    .append("<targetset>\n")
+                    .append(" <targetsetinfo>Target DB for ForgeRock DocBook content,\n")
+                    .append(" for use with ")
+                    .append(extension.toUpperCase())
+                    .append(" only.</targetsetinfo>\n")
+                    .append(" <sitemap>\n")
+                    .append("  <dir name='doc'>\n");
+
+            final String version = getReleaseVersion();
+            for (String docName : docNames) {
+                String fileName = DocUtils.renameDoc(
+                        getProjectName(), docName, version, extension);
+
+                content.append("   <document targetdoc='").append(docName).append("'")
+                        .append("             baseuri='").append(fileName).append("'>")
+                        .append("    &").append(docName).append(";")
+                        .append("   </document>\n");
+            }
+            content.append("  </dir>\n")
+                    .append(" </sitemap>\n")
+                    .append("</targetset>\n");
+
+            FileUtils.writeStringToFile(targetDB, content.toString());
+        } catch (IOException e) {
+            throw new MojoExecutionException(
+                    "Failed to write link target database: " + e.getMessage());
+        }
+        return targetDB.getPath();
     }
 
     /**
@@ -755,6 +823,22 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
+     * Version for this release.
+     *
+     * @parameter property="releaseVersion"
+     */
+    private String releaseVersion;
+
+    /**
+     * Version for this release.
+     *
+     * @return {@link #releaseVersion}
+     */
+    public final String getReleaseVersion() {
+        return releaseVersion;
+    }
+
+    /**
      * Enclose methods to run plugins.
      */
     class Executor extends MojoExecutor {
@@ -779,10 +863,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
          *
          * @throws MojoExecutionException Something went wrong copying images.
          */
-        private void copyImages(final String docType,
-                                final String baseName)
+        private void copyImages(final String docType, final String baseName)
                 throws MojoExecutionException {
-
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     sourceDirectory, getDocumentSrcName());
@@ -833,7 +915,6 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             copyImages(docType, "");
         }
 
-
         /**
          * Prepare Apache FOP for output formats like PDF. This step involves
          * font metrics generation.
@@ -883,8 +964,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
          * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to build the output.
          */
-        void buildEPUB(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-                MojoExecutionException {
+        void buildEPUB(final ArrayList<MojoExecutor.Element> baseConfiguration)
+                throws MojoExecutionException {
 
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.addAll(baseConfiguration);
@@ -908,6 +989,66 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         }
 
         /**
+         * Prepare Olink database files for FO output.
+         *
+         * @param baseConfiguration Common configuration for all executions
+         * @param extension File extension without the ., "pdf" or "rtf"
+         * @throws MojoExecutionException Failed to prepare the target DB files.
+         */
+        void buildFoOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration,
+                            final String extension) throws MojoExecutionException {
+
+            if (!(extension.equalsIgnoreCase("pdf") || extension.equalsIgnoreCase("rtf"))) {
+                throw new MojoExecutionException("Output format " + extension
+                        + " is not supported." + " Use either pdf or rtf.");
+            }
+
+            ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
+            cfg.addAll(baseConfiguration);
+            cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
+            cfg.add(element(name("sourceDirectory"), FilenameUtils
+                    .separatorsToUnix(sourceDirectory.getPath())));
+            cfg.add(element(name("fop1Extensions"), "1"));
+
+            Set<String> docNames = DocUtils.getDocumentNames(
+                    sourceDirectory, getDocumentSrcName());
+            if (docNames.isEmpty()) {
+                throw new MojoExecutionException("No document names found.");
+            }
+
+            for (String docName : docNames) {
+                cfg.add(element(name("includes"), docName + "/"
+                        + getDocumentSrcName()));
+                cfg.add(element(name("collectXrefTargets"), "yes"));
+                cfg.add(element(name("currentDocid"), docName));
+                cfg.add(element(name("insertOlinkPdfFrag"), "1"));
+                cfg.add(element(
+                        name("targetsFilename"),
+                        FilenameUtils.separatorsToUnix(getBuildDirectory().getPath())
+                                + "/" + docName + "-" + extension + ".target.db"));
+
+                executeMojo(
+                        plugin(groupId("com.agilejava.docbkx"),
+                                artifactId("docbkx-maven-plugin"),
+                                version(getDocbkxVersion())),
+                        goal("generate-" + extension),
+                        configuration(cfg.toArray(new Element[cfg.size()])),
+                        executionEnvironment(getProject(), getSession(),
+                                getPluginManager()));
+
+
+                File outputDir = new File(getDocbkxOutputDirectory(),
+                        extension + File.separator + docName);
+                try {
+                    FileUtils.deleteDirectory(outputDir);
+                } catch (IOException e) {
+                    throw new MojoExecutionException(
+                            "Cannot delete " + outputDir + ": " + e.getMessage());
+                }
+            }
+        }
+
+        /**
          * Build FO documents from DocBook XML sources, including fonts.
          *
          * @param baseConfiguration Common configuration for all executions
@@ -916,6 +1057,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
          */
         void buildFO(final ArrayList<MojoExecutor.Element> baseConfiguration,
                      final String format) throws MojoExecutionException {
+
             if (!(format.equalsIgnoreCase("pdf") || format
                     .equalsIgnoreCase("rtf"))) {
                 throw new MojoExecutionException("Output format " + format
@@ -929,108 +1071,85 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             cfg.add(element(name("targetDirectory"), FilenameUtils
                     .separatorsToUnix(getDocbkxOutputDirectory().getPath()
                             + File.separator + format.toLowerCase())));
+            cfg.add(element(name("fop1Extensions"), "1"));
+            cfg.add(element(name("targetDatabaseDocument"), buildFOTargetDB(format)));
 
             // If you update this list, also see copyFonts().
-            String fontDir = FilenameUtils.separatorsToUnix(
-                    getFontsDirectory().getPath());
+            String fontDir = FilenameUtils.separatorsToUnix(getFontsDirectory().getPath());
             cfg.add(element(
                     name("fonts"),
                     element(name("font"),
                             element(name("name"), "DejaVuSans"),
                             element(name("style"), "normal"),
                             element(name("weight"), "normal"),
-                            element(name("embedFile"), fontDir
-                                    + "/DejaVuSans.ttf"),
-                            element(name("metricsFile"), fontDir
-                                    + "/DejaVuSans-metrics.xml")),
+                            element(name("embedFile"), fontDir + "/DejaVuSans.ttf"),
+                            element(name("metricsFile"), fontDir + "/DejaVuSans-metrics.xml")),
                     element(name("font"),
                             element(name("name"), "DejaVuSans"),
                             element(name("style"), "normal"),
                             element(name("weight"), "bold"),
-                            element(name("embedFile"), fontDir
-                                    + "/DejaVuSansCondensed-Bold.ttf"),
-                            element(name("metricsFile"), fontDir
-                                    + "/DejaVuSansCondensed-Bold-metrics.xml")),
+                            element(name("embedFile"), fontDir + "/DejaVuSansCondensed-Bold.ttf"),
+                            element(name("metricsFile"), fontDir + "/DejaVuSansCondensed-Bold-metrics.xml")),
                     element(name("font"),
                             element(name("name"), "DejaVuSans"),
                             element(name("style"), "italic"),
                             element(name("weight"), "normal"),
-                            element(name("embedFile"), fontDir
-                                    + "/DejaVuSans-Oblique.ttf"),
-                            element(name("metricsFile"), fontDir
-                                    + "/DejaVuSans-Oblique-metrics.xml")),
+                            element(name("embedFile"), fontDir + "/DejaVuSans-Oblique.ttf"),
+                            element(name("metricsFile"), fontDir + "/DejaVuSans-Oblique-metrics.xml")),
                     element(name("font"),
                             element(name("name"), "DejaVuSans"),
                             element(name("style"), "italic"),
                             element(name("weight"), "bold"),
-                            element(name("embedFile"), fontDir
-                                    + "/DejaVuSansCondensed-BoldOblique.ttf"),
-                            element(name("metricsFile"), fontDir
-                                    + "/DejaVuSansCondensed-BoldOblique-metrics.xml")),
+                            element(name("embedFile"), fontDir + "/DejaVuSansCondensed-BoldOblique.ttf"),
+                            element(name("metricsFile"), fontDir + "/DejaVuSansCondensed-BoldOblique-metrics.xml")),
                     element(name("font"),
                             element(name("name"), "DejaVuSansMono"),
                             element(name("style"), "normal"),
                             element(name("weight"), "normal"),
-                            element(name("embedFile"), fontDir
-                                    + "/DejaVuSansMono.ttf"),
-                            element(name("metricsFile"), fontDir
-                                    + "/DejaVuSansMono-metrics.xml")),
+                            element(name("embedFile"), fontDir + "/DejaVuSansMono.ttf"),
+                            element(name("metricsFile"), fontDir + "/DejaVuSansMono-metrics.xml")),
                     element(name("font"),
                             element(name("name"), "DejaVuSansMono"),
                             element(name("style"), "normal"),
                             element(name("weight"), "bold"),
-                            element(name("embedFile"), fontDir
-                                    + "/DejaVuSansMono-Bold.ttf"),
-                            element(name("metricsFile"), fontDir
-                                    + "/DejaVuSansMono-Bold-metrics.xml")),
+                            element(name("embedFile"), fontDir + "/DejaVuSansMono-Bold.ttf"),
+                            element(name("metricsFile"), fontDir + "/DejaVuSansMono-Bold-metrics.xml")),
                     element(name("font"),
                             element(name("name"), "DejaVuSansMono"),
                             element(name("style"), "italic"),
                             element(name("weight"), "normal"),
-                            element(name("embedFile"), fontDir
-                                    + "/DejaVuSansMono-Oblique.ttf"),
-                            element(name("metricsFile"), fontDir
-                                    + "/DejaVuSansMono-Oblique-metrics.xml")),
+                            element(name("embedFile"), fontDir + "/DejaVuSansMono-Oblique.ttf"),
+                            element(name("metricsFile"), fontDir + "/DejaVuSansMono-Oblique-metrics.xml")),
                     element(name("font"),
                             element(name("name"), "DejaVuSansMono"),
                             element(name("style"), "italic"),
                             element(name("weight"), "bold"),
-                            element(name("embedFile"), fontDir
-                                    + "/DejaVuSansMono-BoldOblique.ttf"),
-                            element(name("metricsFile"), fontDir
-                                    + "/DejaVuSansMono-BoldOblique-metrics.xml")),
+                            element(name("embedFile"), fontDir + "/DejaVuSansMono-BoldOblique.ttf"),
+                            element(name("metricsFile"), fontDir + "/DejaVuSansMono-BoldOblique-metrics.xml")),
                     element(name("font"),
                             element(name("name"), "DejaVuSerif"),
                             element(name("style"), "normal"),
                             element(name("weight"), "normal"),
-                            element(name("embedFile"), fontDir
-                                    + "/DejaVuSerif.ttf"),
-                            element(name("metricsFile"), fontDir
-                                    + "/DejaVuSerif-metrics.xml")),
+                            element(name("embedFile"), fontDir + "/DejaVuSerif.ttf"),
+                            element(name("metricsFile"), fontDir + "/DejaVuSerif-metrics.xml")),
                     element(name("font"),
                             element(name("name"), "DejaVuSerif"),
                             element(name("style"), "normal"),
                             element(name("weight"), "bold"),
-                            element(name("embedFile"), fontDir
-                                    + "/DejaVuSerifCondensed-Bold.ttf"),
-                            element(name("metricsFile"), fontDir
-                                    + "/DejaVuSerifCondensed-Bold-metrics.xml")),
+                            element(name("embedFile"), fontDir + "/DejaVuSerifCondensed-Bold.ttf"),
+                            element(name("metricsFile"), fontDir + "/DejaVuSerifCondensed-Bold-metrics.xml")),
                     element(name("font"),
                             element(name("name"), "DejaVuSerif"),
                             element(name("style"), "italic"),
                             element(name("weight"), "normal"),
-                            element(name("embedFile"), fontDir
-                                    + "/DejaVuSerif-Italic.ttf"),
-                            element(name("metricsFile"), fontDir
-                                    + "/DejaVuSerif-Italic-metrics.xml")),
+                            element(name("embedFile"), fontDir + "/DejaVuSerif-Italic.ttf"),
+                            element(name("metricsFile"), fontDir + "/DejaVuSerif-Italic-metrics.xml")),
                     element(name("font"),
                             element(name("name"), "DejaVuSerif"),
                             element(name("style"), "italic"),
                             element(name("weight"), "bold"),
-                            element(name("embedFile"), fontDir
-                                    + "/DejaVuSerifCondensed-BoldItalic.ttf"),
-                            element(name("metricsFile"), fontDir
-                                    + "/DejaVuSerifCondensed-BoldItalic-metrics.xml"))));
+                            element(name("embedFile"), fontDir + "/DejaVuSerifCondensed-BoldItalic.ttf"),
+                            element(name("metricsFile"), fontDir + "/DejaVuSerifCondensed-BoldItalic-metrics.xml"))));
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     sourceDirectory, getDocumentSrcName());
@@ -1039,8 +1158,12 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             }
 
             for (String docName : docNames) {
-                cfg.add(element(name("includes"), docName + "/"
-                        + getDocumentSrcName()));
+                cfg.add(element(name("includes"), docName + "/" + getDocumentSrcName()));
+                cfg.add(element(name("insertOlinkPdfFrag"), "1"));
+                cfg.add(element(name("currentDocid"), docName));
+                cfg.add(element(name("targetDirectory"),
+                        FilenameUtils.separatorsToUnix(getDocbkxOutputDirectory().getPath())
+                                + "/" + format));
 
                 executeMojo(
                         plugin(
@@ -1072,8 +1195,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
          * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to build the output.
          */
-        void buildPDF(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-                MojoExecutionException {
+        void buildPDF(final ArrayList<MojoExecutor.Element> baseConfiguration)
+                throws MojoExecutionException {
             buildFO(baseConfiguration, "pdf");
         }
 
@@ -1083,8 +1206,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
          * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to build the output.
          */
-        void buildRTF(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-                MojoExecutionException {
+        void buildRTF(final ArrayList<MojoExecutor.Element> baseConfiguration)
+                throws MojoExecutionException {
             buildFO(baseConfiguration, "rtf");
         }
 
@@ -1094,8 +1217,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
          * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to build the output.
          */
-        void buildManpages(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-                MojoExecutionException {
+        void buildManpages(final ArrayList<MojoExecutor.Element> baseConfiguration)
+                throws MojoExecutionException {
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.addAll(baseConfiguration);
             cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
@@ -1121,8 +1244,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
          * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to prepare the target DB files.
          */
-        void buildSingleHTMLOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-                MojoExecutionException {
+        void buildSingleHTMLOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration)
+                throws MojoExecutionException {
+
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
             cfg.add(element(name("sourceDirectory"), FilenameUtils
@@ -1172,8 +1296,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
          * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to build the output.
          */
-        void buildSingleHTML(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-                MojoExecutionException {
+        void buildSingleHTML(final ArrayList<MojoExecutor.Element> baseConfiguration)
+                throws MojoExecutionException {
+
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.addAll(baseConfiguration);
             cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
@@ -1204,8 +1329,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
          * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to prepare the target DB files.
          */
-        void buildChunkedHTMLOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-                MojoExecutionException {
+        void buildChunkedHTMLOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration)
+                throws MojoExecutionException {
+
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
             cfg.add(element(name("sourceDirectory"), FilenameUtils
@@ -1260,8 +1386,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
          * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to build the output.
          */
-        void buildChunkedHTML(final ArrayList<MojoExecutor.Element> baseConfiguration) throws
-                MojoExecutionException {
+        void buildChunkedHTML(final ArrayList<MojoExecutor.Element> baseConfiguration)
+                throws MojoExecutionException {
+
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.addAll(baseConfiguration);
             cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
