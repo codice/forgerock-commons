@@ -54,6 +54,8 @@ can convert them?
 
 Try `java -jar plantuml.jar file.txt` to make sure generation works fine.
 
+**DOCS-47: Support for olinks in pdf**
+
 **DOCS-51: Automatically set DPI appropriately on raster graphics**
 
 The fix affects only PNG files. It requires a new `pre-site` goal after the
