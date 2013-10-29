@@ -29,6 +29,7 @@ import org.forgerock.json.resource.Context;
 import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.script.Scope;
 import org.forgerock.script.Script;
+import org.forgerock.script.ScriptContext;
 import org.forgerock.script.ScriptEntry;
 import org.forgerock.script.ScriptEvent;
 import org.forgerock.script.ScriptListener;
@@ -530,7 +531,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
                 // TODO Decorate the target with the script
                 // TODO Decorate with DelegatedCompilationHandler to compile a
                 // new instance for debug mode
-                return new ScriptImpl(context, targetProxy) {
+                return new ScriptImpl(context, targetProxy, getName()) {
 
                     // protected ScriptEngine getScriptEngine() throws
                     // ScriptException {
@@ -682,9 +683,9 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
         private final Context context;
         private Bindings safeBinding = null;
 
-        ScriptImpl(final Context context, final CompiledScript target) {
+        ScriptImpl(final Context context, final CompiledScript target, ScriptName scriptName) {
             this.target = target;
-            this.context = context;
+            this.context = new ScriptContext(context, scriptName.getName(), scriptName.getType(), scriptName.getRevision());
         }
 
         public void putSafe(String key, Object value) {
