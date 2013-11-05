@@ -87,7 +87,7 @@ public class JwtSessionModule implements ServerAuthModule {
     /** The Jwt Validated configuration property key. */
     public static final String JWT_VALIDATED_KEY = "jwtValidated";
     /** Whether the JWT should persist between browser restarts property key. */
-    public static final String BROWSER_SESSION_ONLY_KEY = "browserSessionOnly";
+    public static final String BROWSER_SESSION_ONLY_KEY = "sessionOnly";
 
     private final JwtBuilderFactory jwtBuilderFactory;
 
@@ -442,10 +442,7 @@ public class JwtSessionModule implements ServerAuthModule {
 
         Cookie cookie = new Cookie(JWT_SESSION_COOKIE_NAME, jwtString);
         cookie.setPath("/");
-        if (browserSessionOnly) {
-            // Cookie should persist only until browser is closed.
-            cookie.setMaxAge(-1);
-        } else {
+        if (!browserSessionOnly) {
             cookie.setMaxAge(new Long(exp.getTime() - now.getTime()).intValue() / 1000);
         }
 
