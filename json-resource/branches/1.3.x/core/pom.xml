@@ -21,7 +21,6 @@
         <artifactId>org.forgerock.json.resource.parent</artifactId>
         <version>1.3.1-SNAPSHOT</version>
     </parent>
-    <groupId>org.forgerock.commons</groupId>
     <artifactId>org.forgerock.json.resource</artifactId>
     <version>1.3.1-SNAPSHOT</version>
     <name>JSON Resource core</name>
@@ -88,16 +87,4 @@
             </plugin>
         </plugins>
     </build>
-<!-- may-be-temporary, based-on our decisions around the content and release of forgerock-parent -->
-    <repositories>
-        <repository>
-            <id>forgerock-staging-repository</id>
-            <name>ForgeRock Release Repository</name>
-            <url>http://maven.forgerock.org/repo/releases</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-<!-- /may-be-temporary -->
 </project>
