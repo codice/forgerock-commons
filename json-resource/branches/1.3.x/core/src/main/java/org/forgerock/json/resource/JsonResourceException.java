@@ -206,6 +206,15 @@ public class JsonResourceException extends Exception {
     }
 
     /**
+     * Returns true if the HTTP error code is in the 500 range.
+     *
+     * @return <code>true</code> if HTTP error code is in the 500 range.
+     */
+    public boolean isServerError() {
+        return code >= 500 && code <= 599;
+    }
+
+    /**
      * Returns the short reason phrase of the exception.
      */
     public String getReason() {
