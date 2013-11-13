@@ -142,6 +142,8 @@ plugin is used, the publication date only appears in output when set.
 
 **DOCS-109: CC image not included in HTML legal notice page**
 
+**DOCS-110: Verbatim text renders too large in Opera**
+
 ## Known Issues
 
 **DOCS-71: Soft hyphens displayed in mid line in PDF**

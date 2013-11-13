@@ -78,8 +78,8 @@ code,
 .command>strong,
 div.literallayout,
 .filename {
-    font-family: monospace;
-    font-size: 1.1em;
+    font-family: "Courier New", monospace, serif;
+    font-size: 1em;
     font-weight: normal;
 }
 
@@ -238,8 +238,8 @@ div.variablelist-title {
 div.synopsis {
     background-color: #fff;
     border: thin dashed #ccc;
-    font-family: monospace;
-    font-size: 1.1em;
+    font-family: "Courier New", monospace, serif;
+    font-size: 1em;
     margin-bottom: 1em;
     padding: 0.5em;
     white-space: pre;
