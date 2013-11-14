@@ -68,6 +68,36 @@ public class RsaJWKTest {
     private final String QI = "NjI2ODI2NzE4MTA4NDYzNjAxMjU5MTc2ODcwMDQ5OTYwNDI3MTAyMjA4MzU3MTE5MTE1NTU4MjA1ODE2Njkz" +
             "OTA2NzUwMTA2NjM4MjE2MDc2NjgyNTYxODQyNjY3OTcyMDQ3MzEwMzgxNDc0ODg2MjA2NDE2NjQ2MDU1MzA4Nzg2NTQ2MTAwMjA5OD" +
             "ExNzQ4OTIyMDM5MzkxMw";
+
+    private final String N_SP = "0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4" +
+            "cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMst" +
+            "n64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2Q" +
+            "vzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbIS" +
+            "D08qNLyrdkt-bFTWhAI4vMQFh6WeZu0fM4lFd2NcRwr3XPksINHaQ-G_xBniIqbw" +
+            "0Ls1jF44-csFCur-kEgU8awapJzKnqDKgw";
+    private final String E_SP = "AQAB";
+    private final String D_SP = "X4cTteJY_gn4FYPsXB8rdXix5vwsg1FLN5E3EaG6RJoVH-HLLKD9" +
+            "M7dx5oo7GURknchnrRweUkC7hT5fJLM0WbFAKNLWY2vv7B6NqXSzUvxT0_YSfqij" +
+            "wp3RTzlBaCxWp4doFk5N2o8Gy_nHNKroADIkJ46pRUohsXywbReAdYaMwFs9tv8d" +
+            "_cPVY3i07a3t8MN6TNwm0dSawm9v47UiCl3Sk5ZiG7xojPLu4sbg1U2jx4IBTNBz" +
+            "nbJSzFHK66jT8bgkuqsk0GjskDJk19Z4qwjwbsnn4j2WBii3RL-Us2lGVkY8fkFz" +
+            "me1z0HbIkfz0Y6mqnOYtqc0X4jfcKoAC8Q";
+    private final String P_SP = "83i-7IvMGXoMXCskv73TKr8637FiO7Z27zv8oj6pbWUQyLPQBQxtPV" +
+            "nwD20R-60eTDmD2ujnMt5PoqMrm8RfmNhVWDtjjMmCMjOpSXicFHj7XOuVIYQyqV" +
+            "WlWEh6dN36GVZYk93N8Bc9vY41xy8B9RzzOGVQzXvNEvn7O0nVbfs";
+    private final String Q_SP = "3dfOR9cuYq-0S-mkFLzgItgMEfFzB2q3hWehMuG0oCuqnb3vobLyum" +
+            "qjVZQO1dIrdwgTnCdpYzBcOfW5r370AFXjiWft_NGEiovonizhKpo9VVS78TzFgx" +
+            "kIdrecRezsZ-1kYd_s1qDbxtkDEgfAITAG9LUnADun4vIcb6yelxk";
+    private final String DQ_SP = "s9lAH9fggBsoFR8Oac2R_E2gw282rT2kGOAhvIllETE1efrA6huUU" +
+            "vMfBcMpn8lqeW6vzznYY5SSQF7pMdC_agI3nG8Ibp1BUb0JUiraRNqUfLhcQb_d9" +
+            "GF4Dh7e74WbRsobRonujTYN1xCaP6TO61jvWrX-L18txXw494Q_cgk";
+    private final String DP_SP = "s9lAH9fggBsoFR8Oac2R_E2gw282rT2kGOAhvIllETE1efrA6huUU" +
+            "vMfBcMpn8lqeW6vzznYY5SSQF7pMdC_agI3nG8Ibp1BUb0JUiraRNqUfLhcQb_d9" +
+            "GF4Dh7e74WbRsobRonujTYN1xCaP6TO61jvWrX-L18txXw494Q_cgk";
+    private final String QI_SP = "GyM_p6JrXySiz1toFgKbWV-JdI3jQ4ypu9rbMWx3rQJBfmt0FoYzg" +
+            "UIZEVFEcOqwemRN81zoDAaa-Bk0KWNGDjJHZDdDmFhW3AN7lI-puxk_mHZGJ11rx" +
+            "yR8O55XLSe3SPmRfKwZI6yU24ZxvQKFYItdldUKGzO6Ia6zTKhAVRU";
+
     private final String ALG = "RS256";
     private final String KID = "2011-04-29";
     private final String KTY = "RSA";
@@ -304,6 +334,26 @@ public class RsaJWKTest {
         assertEquals(crtCoefficient, ((RSAPrivateCrtKey) keypair.getPrivate()).getCrtCoefficient());
     }
 
+    private String createJsonForSecurityProviderTest() {
+
+        //create string rsa JWT
+        StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"kty\"").append(":").append("\"" + KTY + "\"").append(",")
+                .append("\"n\"").append(":").append("\"" + N_SP + "\"").append(",")
+                .append("\"e\"").append(":").append("\"" + E_SP + "\"").append(",")
+                .append("\"d\"").append(":").append("\"" + D_SP + "\"").append(",")
+                .append("\"p\"").append(":").append("\"" + P_SP + "\"").append(",")
+                .append("\"q\"").append(":").append("\"" + Q_SP + "\"").append(",")
+                .append("\"dp\"").append(":").append("\"" + DP_SP + "\"").append(",")
+                .append("\"dq\"").append(":").append("\"" + DQ_SP + "\"").append(",")
+                .append("\"qi\"").append(":").append("\"" + QI_SP + "\"").append(",")
+                .append("\"alg\"").append(":").append("\"" + ALG + "\"").append(",")
+                .append("\"kid\"").append(":").append("\"" + KID + "\"")
+                .append("}");
+        return sb.toString();
+    }
+
     private void testPrivateKey(RSAPrivateKey privKey){
 
         BigInteger modulus = new BigInteger(Base64url.decode(N));
@@ -317,6 +367,65 @@ public class RsaJWKTest {
     private void testPublicKey(RSAPublicKey pubKey){
         BigInteger modulus = new BigInteger(Base64url.decode(N));
         BigInteger publicExponent = new BigInteger(Base64url.decode(E));
+
+        assertEquals(pubKey.getPublicExponent(), publicExponent);
+        assertEquals(pubKey.getModulus(), modulus);
+    }
+
+    /*
+     * These three tests fail on solaris and IBM JDK due to OPENAM-3251, which needs to be addressed before these
+     * tests can be re-enabled, as otherwise the Jenkins release Jobs will fail
+     */
+    @Test (enabled = false)
+    public void testSecurityProviderWithCreatePrivateKey(){
+        //Given
+        RsaJWK jwk = RsaJWK.parse(createJsonForSecurityProviderTest());
+
+        //When
+        RSAPrivateKey privKey = jwk.toRSAPrivateKey();
+
+        //Then
+        testSecurityProviderPrivateKey(privKey);
+    }
+
+    @Test (enabled = false)
+    public void testSecurityProviderWithCreatePublicKey(){
+        //Given
+        RsaJWK jwk = RsaJWK.parse(createJsonForSecurityProviderTest());
+
+        //When
+        RSAPublicKey pubKey = jwk.toRSAPublicKey();
+
+        //Then
+        testSecurityProviderPublicKey(pubKey);
+    }
+
+    @Test (enabled = false)
+    public void testSecurityProviderWithCreatePairKey(){
+        //Given
+        RsaJWK jwk = RsaJWK.parse(createJsonForSecurityProviderTest());
+
+        //When
+        KeyPair keypair = jwk.toKeyPair();
+
+        //Then
+        testSecurityProviderPrivateKey((RSAPrivateKey) keypair.getPrivate());
+        testSecurityProviderPublicKey((RSAPublicKey) keypair.getPublic());
+    }
+
+    private void testSecurityProviderPrivateKey(RSAPrivateKey privKey){
+
+        BigInteger modulus = new BigInteger(Base64url.decode(N_SP));
+        BigInteger privateExponent = new BigInteger(Base64url.decode(D_SP));
+
+        assertEquals(privKey.getModulus(), modulus);
+        assertEquals(privKey.getPrivateExponent(), privateExponent);
+
+    }
+
+    private void testSecurityProviderPublicKey(RSAPublicKey pubKey){
+        BigInteger modulus = new BigInteger(Base64url.decode(N_SP));
+        BigInteger publicExponent = new BigInteger(Base64url.decode(E_SP));
 
         assertEquals(pubKey.getPublicExponent(), publicExponent);
         assertEquals(pubKey.getModulus(), modulus);
