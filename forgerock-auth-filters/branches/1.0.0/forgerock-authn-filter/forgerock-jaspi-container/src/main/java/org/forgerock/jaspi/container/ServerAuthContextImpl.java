@@ -67,10 +67,13 @@ public class ServerAuthContextImpl implements ServerAuthContext {
     private static final String AUTHC_ID_REQUEST_KEY = "org.forgerock.security.authcid";
     private static final String CONTEXT_REQUEST_KEY = "org.forgerock.security.context";
 
+    private static final String PRIVATE_CONTEXT_MAP_KEY = "_serverAuthContextImplContextMap";
+    private static final String AUTHENTICATING_AUTH_STATUS_KEY = "authenticatingAuthStatus";
+    private static final String AUTHENTICATING_AUTH_MODULE_KEY = "authenticatingAuthModule";
+
+    private final MessageInfoUtils messageInfoUtils = new MessageInfoUtils();
     private final ServerAuthModule sessionAuthModule;
     private final List<ServerAuthModule> serverAuthModules;
-    private ServerAuthModule authenticatingAuthModule;
-    private AuthStatus authenticatingAuthStatus;
 
     /**
      * Constructs an instance of ServerAuthContextImpl.
@@ -140,7 +143,11 @@ public class ServerAuthContextImpl implements ServerAuthContext {
     public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject)
             throws AuthException {
 
+        Map<String, Object> authContextMap = messageInfoUtils.getMap(messageInfo, PRIVATE_CONTEXT_MAP_KEY);
+        AuthStatus authenticatingAuthStatus = null;
+        ServerAuthModule authenticatingAuthModule = null;
         try {
+
             messageInfo.getMap().put(CONTEXT_REQUEST_KEY, new HashMap<String, Object>());
 
             AuthStatus authStatus = null;
@@ -206,6 +213,8 @@ public class ServerAuthContextImpl implements ServerAuthContext {
             return authStatus;
 
         } finally {
+            authContextMap.put(AUTHENTICATING_AUTH_STATUS_KEY, authenticatingAuthStatus);
+            authContextMap.put(AUTHENTICATING_AUTH_MODULE_KEY, authenticatingAuthModule);
             // Once all Auth modules have had the chance to authenticate, audit the attempt.
             if (AuditLoggerHolder.INSTANCE.getInstance() != null) {
                 AuditLoggerHolder.INSTANCE.getInstance().audit(messageInfo);
@@ -279,6 +288,11 @@ public class ServerAuthContextImpl implements ServerAuthContext {
      * (in messageInfo).
      */
     public AuthStatus secureResponse(MessageInfo messageInfo, Subject serviceSubject) throws AuthException {
+
+        Map<String, Object> authContextMap = messageInfoUtils.getMap(messageInfo, PRIVATE_CONTEXT_MAP_KEY);
+        final AuthStatus authenticatingAuthStatus = (AuthStatus) authContextMap.remove(AUTHENTICATING_AUTH_STATUS_KEY);
+        final ServerAuthModule authenticatingAuthModule =
+                (ServerAuthModule) authContextMap.remove(AUTHENTICATING_AUTH_MODULE_KEY);
 
         AuthStatus authStatus = null;
         if (authenticatingAuthModule != null && !AuthStatus.SEND_SUCCESS.equals(authenticatingAuthStatus)) {
