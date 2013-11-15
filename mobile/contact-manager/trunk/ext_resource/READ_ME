@@ -1,0 +1,30 @@
+********************************************************************************************
+OpenDJ CONTACT MANAGER README
+********************************************************************************************
+The OpenDJ contact manager allows you to retrieve contact from ldap using REST.
+With it, you can perform basic actions such as retrieving a contact, displaying its details,
+adding him to your phone address book or launching actions such as call, SMS etc...
+
+- Requirements 
+--------------------------------
+
+  To use this application, please make sure to have :
+  - an android device (or emulator) with internet access. With Android API 2.2 or greater ( API level 8 or greater).
+  - an OpenDJ server configured with REST.
+  
+  /!\ This application use a custom JSON mapping. Don't forget to copy/paste/modify it. (Can be found in /ext_resource_http-config.json).
+
+- How to use this apk ?
+-----------------------
+
+  1/ You need to configure you server settings. On main page, hit 'menu' button to display menu items.
+  Select 'settings' :> 'menu' > 'Add'.
+
+  2/ Adds a new server using the wizard.
+  Depends on your server configuration, you need to fill the required fields such as IP / port number / user credentials to access to your LDAP server. Just follow the wizard.
+  When you added a new server, it will appears in the settings main page as default server. At this point, just hit 'back' to return to the search main activity.
+
+  Enjoy, you are ready to use the Contact Manager apk !
+
+
+

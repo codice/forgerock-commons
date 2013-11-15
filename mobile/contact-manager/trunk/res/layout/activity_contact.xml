@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ctMainLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/ctUpperBarLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="45sp"
+        android:background="@color/generalBackgroundColor"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/ctArrowRightHeaderBtn"
+            android:layout_width="45sp"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/common_buttons_actions"
+            android:contentDescription="@string/arrow_description"
+            android:paddingLeft="10dp"
+            android:scaleType="fitStart"
+            android:src="@drawable/arrow_left" />
+
+        <TextView
+            android:id="@+id/ctName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/ctAddBtn"
+            android:layout_toRightOf="@+id/ctArrowRightHeaderBtn"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="1"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textColor="@color/textPrimaryColor"
+            android:textScaleX="1.5"
+            android:textSize="@dimen/defaultHeaderSize"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/ctAddBtn"
+            android:layout_width="55sp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/common_buttons_actions"
+            android:contentDescription="@string/act_add_description"
+            android:src="@drawable/ic_action_add_person" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ctImageLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="90sp"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/ctLeftImageLayout"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/ctOrganization"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:maxLines="1"
+                android:paddingLeft="15sp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/textPrimaryColor"
+                android:textSize="@dimen/defaultTitleSize" />
+
+            <TextView
+                android:id="@+id/ctFunction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ctOrganization"
+                android:maxLines="4"
+                android:paddingLeft="15sp"
+                android:text="Function"
+                android:textAlignment="viewStart"
+                android:textColor="@color/textPrimaryColor"
+                android:textSize="@dimen/defaultTitleSize" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/ctPhoto"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:scaleType="fitEnd"
+            android:layout_weight="0.4"
+            android:contentDescription="@string/photo_description"
+            android:paddingRight="10sp" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/ctScrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="5sp" >
+
+        <LinearLayout
+            android:id="@+id/ctDetailsLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5sp"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

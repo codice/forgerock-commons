@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/ls_row" >
+
+    <!-- ListRow Left sied Thumbnail image -->
+
+    <LinearLayout
+        android:id="@+id/ls_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip"
+        android:padding="3dip" >
+
+        <ImageView
+            android:id="@+id/ivJpeg"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:adjustViewBounds="true"
+            android:background="@color/generalBackgroundColor"
+            android:contentDescription="@string/photo_description" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/list_ct_layout_arrow_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/arrow_description"
+        android:src="@drawable/arrow_right" />
+
+    <TextView
+        android:id="@+id/contactName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/list_ct_layout_arrow_right"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/ls_photo"
+        android:background="@color/transparent"
+        android:fontFamily="Arial"
+        android:paddingLeft="15dp"
+        android:textColor="@color/textPrimaryColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+</RelativeLayout>

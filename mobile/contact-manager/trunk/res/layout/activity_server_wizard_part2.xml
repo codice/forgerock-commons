@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/sw2_upper_bar_layout"
+        style="@style/UpperBarLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" >
+
+        <ImageView
+            android:id="@+id/sw2_image_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/settings_title_description"
+            android:paddingLeft="5dip"
+            android:src="@drawable/ic_action_settings" />
+
+        <TextView
+            android:id="@+id/sw2_title"
+            style="@style/UpperBarTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/sw2_image_title"
+            android:text="@string/sw2_title" />
+
+        <View
+            style="@style/androidSeparator"
+            android:layout_width="fill_parent"
+            android:layout_below="@+id/sw2_image_title"
+            android:layout_marginBottom="5sp"
+            android:layout_marginTop="5sp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/sw2_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sw2AccountLowerBarLayout"
+        android:layout_below="@+id/sw2_upper_bar_layout" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp"
+            android:descendantFocusability="beforeDescendants" >
+
+            <TextView
+                android:id="@+id/sw2AccountStaticTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="10dp"
+                android:text="@string/sw2_account_title"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/sw2StaticAccountServerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/sw2AccountStaticTitle"
+                android:layout_marginTop="40dp"
+                android:text="@string/sw2_account_username"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <EditText
+                android:id="@+id/sw2EditAccountUserName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/sw2StaticAccountServerName"
+                android:ems="10"
+                android:hint="@string/sw2_account_username_hint"
+                android:inputType="textNoSuggestions|textVisiblePassword"
+                android:maxLength="39"
+                android:singleLine="true"
+                android:focusableInTouchMode="true" >
+
+                <requestFocus android:layout_width="wrap_content" />
+            </EditText>
+
+            <TextView
+                android:id="@+id/sw2StaticAccountServerPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/sw2EditAccountUserName"
+                android:text="@string/sw2_account_password"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <EditText
+                android:id="@+id/sw2EditAccountServerPassword"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/sw2StaticAccountServerPassword"
+                android:ems="10"
+                android:hint="@string/sw2_account_password_hint"
+                android:inputType="textPassword"
+                android:maxLength="25"
+                android:singleLine="true" >
+
+                <requestFocus android:layout_width="wrap_content" />
+            </EditText>
+
+            <TextView
+                android:id="@+id/sw2StaticAccountSecurity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/sw2EditAccountServerPassword"
+                android:text="@string/sw2_security"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/sw2_ssl_label"
+                style="@style/settingsCommons"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/sw2StaticAccountSecurity"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:drawableLeft="@drawable/ic_action_warning"
+                android:gravity="center_vertical"
+                android:text="@string/sw2_security_ssl" />
+
+            <ToggleButton
+                android:id="@+id/sw2_toggle_ssl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/sw2StaticAccountSecurity"
+                android:background="@drawable/toggle_design"
+                android:layout_marginTop="4dp"
+                android:textOff=""
+                android:textOn="" />
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/sw2AccountLowerBarLayout"
+        style="@style/BottomBarLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <View
+            style="@style/androidSeparator"
+            android:layout_width="fill_parent"
+            android:layout_marginBottom="5sp"
+            android:layout_marginTop="0sp" />
+        
+        <Button
+            android:id="@+id/sw2AccountFinishBtn"
+            style="@style/NextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="30sp"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/finish"
+            android:textAlignment="center" />
+    </RelativeLayout>
+
+</RelativeLayout>

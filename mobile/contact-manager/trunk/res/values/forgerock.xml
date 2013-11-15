@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <color name="black">#000000</color>
+    <color name="grey">#313639</color>
+    <color name="softgrey">#EFEFEF</color>
+    <color name="yellow">#F0ED37</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="textPrimaryColor">#FFFFFF</color>
+    <color name="generalBackgroundColor">#000000</color>
+    <color name="separator">#EFEFEF</color>
+    <color name="separatorAndroidColor">#0099CC</color>
+
+    <style name="ForgerockTheme" parent="android:Theme">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTitleBackgroundStyle">@style/WindowTitleBar</item>
+    </style>
+
+    <style name="ForgerockListView" parent="@android:style/Widget.ListView">
+        <item name="android:textColor">@color/textPrimaryColor</item>
+        <item name="android:divider">@color/separator</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:listSelector">@drawable/contactlistselector</item>
+        <item name="android:selectAllOnFocus">false</item>
+        <item name="android:cacheColorHint">@android:color/transparent</item>
+    </style>
+
+    <style name="WindowTitleBar">
+        <item name="android:background">#131518</item>
+    </style>
+
+    <style name="Spinner" parent="@android:style/Widget.Spinner">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="contactTitle">
+        <item name="android:textColor">@color/textPrimaryColor</item>
+        <item name="android:textSize">@dimen/defaultTitleSize</item>
+        <item name="android:paddingBottom">0sp</item>
+        <item name="android:paddingTop">5sp</item>
+        <item name="android:typeface">normal</item>
+    </style>
+
+    <style name="contactDetails">
+        <item name="android:textColor">@color/textPrimaryColor</item>
+        <item name="android:textSize">@dimen/defaultStringSize</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">5sp</item>
+    </style>
+
+    <style name="contactSeparator">
+        <item name="android:background">@color/separator</item>
+        <item name="android:layout_height">1sp</item>
+    </style>
+
+    <style name="settingsTitle">
+        <item name="android:textColor">@color/textPrimaryColor</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:paddingBottom">0sp</item>
+        <item name="android:paddingTop">5sp</item>
+        <item name="android:typeface">normal</item>
+    </style>
+
+    <style name="settingsCommons">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:paddingBottom">0sp</item>
+        <item name="android:paddingTop">5sp</item>
+        <item name="android:typeface">normal</item>
+    </style>
+
+    <style name="androidSeparator">
+        <item name="android:background">@color/separatorAndroidColor</item>
+        <item name="android:layout_height">1sp</item>
+    </style>
+
+    <style name="WindowTitleBackground">
+        <item name="android:background">@color/black</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="NextButton" parent="@android:style/Widget.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingLeft">15sp</item>
+        <item name="android:paddingRight">15sp</item>
+        <item name="android:drawableRight">@drawable/arrow_right</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:drawablePadding">10sp</item>
+        <item name="android:height">20sp</item>
+    </style>
+
+    <style name="SpinnerServers">
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="BottomBarLayout">
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="UpperBarLayout">
+        <item name="android:background">@color/black</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="UpperBarTitle">
+        <item name="android:background">@color/black</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingLeft">5sp</item>
+    </style>
+
+</resources>
