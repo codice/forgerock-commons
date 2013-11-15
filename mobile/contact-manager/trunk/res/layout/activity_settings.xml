@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:id="@+id/settings_upper_bar_layout"
+        style="@style/UpperBarLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" >
+
+        <View
+            style="@style/androidSeparator"
+            android:layout_width="fill_parent"
+            android:layout_below="@+id/settings_image_title"
+            android:layout_marginBottom="5sp"
+            android:layout_marginTop="5sp" />
+
+        <TextView
+            android:id="@+id/settings_title"
+            style="@style/UpperBarTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/settings_image_title"
+            android:text="@string/settings_title" />
+
+        <ImageView
+            android:id="@+id/settings_image_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/settings_title_description"
+            android:paddingLeft="5dip"
+            android:src="@drawable/ic_action_settings" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/settingsScrollview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/settings_upper_bar_layout"
+        android:paddingLeft="5sp" >
+
+        <LinearLayout
+            android:id="@+id/settings_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip"
+            android:paddingTop="5dip" >
+
+            <TextView
+                android:id="@+id/settings_selection_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_selection_label"
+                android:textSize="14sp"
+                android:textStyle="normal" />
+
+            <Spinner
+                android:id="@+id/settings_spinner_servers"
+                style="@style/Spinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <RelativeLayout
+                android:id="@+id/settings_details_selected"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dip"
+                android:paddingRight="5dip"
+                android:paddingTop="5dip" >
+
+                <TextView
+                    android:id="@+id/settings_selected_server_title"
+                    style="@style/settingsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/settings_selected_server_title" />
+
+                <View
+                    android:id="@+id/settings_separator_selected_server"
+                    style="@style/contactSeparator"
+                    android:layout_width="fill_parent"
+                    android:layout_below="@+id/settings_selected_server_title"
+                    android:layout_marginBottom="5sp"
+                    android:layout_marginTop="5sp" />
+
+                <TextView
+                    android:id="@+id/settings_selected_server_IP"
+                    style="@style/settingsCommons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/settings_separator_selected_server"
+                    android:text="@string/sw1_server_ip" />
+
+                <TextView
+                    android:id="@+id/settings_selected_server_IP_content"
+                    style="@style/settingsCommons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/settings_selected_server_port"
+                    android:layout_alignRight="@+id/settings_selected_server_port_content" />
+
+                <TextView
+                    android:id="@+id/settings_selected_server_port"
+                    style="@style/settingsCommons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/settings_selected_server_IP"
+                    android:layout_below="@+id/settings_selected_server_IP"
+                    android:layout_marginTop="5sp"
+                    android:text="@string/sw1_server_port" />
+
+                <TextView
+                    android:id="@+id/settings_selected_server_port_content"
+                    style="@style/settingsCommons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/settings_selected_server_port"
+                    android:layout_alignBottom="@+id/settings_selected_server_port"
+                    android:layout_alignParentRight="true" />
+
+                <TextView
+                    android:id="@+id/settings_selected_authentication"
+                    style="@style/settingsCommons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/settings_selected_server_port"
+                    android:layout_below="@+id/settings_selected_server_port"
+                    android:layout_marginTop="5sp"
+                    android:text="@string/settings_authentication_title" />
+
+                <TextView
+                    android:id="@+id/settings_selected_authentication_content"
+                    style="@style/settingsCommons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/settings_selected_authentication"
+                    android:layout_alignBottom="@+id/settings_selected_authentication"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/settings_others_selected"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingLeft="5dip"
+                android:paddingRight="5dip"
+                android:paddingTop="5dip" >
+
+                <TextView
+                    android:id="@+id/settings_security_server_title"
+                    style="@style/settingsTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="@string/settings_selected_security_title" />
+
+                <View
+                    android:id="@+id/settings_separator_security_server"
+                    style="@style/contactSeparator"
+                    android:layout_width="fill_parent"
+                    android:layout_below="@+id/settings_security_server_title"
+                    android:layout_marginBottom="5sp"
+                    android:layout_marginTop="5sp" />
+
+                <TextView
+                    android:id="@+id/settings_ssl_label"
+                    style="@style/settingsCommons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/settings_separator_security_server"
+                    android:drawableLeft="@drawable/ic_action_warning"
+                    android:text="@string/sw2_security_ssl" />
+
+                <ToggleButton
+                    android:id="@+id/settings_toggle_ssl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/settings_separator_security_server"
+                    android:background="@drawable/toggle_design"
+                    android:enabled="false"
+                    android:textOff=""
+                    android:textOn="" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/settings_empty_server_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/settings_upper_bar_layout"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip"
+        android:paddingTop="5dip"
+        android:text="@string/settings_no_server_configuration"
+        android:visibility="gone" />
+
+</RelativeLayout>

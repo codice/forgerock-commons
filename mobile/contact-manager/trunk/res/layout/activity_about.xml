@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/about_opendj_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:paddingBottom="5sp"
+    android:paddingLeft="5sp"
+    android:paddingRight="5sp"
+    android:paddingTop="5sp" >
+
+    <ImageView
+        android:id="@+id/about_opendj_pic"
+        android:layout_width="match_parent"
+        android:layout_height="257dp"
+        android:layout_marginTop="10sp"
+        android:src="@drawable/opendjsingle"
+        android:contentDescription="@string/about_opendj" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/about_main_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10sp"
+            android:paddingRight="10sp"
+            android:paddingTop="20sp"
+            android:text="@string/about_opendj" />
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingTop="5sp" >
+
+        <ImageView
+            android:id="@+id/about_tv_website"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/about_website"
+            android:gravity="right"
+            android:src="@drawable/logo_sm" />
+    </RelativeLayout>
+
+</LinearLayout>

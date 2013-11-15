@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dip" >
+
+    <ListView
+        android:id="@+id/lvSearchResult"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/list_search_bar"
+        android:choiceMode="singleChoice"
+        android:gravity="center_vertical|center_horizontal" >
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/list_search_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/list_search_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.57"
+            android:drawableRight="@drawable/ic_action_search"
+            android:ems="10"
+            android:gravity="center_vertical|left"
+            android:hint="@string/search"
+            android:inputType="textVisiblePassword|textPersonName|textNoSuggestions"
+            android:maxLength="15"
+            android:maxLines="1"
+            android:padding="10dip" />
+
+        <ProgressBar
+            android:id="@+id/list_progress_bar"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10sp"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/empty_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/list_search_bar" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:fontFamily="Arial"
+            android:paddingLeft="15sp"
+            android:paddingTop="15sp"
+            android:text="@string/warning_no_result_found"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/empty_list_item_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:alpha="0.2"
+            android:background="@color/transparent"
+            android:contentDescription="@string/warning_no_result_found"
+            android:src="@drawable/logo_sm" />
+    </RelativeLayout>
+
+</RelativeLayout>
