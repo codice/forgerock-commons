@@ -1,0 +1,563 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		FAC51A33183A868D00FD3232 /* OpenAMiOSRESTSDKUniversal */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = FAC51A34183A868D00FD3232 /* Build configuration list for PBXAggregateTarget "OpenAMiOSRESTSDKUniversal" */;
+			buildPhases = (
+				FAC51A37183A86BC00FD3232 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = OpenAMiOSRESTSDKUniversal;
+			productName = OpenAMiOSRESTSDKUniversal;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		FAC519E9183A84CF00FD3232 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC519E8183A84CF00FD3232 /* Foundation.framework */; };
+		FAC519F7183A84CF00FD3232 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC519F6183A84CF00FD3232 /* XCTest.framework */; };
+		FAC519F8183A84CF00FD3232 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC519E8183A84CF00FD3232 /* Foundation.framework */; };
+		FAC519FA183A84CF00FD3232 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC519F9183A84CF00FD3232 /* UIKit.framework */; };
+		FAC519FD183A84CF00FD3232 /* libopenam-ios-rest-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC519E5183A84CF00FD3232 /* libopenam-ios-rest-sdk.a */; };
+		FAC51A03183A84CF00FD3232 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FAC51A01183A84CF00FD3232 /* InfoPlist.strings */; };
+		FAC51A05183A84CF00FD3232 /* openam_ios_rest_sdkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A04183A84CF00FD3232 /* openam_ios_rest_sdkTests.m */; };
+		FAC51A20183A85FD00FD3232 /* AuthenticationProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A13183A85FD00FD3232 /* AuthenticationProcess.m */; };
+		FAC51A21183A85FD00FD3232 /* AuthenticationSuccessResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A15183A85FD00FD3232 /* AuthenticationSuccessResponse.m */; };
+		FAC51A22183A85FD00FD3232 /* AuthenticationFailureResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A17183A85FD00FD3232 /* AuthenticationFailureResponse.m */; };
+		FAC51A23183A85FD00FD3232 /* AuthenticationCallbackResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A19183A85FD00FD3232 /* AuthenticationCallbackResponse.m */; };
+		FAC51A24183A85FD00FD3232 /* AuthenticationCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A1B183A85FD00FD3232 /* AuthenticationCallback.m */; };
+		FAC51A25183A85FD00FD3232 /* AuthenticationCallbackField.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A1D183A85FD00FD3232 /* AuthenticationCallbackField.m */; };
+		FAC51A26183A85FD00FD3232 /* DataStoreLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A1F183A85FD00FD3232 /* DataStoreLogin.m */; };
+		FAC51A29183A860800FD3232 /* OpenAMRESTSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A28183A860800FD3232 /* OpenAMRESTSDK.m */; };
+		FAC51A2A183A867A00FD3232 /* RootLoginViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A11183A85F400FD3232 /* RootLoginViewController.h */; };
+		FAC51A2B183A867A00FD3232 /* AuthenticationProcess.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A12183A85FD00FD3232 /* AuthenticationProcess.h */; };
+		FAC51A2C183A867A00FD3232 /* AuthenticationSuccessResponse.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A14183A85FD00FD3232 /* AuthenticationSuccessResponse.h */; };
+		FAC51A2D183A867A00FD3232 /* AuthenticationFailureResponse.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A16183A85FD00FD3232 /* AuthenticationFailureResponse.h */; };
+		FAC51A2E183A867A00FD3232 /* AuthenticationCallbackResponse.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A18183A85FD00FD3232 /* AuthenticationCallbackResponse.h */; };
+		FAC51A2F183A867A00FD3232 /* AuthenticationCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A1A183A85FD00FD3232 /* AuthenticationCallback.h */; };
+		FAC51A30183A867A00FD3232 /* AuthenticationCallbackField.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A1C183A85FD00FD3232 /* AuthenticationCallbackField.h */; };
+		FAC51A31183A867A00FD3232 /* DataStoreLogin.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A1E183A85FD00FD3232 /* DataStoreLogin.h */; };
+		FAC51A32183A867A00FD3232 /* OpenAMRESTSDK.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A27183A860800FD3232 /* OpenAMRESTSDK.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FAC519FB183A84CF00FD3232 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FAC519DD183A84CE00FD3232 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FAC519E4183A84CF00FD3232;
+			remoteInfo = "openam-ios-rest-sdk";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FAC519E3183A84CF00FD3232 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				FAC51A2A183A867A00FD3232 /* RootLoginViewController.h in CopyFiles */,
+				FAC51A2B183A867A00FD3232 /* AuthenticationProcess.h in CopyFiles */,
+				FAC51A2C183A867A00FD3232 /* AuthenticationSuccessResponse.h in CopyFiles */,
+				FAC51A2D183A867A00FD3232 /* AuthenticationFailureResponse.h in CopyFiles */,
+				FAC51A2E183A867A00FD3232 /* AuthenticationCallbackResponse.h in CopyFiles */,
+				FAC51A2F183A867A00FD3232 /* AuthenticationCallback.h in CopyFiles */,
+				FAC51A30183A867A00FD3232 /* AuthenticationCallbackField.h in CopyFiles */,
+				FAC51A31183A867A00FD3232 /* DataStoreLogin.h in CopyFiles */,
+				FAC51A32183A867A00FD3232 /* OpenAMRESTSDK.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		FAC519E5183A84CF00FD3232 /* libopenam-ios-rest-sdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libopenam-ios-rest-sdk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAC519E8183A84CF00FD3232 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		FAC519EC183A84CF00FD3232 /* openam-ios-rest-sdk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "openam-ios-rest-sdk-Prefix.pch"; sourceTree = "<group>"; };
+		FAC519F5183A84CF00FD3232 /* openam-ios-rest-sdkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "openam-ios-rest-sdkTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAC519F6183A84CF00FD3232 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		FAC519F9183A84CF00FD3232 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		FAC51A00183A84CF00FD3232 /* openam-ios-rest-sdkTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "openam-ios-rest-sdkTests-Info.plist"; sourceTree = "<group>"; };
+		FAC51A02183A84CF00FD3232 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FAC51A04183A84CF00FD3232 /* openam_ios_rest_sdkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = openam_ios_rest_sdkTests.m; sourceTree = "<group>"; };
+		FAC51A11183A85F400FD3232 /* RootLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootLoginViewController.h; sourceTree = "<group>"; };
+		FAC51A12183A85FD00FD3232 /* AuthenticationProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationProcess.h; sourceTree = "<group>"; };
+		FAC51A13183A85FD00FD3232 /* AuthenticationProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationProcess.m; sourceTree = "<group>"; };
+		FAC51A14183A85FD00FD3232 /* AuthenticationSuccessResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationSuccessResponse.h; sourceTree = "<group>"; };
+		FAC51A15183A85FD00FD3232 /* AuthenticationSuccessResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationSuccessResponse.m; sourceTree = "<group>"; };
+		FAC51A16183A85FD00FD3232 /* AuthenticationFailureResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationFailureResponse.h; sourceTree = "<group>"; };
+		FAC51A17183A85FD00FD3232 /* AuthenticationFailureResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationFailureResponse.m; sourceTree = "<group>"; };
+		FAC51A18183A85FD00FD3232 /* AuthenticationCallbackResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationCallbackResponse.h; sourceTree = "<group>"; };
+		FAC51A19183A85FD00FD3232 /* AuthenticationCallbackResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationCallbackResponse.m; sourceTree = "<group>"; };
+		FAC51A1A183A85FD00FD3232 /* AuthenticationCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationCallback.h; sourceTree = "<group>"; };
+		FAC51A1B183A85FD00FD3232 /* AuthenticationCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationCallback.m; sourceTree = "<group>"; };
+		FAC51A1C183A85FD00FD3232 /* AuthenticationCallbackField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationCallbackField.h; sourceTree = "<group>"; };
+		FAC51A1D183A85FD00FD3232 /* AuthenticationCallbackField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationCallbackField.m; sourceTree = "<group>"; };
+		FAC51A1E183A85FD00FD3232 /* DataStoreLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataStoreLogin.h; sourceTree = "<group>"; };
+		FAC51A1F183A85FD00FD3232 /* DataStoreLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataStoreLogin.m; sourceTree = "<group>"; };
+		FAC51A27183A860800FD3232 /* OpenAMRESTSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenAMRESTSDK.h; sourceTree = "<group>"; };
+		FAC51A28183A860800FD3232 /* OpenAMRESTSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenAMRESTSDK.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FAC519E2183A84CF00FD3232 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAC519E9183A84CF00FD3232 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAC519F2183A84CF00FD3232 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAC519FD183A84CF00FD3232 /* libopenam-ios-rest-sdk.a in Frameworks */,
+				FAC519F7183A84CF00FD3232 /* XCTest.framework in Frameworks */,
+				FAC519FA183A84CF00FD3232 /* UIKit.framework in Frameworks */,
+				FAC519F8183A84CF00FD3232 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FAC519DC183A84CE00FD3232 = {
+			isa = PBXGroup;
+			children = (
+				FAC519EA183A84CF00FD3232 /* openam-ios-rest-sdk */,
+				FAC519FE183A84CF00FD3232 /* openam-ios-rest-sdkTests */,
+				FAC519E7183A84CF00FD3232 /* Frameworks */,
+				FAC519E6183A84CF00FD3232 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FAC519E6183A84CF00FD3232 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FAC519E5183A84CF00FD3232 /* libopenam-ios-rest-sdk.a */,
+				FAC519F5183A84CF00FD3232 /* openam-ios-rest-sdkTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FAC519E7183A84CF00FD3232 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FAC519E8183A84CF00FD3232 /* Foundation.framework */,
+				FAC519F6183A84CF00FD3232 /* XCTest.framework */,
+				FAC519F9183A84CF00FD3232 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FAC519EA183A84CF00FD3232 /* openam-ios-rest-sdk */ = {
+			isa = PBXGroup;
+			children = (
+				FAC51A0E183A84EF00FD3232 /* Authentication */,
+				FAC51A27183A860800FD3232 /* OpenAMRESTSDK.h */,
+				FAC51A28183A860800FD3232 /* OpenAMRESTSDK.m */,
+				FAC519EB183A84CF00FD3232 /* Supporting Files */,
+			);
+			path = "openam-ios-rest-sdk";
+			sourceTree = "<group>";
+		};
+		FAC519EB183A84CF00FD3232 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FAC519EC183A84CF00FD3232 /* openam-ios-rest-sdk-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FAC519FE183A84CF00FD3232 /* openam-ios-rest-sdkTests */ = {
+			isa = PBXGroup;
+			children = (
+				FAC51A04183A84CF00FD3232 /* openam_ios_rest_sdkTests.m */,
+				FAC519FF183A84CF00FD3232 /* Supporting Files */,
+			);
+			path = "openam-ios-rest-sdkTests";
+			sourceTree = "<group>";
+		};
+		FAC519FF183A84CF00FD3232 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FAC51A00183A84CF00FD3232 /* openam-ios-rest-sdkTests-Info.plist */,
+				FAC51A01183A84CF00FD3232 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FAC51A0E183A84EF00FD3232 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				FAC51A0F183A84F800FD3232 /* View Controllers */,
+				FAC51A10183A850100FD3232 /* Model */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		FAC51A0F183A84F800FD3232 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				FAC51A11183A85F400FD3232 /* RootLoginViewController.h */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		FAC51A10183A850100FD3232 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FAC51A12183A85FD00FD3232 /* AuthenticationProcess.h */,
+				FAC51A13183A85FD00FD3232 /* AuthenticationProcess.m */,
+				FAC51A14183A85FD00FD3232 /* AuthenticationSuccessResponse.h */,
+				FAC51A15183A85FD00FD3232 /* AuthenticationSuccessResponse.m */,
+				FAC51A16183A85FD00FD3232 /* AuthenticationFailureResponse.h */,
+				FAC51A17183A85FD00FD3232 /* AuthenticationFailureResponse.m */,
+				FAC51A18183A85FD00FD3232 /* AuthenticationCallbackResponse.h */,
+				FAC51A19183A85FD00FD3232 /* AuthenticationCallbackResponse.m */,
+				FAC51A1A183A85FD00FD3232 /* AuthenticationCallback.h */,
+				FAC51A1B183A85FD00FD3232 /* AuthenticationCallback.m */,
+				FAC51A1C183A85FD00FD3232 /* AuthenticationCallbackField.h */,
+				FAC51A1D183A85FD00FD3232 /* AuthenticationCallbackField.m */,
+				FAC51A1E183A85FD00FD3232 /* DataStoreLogin.h */,
+				FAC51A1F183A85FD00FD3232 /* DataStoreLogin.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FAC519E4183A84CF00FD3232 /* openam-ios-rest-sdk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAC51A08183A84CF00FD3232 /* Build configuration list for PBXNativeTarget "openam-ios-rest-sdk" */;
+			buildPhases = (
+				FAC519E1183A84CF00FD3232 /* Sources */,
+				FAC519E2183A84CF00FD3232 /* Frameworks */,
+				FAC519E3183A84CF00FD3232 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "openam-ios-rest-sdk";
+			productName = "openam-ios-rest-sdk";
+			productReference = FAC519E5183A84CF00FD3232 /* libopenam-ios-rest-sdk.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		FAC519F4183A84CF00FD3232 /* openam-ios-rest-sdkTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAC51A0B183A84CF00FD3232 /* Build configuration list for PBXNativeTarget "openam-ios-rest-sdkTests" */;
+			buildPhases = (
+				FAC519F1183A84CF00FD3232 /* Sources */,
+				FAC519F2183A84CF00FD3232 /* Frameworks */,
+				FAC519F3183A84CF00FD3232 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FAC519FC183A84CF00FD3232 /* PBXTargetDependency */,
+			);
+			name = "openam-ios-rest-sdkTests";
+			productName = "openam-ios-rest-sdkTests";
+			productReference = FAC519F5183A84CF00FD3232 /* openam-ios-rest-sdkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FAC519DD183A84CE00FD3232 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = ForgeRock;
+			};
+			buildConfigurationList = FAC519E0183A84CE00FD3232 /* Build configuration list for PBXProject "openam-ios-rest-sdk" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = FAC519DC183A84CE00FD3232;
+			productRefGroup = FAC519E6183A84CF00FD3232 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FAC519E4183A84CF00FD3232 /* openam-ios-rest-sdk */,
+				FAC519F4183A84CF00FD3232 /* openam-ios-rest-sdkTests */,
+				FAC51A33183A868D00FD3232 /* OpenAMiOSRESTSDKUniversal */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FAC519F3183A84CF00FD3232 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAC51A03183A84CF00FD3232 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		FAC51A37183A86BC00FD3232 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target ImageFilters ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target ImageFilters -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FAC519E1183A84CF00FD3232 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAC51A24183A85FD00FD3232 /* AuthenticationCallback.m in Sources */,
+				FAC51A29183A860800FD3232 /* OpenAMRESTSDK.m in Sources */,
+				FAC51A22183A85FD00FD3232 /* AuthenticationFailureResponse.m in Sources */,
+				FAC51A26183A85FD00FD3232 /* DataStoreLogin.m in Sources */,
+				FAC51A25183A85FD00FD3232 /* AuthenticationCallbackField.m in Sources */,
+				FAC51A21183A85FD00FD3232 /* AuthenticationSuccessResponse.m in Sources */,
+				FAC51A23183A85FD00FD3232 /* AuthenticationCallbackResponse.m in Sources */,
+				FAC51A20183A85FD00FD3232 /* AuthenticationProcess.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAC519F1183A84CF00FD3232 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAC51A05183A84CF00FD3232 /* openam_ios_rest_sdkTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FAC519FC183A84CF00FD3232 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FAC519E4183A84CF00FD3232 /* openam-ios-rest-sdk */;
+			targetProxy = FAC519FB183A84CF00FD3232 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		FAC51A01183A84CF00FD3232 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FAC51A02183A84CF00FD3232 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FAC51A06183A84CF00FD3232 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		FAC51A07183A84CF00FD3232 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FAC51A09183A84CF00FD3232 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/openam_ios_rest_sdk.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "openam-ios-rest-sdk/openam-ios-rest-sdk-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		FAC51A0A183A84CF00FD3232 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/openam_ios_rest_sdk.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "openam-ios-rest-sdk/openam-ios-rest-sdk-Prefix.pch";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		FAC51A0C183A84CF00FD3232 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "openam-ios-rest-sdk/openam-ios-rest-sdk-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "openam-ios-rest-sdkTests/openam-ios-rest-sdkTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		FAC51A0D183A84CF00FD3232 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "openam-ios-rest-sdk/openam-ios-rest-sdk-Prefix.pch";
+				INFOPLIST_FILE = "openam-ios-rest-sdkTests/openam-ios-rest-sdkTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+		FAC51A35183A868D00FD3232 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		FAC51A36183A868D00FD3232 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FAC519E0183A84CE00FD3232 /* Build configuration list for PBXProject "openam-ios-rest-sdk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAC51A06183A84CF00FD3232 /* Debug */,
+				FAC51A07183A84CF00FD3232 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAC51A08183A84CF00FD3232 /* Build configuration list for PBXNativeTarget "openam-ios-rest-sdk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAC51A09183A84CF00FD3232 /* Debug */,
+				FAC51A0A183A84CF00FD3232 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAC51A0B183A84CF00FD3232 /* Build configuration list for PBXNativeTarget "openam-ios-rest-sdkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAC51A0C183A84CF00FD3232 /* Debug */,
+				FAC51A0D183A84CF00FD3232 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAC51A34183A868D00FD3232 /* Build configuration list for PBXAggregateTarget "OpenAMiOSRESTSDKUniversal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAC51A35183A868D00FD3232 /* Debug */,
+				FAC51A36183A868D00FD3232 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FAC519DD183A84CE00FD3232 /* Project object */;
+}
