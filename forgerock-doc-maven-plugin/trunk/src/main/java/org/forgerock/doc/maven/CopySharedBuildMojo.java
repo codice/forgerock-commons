@@ -16,11 +16,12 @@ package org.forgerock.doc.maven;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 /**
  * Copy common legal notice and front matter to generated sources in preparation
@@ -45,16 +46,18 @@ public class CopySharedBuildMojo extends AbstractBuildMojo {
             }
 
             getLog().info("Copying common content...");
-            copyFiles();
+            ensureGeneratedSources();
+            Executor exec = new Executor();
+            exec.unpack();
         }
     }
 
     /**
-     * Copy common files.
+     * Copy source files if there are no generated sources, yet.
      *
      * @throws MojoExecutionException
      */
-    void copyFiles() throws MojoExecutionException {
+    void ensureGeneratedSources() throws MojoExecutionException {
 
         // Are there already generated sources? If not, copy sources over.
         final File outputDir = getDocbkxGeneratedSourceDirectory();
@@ -66,44 +69,91 @@ public class CopySharedBuildMojo extends AbstractBuildMojo {
                 throw new MojoExecutionException("Failed to copy sources", e);
             }
         }
+    }
 
-        // Copy common content into the expected locations.
-        String prefix = "/common/";
-        final String legal = "legal.xml";     // /common/legal.xml
-        try {
-            final URL legalNotice = getClass().getResource(prefix + legal);
-            final File output = new File(outputDir, legal);
-            FileUtils.copyURLToFile(legalNotice, output);
-        } catch (IOException e) {
-            throw new MojoExecutionException("Failed to copy: " + legal, e);
-        }
+    /**
+     * GroupId of the common content to use.
+     *
+     * @parameter default-value="org.forgerock.commons" property="commonContentGroupId"
+     * @required
+     */
+    private String commonContentGroupId;
 
-        prefix = prefix + "shared/";
-        final String[] shared = {
-            "sec-accessing-doc-online.xml",
-            "sec-formatting-conventions.xml",
-            "sec-interface-stability.xml",
-            "sec-joining-the-community.xml",
-            "sec-release-levels.xml"
-        };
-        for (String file : shared) {
-            final URL commonFile = getClass().getResource(prefix + file);
-            try {
-                final File output = new File(outputDir.getPath() + "/shared/", file);
-                FileUtils.copyURLToFile(commonFile, output);
-            } catch (IOException e) {
-                throw new MojoExecutionException("Failed to copy: " + file, e);
-            }
-        }
+    /**
+     * Gets the group ID of the common content artifact to use.
+     * @return commonContentGroupId
+     */
+    public String getCommonContentGroupId() {
+        return commonContentGroupId;
+    }
 
-        prefix = prefix + "images/";
-        final String cc = "cc-by-nc-nd.png";
-        try {
-            final URL ccImage = getClass().getResource(prefix + cc);
-            final File output = new File(outputDir.getPath() + "/shared/images/", cc);
-            FileUtils.copyURLToFile(ccImage, output);
-        } catch (IOException e) {
-            throw new MojoExecutionException("Failed to copy: " + cc, e);
+    /**
+     * ArtifactId of the common content to use.
+     *
+     * @parameter default-value="forgerock-doc-common-content" property="commonContentArtifactId"
+     * @required
+     */
+    private String commonContentArtifactId;
+
+    /**
+     * Gets the common content artifact to use.
+     * @return commonContentArtifactId
+     */
+    public String getCommonContentArtifactId() {
+        return commonContentArtifactId;
+    }
+
+    /**
+     * Version of the common content artifact to use.
+     *
+     * @parameter default-value="1.0.0-SNAPSHOT" property="commonContentVersion"
+     * @required
+     */
+    private String commonContentVersion;
+
+    /**
+     * Gets the version of the common content artifact to use.
+     * @return commonContentVersion
+     */
+    public String getCommonContentVersion() {
+        return commonContentVersion;
+    }
+
+    /**
+     * Enclose methods to run plugins.
+     */
+    class Executor extends MojoExecutor {
+
+        /**
+         * Unpack common content.
+         *
+         * @throws MojoExecutionException
+         */
+        void unpack() throws MojoExecutionException {
+            final String outputDir = FilenameUtils.separatorsToUnix(
+                    getDocbkxGeneratedSourceDirectory().getPath());
+
+            executeMojo(
+                    plugin(
+                            groupId("org.apache.maven.plugins"),
+                            artifactId("maven-dependency-plugin"),
+                            version("2.8")),
+                    goal("unpack"),
+                    configuration(
+                            element("artifactItems",
+                                    element("artifactItem",
+                                            element("groupId", getCommonContentGroupId()),
+                                            element("artifactId", getCommonContentArtifactId()),
+                                            element("version", getCommonContentVersion()),
+                                            element("type", "jar"),
+                                            element("overWrite", "true"),
+                                            element("outputDirectory", outputDir),
+                                            element("includes", "**/*.*")))),
+                    executionEnvironment(
+                            getProject(),
+                            getSession(),
+                            getPluginManager()));
+
         }
     }
 }
