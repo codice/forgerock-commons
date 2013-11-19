@@ -53,8 +53,6 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      */
     @Override
     public final void execute() throws MojoExecutionException {
-        // TODO: Get these directly from the plugin .jar rather than copying.
-        copyResources();
 
         // If sources are generated, for example for JCite, build documentation
         // from the generated sources, rather than the original sources.
@@ -68,12 +66,14 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
         // The Executor is what actually calls other plugins.
         Executor exec = new Executor();
+        exec.unpackBranding();
 
         List<String> formats = getOutputFormats();
 
         // Prepare FOP for printable output, e.g. PDF.
         if (formats.contains("pdf") || formats.contains("rtf")) {
             getLog().info("Preparing Apache FOP...");
+            copyFonts();
             exec.prepareFOP();
         }
 
@@ -128,14 +128,13 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * Copy resources needed from plugin to project build directory. Resources
-     * include custom fonts and XSL customization files.
+     * Copy fonts needed to the project build directory.
      *
      * @throws MojoExecutionException Copy failed
      */
-    final void copyResources() throws MojoExecutionException {
-        // If you update this method, also see getBaseConfiguration().
-        String[] resources = {"/fonts/DejaVuSans-Oblique.ttf",
+    final void copyFonts() throws MojoExecutionException {
+        // If you update this method, also see buildFO().
+        String[] fonts = {"/fonts/DejaVuSans-Oblique.ttf",
             "/fonts/DejaVuSans.ttf",
             "/fonts/DejaVuSansCondensed-Bold.ttf",
             "/fonts/DejaVuSansCondensed-BoldOblique.ttf",
@@ -146,23 +145,17 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             "/fonts/DejaVuSerif-Italic.ttf",
             "/fonts/DejaVuSerif.ttf",
             "/fonts/DejaVuSerifCondensed-Bold.ttf",
-            "/fonts/DejaVuSerifCondensed-BoldItalic.ttf",
-            "/docbkx-stylesheets/epub/coredoc.xsl",
-            "/docbkx-stylesheets/fo/coredoc.xsl",
-            "/docbkx-stylesheets/fo/titlepages.xsl",
-            "/docbkx-stylesheets/html/chunked.xsl",
-            "/docbkx-stylesheets/html/coredoc.xsl",
-            "/docbkx-stylesheets/man/coredoc.xsl"};
+            "/fonts/DejaVuSerifCondensed-BoldItalic.ttf"};
 
-        for (String resource : resources) {
-            URL src = getClass().getResource(resource);
+        for (String font : fonts) {
+            URL src = getClass().getResource(font);
             File dest = new File(getBuildDirectory()
-                    + resource.replaceAll("/", File.separator));
+                    + font.replaceAll("/", File.separator));
             try {
                 FileUtils.copyURLToFile(src, dest);
             } catch (IOException e) {
                 throw new MojoExecutionException("Failed to copy file: "
-                        + resource + "\n" + e.getMessage());
+                        + font + "\n" + e.getMessage());
             }
         }
     }
@@ -498,6 +491,22 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
+     * CSS file for the pre-site version of the HTML.
+     *
+     * @parameter default-value="coredoc.css" property="releaseCssFileName"
+     * @required
+     */
+    private String preSiteCssFileName;
+
+    /**
+     * Get the name of the CSS file for the pre-site version of the HTML.
+     * @return The file name
+     */
+    public final String getPreSiteCssFileName() {
+        return preSiteCssFileName;
+    }
+
+    /**
      * Prepare single and chunked HTML for publication.
      * <p/>
      * The HTML built by docbkx-tools does not currently include the following,
@@ -527,6 +536,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
             String javascript = IOUtils.toString(getClass()
                     .getResourceAsStream("/endhead-js-favicon.txt"), "UTF-8");
+            javascript = javascript.replace("FAVICON-LINK", getFaviconLink());
             replacements.put("</head>", javascript);
 
             String linkToJira = getLinkToJira();
@@ -538,11 +548,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             HTMLUtils.updateHTML(htmlDir, replacements);
 
             getLog().info("Adding CSS...");
-            File css = new File(getBuildDirectory().getPath() + File.separator
-                    + "coredoc.css");
-            FileUtils.deleteQuietly(css);
-            FileUtils
-                    .copyURLToFile(getClass().getResource("/coredoc.css"), css);
+            File css = new File(getBuildDirectory().getPath(), getPreSiteCssFileName());
             HTMLUtils.addCss(htmlDir, css,
                     FilenameUtils.getBaseName(getDocumentSrcName()) + ".html");
         } catch (IOException e) {
@@ -842,6 +848,38 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * Enclose methods to run plugins.
      */
     class Executor extends MojoExecutor {
+
+        /**
+         * Unpack branding.
+         *
+         * @throws MojoExecutionException
+         */
+        void unpackBranding() throws MojoExecutionException {
+            final String outputDir = FilenameUtils.separatorsToUnix(
+                    getBuildDirectory().getPath());
+
+            executeMojo(
+                    plugin(
+                            groupId("org.apache.maven.plugins"),
+                            artifactId("maven-dependency-plugin"),
+                            version("2.8")),
+                    goal("unpack"),
+                    configuration(
+                            element("artifactItems",
+                                    element("artifactItem",
+                                            element("groupId", getBrandingGroupId()),
+                                            element("artifactId", getBrandingArtifactId()),
+                                            element("version", getBrandingVersion()),
+                                            element("type", "jar"),
+                                            element("overWrite", "true"),
+                                            element("outputDirectory", outputDir),
+                                            element("includes", "**/*.*")))),
+                    executionEnvironment(
+                            getProject(),
+                            getSession(),
+                            getPluginManager()));
+
+        }
 
         /**
          * Support a subset of formats described in the documentation for the <a
