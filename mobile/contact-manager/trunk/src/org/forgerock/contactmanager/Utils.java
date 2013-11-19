@@ -61,7 +61,7 @@ public final class Utils {
      * @return {@code true} if the server has been successfully being deleted.
      */
     static boolean deleteServerConfigurationFromPreferences(final String target) {
-        final LinkedList<ServerConfiguration> registered = loadServerConfigurationListFromPref();
+        final LinkedList<ServerConfiguration> registered = loadRegisteredServerList();
         final Iterator<ServerConfiguration> it = registered.iterator();
         final JSONArray jsonArray = new JSONArray();
         while (it.hasNext()) {
@@ -89,7 +89,7 @@ public final class Utils {
      *            User shared preferences for this application.
      * @return A linked list of server configurations.
      */
-    static LinkedList<ServerConfiguration> loadServerConfigurationListFromPref() {
+    static LinkedList<ServerConfiguration> loadRegisteredServerList() {
         LinkedList<ServerConfiguration> registered = null;
         final String registeredListPref = AppContext.getPref().getString(Constants.ALL_SERVER_CONFIGURATIONS, null);
         if (registeredListPref != null) {
@@ -117,7 +117,7 @@ public final class Utils {
      *            The server configuration to register.
      * @return {@code true} if the server configuration has successfully being added.
      */
-    static boolean saveServerConfigurationInPref(final ServerConfiguration configuration) {
+    static boolean saveCurrentServer(final ServerConfiguration configuration) {
 
         final SharedPreferences pref = AppContext.getPref();
         final String jsonArrayString = pref.getString(Constants.ALL_SERVER_CONFIGURATIONS, null);
@@ -143,13 +143,13 @@ public final class Utils {
     }
 
     /**
-     * Saves a selected server in shared preferences.
+     * Saves the active server configuration in shared preferences.
      *
      * @param configuration
      *            The configuration to save.
      * @return Returns {@code true} if the server configuration is saved.
      */
-    static boolean saveSelectedServerInPref(final ServerConfiguration configuration) {
+    static boolean saveActiveServer(final ServerConfiguration configuration) {
         try {
             final Editor edit = AppContext.getPref().edit();
             edit.putString(Constants.SELECTED_SERVER_CONFIGURATION, configuration.toJSON());
@@ -163,17 +163,17 @@ public final class Utils {
     }
 
     /**
-     * Loads a selected server configuration from shared preferences.
+     * Loads the active server configuration from shared preferences.
      *
-     * @return A server configuration.
+     * @return The active server configuration.
      */
-    static ServerConfiguration loadSelectedServerConfigurationListFromPref() {
+    static ServerConfiguration loadActiveServer() {
         ServerConfiguration serverconfiguration = null;
-        final String jsonServer = AppContext.getPref().getString(Constants.SELECTED_SERVER_CONFIGURATION, null);
-        if (jsonServer != null) {
+        final String active = AppContext.getPref().getString(Constants.SELECTED_SERVER_CONFIGURATION, null);
+        if (active != null) {
             serverconfiguration = new ServerConfiguration();
             try {
-                serverconfiguration = ServerConfiguration.fromJSON(new JSONObject(jsonServer));
+                serverconfiguration = ServerConfiguration.fromJSON(new JSONObject(active));
 
             } catch (final JSONException e) {
                 Log.e("Loading selected server configuration fails", e.toString());
@@ -261,9 +261,22 @@ public final class Utils {
      *            The string to encode.
      * @return A URL encoded string or {@code empty} if an error occurs.
      */
-    static String getURLEncoded(final String stringToEncode) {
+    static String getURLEncoded(String stringToEncode) {
         try {
-            return URLEncoder.encode(stringToEncode, "UTF-8");
+            stringToEncode = stringToEncode.replace("\"", "")
+                    .replace("\"", "")
+                    .replace("'", "")
+                    .replace("!", "")
+                    .replace("#", "")
+                    .replace("$", "")
+                    .replace("%", "")
+                    .replace("(", "")
+                    .replace(")", "")
+                    .replace("&", "")
+                    .replace("~", "")
+                    .replace(";", "");
+            return URLEncoder.encode(stringToEncode, "UTF-8")
+                    .replaceAll("\\+", "%20");
         } catch (final UnsupportedEncodingException e) {
             Log.e("An exception occured during encoding string", e.toString());
         }
@@ -293,12 +306,12 @@ public final class Utils {
      * Checks if an edit text is not empty. (Must contains a value).
      *
      * @param editText
-     *            The UI composant to check.
+     *            The UI element to check.
      * @return {@code true} if the text is not empty.
      */
     static boolean checkEditValue(final EditText editText) {
         if (TextUtils.isEmpty(editText.getText())) {
-            Toast.makeText(AppContext.getContext(), String.format("Invalid '%s' input", editText.getHint()),
+            Toast.makeText(AppContext.getContext(), String.format("Invalid input : '%s' ", editText.getHint()),
                     Toast.LENGTH_SHORT).show();
             return false;
         }

@@ -94,47 +94,34 @@
                     android:layout_marginTop="5sp" />
 
                 <TextView
-                    android:id="@+id/settings_selected_server_IP"
+                    android:id="@+id/settings_selected_server_address"
                     style="@style/settingsCommons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/settings_separator_selected_server"
-                    android:text="@string/sw1_server_ip" />
+                    android:text="@string/sw1_server_address" />
 
                 <TextView
-                    android:id="@+id/settings_selected_server_IP_content"
+                    android:id="@+id/settings_selected_server_address_content"
                     style="@style/settingsCommons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/settings_selected_server_port"
-                    android:layout_alignRight="@+id/settings_selected_server_port_content" />
-
-                <TextView
-                    android:id="@+id/settings_selected_server_port"
-                    style="@style/settingsCommons"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/settings_selected_server_IP"
-                    android:layout_below="@+id/settings_selected_server_IP"
-                    android:layout_marginTop="5sp"
-                    android:text="@string/sw1_server_port" />
-
-                <TextView
-                    android:id="@+id/settings_selected_server_port_content"
-                    style="@style/settingsCommons"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/settings_selected_server_port"
-                    android:layout_alignBottom="@+id/settings_selected_server_port"
-                    android:layout_alignParentRight="true" />
+                    android:layout_above="@+id/settings_selected_authentication"
+                    android:layout_alignRight="@+id/settings_selected_authentication_content"
+                    android:layout_below="@+id/settings_separator_selected_server"
+                    android:maxWidth="190sp"
+                    android:ellipsize="none"                    
+                    android:maxLines="4"
+                    android:gravity="right"
+                    android:scrollHorizontally="false" />
 
                 <TextView
                     android:id="@+id/settings_selected_authentication"
                     style="@style/settingsCommons"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/settings_selected_server_port"
-                    android:layout_below="@+id/settings_selected_server_port"
+                    android:layout_alignLeft="@+id/settings_selected_server_address"
+                    android:layout_below="@+id/settings_selected_server_address"
                     android:layout_marginTop="5sp"
                     android:text="@string/settings_authentication_title" />
 

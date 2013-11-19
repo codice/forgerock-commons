@@ -27,11 +27,10 @@ import android.util.Log;
  */
 public class ServerConfiguration {
 
-    private String serverName;
+    private String name;
     private String username;
     private String password;
-    private String serverIP;
-    private String port;
+    private String serverAddress;
     private boolean isSSL;
 
     /**
@@ -46,16 +45,13 @@ public class ServerConfiguration {
      *
      * @param serverName
      *            The server name used in this application.
-     * @param serverIP
-     *            The IP of the OpenDJ server.
-     * @param port
-     *            The port used to connect to OpenDJ.
+     * @param srvAddress
+     *            The OpenDJ server's address.
      */
-    public ServerConfiguration(final String serverName, final String serverIP, final String port) {
+    public ServerConfiguration(final String serverName, final String srvAddress) {
         super();
-        this.serverName = serverName;
-        this.serverIP = serverIP;
-        this.port = port;
+        this.name = serverName;
+        this.serverAddress = srvAddress;
     }
 
     /**
@@ -107,41 +103,22 @@ public class ServerConfiguration {
     }
 
     /**
-     * Returns the server IP.
+     * Returns the server address.
      *
-     * @return The server's IP.
+     * @return The server's address.
      */
-    public String getServerIP() {
-        return serverIP;
+    public String getAddress() {
+        return serverAddress;
     }
 
     /**
-     * Sets the server IP.
+     * Sets the server address.
      *
-     * @param serverIP
-     *            The IP of the server.
+     * @param srvAddress
+     *            The address of the server.
      */
-    public void setServerIP(final String serverIP) {
-        this.serverIP = serverIP;
-    }
-
-    /**
-     * Returns the ports used.
-     *
-     * @return The port in use.
-     */
-    public String getPort() {
-        return port;
-    }
-
-    /**
-     * Sets the port for this configuration.
-     *
-     * @param port
-     *            The port used in this configuration.
-     */
-    public void setPort(final String port) {
-        this.port = port;
+    public void setAddress(final String srvAddress) {
+        this.serverAddress = srvAddress;
     }
 
     /**
@@ -150,7 +127,7 @@ public class ServerConfiguration {
      * @return The name of this configuration.
      */
     public String getServerName() {
-        return serverName;
+        return name;
     }
 
     /**
@@ -160,17 +137,9 @@ public class ServerConfiguration {
      *            The name of this configuration.
      */
     public void setServerName(final String serverName) {
-        this.serverName = serverName;
+        this.name = serverName;
     }
 
-    /**
-     * Returns the server url like : 192.168.1.1:8080.
-     *
-     * @return The server URL for this configuration.
-     */
-    public final String getServerURL() {
-        return getServerIP() + ":" + getPort();
-    }
 
     /**
      * Returns {@code: true} if SSL is enabled.
@@ -200,9 +169,8 @@ public class ServerConfiguration {
 
         final JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("id", getServerIP());
             jsonObject.put("servername", getServerName());
-            jsonObject.put("port", getPort());
+            jsonObject.put("address", getAddress());
             jsonObject.put("username", getUsername());
             jsonObject.put("password", getPassword());
             jsonObject.put("ssl", String.valueOf(isSSL()));
@@ -222,11 +190,10 @@ public class ServerConfiguration {
      * @return A server configuration.
      */
     static ServerConfiguration fromJSON(final JSONObject json) {
-        final ServerConfiguration srv = new ServerConfiguration("serverName");
+        final ServerConfiguration srv = new ServerConfiguration("tempName");
         try {
-            srv.setServerIP(json.getString("id"));
+            srv.setAddress(json.getString("address"));
             srv.setServerName(json.getString("servername"));
-            srv.setPort(json.getString("port"));
             srv.setUsername(json.getString("username"));
             srv.setPassword(json.getString("password"));
             srv.setSSL(Boolean.valueOf(json.getString("ssl")));

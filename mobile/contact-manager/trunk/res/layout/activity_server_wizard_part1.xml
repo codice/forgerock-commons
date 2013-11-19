@@ -106,51 +106,25 @@
             </EditText>
 
             <TextView
-                android:id="@+id/sw1StaticServerIP"
+                android:id="@+id/sw1StaticServerAddress"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/sw1EditServerName"
-                android:text="@string/sw1_server_ip"
+                android:text="@string/sw1_server_address"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <EditText
-                android:id="@+id/sw1EditServerIP"
+                android:id="@+id/sw1EditServerAddress"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/sw1StaticServerIP"
+                android:layout_below="@+id/sw1StaticServerAddress"
                 android:ems="10"
-                android:hint="@string/sw1_server_ip_hint"
+                android:hint="@string/sw1_server_address_hint"
                 android:inputType="textNoSuggestions|textVisiblePassword"
-                android:maxLength="39"
+                android:maxLength="50"
                 android:singleLine="true" >
-
-                <requestFocus android:layout_width="wrap_content" />
-            </EditText>
-
-            <TextView
-                android:id="@+id/sw1StaticServerPort"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/sw1EditServerIP"
-                android:layout_centerVertical="true"
-                android:text="@string/sw1_server_port"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <EditText
-                android:id="@+id/sw1EditServerPort"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/sw1StaticServerPort"
-                android:ems="10"
-                android:hint="@string/sw1_server_port_hint"
-                android:inputType="number"
-                android:maxLength="4"
-                android:singleLine="true"
-                android:text="@string/sw1_server_port_default" >
 
                 <requestFocus android:layout_width="wrap_content" />
             </EditText>

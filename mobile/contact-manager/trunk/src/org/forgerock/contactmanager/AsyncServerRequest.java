@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Authenticator;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
@@ -48,9 +49,10 @@ import android.widget.Toast;
 /**
  * This class executes an asynchronous request. It connects to the server, authenticating and making the request then,
  * when the result is given, re-throws it to the calling activity which needs it.
- * <p> When an asynchronous task is executed, the task goes through 4 steps: <p>
+ * <p>
+ * When an asynchronous task is executed, the task goes through 4 steps:
+ * <p>
  * onPreExecute() / doInBackground(Params...) / onProgressUpdate(Progress...) / onPostExecute(Result)
- *
  */
 public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
 
@@ -120,7 +122,7 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
 
         URLConnection c = null;
         try {
-            String partialURL = serverConfiguration.getServerURL() + givenUrl[0];
+            String partialURL = serverConfiguration.getAddress() + givenUrl[0];
             if (activity instanceof SearchActivity) {
                 if (isPagedCookie) {
                     partialURL += Constants.LIST_PAGINATION + getPagedCookie();
@@ -156,8 +158,11 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
                             error = "Invalid credentials";
                             throw new IOException("Invalid credentials");
                         } else {
-                            error = ((HttpURLConnection) c).getResponseMessage();
-                            throw new IOException("Http server error.");
+                            final String msg = ((HttpURLConnection) c).getResponseMessage();
+                            if (msg != null) {
+                                throw new ConnectException(msg);
+                            }
+                            throw new ConnectException();
                         }
                     }
                 } catch (final SocketTimeoutException e) {
@@ -196,7 +201,7 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
 
         SSLContext sslContext = null;
         try {
-            sslContext = SSLContext.getInstance("SSL");
+            sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, trustManager, new java.security.SecureRandom());
         } catch (final NoSuchAlgorithmException e) {
             logError(e, "NoSuchAlgorithmException.");

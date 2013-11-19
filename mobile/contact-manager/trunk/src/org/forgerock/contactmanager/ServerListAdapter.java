@@ -64,6 +64,26 @@ public class ServerListAdapter extends BaseAdapter {
     }
 
     /**
+     * Returns the position of the selected item.
+     *
+     * @param itemName
+     *            The name to retrieve.
+     * @return The position of the item.
+     */
+    public int getPosition(final String itemName) {
+        if (listData != null && listData.size() > 1) {
+            int position = 0;
+            for (final ServerConfiguration conf : listData) {
+                if (conf.getServerName().equals(itemName)) {
+                    return position;
+                }
+                position += 1;
+            }
+        }
+        return 0;
+    }
+
+    /**
      * Gets a View that displays the data at the specified position in the data set. You can either create a View
      * manually or inflate it from an XML layout file. When the View is inflated, the parent View will apply default
      * layout parameters unless you use inflate to specify a root view and to prevent attachment to the root.
