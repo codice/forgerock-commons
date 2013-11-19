@@ -41,8 +41,7 @@ public class ServerWizardPart1Activity extends AugmentedActivity {
 
         final Button btnNext = (Button) findViewById(R.id.sw1NextBtn);
         final EditText etServerName = (EditText) findViewById(R.id.sw1EditServerName);
-        final EditText etServerIP = (EditText) findViewById(R.id.sw1EditServerIP);
-        final EditText etServerPort = (EditText) findViewById(R.id.sw1EditServerPort);
+        final EditText etServerAddress = (EditText) findViewById(R.id.sw1EditServerAddress);
         etServerName.requestFocus();
 
         // Edit mode
@@ -51,19 +50,21 @@ public class ServerWizardPart1Activity extends AugmentedActivity {
         if (isEdit) {
             final ServerConfiguration serverToEdit = AppContext.getServerConfiguration();
             etServerName.setText(serverToEdit.getServerName());
-            etServerIP.setText(serverToEdit.getServerIP());
-            etServerPort.setText(serverToEdit.getPort());
+            etServerAddress.setText(serverToEdit.getAddress());
         }
 
         btnNext.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(final View v) {
 
-                if (checkEditValue(etServerIP) && checkEditValue(etServerPort)) {
+                if (checkEditValue(etServerAddress)) {
                     final Intent intent2 = new Intent(ServerWizardPart1Activity.this, ServerWizardPart2Activity.class);
                     intent2.putExtra("serverName", etServerName.getText().toString().trim());
-                    intent2.putExtra("serverIP", etServerIP.getText().toString().trim());
-                    intent2.putExtra("serverPort", etServerPort.getText().toString().trim());
+                    final String address = etServerAddress.getText().toString()
+                            .replace("https://", "")
+                            .replace("http://", "")
+                            .trim();
+                    intent2.putExtra("address", address);
                     if (isEdit) {
                         intent2.putExtra("isEdit", true);
                     }

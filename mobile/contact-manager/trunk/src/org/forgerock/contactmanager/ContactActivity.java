@@ -681,6 +681,7 @@ public class ContactActivity extends AugmentedActivity {
         OnClickListener myActionListener = null;
         if (choice == Action.CALL) {
             actionButton.setImageResource(R.drawable.ic_action_call);
+            actionButton.setContentDescription(getResources().getText(R.string.act_call_description));
             myActionListener = new OnClickListener() {
                 @Override
                 public void onClick(final View v) {
@@ -689,6 +690,7 @@ public class ContactActivity extends AugmentedActivity {
             };
         } else if (choice == Action.SEND_SMS) {
             actionButton.setImageResource(R.drawable.ic_action_chat);
+            actionButton.setContentDescription(getResources().getText(R.string.act_sms_description));
             myActionListener = new OnClickListener() {
                 @Override
                 public void onClick(final View v) {
@@ -697,6 +699,7 @@ public class ContactActivity extends AugmentedActivity {
             };
         } else if (choice == Action.GEOLOCATION) {
             actionButton.setImageResource(R.drawable.ic_action_location_found);
+            actionButton.setContentDescription(getResources().getText(R.string.act_geolocation_description));
             myActionListener = new OnClickListener() {
                 @Override
                 public void onClick(final View v) {
@@ -705,6 +708,7 @@ public class ContactActivity extends AugmentedActivity {
             };
         } else if (choice == Action.MAIL) {
             actionButton.setImageResource(R.drawable.ic_action_email);
+            actionButton.setContentDescription(getResources().getText(R.string.act_mail_description));
             myActionListener = new OnClickListener() {
                 @Override
                 public void onClick(final View v) {
@@ -713,6 +717,7 @@ public class ContactActivity extends AugmentedActivity {
             };
         } else if (choice == Action.SEE_MANAGER) {
             actionButton.setImageResource(R.drawable.ic_action_person);
+            actionButton.setContentDescription(getResources().getText(R.string.act_manager_description));
             myActionListener = new OnClickListener() {
                 @Override
                 public void onClick(final View v) {

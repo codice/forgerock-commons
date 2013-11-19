@@ -169,6 +169,7 @@ public class SearchActivity extends AugmentedActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT, 0.5f));
         btnLoadLess.setImageResource(R.drawable.ic_action_previous);
         btnLoadLess.setBackgroundColor(getResources().getColor(R.color.transparent));
+        btnLoadLess.setContentDescription(getResources().getText(R.string.search_previous));
         footer.addView(btnLoadLess);
 
         final ImageButton btnLoadMore = new ImageButton(this);
@@ -176,6 +177,7 @@ public class SearchActivity extends AugmentedActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT, 0.5f));
         btnLoadMore.setImageResource(R.drawable.ic_action_next);
         btnLoadMore.setBackgroundColor(getResources().getColor(R.color.transparent));
+        btnLoadMore.setContentDescription(getResources().getText(R.string.search_next));
         footer.addView(btnLoadMore);
 
         lvSearchResult.addFooterView(footer);

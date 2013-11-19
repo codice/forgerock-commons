@@ -64,8 +64,7 @@ public class ServerWizardPart2Activity extends AugmentedActivity {
         }
 
         final ServerConfiguration newServerConfiguration = new ServerConfiguration(
-                previous.getStringExtra("serverName"), previous.getStringExtra("serverIP"),
-                previous.getStringExtra("serverPort"));
+                previous.getStringExtra("serverName"), previous.getStringExtra("address"));
 
         /**
          * Finish. Sends data to main menu.
@@ -82,7 +81,8 @@ public class ServerWizardPart2Activity extends AugmentedActivity {
                     if (isEdit) {
                         Utils.deleteServerConfigurationFromPreferences(original.getServerName());
                     }
-                    Utils.saveServerConfigurationInPref(newServerConfiguration);
+                    Utils.saveCurrentServer(newServerConfiguration);
+                    Utils.saveActiveServer(newServerConfiguration);
 
                     final Intent intent = getIntent();
                     intent.putExtra("returnedData", "new server added");

@@ -14,15 +14,16 @@
     <string name="search_next">Next</string>
 
     <!-- Contact activity -->
-    <string name="contact_title">Contact informations</string>
     <string name="contact_mobile_title">Mobile</string>
     <string name="contact_home_phone_title">Home</string>
-    <string name="contact_phone_title">Phone</string>
     <string name="contact_mail_title">Mail</string>
     <string name="contact_address_title">Address</string>
     <string name="contact_manager_title">Manager</string>
     <string name="act_mail_description">E-mail me</string>
     <string name="act_call_description">Call me</string>
+    <string name="act_sms_description">Send me an SMS</string>
+    <string name="act_geolocation_description">Locate me</string>
+    <string name="act_manager_description">See my manager</string>
     <string name="act_add_description">Add me</string>
     <string name="contact_warning_add_contact">Do you want to add %s to your contacts ?</string>
 
@@ -37,7 +38,6 @@
     <string name="settings_selected_security_title">Security</string>
     <string name="settings_authentication_title">Authentication</string>
     <string name="settings_authentication_basic">Basic</string>
-    <string name="settings_authentication_OAuth">OAuth</string>
     <string name="settings_no_server_configuration">No server configuration found. \n\nPlease configure a new server to use the contact manager.</string>
 
     <!-- Actions -->
@@ -48,14 +48,11 @@
     <!-- Server wizard part 1 -->
     <string name="sw1_image_title">New server</string>
     <string name="act_next_description">Continue</string>
-    <string name="sw1_server_ip">Server IP</string>
+    <string name="sw1_server_address">Server address</string>
     <string name="sw1_title">In a few steps, you will be able to set up your connection via REST to your LDAP server.</string>
-    <string name="sw1_server_ip_hint">192.168.0.1</string>
+    <string name="sw1_server_address_hint">IP:port/opendj</string>
     <string name="sw1_server_name">Server name</string>
     <string name="sw1_server_name_hint">Home</string>
-    <string name="sw1_server_port">HTTP Server port</string>
-    <string name="sw1_server_port_hint">HTTP port (eg.8080)</string>
-    <string name="sw1_server_port_default">8080</string>
 
     <!-- Server wizard part 2 -->
     <string name="sw2_title">Credentials</string>
@@ -64,26 +61,17 @@
     <string name="sw2_account_username_hint">Username</string>
     <string name="sw2_account_password">Password</string>
     <string name="sw2_account_password_hint">Password</string>
-    <string name="sw2_account_base_dn_hint">dc=example,dc=com</string>
     <string name="sw2_security">Security</string>
-    <string name="sw2_security_none">None</string>
     <string name="sw2_security_ssl">SSL/TLS</string>
-    <string name="sw2_authentication_basic">Basic</string>
-    <string name="sw2_authentication_oauth">Oauth</string>
     <string name="finish">Finish</string>
 
     <!-- About activity -->
     <string name="about_opendj">OpenDJ is an LDAPv3 compliant directory service, developed for the Java platform, providing a high performance, highly available, and secure store for the identities managed by your organization. Its easy installation process, combined with the power of the Java platform makes OpenDJ the simplest, fastest directory to deploy and manage.</string>
     <string name="about_website">www.forgerock.com </string>
 
-    <!-- Error messages -->
-    <string name="err_cannot_load_server_list">Unable to load server list</string>
-    <string name="err_cannot_connect_to_server">Unable to connect to selected server</string>
-
     <!-- Status messages -->
     <string name="warning_delete_server">Delete server %s</string>
     <string name="warning_approval">Are you sure?</string>
-    <string name="warning_no_server_found">No server found. Please add a new server to use OPENDJ REST.</string>
     <string name="warning_selected_server">%s is set as default server</string>
     <string name="warning_call_number">Call %s?</string>
     <string name="warning_no_result_found">No result</string>

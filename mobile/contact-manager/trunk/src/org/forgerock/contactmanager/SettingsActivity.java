@@ -54,9 +54,8 @@ public class SettingsActivity extends AugmentedActivity {
         final Spinner serverSpinner = (Spinner) findViewById(R.id.settings_spinner_servers);
         final ToggleButton toogleSSL = (ToggleButton) findViewById(R.id.settings_toggle_ssl);
 
-        final LinkedList<ServerConfiguration> servers = Utils.loadServerConfigurationListFromPref();
-        final TextView tvIpConfig = (TextView) findViewById(R.id.settings_selected_server_IP_content);
-        final TextView tvPortConfig = (TextView) findViewById(R.id.settings_selected_server_port_content);
+        final LinkedList<ServerConfiguration> servers = Utils.loadRegisteredServerList();
+        final TextView tvSrvAddress = (TextView) findViewById(R.id.settings_selected_server_address_content);
         final TextView tvAuthentication = (TextView) findViewById(R.id.settings_selected_authentication_content);
 
         final SpinnerAdapter adapter = new ServerListAdapter(this, servers);
@@ -66,8 +65,7 @@ public class SettingsActivity extends AugmentedActivity {
             serverListViewMode();
             serverConfiguration = (ServerConfiguration) adapter.getItem(ServerListAdapter.getSelectedIndex());
             serverSpinner.setSelection(ServerListAdapter.getSelectedIndex());
-            tvIpConfig.setText(serverConfiguration.getServerIP());
-            tvPortConfig.setText(serverConfiguration.getPort());
+            tvSrvAddress.setText(serverConfiguration.getAddress());
         } else {
             emptyServerListViewMode();
         }
@@ -79,7 +77,7 @@ public class SettingsActivity extends AugmentedActivity {
                 serverConfiguration = (ServerConfiguration) serverSpinner.getAdapter().getItem(
                         serverSpinner.getSelectedItemPosition());
                 AppContext.setServerConfiguration(serverConfiguration);
-                Utils.saveSelectedServerInPref(serverConfiguration);
+                Utils.saveActiveServer(serverConfiguration);
                 ServerListAdapter.setSelectedIndex(arg0.getSelectedItemPosition());
 
                 Toast.makeText(
@@ -87,8 +85,7 @@ public class SettingsActivity extends AugmentedActivity {
                         String.format(getResources().getString(R.string.warning_selected_server),
                                 serverConfiguration.getServerName()), Toast.LENGTH_SHORT).show();
 
-                tvIpConfig.setText(serverConfiguration.getServerIP());
-                tvPortConfig.setText(serverConfiguration.getPort());
+                tvSrvAddress.setText(serverConfiguration.getAddress());
                 toogleSSL.setChecked(serverConfiguration.isSSL());
                 tvAuthentication.setText(getResources().getString(R.string.settings_authentication_basic));
 
@@ -197,7 +194,10 @@ public class SettingsActivity extends AugmentedActivity {
      */
     private void refreshSpinner() {
         final Spinner serverSpinner = (Spinner) findViewById(R.id.settings_spinner_servers);
-        serverSpinner.setAdapter(new ServerListAdapter(this, Utils.loadServerConfigurationListFromPref()));
+        final ServerListAdapter adapter = new ServerListAdapter(this, Utils.loadRegisteredServerList());
+        final ServerConfiguration activeServer = Utils.loadActiveServer();
+        serverSpinner.setAdapter(adapter);
+        serverSpinner.setSelection(adapter.getPosition(activeServer.getServerName()));
         if (serverSpinner.getCount() == 0) {
             emptyServerListViewMode();
         } else {
