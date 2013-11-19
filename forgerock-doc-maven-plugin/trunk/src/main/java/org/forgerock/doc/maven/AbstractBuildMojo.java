@@ -250,6 +250,72 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     private String documentSrcName;
 
     /**
+     * Favicon link element for the pre-site version of the HTML.
+     *
+     * @parameter
+     * default-value="<link rel=\"shortcut icon\" href=\"http://forgerock.org/favicon.ico\">"
+     * property="faviconLink"
+     * @required
+     */
+    private String faviconLink;
+
+    /**
+     * Get the favicon link element for the pre-site version of the HTML.
+     * @return The link element
+     */
+    public final String getFaviconLink() {
+        return faviconLink;
+    }
+
+    /**
+     * GroupId of the branding to use.
+     *
+     * @parameter default-value="org.forgerock.commons" property="brandingGroupId"
+     * @required
+     */
+    private String brandingGroupId;
+
+    /**
+     * Gets the group ID of the branding artifact to use.
+     * @return brandingGroupId
+     */
+    public String getBrandingGroupId() {
+        return brandingGroupId;
+    }
+
+    /**
+     * ArtifactId of the branding to use.
+     *
+     * @parameter default-value="forgerock-doc-default-branding" property="brandingArtifactId"
+     * @required
+     */
+    private String brandingArtifactId;
+
+    /**
+     * Gets the branding artifact to use.
+     * @return brandingArtifactId
+     */
+    public String getBrandingArtifactId() {
+        return brandingArtifactId;
+    }
+
+    /**
+     * Version of the branding artifact to use.
+     *
+     * @parameter default-value="1.0.0-SNAPSHOT" property="brandingVersion"
+     * @required
+     */
+    private String brandingVersion;
+
+    /**
+     * Gets the version of the branding artifact to use.
+     * @return brandingVersion
+     */
+    public String getBrandingVersion() {
+        return brandingVersion;
+    }
+
+    /**
      * Docbkx Tools plugin version to use.
      *
      * @return {@link #docbkxVersion}

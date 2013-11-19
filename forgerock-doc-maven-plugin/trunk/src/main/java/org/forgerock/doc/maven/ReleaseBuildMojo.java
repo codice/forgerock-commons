@@ -17,6 +17,7 @@ package org.forgerock.doc.maven;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -76,6 +77,41 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
     }
 
     /**
+     * Favicon link element for the release version of the HTML.
+     *
+     * @parameter
+     * default-value="<link rel=\"shortcut icon\" href=\"http://forgerock.org/favicon.ico\">"
+     * property="releaseFaviconLink"
+     * @required
+     */
+    private String releaseFaviconLink;
+
+    /**
+     * Get the favicon link element for the release version of the HTML.
+     * @return The link element
+     */
+    public final String getReleaseFaviconLink() {
+        return releaseFaviconLink;
+    }
+
+    /**
+     * CSS file for the release version of the HTML.
+     *
+     * @parameter default-value="dfo.css" property="releaseCssFileName"
+     * @required
+     */
+    private String releaseCssFileName;
+
+    /**
+     * Get the name of the CSS file for the release version of the HTML.
+     * @return The file name
+     */
+    public final String getReleaseCssFileName() {
+        return releaseCssFileName;
+    }
+
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -92,19 +128,24 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
         try {
             addIndexHtml(releaseDocDirectory);
         } catch (IOException e) {
-            throw new MojoExecutionException("Failed to copy index.html: "
-                    + e.getMessage());
+            throw new MojoExecutionException("Failed to copy index.html.", e);
         }
 
         getLog().info("Renaming .pdfs...");
         renamePDFs(getReleaseVersion(), releaseDocDirectory);
 
+        getLog().info("Fixing favicon links in HTML...");
+        try {
+            fixFaviconLinks(releaseDocDirectory);
+        } catch (IOException e) {
+            throw new MojoExecutionException("Failed to fix favicon links.", e);
+        }
+
         getLog().info("Replacing CSS...");
         try {
             replaceCSS(releaseDocDirectory);
         } catch (IOException e) {
-            throw new MojoExecutionException("Failed to replace CSS: "
-                    + e.getMessage());
+            throw new MojoExecutionException("Failed to replace CSS.", e);
         }
     }
 
@@ -148,18 +189,35 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
     }
 
     /**
+     * Fix favicon link elements in the HTML.
+     * @param directory Directory containing HTML
+     * @throws IOException Failed to update the favicon links
+     */
+    final void fixFaviconLinks(final String directory) throws IOException {
+        HashMap<String, String> replacements = new HashMap<String, String>();
+
+        final String oldFaviconLink = getFaviconLink();
+        final String newFaviconLink = getReleaseFaviconLink();
+        if (!oldFaviconLink.equalsIgnoreCase(newFaviconLink)) {
+            replacements.put(oldFaviconLink, newFaviconLink);
+            HTMLUtils.updateHTML(directory, replacements);
+        }
+    }
+
+    /**
      * Replace CSS files for released documentation.
      *
      * @param directory Directory enclosing HTML documents with CSS.
      * @throws IOException Could not replace CSS file with new content.
      */
     final void replaceCSS(final String directory) throws IOException {
-        File dir = new File(directory);
-        String[] ext = {"css"};
-        boolean isRecursive = true;
-        for (File css : FileUtils.listFiles(dir, ext, isRecursive)) {
-            FileUtils.deleteQuietly(css);
-            FileUtils.copyURLToFile(getClass().getResource("/dfo.css"), css);
+        final File newCss = new File(getBuildDirectory().getPath(), getReleaseCssFileName());
+
+        final File dir = new File(directory);
+        final String[] ext = {"css"};
+        final boolean isRecursive = true;
+        for (File oldCss : FileUtils.listFiles(dir, ext, isRecursive)) {
+            FileUtils.copyFile(newCss, oldCss);
         }
     }
 
