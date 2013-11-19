@@ -67,7 +67,6 @@
   <url>https://bugster.forgerock.org/jira/browse/DOCS</url>
  </issueManagement>
 
- <!-- TODO
  <ciManagement>
   <system>jenkins</system>
   <url>http://builds.forgerock.org/view/Docs/job/Commons%20-%20Forgerock%20Doc%20Common%20Content/</url>
@@ -82,7 +81,6 @@
     </notifier>
   </notifiers>
  </ciManagement>
- -->
 
  <distributionManagement>
   <site>
