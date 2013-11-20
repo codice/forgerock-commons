@@ -263,18 +263,7 @@ public final class Utils {
      */
     static final String getURLEncoded(String stringToEncode) {
         try {
-            stringToEncode = stringToEncode
-                    .replace("\\", "").replace("/", "")
-                    .replace("{", "").replace("}", "")
-                    .replace("'", "").replace("\"", "")
-                    .replace("!", "").replace("?", "")
-                    .replace(";", "").replace(",", "")
-                    .replace("#", "").replace("$", "")
-                    .replace("%", "").replace("&", "")
-                    .replace("(", "").replace(")", "")
-                    .replace("~", "").replace("|", "");
-            return URLEncoder.encode(stringToEncode, "UTF-8")
-                    .replaceAll("\\+", "%20");
+            return URLEncoder.encode(stringToEncode.replace("\"", ""), "UTF-8");
         } catch (final UnsupportedEncodingException e) {
             Log.e("An exception occured during encoding string", e.toString());
         }

@@ -20,11 +20,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.Authenticator;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.PasswordAuthentication;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
@@ -42,6 +40,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -115,8 +114,7 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
     protected JSONObject doInBackground(final String... givenUrl) {
         final ServerConfiguration serverConfiguration = AppContext.getServerConfiguration();
 
-        if (serverConfiguration == null
-                || (serverConfiguration != null && !serverConfiguration.isValid())) {
+        if (serverConfiguration == null || (serverConfiguration != null && !serverConfiguration.isValid())) {
             logError(new IOException(), "No server configured");
             return null;
         }
@@ -131,9 +129,7 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
                     partialURL += getPageOffset();
                 }
             }
-
-            Authenticator.setDefault(new AugmentedAuthenticator(new PasswordAuthentication(serverConfiguration
-                    .getUsername(), serverConfiguration.getPassword().toCharArray())));
+            final String authString = (serverConfiguration.getUsername() + ":" + serverConfiguration.getPassword());
 
             if (!serverConfiguration.isSSL()) {
                 // Basic authentication.
@@ -145,7 +141,8 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
                     c.setConnectTimeout(500);
                     c.setReadTimeout(500);
                     c.setDoOutput(false);
-
+                    c.setRequestProperty("Authorization",
+                            "Basic " + Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP));
                     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.FROYO) {
                         c.setDoInput(true);
                         ((HttpURLConnection) c).setInstanceFollowRedirects(false);
@@ -181,6 +178,8 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
                 final URL url = getHTTPsUrl(partialURL);
                 try {
                     c = url.openConnection();
+                    c.setRequestProperty("Authorization",
+                            "Basic " + Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP));
                 } catch (final IOException e) {
                     logError(e, "An error occured during SSL transaction.");
                 }
