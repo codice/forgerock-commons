@@ -80,4 +80,12 @@
 			</releases>
 		</repository>
 	</repositories>
+
+ <distributionManagement>
+  <site>
+   <id>forgerock.org</id>
+   <name>ForgeRock Community</name>
+   <url>scp://forgerock.org/var/www/vhosts/commons.forgerock.org/httpdocs/mobile/contact-manager</url>
+  </site>
+ </distributionManagement>
 </project> 
