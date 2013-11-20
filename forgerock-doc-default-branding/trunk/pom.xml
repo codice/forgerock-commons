@@ -35,7 +35,7 @@
   </description>
  <packaging>jar</packaging>
 
-  <scm>
+ <scm>
   <url>https://svn.forgerock.org/commons/forgerock-doc-default-branding/</url>
   <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-default-branding/trunk/</connection>
   <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-default-branding/trunk/</developerConnection>
