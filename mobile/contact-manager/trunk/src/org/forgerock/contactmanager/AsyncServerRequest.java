@@ -115,19 +115,20 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
     protected JSONObject doInBackground(final String... givenUrl) {
         final ServerConfiguration serverConfiguration = AppContext.getServerConfiguration();
 
-        if (serverConfiguration == null) {
+        if (serverConfiguration == null
+                || (serverConfiguration != null && !serverConfiguration.isValid())) {
             logError(new IOException(), "No server configured");
             return null;
         }
 
         URLConnection c = null;
         try {
-            String partialURL = serverConfiguration.getAddress() + givenUrl[0];
+            String partialURL = serverConfiguration.getAddress() + givenUrl[0] + Constants.LIST_PAGINATION;
             if (activity instanceof SearchActivity) {
                 if (isPagedCookie) {
-                    partialURL += Constants.LIST_PAGINATION + getPagedCookie();
+                    partialURL += getPagedCookie();
                 } else {
-                    partialURL += Constants.LIST_PAGINATION + getPageOffset();
+                    partialURL += getPageOffset();
                 }
             }
 
