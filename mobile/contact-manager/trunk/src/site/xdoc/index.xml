@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ! CCPL HEADER START
+  !
+  ! This work is licensed under the Creative Commons
+  ! Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+  ! To view a copy of this license, visit
+  ! http://creativecommons.org/licenses/by-nc-nd/3.0/
+  ! or send a letter to Creative Commons, 444 Castro Street,
+  ! Suite 900, Mountain View, California, 94041, USA.
+  !
+  ! See the License for the specific language governing permissions
+  ! and limitations under the License.
+  !
+  ! If applicable, add the following below this CCPL HEADER, with the fields
+  ! enclosed by brackets "[]" replaced with your own identifying information:
+  !      Portions Copyright [yyyy] [name of copyright owner]
+  !
+  ! CCPL HEADER END
+  !
+  !      Copyright 2013 ForgeRock AS
+  !
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/XDOC/2.0
+                              http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+ <properties>
+  <title>OpenDJ Contact Manager</title>
+  <author email="opendj@forgerock.org">ForgeRock AS</author>
+ </properties>
+
+ <body>
+  <section name="Table of Contents">
+   <macro name="toc" />
+  </section>
+
+  <section name="About OpenDJ Contact Manager">
+
+   <p>
+    <a href="http://forgerock.com/products/open-identity-stack/opendj/"
+    >OpenDJ directory services</a> give modern mobile applications easy access
+    to directory data through a
+    <a href="http://commons.forgerock.org/forgerock-rest/"
+    >ForgeRock common REST</a> interface.
+
+    OpenDJ Contact Manager is an Android application
+    that demonstrates use of OpenDJ directory server's REST interface
+    to search for and to read user resources.
+
+    When you retrieve the resource for a user from OpenDJ directory server,
+    OpenDJ Contact Manager lets you do the following:
+   </p>
+
+   <ul>
+    <li>Add the user to your Android address book.</li>
+    <li>Place a call to the user.</li>
+    <li>Send email to the user.</li>
+    <li>Geolocate the user's address.</li>
+    <li>Get the resource for the user's manager.</li>
+   </ul>
+
+   <p>
+    The directory data itself is exposed as REST resources of HTTP
+    using the directory HTTP connection handler,
+    with a mapping from LDAP entries to REST resources
+    configured in a file called <code>http-config.json</code>.
+
+    For details about the OpenDJ REST interface
+    and for examples showing how to use it,
+    see the <i>OpenDJ Administration Guide chapter</i>,
+    <i><a href="http://docs.forgerock.org/en/opendj/2.6.0/admin-guide/#chap-rest-operations"
+    >Performing RESTful Operations</a></i>.
+   </p>
+
+  </section>
+
+  <section name="To Build OpenDJ Contact Manager">
+
+   <ol>
+
+    <li>
+     <p>
+      Checkout the sources for OpenDJ Contact Manager.
+     </p>
+
+     <pre>$ svn co https://svn.forgerock.org/commons/mobile/contact-manager/trunk contact-manager</pre>
+
+     <p>
+      In the <code>AndroidManifest.xml</code> file, note the value of the
+      <code>android:targetSdkVersion</code> attribute
+      on the <code>&lt;uses-sdk></code> element.
+
+      You need to get this version of the Android SDK.
+     </p>
+    </li>
+
+    <li>
+     <p>
+      Download and install Android SDK.
+
+      See <a href="http://developer.android.com/tools/index.html"
+      >http://developer.android.com/tools/index.html</a> for instructions.
+     </p>
+
+     <p>
+      The minimum Android SDK version is 8.
+
+      The target Android SDK version is the
+      <code>android:targetSdkVersion</code> of the <code>&lt;uses-sdk></code> element.
+
+      If you have installed a later version of the SDK,
+      also install the target SDK version.
+     </p>
+    </li>
+
+    <li>
+     <p>
+      Set up your development environment to be able to use Android SDK.
+     </p>
+
+     <ul>
+      <li>
+       If you use Eclipse IDE,
+       see <a href="http://developer.android.com/sdk/installing/bundle.html"
+      >http://developer.android.com/sdk/installing/bundle.html</a>.
+      </li>
+
+      <li>
+       If you use IntelliJ IDEA,
+       see <a href="http://confluence.jetbrains.com/display/IntelliJIDEA/Prerequisites+for+Android+development"
+       >http://confluence.jetbrains.com/display/IntelliJIDEA/Prerequisites+for+Android+development</a>.
+      </li>
+
+      <li>
+       If you use NetBeans IDE,
+       see <a href="http://nbandroid.org/wiki/index.php/Installation"
+      >http://nbandroid.org/wiki/index.php/Installation</a>.
+      </li>
+     </ul>
+    </li>
+
+    <li>
+     <p>
+      Install and configure OpenDJ directory server.
+     </p>
+
+     <ol>
+      <li>
+       Install OpenDJ as described in the <a
+       href="http://docs.forgerock.org/en/opendj/2.6.0/install-guide/"
+       ><i>Installation Guide</i></a>,
+       importing <a href="http://opendj.forgerock.org/Example.ldif"
+       >Example.ldif</a> sample data.
+      </li>
+
+      <li>
+       Configure the HTTP Connection Handler
+       as described in the <i>Administration Guide</i> procedure, <a
+       href="http://docs.forgerock.org/en/opendj/2.6.0/admin-guide/#setup-rest2ldap-connection-handler"
+       ><i>To Set Up REST Access to OpenDJ Directory Server</i></a>.
+      </li>
+
+      <li>
+       Stop OpenDJ directory server,
+       apply the configuration, <code>ext_resource/http-config.json</code>,
+       provided with OpenDJ Contact Manager source files,
+       start OpenDJ directory server again,
+       and then check that the REST interface is working.
+
+       <pre><b>$ /path/to/opendj/bin/stop-ds</b>
+Stopping Server...
+<b>$ cp ext_resource/http-config.json /path/to/opendj/config/http-config.json</b>
+<b>$ /path/to/opendj/bin/start-ds</b>
+...The Directory Server has started successfully
+<b>$ curl http://bjensen:hifalutin@opendj.example.com:8080/users/bjensen?_prettyPrint=true</b>
+{
+  "_rev" : "00000000265ab6d0",
+  "schemas" : [ "urn:scim:schemas:core:1.0" ],
+  "contactInformation" : {
+    "telephoneNumber" : [ "+1 408 555 1862" ],
+    "emailAddress" : [ "bjensen@example.com" ]
+  },
+  "_id" : "bjensen",
+  "name" : {
+    "familyName" : "Jensen",
+    "givenName" : "Barbara"
+  },
+  "userName" : "bjensen@example.com",
+  "displayName" : "Barbara Jensen",
+  "contactAddress" : {
+    "location" : "San Francisco",
+    "postalAddress" : "500 3rd Street"
+  },
+  "manager" : [ {
+    "_id" : "trigden",
+    "displayName" : "Torrey Rigden"
+  } ]
+}
+</pre>
+      </li>
+     </ol>
+    </li>
+
+    <li>
+     <p>
+      Import the OpenDJ Contact Manager project into your development environment.
+     </p>
+
+     <p>
+      Make sure you have the correct Android SDK in the project SDK list.
+      <br />
+      For example, your project configuration might look like this
+      in IntelliJ IDEA if <code>&lt;uses-sdk android:targetSdkVersion="19" /></code>:
+     </p>
+
+     <img src="images/contact-manager-import.png"
+          alt="Import Wizard SDK Screen"
+          style="max-width: 640px;"
+     />
+    </li>
+
+    <li>
+     <p>
+      Configure your development environment to build the project.
+     </p>
+
+     <p>
+      For example, if you use IntelliJ IDEA you configure a build that
+      deploys the application into the Android emulator and launches the default activity.
+     </p>
+
+     <img src="images/configure-build.png"
+          alt="Build Configuration Screen"
+          style="max-width: 640px;"
+     />
+    </li>
+
+    <li>
+     <p>
+      Build the configuration, thereby starting the emulator with OpenDJ Contact Manager.
+     </p>
+
+     <p>
+      The emulator shows OpenDJ Contact Manager with no search results.
+     </p>
+
+     <img src="images/run-contact-manager.png"
+          alt="Import Wizard SDK Screen"
+          style="max-width: 640px;"
+     />
+    </li>
+
+    <li>
+     <p>
+      Configure the connection to OpenDJ directory server.
+     </p>
+
+     <ol>
+      <li>
+       Click Menu > Settings.
+      </li>
+
+      <li>
+       On the Settings page, click Menu > Add.
+      </li>
+
+      <li>
+       <p>
+        On the New Server page, provide a name and IP address:port combination.
+       </p>
+
+       <img src="images/configure-connection.png"
+            alt="Server Connection Configuration Screen"
+            style="max-width: 640px;"
+       />
+
+       <p>
+        Use an IP address to access OpenDJ directory server from the emulator.
+
+        For example, use the IP address assigned to your main network interface.
+       </p>
+      </li>
+
+      <li>
+       <p>
+        Click Continue, and then enter a user name and password.
+       </p>
+
+       <img src="images/configure-connection-authn.png"
+            alt="Server Connection Authentication Screen"
+            style="max-width: 640px;"
+       />
+
+       <p>
+        If you imported Example.ldif data into OpenDJ directory server,
+        then you can use <code>bjensen</code> with password <code>hifalutin</code>.
+       </p>
+      </li>
+     </ol>
+    </li>
+
+    <li>
+     <p>
+      With the connection properly configured, try some features.
+     </p>
+
+     <ul>
+      <li>
+       <p>
+        Perform a search for "jensen".
+       </p>
+
+       <img src="images/search-result.png"
+            alt="Search Result for jensen"
+            style="max-width: 640px;"
+       />
+      </li>
+
+      <li>
+       <p>
+        Perform a search for "carter"
+        and then add Sam Carter's entry to your address book.
+       </p>
+
+       <img src="images/add-contact.png"
+            alt="Adding Sam Carter to the address book"
+            style="max-width: 640px;"
+       />
+
+       <p>
+        The contacts you add show up in your Android address book.
+       </p>
+
+       <img src="images/address-book.png"
+            alt="Adding Sam Carter to the address book"
+            style="max-width: 640px;"
+       />
+      </li>
+     </ul>
+    </li>
+   </ol>
+  </section>
+
+  <section name="To Deploy OpenDJ Contact Manager on an Android Device">
+
+   <p>
+    To try OpenDJ Contact Manager on a physical device such as a phone,
+    install the compiled .apk.
+   </p>
+
+   <ol>
+    <li>
+     Plug your device into your computer by USB cable,
+     and use the device in USB mode.
+    </li>
+
+    <li>
+     Copy <code>target/contactmanager.apk</code> to your device.
+    </li>
+
+    <li>
+     Unmount the device,
+     shut down the USB connection,
+     and unplug your device.
+    </li>
+
+    <li>
+     In the device Settings
+     under Security > Device Administration,
+     allow installation of applications from Unknown Sources.
+    </li>
+
+    <li>
+     Open the .apk file
+     and accept Android's prompt to install OpenDJ Contact Manager.
+    </li>
+   </ol>
+  </section>
+
+ </body>
+
+</document>
