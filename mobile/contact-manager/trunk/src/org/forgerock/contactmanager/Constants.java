@@ -27,7 +27,8 @@ final class Constants {
     final static String SEARCH_SPECIFICUSER_BY_ID = "/users/%s?&_prettyPrint=true";
     final static String FILTER_FAMILYNAME_STARTSWITH
         = "/users?_queryFilter=name/familyName+sw+\"%s\"&_prettyPrint=true";
-    // Filter examples (unused) :
+    // TODO Add other filter
+    // e.g. :
     // final static String FILTER_GIVENNAME_STARTSWITH
     //    = "/users?_queryFilter=name/givenName+sw+\"%s\"&_prettyPrint=true";
     // final static String FILTER_MAIL_STARTSWITH = "/users?_queryFilter=userName+sw+\"%s\"&_prettyPrint=true";

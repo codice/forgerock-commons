@@ -19,6 +19,7 @@ package org.forgerock.contactmanager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
@@ -140,7 +141,6 @@ public class ServerConfiguration {
         this.name = serverName;
     }
 
-
     /**
      * Returns {@code: true} if SSL is enabled.
      *
@@ -158,6 +158,15 @@ public class ServerConfiguration {
      */
     public void setSSL(final boolean ssl) {
         this.isSSL = ssl;
+    }
+
+    /**
+     * Returns {@code true} if the server configuration contains at least an address.
+     *
+     * @return {@code true} if the configuration is valid.
+     */
+    public boolean isValid() {
+        return !TextUtils.isEmpty(this.serverAddress);
     }
 
     /**

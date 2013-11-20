@@ -60,7 +60,7 @@ public final class Utils {
      *            The server to delete.
      * @return {@code true} if the server has been successfully being deleted.
      */
-    static boolean deleteServerConfigurationFromPreferences(final String target) {
+    static final boolean deleteServerConfigurationFromPreferences(final String target) {
         final LinkedList<ServerConfiguration> registered = loadRegisteredServerList();
         final Iterator<ServerConfiguration> it = registered.iterator();
         final JSONArray jsonArray = new JSONArray();
@@ -89,7 +89,7 @@ public final class Utils {
      *            User shared preferences for this application.
      * @return A linked list of server configurations.
      */
-    static LinkedList<ServerConfiguration> loadRegisteredServerList() {
+    static final LinkedList<ServerConfiguration> loadRegisteredServerList() {
         LinkedList<ServerConfiguration> registered = null;
         final String registeredListPref = AppContext.getPref().getString(Constants.ALL_SERVER_CONFIGURATIONS, null);
         if (registeredListPref != null) {
@@ -117,7 +117,7 @@ public final class Utils {
      *            The server configuration to register.
      * @return {@code true} if the server configuration has successfully being added.
      */
-    static boolean saveCurrentServer(final ServerConfiguration configuration) {
+    static final boolean saveCurrentServer(final ServerConfiguration configuration) {
 
         final SharedPreferences pref = AppContext.getPref();
         final String jsonArrayString = pref.getString(Constants.ALL_SERVER_CONFIGURATIONS, null);
@@ -149,7 +149,7 @@ public final class Utils {
      *            The configuration to save.
      * @return Returns {@code true} if the server configuration is saved.
      */
-    static boolean saveActiveServer(final ServerConfiguration configuration) {
+    static final boolean saveActiveServer(final ServerConfiguration configuration) {
         try {
             final Editor edit = AppContext.getPref().edit();
             edit.putString(Constants.SELECTED_SERVER_CONFIGURATION, configuration.toJSON());
@@ -167,7 +167,7 @@ public final class Utils {
      *
      * @return The active server configuration.
      */
-    static ServerConfiguration loadActiveServer() {
+    static final ServerConfiguration loadActiveServer() {
         ServerConfiguration serverconfiguration = null;
         final String active = AppContext.getPref().getString(Constants.SELECTED_SERVER_CONFIGURATION, null);
         if (active != null) {
@@ -189,7 +189,7 @@ public final class Utils {
      *            The JSON string representation.
      * @return A list of JSON objects.
      */
-    static LinkedList<JSONObject> read(final String json) {
+    static final LinkedList<JSONObject> read(final String json) {
         if (json != null) {
             try {
                 return read(new JSONObject(json));
@@ -207,7 +207,7 @@ public final class Utils {
      *            The main SON object to parse.
      * @return A list of JSON objects.
      */
-    static LinkedList<JSONObject> read(final JSONObject json) {
+    static final LinkedList<JSONObject> read(final JSONObject json) {
         if (json != null) {
             final LinkedList<JSONObject> results = new LinkedList<JSONObject>();
 
@@ -239,7 +239,7 @@ public final class Utils {
      * @throws IOException
      *             If an error occurs during the copy process.
      */
-    static void copyStream(final InputStream is, final OutputStream os) throws IOException {
+    static final void copyStream(final InputStream is, final OutputStream os) throws IOException {
         try {
             final byte[] buffer = new byte[16 * 1024];
             int len;
@@ -261,20 +261,18 @@ public final class Utils {
      *            The string to encode.
      * @return A URL encoded string or {@code empty} if an error occurs.
      */
-    static String getURLEncoded(String stringToEncode) {
+    static final String getURLEncoded(String stringToEncode) {
         try {
-            stringToEncode = stringToEncode.replace("\"", "")
-                    .replace("\"", "")
-                    .replace("'", "")
-                    .replace("!", "")
-                    .replace("#", "")
-                    .replace("$", "")
-                    .replace("%", "")
-                    .replace("(", "")
-                    .replace(")", "")
-                    .replace("&", "")
-                    .replace("~", "")
-                    .replace(";", "");
+            stringToEncode = stringToEncode
+                    .replace("\\", "").replace("/", "")
+                    .replace("{", "").replace("}", "")
+                    .replace("'", "").replace("\"", "")
+                    .replace("!", "").replace("?", "")
+                    .replace(";", "").replace(",", "")
+                    .replace("#", "").replace("$", "")
+                    .replace("%", "").replace("&", "")
+                    .replace("(", "").replace(")", "")
+                    .replace("~", "").replace("|", "");
             return URLEncoder.encode(stringToEncode, "UTF-8")
                     .replaceAll("\\+", "%20");
         } catch (final UnsupportedEncodingException e) {
@@ -289,7 +287,7 @@ public final class Utils {
      * @param c
      *            The connection to close.
      */
-    static void closeConnection(final URLConnection c) {
+    static final void closeConnection(final URLConnection c) {
         try {
             // Close the connection.
             if (c instanceof HttpURLConnection) {
@@ -309,7 +307,7 @@ public final class Utils {
      *            The UI element to check.
      * @return {@code true} if the text is not empty.
      */
-    static boolean checkEditValue(final EditText editText) {
+    static final boolean checkEditValue(final EditText editText) {
         if (TextUtils.isEmpty(editText.getText())) {
             Toast.makeText(AppContext.getContext(), String.format("Invalid input : '%s' ", editText.getHint()),
                     Toast.LENGTH_SHORT).show();
