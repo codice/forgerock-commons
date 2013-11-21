@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/settings_separator_selected_server"
                     android:text="@string/sw1_server_address" />
-
+                
                 <TextView
                     android:id="@+id/settings_selected_server_address_content"
                     style="@style/settingsCommons"
@@ -109,12 +109,15 @@
                     android:layout_above="@+id/settings_selected_authentication"
                     android:layout_alignRight="@+id/settings_selected_authentication_content"
                     android:layout_below="@+id/settings_separator_selected_server"
+                    android:ellipsize="marquee"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:freezesText="true"
+                    android:marqueeRepeatLimit="marquee_forever"
                     android:maxWidth="190sp"
-                    android:ellipsize="none"                    
-                    android:maxLines="4"
-                    android:gravity="right"
-                    android:scrollHorizontally="false" />
-
+                    android:scrollHorizontally="true"
+                    android:singleLine="true" />
+                
                 <TextView
                     android:id="@+id/settings_selected_authentication"
                     style="@style/settingsCommons"
