@@ -56,7 +56,7 @@
 				<configuration>
 					<sdk>
 						<!-- platform or api level (api level 4 = platform 1.6) -->
-						<platform>18</platform>
+						<platform>19</platform>
 					</sdk>
 				</configuration>
 			</plugin>
