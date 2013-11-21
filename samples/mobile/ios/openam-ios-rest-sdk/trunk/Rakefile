@@ -1,0 +1,76 @@
+PROJECT_NAME = "openam-ios-rest-sdk"
+CONFIGURATION = "Release"
+
+TARGET_NAME = "openam-ios-rest-sdk"
+
+SDK_VERSION = ENV["SDK_VERSION"] || "7.0"
+
+PROJECT_ROOT = File.dirname(__FILE__)
+BUILD_DIR = File.join(PROJECT_ROOT, "build")
+
+SIMULATOR_LIBRARY_PATH = File.join(BUILD_DIR, "#{CONFIGURATION}-iphonesimulator", "lib#{PROJECT_NAME}.a")
+DEVICE_LIBRARY_DIR = File.join(BUILD_DIR, "#{CONFIGURATION}-iphoneos")
+DEVICE_LIBRARY_PATH = File.join(DEVICE_LIBRARY_DIR, "lib#{PROJECT_NAME}.a")
+UNIVERSAL_LIBRARY_DIR = File.join(BUILD_DIR, "#{CONFIGURATION}-iphoneuniversal")
+UNIVERSAL_LIBRARY_PATH = File.join(UNIVERSAL_LIBRARY_DIR, "#{PROJECT_NAME}")
+FRAMEWORK_PATH = File.join(UNIVERSAL_LIBRARY_DIR, "#{PROJECT_NAME}.framework")
+
+def system_or_exit(cmd, stdout = nil)
+  puts "Executing #{cmd}"
+  cmd += " >#{stdout}" if stdout
+  system(cmd) or begin
+    output = `car #{stdout}`
+    raise <<EOF
+******** Build failed ********
+#{output}
+
+EOF
+  end
+end
+
+def with_env_vars(env_vars)
+  old_values = {}
+  env_vars.each do |key,new_value|
+    old_values[key] = ENV[key]
+    ENV[key] = new_value
+  end
+
+  yield
+
+  env_vars.each_key do |key|
+    ENV[key] = old_values[key]
+  end
+end
+
+def output_file(target)
+  output_dir = if ENV['IS_CI_BOX']
+    ENV['CC_BUILD_ARTIFACTS']
+  else
+    Dir.mkdir(BUILD_DIR) unless File.exists?(BUILD_DIR)
+    BUILD_DIR
+  end
+
+  output_file = File.join(output_dir, "#{target}.output")
+  puts "Output: #{output_file}"
+  "'#{output_file}'"
+end
+
+desc "Clean all targets"
+task :clean do
+  system_or_exit "rm -rf '#{BUILD_DIR}'/*", output_file("clean")
+end
+
+desc "Build OpenAM iOS REST SDK"
+task :build do
+  system_or_exit "xcodebuild -project #{PROJECT_NAME}.xcodeproj -target #{TARGET_NAME} -configuration #{CONFIGURATION} -sdk iphoneos#{SDK_VERSION} BUILD_DIR=#{BUILD_DIR}", output_file("build_#{PROJECT_NAME}_iphoneos")
+  system_or_exit "xcodebuild -project #{PROJECT_NAME}.xcodeproj -target #{TARGET_NAME} -configuration #{CONFIGURATION} -sdk iphonesimulator#{SDK_VERSION} 'VALID_ARCHS=i386 x86_64' BUILD_DIR=#{BUILD_DIR}", output_file("build_#{PROJECT_NAME}_iphonesimulator")
+end
+
+desc "Packages OpenAM iOS REST SDK into a framework"
+task :package do
+  system_or_exit "rm -rf #{FRAMEWORK_PATH} && mkdir -p #{UNIVERSAL_LIBRARY_DIR} && mkdir -p #{FRAMEWORK_PATH}/Versions/A/Headers && mkdir -p #{FRAMEWORK_PATH}/Versions/A/Resources"
+  system_or_exit "lipo #{SIMULATOR_LIBRARY_PATH} #{DEVICE_LIBRARY_PATH} -create -output #{UNIVERSAL_LIBRARY_PATH}"
+  system_or_exit "cp #{UNIVERSAL_LIBRARY_PATH} #{FRAMEWORK_PATH}/Versions/A && cp -r #{DEVICE_LIBRARY_DIR}/include/#{PROJECT_NAME}/ #{FRAMEWORK_PATH}/Versions/A/Headers && ln -s #{FRAMEWORK_PATH}/Versions/A #{FRAMEWORK_PATH}/Versions/Current && ln -s #{FRAMEWORK_PATH}/Versions/Current/Headers #{FRAMEWORK_PATH}/Headers && ln -s #{FRAMEWORK_PATH}/Versions/Current/Resources #{FRAMEWORK_PATH}/Resources && ln -s #{FRAMEWORK_PATH}/Versions/Current/#{PROJECT_NAME} #{FRAMEWORK_PATH}/#{PROJECT_NAME}"
+end
+
+task :default => [:clean, :build, :package]

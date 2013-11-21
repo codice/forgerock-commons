@@ -6,21 +6,16 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		FAC51A33183A868D00FD3232 /* OpenAMiOSRESTSDKUniversal */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = FAC51A34183A868D00FD3232 /* Build configuration list for PBXAggregateTarget "OpenAMiOSRESTSDKUniversal" */;
-			buildPhases = (
-				FAC51A37183A86BC00FD3232 /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = OpenAMiOSRESTSDKUniversal;
-			productName = OpenAMiOSRESTSDKUniversal;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
+		FA877A84183D0AF00036938D /* RootLoginViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A11183A85F400FD3232 /* RootLoginViewController.h */; };
+		FA877A85183D0AF00036938D /* AuthenticationProcess.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A12183A85FD00FD3232 /* AuthenticationProcess.h */; };
+		FA877A86183D0AF00036938D /* AuthenticationSuccessResponse.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A14183A85FD00FD3232 /* AuthenticationSuccessResponse.h */; };
+		FA877A87183D0AF00036938D /* AuthenticationFailureResponse.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A16183A85FD00FD3232 /* AuthenticationFailureResponse.h */; };
+		FA877A88183D0AF00036938D /* AuthenticationCallbackResponse.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A18183A85FD00FD3232 /* AuthenticationCallbackResponse.h */; };
+		FA877A89183D0AF00036938D /* AuthenticationCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A1A183A85FD00FD3232 /* AuthenticationCallback.h */; };
+		FA877A8A183D0AF00036938D /* AuthenticationCallbackField.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A1C183A85FD00FD3232 /* AuthenticationCallbackField.h */; };
+		FA877A8B183D0AF00036938D /* DataStoreLogin.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A1E183A85FD00FD3232 /* DataStoreLogin.h */; };
+		FA877A8C183D0AF00036938D /* OpenAMRESTSDK.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A27183A860800FD3232 /* OpenAMRESTSDK.h */; };
 		FAC519E9183A84CF00FD3232 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC519E8183A84CF00FD3232 /* Foundation.framework */; };
 		FAC519F7183A84CF00FD3232 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC519F6183A84CF00FD3232 /* XCTest.framework */; };
 		FAC519F8183A84CF00FD3232 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC519E8183A84CF00FD3232 /* Foundation.framework */; };
@@ -36,15 +31,6 @@
 		FAC51A25183A85FD00FD3232 /* AuthenticationCallbackField.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A1D183A85FD00FD3232 /* AuthenticationCallbackField.m */; };
 		FAC51A26183A85FD00FD3232 /* DataStoreLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A1F183A85FD00FD3232 /* DataStoreLogin.m */; };
 		FAC51A29183A860800FD3232 /* OpenAMRESTSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A28183A860800FD3232 /* OpenAMRESTSDK.m */; };
-		FAC51A2A183A867A00FD3232 /* RootLoginViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A11183A85F400FD3232 /* RootLoginViewController.h */; };
-		FAC51A2B183A867A00FD3232 /* AuthenticationProcess.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A12183A85FD00FD3232 /* AuthenticationProcess.h */; };
-		FAC51A2C183A867A00FD3232 /* AuthenticationSuccessResponse.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A14183A85FD00FD3232 /* AuthenticationSuccessResponse.h */; };
-		FAC51A2D183A867A00FD3232 /* AuthenticationFailureResponse.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A16183A85FD00FD3232 /* AuthenticationFailureResponse.h */; };
-		FAC51A2E183A867A00FD3232 /* AuthenticationCallbackResponse.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A18183A85FD00FD3232 /* AuthenticationCallbackResponse.h */; };
-		FAC51A2F183A867A00FD3232 /* AuthenticationCallback.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A1A183A85FD00FD3232 /* AuthenticationCallback.h */; };
-		FAC51A30183A867A00FD3232 /* AuthenticationCallbackField.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A1C183A85FD00FD3232 /* AuthenticationCallbackField.h */; };
-		FAC51A31183A867A00FD3232 /* DataStoreLogin.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A1E183A85FD00FD3232 /* DataStoreLogin.h */; };
-		FAC51A32183A867A00FD3232 /* OpenAMRESTSDK.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A27183A860800FD3232 /* OpenAMRESTSDK.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,21 +44,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		FAC519E3183A84CF00FD3232 /* CopyFiles */ = {
+		FA877A83183D0ADA0036938D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
+			dstSubfolderSpec = 7;
 			files = (
-				FAC51A2A183A867A00FD3232 /* RootLoginViewController.h in CopyFiles */,
-				FAC51A2B183A867A00FD3232 /* AuthenticationProcess.h in CopyFiles */,
-				FAC51A2C183A867A00FD3232 /* AuthenticationSuccessResponse.h in CopyFiles */,
-				FAC51A2D183A867A00FD3232 /* AuthenticationFailureResponse.h in CopyFiles */,
-				FAC51A2E183A867A00FD3232 /* AuthenticationCallbackResponse.h in CopyFiles */,
-				FAC51A2F183A867A00FD3232 /* AuthenticationCallback.h in CopyFiles */,
-				FAC51A30183A867A00FD3232 /* AuthenticationCallbackField.h in CopyFiles */,
-				FAC51A31183A867A00FD3232 /* DataStoreLogin.h in CopyFiles */,
-				FAC51A32183A867A00FD3232 /* OpenAMRESTSDK.h in CopyFiles */,
+				FA877A84183D0AF00036938D /* RootLoginViewController.h in CopyFiles */,
+				FA877A85183D0AF00036938D /* AuthenticationProcess.h in CopyFiles */,
+				FA877A86183D0AF00036938D /* AuthenticationSuccessResponse.h in CopyFiles */,
+				FA877A87183D0AF00036938D /* AuthenticationFailureResponse.h in CopyFiles */,
+				FA877A88183D0AF00036938D /* AuthenticationCallbackResponse.h in CopyFiles */,
+				FA877A89183D0AF00036938D /* AuthenticationCallback.h in CopyFiles */,
+				FA877A8A183D0AF00036938D /* AuthenticationCallbackField.h in CopyFiles */,
+				FA877A8B183D0AF00036938D /* DataStoreLogin.h in CopyFiles */,
+				FA877A8C183D0AF00036938D /* OpenAMRESTSDK.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,6 +91,10 @@
 		FAC51A1F183A85FD00FD3232 /* DataStoreLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataStoreLogin.m; sourceTree = "<group>"; };
 		FAC51A27183A860800FD3232 /* OpenAMRESTSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenAMRESTSDK.h; sourceTree = "<group>"; };
 		FAC51A28183A860800FD3232 /* OpenAMRESTSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenAMRESTSDK.m; sourceTree = "<group>"; };
+		FAC51A64183D016000FD3232 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		FAC51A67183D016000FD3232 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		FAC51A68183D016000FD3232 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		FAC51A69183D016000FD3232 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +145,8 @@
 				FAC519E8183A84CF00FD3232 /* Foundation.framework */,
 				FAC519F6183A84CF00FD3232 /* XCTest.framework */,
 				FAC519F9183A84CF00FD3232 /* UIKit.framework */,
+				FAC51A64183D016000FD3232 /* Cocoa.framework */,
+				FAC51A66183D016000FD3232 /* Other Frameworks */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -234,6 +226,16 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		FAC51A66183D016000FD3232 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FAC51A67183D016000FD3232 /* Foundation.framework */,
+				FAC51A68183D016000FD3232 /* CoreData.framework */,
+				FAC51A69183D016000FD3232 /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -243,7 +245,7 @@
 			buildPhases = (
 				FAC519E1183A84CF00FD3232 /* Sources */,
 				FAC519E2183A84CF00FD3232 /* Frameworks */,
-				FAC519E3183A84CF00FD3232 /* CopyFiles */,
+				FA877A83183D0ADA0036938D /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -295,7 +297,6 @@
 			targets = (
 				FAC519E4183A84CF00FD3232 /* openam-ios-rest-sdk */,
 				FAC519F4183A84CF00FD3232 /* openam-ios-rest-sdkTests */,
-				FAC51A33183A868D00FD3232 /* OpenAMiOSRESTSDKUniversal */,
 			);
 		};
 /* End PBXProject section */
@@ -310,22 +311,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		FAC51A37183A86BC00FD3232 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target ImageFilters ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target ImageFilters -configuration ${CONFIGURATION} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FAC519E1183A84CF00FD3232 /* Sources */ = {
@@ -505,20 +490,6 @@
 			};
 			name = Release;
 		};
-		FAC51A35183A868D00FD3232 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		FAC51A36183A868D00FD3232 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -548,14 +519,6 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
-		};
-		FAC51A34183A868D00FD3232 /* Build configuration list for PBXAggregateTarget "OpenAMiOSRESTSDKUniversal" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				FAC51A35183A868D00FD3232 /* Debug */,
-				FAC51A36183A868D00FD3232 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
