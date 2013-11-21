@@ -57,6 +57,7 @@
     <li>Add the user to your Android address book.</li>
     <li>Place a call to the user.</li>
     <li>Send email to the user.</li>
+    <li>Send a text message (SMS) to the user.</li>
     <li>Geolocate the user's address.</li>
     <li>Get the resource for the user's manager.</li>
    </ul>
@@ -76,7 +77,7 @@
 
   </section>
 
-  <section name="To Build OpenDJ Contact Manager">
+  <section name="To Build OpenDJ Contact Manager in Your IDE">
 
    <ol>
 
@@ -339,6 +340,96 @@ Stopping Server...
        />
       </li>
      </ul>
+    </li>
+   </ol>
+  </section>
+
+  <section name="To Build OpenDJ Contact Manager on the Command Line">
+
+   <p>
+    You can build OpenDJ Contact Manager
+    by using <a href="http://maven.apache.org/">Apache Maven</a>.
+
+    Follow these steps:
+   </p>
+
+   <ol>
+
+    <li>
+     <p>
+      Checkout the sources for OpenDJ Contact Manager.
+     </p>
+
+     <pre>$ svn co https://svn.forgerock.org/commons/mobile/contact-manager/trunk contact-manager</pre>
+
+     <p>
+      In the <code>AndroidManifest.xml</code> file, note the value of the
+      <code>android:targetSdkVersion</code> attribute
+      on the <code>&lt;uses-sdk></code> element.
+
+      You need to get this version of the Android SDK.
+     </p>
+    </li>
+
+    <li>
+     <p>
+      Download and install Android SDK.
+
+      See <a href="http://developer.android.com/tools/index.html"
+      >http://developer.android.com/tools/index.html</a> for instructions.
+     </p>
+
+     <p>
+      The minimum Android SDK version is 8.
+
+      The target Android SDK version is the
+      <code>android:targetSdkVersion</code> of the <code>&lt;uses-sdk></code> element.
+
+      If you have installed a later version of the SDK,
+      also install the target SDK version.
+     </p>
+    </li>
+
+    <li>
+     <p>
+      Build OpenDJ Contact Manager using Apache Maven.
+     </p>
+
+     <p>
+      The <code>ANDROID_HOME</code> directory depends on
+      where you installed Android SDK, and on your platform.
+      <br />
+      The following example is from an installation on Mac OS X.
+     </p>
+
+     <pre><b>$ ANDROID_HOME=~/Development/android-sdk-macosx \
+ PATH=$ANDROID_HOME/tools:$ANDROID_HOME/platform_tools:$PATH \
+ mvn -Pprecommit clean install</b>
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] Building ContactManager 1.0.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+
+...
+
+[INFO] --- maven-install-plugin:2.4:install (default-install) @ contactmanager ---
+[INFO] Installing ...target/contactmanager.apk to ...
+[INFO] Installing ...pom.xml to ...
+[INFO] Installing ...target/contactmanager.jar to ...
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 31.816s
+[INFO] Finished at: Thu Nov 21 10:36:33 CET 2013
+[INFO] Final Memory: 37M/255M
+[INFO] ------------------------------------------------------------------------</pre>
+
+     <p>
+      After a successful build, deploy the OpenDJ Contact Manager application,
+      <code>target/contactmanager.apk</code>, on your Android device
+      as described below.
+     </p>
     </li>
    </ol>
   </section>
