@@ -268,7 +268,7 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
         BufferedReader reader = null;
         final StringBuilder sb = new StringBuilder();
         try {
-            reader = new BufferedReader(new InputStreamReader(in), 16 * 1024);
+            reader = new BufferedReader(new InputStreamReader(in), 8 * 1024);
             String line = "";
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
