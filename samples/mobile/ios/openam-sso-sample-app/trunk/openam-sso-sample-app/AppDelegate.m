@@ -11,9 +11,27 @@
 
 @implementation AppDelegate
 
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    
+    if ([[url scheme] isEqualToString:@"sso"]) {
+        
+        
+        
+        return YES;
+    }
+    return NO;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    
     
     ServerSettings *serverSettings = [[ServerSettings alloc] init];
     
@@ -21,6 +39,24 @@
     ViewController *viewController = [rootView viewControllers][0];
     viewController.serverSettings = serverSettings;
     
+    //Display error is there is no URL
+    if (![launchOptions objectForKey:UIApplicationLaunchOptionsURLKey]) {
+        UIAlertView *alertView;
+        alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"This app was launched without any text. Open this app using the Sender app to send text." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    }
+    
+    
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    // Display text
+    UIAlertView *alertView;
+    NSString *text = [[url host] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    alertView = [[UIAlertView alloc] initWithTitle:@"Text" message:text delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alertView show];
+
     return YES;
 }
 							

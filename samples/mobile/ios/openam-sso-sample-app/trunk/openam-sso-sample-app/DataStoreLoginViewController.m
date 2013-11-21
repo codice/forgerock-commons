@@ -7,9 +7,9 @@
 //
 
 #import "DataStoreLoginViewController.h"
-#import "AuthenticationCallback.h"
-#import "AuthenticationCallbackField.h"
-#import "DataStoreLogin.h"
+#import <openam-ios-rest-sdk/AuthenticationCallback.h>
+#import <openam-ios-rest-sdk/AuthenticationCallbackField.h>
+#import <openam-ios-rest-sdk/DataStoreLogin.h>
 
 @interface DataStoreLoginViewController ()
 @property (strong, nonatomic) DataStoreLogin *dataStoreLogin;

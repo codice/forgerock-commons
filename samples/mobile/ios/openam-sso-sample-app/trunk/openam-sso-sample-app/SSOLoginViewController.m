@@ -7,7 +7,7 @@
 //
 
 #import "SSOLoginViewController.h"
-#import "OpenAMRESTSDK.h"
+#import <openam-ios-rest-sdk/OpenAMRESTSDK.h>
 #import "DataStoreLoginViewController.h"
 #import "KeyChainWrapper.h"
 

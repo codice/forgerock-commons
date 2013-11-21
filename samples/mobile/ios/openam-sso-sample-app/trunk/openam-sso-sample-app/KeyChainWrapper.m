@@ -39,7 +39,7 @@ static NSString *serviceName = @"org.forgerock.OpenAMSSO";
     CFTypeRef typeRef = (__bridge CFTypeRef) attributes;
     SecItemCopyMatching((CFDictionaryRef)CFBridgingRetain(searchDictionary), &typeRef);
     
-    return [[NSString alloc] initWithData:CFBridgingRelease(typeRef) encoding:NSUTF8StringEncoding];;
+    return [[NSString alloc] initWithData:CFBridgingRelease(typeRef) encoding:NSUTF8StringEncoding];
 }
 
 + (BOOL)createKeychainValue:(NSString *)password forIdentifier:(NSString *)identifier {
