@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RootLoginViewController.h"
-#import "AuthenticationProcess.h"
+#import <openam-ios-rest-sdk/RootLoginViewController.h>
+#import <openam-ios-rest-sdk/AuthenticationProcess.h>
 #import "ServerSettings.h"
 #import "LoginViewController.h"
 

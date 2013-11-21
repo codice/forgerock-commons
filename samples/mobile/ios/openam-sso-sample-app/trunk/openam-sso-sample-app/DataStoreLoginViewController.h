@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AuthenticationCallbackResponse.h"
-#import "RootLoginViewController.h"
+#import <openam-ios-rest-sdk/AuthenticationCallbackResponse.h>
+#import <openam-ios-rest-sdk/RootLoginViewController.h>
 
 @interface DataStoreLoginViewController : UIViewController
 
