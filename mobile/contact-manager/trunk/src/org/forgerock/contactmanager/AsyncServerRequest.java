@@ -130,7 +130,7 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
                     partialURL += getPageOffset();
                 }
             }
-            final String authString = (serverConfiguration.getUsername() + ":" + serverConfiguration.getPassword());
+            final String authString = serverConfiguration.getUsername() + ":" + serverConfiguration.getPassword();
 
             if (!serverConfiguration.isSSL()) {
                 // Basic authentication.
