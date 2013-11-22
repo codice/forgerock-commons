@@ -400,24 +400,83 @@ public final class ResourceFunctions {
 
         @Override
         public JsonValue call(Parameter scope, Function<?> callback, Object... arguments)
-                throws ResourceException {
-            return null; // To change body of implemented methods use File |
-                         // Settings | File Templates.
+                throws ResourceException, NoSuchMethodException {
+            String resourceName = null;
+            String revision = null;
+            JsonValue patch = null;
+            List<Object> fieldFilter = null;
+            JsonValue context = null;
+
+            if (arguments.length < 3) {
+                throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage("patch",
+                        arguments));
+            }
+
+            for (int i = 0; i < arguments.length; i++) {
+                Object value = arguments[i];
+                switch (i) {
+                case 0:
+                    if (value instanceof String) {
+                        resourceName = (String) value;
+                    } else {
+                        throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
+                                "patch", arguments));
+                    }
+                    break;
+                case 1:
+                    if (value instanceof String) {
+                        revision = (String) value;
+                    } else if (null != value) {
+                        throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
+                                "patch", arguments));
+                    }
+                    break;
+                case 2:
+                    if (value instanceof List) {
+                        patch = new JsonValue(value);
+                    } else if (value instanceof JsonValue && ((JsonValue) value).isList()) {
+                        patch = (JsonValue) value;
+                    } else {
+                        throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
+                                "patch", arguments));
+                    }
+                    break;
+                case 3:
+                    if (value instanceof List) {
+                        fieldFilter = (List<Object>) value;
+                        break;
+                    } else if (value instanceof JsonValue && ((JsonValue) value).isList()) {
+                        fieldFilter = ((JsonValue) value).asList();
+                        break;
+                    } else if (null != value && arguments.length > 3) {
+                        throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
+                                "patch", arguments));
+                    }
+                case 4:
+                    if (value instanceof Map) {
+                        context = new JsonValue(value);
+                    } else if (value instanceof JsonValue && ((JsonValue) value).isMap()) {
+                        context = (JsonValue) value;
+                    } else if (null != value) {
+                        throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
+                                "patch", arguments));
+                    }
+                    break;
+                default: // TODO log unused arguments
+                }
+            }
+
+            return patch(scope, resourceName, revision, patch, fieldFilter, context, callback).getContent();
         }
 
         private final Resource patch(Parameter scope, String resourceName, String revision,
                 JsonValue patch, List<Object> fieldFilter, JsonValue context,
                 final Function<?> callback) throws ResourceException {
-            PatchRequest pr = Requests.newPatchRequest(resourceName, null);
-
-            for (JsonValue op : patch) {
-                final String operation =
-                        op.get(PatchOperation.FIELD_OPERATION).required().asString();
-                final String field = op.get(PatchOperation.FIELD_FIELD).required().asString();
-                final JsonValue value = op.get(PatchOperation.FIELD_VALUE).required();
-                pr.addPatchOperation(operation, field, value);
-            }
-
+            // create the request
+            PatchRequest pr = Requests.newPatchRequest(resourceName);
+            // add operations
+            List<PatchOperation> ops = PatchOperation.valueOfList(patch);
+            pr.addPatchOperation(ops.toArray(new PatchOperation[ops.size()]));
             // add fieldFilter
             pr.addField(fetchFields(fieldFilter));
             // set revision
