@@ -24,14 +24,13 @@ final class Constants {
      */
     final static int DEFAULT_ID_PICTURE = R.drawable.avatar_male_gray_frame_200x200;
 
-    final static String SEARCH_SPECIFICUSER_BY_ID = "/users/%s?&_prettyPrint=true";
-    final static String FILTER_FAMILYNAME_STARTSWITH
-        = "/users?_queryFilter=name/familyName+sw+\"%s\"&_prettyPrint=true";
+    final static String SEARCH_SPECIFICUSER_BY_ID = "/users/%s";
+    final static String FILTER_FAMILYNAME_STARTSWITH = "/users?_queryFilter=name/familyName+sw+\"%s\"";
     // TODO Add other filter
     // e.g. :
     // final static String FILTER_GIVENNAME_STARTSWITH
-    //    = "/users?_queryFilter=name/givenName+sw+\"%s\"&_prettyPrint=true";
-    // final static String FILTER_MAIL_STARTSWITH = "/users?_queryFilter=userName+sw+\"%s\"&_prettyPrint=true";
+    //    = "/users?_queryFilter=name/givenName+sw+\"%s\"";
+    // final static String FILTER_MAIL_STARTSWITH = "/users?_queryFilter=userName+sw+\"%s\"";
 
     // List pagination
     final static int PAGED_RESULT = 8;

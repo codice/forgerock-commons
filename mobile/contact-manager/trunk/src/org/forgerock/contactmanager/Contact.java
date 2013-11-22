@@ -438,10 +438,7 @@ public class Contact {
             pDetails = contactDetails.optJSONArray(MapperConstants.TELEPHONE_NUMBER);
         } else if (section == SECTION.MAIL && contactDetails != null) {
             pDetails = contactDetails.optJSONArray(MapperConstants.EMAIL_ADDRESS);
-        } /*
-           * else if (section == SECTION.ADDRESS) { final String address = getAddressFromJSON(); if
-           * (!TextUtils.isEmpty(address)) { extractedValues.add(address); return extractedValues; } return null; }
-           */
+        }
         if (pDetails != null) {
             for (int i = 0; i < pDetails.length(); i++) {
                 try {

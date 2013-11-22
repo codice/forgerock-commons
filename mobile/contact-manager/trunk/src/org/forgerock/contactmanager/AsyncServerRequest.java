@@ -121,8 +121,9 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
 
         URLConnection c = null;
         try {
-            String partialURL = serverConfiguration.getAddress() + givenUrl[0] + Constants.LIST_PAGINATION;
+            String partialURL = serverConfiguration.getAddress() + givenUrl[0];
             if (activity instanceof SearchActivity) {
+                partialURL += Constants.LIST_PAGINATION;
                 if (isPagedCookie) {
                     partialURL += getPagedCookie();
                 } else {
