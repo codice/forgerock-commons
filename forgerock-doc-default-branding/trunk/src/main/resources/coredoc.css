@@ -195,6 +195,12 @@ table {
     border-top: thin solid #ccc;
 }
 
+.table-contents td,
+.table-contents th {
+    padding: 1em;
+    vertical-align: top;
+}
+
 .table-contents thead {
     text-align: left;
 }
