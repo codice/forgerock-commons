@@ -28,7 +28,7 @@
  <artifactId>forgerock-doc-default-branding</artifactId>
  <groupId>org.forgerock.commons</groupId>
  <name>ForgeRock Documentation Default Branding</name>
- <version>1.0.1</version>
+ <version>1.0.2-SNAPSHOT</version>
  <description>
     This ForgeRock default branding includes style-related
     elements needed when building core documentation.
@@ -36,9 +36,9 @@
  <packaging>jar</packaging>
 
  <scm>
-  <url>https://svn.forgerock.org/commons/forgerock-doc-default-branding/tags/1.0.1</url>
-  <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-default-branding/tags/1.0.1</connection>
-  <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-default-branding/tags/1.0.1</developerConnection>
+  <url>https://svn.forgerock.org/commons/forgerock-doc-default-branding/</url>
+  <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-default-branding/trunk/</connection>
+  <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-default-branding/trunk/</developerConnection>
  </scm>
 
  <licenses>
