@@ -66,7 +66,8 @@
     <string name="finish">Finish</string>
 
     <!-- About activity -->
-    <string name="about_opendj">OpenDJ is an LDAPv3 compliant directory service, developed for the Java platform, providing a high performance, highly available, and secure store for the identities managed by your organization. Its easy installation process, combined with the power of the Java platform makes OpenDJ the simplest, fastest directory to deploy and manage.</string>
+    <string name="about_opendj">OpenDJ Contact Manager is a sample application of the OpenDJ open source Project, demonstrating the use of REST APIs to access directory data.
+ OpenDJ is an LDAPv3 and REST compliant directory service, developed for the Java platform, providing a high performance, highly available, and secure store for the identities managed by your organization.</string>
     <string name="about_website">www.forgerock.com </string>
 
     <!-- Status messages -->
