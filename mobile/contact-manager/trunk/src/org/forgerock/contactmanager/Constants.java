@@ -25,7 +25,8 @@ final class Constants {
     final static int DEFAULT_ID_PICTURE = R.drawable.avatar_male_gray_frame_200x200;
 
     final static String SEARCH_SPECIFICUSER_BY_ID = "/users/%s";
-    final static String FILTER_FAMILYNAME_STARTSWITH = "/users?_queryFilter=name/familyName+sw+\"%s\"";
+    final static String FILTER_FAMILYNAME_STARTSWITH =
+        "/users?_queryFilter=name/familyName+sw+\"%s\"+or+name/givenName+sw+\"%s\"";
     // TODO Add other filter
     // e.g. :
     // final static String FILTER_GIVENNAME_STARTSWITH
