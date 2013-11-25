@@ -204,7 +204,8 @@ public class SearchActivity extends AugmentedActivity {
     }
 
     private String getFilterRequest(final String searchValue) {
-        return String.format(Constants.FILTER_FAMILYNAME_STARTSWITH, Utils.getURLEncoded(searchValue));
+        final String encodedValue = Utils.getURLEncoded(searchValue);
+        return String.format(Constants.FILTER_FAMILYNAME_STARTSWITH, encodedValue, encodedValue);
     }
 
     static void initializePageCounter() {
