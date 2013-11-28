@@ -49,7 +49,7 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
-    if ([[request.URL absoluteString] rangeOfString:@"/XUI"].location == NSNotFound) {
+    if ([[request.URL absoluteString] rangeOfString:@"/XUI"].location == NSNotFound) {//TODO check for existance of cookie instead
         
         NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
         for (NSHTTPCookie *cookie in [storage cookies]) {
