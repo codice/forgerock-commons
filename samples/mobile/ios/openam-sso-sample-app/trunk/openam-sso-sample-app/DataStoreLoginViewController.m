@@ -41,7 +41,7 @@
 }
 
 - (DataStoreLogin *)dataStoreLogin {
-    if (!_dataStoreLogin) _dataStoreLogin = [[DataStoreLogin alloc] initWithCallbacks:self.response.callbacks];;
+    if (!_dataStoreLogin) _dataStoreLogin = [[DataStoreLogin alloc] initWithCallbacks:self.response.callbacks];
     return _dataStoreLogin;
 }
 
