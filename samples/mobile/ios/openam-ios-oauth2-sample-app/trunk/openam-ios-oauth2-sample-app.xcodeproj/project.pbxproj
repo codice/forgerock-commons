@@ -1,0 +1,523 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FA877B22183D120F0036938D /* Native.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA877B21183D120F0036938D /* Native.storyboard */; };
+		FA877B33183D121E0036938D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B24183D121E0036938D /* AppDelegate.m */; };
+		FA877B35183D121E0036938D /* ServerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B28183D121E0036938D /* ServerSettings.m */; };
+		FA877B36183D121E0036938D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B2A183D121E0036938D /* ViewController.m */; };
+		FA877B37183D121E0036938D /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B2C183D121E0036938D /* SettingsViewController.m */; };
+		FA877B38183D121E0036938D /* SettingsProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B2E183D121E0036938D /* SettingsProperty.m */; };
+		FA877B39183D121E0036938D /* SettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B30183D121E0036938D /* SettingsCell.m */; };
+		FA877B3A183D121E0036938D /* AuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B32183D121E0036938D /* AuthViewController.m */; };
+		FA877B5F183D12FD0036938D /* KeyChainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B5E183D12FC0036938D /* KeyChainWrapper.m */; };
+		FA877B67183E5E550036938D /* openam-ios-rest-sdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA877B65183E504A0036938D /* openam-ios-rest-sdk.framework */; };
+		FAE5C83C1846551400F3655B /* TokenInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE5C83B1846551400F3655B /* TokenInfoViewController.m */; };
+		FAE70DDA183A83D600F0C920 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE70DD9183A83D600F0C920 /* Foundation.framework */; };
+		FAE70DDC183A83D600F0C920 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE70DDB183A83D600F0C920 /* CoreGraphics.framework */; };
+		FAE70DDE183A83D600F0C920 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE70DDD183A83D600F0C920 /* UIKit.framework */; };
+		FAE70DE4183A83D600F0C920 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FAE70DE2183A83D600F0C920 /* InfoPlist.strings */; };
+		FAE70DE6183A83D600F0C920 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70DE5183A83D600F0C920 /* main.m */; };
+		FAE70DF2183A83D600F0C920 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAE70DF1183A83D600F0C920 /* Images.xcassets */; };
+		FAE70DF9183A83D600F0C920 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE70DF8183A83D600F0C920 /* XCTest.framework */; };
+		FAE70DFA183A83D600F0C920 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE70DD9183A83D600F0C920 /* Foundation.framework */; };
+		FAE70DFB183A83D600F0C920 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE70DDD183A83D600F0C920 /* UIKit.framework */; };
+		FAE70E03183A83D600F0C920 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FAE70E01183A83D600F0C920 /* InfoPlist.strings */; };
+		FAE70E05183A83D600F0C920 /* openam_ios_oauth2_sample_appTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70E04183A83D600F0C920 /* openam_ios_oauth2_sample_appTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FAE70DFC183A83D600F0C920 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FAE70DCE183A83D600F0C920 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FAE70DD5183A83D600F0C920;
+			remoteInfo = "openam-ios-oauth2-sample-app";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		FA877B21183D120F0036938D /* Native.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Native.storyboard; sourceTree = "<group>"; };
+		FA877B23183D121E0036938D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		FA877B24183D121E0036938D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		FA877B27183D121E0036938D /* ServerSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerSettings.h; sourceTree = "<group>"; };
+		FA877B28183D121E0036938D /* ServerSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerSettings.m; sourceTree = "<group>"; };
+		FA877B29183D121E0036938D /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		FA877B2A183D121E0036938D /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		FA877B2B183D121E0036938D /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		FA877B2C183D121E0036938D /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		FA877B2D183D121E0036938D /* SettingsProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsProperty.h; sourceTree = "<group>"; };
+		FA877B2E183D121E0036938D /* SettingsProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsProperty.m; sourceTree = "<group>"; };
+		FA877B2F183D121E0036938D /* SettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsCell.h; sourceTree = "<group>"; };
+		FA877B30183D121E0036938D /* SettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsCell.m; sourceTree = "<group>"; };
+		FA877B31183D121E0036938D /* AuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthViewController.h; sourceTree = "<group>"; };
+		FA877B32183D121E0036938D /* AuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthViewController.m; sourceTree = "<group>"; };
+		FA877B5D183D12FC0036938D /* KeyChainWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyChainWrapper.h; sourceTree = "<group>"; };
+		FA877B5E183D12FC0036938D /* KeyChainWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyChainWrapper.m; sourceTree = "<group>"; };
+		FA877B65183E504A0036938D /* openam-ios-rest-sdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "openam-ios-rest-sdk.framework"; path = "../openam-ios-rest-sdk/build/Release-iphoneuniversal/openam-ios-rest-sdk.framework"; sourceTree = "<group>"; };
+		FAE5C83A1846551400F3655B /* TokenInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TokenInfoViewController.h; sourceTree = "<group>"; };
+		FAE5C83B1846551400F3655B /* TokenInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TokenInfoViewController.m; sourceTree = "<group>"; };
+		FAE70DD6183A83D600F0C920 /* openam-ios-oauth2-sample-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "openam-ios-oauth2-sample-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAE70DD9183A83D600F0C920 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		FAE70DDB183A83D600F0C920 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		FAE70DDD183A83D600F0C920 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		FAE70DE1183A83D600F0C920 /* openam-ios-oauth2-sample-app-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "openam-ios-oauth2-sample-app-Info.plist"; sourceTree = "<group>"; };
+		FAE70DE3183A83D600F0C920 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FAE70DE5183A83D600F0C920 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		FAE70DE7183A83D600F0C920 /* openam-ios-oauth2-sample-app-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "openam-ios-oauth2-sample-app-Prefix.pch"; sourceTree = "<group>"; };
+		FAE70DF1183A83D600F0C920 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		FAE70DF7183A83D600F0C920 /* openam-ios-oauth2-sample-appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "openam-ios-oauth2-sample-appTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAE70DF8183A83D600F0C920 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		FAE70E00183A83D600F0C920 /* openam-ios-oauth2-sample-appTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "openam-ios-oauth2-sample-appTests-Info.plist"; sourceTree = "<group>"; };
+		FAE70E02183A83D600F0C920 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FAE70E04183A83D600F0C920 /* openam_ios_oauth2_sample_appTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = openam_ios_oauth2_sample_appTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FAE70DD3183A83D600F0C920 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA877B67183E5E550036938D /* openam-ios-rest-sdk.framework in Frameworks */,
+				FAE70DDC183A83D600F0C920 /* CoreGraphics.framework in Frameworks */,
+				FAE70DDE183A83D600F0C920 /* UIKit.framework in Frameworks */,
+				FAE70DDA183A83D600F0C920 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAE70DF4183A83D600F0C920 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAE70DF9183A83D600F0C920 /* XCTest.framework in Frameworks */,
+				FAE70DFB183A83D600F0C920 /* UIKit.framework in Frameworks */,
+				FAE70DFA183A83D600F0C920 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FAE70DCD183A83D600F0C920 = {
+			isa = PBXGroup;
+			children = (
+				FAE70DDF183A83D600F0C920 /* openam-ios-oauth2-sample-app */,
+				FAE70DFE183A83D600F0C920 /* openam-ios-oauth2-sample-appTests */,
+				FAE70DD8183A83D600F0C920 /* Frameworks */,
+				FAE70DD7183A83D600F0C920 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FAE70DD7183A83D600F0C920 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FAE70DD6183A83D600F0C920 /* openam-ios-oauth2-sample-app.app */,
+				FAE70DF7183A83D600F0C920 /* openam-ios-oauth2-sample-appTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FAE70DD8183A83D600F0C920 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FA877B65183E504A0036938D /* openam-ios-rest-sdk.framework */,
+				FAE70DD9183A83D600F0C920 /* Foundation.framework */,
+				FAE70DDB183A83D600F0C920 /* CoreGraphics.framework */,
+				FAE70DDD183A83D600F0C920 /* UIKit.framework */,
+				FAE70DF8183A83D600F0C920 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FAE70DDF183A83D600F0C920 /* openam-ios-oauth2-sample-app */ = {
+			isa = PBXGroup;
+			children = (
+				FA877B23183D121E0036938D /* AppDelegate.h */,
+				FA877B24183D121E0036938D /* AppDelegate.m */,
+				FA877B27183D121E0036938D /* ServerSettings.h */,
+				FA877B28183D121E0036938D /* ServerSettings.m */,
+				FA877B29183D121E0036938D /* ViewController.h */,
+				FA877B2A183D121E0036938D /* ViewController.m */,
+				FA877B2B183D121E0036938D /* SettingsViewController.h */,
+				FA877B2C183D121E0036938D /* SettingsViewController.m */,
+				FA877B2D183D121E0036938D /* SettingsProperty.h */,
+				FA877B2E183D121E0036938D /* SettingsProperty.m */,
+				FA877B2F183D121E0036938D /* SettingsCell.h */,
+				FA877B30183D121E0036938D /* SettingsCell.m */,
+				FA877B31183D121E0036938D /* AuthViewController.h */,
+				FA877B32183D121E0036938D /* AuthViewController.m */,
+				FA877B21183D120F0036938D /* Native.storyboard */,
+				FA877B5D183D12FC0036938D /* KeyChainWrapper.h */,
+				FA877B5E183D12FC0036938D /* KeyChainWrapper.m */,
+				FAE70DF1183A83D600F0C920 /* Images.xcassets */,
+				FAE70DE0183A83D600F0C920 /* Supporting Files */,
+				FAE5C83A1846551400F3655B /* TokenInfoViewController.h */,
+				FAE5C83B1846551400F3655B /* TokenInfoViewController.m */,
+			);
+			path = "openam-ios-oauth2-sample-app";
+			sourceTree = "<group>";
+		};
+		FAE70DE0183A83D600F0C920 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FAE70DE1183A83D600F0C920 /* openam-ios-oauth2-sample-app-Info.plist */,
+				FAE70DE2183A83D600F0C920 /* InfoPlist.strings */,
+				FAE70DE5183A83D600F0C920 /* main.m */,
+				FAE70DE7183A83D600F0C920 /* openam-ios-oauth2-sample-app-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FAE70DFE183A83D600F0C920 /* openam-ios-oauth2-sample-appTests */ = {
+			isa = PBXGroup;
+			children = (
+				FAE70E04183A83D600F0C920 /* openam_ios_oauth2_sample_appTests.m */,
+				FAE70DFF183A83D600F0C920 /* Supporting Files */,
+			);
+			path = "openam-ios-oauth2-sample-appTests";
+			sourceTree = "<group>";
+		};
+		FAE70DFF183A83D600F0C920 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FAE70E00183A83D600F0C920 /* openam-ios-oauth2-sample-appTests-Info.plist */,
+				FAE70E01183A83D600F0C920 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FAE70DD5183A83D600F0C920 /* openam-ios-oauth2-sample-app */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAE70E08183A83D600F0C920 /* Build configuration list for PBXNativeTarget "openam-ios-oauth2-sample-app" */;
+			buildPhases = (
+				FAE70DD2183A83D600F0C920 /* Sources */,
+				FAE70DD3183A83D600F0C920 /* Frameworks */,
+				FAE70DD4183A83D600F0C920 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "openam-ios-oauth2-sample-app";
+			productName = "openam-ios-oauth2-sample-app";
+			productReference = FAE70DD6183A83D600F0C920 /* openam-ios-oauth2-sample-app.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FAE70DF6183A83D600F0C920 /* openam-ios-oauth2-sample-appTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAE70E0B183A83D600F0C920 /* Build configuration list for PBXNativeTarget "openam-ios-oauth2-sample-appTests" */;
+			buildPhases = (
+				FAE70DF3183A83D600F0C920 /* Sources */,
+				FAE70DF4183A83D600F0C920 /* Frameworks */,
+				FAE70DF5183A83D600F0C920 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FAE70DFD183A83D600F0C920 /* PBXTargetDependency */,
+			);
+			name = "openam-ios-oauth2-sample-appTests";
+			productName = "openam-ios-oauth2-sample-appTests";
+			productReference = FAE70DF7183A83D600F0C920 /* openam-ios-oauth2-sample-appTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FAE70DCE183A83D600F0C920 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = ForgeRock;
+				TargetAttributes = {
+					FAE70DF6183A83D600F0C920 = {
+						TestTargetID = FAE70DD5183A83D600F0C920;
+					};
+				};
+			};
+			buildConfigurationList = FAE70DD1183A83D600F0C920 /* Build configuration list for PBXProject "openam-ios-oauth2-sample-app" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FAE70DCD183A83D600F0C920;
+			productRefGroup = FAE70DD7183A83D600F0C920 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FAE70DD5183A83D600F0C920 /* openam-ios-oauth2-sample-app */,
+				FAE70DF6183A83D600F0C920 /* openam-ios-oauth2-sample-appTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FAE70DD4183A83D600F0C920 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAE70DF2183A83D600F0C920 /* Images.xcassets in Resources */,
+				FAE70DE4183A83D600F0C920 /* InfoPlist.strings in Resources */,
+				FA877B22183D120F0036938D /* Native.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAE70DF5183A83D600F0C920 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAE70E03183A83D600F0C920 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FAE70DD2183A83D600F0C920 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA877B33183D121E0036938D /* AppDelegate.m in Sources */,
+				FA877B39183D121E0036938D /* SettingsCell.m in Sources */,
+				FAE5C83C1846551400F3655B /* TokenInfoViewController.m in Sources */,
+				FAE70DE6183A83D600F0C920 /* main.m in Sources */,
+				FA877B5F183D12FD0036938D /* KeyChainWrapper.m in Sources */,
+				FA877B3A183D121E0036938D /* AuthViewController.m in Sources */,
+				FA877B38183D121E0036938D /* SettingsProperty.m in Sources */,
+				FA877B37183D121E0036938D /* SettingsViewController.m in Sources */,
+				FA877B35183D121E0036938D /* ServerSettings.m in Sources */,
+				FA877B36183D121E0036938D /* ViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAE70DF3183A83D600F0C920 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FAE70E05183A83D600F0C920 /* openam_ios_oauth2_sample_appTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FAE70DFD183A83D600F0C920 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FAE70DD5183A83D600F0C920 /* openam-ios-oauth2-sample-app */;
+			targetProxy = FAE70DFC183A83D600F0C920 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		FAE70DE2183A83D600F0C920 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FAE70DE3183A83D600F0C920 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		FAE70E01183A83D600F0C920 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FAE70E02183A83D600F0C920 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FAE70E06183A83D600F0C920 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		FAE70E07183A83D600F0C920 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FAE70E09183A83D600F0C920 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/Phill/ForgeRockDev/commons/samples/mobile/ios/openam-ios-rest-sdk/build/Release-iphoneuniversal",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "openam-ios-oauth2-sample-app/openam-ios-oauth2-sample-app-Prefix.pch";
+				INFOPLIST_FILE = "openam-ios-oauth2-sample-app/openam-ios-oauth2-sample-app-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		FAE70E0A183A83D600F0C920 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/Phill/ForgeRockDev/commons/samples/mobile/ios/openam-ios-rest-sdk/build/Release-iphoneuniversal",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "openam-ios-oauth2-sample-app/openam-ios-oauth2-sample-app-Prefix.pch";
+				INFOPLIST_FILE = "openam-ios-oauth2-sample-app/openam-ios-oauth2-sample-app-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		FAE70E0C183A83D600F0C920 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/openam-ios-oauth2-sample-app.app/openam-ios-oauth2-sample-app";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "openam-ios-oauth2-sample-app/openam-ios-oauth2-sample-app-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "openam-ios-oauth2-sample-appTests/openam-ios-oauth2-sample-appTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		FAE70E0D183A83D600F0C920 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/openam-ios-oauth2-sample-app.app/openam-ios-oauth2-sample-app";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "openam-ios-oauth2-sample-app/openam-ios-oauth2-sample-app-Prefix.pch";
+				INFOPLIST_FILE = "openam-ios-oauth2-sample-appTests/openam-ios-oauth2-sample-appTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FAE70DD1183A83D600F0C920 /* Build configuration list for PBXProject "openam-ios-oauth2-sample-app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAE70E06183A83D600F0C920 /* Debug */,
+				FAE70E07183A83D600F0C920 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAE70E08183A83D600F0C920 /* Build configuration list for PBXNativeTarget "openam-ios-oauth2-sample-app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAE70E09183A83D600F0C920 /* Debug */,
+				FAE70E0A183A83D600F0C920 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAE70E0B183A83D600F0C920 /* Build configuration list for PBXNativeTarget "openam-ios-oauth2-sample-appTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAE70E0C183A83D600F0C920 /* Debug */,
+				FAE70E0D183A83D600F0C920 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FAE70DCE183A83D600F0C920 /* Project object */;
+}
