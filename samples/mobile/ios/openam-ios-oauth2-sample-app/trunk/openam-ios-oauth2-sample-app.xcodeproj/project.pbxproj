@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA0B657C184CB20E00E421A9 /* SimpleLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = FA0B657B184CB20E00E421A9 /* SimpleLogin.m */; };
 		FA877B22183D120F0036938D /* Native.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA877B21183D120F0036938D /* Native.storyboard */; };
 		FA877B33183D121E0036938D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B24183D121E0036938D /* AppDelegate.m */; };
 		FA877B35183D121E0036938D /* ServerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B28183D121E0036938D /* ServerSettings.m */; };
 		FA877B36183D121E0036938D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B2A183D121E0036938D /* ViewController.m */; };
 		FA877B37183D121E0036938D /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B2C183D121E0036938D /* SettingsViewController.m */; };
-		FA877B38183D121E0036938D /* SettingsProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B2E183D121E0036938D /* SettingsProperty.m */; };
-		FA877B39183D121E0036938D /* SettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B30183D121E0036938D /* SettingsCell.m */; };
 		FA877B3A183D121E0036938D /* AuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B32183D121E0036938D /* AuthViewController.m */; };
 		FA877B5F183D12FD0036938D /* KeyChainWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B5E183D12FC0036938D /* KeyChainWrapper.m */; };
-		FA877B67183E5E550036938D /* openam-ios-rest-sdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA877B65183E504A0036938D /* openam-ios-rest-sdk.framework */; };
+		FAB71599184C8504006235F5 /* openam-ios-rest-sdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAB71598184C8504006235F5 /* openam-ios-rest-sdk.framework */; };
+		FAB7159B184C8D80006235F5 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FAB7159A184C8D80006235F5 /* Settings.bundle */; };
 		FAE5C83C1846551400F3655B /* TokenInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE5C83B1846551400F3655B /* TokenInfoViewController.m */; };
 		FAE70DDA183A83D600F0C920 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE70DD9183A83D600F0C920 /* Foundation.framework */; };
 		FAE70DDC183A83D600F0C920 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE70DDB183A83D600F0C920 /* CoreGraphics.framework */; };
@@ -42,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FA0B657A184CB20E00E421A9 /* SimpleLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleLogin.h; sourceTree = "<group>"; };
+		FA0B657B184CB20E00E421A9 /* SimpleLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleLogin.m; sourceTree = "<group>"; };
 		FA877B21183D120F0036938D /* Native.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Native.storyboard; sourceTree = "<group>"; };
 		FA877B23183D121E0036938D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		FA877B24183D121E0036938D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -51,15 +53,12 @@
 		FA877B2A183D121E0036938D /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		FA877B2B183D121E0036938D /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		FA877B2C183D121E0036938D /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
-		FA877B2D183D121E0036938D /* SettingsProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsProperty.h; sourceTree = "<group>"; };
-		FA877B2E183D121E0036938D /* SettingsProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsProperty.m; sourceTree = "<group>"; };
-		FA877B2F183D121E0036938D /* SettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsCell.h; sourceTree = "<group>"; };
-		FA877B30183D121E0036938D /* SettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsCell.m; sourceTree = "<group>"; };
 		FA877B31183D121E0036938D /* AuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthViewController.h; sourceTree = "<group>"; };
 		FA877B32183D121E0036938D /* AuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthViewController.m; sourceTree = "<group>"; };
 		FA877B5D183D12FC0036938D /* KeyChainWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyChainWrapper.h; sourceTree = "<group>"; };
 		FA877B5E183D12FC0036938D /* KeyChainWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyChainWrapper.m; sourceTree = "<group>"; };
-		FA877B65183E504A0036938D /* openam-ios-rest-sdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "openam-ios-rest-sdk.framework"; path = "../openam-ios-rest-sdk/build/Release-iphoneuniversal/openam-ios-rest-sdk.framework"; sourceTree = "<group>"; };
+		FAB71598184C8504006235F5 /* openam-ios-rest-sdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "openam-ios-rest-sdk.framework"; path = "../../../../../../Library/Frameworks/openam-ios-rest-sdk.framework"; sourceTree = "<group>"; };
+		FAB7159A184C8D80006235F5 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		FAE5C83A1846551400F3655B /* TokenInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TokenInfoViewController.h; sourceTree = "<group>"; };
 		FAE5C83B1846551400F3655B /* TokenInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TokenInfoViewController.m; sourceTree = "<group>"; };
 		FAE70DD6183A83D600F0C920 /* openam-ios-oauth2-sample-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "openam-ios-oauth2-sample-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA877B67183E5E550036938D /* openam-ios-rest-sdk.framework in Frameworks */,
+				FAB71599184C8504006235F5 /* openam-ios-rest-sdk.framework in Frameworks */,
 				FAE70DDC183A83D600F0C920 /* CoreGraphics.framework in Frameworks */,
 				FAE70DDE183A83D600F0C920 /* UIKit.framework in Frameworks */,
 				FAE70DDA183A83D600F0C920 /* Foundation.framework in Frameworks */,
@@ -125,7 +124,7 @@
 		FAE70DD8183A83D600F0C920 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FA877B65183E504A0036938D /* openam-ios-rest-sdk.framework */,
+				FAB71598184C8504006235F5 /* openam-ios-rest-sdk.framework */,
 				FAE70DD9183A83D600F0C920 /* Foundation.framework */,
 				FAE70DDB183A83D600F0C920 /* CoreGraphics.framework */,
 				FAE70DDD183A83D600F0C920 /* UIKit.framework */,
@@ -145,10 +144,6 @@
 				FA877B2A183D121E0036938D /* ViewController.m */,
 				FA877B2B183D121E0036938D /* SettingsViewController.h */,
 				FA877B2C183D121E0036938D /* SettingsViewController.m */,
-				FA877B2D183D121E0036938D /* SettingsProperty.h */,
-				FA877B2E183D121E0036938D /* SettingsProperty.m */,
-				FA877B2F183D121E0036938D /* SettingsCell.h */,
-				FA877B30183D121E0036938D /* SettingsCell.m */,
 				FA877B31183D121E0036938D /* AuthViewController.h */,
 				FA877B32183D121E0036938D /* AuthViewController.m */,
 				FA877B21183D120F0036938D /* Native.storyboard */,
@@ -158,6 +153,9 @@
 				FAE70DE0183A83D600F0C920 /* Supporting Files */,
 				FAE5C83A1846551400F3655B /* TokenInfoViewController.h */,
 				FAE5C83B1846551400F3655B /* TokenInfoViewController.m */,
+				FAB7159A184C8D80006235F5 /* Settings.bundle */,
+				FA0B657A184CB20E00E421A9 /* SimpleLogin.h */,
+				FA0B657B184CB20E00E421A9 /* SimpleLogin.m */,
 			);
 			path = "openam-ios-oauth2-sample-app";
 			sourceTree = "<group>";
@@ -267,6 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FAB7159B184C8D80006235F5 /* Settings.bundle in Resources */,
 				FAE70DF2183A83D600F0C920 /* Images.xcassets in Resources */,
 				FAE70DE4183A83D600F0C920 /* InfoPlist.strings in Resources */,
 				FA877B22183D120F0036938D /* Native.storyboard in Resources */,
@@ -289,12 +288,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA877B33183D121E0036938D /* AppDelegate.m in Sources */,
-				FA877B39183D121E0036938D /* SettingsCell.m in Sources */,
 				FAE5C83C1846551400F3655B /* TokenInfoViewController.m in Sources */,
 				FAE70DE6183A83D600F0C920 /* main.m in Sources */,
+				FA0B657C184CB20E00E421A9 /* SimpleLogin.m in Sources */,
 				FA877B5F183D12FD0036938D /* KeyChainWrapper.m in Sources */,
 				FA877B3A183D121E0036938D /* AuthViewController.m in Sources */,
-				FA877B38183D121E0036938D /* SettingsProperty.m in Sources */,
 				FA877B37183D121E0036938D /* SettingsViewController.m in Sources */,
 				FA877B35183D121E0036938D /* ServerSettings.m in Sources */,
 				FA877B36183D121E0036938D /* ViewController.m in Sources */,
@@ -419,6 +417,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/Phill/ForgeRockDev/commons/samples/mobile/ios/openam-ios-rest-sdk/build/Release-iphoneuniversal",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"$(USER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "openam-ios-oauth2-sample-app/openam-ios-oauth2-sample-app-Prefix.pch";
@@ -436,6 +436,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/Phill/ForgeRockDev/commons/samples/mobile/ios/openam-ios-rest-sdk/build/Release-iphoneuniversal",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"$(USER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "openam-ios-oauth2-sample-app/openam-ios-oauth2-sample-app-Prefix.pch";

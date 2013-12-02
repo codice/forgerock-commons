@@ -1,10 +1,18 @@
-//
-//  AppDelegate.m
-//  OpenAMOAuth2SampleApp
-//
-//  Created by Phill on 13/11/2013.
-//  Copyright (c) 2013 ForgeRock. All rights reserved.
-//
+/*
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2013 ForgeRock, AS.
+ */
 
 #import "AppDelegate.h"
 #import "ViewController.h"
@@ -19,13 +27,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    
-    self.serverSettings = [ServerSettings getInstance];
-    
-    UINavigationController *rootView = (UINavigationController *)self.window.rootViewController;
-    ViewController *viewController = [rootView viewControllers][0];
-    viewController.serverSettings = self.serverSettings;
-    
     return YES;
 }
 							
@@ -49,31 +50,6 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-//    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
-    
-    NSString *ssoTokenId = [KeyChainWrapper searchKeychainCopyMatching:@"SSOTokenId"];
-    
-    NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];
-    [cookieProperties setObject:@"iPlanetDirectoryPro" forKey:NSHTTPCookieName];
-    [cookieProperties setObject:ssoTokenId forKey:NSHTTPCookieValue];
-    [cookieProperties setObject:@".forgerock.com" forKey:NSHTTPCookieDomain];//TODO get from properties
-//    [cookieProperties setObject:[self.serverSettings valueForKey:@"OPENAM_URL_SETTING_KEY"] forKey:NSHTTPCookieOriginURL];
-    [cookieProperties setObject:@"http://phill.internal.forgerock.com" forKey:NSHTTPCookieOriginURL];
-    [cookieProperties setObject:@"/" forKey:NSHTTPCookiePath];
-    //    [cookieProperties setObject:@"0" forKey:NSHTTPCookieVersion];
-    
-    // set expiration to one month from now or any NSDate of your choosing
-    // this makes the cookie sessionless and it will persist across web sessions and app launches
-    /// if you want the cookie to be destroyed when your app exits, don't set this
-    //    [cookieProperties setObject:[[NSDate date] dateByAddingTimeInterval:2629743] forKey:NSHTTPCookieExpires];
-    
-    NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
-    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
-    
-
-    NSArray *a = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:@"http://phill.internal.forgerock.com"]];
-    
-    NSString *s = @"";
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
