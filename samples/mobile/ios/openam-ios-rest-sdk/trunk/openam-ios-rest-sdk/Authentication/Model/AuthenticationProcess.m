@@ -1,103 +1,85 @@
-//
-//  AuthenticationProcess.m
-//  OpenAMRESTSDK
-//
-//  Created by Phill on 13/11/2013.
-//  Copyright (c) 2013 ForgeRock. All rights reserved.
-//
+/*
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2013 ForgeRock, AS.
+ */
 
 #import "AuthenticationProcess.h"
 #import "AuthenticationCallbackResponse.h"
 #import "AuthenticationSuccessResponse.h"
 #import "AuthenticationFailureResponse.h"
+#import "RestService.h"
 
-@interface AuthenticationProcess() <NSURLConnectionDataDelegate>
+@interface AuthenticationProcess()
 @property (strong, nonatomic) id <AuthenticationProcessDelegate> delegate;
-@property (strong, nonatomic) NSURL *authenticateUrl;
-@property (strong, nonatomic) NSData *receivedData;
-@property (strong, nonatomic) NSDictionary *jsonResponse;
-@property (strong, nonatomic) NSURLConnection *connection;
-@property (nonatomic) BOOL isComplete;
+@property (strong, nonatomic) NSString *authenticateUrl;
+
+@property (nonatomic, strong, readonly) RestService *restService;
 @end
 
 @implementation AuthenticationProcess  //TODO locking to ensure that when a request has been sent no other can be made until that one has completed?
 
-- (void)start:(id <AuthenticationProcessDelegate>)delegate {
-    
-    self.delegate = delegate;
-    self.authenticateUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [self.delegate authenticateTo], @"/json/authenticate"]];
-    
-    [self initiateAuthentication];
+- (RestService *)restService {
+    return [RestService instance];
 }
 
-- (void)initiateAuthentication {
+- (void)startAuthenticationToServer:(NSString *)baseUri delegate:(id <AuthenticationProcessDelegate>)delegate {
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.authenticateUrl cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10];
+    self.delegate = delegate;
+    self.authenticateUrl = [NSString stringWithFormat:@"%@%@", baseUri, @"/json/authenticate"]; //TODO check to see if base URI has trailing slash!!
     
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:[@"{}" dataUsingEncoding:NSUTF8StringEncoding]];
-    self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [self initiateAuthenticationWithHeaders:nil];
+}
+
+- (void)startZPLAuthenticationToServer:(NSString *)baseUri forUser:(NSString *)username withPassword:(NSString *)password delegate:(id <AuthenticationProcessDelegate>)delegate {
+    
+    self.delegate = delegate;
+    self.authenticateUrl = [NSString stringWithFormat:@"%@%@", baseUri, @"/json/authenticate"]; //TODO check to see if base URI has trailing slash!!
+    
+    NSDictionary *headers = [[NSDictionary alloc] initWithObjectsAndKeys:username, @"X-OpenAM-Username", password, @"X-OpenAM-Password", nil];
+    
+    [self initiateAuthenticationWithHeaders:headers];
+}
+
+- (void)initiateAuthenticationWithHeaders:(NSDictionary *)headers {
+    [self.restService post:self.authenticateUrl withHeaders:headers withParams:nil withBody:[[NSDictionary alloc] init] onCompletion:[self completionBlock]];
 }
 
 - (void)submitCallbacks:(NSDictionary *)callbacks {
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.authenticateUrl cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10];
-    
-    [request setHTTPMethod:@"POST"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    NSError *error;
-    NSData *json = [NSJSONSerialization dataWithJSONObject:callbacks options:NSJSONWritingPrettyPrinted error:&error];
-    
-    [request setHTTPBody:json];
-    self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [self.restService post:self.authenticateUrl withHeaders:nil withParams:nil withBody:callbacks onCompletion:[self completionBlock]];
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// NSURLConnectionDataDelegate
-//
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    //    self.receivedData = [[NSMutableData alloc] init];
-    NSLog(@"didRecieveResponse");
+- (void (^)(NSDictionary *response, NSError *err))completionBlock {
+    return ^(NSDictionary *response, NSError *err) {
+        // When the request completes, this block will be called.
+        
+        if (!err) {
+            NSLog(@"Received data %@", response);
+            
+            if ([response valueForKey:@"tokenId"]) {
+                [self.delegate authenticationSucceededWithResult:[[AuthenticationSuccessResponse alloc] initWithData:response]];
+            } else if ([response valueForKey:@"errorMessage"]) {
+                [self.delegate authenticationFailedWithResult:[[AuthenticationFailureResponse alloc] initWithData:response]];
+            } else {
+                [self.delegate responseReceivedWithCallbacks:[[AuthenticationCallbackResponse alloc] initWithData:response]];
+            }
+            
+            NSLog(@"connectionDidFinishLoading");
+        } else {
+            [self.delegate authenticationFailed:err];
+            NSLog(@"WHOOPS! Something went wrong!!");
+        }
+    };
 }
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    self.receivedData = [[NSMutableData alloc] initWithData:data];
-    NSLog(@"didReceiveData");
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    NSLog(@"WHOOPS! Something went wrong"); //TODO
-    //    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error"
-    //                                                    message:error.description
-    //                                                   delegate:nil
-    //                                          cancelButtonTitle:@"Close"
-    //                                          otherButtonTitles:nil];
-    //
-    //    [alert show];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSString* s = [[NSString alloc] initWithData:self.receivedData encoding:NSUTF8StringEncoding];
-    NSLog(@"Received data %@", s);
-    
-    NSDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:self.receivedData options:NSJSONReadingMutableContainers error:nil];
-    
-    if ([jsonResponse valueForKey:@"tokenId"]) {
-        [self.delegate authenticationSucceededWithResult:[[AuthenticationSuccessResponse alloc] initWithData:jsonResponse]];
-    } else if ([jsonResponse valueForKey:@"errorMessage"]) {
-        [self.delegate authenticationFailedWithResult:[[AuthenticationFailureResponse alloc] initWithData:jsonResponse]];
-    } else {
-        [self.delegate responseReceivedWithCallbacks:[[AuthenticationCallbackResponse alloc] initWithData:jsonResponse]];
-    }
-    
-    NSLog(@"connectionDidFinishLoading");
-}
-//
-// NSURLConnectionDataDelegate
-//
-////////////////////////////////////////////
 
 @end

@@ -1,5 +1,5 @@
 //
-//  openam-ios-rest-sdkTests.m
+//  RestConnectionTests.m
 //  openam-ios-rest-sdk
 //
 //  Created by Phill on 30/11/2013.
@@ -7,12 +7,13 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "RestConnection.h"
 
-@interface openam_ios_rest_sdkTests : XCTestCase
+@interface RestConnectionTests : XCTestCase
 
 @end
 
-@implementation openam_ios_rest_sdkTests
+@implementation RestConnectionTests
 
 - (void)setUp
 {
@@ -26,9 +27,9 @@
     [super tearDown];
 }
 
-- (void)testExample {
-    
-}
+- (void)testExample
+{
 
+}
 
 @end

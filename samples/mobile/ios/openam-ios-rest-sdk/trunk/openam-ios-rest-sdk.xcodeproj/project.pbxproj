@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA2E21561849FAC20004EF4E /* RestService.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2E21551849FAC20004EF4E /* RestService.m */; };
+		FA2E21591849FCE30004EF4E /* RestConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2E21581849FCE30004EF4E /* RestConnection.m */; };
+		FA2E215C184A17900004EF4E /* LegacyRestService.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2E215B184A17900004EF4E /* LegacyRestService.m */; };
+		FA2E215F184A17EE0004EF4E /* LegacyRestConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2E215E184A17EE0004EF4E /* LegacyRestConnection.m */; };
+		FA2E2160184A1C680004EF4E /* RestService.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA2E21541849FAC20004EF4E /* RestService.h */; };
+		FA2E2161184A1C680004EF4E /* RestConnection.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA2E21571849FCE30004EF4E /* RestConnection.h */; };
+		FA2E2162184A1C680004EF4E /* LegacyRestService.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA2E215A184A17900004EF4E /* LegacyRestService.h */; };
+		FA2E2165184A23760004EF4E /* RestServiceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2E2164184A23760004EF4E /* RestServiceTests.m */; };
 		FA877A84183D0AF00036938D /* RootLoginViewController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A11183A85F400FD3232 /* RootLoginViewController.h */; };
 		FA877A85183D0AF00036938D /* AuthenticationProcess.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A12183A85FD00FD3232 /* AuthenticationProcess.h */; };
 		FA877A86183D0AF00036938D /* AuthenticationSuccessResponse.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A14183A85FD00FD3232 /* AuthenticationSuccessResponse.h */; };
@@ -18,13 +26,25 @@
 		FA877A8C183D0AF00036938D /* OpenAMRESTSDK.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAC51A27183A860800FD3232 /* OpenAMRESTSDK.h */; };
 		FA877B6C183E65840036938D /* OAuth2.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B6B183E65840036938D /* OAuth2.m */; };
 		FA877B70183E6DE00036938D /* HttpHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B6F183E6DE00036938D /* HttpHelper.m */; };
+		FA89024C184A3553007FC340 /* RestConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA89024B184A3553007FC340 /* RestConnectionTests.m */; };
+		FA890252184A3F7A007FC340 /* HttpHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA890251184A3F7A007FC340 /* HttpHelperTests.m */; };
+		FA890256184A423B007FC340 /* DataStoreLoginTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA890255184A423B007FC340 /* DataStoreLoginTests.m */; };
+		FA890258184A48FD007FC340 /* AuthenticationCallbackFieldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA890257184A48FD007FC340 /* AuthenticationCallbackFieldTests.m */; };
+		FA89025B184A4924007FC340 /* JsonTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA89025A184A4924007FC340 /* JsonTestHelper.m */; };
+		FA89025D184A49F0007FC340 /* AuthenticationCallbackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA89025C184A49F0007FC340 /* AuthenticationCallbackTests.m */; };
+		FA89025F184A4A92007FC340 /* AuthenticationCallbackResponseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA89025E184A4A92007FC340 /* AuthenticationCallbackResponseTests.m */; };
+		FA890261184A4B8B007FC340 /* AuthenticationFailureResponseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA890260184A4B8B007FC340 /* AuthenticationFailureResponseTests.m */; };
+		FA890263184A4C3B007FC340 /* AuthenticationSuccessResponseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA890262184A4C3B007FC340 /* AuthenticationSuccessResponseTests.m */; };
+		FA890269184A50C5007FC340 /* RestSyncConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = FA890268184A50C5007FC340 /* RestSyncConnection.m */; };
+		FA89026A184A5343007FC340 /* LegacyRestConnection.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA2E215D184A17EE0004EF4E /* LegacyRestConnection.h */; };
+		FA89026C184A53CA007FC340 /* RestSyncConnection.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA890267184A50C5007FC340 /* RestSyncConnection.h */; };
+		FA89026E184A5526007FC340 /* openam_ios_rest_sdkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA89026D184A5526007FC340 /* openam_ios_rest_sdkTests.m */; };
 		FAC519E9183A84CF00FD3232 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC519E8183A84CF00FD3232 /* Foundation.framework */; };
 		FAC519F7183A84CF00FD3232 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC519F6183A84CF00FD3232 /* XCTest.framework */; };
 		FAC519F8183A84CF00FD3232 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC519E8183A84CF00FD3232 /* Foundation.framework */; };
 		FAC519FA183A84CF00FD3232 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC519F9183A84CF00FD3232 /* UIKit.framework */; };
 		FAC519FD183A84CF00FD3232 /* libopenam-ios-rest-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAC519E5183A84CF00FD3232 /* libopenam-ios-rest-sdk.a */; };
 		FAC51A03183A84CF00FD3232 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FAC51A01183A84CF00FD3232 /* InfoPlist.strings */; };
-		FAC51A05183A84CF00FD3232 /* openam_ios_rest_sdkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A04183A84CF00FD3232 /* openam_ios_rest_sdkTests.m */; };
 		FAC51A20183A85FD00FD3232 /* AuthenticationProcess.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A13183A85FD00FD3232 /* AuthenticationProcess.m */; };
 		FAC51A21183A85FD00FD3232 /* AuthenticationSuccessResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A15183A85FD00FD3232 /* AuthenticationSuccessResponse.m */; };
 		FAC51A22183A85FD00FD3232 /* AuthenticationFailureResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = FAC51A17183A85FD00FD3232 /* AuthenticationFailureResponse.m */; };
@@ -55,6 +75,11 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 7;
 			files = (
+				FA89026C184A53CA007FC340 /* RestSyncConnection.h in CopyFiles */,
+				FA89026A184A5343007FC340 /* LegacyRestConnection.h in CopyFiles */,
+				FA2E2160184A1C680004EF4E /* RestService.h in CopyFiles */,
+				FA2E2161184A1C680004EF4E /* RestConnection.h in CopyFiles */,
+				FA2E2162184A1C680004EF4E /* LegacyRestService.h in CopyFiles */,
 				FAE5C8371844C3FF00F3655B /* HttpHelper.h in CopyFiles */,
 				FAE5C8381844C3FF00F3655B /* OAuth2.h in CopyFiles */,
 				FAE5C8391844C3FF00F3655B /* OAuth2Delegate.h in CopyFiles */,
@@ -73,10 +98,39 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FA2E21541849FAC20004EF4E /* RestService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RestService.h; path = Common/RestService.h; sourceTree = "<group>"; };
+		FA2E21551849FAC20004EF4E /* RestService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RestService.m; path = Common/RestService.m; sourceTree = "<group>"; };
+		FA2E21571849FCE30004EF4E /* RestConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RestConnection.h; path = Common/RestConnection.h; sourceTree = "<group>"; };
+		FA2E21581849FCE30004EF4E /* RestConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RestConnection.m; path = Common/RestConnection.m; sourceTree = "<group>"; };
+		FA2E215A184A17900004EF4E /* LegacyRestService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegacyRestService.h; path = Common/LegacyRestService.h; sourceTree = "<group>"; };
+		FA2E215B184A17900004EF4E /* LegacyRestService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegacyRestService.m; path = Common/LegacyRestService.m; sourceTree = "<group>"; };
+		FA2E215D184A17EE0004EF4E /* LegacyRestConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LegacyRestConnection.h; path = Common/LegacyRestConnection.h; sourceTree = "<group>"; };
+		FA2E215E184A17EE0004EF4E /* LegacyRestConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LegacyRestConnection.m; path = Common/LegacyRestConnection.m; sourceTree = "<group>"; };
+		FA2E2164184A23760004EF4E /* RestServiceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RestServiceTests.m; path = Common/RestServiceTests.m; sourceTree = "<group>"; };
+		FA2E2178184A2F800004EF4E /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOCMock.a; sourceTree = "<group>"; };
+		FA2E217A184A2F800004EF4E /* NSNotificationCenter+OCMAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+OCMAdditions.h"; sourceTree = "<group>"; };
+		FA2E217B184A2F800004EF4E /* OCMArg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OCMArg.h; sourceTree = "<group>"; };
+		FA2E217C184A2F800004EF4E /* OCMConstraint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OCMConstraint.h; sourceTree = "<group>"; };
+		FA2E217D184A2F800004EF4E /* OCMock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OCMock.h; sourceTree = "<group>"; };
+		FA2E217E184A2F800004EF4E /* OCMockObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OCMockObject.h; sourceTree = "<group>"; };
+		FA2E217F184A2F800004EF4E /* OCMockRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OCMockRecorder.h; sourceTree = "<group>"; };
 		FA877B6A183E65840036938D /* OAuth2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAuth2.h; path = OAuth2/Model/OAuth2.h; sourceTree = "<group>"; };
 		FA877B6B183E65840036938D /* OAuth2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAuth2.m; path = OAuth2/Model/OAuth2.m; sourceTree = "<group>"; };
 		FA877B6E183E6DE00036938D /* HttpHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HttpHelper.h; path = Utils/HttpHelper.h; sourceTree = "<group>"; };
 		FA877B6F183E6DE00036938D /* HttpHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HttpHelper.m; path = Utils/HttpHelper.m; sourceTree = "<group>"; };
+		FA89024B184A3553007FC340 /* RestConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RestConnectionTests.m; path = Common/RestConnectionTests.m; sourceTree = "<group>"; };
+		FA890251184A3F7A007FC340 /* HttpHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HttpHelperTests.m; path = Utils/HttpHelperTests.m; sourceTree = "<group>"; };
+		FA890255184A423B007FC340 /* DataStoreLoginTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataStoreLoginTests.m; path = Authentication/Model/DataStoreLoginTests.m; sourceTree = "<group>"; };
+		FA890257184A48FD007FC340 /* AuthenticationCallbackFieldTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AuthenticationCallbackFieldTests.m; path = Authentication/Model/AuthenticationCallbackFieldTests.m; sourceTree = "<group>"; };
+		FA890259184A4924007FC340 /* JsonTestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JsonTestHelper.h; path = Authentication/Model/JsonTestHelper.h; sourceTree = "<group>"; };
+		FA89025A184A4924007FC340 /* JsonTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JsonTestHelper.m; path = Authentication/Model/JsonTestHelper.m; sourceTree = "<group>"; };
+		FA89025C184A49F0007FC340 /* AuthenticationCallbackTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AuthenticationCallbackTests.m; path = Authentication/Model/AuthenticationCallbackTests.m; sourceTree = "<group>"; };
+		FA89025E184A4A92007FC340 /* AuthenticationCallbackResponseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AuthenticationCallbackResponseTests.m; path = Authentication/Model/AuthenticationCallbackResponseTests.m; sourceTree = "<group>"; };
+		FA890260184A4B8B007FC340 /* AuthenticationFailureResponseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AuthenticationFailureResponseTests.m; path = Authentication/Model/AuthenticationFailureResponseTests.m; sourceTree = "<group>"; };
+		FA890262184A4C3B007FC340 /* AuthenticationSuccessResponseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AuthenticationSuccessResponseTests.m; path = Authentication/Model/AuthenticationSuccessResponseTests.m; sourceTree = "<group>"; };
+		FA890267184A50C5007FC340 /* RestSyncConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RestSyncConnection.h; path = Common/RestSyncConnection.h; sourceTree = "<group>"; };
+		FA890268184A50C5007FC340 /* RestSyncConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RestSyncConnection.m; path = Common/RestSyncConnection.m; sourceTree = "<group>"; };
+		FA89026D184A5526007FC340 /* openam_ios_rest_sdkTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = openam_ios_rest_sdkTests.m; sourceTree = "<group>"; };
 		FAC519E5183A84CF00FD3232 /* libopenam-ios-rest-sdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libopenam-ios-rest-sdk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAC519E8183A84CF00FD3232 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FAC519EC183A84CF00FD3232 /* openam-ios-rest-sdk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "openam-ios-rest-sdk-Prefix.pch"; sourceTree = "<group>"; };
@@ -85,7 +139,6 @@
 		FAC519F9183A84CF00FD3232 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		FAC51A00183A84CF00FD3232 /* openam-ios-rest-sdkTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "openam-ios-rest-sdkTests-Info.plist"; sourceTree = "<group>"; };
 		FAC51A02183A84CF00FD3232 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		FAC51A04183A84CF00FD3232 /* openam_ios_rest_sdkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = openam_ios_rest_sdkTests.m; sourceTree = "<group>"; };
 		FAC51A11183A85F400FD3232 /* RootLoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootLoginViewController.h; sourceTree = "<group>"; };
 		FAC51A12183A85FD00FD3232 /* AuthenticationProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationProcess.h; sourceTree = "<group>"; };
 		FAC51A13183A85FD00FD3232 /* AuthenticationProcess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationProcess.m; sourceTree = "<group>"; };
@@ -133,6 +186,55 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FA2E21531849FA9F0004EF4E /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				FA2E21541849FAC20004EF4E /* RestService.h */,
+				FA2E21551849FAC20004EF4E /* RestService.m */,
+				FA2E21571849FCE30004EF4E /* RestConnection.h */,
+				FA2E21581849FCE30004EF4E /* RestConnection.m */,
+				FA2E215A184A17900004EF4E /* LegacyRestService.h */,
+				FA2E215B184A17900004EF4E /* LegacyRestService.m */,
+				FA2E215D184A17EE0004EF4E /* LegacyRestConnection.h */,
+				FA2E215E184A17EE0004EF4E /* LegacyRestConnection.m */,
+				FA890267184A50C5007FC340 /* RestSyncConnection.h */,
+				FA890268184A50C5007FC340 /* RestSyncConnection.m */,
+			);
+			name = Common;
+			sourceTree = "<group>";
+		};
+		FA2E2163184A23690004EF4E /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				FA2E2164184A23760004EF4E /* RestServiceTests.m */,
+				FA89024B184A3553007FC340 /* RestConnectionTests.m */,
+			);
+			name = Common;
+			sourceTree = "<group>";
+		};
+		FA2E2177184A2F800004EF4E /* OCMock */ = {
+			isa = PBXGroup;
+			children = (
+				FA2E2178184A2F800004EF4E /* libOCMock.a */,
+				FA2E2179184A2F800004EF4E /* OCMock */,
+			);
+			name = OCMock;
+			path = "openam-ios-rest-sdkTests/Libraries/OCMock";
+			sourceTree = "<group>";
+		};
+		FA2E2179184A2F800004EF4E /* OCMock */ = {
+			isa = PBXGroup;
+			children = (
+				FA2E217A184A2F800004EF4E /* NSNotificationCenter+OCMAdditions.h */,
+				FA2E217B184A2F800004EF4E /* OCMArg.h */,
+				FA2E217C184A2F800004EF4E /* OCMConstraint.h */,
+				FA2E217D184A2F800004EF4E /* OCMock.h */,
+				FA2E217E184A2F800004EF4E /* OCMockObject.h */,
+				FA2E217F184A2F800004EF4E /* OCMockRecorder.h */,
+			);
+			path = OCMock;
+			sourceTree = "<group>";
+		};
 		FA877B68183E65510036938D /* OAuth2 */ = {
 			isa = PBXGroup;
 			children = (
@@ -160,6 +262,37 @@
 			name = Utils;
 			sourceTree = "<group>";
 		};
+		FA890250184A3F69007FC340 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				FA890251184A3F7A007FC340 /* HttpHelperTests.m */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		FA890253184A421C007FC340 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				FA890254184A4226007FC340 /* Model */,
+			);
+			name = Authentication;
+			sourceTree = "<group>";
+		};
+		FA890254184A4226007FC340 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FA890255184A423B007FC340 /* DataStoreLoginTests.m */,
+				FA890257184A48FD007FC340 /* AuthenticationCallbackFieldTests.m */,
+				FA890259184A4924007FC340 /* JsonTestHelper.h */,
+				FA89025A184A4924007FC340 /* JsonTestHelper.m */,
+				FA89025C184A49F0007FC340 /* AuthenticationCallbackTests.m */,
+				FA89025E184A4A92007FC340 /* AuthenticationCallbackResponseTests.m */,
+				FA890260184A4B8B007FC340 /* AuthenticationFailureResponseTests.m */,
+				FA890262184A4C3B007FC340 /* AuthenticationSuccessResponseTests.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		FAC519DC183A84CE00FD3232 = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +315,7 @@
 		FAC519E7183A84CF00FD3232 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FA2E2177184A2F800004EF4E /* OCMock */,
 				FAC519E8183A84CF00FD3232 /* Foundation.framework */,
 				FAC519F6183A84CF00FD3232 /* XCTest.framework */,
 				FAC519F9183A84CF00FD3232 /* UIKit.framework */,
@@ -194,6 +328,7 @@
 		FAC519EA183A84CF00FD3232 /* openam-ios-rest-sdk */ = {
 			isa = PBXGroup;
 			children = (
+				FA2E21531849FA9F0004EF4E /* Common */,
 				FA877B6D183E6DD20036938D /* Utils */,
 				FAC51A0E183A84EF00FD3232 /* Authentication */,
 				FA877B68183E65510036938D /* OAuth2 */,
@@ -215,8 +350,11 @@
 		FAC519FE183A84CF00FD3232 /* openam-ios-rest-sdkTests */ = {
 			isa = PBXGroup;
 			children = (
-				FAC51A04183A84CF00FD3232 /* openam_ios_rest_sdkTests.m */,
+				FA890253184A421C007FC340 /* Authentication */,
+				FA890250184A3F69007FC340 /* Utils */,
+				FA2E2163184A23690004EF4E /* Common */,
 				FAC519FF183A84CF00FD3232 /* Supporting Files */,
+				FA89026D184A5526007FC340 /* openam_ios_rest_sdkTests.m */,
 			);
 			path = "openam-ios-rest-sdkTests";
 			sourceTree = "<group>";
@@ -363,10 +501,15 @@
 				FA877B70183E6DE00036938D /* HttpHelper.m in Sources */,
 				FAC51A29183A860800FD3232 /* OpenAMRESTSDK.m in Sources */,
 				FA877B6C183E65840036938D /* OAuth2.m in Sources */,
+				FA2E21561849FAC20004EF4E /* RestService.m in Sources */,
+				FA2E215C184A17900004EF4E /* LegacyRestService.m in Sources */,
+				FA2E215F184A17EE0004EF4E /* LegacyRestConnection.m in Sources */,
+				FA890269184A50C5007FC340 /* RestSyncConnection.m in Sources */,
 				FAC51A22183A85FD00FD3232 /* AuthenticationFailureResponse.m in Sources */,
 				FAC51A26183A85FD00FD3232 /* DataStoreLogin.m in Sources */,
 				FAC51A25183A85FD00FD3232 /* AuthenticationCallbackField.m in Sources */,
 				FAC51A21183A85FD00FD3232 /* AuthenticationSuccessResponse.m in Sources */,
+				FA2E21591849FCE30004EF4E /* RestConnection.m in Sources */,
 				FAC51A23183A85FD00FD3232 /* AuthenticationCallbackResponse.m in Sources */,
 				FAC51A20183A85FD00FD3232 /* AuthenticationProcess.m in Sources */,
 			);
@@ -376,7 +519,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAC51A05183A84CF00FD3232 /* openam_ios_rest_sdkTests.m in Sources */,
+				FA89025D184A49F0007FC340 /* AuthenticationCallbackTests.m in Sources */,
+				FA2E2165184A23760004EF4E /* RestServiceTests.m in Sources */,
+				FA89025B184A4924007FC340 /* JsonTestHelper.m in Sources */,
+				FA890252184A3F7A007FC340 /* HttpHelperTests.m in Sources */,
+				FA890263184A4C3B007FC340 /* AuthenticationSuccessResponseTests.m in Sources */,
+				FA890258184A48FD007FC340 /* AuthenticationCallbackFieldTests.m in Sources */,
+				FA890261184A4B8B007FC340 /* AuthenticationFailureResponseTests.m in Sources */,
+				FA89024C184A3553007FC340 /* RestConnectionTests.m in Sources */,
+				FA89026E184A5526007FC340 /* openam_ios_rest_sdkTests.m in Sources */,
+				FA890256184A423B007FC340 /* DataStoreLoginTests.m in Sources */,
+				FA89025F184A4A92007FC340 /* AuthenticationCallbackResponseTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,6 +657,8 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(SRCROOT)/Libraries/OCMock",
+					"$(SRCROOT/Libraries",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "openam-ios-rest-sdk/openam-ios-rest-sdk-Prefix.pch";
@@ -512,6 +667,17 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "openam-ios-rest-sdkTests/openam-ios-rest-sdkTests-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/Libraries/OCMock",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-force_load",
+					"$(SRCROOT)/Libraries/OCMock/libOCMock.a",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -525,10 +691,23 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(SRCROOT)/Libraries/OCMock",
+					"$(SRCROOT/Libraries",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "openam-ios-rest-sdk/openam-ios-rest-sdk-Prefix.pch";
 				INFOPLIST_FILE = "openam-ios-rest-sdkTests/openam-ios-rest-sdkTests-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/Libraries/OCMock",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					XCTest,
+					"-force_load",
+					"$(SRCROOT)/Libraries/OCMock/libOCMock.a",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = xctest;
 			};
