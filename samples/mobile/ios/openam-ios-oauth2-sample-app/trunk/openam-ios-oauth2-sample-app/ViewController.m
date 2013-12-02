@@ -1,10 +1,18 @@
-//
-//  ViewController.m
-//  OpenAMOAuth2SampleApp
-//
-//  Created by Phill on 13/11/2013.
-//  Copyright (c) 2013 ForgeRock. All rights reserved.
-//
+/*
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2013 ForgeRock, AS.
+ */
 
 #import "ViewController.h"
 #import "SettingsViewController.h"
@@ -12,12 +20,34 @@
 #import <openam-ios-rest-sdk/OpenAMRESTSDK.h>
 #import "KeyChainWrapper.h"
 #import "TokenInfoViewController.h"
+#import "SimpleLogin.h"
 
 @interface ViewController ()
-
+@property (strong, nonatomic) NSTimer *refreshTimer;
+@property (weak, nonatomic) IBOutlet UIView *tokenInfoViewContainer;
 @end
 
 @implementation ViewController
+
+- (ServerSettings *)serverSettings {
+    return [ServerSettings instance];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    if (![[ServerSettings instance] isConfigured]) {
+        [self performSegueWithIdentifier:@"ToSettings" sender:self];
+        return;
+    }
+    
+    if (![self haveValidSSOToken]) {
+        [[[SimpleLogin alloc] init] loginToServer:self.serverSettings.baseUri forUser:@"amadmin" withPassword:@"cangetin"];
+    }
+}
+
+- (BOOL)haveValidSSOToken {
+    NSString *ssoTokenId = [KeyChainWrapper searchKeychainCopyMatching:@"SSOTokenId"];
+    return [[[OpenAMRESTSDK alloc] init] isTokenValid:ssoTokenId forServerInstance:[self.serverSettings baseUri]];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,60 +59,10 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    
-    BOOL isTokenValid = [[[OpenAMRESTSDK alloc] init] isTokenValid:[KeyChainWrapper searchKeychainCopyMatching:@"SSOTokenId"] forServerInstance:[self.serverSettings valueForKey:@"OPENAM_URL_SETTING_KEY"]];
-    
-    if ([identifier isEqualToString:@"ToOAuth"] && !isTokenValid) {
-        
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"You do not have a valid SSO Token Id. Login using the OpenAM SSO App first." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-        
-        
-        //TODO can only test this on an actual physical device!
-//        NSURL *myURL = [NSURL URLWithString:@"sso://www.acme.com?Quarterly%20Report#200806231300"];
-//        [[UIApplication sharedApplication] openURL:myURL];
-        
-        
-//        NSURL *ourURL = [NSURL URLWithString:@"http://maps.google.com/maps?ll=-37.812022,144.969277"];
-//        [[UIApplication sharedApplication] openURL:ourURL];
-        return NO;
-    }
-    
-    if ([identifier isEqualToString:@"ToTokenInfo"]) {
-        
-        NSString *accessToken = [self.serverSettings valueForKey:@"access_token"];
-        
-        NSDictionary *tokenInfo = [[[OAuth2 alloc] initWithDelegate:self] getTokenInfo:accessToken];
-
-        if ([tokenInfo objectForKey:@"error"]) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"You do not have a valid OAuth Token. Authorize first." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alertView show];
-            
-            return NO;
-        }
-    }
-    
-    return YES;
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"ToSettings"]) {
-        SettingsViewController *settingsVC = [segue.destinationViewController viewControllers][0];
-        settingsVC.serverSettings = self.serverSettings;
-    } else if ([segue.identifier isEqualToString:@"ToOAuth"]) {
+    if ([segue.identifier isEqualToString:@"ToOAuth"]) {
         AuthViewController *authVC = [segue.destinationViewController viewControllers][0];
-        authVC.serverSettings = self.serverSettings;
         authVC.delegate = self;
-    } else if ([segue.identifier isEqualToString:@"ToTokenInfo"]) {
-        
-        NSString *accessToken = [self.serverSettings valueForKey:@"access_token"];
-
-        NSDictionary *tokenInfo = [[[OAuth2 alloc] initWithDelegate:self] getTokenInfo:accessToken];
-        
-        TokenInfoViewController *tokenInfoVC = [segue.destinationViewController viewControllers][0];
-        tokenInfoVC.serverSettings = self.serverSettings;
-        tokenInfoVC.tokenInfo = tokenInfo;
     }
 }
 
@@ -91,28 +71,28 @@
 }
 
 
-- (NSURL *)openAMBaseUrl{
-    return [NSURL URLWithString:[self.serverSettings valueForKey:@"OPENAM_URL_SETTING_KEY"]];
+- (NSURL *)openAMBaseUrl {
+    return [NSURL URLWithString:[[ServerSettings instance] baseUri]];
 }
 
 - (NSURL *)redirectionUrl {
-    return [NSURL URLWithString:[self.serverSettings valueForKey:@"OAUTH2_REDIRECT_URI_SETTING_KEY"]];
+    return [NSURL URLWithString:[[ServerSettings instance] redirectionUrl]];
 }
 
 - (NSString *)scope {
-    return [self.serverSettings valueForKey:@"OAUTH2_SCOPE_SETTING_KEY"];
+    return [[ServerSettings instance] scope];
 }
 
 - (NSString *)realm {
-    return [self.serverSettings valueForKey:@"OPENAM_REALM_SETTING_KEY"];
+   return [[ServerSettings instance] realm];
 }
 
 - (NSString *)clientId {
-    return [self.serverSettings valueForKey:@"OAUTH2_CLIENT_ID_SETTING_KEY"];
+    return [[ServerSettings instance] clientId];
 }
 
 - (NSString *)clientSecret {
-    return [self.serverSettings valueForKey:@"OAUTH2_CLIENT_SECRET_SETTING_KEY"];
+    return [[ServerSettings instance] clientSecret];
 }
 
 - (void)accessTokenCallback:(NSDictionary *)accessToken {
@@ -121,14 +101,20 @@
     [self.serverSettings setValue:[accessToken valueForKey:@"refresh_token"] forKey:@"refresh_token"];
     [self.serverSettings setValue:[accessToken valueForKey:@"expires_in"] forKey:@"expires_in"];
 
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
-//    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-//    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
-//    NSDate *expiresDate = [dateFormatter dateFromString:[accessToken valueForKey:@"expires_in"]];
+    // If the AM server instance can offer refresh tokens then uncomment this line to initiate timer to keep access token alive
+    //    [self refreshTimer];
+    [self reloadTokenInfoData];
+}
+
+- (void)enableRefreshTimer:(NSString *)accessToken {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+    NSDate *expiresDate = [dateFormatter dateFromString:[accessToken valueForKey:@"expires_in"]];
     
-//    NSTimeInterval expiresIn = [expiresDate timeIntervalSinceNow] - 5;
-//    [self.refreshTimer invalidate];
-//    self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:expiresIn target:self selector:@selector(handleRefreshTimer:) userInfo:nil repeats:NO];
+    NSTimeInterval expiresIn = [expiresDate timeIntervalSinceNow] - 5;
+    [self.refreshTimer invalidate];
+    self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:expiresIn target:self selector:@selector(handleRefreshTimer:) userInfo:nil repeats:NO];
 }
 
 - (void)handleRefreshTimer:(NSTimer *)timer {
@@ -138,12 +124,23 @@
 }
 
 - (void)refreshTokenCallback:(NSDictionary *)refreshToken {
-//    NSLog(@"%@", accessToken);
-//    [self.serverSettings setValue:[refreshToken valueForKey:@"access_token"] forKey:@"access_token"];
-//    [self.serverSettings setValue:[refreshToken valueForKey:@"refresh_token"] forKey:@"refresh_token"];
-//    [self.serverSettings setValue:[refreshToken valueForKey:@"expires_in"] forKey:@"expires_in"];
-    NSString *s = @"";
+    NSLog(@"%@", refreshToken);
+    [self.serverSettings setValue:[refreshToken valueForKey:@"access_token"] forKey:@"access_token"];
+    [self.serverSettings setValue:[refreshToken valueForKey:@"refresh_token"] forKey:@"refresh_token"];
+    [self.serverSettings setValue:[refreshToken valueForKey:@"expires_in"] forKey:@"expires_in"];
+    
+    [self reloadTokenInfoData];
+}
+- (IBAction)revokeButtonAction:(id)sender {//TODO is there a way to tell server to revoke???? Must be...
+    [self.serverSettings setValue:@"" forKey:@"access_token"];
+    [self.serverSettings setValue:@"" forKey:@"refresh_token"];
+    [self.serverSettings setValue:@"" forKey:@"expires_in"];
+    
+    [self reloadTokenInfoData];
 }
 
+- (void)reloadTokenInfoData {
+    [[self.tokenInfoViewContainer subviews][0] reloadData];
+}
 
 @end

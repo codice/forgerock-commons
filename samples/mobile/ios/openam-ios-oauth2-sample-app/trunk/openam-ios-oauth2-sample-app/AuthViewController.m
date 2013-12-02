@@ -33,9 +33,6 @@
 
 - (void)loadView {
     [super loadView];
-//    self.authenticated = false;
-    //    authenticated = [[appDelegate.serverProperties valueForKey:SETTINGS_OPENAM_URL] hasPrefix:@"https"];
-//    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"about:blank"]]];
 }
 
 - (void)viewDidLoad {
@@ -46,15 +43,15 @@
     NSDictionary *params = [NSMutableDictionary dictionary];
     [params setValue:@"code" forKey:@"response_type"];
 //    [params setValue:@"TOUCH" forKey:@"display"];
-    [params setValue:[self.serverSettings valueForKey:@"OAUTH2_SCOPE_SETTING_KEY"] forKey:@"scope"];
-    [params setValue:[self.serverSettings valueForKey:@"OPENAM_REALM_SETTING_KEY"] forKey:@"realm"];
-    [params setValue:[self.serverSettings valueForKey:@"OPENAM_AUTH_SERVICE_SETTING_KEY"] forKey:@"service"];
-    [params setValue:[self.serverSettings valueForKey:@"OAUTH2_CLIENT_ID_SETTING_KEY"] forKey:@"client_id"];
-    [params setValue:[self.serverSettings valueForKey:@"OAUTH2_REDIRECT_URI_SETTING_KEY"] forKey:@"redirect_uri"];
+    [params setValue:[[ServerSettings instance] scope] forKey:@"scope"];
+    [params setValue:[[ServerSettings instance] realm] forKey:@"realm"];
+    [params setValue:[[ServerSettings instance] authService] forKey:@"service"];
+    [params setValue:[[ServerSettings instance] clientId] forKey:@"client_id"];
+    [params setValue:[[ServerSettings instance] redirectionUrl] forKey:@"redirect_uri"];
     
     NSLog(@"params=%@", params);
     
-    NSString *authzURL = [NSString stringWithFormat:@"%@%@", [self.serverSettings valueForKey:@"OPENAM_URL_SETTING_KEY"], @"/oauth2/authorize"];
+    NSString *authzURL = [NSString stringWithFormat:@"%@%@", [[ServerSettings instance] baseUri], @"/oauth2/authorize"];
     
     NSString *p = [HttpHelper urlEncodeDictionary:params];
     NSLog(@"p=%@", p);
@@ -73,12 +70,11 @@
 }
 
 - (void)setCookieForSSOTokenId:(NSString *)ssoTokenId {
-    
     NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];
-    [cookieProperties setObject:[self.serverSettings valueForKey:@"OPENAM_COOKIE_NAME_SETTING_KEY"] forKey:NSHTTPCookieName];
+    [cookieProperties setObject:@"iPlanetDirectoryPro" forKey:NSHTTPCookieName];//TODO make call to get cookie name
     [cookieProperties setObject:ssoTokenId forKey:NSHTTPCookieValue];
     [cookieProperties setObject:@".forgerock.com" forKey:NSHTTPCookieDomain];//TODO get from properties
-    [cookieProperties setObject:[self.serverSettings valueForKey:@"OPENAM_URL_SETTING_KEY"] forKey:NSHTTPCookieOriginURL];
+    [cookieProperties setObject:[[ServerSettings instance] baseUri] forKey:NSHTTPCookieOriginURL];
     [cookieProperties setObject:@"/" forKey:NSHTTPCookiePath];
     
     NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:cookieProperties];
@@ -88,13 +84,12 @@
 - (void)deleteSSOTokenCookie {
     NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     for (NSHTTPCookie *cookie in [storage cookies]) {
-        NSRange range = [cookie.name rangeOfString:[self.serverSettings valueForKey:@"OPENAM_COOKIE_NAME_SETTING_KEY"]];
+        NSRange range = [cookie.name rangeOfString:@"iPlanetDirectoryPro"];//TODO make call to get cookie name
         if (range.location != NSNotFound) {
             //sso token cookie found
             [storage deleteCookie:cookie];
         }
     }
-    [[NSUserDefaults standardUserDefaults] synchronize];  //????
 }
 
 - (void)didReceiveMemoryWarning {
@@ -105,7 +100,7 @@
 // only used for getting authorization grant code (parameter in the URL)
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
-    if ([[request.URL absoluteString] hasPrefix:[self.serverSettings valueForKey:@"OAUTH2_REDIRECT_URI_SETTING_KEY"]]) {
+    if ([[request.URL absoluteString] hasPrefix:[[ServerSettings instance] redirectionUrl]]) {
         if (DEBUG)
             NSLog(@"URL: %@\n", [request.URL absoluteString]);
 
@@ -119,14 +114,12 @@
 
             NSString *code = [[HttpHelper decodeUrlParameters:request.URL.query] valueForKey:@"code"];
             [self.delegate processGrantToken:code];
-            //            [self.delegate processGrantToken:request.URL];
-
 
         } else {
-            //handle error!  //TODO guess an error has occured and should be handled?...
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Failed to Authorize." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
         }
 
-        //        UIViewController *b = [self.navigationController popViewControllerAnimated:NO];
         [self dismissViewControllerAnimated:YES completion:nil];
 
         return NO;

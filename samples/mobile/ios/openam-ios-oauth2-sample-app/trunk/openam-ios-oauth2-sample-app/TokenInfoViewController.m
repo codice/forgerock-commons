@@ -1,19 +1,32 @@
-//
-//  TokenInfoViewController.m
-//  openam-ios-oauth2-sample-app
-//
-//  Created by Phill on 27/11/2013.
-//  Copyright (c) 2013 ForgeRock. All rights reserved.
-//
+/*
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2013 ForgeRock, AS.
+ */
 
 #import "TokenInfoViewController.h"
-#import "SettingsCell.h"
+#import <openam-ios-rest-sdk/OpenAMRESTSDK.h>
 
 @interface TokenInfoViewController ()
-
+@property (nonatomic, weak, readonly) ServerSettings *serverSettings;
+@property (strong, nonatomic) NSDictionary *tokenInfo;
 @end
 
 @implementation TokenInfoViewController
+
+- (ServerSettings *)serverSettings {
+    return [ServerSettings instance];
+}
 
 - (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
@@ -45,6 +58,19 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 2;
+}
+
+- (NSDictionary *)tokenInfo {
+    NSString *accessToken = [self.serverSettings valueForKey:@"access_token"];
+    if ([accessToken length] == 0) {
+        return nil;
+    }
+    if (!_tokenInfo) {
+        if (accessToken) {
+            _tokenInfo = [[[OAuth2 alloc] initWithDelegate:nil] tokenInfoFfromServer:self.serverSettings.baseUri for:accessToken];
+        }
+    }
+    return _tokenInfo;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

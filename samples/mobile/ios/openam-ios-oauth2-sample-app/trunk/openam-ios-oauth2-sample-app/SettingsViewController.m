@@ -1,20 +1,27 @@
-//
-//  SettingsViewController.m
-//  OpenAMOAuth2SampleApp
-//
-//  Created by Phill on 13/11/2013.
-//  Copyright (c) 2013 ForgeRock. All rights reserved.
-//
+/*
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2013 ForgeRock, AS.
+ */
 
 #import "SettingsViewController.h"
-#import "SettingsProperty.h"
-#import "SettingsCell.h"
 
 @interface SettingsViewController ()
-@property (strong, nonatomic) NSArray *openamSettingsKeys;
-@property (strong, nonatomic) NSArray *oauthSettingsKeys;
-@property (strong, nonatomic) NSDictionary *openamSettings;
-@property (strong, nonatomic) NSDictionary *oauthSettings;
+@property (weak, nonatomic) IBOutlet UITextField *baseUriField;
+@property (weak, nonatomic) IBOutlet UITextField *clientIdField;
+@property (weak, nonatomic) IBOutlet UITextField *clientSecretField;
+@property (weak, nonatomic) IBOutlet UITextField *redirectionUrlField;
+@property (weak, nonatomic) IBOutlet UITextField *scopeField;
 @property (weak, nonatomic) UITextField *fieldInEditMode;
 @end
 
@@ -38,152 +45,18 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (NSArray *)openamSettingsKeys{
-    if (!_openamSettingsKeys) _openamSettingsKeys = self.serverSettings.openamSettingsKeys;
-    return _openamSettingsKeys;
-}
-
-- (NSDictionary *)openamSettings {
-    if (!_openamSettings) {
-        
-        NSArray *contents = [NSArray arrayWithObjects:
-                             [SettingsProperty initWithLabel:@"OpenAM URL"
-                                                 placeHolder:@"http://<openam_fqdn>/openam"
-                                                       value:[self.serverSettings valueForKey:@"OPENAM_URL_SETTING_KEY"]
-                                                keyboardType:UIKeyboardTypeURL],
-                             
-                             [SettingsProperty initWithLabel:@"Realm"
-                                                 placeHolder:@"/"
-                                                       value:[self.serverSettings valueForKey:@"OPENAM_REALM_SETTING_KEY"]
-                                                keyboardType:UIKeyboardTypeURL],
-                             
-                             [SettingsProperty initWithLabel:@"Authentication Service"
-                                                 placeHolder:@"ldapService"
-                                                       value:[self.serverSettings valueForKey:@"OPENAM_AUTH_SERVICE_SETTING_KEY"]],
-                             
-                             [SettingsProperty initWithLabel:@"Session Cookie"
-                                                 placeHolder:@"iPlanetDirectoryPro"
-                                                       value:[self.serverSettings valueForKey:@"OPENAM_COOKIE_NAME_SETTING_KEY"]],
-                             
-                             nil];
-        
-        NSArray *keys = self.serverSettings.openamSettingsKeys;//self.openamSettingsKeys;
-        
-        _openamSettings = [[NSDictionary alloc] initWithObjects:contents forKeys:keys];
-    }
-    return _openamSettings;
-}
-
-- (NSArray *)oauthSettingsKeys{
-    if (!_oauthSettingsKeys) _oauthSettingsKeys = self.serverSettings.oauthSettingsKeys;
-    return _oauthSettingsKeys;
-}
-
-- (NSDictionary *)oauthSettings {
-    if (!_oauthSettings) {
-        
-        NSArray *contents = [NSArray arrayWithObjects:
-                             [SettingsProperty initWithLabel:@"Client ID" //TODO localisation
-                                                 placeHolder:@""
-                                                       value:[self.serverSettings valueForKey:@"OAUTH2_CLIENT_ID_SETTING_KEY"]],
-                             
-                             [SettingsProperty initWithLabel:@"Client Password"
-                                                 placeHolder:@"********"
-                                                       value:[self.serverSettings valueForKey:@"OAUTH2_CLIENT_SECRET_SETTING_KEY"]
-                                                keyboardType:UIKeyboardTypeDefault secure:YES],
-                             
-                             [SettingsProperty initWithLabel:@"Redirection URL"
-                                                 placeHolder:@"http://example.com/oauth"
-                                                       value:[self.serverSettings valueForKey:@"OAUTH2_REDIRECT_URI_SETTING_KEY"]
-                                                keyboardType:UIKeyboardTypeURL],
-                             
-                             [SettingsProperty initWithLabel:@"Scope"
-                                                 placeHolder:@"cn mail"
-                                                       value:[self.serverSettings valueForKey:@"OAUTH2_SCOPE_SETTING_KEY"]],
-                             
-                             nil];
-        
-        NSArray *keys = self.serverSettings.oauthSettingsKeys;//self.oauthSettingsKeys;
-        
-        _oauthSettings = [[NSDictionary alloc] initWithObjects:contents forKeys:keys];
-    }
-    
-    return _oauthSettings;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    switch (section) {
-        case 0: return self.openamSettings.count;
-        case 1: return self.oauthSettings.count;
-    }
-    return 0;
-}
-
-
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-//    // The header for the section is the region name -- get this from the region at the section index.
-//    Region *region = [regions objectAtIndex:section];
-//    return [region name];
-//}
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *displayCellId = @"SettingsCellId";
-    SettingsCell *cell = [tableView dequeueReusableCellWithIdentifier:displayCellId];
-    if (cell == nil) {
-        cell = [[SettingsCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:displayCellId];
-    }
-    
-    NSDictionary *settings;
-    NSArray *settingsKeys;
-    switch (indexPath.section) {
-        case 0: {
-            settings = self.openamSettings;
-            settingsKeys = self.openamSettingsKeys;
-            break;
-        }
-        case 1: {
-            settings = self.oauthSettings;
-            settingsKeys = self.oauthSettingsKeys;
-            break;
-        }
-    }
-    
-    SettingsProperty *property = [settings valueForKey:[settingsKeys objectAtIndex:indexPath.row]];
-    cell.textLabel.text = property.textLabel;
-    cell.textValue.delegate = self;
-    cell.textValue.placeholder = property.textPlaceholder;
-    cell.textValue.text = property.textValue;
-    cell.textValue.keyboardType = property.keyboardType;
-    return cell;
-}
-
-- (IBAction)saveSettings:(UIBarButtonItem *)sender {
+- (IBAction)doneButtonAction:(id)sender {
     
     [self.fieldInEditMode resignFirstResponder];
     
-    [self updateServerSettings:self.openamSettings];
-    [self updateServerSettings:self.oauthSettings];
+    //Save to settings
+    [ServerSettings instance].baseUri = self.baseUriField.text;
+    [ServerSettings instance].clientId = self.clientIdField.text;
+    [ServerSettings instance].clientSecret = self.clientSecretField.text;
+    [ServerSettings instance].redirectionUrl = self.redirectionUrlField.text;
+    [ServerSettings instance].scope = self.scopeField.text;
     
-    [self.serverSettings saveSettings];
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)updateServerSettings:(NSDictionary *)settings {
-    
-    for (NSString *key in [settings allKeys]) {
-        NSString *value = [[settings valueForKey:key] textValue];
-        [self.serverSettings setValue:value forKey:key];
-    }
-}
-
-- (IBAction)cancelSettings:(UIBarButtonItem *)sender {
-    
+    // Pop
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -194,31 +67,6 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     self.fieldInEditMode = textField;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    
-    SettingsCell *cell = (SettingsCell*)textField.superview.superview.superview; //TODO revist this when have second section to see what indexPath.row is for second section..?
-    
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    
-    NSDictionary *settings;
-    NSArray *settingsKeys;
-    switch (indexPath.section) {
-        case 0: {
-            settings = self.openamSettings;
-            settingsKeys = self.openamSettingsKeys;
-            break;
-        }
-        case 1: {
-            settings = self.oauthSettings;
-            settingsKeys = self.oauthSettingsKeys;
-            break;
-        }
-    }
-    
-    SettingsProperty *property = [settings valueForKey:[settingsKeys objectAtIndex:indexPath.row]];
-    property.textValue = textField.text;
 }
 
 @end
