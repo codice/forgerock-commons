@@ -84,20 +84,12 @@ public class IntTest {
 
         //When
         FilterRunner filterRunner = new FilterRunner();
-        boolean exceptionCaught = false;
-        Exception exception = null;
-        try {
-            filterRunner.run("default");
-        } catch (ServletException e) {
-            exceptionCaught = true;
-            exception = e;
-        }
+        filterRunner.run("default");
 
         //Then
-        assertTrue(exceptionCaught);
-        assertTrue(ServletException.class.isAssignableFrom(exception.getClass()));
         verify(filterRunner.getFilterChain(), never()).doFilter((HttpServletRequest) anyObject(),
                 (HttpServletResponse) anyObject());
+        verify(filterRunner.getResponse()).setStatus(500);
     }
 
     @Test
@@ -109,20 +101,12 @@ public class IntTest {
 
         //When
         FilterRunner filterRunner = new FilterRunner();
-        boolean exceptionCaught = false;
-        Exception exception = null;
-        try {
-            filterRunner.run("none");
-        } catch (ServletException e) {
-            exceptionCaught = true;
-            exception = e;
-        }
+        filterRunner.run("none");
 
         //Then
-        assertTrue(exceptionCaught);
-        assertTrue(AuthException.class.isAssignableFrom(exception.getCause().getClass()));
         verify(filterRunner.getFilterChain(), never()).doFilter((HttpServletRequest) anyObject(),
                 (HttpServletResponse) anyObject());
+        verify(filterRunner.getResponse()).setStatus(500);
     }
 
     @Test
@@ -422,33 +406,6 @@ public class IntTest {
         assertEquals(responseArgumentCaptor.getValue().getResponse(), filterRunner.getResponse());
         verify(filterRunner.getResponse()).addHeader(eq("session"), anyString());
         verify(filterRunner.getResponse()).addHeader(eq("AUTH_SUCCESS"), anyString());
-    }
-
-    @Test
-    public void shouldNotAuthenticateUsingValidateSendSuccessAuthModuleAndCallSessionSecureResponse()
-            throws IOException, ServletException, AuthException {
-
-        //Given
-        Map<String, Object> sessionModuleProps = new HashMap<String, Object>();
-        Map<String, Object> authModuleProps = new HashMap<String, Object>();
-        Configuration configuration = new Configuration()
-                .addAuthContext("session-auth-auth")
-                .setSessionModule(ValidateSendFailureSessionModule.class, sessionModuleProps)
-                .addAuthenticationModule(ValidateSendSuccessAuthModule.class, authModuleProps)
-                .addAuthenticationModule(ValidateSuccessAuthModule.class, authModuleProps)
-                .done();
-        ConfigurationManager.configure(configuration);
-
-        //When
-        FilterRunner filterRunner = new FilterRunner();
-        filterRunner.run("session-auth-auth");
-
-        //Then
-        verify(filterRunner.getFilterChain(), never()).doFilter((HttpServletRequest) anyObject(),
-                (HttpServletResponse) anyObject());
-        verify(filterRunner.getResponse()).addHeader(eq("session"), anyString());
-        verify(filterRunner.getResponse(), never()).addHeader(eq("AUTH_SEND_SUCCESS"), anyString());
-        verify(filterRunner.getResponse(), never()).addHeader(eq("AUTH_SUCCESS"), anyString());
     }
 
     @Test
