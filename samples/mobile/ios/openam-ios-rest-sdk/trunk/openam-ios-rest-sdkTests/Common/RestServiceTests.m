@@ -1,17 +1,20 @@
-//
-//  RestServiceTests.m
-//  openam-ios-rest-sdk
-//
-//  Created by Phill on 30/11/2013.
-//  Copyright (c) 2013 ForgeRock. All rights reserved.
-//
+/*
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2013 ForgeRock, AS.
+ */
 
 #import <XCTest/XCTest.h>
-#import "OCMockObject.h"
-#import "OCMockRecorder.h"
-#import "OCMConstraint.h"
-#import "OCMArg.h"
-#import "NSNotificationCenter+OCMAdditions.h"
 
 #import "RestService.h"
 
@@ -51,28 +54,6 @@
     RestService *instance2 = [[RestService alloc] init];
     
     XCTAssertTrue(instance1 == instance2);
-}
-
-- (void)testGetWithNoHeadersWithNoParamsOnCompletion {
-// 
-//    id mockRestService = [OCMockObject partialMockForObject:restService];
-//    [[[mockRestService stub] andCall:@selector(mockCreateRequest:) onObject:self] createRequest:[OCMArg any]];
-//    
-    [restService get:@"http://phill.internal.forgerock." withHeaders:nil withParams:nil onCompletion:^(NSDictionary *response, NSError *err) {
-        
-        
-        
-    }];
-    
-    
-}
-
-- (NSMutableURLRequest *)mockCreateRequest:(NSString *)url {
-    id mockRequest = [OCMockObject mockForClass:[NSURLRequest class]];
-    
-    [[[mockRequest stub] andReturn:nil] createRequest:[OCMArg any]];
-    
-    return mockRequest;
 }
 
 @end
