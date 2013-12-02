@@ -241,6 +241,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = ForgeRock;
 				TargetAttributes = {
+					FAE70DD5183A83D600F0C920 = {
+						DevelopmentTeam = 9QSE66762D;
+					};
 					FAE70DF6183A83D600F0C920 = {
 						TestTargetID = FAE70DD5183A83D600F0C920;
 					};
@@ -420,6 +423,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/Phill/ForgeRockDev/commons/samples/mobile/ios/openam-ios-rest-sdk/build/Release-iphoneuniversal",
@@ -430,6 +435,7 @@
 				GCC_PREFIX_HEADER = "openam-ios-oauth2-sample-app/openam-ios-oauth2-sample-app-Prefix.pch";
 				INFOPLIST_FILE = "openam-ios-oauth2-sample-app/openam-ios-oauth2-sample-app-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -439,6 +445,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/Phill/ForgeRockDev/commons/samples/mobile/ios/openam-ios-rest-sdk/build/Release-iphoneuniversal",
@@ -449,6 +457,7 @@
 				GCC_PREFIX_HEADER = "openam-ios-oauth2-sample-app/openam-ios-oauth2-sample-app-Prefix.pch";
 				INFOPLIST_FILE = "openam-ios-oauth2-sample-app/openam-ios-oauth2-sample-app-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
