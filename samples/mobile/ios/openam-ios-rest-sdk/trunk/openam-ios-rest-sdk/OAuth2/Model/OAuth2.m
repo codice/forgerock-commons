@@ -1,13 +1,22 @@
-//
-//  OAuth2.m
-//  openam-ios-rest-sdk
-//
-//  Created by Phill on 21/11/2013.
-//  Copyright (c) 2013 ForgeRock. All rights reserved.
-//
+/*
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2013 ForgeRock, AS.
+ */
 
 #import "OAuth2.h"
 #import "HttpHelper.h"
+#import "LegacyRestService.h"
 
 @interface OAuth2()
 @property (strong, nonatomic) id<OAuth2Delegate> delegate;
@@ -15,6 +24,9 @@
 @property (strong, nonatomic) NSDictionary *accessToken;
 
 @property (strong, nonatomic) NSData *receivedData;
+
+
+@property (nonatomic, strong, readonly) LegacyRestService *restService;
 @end
 
 @implementation OAuth2
@@ -32,6 +44,10 @@
     }
     
     return self;
+}
+
+- (LegacyRestService *)restService {
+    return [LegacyRestService instance];
 }
 
 - (void)getAccessTokenWithCode:(NSString *)code {
@@ -60,105 +76,57 @@
 
 - (void)getAccessTokenWithUrlParams:(NSDictionary *)params forClientId:(NSString *)clientId usingClientSecret:(NSString *)clientSecret {
     
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [[self.delegate openAMBaseUrl] absoluteString], @"/oauth2/access_token"]];
+    NSString *url = [NSString stringWithFormat:@"%@%@", [[self.delegate openAMBaseUrl] absoluteString], @"/oauth2/access_token"];
     
-    NSString *post = [HttpHelper urlEncodeDictionary:params];
-    NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
-    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     //add authorization header
     NSString *authzUserPassword = [NSString stringWithFormat:@"%@:%@", clientId, clientSecret];
     NSString *authorizationHeader = [NSString stringWithFormat:@"Basic %@", [HttpHelper base64Encode:authzUserPassword]];
-    [request setValue:authorizationHeader forHTTPHeaderField:@"Authorization"];
+    NSLog(@"%@", authorizationHeader);
     
-    [request setHTTPBody:postData];
+    NSMutableDictionary* headers = [[NSMutableDictionary alloc] init];
+    [headers setValue:authorizationHeader forKey:@"Authorization"];
     
-    /* when we use https, we need to allow any HTTPS cerificates, so add the one line code, use it only for test!
-     */
-    //    [NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:[url host]];
-    
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    [connection start];
-}
-
-- (NSDictionary *)getTokenInfo:(NSString *) accessToken {
-    
-    NSString *tokenURL = [NSString stringWithFormat:@"%@%@", [self.delegate openAMBaseUrl], @"/oauth2/tokeninfo"];
-    
-    NSDictionary *params = [NSMutableDictionary dictionary];
-    [params setValue:accessToken forKey:@"access_token"];
-    NSString *p = [HttpHelper urlEncodeDictionary:params];
-    
-    NSURL *fullURL = [NSURL URLWithString:[tokenURL stringByAppendingFormat:@"?%@", p]];
-    NSMutableURLRequest *tokenRequest = [NSMutableURLRequest requestWithURL:fullURL];
-    [tokenRequest setHTTPMethod:@"GET"];
-    
-    NSHTTPURLResponse  *response = [[NSHTTPURLResponse alloc] init];
-    NSError *error = [[NSError alloc] init];
-    
-    //TODO this should be in another thread or asynchronous request
-    NSData *data = [NSURLConnection sendSynchronousRequest:tokenRequest returningResponse:&response error:&error];
-    
-    if (data) {
-        NSDictionary *tokenInfo = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-        return tokenInfo;
-    }
-    
-    //TODO error?? send to delegate??
-    
-    return nil;
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-   
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    self.receivedData = [[NSMutableData alloc] initWithData:data];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    // do something with error here
-}
-
-//reads access token received from server (access and refresh token requests)
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    
-    NSError *error = [[NSError alloc] init];
-    NSDictionary *token = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:self.receivedData options:kNilOptions error:&error]];
-    if (token) {
+    [self.restService post:url withHeaders:headers withFormParams:params onCompletion:^(NSDictionary *response, NSError *err){
         
-        if ([token objectForKey:@"access_token"]) {
+        if (response) {
             
-            //convert expires_in to axpires at
-            NSTimeInterval expiresIn = (NSTimeInterval)[[token valueForKey:@"expires_in"] intValue];
-            
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-            [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-            [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
-            NSString *dateStr = [dateFormatter stringFromDate:[[NSDate alloc] initWithTimeIntervalSinceNow:expiresIn]];
-                        [token setValue:dateStr forKey:@"expires_in"];
-            
-            self.accessToken = token;
-            
-            if ([token objectForKey:@"refresh_token"]) {
-                //access token request
-                [self.delegate accessTokenCallback:token];
+            if ([response objectForKey:@"access_token"]) {
+                
+                //convert expires_in to axpires at
+                NSTimeInterval expiresIn = (NSTimeInterval)[[response valueForKey:@"expires_in"] intValue];
+                
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+                [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+                NSString *dateStr = [dateFormatter stringFromDate:[[NSDate alloc] initWithTimeIntervalSinceNow:expiresIn]];
+                [response setValue:dateStr forKey:@"expires_in"];
+                
+                if ([response objectForKey:@"refresh_token"]) {
+                    //access token request
+                    [self.delegate accessTokenCallback:response];
+                } else {
+                    //refresh token request
+                    [self.delegate refreshTokenCallback:response];
+                }
+                
             } else {
-                //refresh token request
-                [self.delegate refreshTokenCallback:token];
+                //TODO
             }
-            
         } else {
             //TODO
         }
-    } else {
-        //TODO
-    }
+
+    }];
+}
+
+- (NSDictionary *)tokenInfoFfromServer:(NSString *)baseUri for:(NSString *)accessToken {
+    
+    NSString *tokenURL = [NSString stringWithFormat:@"%@%@", baseUri, @"/oauth2/tokeninfo"];
+    
+    NSDictionary *params = [NSMutableDictionary dictionary];
+    [params setValue:accessToken forKey:@"access_token"];
+    
+    return [self.restService get:tokenURL withHeaders:nil withParams:params];
 }
 
 @end

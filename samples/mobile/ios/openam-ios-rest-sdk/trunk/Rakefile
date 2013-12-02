@@ -73,4 +73,11 @@ task :package do
   system_or_exit "cp #{UNIVERSAL_LIBRARY_PATH} #{FRAMEWORK_PATH}/Versions/A && cp -r #{DEVICE_LIBRARY_DIR}/include/#{PROJECT_NAME}/ #{FRAMEWORK_PATH}/Versions/A/Headers && ln -s #{FRAMEWORK_PATH}/Versions/A #{FRAMEWORK_PATH}/Versions/Current && ln -s #{FRAMEWORK_PATH}/Versions/Current/Headers #{FRAMEWORK_PATH}/Headers && ln -s #{FRAMEWORK_PATH}/Versions/Current/Resources #{FRAMEWORK_PATH}/Resources && ln -s #{FRAMEWORK_PATH}/Versions/Current/#{PROJECT_NAME} #{FRAMEWORK_PATH}/#{PROJECT_NAME}"
 end
 
-task :default => [:clean, :build, :package]
+desc "Deploy OpenAM iOS REST SDK to /Library/Frameworks/openam-ios-rest-sdk.framework"
+task :deploy do
+  system_or_exit "mkdir -p ~/Library/Frameworks"
+  system_or_exit "rm -rf ~/Library/Frameworks/openam-ios-rest-sdk.framework"
+  system_or_exit "cp -r #{FRAMEWORK_PATH} ~/Library/Frameworks/openam-ios-rest-sdk.framework"
+end
+
+task :default => [:clean, :build, :package, :deploy]
