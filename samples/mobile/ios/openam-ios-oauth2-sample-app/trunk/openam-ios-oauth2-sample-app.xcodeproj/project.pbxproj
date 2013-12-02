@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		FA0B657C184CB20E00E421A9 /* SimpleLogin.m in Sources */ = {isa = PBXBuildFile; fileRef = FA0B657B184CB20E00E421A9 /* SimpleLogin.m */; };
+		FA0B657F184CDDEA00E421A9 /* SettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FA0B657E184CDDEA00E421A9 /* SettingsCell.m */; };
 		FA877B22183D120F0036938D /* Native.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA877B21183D120F0036938D /* Native.storyboard */; };
 		FA877B33183D121E0036938D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B24183D121E0036938D /* AppDelegate.m */; };
 		FA877B35183D121E0036938D /* ServerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = FA877B28183D121E0036938D /* ServerSettings.m */; };
@@ -44,6 +45,8 @@
 /* Begin PBXFileReference section */
 		FA0B657A184CB20E00E421A9 /* SimpleLogin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleLogin.h; sourceTree = "<group>"; };
 		FA0B657B184CB20E00E421A9 /* SimpleLogin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleLogin.m; sourceTree = "<group>"; };
+		FA0B657D184CDDEA00E421A9 /* SettingsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsCell.h; sourceTree = "<group>"; };
+		FA0B657E184CDDEA00E421A9 /* SettingsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsCell.m; sourceTree = "<group>"; };
 		FA877B21183D120F0036938D /* Native.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Native.storyboard; sourceTree = "<group>"; };
 		FA877B23183D121E0036938D /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		FA877B24183D121E0036938D /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -136,6 +139,8 @@
 		FAE70DDF183A83D600F0C920 /* openam-ios-oauth2-sample-app */ = {
 			isa = PBXGroup;
 			children = (
+				FA0B657D184CDDEA00E421A9 /* SettingsCell.h */,
+				FA0B657E184CDDEA00E421A9 /* SettingsCell.m */,
 				FA877B23183D121E0036938D /* AppDelegate.h */,
 				FA877B24183D121E0036938D /* AppDelegate.m */,
 				FA877B27183D121E0036938D /* ServerSettings.h */,
@@ -291,6 +296,7 @@
 				FAE5C83C1846551400F3655B /* TokenInfoViewController.m in Sources */,
 				FAE70DE6183A83D600F0C920 /* main.m in Sources */,
 				FA0B657C184CB20E00E421A9 /* SimpleLogin.m in Sources */,
+				FA0B657F184CDDEA00E421A9 /* SettingsCell.m in Sources */,
 				FA877B5F183D12FD0036938D /* KeyChainWrapper.m in Sources */,
 				FA877B3A183D121E0036938D /* AuthViewController.m in Sources */,
 				FA877B37183D121E0036938D /* SettingsViewController.m in Sources */,
