@@ -229,9 +229,13 @@ public class RhinoScript implements CompiledScript {
      *            to add the property to
      */
     private void addLoggerProperty(Scriptable scope) {
-        String loggerName = "org.forgerock.script.javascript.JavaScript." + scriptName;
+        String loggerName = "org.forgerock.script.javascript.JavaScript." + trimPath(scriptName);
         scope.put("logger", scope, Converter.wrap(null, FunctionFactory.getLogger(loggerName),
                 scope, false));
+    }
+
+    private String trimPath(String name) {
+        return name.indexOf("/") != -1 ? name.substring(name.lastIndexOf("/") + 1) : name;
     }
 
     public Bindings prepareBindings(org.forgerock.json.resource.Context context, Bindings request,
