@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/datastore_username"
+            />
+
+    <EditText android:id="@+id/datastore_username_text"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:hint="@string/datastore_username"
+            />
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/datastore_password"
+            />
+
+    <EditText android:id="@+id/datastore_password_text"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:inputType="textPassword"
+              android:hint="@string/datastore_password"
+            />
+
+
+    <Button
+            android:id="@+id/datastore_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/datastore_button" />
+
+
+</LinearLayout>

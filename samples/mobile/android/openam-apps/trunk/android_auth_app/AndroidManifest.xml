@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="org.forgerock.openam.mobile.example.authentication"
+          android:versionCode="1"
+          android:versionName="1.0"
+          android:hardwareAccelerated="true"
+          android:installLocation="preferExternal" >
+
+    <uses-sdk android:minSdkVersion="18" android:targetSdkVersion="18" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application android:label="@string/app_name"
+                 android:theme="@style/ForgeRockTheme" android:icon="@drawable/ic_launcher">
+        <activity android:name=".activities.HomeActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activities.authenticate.AuthenticateActivity"
+                  android:allowTaskReparenting="true" />
+        <activity android:name=".activities.authenticate.DataStoreActivity"  />
+        <activity android:name=".activities.authenticate.LoginWebActivity" />
+        <activity android:name=".activities.SettingsActivity" />
+        <activity android:name=".activities.AboutActivity"
+                  android:screenOrientation="portrait"/>
+
+        <provider
+                android:authorities="org.forgerock.openam.mobile.example.content.SSOContentProvider"
+                android:exported="true"
+                android:protectionLevel="signature"
+                android:name="org.forgerock.openam.mobile.example.content.SSOContentProvider" />
+
+        <activity android:name=".activities.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="frauth" />
+            </intent-filter>
+        </activity>
+
+    </application>
+</manifest>
