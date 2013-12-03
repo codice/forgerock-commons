@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:id="@+id/scrollView1"
+            android:layout_width="fill_parent" android:layout_height="fill_parent"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/login_layout"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+
+        <ImageView
+                android:id="@+id/about_forgerock_img"
+                android:layout_width="match_parent"
+                android:layout_height="98dp"
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="10sp"
+                android:src="@drawable/forgerock_logo"
+                android:contentDescription="@string/about_forgerock" />
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:gravity="center">
+
+            <Button
+                    android:id="@+id/home_authorize_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_authorize_button" />
+
+            <Button
+                    android:id="@+id/home_profile_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_profile_button" />
+
+
+            <Button
+                    android:id="@+id/home_discard_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_discard_button" />
+
+        </LinearLayout>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/home_sso_token"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                />
+
+        <TextView
+                android:id="@+id/home_sso_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+                />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/home_oauth2_token"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                />
+
+        <TextView
+                android:id="@+id/home_oauth2_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="italic"
+                />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/home_profile"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                />
+
+        <TextView
+                android:id="@+id/home_profile_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+
+
+    </LinearLayout>
+
+</ScrollView>

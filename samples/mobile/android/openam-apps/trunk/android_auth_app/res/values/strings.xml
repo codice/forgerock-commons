@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ForgeRock Authentication</string>
+    <string name="app_version">1.0</string>
+    <string name="logo_description">ForgeRock AS</string>
+
+    <!-- Home Activity -->
+    <string name="home_native">Native UI</string>
+    <string name="home_web">WebView</string>
+    <string name="home_sso_token">SSO Token</string>
+    <string name="home_clear_local">Clear Local</string>
+
+    <!-- Settings Activity -->
+    <string name="settings_openam_base">OpenAM Base URL</string>
+    <string name="settings_realm">Authentication Realm</string>
+    <string name="settings_cookie_domain">Cookie Domain</string>
+    <string name="settings_cookie_name">Cookie Name</string>
+    <string name="settings_save_button">Save</string>
+    <string name="settings_cookie_button">Load Cookie Name</string>
+    <string name="settings_domains_button">Load Domains</string>
+
+    <string name="settings_authenticate_header">Authentication Server Settings</string>
+
+    <!-- DataStore Activity -->
+    <string name="datastore_username">Username</string>
+    <string name="datastore_password">Password</string>
+    <string name="datastore_button">Submit</string>
+
+    <!-- About Activity -->
+    <string name="about_forgerock">ForgeRock AS, thingie thingie words some more text here to fill up the void making lots of things look like there\'s many words but actually there\'s just nonsense it\'s nothing important.</string>
+
+    <!-- Menu -->
+    <string name="menu_settings">Settings</string>
+    <string name="menu_about">About</string>
+
+    <!-- Generic -->
+    <string name="login_button">Login</string>
+    <string name="logout_button">Logout</string>
+</resources>

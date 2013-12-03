@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="ForgeRockTheme" parent="android:Theme">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTitleBackgroundStyle">@style/WindowTitleBar</item>
+    </style>
+
+    <style name="WindowTitleBar">
+        <item name="android:background">#131518</item>
+    </style>
+
+</resources>

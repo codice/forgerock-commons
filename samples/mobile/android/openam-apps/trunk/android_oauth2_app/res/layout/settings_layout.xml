@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:id="@+id/scrollView1"
+            android:layout_width="fill_parent" android:layout_height="fill_parent"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_oauth_header"
+                android:textStyle="bold|italic"
+                />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_client_id"
+                android:textStyle="italic"
+                android:layout_marginTop="3dp"
+                />
+
+        <EditText android:id="@+id/settings_client_id_text"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:hint="@string/settings_client_id"
+                />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_client_secret"
+                android:textStyle="italic"
+                />
+
+        <EditText android:id="@+id/settings_client_secret_text"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:inputType="textPassword"
+                  android:hint="@string/settings_client_secret"
+                />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_scope"
+                android:textStyle="italic"
+                />
+
+        <EditText android:id="@+id/settings_scope_text"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:hint="@string/settings_scope"
+                />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_redirect"
+                android:textStyle="italic"
+                />
+
+        <EditText android:id="@+id/settings_redirect_text"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:hint="@string/settings_redirect"
+                />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_authenticate_header"
+                android:textStyle="bold|italic"
+                android:layout_marginTop="5dp"
+                />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_realm"
+                android:textStyle="italic"
+                android:layout_marginTop="3dp"
+                />
+
+        <TextView android:id="@+id/settings_realm_text"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_openam_base"
+                android:textStyle="italic"
+                />
+
+        <TextView android:id="@+id/settings_openambase_text"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_cookie_domain"
+                android:textStyle="italic"
+                />
+
+        <TextView android:id="@+id/settings_cookie_domain_text"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                />
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_cookie_name"
+                android:textStyle="italic"
+                />
+
+        <TextView android:id="@+id/settings_cookie_name_text"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                />
+
+        <Button
+                android:id="@+id/settings_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_button"
+                android:layout_marginTop="3dp"
+                />
+
+
+    </LinearLayout>
+
+</ScrollView>
