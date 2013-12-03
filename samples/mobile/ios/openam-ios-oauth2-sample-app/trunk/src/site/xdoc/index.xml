@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ! CCPL HEADER START
+  !
+  ! This work is licensed under the Creative Commons
+  ! Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+  ! To view a copy of this license, visit
+  ! http://creativecommons.org/licenses/by-nc-nd/3.0/
+  ! or send a letter to Creative Commons, 444 Castro Street,
+  ! Suite 900, Mountain View, California, 94041, USA.
+  !
+  ! See the License for the specific language governing permissions
+  ! and limitations under the License.
+  !
+  ! If applicable, add the following below this CCPL HEADER, with the fields
+  ! enclosed by brackets "[]" replaced with your own identifying information:
+  !      Portions Copyright [yyyy] [name of copyright owner]
+  !
+  ! CCPL HEADER END
+  !
+  !      Copyright 2013 ForgeRock AS
+  !
+-->
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/XDOC/2.0
+                              http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+ <properties>
+  <title>OpenAM OAuth 2.0 iOS Sample App</title>
+  <author email="opendj@forgerock.org">ForgeRock AS</author>
+ </properties>
+
+ <body>
+  <section name="Table of Contents">
+   <macro name="toc" />
+  </section>
+
+  <section name="About the Sample App">
+
+   <p>
+    <a href="http://forgerock.com/products/open-identity-stack/openam/"
+    >OpenAM services</a> make it easy to add access management
+    to modern mobile applications.
+   </p>
+
+   <p>
+    OpenAM OAuth 2.0 iOS Sample App demonstrates use of OpenAM server's
+    standard <a href="http://docs.forgerock.org/en/openam/11.0.0/dev-guide/index/chap-rest.html#rest-api-oauth2"
+    >OAuth 2.0 REST API</a> to authorize OAuth 2.0 client access.
+   </p>
+
+   <p>
+    For more information on OpenAM's support for OAuth 2.0,
+    read the <i>Administration Guide</i> chapter on
+    <a href="http://docs.forgerock.org/en/openam/11.0.0/admin-guide/index/chap-oauth2.html"
+    ><i>Managing OAuth 2.0 Authorization</i></a>.
+   </p>
+
+   <p>
+    For more information on OpenAM's support for mobile applications,
+    read the <i>Administration Guide</i> chapter on
+    <a href="http://docs.forgerock.org/en/openam/11.0.0/admin-guide/index/chap-mobile.html"
+    ><i>Working with Mobile Devices &amp; Applications</i></a>.
+   </p>
+
+  </section>
+
+  <section name="To Prepare OpenAM Server">
+
+   <p>
+    Before you try the sample application, install and configure OpenAM server
+    as described in the <a href="http://docs.forgerock.org/en/openam/11.0.0/install-guide/"
+    ><i>OpenAM Installation Guide</i></a>, and then prepare OpenAM
+    for use with the sample application.
+   </p>
+
+   <p>
+    <b>Important</b> For the initial version of the sample,
+    the cookie domain must be <code>.forgerock.com</code>,
+    the OpenAM administrator <code>amadmin</code>
+    must have password <code>cangetin</code>,
+    and the SSO Token cookie must have the default name,
+    <code>iPlanetDirectoryPro</code>.
+   </p>
+
+   <p>
+    <b>Tip</b> Add an alias to the localhost address
+    such as <code>oauth2.forgerock.com</code>
+    in your <code>/etc/hosts</code> file
+    to fake the fully-qualified domain name before configuring OpenAM.
+   </p>
+
+   <p>
+    After initial installation and configuration of OpenAM,
+    follow these steps to prepare OpenAM for use with the sample application.
+   </p>
+
+   <ol>
+
+    <li>
+     <p>
+      In OpenAM Console > Common Tasks, click Configure OAuth2,
+      and then click Create in the Configure OAuth2 page
+      to configure an OAuth 2.0 Authorization Server for the realm /.
+     </p>
+    </li>
+
+
+    <li>
+     <p>
+      In OpenAM Console > Access Control > / (Top Level Realm) > Agents
+      > OAuth 2.0 Client, click New,
+      and then use the New OAuth 2.0 Client page
+      to register an OAuth 2.0 client
+      with name <code>MyApp</code> and password <code>password</code>.
+     </p>
+
+     <p>
+      After you register the client, click the link to the client profile
+      to set the Redirection URI to <code>http://www.example.com/</code>
+      and the Scopes to <code>cn</code> and <code>mail</code>,
+      and then click Save.
+     </p>
+    </li>
+
+   </ol>
+
+  </section>
+
+  <section name="To Build the Sample App on Mac OS X">
+
+   <p>
+    You can build the sample on OS X 10.8 or later with Xcode installed.
+   </p>
+
+   <ol>
+
+     <li>
+
+      <p>
+       In Terminal, check out the sample application source code.
+      </p>
+
+      <pre>$ svn co https://svn.forgerock.org/commons/samples/mobile/ios</pre>
+
+      <p>
+       This subversion command checks out iOS sample application code into
+       an <code>ios</code> folder in the current working directory.
+       It also checks out the REST SDK framework code
+       that you need in order to build the sample application.
+      </p>
+     </li>
+
+     <li>
+
+      <p>
+       Build the REST SDK framework that the sample application depends on.
+      </p>
+
+      <pre>$ cd ios/openam-ios-rest-sdk/trunk/
+$ rake</pre>
+
+      <p>
+       When you build with <code>rake</code> on the command line,
+       the framework is copied to your Frameworks folder,
+       <code>~/Library/Frameworks/openam-ios-rest-sdk.framework</code>.
+      </p>
+
+     </li>
+
+     <li>
+
+      <p>
+       Build the sample project in Xcode.
+      </p>
+
+      <p>
+       You can open the project either from Finder, or from the command line.
+      </p>
+
+      <pre>$ cd ../../openam-ios-oauth2-sample-app/trunk/
+$ open openam-ios-oauth2-sample-app.xcodeproj</pre>
+
+     </li>
+
+     <li>
+
+      <p>
+       Click the play button in Xcode to build and then run the current scheme.
+       After the sample builds, Xcode launches the sample in the simulator.
+      </p>
+
+    </li>
+
+   </ol>
+
+   <p>
+    If you have successfully arrived at this point,
+    then OpenAM can function as an OAuth 2.0 Authorization Server,
+    and the client application is registered as <code>MyApp</code>.
+    The client application is also running in an iOS device simulator,
+    waiting to be configured.
+   </p>
+
+  </section>
+
+  <section name="To Try the Sample App">
+
+   <p>
+    After the sample builds in Xcode, Xcode launches the application
+    in an iOS device simulator, and you can try it with OpenAM.
+   </p>
+
+   <ol>
+    <li>
+
+     <p>
+      The initial screen in the simulator lets you configure the client.
+     </p>
+
+     <p>
+      <a href="images/initial-screen.png">
+       <img src="images/initial-screen.png"
+            alt="initial-screen"
+            style="box-shadow: 3px 3px 8px #222; max-width: 240px;"
+       />
+      </a>
+     </p>
+
+     <ul>
+      <li>
+       Set the Base URI to the URL to your OpenAM server,
+       such as <code>http://oauth2.forgerock.com:8080/openam</code>.
+      </li>
+
+      <li>
+       Edit the OAuth2 client settings to correspond
+       to the OAuth 2.0 client profile that you configured in OpenAM.
+      </li>
+     </ul>
+
+    </li>
+
+    <li>
+     <p>
+      After you finish setting the client configuration,
+      click the Authorize link to have the client direct you
+      as <code>amadmin</code> to OpenAM to authorize an access token
+      for the client application.
+     </p>
+
+     <p>
+      <a href="images/before-authorization.png">
+       <img src="images/before-authorization.png"
+            alt="before-authorization"
+            style="box-shadow: 3px 3px 8px #222; max-width: 240px;"
+       />
+      </a>
+     </p>
+    </li>
+
+    <li>
+     <p>
+      Click allow to authorize access on the OAuth authorization page.
+     </p>
+
+     <p>
+      <a href="images/authorizing-access.png">
+       <img src="images/authorizing-access.png"
+            alt="authorizing-access"
+            style="box-shadow: 3px 3px 8px #222; max-width: 240px;"
+               />
+      </a>
+     </p>
+    </li>
+
+    <li>
+
+     <p>
+      On success, you see the OAuth 2.0 access token information
+      and also the scope values for <code>amadmin</code> in the client.
+     </p>
+
+     <p>
+      <a href="images/token-and-scopes.png">
+       <img src="images/token-and-scopes.png"
+            alt="token-and-scopes"
+            style="box-shadow: 3px 3px 8px #222; max-width: 240px;"
+               />
+      </a>
+     </p>
+    </li>
+   </ol>
+
+  </section>
+
+  <section name="To Change Sample App Settings">
+
+   <p>
+    You can change the client settings after you leave the initial screen.
+    Follow these steps.
+   </p>
+
+   <ol>
+    <li>
+     <p>
+      Type Command + Shift + H to open the simulator home page
+      where you can access the device settings.
+     </p>
+
+     <p>
+      <a href="images/access-settings.png">
+       <img src="images/access-settings.png"
+            alt="access-settings"
+            style="box-shadow: 3px 3px 8px #222; max-width: 240px;"
+               />
+      </a>
+     </p>
+    </li>
+
+    <li>
+     <p>
+      Click Settings, and then navigate down the page
+      to select the settings for the sample application.
+     </p>
+
+     <p>
+      <a href="images/selecting-settings.png">
+       <img src="images/selecting-settings.png"
+            alt="selecting-settings"
+            style="box-shadow: 3px 3px 8px #222; max-width: 240px;"
+               />
+      </a>
+     </p>
+    </li>
+
+    <li>
+     <p>
+      On the settings screen, edit the settings as necessary.
+     </p>
+
+     <p>
+      <a href="images/settings-screen.png">
+       <img src="images/settings-screen.png"
+            alt="settings-screen"
+            style="box-shadow: 3px 3px 8px #222; max-width: 240px;"
+               />
+      </a>
+     </p>
+    </li>
+
+    <li>
+     <p>
+      When finished, return to the application
+      by returning to the device home page
+      and paging through the available applications
+      to find the sample application.
+     </p>
+    </li>
+   </ol>
+
+  </section>
+
+<!--  TODO: deploy onto a real device
+
+  <section name="To Deploy the Sample App on an iOS Device">
+
+   <p>
+    To try OpenAM OAuth 2.0 Sample App on an iOS device such as a phone or tablet,
+   </p>
+  </section>
+
+-->
+ </body>
+
+</document>
