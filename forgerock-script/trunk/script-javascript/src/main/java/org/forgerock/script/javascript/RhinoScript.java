@@ -316,16 +316,16 @@ public class RhinoScript implements CompiledScript {
                 throw new ScriptThrownException(e.getMessage(), e.getWrappedException());
             }
         } catch (JavaScriptException e) {
-            logger.error("Failed to evaluate {} script.", scriptName, e);
+            logger.debug("Failed to evaluate {} script.", scriptName, e);
             throw new ScriptThrownException(e, Converter.convert(e.getValue()));
         } catch (RhinoException e) {
-            logger.error("Failed to evaluate {} script.", scriptName, e);
+            logger.debug("Failed to evaluate {} script.", scriptName, e);
             // some other runtime exception encountered
             final ScriptException exception = new ScriptException(e.getMessage());
             exception.initCause(e);
             throw exception;
         } catch (Exception e) {
-            logger.error("Failed to evaluate {} script.", scriptName, e);
+            logger.debug("Failed to evaluate {} script.", scriptName, e);
             throw new ScriptException(e);
         } finally {
             Context.getCurrentContext().removeThreadLocal(Parameter.class.getName());
