@@ -1,0 +1,101 @@
+<div class="container">
+
+	<h2>{{'console'|i18n}}</h2>
+	<h4>{{'realm'|i18n}} {{realms[realmIndex]}}</h4>
+	
+	<div class="panel panel-info" ng-show="identities.length>0">
+	  <div class="panel-heading">{{'identitiesIn'|i18n}} {{realms[realmIndex]}}</div>
+	  <div class="list-group">
+	    <a ng-repeat="identity in identities" class="list-group-item" data-toggle="modal" data-target="#identityModal" ng-click="getUser(identity)">{{identity}}</a>
+	  </div>
+
+	</div>
+
+	<div class="panel panel-info" ng-show="sessions.length>0">
+	  <div class="panel-heading">{{'activeSessionsIn'|i18n}} {{realms[realmIndex]}}</div>
+	  <table class="table">
+	  	<thead>
+          <tr>
+            <th>{{'userID'|i18n}}</th>
+            <th>{{'minutesRemaining'|i18n}}</th>
+          </tr>
+        </thead>
+		<tr ng-repeat="session in sessions" >
+	  		<td>{{session.userid}}</td>
+	  		<td>{{session.timeleft}}</td>
+		</tr>
+	  </table>
+	</div>
+
+	<br/>
+	<button class="btn btn-lg btn-primary"  data-toggle="modal" data-target="#realmsModal" type="submit" >{{'realms'|i18n}}</button> 
+
+
+
+	<!-- Modal -->
+    <div class="modal fade" id="realmsModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">{{'selectOrAddNewRealms'|i18n}}</h4>
+
+            <div class="modal-body" >
+
+            	<div class="list-group">
+				  	<a ng-repeat="realm in realms" data-dismiss="modal" ng-click="selectRealm($index)" class="list-group-item {{$index==realmIndex ? 'active' :''}}">{{realm}}</a>
+				</div>
+
+	            <div class="input-group" >
+			        <input type="text" class="form-control input-lg " placeholder="Add Realm" ng-model="realm" type="text" />
+			        <span class="input-group-btn">
+			            <button ng-click="addRealm(realm)" ng-disabled="!realm" class="btn btn-lg btn-primary" type="button">{{'add'|i18n}}</button>    
+			        </span>
+			    </div>
+			</div>
+
+          </div>
+
+          <div class="modal-body">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{'close'|i18n}}</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+	<!-- Modal -->
+    <div class="modal fade" id="identityModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+           
+            <div class="modal-body" >
+
+              <div class="panel panel-info">
+          <div class="panel-heading">{{identity.givenname[0]}}</div>
+          <table class="table">
+          <tr ng-repeat="(key, value) in identity" >
+              <td>{{key}}</td>
+              <td>{{value[0]}}</td>
+          </tr>
+          </table>
+           
+        </div>
+
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{'close'|i18n}}</button>
+
+      </div>
+
+      
+
+        </div>
+      </div>
+    </div>
+
+
+</div>
+

@@ -1,0 +1,82 @@
+<div ng-show="ready" class="container">
+
+
+
+    <form id="profileForm" name="profileForm" novalidate profile>
+  
+        <h2>{{user.username}}</h2>
+
+        <div class="row">
+            <div class="col-md-6" ng-show="toggle||wideView">
+
+                <div>
+                    <label ng-bind="'firstName'|i18n"></label> <span class="error" ng-show="profileForm.givenname.$invalid">{{'required'|i18n}}</span>
+                    <input class="form-control input-lg" placeholder="{{'firstName'|i18n}}" type="text" ng-model="user.givenname" name="givenname" required/><br/>
+                </div>
+                
+                <div>
+                    <label ng-bind="'lastName'|i18n"></label>  <span class="error" ng-show="profileForm.sn.$invalid">{{'required'|i18n}}</span>
+                    <input class="form-control input-lg" placeholder="{{'lastName'|i18n}}" type="text" ng-model="user.sn" name="sn" required/><br/>
+                </div>
+
+                <div>
+                    <label ng-bind="'emailAddress'|i18n"></label>  <span class="error" ng-show="profileForm.mail.$invalid">{{'validEmail'|i18n}}</span>
+                    <input class="form-control input-lg" placeholder="{{'emailAddress'|i18n}}" type="email" ng-model="user.mail" name="mail" required/><br/>    
+                </div>
+
+            </div>
+
+            <div class="col-md-6 show-animation" ng-hide="toggle&&!wideView">
+
+                <div>
+                    <label ng-bind="'mobileNumber'|i18n"></label><span class="error" ng-show="profileForm.telephonenumber.$invalid"></span>
+                    <input only-numbers class="form-control input-lg " placeholder="{{'mobileNumber'|i18n}}"  type="tel" ng-model="user.telephonenumber" name="telephonenumber" /><br/>
+                </div>
+                
+                <div>
+                    <label ng-bind="'address'|i18n"></label>
+                    <textarea class="form-control" rows="6" placeholder="{{'address'|i18n}}" type="text" ng-model="user.postaladdress" name="postaladdress"></textarea>
+                  <br/>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="pull-left">
+                    <button class="btn btn-lg btn-primary" ng-hide="wideView" ng-click="toggle=!toggle" >{{'next'|i18n}}</button>
+                </div>
+                 <div class="pull-right">
+                    <button class="btn btn-lg btn-primary" ng-click="updateProfile()" data-toggle="modal" data-target="#alertModal"  ng-disabled="profileForm.$invalid || isUnchanged(user)" type="submit" >{{'update'|i18n}}</button> 
+                    <button class="btn btn-lg btn-primary" ng-click="resetProfile()"   ng-disabled="isUnchanged(user)">{{'reset'|i18n}}</button>
+                </div>
+            </div>
+        </div>
+  
+                
+    </form>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="alertModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">{{message}}</h4>
+          </div>
+          <div class="modal-body">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{'close'|i18n}}</button>
+          
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+   
+<div>
+

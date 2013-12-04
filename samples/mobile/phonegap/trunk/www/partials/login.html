@@ -1,0 +1,32 @@
+
+<div ng-show="ready" class="container">
+
+    <div class="alert {{messageClass}}" >{{message}}</div>
+
+  
+      <form class="form-narrow form-inline" name="loginForm" novalidate>
+          <h2 class="form-signin-narrow">{{'pleaseSignIn'|i18n}}</h2>
+          
+          <div class="double-input">
+              <input class="form-control input-lg" placeholder="{{'username'|i18n}}"  ng-model="username" required type="text" />
+              <input class="form-control input-lg" placeholder="{{'password'|i18n}}"  ng-model="password" required type="{{showPassword && 'text' || 'password' }}" />
+          </div>
+
+          <div class="inline-label-container">
+              <label class="checkbox-inline">
+                  <input type="checkbox" ng-model="rememberMe">{{'rememberMe'|i18n}} 
+              </label>
+              <label class="checkbox-inline">
+                  <input type="checkbox" ng-model="showPassword">{{'showPassword'|i18n}} 
+              </label>
+          </div>
+          
+          <button ng-click="login()" ng-disabled="loginForm.$invalid" class="btn btn-lg btn-primary btn-block" type="submit">{{'login'|i18n}}</button>
+
+      </form>
+
+
+</div>
+
+
+
