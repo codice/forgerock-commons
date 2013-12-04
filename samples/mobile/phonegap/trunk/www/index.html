@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" ng-app="openAm">
+<head>
+  <meta charset="utf-8">
+  <meta name="format-detection" content="telephone=yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
+
+  <title>OpenAm App</title>
+
+  <link rel="stylesheet" href="css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="css/app.css"/>
+
+</head>
+<body>
+
+  <navigation-bar></navigation-bar>
+  
+  <div id="wrap">
+    <div class="view-animate-container">
+        <div ng-view class="view-animate"></div>
+    </div>
+  </div>
+
+
+  <confirm-modal></confirm-modal>
+  <language-modal></language-modal>
+
+
+  <script src="lib/jquery/jquery-1.10.2.min.js"></script>
+  <script src="lib/bootstrap/bootstrap.min.js"></script>
+  <script src="lib/angular/angular.min.js"></script>
+  <script src="lib/angular/angular-route.min.js"></script>
+  <script src="lib/angular/angular-animate.min.js"></script>
+
+  <script src="js/services/openAmServices.js"></script>
+  <script src="js/controllers/controllers.js"></script>
+  <script src="js/directives/directives.js"></script>
+
+
+  <script src="js/modules/filters.js"></script>
+  <script src="js/modules/localize.js"></script>
+  <script src="js/modules/storage.js"></script>
+  <script src="js/modules/app.js"></script>
+
+  <script src="js/phonegap.js"></script>
+
+</body>
+</html>

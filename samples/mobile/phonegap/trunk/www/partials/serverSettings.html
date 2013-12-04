@@ -1,0 +1,51 @@
+
+<div class="container">
+
+    <form name="settingsForm" id="settingsForm" novalidate>
+
+        <h2 class="form-signin-narrow">{{'servers'|i18n}}</h2>
+
+        <div class="input-group" ng-show="stage=='url'" >
+            <input type="text" class="form-control input-lg " placeholder="{{'addServerUrl'|i18n}}" ng-model="url" name="url" required type="url" />
+            <span class="input-group-btn">
+                <button ng-click="addUrl()" ng-disabled="settingsForm.url.$invalid" class="btn btn-lg btn-primary" type="button">{{'next'|i18n}}</button>    
+            </span>
+        </div>
+
+        <div class="input-group" ng-show="stage=='name'" >
+            <input type="text" class="form-control input-lg " placeholder="{{'nameOptional'|i18n}}"  ng-model="name" name="name"  type="text" />
+            <span class="input-group-btn">
+                <button ng-click="finish()" ng-disabled="settingsForm.name.$invalid" class="btn btn-lg btn-primary" type="button">{{'finish'|i18n}}</button>
+            </span>
+        </div>
+
+        <br/>
+        <div class="input-group server-list repeat-animation" ng-repeat="server in servers" >
+
+            <button ng-click="selectServer($index)"  class="btn btn-lg btn-block left-block {{(server.online==true) ? 'success' : 'warning'}} {{$index==selectedIndex ? 'active' :''}}">
+                <span class="pull-left server-name">{{server.name}}</span>
+                <span class="pull-right glyphicon {{(server.online==true) ? 'glyphicon-thumbs-up' : 'glyphicon-thumbs-down'}}"></span>
+            </button>
+
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-lg dropdown-toggle btn-default"  data-toggle="dropdown" tabindex="-1">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <ul class="dropdown-menu pull-right" role="menu">
+                <li ng-show="server.online"><a ng-click="login($index)" ><span class="glyph-enter"></span>{{'login'|i18n}}</a></li>
+                <li><a ng-click="selectServer($index)" >{{'selectTest'|i18n}}</a></li>
+                <li><a ng-click="editServer($index)" >{{'edit'|i18n}}</a></li>
+                <li><a ng-click="deleteServer($index)" >{{'delete'|i18n}}</a></li>
+              </ul>
+            </div>
+
+
+
+        </div>
+
+    </form>
+
+</div>
+
+

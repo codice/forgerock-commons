@@ -1,0 +1,308 @@
+/* app css stylesheet */
+body{
+ /* -webkit-transform: translate3d(0px,0px,0px);*/
+ background-color: #eee;
+}
+
+
+
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+
+.menu:before {
+  content: "[";
+}
+
+.menu:after {
+  content: "]";
+}
+
+.menu > li {
+  display: inline;
+}
+
+.menu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+
+.menu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
+
+input.ng-invalid{
+  border-color: #F88;
+  background-color: #F7E7E7;
+}
+
+
+
+.inline-label-container{
+  padding:10px 0 20px;
+}
+
+.float-right{
+  float:right;
+}
+.form-narrow div{
+  padding-top: 10px;
+}
+
+.form-narrow {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-narrow .form-narrow-heading,
+.form-narrow .checkbox {
+  margin-bottom: 10px;
+}
+.form-narrow .checkbox {
+  font-weight: normal;
+}
+.form-narrow .form-control {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.form-narrow .form-control:focus {
+  z-index: 2;
+}
+
+.form-button{
+  width:340px;
+}
+
+.left-block{
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  padding-left:13px;
+  padding-right:13px;
+
+}
+
+input.ng-dirty, textarea.ng-dirty{
+ -webkit-transition:background ease-in-out .5s;
+  transition:background ease-in-out .5s;
+  background-color: #E2FAFD;
+}
+
+input.ng-dirty.ng-invalid, textarea.ng-dirty.ng-invalid{
+  background-color:#F7E7E7;
+}
+
+.server-list button.left-block, .server-list .dropdown-toggle{
+  font-size:13px;
+}
+
+/*css fix to stop text to wrapping or going off the page in low res screens*/
+.server-name{
+   max-width: 100px;
+}
+
+
+button.left-block.warning{
+    color: #ffffff;
+    background-color: #A2A2A2;
+    border-color: #A2A2A2;
+}
+
+button.left-block.success{
+    color: #ffffff;
+    background-color: #85AA85;
+    border-color: #398439;
+}
+
+
+button.left-block.active.warning{
+    background-color: #666;
+    border-color: #666;
+}
+
+button.left-block.active.success{
+    background-color: #419641;//#91A891;
+}
+
+.server-list{
+  margin-bottom: 10px;
+}
+
+
+
+.double-input input:nth-child(1){
+  margin-bottom: -1px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+
+}
+.double-input input:nth-child(2) {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+
+.many-input input {
+  margin-bottom: -1px;
+  border-radius: 0;
+}
+ .many-input input:first-of-type {
+  margin-bottom: -1px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+
+}
+.many-input input:last-of-type {
+  margin-bottom: 10px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.error{
+  color:#F88;
+  float:right;
+}
+
+
+.alert{
+  -webkit-transition:all ease-in-out .5s;
+  transition:all ease-in-out .5s;
+}
+
+
+.view-animate-container {
+
+ /* position:absolute;*/
+  top:0;bottom:0;
+  left:0;right:0;
+  overflow-x:hidden;
+
+}
+ 
+.view-animate {
+  padding:70px 10px 10px 10px;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+}
+ 
+.view-animate.ng-enter, .view-animate.ng-leave {
+  -webkit-transition:all ease-in-out .5s;
+  transition:all ease-in-out .5s;
+
+  width:100%;
+
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+
+}
+ 
+.view-animate.ng-enter {
+  left:100%;
+  opacity: 0;
+}
+.view-animate.ng-enter.ng-enter-active {
+  left:0;
+   opacity: 1;
+}
+.view-animate.ng-leave.ng-leave-active {
+  left:-100%;
+   opacity: 0;
+}
+
+
+
+
+.repeat-animation, .repeat-animation.ng-leave.ng-leave-active .btn-default{
+    -webkit-transition: 0.5s ease-in-out all;
+    transition: 0.5s ease-in-out all;
+    //-webkit-transform: translate3d(0px,0px,0px);
+}
+
+.repeat-animation.ng-enter .left-block, .repeat-animation.ng-leave .left-block{
+   border-radius: 6px;
+}
+
+.repeat-animation.ng-enter, 
+.repeat-animation.ng-leave
+{ 
+    -webkit-transition: 0.5s ease-in-out height opacity;
+    transition: 0.5s ease-in-out height opacity;
+    display: block;
+    width:100%;
+    overflow: hidden;
+    height: 39px;
+} 
+
+.repeat-animation.ng-enter.ng-enter-active, 
+.repeat-animation.ng-leave {
+    opacity: 1;
+    top: 0;
+    height: 39px;
+}
+ 
+.repeat-animation.ng-leave.ng-leave-active,
+.repeat-animation.ng-enter {
+    opacity: 0;
+    top: -39px;
+    height: 0;
+}
+
+.repeat-animation.ng-leave.ng-leave-active .btn-default,
+.repeat-animation.ng-enter .btn-default{
+    background-color: transparent;
+}
+
+
+
+.glyphicon{
+  padding-right:1.8em;
+}
+
+
+.btn-lg {
+  margin-bottom: 8px;
+}
+
+
+
+
+.modal-dialog {
+  padding-top: 150px;
+}
+
+#identityModal .modal-dialog {
+  padding-top: 10px;
+}
+
+/*required  because bootstrap dropdown doenst work properly with absolute positioned divs*/
+#settingsForm{
+  padding-bottom: 105px;
+}
+
+
+
+.panel-info {
+  overflow: hidden;
+}
+
+
+
+@media (max-width: 767px){
+  .navbar-nav.nav.pull-right {
+    float: none !important;
+    margin-left: 0;
+  }
+  .navbar-nav .open .dropdown-menu > li > a, .navbar-nav .open .dropdown-menu .dropdown-header {
+    padding: 5px 15px 5px 40px;
+  }
+}
