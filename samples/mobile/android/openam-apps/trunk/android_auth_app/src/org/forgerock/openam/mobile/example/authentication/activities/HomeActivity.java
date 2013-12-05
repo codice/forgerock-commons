@@ -34,10 +34,23 @@ import org.forgerock.openam.mobile.example.authentication.R;
 import org.forgerock.openam.mobile.example.authentication.activities.authenticate.AuthenticateActivity;
 import org.forgerock.openam.mobile.example.authentication.activities.authenticate.LoginWebActivity;
 
+/**
+ * HomeActivity is the view responsible for setting up and redirecting the user
+ * to the appropriate parts of the application.
+ *
+ * It also displays information sent to it by the Presenter to the user.
+ *
+ * It acts as our entry point, and also configures the ApplicationContext
+ */
 public class HomeActivity extends AuthAppActivity implements Listener<String> {
 
     private static final String TAG = "HomeActivity";
 
+    /**
+     * entry point for the application
+     *
+     * @param savedInstanceState resuming - Android system controlled
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,10 +149,15 @@ public class HomeActivity extends AuthAppActivity implements Listener<String> {
         getPresenter().unregisterListener(this);
     }
 
+    /**
+     * on resume, checks if we already have our config
+     * set up, and if not directs the user to the
+     * settings page to do just that.
+     */
     @Override
     public void onResume() {
         super.onResume();
-    http:
+
         getPresenter().registerListener(this);
 
         if (getAuthNClient().getOpenAmServerResource() == null) {
@@ -156,6 +174,13 @@ public class HomeActivity extends AuthAppActivity implements Listener<String> {
         }
     }
 
+    /**
+     * delegates to the below functions to perform simple display
+     * tasks
+     *
+     * @param action the action just performed
+     * @param response the response to the action
+     */
     @Override
     public void onEvent(ActionType action, String response) {
 
