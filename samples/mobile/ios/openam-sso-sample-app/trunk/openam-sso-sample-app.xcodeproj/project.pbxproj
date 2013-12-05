@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA09D7F7184785AA00D42C8B /* openam-ios-rest-sdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA877B62183E32040036938D /* openam-ios-rest-sdk.framework */; };
+		FA09D7FA1847958D00D42C8B /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA09D7F91847958D00D42C8B /* MainViewController.m */; };
+		FA09D7FF1848A56E00D42C8B /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FA09D7FE1848A56E00D42C8B /* Settings.bundle */; };
+		FA09D8001848A57700D42C8B /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = FA09D7FE1848A56E00D42C8B /* Settings.bundle */; };
 		FA877B1D183D106E0036938D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FAE70D49183A7C4100F0C920 /* InfoPlist.strings */; };
 		FA877B64183E50010036938D /* openam-ios-rest-sdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA877B62183E32040036938D /* openam-ios-rest-sdk.framework */; };
 		FAE70D41183A7C4100F0C920 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE70D40183A7C4100F0C920 /* Foundation.framework */; };
@@ -23,7 +27,6 @@
 		FAE70D8B183A7CD200F0C920 /* HttpHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D7B183A7CD200F0C920 /* HttpHelper.m */; };
 		FAE70D8C183A7CD200F0C920 /* ServerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D7D183A7CD200F0C920 /* ServerSettings.m */; };
 		FAE70D8D183A7CD200F0C920 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D7F183A7CD200F0C920 /* ViewController.m */; };
-		FAE70D8E183A7CD200F0C920 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D81183A7CD200F0C920 /* LoginViewController.m */; };
 		FAE70D8F183A7CD200F0C920 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D83183A7CD200F0C920 /* SettingsViewController.m */; };
 		FAE70D90183A7CD200F0C920 /* SettingsProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D85183A7CD200F0C920 /* SettingsProperty.m */; };
 		FAE70D91183A7CD200F0C920 /* SettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D87183A7CD200F0C920 /* SettingsCell.m */; };
@@ -37,7 +40,6 @@
 		FAE70DA8183A7D1900F0C920 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D79183A7CD200F0C920 /* AppDelegate.m */; };
 		FAE70DA9183A7D1900F0C920 /* HttpHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D7B183A7CD200F0C920 /* HttpHelper.m */; };
 		FAE70DAA183A7D1900F0C920 /* SettingsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D87183A7CD200F0C920 /* SettingsCell.m */; };
-		FAE70DAB183A7D1900F0C920 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D81183A7CD200F0C920 /* LoginViewController.m */; };
 		FAE70DAC183A7D1900F0C920 /* SettingsProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D85183A7CD200F0C920 /* SettingsProperty.m */; };
 		FAE70DAD183A7D1900F0C920 /* ServerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D7D183A7CD200F0C920 /* ServerSettings.m */; };
 		FAE70DAE183A7D1900F0C920 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE70D7F183A7CD200F0C920 /* ViewController.m */; };
@@ -61,8 +63,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FA09D7F81847958D00D42C8B /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		FA09D7F91847958D00D42C8B /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		FA09D7FE1848A56E00D42C8B /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = "openam-sso-sample-app/Settings.bundle"; sourceTree = "<group>"; };
 		FA877B62183E32040036938D /* openam-ios-rest-sdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "openam-ios-rest-sdk.framework"; path = "../openam-ios-rest-sdk/build/Release-iphoneuniversal/openam-ios-rest-sdk.framework"; sourceTree = "<group>"; };
-		FAE70D3D183A7C4100F0C920 /* openam-sso-sample-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "openam-sso-sample-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAE70D3D183A7C4100F0C920 /* OpenAM SSO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenAM SSO.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAE70D40183A7C4100F0C920 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FAE70D42183A7C4100F0C920 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		FAE70D44183A7C4100F0C920 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -83,8 +88,6 @@
 		FAE70D7D183A7CD200F0C920 /* ServerSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerSettings.m; sourceTree = "<group>"; };
 		FAE70D7E183A7CD200F0C920 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		FAE70D7F183A7CD200F0C920 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		FAE70D80183A7CD200F0C920 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		FAE70D81183A7CD200F0C920 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		FAE70D82183A7CD200F0C920 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		FAE70D83183A7CD200F0C920 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		FAE70D84183A7CD200F0C920 /* SettingsProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsProperty.h; sourceTree = "<group>"; };
@@ -102,7 +105,7 @@
 		FAE70D9C183A7CF200F0C920 /* LoginWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginWebViewController.h; sourceTree = "<group>"; };
 		FAE70D9D183A7CF200F0C920 /* LoginWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginWebViewController.m; sourceTree = "<group>"; };
 		FAE70DA0183A7D0300F0C920 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		FAE70DBD183A7D1900F0C920 /* openam-sso-sample-app copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "openam-sso-sample-app copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAE70DBD183A7D1900F0C920 /* OpenAM SSO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenAM SSO.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAE70DBE183A7D1900F0C920 /* openam-sso-sample-app copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "openam-sso-sample-app copy-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -132,6 +135,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA09D7F7184785AA00D42C8B /* openam-ios-rest-sdk.framework in Frameworks */,
 				FAE70DB2183A7D1900F0C920 /* CoreGraphics.framework in Frameworks */,
 				FAE70DB3183A7D1900F0C920 /* UIKit.framework in Frameworks */,
 				FAE70DB4183A7D1900F0C920 /* Foundation.framework in Frameworks */,
@@ -144,6 +148,7 @@
 		FAE70D34183A7C4100F0C920 = {
 			isa = PBXGroup;
 			children = (
+				FA09D7FE1848A56E00D42C8B /* Settings.bundle */,
 				FAE70D46183A7C4100F0C920 /* openam-sso-sample-app */,
 				FAE70D65183A7C4100F0C920 /* openam-sso-sample-appTests */,
 				FAE70D3F183A7C4100F0C920 /* Frameworks */,
@@ -154,9 +159,9 @@
 		FAE70D3E183A7C4100F0C920 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FAE70D3D183A7C4100F0C920 /* openam-sso-sample-app.app */,
+				FAE70D3D183A7C4100F0C920 /* OpenAM SSO.app */,
 				FAE70D5E183A7C4100F0C920 /* openam-sso-sample-appTests.xctest */,
-				FAE70DBD183A7D1900F0C920 /* openam-sso-sample-app copy.app */,
+				FAE70DBD183A7D1900F0C920 /* OpenAM SSO.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -248,8 +253,6 @@
 				FAE70D7D183A7CD200F0C920 /* ServerSettings.m */,
 				FAE70D7E183A7CD200F0C920 /* ViewController.h */,
 				FAE70D7F183A7CD200F0C920 /* ViewController.m */,
-				FAE70D80183A7CD200F0C920 /* LoginViewController.h */,
-				FAE70D81183A7CD200F0C920 /* LoginViewController.m */,
 				FAE70D82183A7CD200F0C920 /* SettingsViewController.h */,
 				FAE70D83183A7CD200F0C920 /* SettingsViewController.m */,
 				FAE70D84183A7CD200F0C920 /* SettingsProperty.h */,
@@ -258,6 +261,8 @@
 				FAE70D87183A7CD200F0C920 /* SettingsCell.m */,
 				FAE70D88183A7CD200F0C920 /* KeyChainWrapper.h */,
 				FAE70D89183A7CD200F0C920 /* KeyChainWrapper.m */,
+				FA09D7F81847958D00D42C8B /* MainViewController.h */,
+				FA09D7F91847958D00D42C8B /* MainViewController.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -279,7 +284,7 @@
 			);
 			name = "openam-sso-sample-app";
 			productName = "openam-sso-sample-app";
-			productReference = FAE70D3D183A7C4100F0C920 /* openam-sso-sample-app.app */;
+			productReference = FAE70D3D183A7C4100F0C920 /* OpenAM SSO.app */;
 			productType = "com.apple.product-type.application";
 		};
 		FAE70D5D183A7C4100F0C920 /* openam-sso-sample-appTests */ = {
@@ -314,7 +319,7 @@
 			);
 			name = "openam-sso-sample-app copy";
 			productName = "openam-sso-sample-app";
-			productReference = FAE70DBD183A7D1900F0C920 /* openam-sso-sample-app copy.app */;
+			productReference = FAE70DBD183A7D1900F0C920 /* OpenAM SSO.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -356,6 +361,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA09D7FF1848A56E00D42C8B /* Settings.bundle in Resources */,
 				FAE70D59183A7C4100F0C920 /* Images.xcassets in Resources */,
 				FAE70D4B183A7C4100F0C920 /* InfoPlist.strings in Resources */,
 				FAE70D98183A7CEA00F0C920 /* Native.storyboard in Resources */,
@@ -374,9 +380,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA09D8001848A57700D42C8B /* Settings.bundle in Resources */,
+				FAE70DB6183A7D1900F0C920 /* Images.xcassets in Resources */,
 				FA877B1D183D106E0036938D /* InfoPlist.strings in Resources */,
 				FAE70DCC183A7DBE00F0C920 /* Webview.storyboard in Resources */,
-				FAE70DB6183A7D1900F0C920 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,9 +398,9 @@
 				FAE70D9A183A7CEA00F0C920 /* DataStoreLoginViewController.m in Sources */,
 				FAE70D99183A7CEA00F0C920 /* SSOLoginViewController.m in Sources */,
 				FAE70D8A183A7CD200F0C920 /* AppDelegate.m in Sources */,
+				FA09D7FA1847958D00D42C8B /* MainViewController.m in Sources */,
 				FAE70D8B183A7CD200F0C920 /* HttpHelper.m in Sources */,
 				FAE70D91183A7CD200F0C920 /* SettingsCell.m in Sources */,
-				FAE70D8E183A7CD200F0C920 /* LoginViewController.m in Sources */,
 				FAE70D90183A7CD200F0C920 /* SettingsProperty.m in Sources */,
 				FAE70D8C183A7CD200F0C920 /* ServerSettings.m in Sources */,
 				FAE70D8D183A7CD200F0C920 /* ViewController.m in Sources */,
@@ -419,7 +426,6 @@
 				FAE70DA8183A7D1900F0C920 /* AppDelegate.m in Sources */,
 				FAE70DA9183A7D1900F0C920 /* HttpHelper.m in Sources */,
 				FAE70DAA183A7D1900F0C920 /* SettingsCell.m in Sources */,
-				FAE70DAB183A7D1900F0C920 /* LoginViewController.m in Sources */,
 				FAE70DAC183A7D1900F0C920 /* SettingsProperty.m in Sources */,
 				FAE70DAD183A7D1900F0C920 /* ServerSettings.m in Sources */,
 				FAE70DAE183A7D1900F0C920 /* ViewController.m in Sources */,
@@ -543,7 +549,7 @@
 				GCC_PREFIX_HEADER = "openam-sso-sample-app/openam-sso-sample-app-Prefix.pch";
 				INFOPLIST_FILE = "openam-sso-sample-app/openam-sso-sample-app-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "OpenAM SSO";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -561,7 +567,7 @@
 				GCC_PREFIX_HEADER = "openam-sso-sample-app/openam-sso-sample-app-Prefix.pch";
 				INFOPLIST_FILE = "openam-sso-sample-app/openam-sso-sample-app-Info.plist";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "OpenAM SSO";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -613,10 +619,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/Phill/ForgeRockDev/commons/samples/mobile/ios/openam-ios-rest-sdk/build/Release-iphoneuniversal",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "openam-sso-sample-app/openam-sso-sample-app-Prefix.pch";
 				INFOPLIST_FILE = "openam-sso-sample-app copy-Info.plist";
-				PRODUCT_NAME = "openam-sso-sample-app copy";
+				PRODUCT_NAME = "OpenAM SSO";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -626,10 +636,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/Phill/ForgeRockDev/commons/samples/mobile/ios/openam-ios-rest-sdk/build/Release-iphoneuniversal",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "openam-sso-sample-app/openam-sso-sample-app-Prefix.pch";
 				INFOPLIST_FILE = "openam-sso-sample-app copy-Info.plist";
-				PRODUCT_NAME = "openam-sso-sample-app copy";
+				PRODUCT_NAME = "OpenAM SSO";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
