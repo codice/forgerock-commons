@@ -1,10 +1,18 @@
-//
-//  AppDelegate.m
-//  OpenAMSSO
-//
-//  Created by Phill on 11/11/2013.
-//  Copyright (c) 2013 ForgeRock. All rights reserved.
-//
+/*
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2013 ForgeRock, AS.
+ */
 
 #import "AppDelegate.h"
 #import "ViewController.h"
@@ -12,6 +20,8 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    [NSThread sleepForTimeInterval:(NSTimeInterval)1];
     
     return YES;
 }
@@ -32,21 +42,18 @@
     // Override point for customization after application launch.
     
     
-    
-    ServerSettings *serverSettings = [[ServerSettings alloc] init];
-    
-    UINavigationController *rootView = (UINavigationController *)self.window.rootViewController;
-    ViewController *viewController = [rootView viewControllers][0];
-    viewController.serverSettings = serverSettings;
+//    UINavigationController *rootView = (UINavigationController *)self.window.rootViewController;
+//    ViewController *viewController = [rootView viewControllers][0];
+//    viewController.serverSettings = serverSettings;
     
     //Display error is there is no URL
-    if (![launchOptions objectForKey:UIApplicationLaunchOptionsURLKey]) {
-        UIAlertView *alertView;
-        alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"This app was launched without any text. Open this app using the Sender app to send text." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
-    }
+//    if (![launchOptions objectForKey:UIApplicationLaunchOptionsURLKey]) {
+//        UIAlertView *alertView;
+//        alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:@"This app was launched without any text. Open this app using the Sender app to send text." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//        [alertView show];
+//    }
     
-    
+    NSLog(@"%@", [[NSUserDefaults standardUserDefaults] dictionaryRepresentation]);
     return YES;
 }
 
