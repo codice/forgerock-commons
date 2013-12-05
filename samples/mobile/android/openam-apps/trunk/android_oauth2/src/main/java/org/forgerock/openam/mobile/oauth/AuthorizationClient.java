@@ -23,9 +23,13 @@ import org.forgerock.openam.mobile.commons.ASyncRestRequest;
 import org.forgerock.openam.mobile.commons.ActionType;
 import org.forgerock.openam.mobile.commons.IRestRequestBuilder;
 import org.forgerock.openam.mobile.commons.Relay;
+import org.forgerock.openam.mobile.commons.RestActions;
+import org.forgerock.openam.mobile.commons.RestConstants;
 import org.forgerock.openam.mobile.commons.RestRequestBuilder;
 import org.forgerock.openam.mobile.commons.UnwrappedResponse;
 import org.forgerock.openam.mobile.oauth.resources.OAuth2ServerResource;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * RestClient for talking with the OpenAM OAuth2.0 Authorization server.
@@ -165,13 +169,98 @@ public class AuthorizationClient extends Relay<UnwrappedResponse, UnwrappedRespo
     /**
      * {@link Relay} contract. Notifies its listeners.
      *
-     * todo: see top
-     *
      * @param action The action just performed
      * @param response The response to the action just performed
      */
-    @Override
     public void onEvent(ActionType action, UnwrappedResponse response) {
+        action = detectFailures(action, response);
         notify(action, response);
+    }
+
+
+    /**
+     * Detects whether known failures have been hit, or otherwise there have been
+     * issues with gathering the response.
+     *
+     * The response is not altered in any way here, just interrogated.
+     *
+     * @param action the action we are returning from
+     * @param response the response associated with the action we just performed
+     * @return the action to continue with
+     */
+    private ActionType detectFailures(ActionType action, UnwrappedResponse response) {
+
+
+        if (action == null) {
+            throw new NullPointerException("Responses to the client must have an action type associated.");
+        }
+
+        if (response == null || response.getStatusCode() != RestConstants.HTTP_SUCCESS ||
+                response.getEntityContent() == null) {
+            return RestActions.TRANSPORT_FAIL;
+        }
+
+        if (action == OAuthAction.GET_CODE) {
+            if (!validateJsonResponse(response.getEntityContent())) {
+                return OAuthAction.GET_CODE_FAIL;
+            }
+        }
+
+        //validate it's a JSON response, with at least an access_token element
+        if (action == OAuthAction.GET_PROFILE) {
+            try {
+                JSONObject data = new JSONObject(response.getEntityContent());
+
+                if (!data.has(AuthZConstants.ACCESS_TOKEN)) {
+                    return OAuthAction.GET_PROFILE_FAIL;
+                }
+            } catch (JSONException e) {
+                return OAuthAction.GET_PROFILE_FAIL;
+            }
+        }
+
+        //same as above, setting to GET_TOKEN_FAIL in this situation
+        if (action == OAuthAction.GET_TOKEN) {
+            try {
+                JSONObject data = new JSONObject(response.getEntityContent());
+
+                if (!data.has(AuthZConstants.ACCESS_TOKEN)) {
+                    return OAuthAction.GET_TOKEN_FAIL;
+                }
+            } catch (JSONException e) {
+                return OAuthAction.GET_TOKEN_FAIL;
+            }
+        }
+
+        //check that we don't have the failure string returned
+        if (action == OAuthAction.VALIDATE) {
+            if (response.getEntityContent().contains(AuthZConstants.VALIDATE_FAIL_STR)) {
+                return OAuthAction.VALIDATE_FAIL;
+            }
+        }
+
+        return action;
+    }
+
+    /**
+     * Performs some validation of the response to ensure that no error has been returned.
+     *
+     * @param jsonResponse string representation of the server's response
+     * @return
+     */
+    private boolean validateJsonResponse(String jsonResponse) {
+
+        boolean result = true;
+
+        if (jsonResponse.contains(AuthZConstants.ERROR_DESCRIPTION)) {
+            try {
+                JSONObject errorResponse = new JSONObject(jsonResponse);
+                result = false;
+            } catch (JSONException e) {
+                result = false;
+            }
+        }
+
+        return result;
     }
 }

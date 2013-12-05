@@ -18,13 +18,13 @@ package org.forgerock.openam.mobile.commons;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import org.apache.http.HttpResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;

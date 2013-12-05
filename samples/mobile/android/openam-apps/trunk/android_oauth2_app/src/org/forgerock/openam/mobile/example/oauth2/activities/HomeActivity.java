@@ -261,22 +261,20 @@ public class HomeActivity extends OAuth2AppActivity implements Listener<String> 
 
         if (getAuthNClient().getOpenAmServerResource() == null) {
             passToAuthApp();
-        }
+        } else if (getAuthZClient().getOAuth2ServerResource() == null) {
+            enableButtons(false, false, false);
 
-        if (getAuthZClient().getOAuth2ServerResource() == null) {
             final Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
-
-            enableButtons(false, false, false);
-            return;
-        }
-
-        final String ssoToken = getPresenter().getSSOToken();
-
-        if (ssoToken != null) {
-            getAuthNClient().isTokenValid(ssoToken);
         } else {
-            passToAuthApp();
+
+            final String ssoToken = getPresenter().getSSOToken();
+
+            if (ssoToken != null) {
+                getAuthNClient().isTokenValid(ssoToken);
+            } else {
+                passToAuthApp();
+            }
         }
     }
 
@@ -297,9 +295,9 @@ public class HomeActivity extends OAuth2AppActivity implements Listener<String> 
             validateOauthSuccess();
         } else if (action == OAuthAction.VALIDATE_FAIL) {
             validateOauthFail();
-        } else if ( action == AuthNAction.VALIDATE) {
+        } else if (action == AuthNAction.VALIDATE) {
             validateAuthNSuccess();
-        } else if ( action == AuthNAction.VALIDATE_FAIL) {
+        } else if (action == AuthNAction.VALIDATE_FAIL) {
             validateAuthNFail();
         }
     }
@@ -312,7 +310,8 @@ public class HomeActivity extends OAuth2AppActivity implements Listener<String> 
     }
 
     private void getProfileFail() {
-        //nyi
+        AndroidUtils.showToast("Unable to get profile", this);
+        clearTextEdit(R.id.home_profile_text);
     }
 
     /**
@@ -330,6 +329,7 @@ public class HomeActivity extends OAuth2AppActivity implements Listener<String> 
      * If we aren't validated,
      */
     private void validateOauthFail() {
+        AndroidUtils.showToast("Failed to validate OAuth2.0 token", this);
         clearTextEdit(R.id.home_oauth2_text);
         clearTextEdit(R.id.home_profile_text);
         enableButtons(true, false, false);
@@ -350,7 +350,7 @@ public class HomeActivity extends OAuth2AppActivity implements Listener<String> 
      * If the authentication token is not valid, move the user to the authentication app
      */
     private void validateAuthNFail() {
-        AndroidUtils.showToast("Unable to validate token.", this);
+        AndroidUtils.showToast("Unable to validate SSO token.", this);
         passToAuthApp();
     }
 

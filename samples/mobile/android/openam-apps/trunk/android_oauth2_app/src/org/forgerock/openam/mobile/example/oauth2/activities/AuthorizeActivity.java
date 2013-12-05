@@ -16,10 +16,12 @@
 
 package org.forgerock.openam.mobile.example.oauth2.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import org.forgerock.openam.mobile.commons.ActionType;
+import org.forgerock.openam.mobile.commons.AndroidUtils;
 import org.forgerock.openam.mobile.commons.Listener;
 import org.forgerock.openam.mobile.example.oauth2.R;
 import org.forgerock.openam.mobile.example.oauth2.activities.webview.AuthorizeWebClient;
@@ -73,10 +75,14 @@ public class AuthorizeActivity extends OAuth2AppActivity implements Listener<Str
     }
 
     private void getCodeSuccess() {
+        Intent intent = new Intent();
+        intent.setClass(this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
         finish(); //then close the window
     }
 
     private void getCodeFail() {
-        //nyi
+        AndroidUtils.showToast("Getting the authorization grant code failed", this);
     }
 }

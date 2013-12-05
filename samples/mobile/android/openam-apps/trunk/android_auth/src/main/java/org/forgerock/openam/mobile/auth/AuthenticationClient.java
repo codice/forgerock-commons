@@ -25,6 +25,7 @@ import org.forgerock.openam.mobile.commons.ASyncRestRequest;
 import org.forgerock.openam.mobile.commons.ActionType;
 import org.forgerock.openam.mobile.commons.IRestRequestBuilder;
 import org.forgerock.openam.mobile.commons.Relay;
+import org.forgerock.openam.mobile.commons.RestActions;
 import org.forgerock.openam.mobile.commons.RestConstants;
 import org.forgerock.openam.mobile.commons.RestRequestBuilder;
 import org.forgerock.openam.mobile.commons.UnwrappedResponse;
@@ -49,11 +50,6 @@ import org.json.JSONObject;
  *
  */
 public class AuthenticationClient extends Relay<UnwrappedResponse, UnwrappedResponse> {
-
-    private final String CALLBACKS = "callbacks";
-    private final String INPUT = "input";
-    private final String NAME = "name";
-    private final String VALUE = "value";
 
     private OpenAMServerResource server;
 
@@ -253,17 +249,6 @@ public class AuthenticationClient extends Relay<UnwrappedResponse, UnwrappedResp
     }
 
     /**
-     * {@link Relay} contract. Notifies its listeners.
-     *
-     * @param action The action just performed
-     * @param response The response to the action just performed
-     */
-    public void onEvent(ActionType action, UnwrappedResponse response) {
-        //action = detectFailures(action, response);
-        notify(action, response);
-    }
-
-    /**
      * Checks if our server has been set with a value. Errors if not.
      */
     private void checkServer() {
@@ -284,27 +269,105 @@ public class AuthenticationClient extends Relay<UnwrappedResponse, UnwrappedResp
      */
     public void replaceAuthenticateInputVals(JSONObject authObj, Hashtable<String, String> values) throws JSONException {
 
-        JSONArray callbacks = authObj.getJSONArray(CALLBACKS);
+        JSONArray callbacks = authObj.getJSONArray(AuthNConstants.CALLBACKS);
 
         for (int i = 0; i < callbacks.length(); i++) {
             JSONObject callback = callbacks.getJSONObject(i);
-            JSONArray inputs = callback.getJSONArray(INPUT);
+            JSONArray inputs = callback.getJSONArray(AuthNConstants.INPUT);
 
             for (int k = 0; k < inputs.length(); k++) {
                 JSONObject input = inputs.getJSONObject(k);
-                if (values.containsKey(input.getString(NAME))) {
-                    input.put(VALUE, values.get(input.getString(NAME)));
+                if (values.containsKey(input.getString(AuthNConstants.NAME))) {
+                    input.put(AuthNConstants.VALUE, values.get(input.getString(AuthNConstants.NAME)));
                 }
             }
         }
     }
 
     /**
-    private ActionType detectFailures() {
+     * {@link Relay} contract. Notifies its listeners.
+     *
+     * @param action The action just performed
+     * @param response The response to the action just performed
+     */
+    public void onEvent(ActionType action, UnwrappedResponse response) {
+        action = detectFailures(action, response);
+        notify(action, response);
+    }
 
-        check each of the failure-types we know, e.g. boolean=false return the failureType,
-        boolean=true returns successType. As we build this up we will return the actually
-        correct actinoType to the user from this presenter
 
-    }*/
+    /**
+     * Detects whether known failures have been hit, or otherwise there have been
+     * issues with gathering the response.
+     *
+     * The response is not altered in any way here, just interrogated.
+     *
+     * @param action the action we are returning from
+     * @param response the response associated with the actiowe just performed
+     * @return the action to continue with
+     */
+    private ActionType detectFailures(ActionType action, UnwrappedResponse response) {
+
+        if (action == null) {
+            throw new NullPointerException("Responses to the client must have an action type associated.");
+        }
+
+        if (response == null || response.getStatusCode() != RestConstants.HTTP_SUCCESS ||
+                response.getEntityContent() == null) {
+            return RestActions.TRANSPORT_FAIL;
+        }
+
+        //check that we don't have the failure string returned
+        if (action == AuthNAction.VALIDATE) {
+            if (response.getEntityContent().contains(AuthNConstants.VALIDATE_FAIL_STR)) {
+                return AuthNAction.VALIDATE_FAIL;
+            }
+        }
+
+        // check there's JSON information, and it has a 'domains' key
+        if (action == AuthNAction.GET_COOKIE_DOMAINS) {
+            try {
+                JSONObject data = new JSONObject(response.getEntityContent());
+
+                if (!data.has(AuthNConstants.DOMAINS)) {
+                    return AuthNAction.GET_COOKIE_DOMAINS_FAIL;
+                }
+            } catch (JSONException e) {
+                return AuthNAction.GET_COOKIE_DOMAINS_FAIL;
+            }
+        }
+
+        //check there's a response string, and it starts with 'string='
+        if (action == AuthNAction.GET_COOKIE_NAME) {
+            if (!response.getEntityContent().startsWith(AuthNConstants.COOKIE_NAME_STR)) {
+                action = AuthNAction.GET_COOKIE_NAME_FAIL;
+            }
+        }
+
+        //check we have the necessary string indicating logout
+        if (action == AuthNAction.LOGOUT) {
+            if (!response.getEntityContent().contains(AuthNConstants.LOGOUT_STR)) {
+                action = AuthNAction.LOGOUT_FAIL;
+            }
+        }
+
+        // validates that the returned auth action has a json body content
+        // and a token ID, if it doesn't ahve the former, error, if it
+        // doesn't have the latter, set to continue
+        if (action == AuthNAction.AUTH) {
+
+            try {
+                JSONObject data = new JSONObject(response.getEntityContent());
+
+                if (!data.has(AuthNConstants.TOKEN_ID)) {
+                    return AuthNAction.AUTH_CONT;
+                }
+            } catch (JSONException e) {
+                return AuthNAction.AUTH_FAIL;
+            }
+
+        }
+
+        return action;
+    }
 }

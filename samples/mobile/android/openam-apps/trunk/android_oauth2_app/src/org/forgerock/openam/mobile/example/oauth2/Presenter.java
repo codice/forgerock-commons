@@ -17,17 +17,15 @@
 package org.forgerock.openam.mobile.example.oauth2;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import org.forgerock.openam.mobile.auth.AuthNAction;
 import org.forgerock.openam.mobile.auth.AuthenticationClient;
 import org.forgerock.openam.mobile.commons.ActionType;
 import org.forgerock.openam.mobile.commons.AndroidUtils;
 import org.forgerock.openam.mobile.commons.Relay;
-import org.forgerock.openam.mobile.commons.RestConstants;
+import org.forgerock.openam.mobile.commons.RestActions;
 import org.forgerock.openam.mobile.commons.UnwrappedResponse;
 import org.forgerock.openam.mobile.example.content.TokenDataSource;
-import org.forgerock.openam.mobile.example.oauth2.activities.HomeActivity;
 import org.forgerock.openam.mobile.oauth.AuthZConstants;
 import org.forgerock.openam.mobile.oauth.AuthorizationClient;
 import org.forgerock.openam.mobile.oauth.OAuthAction;
@@ -114,102 +112,34 @@ public class Presenter extends Relay<UnwrappedResponse, String> {
      *  - Propagate the response and (possibly altered) action on to further listeners,
      *    such as Activities.
      *
-     *    todo: this will get cleaner as the AuthorizationClient gets smarter
-     *
      * @param action The action of whose response we are handling
      * @param response The response returned to us from the client
      */
     @Override
     public void onEvent(ActionType action, UnwrappedResponse response) {
 
-        String responseValue = null;
+        if (action == RestActions.TRANSPORT_FAIL) {
+            AndroidUtils.showToast("Transport failed. Check internet?", context);
+            Log.e(TAG, "Transport failed. Aborting Presenter flow.");
+            return;
+        }
 
-        if (response != null) {
+        if (response == null || action == null) {
+            throw new NullPointerException("Response and action to the Presenter cannot be null.");
+        }
 
-             responseValue = response.getEntityContent();
+        //anything that doesn't have an entry in the following (e.g. GET_COOKIE_NAME_FAIL)
+        //should be handled by one of the listening classes to notify the user
+        String responseValue = response.getEntityContent();
 
-            if (response.getStatusCode() != RestConstants.HTTP_SUCCESS) {
-                action = response.getFailActionType();
-            }
-
-            if (action == OAuthAction.GET_PROFILE) {
-                getAuthZClient().setProfile(responseValue);
-            }
-
-            if (action == AuthNAction.VALIDATE) {
-
-                if (responseValue.contains("boolean=false")) {
-                    action = AuthNAction.VALIDATE_FAIL;
-                } else {
-
-                    final String ssoToken = getDataSource().getSSOToken(context);
-                    final String accessToken = getDataSource().getAccessToken(context);
-
-                    if (accessToken != null && ssoToken != null) {
-                        String base = getAuthNClient().getOpenAmServerResource().getOpenAmBase();
-                        String tokenName = getAuthNClient().getCookieNameWithDefault(AppConstants.DEFAULT_COOKIE_NAME);
-
-                        getAuthZClient().isAccessTokenValid(base, accessToken, tokenName, ssoToken);
-                    }
-
-                }
-            } else if (action == OAuthAction.GET_CODE) {
-
-                if (validateJsonResponse(responseValue, response)) {
-
-                    final String base = getAuthNClient().getOpenAmServerResource().getOpenAmBase();
-                    final String token = getDataSource().getSSOToken(context);
-                    final String tokenName = getAuthNClient().getCookieNameWithDefault(AppConstants.DEFAULT_COOKIE_NAME);
-
-                    getAuthZClient().convertCodeToAccessToken(responseValue, base, token, tokenName);
-                }
-
-            } else if (action == OAuthAction.GET_TOKEN) {
-
-                if (validateJsonResponse(responseValue, response)) {
-
-                    JSONObject data = null;
-
-                    try {
-                        data = new JSONObject(responseValue);
-                    } catch (JSONException e) {
-                       fail("Unable to unmarshall the token response", response);
-                    }
-
-                    if (data != null && data.has(AuthZConstants.ACCESS_TOKEN)) {
-
-                        String tokenId = null;
-
-                        try {
-                            tokenId = data.getString(AuthZConstants.ACCESS_TOKEN);
-                        } catch (JSONException e) {
-                            fail("Unable to marshall the access token response", response);
-                        }
-
-                        String serverSetup = null;
-
-                        try {
-                            serverSetup = getAuthZClient().getOAuth2ServerResource().toJSON();
-                        } catch (JSONException e) {
-                            fail("Unable to read the OAuth2.0 server configuration", response);
-                        }
-
-                        if (getDataSource().storeAccessToken(tokenId, context, serverSetup)) {
-
-                            Intent intent = new Intent();
-                            intent.setClass(context, HomeActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(intent);
-                            return;
-
-                        } else {
-                            fail("Errored attempting to store the access token.", response);
-                        }
-                    }
-                }
-
-            }
-
+        if (action == OAuthAction.GET_PROFILE) {
+            getAuthZClient().setProfile(responseValue);
+        } else if (action == AuthNAction.VALIDATE) {
+            triggerOAuthRequest();
+        } else if (action == OAuthAction.GET_CODE) {
+            convertCodeToToken(responseValue);
+        } else if (action == OAuthAction.GET_TOKEN) {
+            action = doStoreToken(response);
         }
 
         notify(action, responseValue);
@@ -217,29 +147,69 @@ public class Presenter extends Relay<UnwrappedResponse, String> {
     }
 
     /**
-     * Performs some validation of the response to ensure that no error has been returned.
-     * todo: move this functionality into the client
-     *
-     * @param jsonResponse string representation of the server's response
+     * perform the storing of a token
      * @param response
      * @return
      */
-    private boolean validateJsonResponse(String jsonResponse, UnwrappedResponse response) {
+    private ActionType doStoreToken(UnwrappedResponse response) {
 
-        boolean result = true;
-
-        if (jsonResponse.contains("error_description")) {
-            try {
-                JSONObject errorResponse = new JSONObject(jsonResponse);
-                fail(errorResponse.getString("error_description"), response);
-                result = false;
-            } catch (JSONException e) {
-                result = false;
-                fail("Getting code failed.", response);
+        try {
+            if (!storeToken(response.getEntityContent())) {
+                return fail("Errored attempting to store access token", response);
             }
+        } catch (JSONException e) {
+            return fail("Errored attempting to store the access token.", response);
         }
 
-        return result;
+        return response.getSuccessActionType();
+
+    }
+
+    /**
+     * for storing an access token
+     *
+     * @param responseValue
+     * @return
+     * @throws JSONException
+     */
+    private boolean storeToken(String responseValue) throws JSONException {
+
+        String serverSetup = getAuthZClient().getOAuth2ServerResource().toJSON();
+        JSONObject data = new JSONObject(responseValue);
+        String tokenId = data.getString(AuthZConstants.ACCESS_TOKEN);
+
+        return getDataSource().storeAccessToken(tokenId, context, serverSetup);
+    }
+
+
+    /**
+     * Validates the OAuth and returned the appropriate success/fail action
+     */
+    private void triggerOAuthRequest() {
+
+        final String ssoToken = getDataSource().getSSOToken(context);
+        final String accessToken = getDataSource().getAccessToken(context);
+
+        if (accessToken != null && ssoToken != null) {
+            String base = getAuthNClient().getOpenAmServerResource().getOpenAmBase();
+            String tokenName = getAuthNClient().getCookieNameWithDefault(AppConstants.DEFAULT_COOKIE_NAME);
+
+            getAuthZClient().isAccessTokenValid(base, accessToken, tokenName, ssoToken);
+        }
+    }
+
+    /**
+     * Triggers querying the server for an access token
+     * @param code
+     */
+    private void convertCodeToToken(String code) {
+
+        final String base = getAuthNClient().getOpenAmServerResource().getOpenAmBase();
+        final String token = getDataSource().getSSOToken(context);
+        final String tokenName = getAuthNClient().getCookieNameWithDefault(AppConstants.DEFAULT_COOKIE_NAME);
+
+        getAuthZClient().convertCodeToAccessToken(code, base, token, tokenName);
+
     }
 
     /**

@@ -19,6 +19,7 @@ package org.forgerock.openam.mobile.example.authentication.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,9 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 import org.forgerock.openam.mobile.auth.AuthNAction;
 import org.forgerock.openam.mobile.auth.resources.OpenAMServerResource;
-import org.forgerock.openam.mobile.commons.ValidationUtils;
 import org.forgerock.openam.mobile.commons.ActionType;
+import org.forgerock.openam.mobile.commons.AndroidUtils;
 import org.forgerock.openam.mobile.commons.Listener;
+import org.forgerock.openam.mobile.commons.ValidationUtils;
 import org.forgerock.openam.mobile.example.authentication.ApplicationContext;
 import org.forgerock.openam.mobile.example.authentication.R;
 import org.json.JSONArray;
@@ -132,7 +134,7 @@ public class SettingsActivity extends AuthAppActivity implements Listener<String
      * if we fail to get the cookie name from the server
      */
     private void cookieNameFail() {
-        //nyi
+        AndroidUtils.showToast("Unable to load cookie domains.",this);
     }
 
     /**
@@ -153,7 +155,7 @@ public class SettingsActivity extends AuthAppActivity implements Listener<String
             }
 
         } catch (JSONException e) {
-            System.out.println("this went badly wrong");
+            Log.e(TAG, "Unable to objectify the returned JSON.");
         }
 
         final String[] optArray = options.toArray(new String[options.size()]);
@@ -172,7 +174,7 @@ public class SettingsActivity extends AuthAppActivity implements Listener<String
     }
 
     private void cookieDomainFail() {
-        //nyi
+        AndroidUtils.showToast("Unable to load cookie domains.",this);
     }
 
     @Override

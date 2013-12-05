@@ -139,20 +139,20 @@ public class HomeActivity extends AuthAppActivity implements Listener<String> {
     @Override
     public void onResume() {
         super.onResume();
-
+    http:
         getPresenter().registerListener(this);
 
         if (getAuthNClient().getOpenAmServerResource() == null) {
             passToSettings();
-            return;
-        }
-
-        final String ssoToken = getPresenter().getSSOToken();
-
-        if (ssoToken != null) {
-            getAuthNClient().isTokenValid(ssoToken);
         } else {
-            enableButtons(true, false);
+
+            final String ssoToken = getPresenter().getSSOToken();
+
+            if (ssoToken != null) {
+                getAuthNClient().isTokenValid(ssoToken);
+            } else {
+                enableButtons(true, false);
+            }
         }
     }
 
@@ -212,7 +212,6 @@ public class HomeActivity extends AuthAppActivity implements Listener<String> {
     private void passToSettings() {
         final Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
-        finish();
     }
 
 }

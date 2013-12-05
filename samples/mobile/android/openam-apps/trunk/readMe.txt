@@ -20,10 +20,7 @@ ASynchronousRequest [android_commons] created and executed by the Authentication
 
 In this model, the Presenter is able to perform some tasks on the response provided by the  Client before informing the UI to update. 
 
-**The Client can either be made simple and passive (as in the current version) where all error-checking and validation of the response is the responsibility of the appropriate app's Presenter, but would be better smarter - that is, with the ability to look at responses and mark those which have failed as being in a fail state, so the presenter does not have to interrogate the returned objects itself.**
-
 This system uses ActionTypes to determine which request has been performed. The ActionType interface is defined within [android_commons], and is used and extended by both [android_oauth2] and [android_auth] projects. These ActionTypes are used by the Listener and Relay system to inform the respective implementing classes.
-
 
 - [android_auth]
 
@@ -70,10 +67,6 @@ The static implementation - of which there is currently only a single authentica
 - [android_oauth2_app]
 
 The Android Activities and supporting Presenter used to display an interface to the authentication client's basic functionality. The application allows the user to configure the OAuth2.0 client (client ID, client secret, etc.), and retrieves an OpenAM authentication token from the Auth App, as such this app requires the Auth App to function. This app uses a web view to perform the code retrieval part of the authorization grant process, and then uses the AuthorizationClient to transform the code into an access token. The code is documented to describe its mechanisms.
-
-*** NOTES AND BUGS ***
-
-Currently the clients are passive in their attitude to responses, and leave it up to the application's Presenter to determine whether the response was successful and respond accordingly. This will change so each client is aware of certain parts of fail-state information so it can mark known-failures as such directly through altering the ActionType.
 
 - After initial setting of the Authentication application's settings for the first time, the application will close instead of returning to the home screen.
 - Querying for an authorization token generates a new android activity instance without shutting down the old home screen activity, so multiple home screen activities occur in the task stack.

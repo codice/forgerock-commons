@@ -5,7 +5,9 @@
     <groupId>org.forgerock.openam.mobile</groupId>
     <artifactId>android-auth-app</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+
     <packaging>apk</packaging>
+
     <name>Android Authentication</name>
     <description>
         TODO
