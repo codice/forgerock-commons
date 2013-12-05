@@ -24,7 +24,7 @@ import org.forgerock.openam.mobile.auth.AuthenticationClient;
 import org.forgerock.openam.mobile.commons.ActionType;
 import org.forgerock.openam.mobile.commons.AndroidUtils;
 import org.forgerock.openam.mobile.commons.Relay;
-import org.forgerock.openam.mobile.commons.RestConstants;
+import org.forgerock.openam.mobile.commons.RestActions;
 import org.forgerock.openam.mobile.commons.UnwrappedResponse;
 import org.forgerock.openam.mobile.example.content.TokenDataSource;
 import org.json.JSONException;
@@ -60,8 +60,7 @@ public class Presenter extends Relay<UnwrappedResponse, String> {
     private int authFailure = 0;
     private static final int FAILURE_LIMIT = 2;
 
-    //
-    public TokenDataSource getDataSource() {
+    private TokenDataSource getDataSource() {
         return dataSource;
     }
 
@@ -111,59 +110,80 @@ public class Presenter extends Relay<UnwrappedResponse, String> {
     @Override
     public void onEvent(ActionType action, UnwrappedResponse response) {
 
-        String responseValue = null;
-
-        if (response != null) {
-
-            responseValue = response.getEntityContent();
-
-            if (response.getStatusCode() != RestConstants.HTTP_SUCCESS) {
-                action = fail("HTTP Status was not okay", response);
-            }
-
-            if (action == AuthNAction.AUTH) {
-                action = onSuccessfulAuthentication(response);
-            } else if (action == AuthNAction.AUTH_FAIL) {
-                if (authFailure > FAILURE_LIMIT) {
-                    return;
-                } else {
-                    authFailure++;
-                    getAuthNClient().authenticate();
-                    AndroidUtils.showToast("Failed auth. Try again.", context);
-                }
-            } else if (action == AuthNAction.LOGOUT) {
-                if (!getDataSource().deleteSSOToken(context)) {
-                    action = fail("Unable to read delete SSO token", response);
-                }
-            } else if (action == AuthNAction.GET_COOKIE_DOMAINS) {
-                //do nothing, pass on through, the activity has to handle this
-            } else if (action == AuthNAction.GET_COOKIE_NAME) {
-                responseValue = responseValue.substring(responseValue.indexOf("=") + 1).trim();
-            } else if (action == AuthNAction.WEB_AUTH) {
-
-                String serverSetup = null;
-
-                try {
-                    serverSetup = getAuthNClient().getOpenAmServerResource().toJSON();
-                } catch (JSONException e) {
-                    action = fail("Unable to read OpenAM Server Config", response);
-                }
-
-                if (!getDataSource().storeSSOToken(responseValue, context, serverSetup)) {
-                    action = fail("Unable to store SSO token", response);
-                }
-            } else if (action == AuthNAction.VALIDATE) {
-                if (responseValue.contains("boolean=false")) {
-                    action = fail("Validation failed.", response);
-                } else {
-                    responseValue = responseValue.substring(responseValue.indexOf("=") + 1);
-                }
-            }
+        if (action == RestActions.TRANSPORT_FAIL) {
+            AndroidUtils.showToast("Transport failed. Check internet?", context);
+            Log.e(TAG, "Transport failed. Aborting Presenter flow.");
+            return;
         }
 
-        //continue propagating
+        if (response == null || action == null) {
+            throw new NullPointerException("Response and action to the Presenter cannot be null.");
+        }
+
+        //anything that doesn't have an entry in the following (e.g. GET_COOKIE_NAME_FAIL)
+        //should be handled by one of the listening classes to notify the user
+        String responseValue = response.getEntityContent();
+
+        if (action == AuthNAction.AUTH) {
+            action = onSuccessfulAuthentication(response);
+        } else if (action == AuthNAction.AUTH_FAIL) {
+            attemptAuthRestart();
+        } else if (action == AuthNAction.LOGOUT) {
+            action = deleteSSOToken(action, response);
+        } else if (action == AuthNAction.GET_COOKIE_DOMAINS) {
+            //do nothing, pass on through, the activity has to handle this
+            //as the JSON rep. is more useful than a String breakdown
+        } else if (action == AuthNAction.GET_COOKIE_NAME) {
+            responseValue = responseValue.substring(responseValue.indexOf("=") + 1).trim();
+        } else if (action == AuthNAction.WEB_AUTH) {
+            action = webAuth(action, response);
+        } else if (action == AuthNAction.VALIDATE) {
+            responseValue = responseValue.substring(responseValue.indexOf("=") + 1);
+        } else if (action == AuthNAction.VALIDATE_FAIL) {
+            action = fail("Validation failed.", response);
+        }
+
+        //continue propagating the success/failure messages
         notify(action, responseValue);
 
+    }
+
+    /**
+     * Attempts to send the user back to start the auth process,
+     * so long as we haven't overstepped our limit of the number of
+     * attempts to make
+     */
+    private void attemptAuthRestart() {
+
+        if (authFailure <= FAILURE_LIMIT) {
+            authFailure++;
+            getAuthNClient().authenticate();
+            AndroidUtils.showToast("Failed auth. Try again.", context);
+        }
+
+    }
+
+    /**
+     * Ensures that the returnin values from the web authentication are appropriate
+     *
+     * @param action The response's action type
+     * @param response The response from the auth client
+     * @return the response's success or failure action type, depending on verification
+     */
+    private ActionType webAuth(ActionType action, UnwrappedResponse response) {
+        String serverSetup = null;
+
+        try {
+            serverSetup = getAuthNClient().getOpenAmServerResource().toJSON();
+        } catch (JSONException e) {
+            action = fail("Unable to read OpenAM Server Config", response);
+        }
+
+        if (!getDataSource().storeSSOToken(response.getEntityContent(), context, serverSetup)) {
+            action = fail("Unable to store SSO token", response);
+        }
+
+        return action;
     }
 
     /**
@@ -179,7 +199,7 @@ public class Presenter extends Relay<UnwrappedResponse, String> {
 
         authFailure = 0; //dont let them just loop forever
 
-        JSONObject data = null;
+        JSONObject data;
 
         try {
             data = new JSONObject(responseValue);
@@ -189,8 +209,8 @@ public class Presenter extends Relay<UnwrappedResponse, String> {
 
         if (data.has(AuthNConstants.TOKEN_ID)) {
 
-            String tokenId = null;
-            String serverSetup = null;
+            String tokenId;
+            String serverSetup;
 
             try {
                 tokenId = data.getString(AuthNConstants.TOKEN_ID);
@@ -203,12 +223,25 @@ public class Presenter extends Relay<UnwrappedResponse, String> {
                 return fail("Unable to store SSO token", response);
             }
 
-        } else {
-            action = AuthNAction.AUTH_CONT;
         }
 
         return action;
 
+    }
+
+    /**
+     * Deletes the SSO token
+     *
+     * @param action
+     * @param response
+     * @return
+     */
+    private ActionType deleteSSOToken(ActionType action, UnwrappedResponse response) {
+        if (!removeLocalSSOToken()) {
+            action = fail("Unable to delete SSO token", response);
+        }
+
+        return action;
     }
 
     /**
@@ -224,5 +257,7 @@ public class Presenter extends Relay<UnwrappedResponse, String> {
         AndroidUtils.showToast(msg, ApplicationContext.getInstance().getContext());
         return response.getFailActionType();
     }
+
+
 
 }

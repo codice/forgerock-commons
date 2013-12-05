@@ -10,7 +10,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.openam.mobile</groupId>
+            <groupId>org.forgerock.openam.mobile.commons</groupId>
             <artifactId>android_commons</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

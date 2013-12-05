@@ -41,5 +41,15 @@ public class AuthNConstants {
     public final static String REALM = "realm";
     public final static String COOKIE_DOMAIN = "cookie_realm";
     public final static String COOKIE_NAME = "cookie_name";
+    public final static String DOMAINS = "domains";
+
+    public final static String CALLBACKS = "callbacks";
+    public final static String INPUT = "input";
+    public final static String NAME = "name";
+    public final static String VALUE = "value";
+
+    public final static String VALIDATE_FAIL_STR = "boolean=false";
+    public final static String COOKIE_NAME_STR = "string=";
+    public final static String LOGOUT_STR = "Successfully logged out";
 
 }

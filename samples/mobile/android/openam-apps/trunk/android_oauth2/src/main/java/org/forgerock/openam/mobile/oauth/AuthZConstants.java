@@ -41,4 +41,7 @@ public class AuthZConstants {
     public static final String REDIRECT_URI = "redirect_uri";
     public static final String CLIENT_ID = "client_id";
 
+    public static final String VALIDATE_FAIL_STR = "boolean=false";
+    public static final String ERROR_DESCRIPTION = "error_description";
+
 }
