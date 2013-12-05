@@ -111,9 +111,7 @@ angular.module('openAm.controllers', [])
     $scope.servers = $localStorage.servers;
     $scope.selectedIndex = $localStorage.serverIndex;
     $scope.stage = 'url';
-    $scope.url = $scope.name = $scope.realm = '';
-      /*debug*/ $scope.url = 'http://172.16.100.149:28080/openam';
-
+    $scope.url = $scope.name = $scope.realm = '';`
 
     $scope.addUrl = function(){
         $scope.stage = 'name';
