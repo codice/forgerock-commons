@@ -1,5 +1,6 @@
-.factory('PhonegapService', function($http, $localStorage, restEndpoints ){
+angular.module('ngPhoneGap', [])
 
+.factory('PhoneGapService', function($http, $localStorage, restEndpoints ){
 
 	var service = {
 

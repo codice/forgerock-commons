@@ -10,7 +10,9 @@ angular.module('openAm.services', [])
 	getcookienamefortoken: '/identity/json/getcookienamefortoken',
 	forgotpassword: '/json/users?_action=forgotPassword',
 	getAllSessions: '/sessions?_queryId=all',
-	getAllIdentities: '/users?_queryID=*'
+	getAllIdentities: '/users?_queryID=*',
+    forgotPassword: '/json/users?_action=forgotPassword',
+    forgotPasswordReset: '/json/users?_action=forgotPasswordReset'
 })
 
 .factory('AppService', function($http, $localStorage, $sessionStorage ){
@@ -37,6 +39,10 @@ angular.module('openAm.services', [])
             $http.defaults.headers.common['Content-Type'] = 'application/json';
             $http.defaults.headers.common['Cache-Control'] = 'no-cache';
   
+        },
+
+        setHeader: function( key, value ) {
+            $http.defaults.headers.common[key] = value;
         }
         
     }
@@ -74,7 +80,7 @@ angular.module('openAm.services', [])
 				  		
 				  		// phonegap incorrectly returns 200 so need to double check here
 					  	if( angular.isDefined($routeParams.goto) || angular.isDefined(e.successUrl) ){
-					  		$http.defaults.headers.common[tokenName] = e.tokenId;
+                            AppService.setHeader(tokenName, e.tokenId);
 		                    success(e);
 		                }else {
 		                    error(e);
@@ -108,7 +114,7 @@ angular.module('openAm.services', [])
         getRequirements: function(authCallbackObj,success, error) {
         	
         
-        	var query = angular.isDefined($localStorage.servers[$localStorage.serverIndex].params) ? '?'+$localStorage.servers[$localStorage.serverIndex].params : '';
+        	var query = angular.isDefined($localStorage.servers[$localStorage.serverIndex].params) ? '?' + $localStorage.servers[$localStorage.serverIndex].params : '';
    
         	$http.post(
         		$localStorage.servers[$localStorage.serverIndex].openam + restEndpoints.authenticate + query , 
@@ -155,14 +161,25 @@ angular.module('openAm.services', [])
          
         },
 
-    
-
         updateProfile: function(user,putConfig,success,error){
 
             var url = $localStorage.servers[$localStorage.serverIndex].openam + '/json/' + $localStorage.servers[$localStorage.serverIndex].realm + '/users/' + $localStorage.username;
             $http.put( url, user, { withCredentials: true } )
             .success(success)
             .error(error);
+        },
+
+        forgotPassword: function(user,success,error){
+            $http.post( $localStorage.servers[$localStorage.serverIndex].openam  + restEndpoints.forgotPassword, {username:user, subject:'EmailSubject', message:'EmailMessage'})
+            .success(success)
+            .error(error);
+        },
+        forgotPasswordReset: function(params,success,error){
+            $http.post( $localStorage.servers[$localStorage.serverIndex].openam + restEndpoints.forgotPasswordReset, params)
+            .success(success)
+            .error(error);
+
+
         }
        
 	 }
