@@ -225,7 +225,7 @@ button.left-block.active.success{
 .repeat-animation, .repeat-animation.ng-leave.ng-leave-active .btn-default{
     -webkit-transition: 0.5s ease-in-out all;
     transition: 0.5s ease-in-out all;
-    //-webkit-transform: translate3d(0px,0px,0px);
+    /*-webkit-transform: translate3d(0px,0px,0px);*/
 }
 
 .repeat-animation.ng-enter .left-block, .repeat-animation.ng-leave .left-block{
@@ -284,7 +284,7 @@ button.left-block.active.success{
   padding-top: 10px;
 }
 
-/*required  because bootstrap dropdown doenst work properly with absolute positioned divs*/
+/*required  because bootstrap dropdown doesnt work properly with absolute positioned divs*/
 #settingsForm{
   padding-bottom: 105px;
 }
