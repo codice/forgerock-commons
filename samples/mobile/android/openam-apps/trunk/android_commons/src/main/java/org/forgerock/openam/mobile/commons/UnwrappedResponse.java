@@ -22,10 +22,10 @@ package org.forgerock.openam.mobile.commons;
  */
 public class UnwrappedResponse {
 
-    final int statusCode;
-    final String entityContent;
-    final ActionType success;
-    final ActionType fail;
+    private final int statusCode;
+    private final String entityContent;
+    private final ActionType success;
+    private final ActionType fail;
 
     public UnwrappedResponse(int statusCode, String entityContent, ActionType success, ActionType fail) {
         this.statusCode = statusCode;
