@@ -97,6 +97,24 @@ The fix requires that you insert a new execution as the first `pre-site` goal:
 
 **DOCS-105: Color link text in printable formats**
 
+**DOCS-107: Make release documentation transportable**
+
+To build a .zip of the released documentation, you can set
+`-DbuildReleaseZip=true` when running the release goal on the command line,
+or `<buildReleaseZip>true</buildReleaseZip>` in the execution configuration.
+
+The file, `_projectName_-_releaseVersion_-docs.zip`, can be found
+after the build in the project build directory. When unzipped, it unpacks
+the documentation for the release under `_projectName_/_releaseVersion_/`.
+
+At present this builds a .zip only of the release documents
+for the current module.
+In other words, only HTML and PDF output,
+and only corresponding to the DocBook XML sources built in the current module.
+As a result, if your documentation set requires documents from multiple modules,
+you must still build the final release .zip yourself.
+
+
 ## Bugs Fixed
 
 **DOCS-75: Wide programlisting shading extends to the right edge of the page in PDF**

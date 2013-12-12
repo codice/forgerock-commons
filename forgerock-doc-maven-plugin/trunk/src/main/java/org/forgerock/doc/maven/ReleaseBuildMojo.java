@@ -16,6 +16,7 @@ package org.forgerock.doc.maven;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +111,21 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
         return releaseCssFileName;
     }
 
+    /**
+     * Whether to build a .zip of the release content.
+     *
+     * @parameter default-value="false" property="buildReleaseZip"
+     */
+    private boolean buildReleaseZip;
+
+    /**
+     * Whether to build a .zip containing the release content.
+     *
+     * @return true if the .zip should be built.
+     */
+    public final boolean doBuildReleaseZip() {
+        return buildReleaseZip;
+    }
 
     /**
      * {@inheritDoc}
@@ -147,6 +163,9 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
         } catch (IOException e) {
             throw new MojoExecutionException("Failed to replace CSS.", e);
         }
+
+        getLog().info("Zipping release content if <buildReleaseZip>true</buildReleaseZip>...");
+        exec.zip();
     }
 
     /**
@@ -179,8 +198,7 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
             throws MojoExecutionException {
         File dir = new File(directory);
         String[] ext = {"pdf"};
-        boolean isRecursive = false;
-        for (File pdf : FileUtils.listFiles(dir, ext, isRecursive)) {
+        for (File pdf : FileUtils.listFiles(dir, ext, false)) { // Not recursive
             String name = pdf.getName().replaceFirst("-", "-" + version + "-");
             if (!pdf.renameTo(new File(pdf.getParent() + File.separator + name))) {
                 throw new MojoExecutionException("Failed to rename PDF: " + name);
@@ -292,6 +310,46 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
                                     releaseDocDirectory), getResources()),
                     executionEnvironment(getProject(), getSession(),
                             getPluginManager()));
+        }
+
+        /**
+         * Zip release layout content if configured to do so.
+         * <p>
+         * This zips the release layout only on one level,
+         * and does not handle assembly of multiple zips
+         * into a single documentation set .zip.
+         *
+         * @throws MojoExecutionException Problem during execution.
+         */
+        public void zip() throws MojoExecutionException {
+            if (!doBuildReleaseZip()) {
+                return;
+            }
+
+            URL resource = getClass().getResource("/zip.xml");
+            File assembly = new File(getBuildDirectory(), "assembly.xml");
+            try {
+                FileUtils.copyURLToFile(resource, assembly);
+            } catch (IOException e) {
+                throw new MojoExecutionException("Failed to extract the assembly: "
+                        + e.getMessage());
+            }
+
+
+            final String finalName = getProjectName() + "-" + getReleaseVersion();
+            final String assemblyFile = FilenameUtils.separatorsToUnix(assembly.getPath());
+
+            executeMojo(
+                    plugin(
+                            groupId("org.apache.maven.plugins"),
+                            artifactId("maven-assembly-plugin"),
+                            version("2.4")),
+                    goal("single"),
+                    configuration(
+                            element(name("finalName"), finalName),
+                            element(name("descriptors"),
+                                    element(name("descriptor"), assemblyFile))),
+                    executionEnvironment(getProject(), getSession(), getPluginManager()));
         }
     }
 }
