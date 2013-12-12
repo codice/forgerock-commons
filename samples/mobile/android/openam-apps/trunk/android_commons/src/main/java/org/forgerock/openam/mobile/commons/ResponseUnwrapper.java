@@ -26,9 +26,9 @@ import org.apache.http.util.EntityUtils;
  */
 public class ResponseUnwrapper implements IResponseUnwrapper {
 
-    private HttpResponse response;
-    private ActionType successAction;
-    private ActionType failAction;
+    private final HttpResponse response;
+    private final ActionType successAction;
+    private final ActionType failAction;
 
     public ResponseUnwrapper(HttpResponse response, ActionType successAction, ActionType failAction) {
         this.response = response;

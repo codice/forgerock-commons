@@ -30,38 +30,38 @@ public class AuthenticateFactory {
     }
 
     public static Authenticate createFromJSON(JSONObject authJson) throws JSONException {
-        Authenticate auth = new Authenticate();
+        final Authenticate auth = new Authenticate();
 
-            auth.setAuthId(authJson.getString("authId"));
-            auth.setStage(authJson.getString("stage"));
-            auth.setTemplate(authJson.getString("template"));
+        auth.setAuthId(authJson.getString("authId"));
+        auth.setStage(authJson.getString("stage"));
+        auth.setTemplate(authJson.getString("template"));
 
-            JSONArray callbackJson = authJson.getJSONArray("callbacks");
-            Callback[] callbacks = new Callback[callbackJson.length()];
+        final JSONArray callbackJson = authJson.getJSONArray("callbacks");
+        final Callback[] callbacks = new Callback[callbackJson.length()];
 
-            for (int i = 0; i < callbackJson.length(); i++) {
-                JSONObject callback = callbackJson.getJSONObject(i);
+        for (int i = 0; i < callbackJson.length(); i++) {
+            JSONObject callback = callbackJson.getJSONObject(i);
 
-                Callback c = new Callback();
-                c.setType(callback.getString("type"));
+            Callback c = new Callback();
+            c.setType(callback.getString("type"));
 
-                JSONArray outputCallbacks = callback.getJSONArray("output");
-                JSONArray inputCallbacks = callback.getJSONArray("input");
+            JSONArray outputCallbacks = callback.getJSONArray("output");
+            JSONArray inputCallbacks = callback.getJSONArray("input");
 
-                c.setOutput(gatherCallbackElements(outputCallbacks));
-                c.setInput(gatherCallbackElements(inputCallbacks));
+            c.setOutput(gatherCallbackElements(outputCallbacks));
+            c.setInput(gatherCallbackElements(inputCallbacks));
 
-                callbacks[i] = c;
-            }
+            callbacks[i] = c;
+        }
 
-            auth.setCallbacks(callbacks);
+        auth.setCallbacks(callbacks);
 
         return auth;
     }
 
     private static CallbackElement[] gatherCallbackElements(JSONArray callbacks) throws JSONException {
 
-        CallbackElement[] elements = new CallbackElement[callbacks.length()];
+        final CallbackElement[] elements = new CallbackElement[callbacks.length()];
 
         for(int i = 0; i < callbacks.length(); i++) {
             JSONObject callbackElement = callbacks.getJSONObject(i);

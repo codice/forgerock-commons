@@ -36,15 +36,37 @@ public class OpenAMServerResource implements Resource<OpenAMServerResource> {
     private String cookieDomain;
     private String cookieName;
 
-    public String getRealm() {  return realm; }
-    public String getOpenAmBase() { return openAmBase; }
-    public String getCookieDomain() { return cookieDomain; }
-    public String getCookieName() { return cookieName; }
+    public String getRealm() {
+        return realm;
+    }
 
-    public void setRealm(String realm) { this.realm = realm; }
-    public void setOpenAmBase(String openamBase) { this.openAmBase = openamBase; }
-    public void setCookieDomain(String cookieDomain) { this.cookieDomain = cookieDomain; }
-    public void setCookieName(String cookieName) { this.cookieName = cookieName; }
+    public String getOpenAmBase() {
+        return openAmBase;
+    }
+
+    public String getCookieDomain() {
+        return cookieDomain;
+    }
+
+    public String getCookieName() {
+        return cookieName;
+    }
+
+    public void setRealm(String realm) {
+        this.realm = realm;
+    }
+
+    public void setOpenAmBase(String openamBase) {
+        this.openAmBase = openamBase;
+    }
+
+    public void setCookieDomain(String cookieDomain) {
+        this.cookieDomain = cookieDomain;
+    }
+
+    public void setCookieName(String cookieName) {
+        this.cookieName = cookieName;
+    }
 
     /**
      * Converts this object into a JSON representation of itself

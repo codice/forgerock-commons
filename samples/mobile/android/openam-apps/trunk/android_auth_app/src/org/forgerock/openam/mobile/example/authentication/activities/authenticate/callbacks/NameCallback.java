@@ -34,8 +34,7 @@ public class NameCallback implements DrawableCallback {
 
     public static final String TYPE = "NameCallback";
 
-    public NameCallback(String label, String id, Activity active)
-    {
+    public NameCallback(String label, String id, Activity active) {
         this.id = id;
 
         myLayout = new LinearLayout(active);

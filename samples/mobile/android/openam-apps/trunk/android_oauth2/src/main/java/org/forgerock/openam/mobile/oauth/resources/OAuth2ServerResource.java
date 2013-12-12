@@ -35,21 +35,55 @@ import org.json.JSONObject;
  */
 public class OAuth2ServerResource implements Resource<OAuth2ServerResource> {
 
+    private final static String SCOPE = "scope";
+    private final static String CLIENT_ID = "clientId";
+    private final static String CLIENT_SECRET = "clientSecret";
+    private final static String REDIRECT_URI = "redirectUri";
+
     private String scope;
     private String clientId;
     private String clientSecret;
     private String redirectUri;
 
-    public String getScope() { return scope; }
-    public String getClientId() { return clientId; }
-    public String getClientSecret() { return clientSecret; }
-    public String getRedirectUri() { return redirectUri; }
+    public String getScope() {
+        return scope;
+    }
 
-    public void setScope(String scope) { this.scope = scope; }
-    public void setClientId(String clientId) { this.clientId = clientId; }
-    public void setClientSecret(String clientSecret) { this.clientSecret = clientSecret; }
-    public void setRedirectUri(String redirectUri) { this.redirectUri = redirectUri; }
+    public String getClientId() {
+        return clientId;
+    }
 
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public String getRedirectUri() {
+        return redirectUri;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
+    }
+
+    public void setRedirectUri(String redirectUri) {
+        this.redirectUri = redirectUri;
+    }
+
+    /**
+     * Turns this server object into a simple JSON object for
+     * storing and reloading, as per the {@link Resource} interface
+     *
+     * @return JSON string representation of this server resource
+     * @throws JSONException
+     */
     public String toJSON() throws JSONException {
 
         JSONObject jsonObject = new JSONObject();
@@ -63,6 +97,12 @@ public class OAuth2ServerResource implements Resource<OAuth2ServerResource> {
 
     }
 
+    /**
+     * Recreates this object from a JSON representation of it.
+     *
+     * @return {@link OAuth2ServerResource} built from the json sent in
+     * @throws JSONException
+     */
     public OAuth2ServerResource fromJSON(JSONObject json) {
         try {
             setScope(json.getString(SCOPE));
@@ -75,11 +115,6 @@ public class OAuth2ServerResource implements Resource<OAuth2ServerResource> {
         }
         return this;
     }
-
-    private final static String SCOPE = "scope";
-    private final static String CLIENT_ID = "clientId";
-    private final static String CLIENT_SECRET = "clientSecret";
-    private final static String REDIRECT_URI = "redirectUri";
 
     public String getAuthorizeUrl(String base) {
         final StringBuilder sb = new StringBuilder(base);
