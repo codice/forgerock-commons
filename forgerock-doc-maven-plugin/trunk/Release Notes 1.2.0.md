@@ -177,13 +177,13 @@ will have to interpret the optional characters anyway.
 
 **DOCS-75: Wide programlisting shading extends to the right edge of the page in PDF**
 
-When <programlisting> content is shaded and the <programlisting> width
+When `<programlisting>` content is shaded and the `<programlisting>` width
 is set to make it page-wide, then the background shading extends into
 the right margin to the edge of the page.
 
 **DOCS-76: Cannot copy/paste examples from PDF**
 
-<screen> content is formatted for readability, but without backslashes
+`<screen>` content is formatted for readability, but without backslashes
 before newlines, so cannot be copy/pasted directly from the PDF.
 
 Workaround: Access the HTML version, click on the [-] icon to flatten
