@@ -3,19 +3,24 @@
 This Maven plugin centralizes configuration of core documentation, to ensure
 that documents are formatted uniformly.
 
+_This document covers functionality present in 2.0.0-SNAPSHOT._
+
 With centralized configuration handled by this Maven plugin, the core
 documentation-related project configuration takes at least two arguments:
 
 *   `<projectName>`: the short name for the project such as OpenAM, OpenDJ,
-    or OpenIDM
+    OpenICF, OpenIDM, OpenIG, and so forth
 *   `<googleAnalyticsId>`: to add Google Analytics JavaScript to the HTML
     output
 
-The project then runs two plugin executions:
+The project runs multiple plugin executions:
 
-1.  A `build` goal in the `pre-site` phase to build and massage output
-2.  A `layout` goal in the `site` phase to copy content under
-    `site-doc`
+1.  A `filter` goal for Maven resource filtering on source files
+2.  A `boilerplate` goal to copy common content
+3.  A `prepare` goal to prepare sources for the build
+4.  A `build` goal in the `pre-site` phase to build and massage output
+5.  A `layout` goal in the `site` phase to copy content under `site/doc`
+6.  A `release` goal to prepare site documentation for release
 
 ## Example Plugin Specification
 
@@ -156,6 +161,8 @@ Getting screenshots and other images to look okay in PDF can be a hassle.
 The plugin therefore adjusts the XML to make large PNG images fit in the page,
 and adjusts dots-per-inch on PNG images to make them look okay in print.
 
+**Note: Do capture screenshots at 72 DPI. Retina displays can default to 144.**
+
 To take advantage of this feature, you must include a new `pre-site` goal
 after the sources have been pre-processed:
 
@@ -251,6 +258,8 @@ those in your Maven site. The plugin also runs the link check.
 
 The plugin also adds a `.htaccess` file under `target/site/doc` indicating to
 Apache HTTPD server to compress text files like HTML and CSS.
+If the server is configured to ignore `.htaccess`,
+consult with the server administrator to update server settings as necessary.
 
 ## Release Layout
 
@@ -268,13 +277,15 @@ Both dates are reflected in the documents to publish.
 * The `releaseDate` indicates the date the software was released.
 * The `pubDate` indicates the date you published the documentation.
 
-To build a .zip of the released documentation, you can further set
-`-DbuildReleaseZip=true` when running the release goal on the command line,
+## Zip of Release Documentation
+
+To build a .zip of the release documentation, you can further set
+`-DbuildReleaseZip=true` when running the `release` goal on the command line,
 or `<buildReleaseZip>true</buildReleaseZip>` in the execution configuration.
 
-The file, `_projectName_-_releaseVersion_-docs.zip`, can be found
+The file, `projectName-releaseVersion-docs.zip`, can be found
 after the build in the project build directory. When unzipped, it unpacks
-the documentation for the release under `_projectName_/_releaseVersion_/`.
+the documentation for the release under `projectName/releaseVersion/`.
 
 At present this builds a .zip only of the release documents
 for the current module.

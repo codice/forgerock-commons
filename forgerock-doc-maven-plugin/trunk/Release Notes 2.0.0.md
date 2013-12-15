@@ -56,6 +56,11 @@ Try `java -jar plantuml.jar file.txt` to make sure generation works fine.
 
 **DOCS-47: Support for olinks in pdf**
 
+External olinks in PDF depend on relative locations of other PDF files.
+As a result, if you only download one PDF,
+or if you move the files relative to each other,
+then the external olinks break.
+
 **DOCS-51: Automatically set DPI appropriately on raster graphics**
 
 The fix affects only PNG files. It requires a new `pre-site` goal after the
@@ -73,6 +78,11 @@ sources have been pre-processed:
 
 **DOCS-78: Include hyphen when splitting URL across lines**
 
+These are soft hyphens. Soft hyphens "disappear" when copy/pasted.
+
+If you have a `<link xlink:href="http://some/url">http://some/url</link>`,
+write it `<link xlink:href="http://some/url" />` instead.
+
 **DOCS-85: Make it easy to get the link to other titled block elements**
 
 Added ↪ on mouseover in HTML for all titles with anchors.
@@ -81,7 +91,14 @@ Added ↪ on mouseover in HTML for all titles with anchors.
 
 **DOCS-87: Allow soft hyphens at commas in long literals**
 
+This is aimed to allow hyphenation of LDAP DNs,
+such as `uid=bjensen,ou=People,dc=example,dc=com`.
+
 **DOCS-88: Style more width in HTML table rendering of simplelist**
+
+When you use a `<simplelist>` with multiple columns,
+the stylesheets render the list as a table.
+This change spreads the label across the page.
 
 **DOCS-89: Simplify use of Maven properties in XML attribute values**
 
@@ -97,15 +114,17 @@ The fix requires that you insert a new execution as the first `pre-site` goal:
 
 **DOCS-105: Color link text in printable formats**
 
+Link text is now blue.
+
 **DOCS-107: Make release documentation transportable**
 
 To build a .zip of the released documentation, you can set
 `-DbuildReleaseZip=true` when running the release goal on the command line,
 or `<buildReleaseZip>true</buildReleaseZip>` in the execution configuration.
 
-The file, `_projectName_-_releaseVersion_-docs.zip`, can be found
+The file, `projectName-releaseVersion-docs.zip`, can be found
 after the build in the project build directory. When unzipped, it unpacks
-the documentation for the release under `_projectName_/_releaseVersion_/`.
+the documentation for the release under `projectName/releaseVersion/`.
 
 At present this builds a .zip only of the release documents
 for the current module.
@@ -131,6 +150,8 @@ The fix helps, but for page-wide listings, use this suggestion from Bob Stayton:
 **DOCS-92: Doc build plugin NPE when source directory contains no directories**
 
 **DOCS-93: Doc build plugin does not properly use configuration settings**
+
+This lets you use a different `${project.build.directory}` than `target`.
 
 **DOCS-94: Version numbers on draft docs are confusing**
 
@@ -178,6 +199,14 @@ Second, if you have a construction like `.]` where brackets mean
 optional, then add an extra space. It's technically wrong, but readers
 will have to interpret the optional characters anyway.
 
+**DOCS-76: Cannot copy/paste examples from PDF**
+
+`<screen>` content is formatted for readability, but without backslashes
+before newlines, so cannot be copy/pasted directly from the PDF.
+
+Workaround: Access the HTML version, click on the [-] icon to flatten
+the formatted example, and then copy the resulting content. (not
+accessible)
 
 * * *
 This work is licensed under the Creative Commons
