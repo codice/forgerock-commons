@@ -63,7 +63,6 @@ $(document).ready(function() {
         return;
     }
 
-    var href = $(this).children("a").attr("name");
     $(this).prepend('<a href=\"#' + href
       + '\" class=\"showlink\" style=\"display: none;\">&#x021AA; </a>');
     $(this).mouseenter(function() {
