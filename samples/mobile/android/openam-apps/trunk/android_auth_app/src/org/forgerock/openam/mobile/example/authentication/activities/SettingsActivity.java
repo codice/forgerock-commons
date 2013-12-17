@@ -155,7 +155,7 @@ public class SettingsActivity extends AuthAppActivity implements Listener<String
             }
 
         } catch (JSONException e) {
-            Log.e(TAG, "Unable to objectify the returned JSON.");
+            Log.e(TAG, "Unable to objectify the returned JSON.", e);
         }
 
         final String[] optArray = options.toArray(new String[options.size()]);
@@ -174,7 +174,7 @@ public class SettingsActivity extends AuthAppActivity implements Listener<String
     }
 
     private void cookieDomainFail() {
-        AndroidUtils.showToast("Unable to load cookie domains.",this);
+        AndroidUtils.showToast("Unable to load cookie domains.", this);
     }
 
     @Override

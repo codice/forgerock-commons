@@ -69,7 +69,7 @@ public class DataStoreActivity extends AuthAppActivity implements Listener<Strin
                     try {
                         json = new JSONObject(jsonToFill);
                     } catch (JSONException e) {
-                        Log.e(TAG, "Unable to unmarshall JSON sent to this authentication stage.");
+                        Log.e(TAG, "Unable to unmarshall JSON sent to this authentication stage.", e);
                     }
 
                     try {
@@ -80,7 +80,7 @@ public class DataStoreActivity extends AuthAppActivity implements Listener<Strin
                         getAuthNClient().replaceAuthenticateInputVals(json, myVals);
 
                     } catch (JSONException e) {
-                        Log.e(TAG, "Unable to modify JSON representation of authentication stage.");
+                        Log.e(TAG, "Unable to modify JSON representation of authentication stage.", e);
                     }
 
                     getAuthNClient().authenticate(json);

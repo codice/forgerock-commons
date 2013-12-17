@@ -17,6 +17,7 @@
 package org.forgerock.openam.mobile.example.oauth2.activities.webview;
 
 import android.net.Uri;
+import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -139,7 +140,7 @@ public class AuthorizeWebClient extends WebViewClient {
             try {
                 tempUri = new URI(url);
             } catch (URISyntaxException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Unable to validate URI correctly.", e);
             }
 
             List<NameValuePair> params = URLEncodedUtils.parse(tempUri, RestConstants.UTF8);

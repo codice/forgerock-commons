@@ -101,8 +101,6 @@ public class Presenter extends Relay<UnwrappedResponse, String> {
      *  - Propagate the response and (possibly altered) action on to further listeners,
      *    such as Activities.
      *
-     *    todo: this will get cleaner as the AuthenticationClient gets smarter
-
      *
      * @param action The action of whose response we are handling
      * @param response The response returned to us from the client

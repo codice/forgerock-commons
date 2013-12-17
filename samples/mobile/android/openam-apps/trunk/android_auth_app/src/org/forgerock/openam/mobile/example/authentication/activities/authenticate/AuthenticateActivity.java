@@ -18,6 +18,7 @@ package org.forgerock.openam.mobile.example.authentication.activities.authentica
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
@@ -63,7 +64,7 @@ public class AuthenticateActivity extends AuthAppActivity implements Listener<St
         try {
             auth = AuthenticateFactory.createFromString(authCallbackString);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Unable to generate JSON representation of authentication stage.", e);
             errored = true;
         }
 
@@ -136,7 +137,7 @@ public class AuthenticateActivity extends AuthAppActivity implements Listener<St
                     getAuthNClient().replaceAuthenticateInputVals(jsonToAlter, myVals);
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Unable to modify JSON representation of authentication stage.", e);
                 }
 
                 getAuthNClient().authenticate(jsonToAlter);
