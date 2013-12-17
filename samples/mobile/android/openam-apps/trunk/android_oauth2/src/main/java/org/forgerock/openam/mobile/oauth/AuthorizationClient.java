@@ -195,9 +195,20 @@ public class AuthorizationClient extends Relay<UnwrappedResponse, UnwrappedRespo
             throw new NullPointerException("Responses to the client must have an action type associated.");
         }
 
-        if (response == null || response.getStatusCode() != RestConstants.HTTP_SUCCESS ||
-                response.getEntityContent() == null) {
+        if (response == null || response.getEntityContent() == null) {
             return RestActions.TRANSPORT_FAIL;
+        }
+
+        //special cases go here, for example - GET_PROFILE will not return
+        //http success if the token has run out - so make sure we just change that to fail
+        if(response.getStatusCode() != RestConstants.HTTP_SUCCESS) {
+
+            if(action == OAuthAction.GET_PROFILE) {
+                action = response.getFailActionType();
+            } else {
+                return RestActions.TRANSPORT_FAIL;
+            }
+
         }
 
         if (action == OAuthAction.GET_CODE) {
