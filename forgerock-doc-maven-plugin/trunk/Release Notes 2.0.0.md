@@ -78,8 +78,6 @@ sources have been pre-processed:
 
 **DOCS-78: Include hyphen when splitting URL across lines**
 
-These are soft hyphens. Soft hyphens "disappear" when copy/pasted.
-
 If you have a `<link xlink:href="http://some/url">http://some/url</link>`,
 write it `<link xlink:href="http://some/url" />` instead.
 
