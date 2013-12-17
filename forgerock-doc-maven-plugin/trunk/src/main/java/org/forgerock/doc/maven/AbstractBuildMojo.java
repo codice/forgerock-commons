@@ -427,7 +427,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * @return {@link #filteredDocbkxSourceDirectory}
      */
     public File getFilteredDocbkxSourceDirectory() {
-        return new File(getBuildDirectory(), filteredDocbkxSourceDirectory);
+        return new File(buildDirectory, filteredDocbkxSourceDirectory);
     }
 
     /**
