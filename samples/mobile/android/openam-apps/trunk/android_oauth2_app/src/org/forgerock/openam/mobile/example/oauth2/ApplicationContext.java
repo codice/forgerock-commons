@@ -122,7 +122,7 @@ public class ApplicationContext {
 
             return true;
         } catch (JSONException e) {
-            Log.e(TAG, "OAuth2.0 config save failed.");
+            Log.e(TAG, "OAuth2.0 config save failed.", e);
         }
 
         return false;

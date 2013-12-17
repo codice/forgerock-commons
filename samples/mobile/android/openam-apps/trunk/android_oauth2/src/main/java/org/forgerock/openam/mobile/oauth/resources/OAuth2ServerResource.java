@@ -35,6 +35,8 @@ import org.json.JSONObject;
  */
 public class OAuth2ServerResource implements Resource<OAuth2ServerResource> {
 
+    private final static String TAG = "OAuth2ServerResource";
+
     private final static String SCOPE = "scope";
     private final static String CLIENT_ID = "clientId";
     private final static String CLIENT_SECRET = "clientSecret";
@@ -111,7 +113,7 @@ public class OAuth2ServerResource implements Resource<OAuth2ServerResource> {
             setRedirectUri(json.getString(REDIRECT_URI));
 
         } catch (JSONException e) {
-            Log.w("Server Configuration", e);
+            Log.e(TAG, "Server Configuration", e);
         }
         return this;
     }
@@ -125,7 +127,7 @@ public class OAuth2ServerResource implements Resource<OAuth2ServerResource> {
             sb.append(AuthZConstants.SCOPE_PARAM).append(URLEncoder.encode(getScope(), RestConstants.UTF8));
             sb.append(AuthZConstants.REDIRECT_URI_PARAM).append(URLEncoder.encode(getRedirectUri(), RestConstants.UTF8));
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error generating the Authorization URL from constituent parts.", e);
         }
 
         return sb.toString();

@@ -43,7 +43,6 @@ import org.json.JSONObject;
  * Supports basic querying of an openAM authentication service through
  * asynchronous calls.
  *
- * todo: make the client smarter, with knowledge of the expected return-type values
  * setting the failure action if we know that a request has failed - eg move some
  * functionality from the current Auth App Presenter to here to make the client
  * more helpful
@@ -312,9 +311,20 @@ public class AuthenticationClient extends Relay<UnwrappedResponse, UnwrappedResp
             throw new NullPointerException("Responses to the client must have an action type associated.");
         }
 
-        if (response == null || response.getStatusCode() != RestConstants.HTTP_SUCCESS ||
-                response.getEntityContent() == null) {
+        if (response == null || response.getEntityContent() == null) {
             return RestActions.TRANSPORT_FAIL;
+        }
+
+        //special case here as we get returned 401 Unauthorized when the
+        //password is incorrect
+        if(response.getStatusCode() != RestConstants.HTTP_SUCCESS) {
+
+            if(action == AuthNAction.AUTH) {
+                action = response.getFailActionType();
+            } else {
+                return RestActions.TRANSPORT_FAIL;
+            }
+
         }
 
         //check that we don't have the failure string returned
@@ -352,7 +362,7 @@ public class AuthenticationClient extends Relay<UnwrappedResponse, UnwrappedResp
         }
 
         // validates that the returned auth action has a json body content
-        // and a token ID, if it doesn't ahve the former, error, if it
+        // and a token ID, if it doesn't have the former, error, if it
         // doesn't have the latter, set to continue
         if (action == AuthNAction.AUTH) {
 
