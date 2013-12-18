@@ -19,9 +19,9 @@ The project runs multiple plugin executions:
 2.  A `filter` goal for Maven resource filtering on source files
 3.  An optional `jcite` goal to cite Java source files
 4.  A `prepare` goal to prepare sources for the build
-4.  A `build` goal in the `pre-site` phase to build and massage output
-5.  A `layout` goal in the `site` phase to copy content under `site/doc`
-6.  A `release` goal to prepare site documentation for release
+5.  A `build` goal in the `pre-site` phase to build and massage output
+6.  A `layout` goal in the `site` phase to copy content under `site/doc`
+7.  A `release` goal to prepare site documentation for release
 
 ## Example Plugin Specification
 
