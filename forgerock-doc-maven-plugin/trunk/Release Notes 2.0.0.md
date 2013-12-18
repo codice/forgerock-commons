@@ -171,9 +171,9 @@ This is fixed in the doc build plugin, but requires changes to the product POM:
 
 And to the top level document files, such as `index.xml`:
 
-      <date><?eval ${publicationDate}?></date>
-      <pubdate><?eval ${publicationDate}?></pubdate>
-      <releaseinfo><?eval ${softwareReleaseDate}?></releaseinfo>
+      <date>${publicationDate}</date>
+      <pubdate>${publicationDate}</pubdate>
+      <releaseinfo>${softwareReleaseDate}</releaseinfo>
 
 Once these are changed in the product docs and this version of the doc build
 plugin is used, the publication date only appears in output when set.
