@@ -15,9 +15,10 @@ documentation-related project configuration takes at least two arguments:
 
 The project runs multiple plugin executions:
 
-1.  A `filter` goal for Maven resource filtering on source files
-2.  A `boilerplate` goal to copy common content
-3.  A `prepare` goal to prepare sources for the build
+1.  A `boilerplate` goal to copy common content
+2.  A `filter` goal for Maven resource filtering on source files
+3.  An optional `jcite` goal to cite Java source files
+4.  A `prepare` goal to prepare sources for the build
 4.  A `build` goal in the `pre-site` phase to build and massage output
 5.  A `layout` goal in the `site` phase to copy content under `site/doc`
 6.  A `release` goal to prepare site documentation for release
@@ -40,6 +41,13 @@ POM property called `gaId`, whose value is the Google Analytics ID.
            </configuration>
            <executions>
             <execution>
+             <id>copy-common</id>
+             <phase>pre-site</phase>
+             <goals>
+              <goal>boilerplate</goal>
+             </goals>
+            </execution>
+            <execution>
              <id>filter-sources</id>
              <phase>pre-site</phase>
              <goals>
@@ -47,10 +55,10 @@ POM property called `gaId`, whose value is the Google Analytics ID.
              </goals>
             </execution>
             <execution>
-             <id>copy-common</id>
+             <id>run-jcite</id>
              <phase>pre-site</phase>
              <goals>
-              <goal>boilerplate</goal>
+              <goal>jcite</goal>
              </goals>
             </execution>
             <execution>

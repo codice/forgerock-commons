@@ -100,7 +100,8 @@ This change spreads the label across the page.
 
 **DOCS-89: Simplify use of Maven properties in XML attribute values**
 
-The fix requires that you insert a new execution as the first `pre-site` goal:
+The fix requires that you insert a new execution `pre-site` goal
+after the goal to copy common content:
 
     <execution>
         <id>filter-sources</id>
@@ -180,6 +181,8 @@ plugin is used, the publication date only appears in output when set.
 **DOCS-109: CC image not included in HTML legal notice page**
 
 **DOCS-110: Verbatim text renders too large in Opera**
+
+**DOCS-121: Maven resource filtering should happen after common content is copied**
 
 ## Known Issues
 

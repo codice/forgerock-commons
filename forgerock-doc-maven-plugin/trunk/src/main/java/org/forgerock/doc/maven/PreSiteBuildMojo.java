@@ -54,14 +54,15 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     @Override
     public final void execute() throws MojoExecutionException {
 
-        // If sources are generated, for example for JCite, build documentation
-        // from the generated sources, rather than the original sources.
-        if (doUseGeneratedSources()) {
-            sourceDirectory = getDocbkxGeneratedSourceDirectory();
-        } else if (doUseFilteredSources()) {
-            sourceDirectory = getFilteredDocbkxSourceDirectory();
+        if (!doUseFilteredSources()) {
+            throw new MojoExecutionException("This version of the doc build"
+                + " plugin requires that you use filtered sources.");
+        }
+
+        if (getJCiteOutputDirectory().exists()) {
+            sourceDirectory = getJCiteOutputDirectory();
         } else {
-            sourceDirectory = getDocbkxSourceDirectory();
+            sourceDirectory = getFilteredDocbkxSourceDirectory();
         }
 
         // The Executor is what actually calls other plugins.

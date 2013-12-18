@@ -85,9 +85,9 @@ public class JCiteBuildMojo extends AbstractBuildMojo {
         void runJCite() throws MojoExecutionException {
 
             String outputDir = FilenameUtils.separatorsToUnix(
-                    getDocbkxGeneratedSourceDirectory().getPath());
+                    getJCiteOutputDirectory().getPath());
             String sourceDir = FilenameUtils.separatorsToUnix(
-                    getDocbkxSourceDirectory().getPath());
+                    getFilteredDocbkxSourceDirectory().getPath());
             if (doUseFilteredSources()) {
                 sourceDir = FilenameUtils.separatorsToUnix(
                         getFilteredDocbkxSourceDirectory().getPath());

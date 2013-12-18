@@ -39,6 +39,13 @@ public class FilterPreSiteBuildMojo extends AbstractBuildMojo {
      */
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+
+        if (!getDocbkxGeneratedSourceDirectory().exists()) {
+            throw new MojoExecutionException("<docbkxGeneratedSourceDirectory>"
+                + " must exist before you filter resources.\n"
+                + "Copy common content with the boilerplate goal first.");
+        }
+
         // The Executor is what actually calls other plugins.
         Executor exec = new Executor();
 
@@ -56,12 +63,12 @@ public class FilterPreSiteBuildMojo extends AbstractBuildMojo {
          * @throws MojoExecutionException
          */
         void filter() throws MojoExecutionException {
-            final String filteredDocbkxSourceDirectory =
+            final String filteredOutputDirectory =
                     FilenameUtils.separatorsToUnix(
                             getFilteredDocbkxSourceDirectory().getPath());
-            final String docbkxSourceDirectory =
+            final String sourceDirectory =
                     FilenameUtils.separatorsToUnix(
-                            getDocbkxSourceDirectory().getPath());
+                            getDocbkxGeneratedSourceDirectory().getPath());
 
             executeMojo(
                     plugin(
@@ -70,15 +77,15 @@ public class FilterPreSiteBuildMojo extends AbstractBuildMojo {
                             version(getResourcesVersion())),
                     goal("copy-resources"),
                     configuration(
-                            element(name("outputDirectory"), filteredDocbkxSourceDirectory),
+                            element(name("outputDirectory"), filteredOutputDirectory),
                             element(name("resources"),
                                     element(name("resource"),
-                                            element(name("directory"), docbkxSourceDirectory),
+                                            element(name("directory"), sourceDirectory),
                                             element(name("filtering"), "true"),
                                             element(name("includes"),
                                                     element(name("include"), "**/*.xml"))),
                                      element(name("resource"),
-                                            element(name("directory"), docbkxSourceDirectory),
+                                            element(name("directory"), sourceDirectory),
                                             element(name("filtering"), "false"),
                                             element(name("excludes"),
                                                     element(name("exclude"), "**/*.xml"))))),
