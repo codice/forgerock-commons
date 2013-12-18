@@ -139,7 +139,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * Base directory for processed DocBook XML source files, relative to the
      * build directory.
      *
-     * @parameter default-value="generated-docbkx"
+     * @parameter default-value="docbkx-generated"
      * property="docbkxGeneratedSourceDirectory"
      * @required
      */
@@ -186,6 +186,16 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * @required
      */
     private File buildDirectory;
+
+    /**
+     * When running JCite, the output directory for processed files, relative
+     * to the build directory.
+     *
+     * @parameter default-value="docbkx-jcite"
+     * property="jCiteOutputDirectory"
+     * @required
+     */
+    private String jCiteOutputDirectory;
 
     /**
      * The Maven Project Object.
@@ -465,6 +475,15 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      */
     public File getDocbkxOutputDirectory() {
         return new File(buildDirectory, docbkxOutputDirectory);
+    }
+
+    /**
+     * JCite output directory, relative to the build directory.
+     *
+     * @return {@link #jCiteOutputDirectory}
+     */
+    public File getJCiteOutputDirectory() {
+        return new File(buildDirectory, jCiteOutputDirectory);
     }
 
     /**
