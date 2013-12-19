@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
- * Copyright © 2011 ForgeRock AS. All rights reserved.
+ * Copyright 2011-2013 ForgeRock AS.
  */
 
 package org.forgerock.util;
@@ -19,10 +19,8 @@ package org.forgerock.util;
 // Java SE
 import java.io.Serializable;
 import java.util.AbstractSet;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 /**
  * Exposes a range of integer values as a set. Avoids the allocation of storage for all
@@ -31,13 +29,11 @@ import java.util.Set;
  * <p>
  * If combination of start/stop/step values are not mathematically possible to represent
  * as a set of values, it is represented by this implementation as an empty set.
- *
- * @author Paul C. Bryan
  */
 public class RangeSet extends AbstractSet<Integer> implements Cloneable, Serializable {
 
     /** Establishes serialized object compatibility. */
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /** The start of the range, inclusive. */
     private final int start;
@@ -52,6 +48,7 @@ public class RangeSet extends AbstractSet<Integer> implements Cloneable, Seriali
      * Constructs a range set for a sequence of numbers, starting at {@code 0} with
      * the value to stop.  Equivalent to constructing the range set with:
      * {@code RangeSet(0, stop, 1)}.
+     * @param stop the point at which to stop the range (exclusive).
      */
     public RangeSet(int stop) {
         this(0, stop, 1);
@@ -74,7 +71,7 @@ public class RangeSet extends AbstractSet<Integer> implements Cloneable, Seriali
      * @param start the start of the range, inclusive.
      * @param stop the point at which to stop the range (exclusive).
      * @param step the step to increment for each value in the range.
-     * @throws IllegalArgumentException if {@code step} is {@code 0}. 
+     * @throws IllegalArgumentException if {@code step} is {@code 0}.
      */
     public RangeSet(int start, int stop, int step) {
         if (step == 0) {

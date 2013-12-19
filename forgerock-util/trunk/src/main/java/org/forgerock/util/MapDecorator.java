@@ -12,7 +12,7 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright © 2010–2011 ApexIdentity Inc. All rights reserved.
- * Portions Copyrighted 2011 ForgeRock AS.
+ * Portions Copyright 2011-2013 ForgeRock AS.
  */
 
 package org.forgerock.util;
@@ -23,10 +23,13 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Wraps another map. All methods simply call through to the wrapped map. Subclasses are
- * expected to override one or more of these methods.
+ * Wraps another map. All methods simply call through to the wrapped map.
+ * Subclasses are expected to override one or more of these methods.
  *
- * @author Paul C. Bryan
+ * @param <K>
+ *            The type of key.
+ * @param <V>
+ *            The type of value.
  */
 public class MapDecorator<K, V> implements Map<K, V> {
 
@@ -36,8 +39,10 @@ public class MapDecorator<K, V> implements Map<K, V> {
     /**
      * Constructs a new map decorator, wrapping the specified map.
      *
-     * @param map the map to wrap with the decorator.
-     * @throws NullPointerException if {@code map} is {@code null}.
+     * @param map
+     *            the map to wrap with the decorator.
+     * @throws NullPointerException
+     *             if {@code map} is {@code null}.
      */
     public MapDecorator(Map<K, V> map) {
         if (map == null) {
@@ -63,10 +68,13 @@ public class MapDecorator<K, V> implements Map<K, V> {
     }
 
     /**
-     * Returns {@code true} if this map contains a mapping for the specified key.
+     * Returns {@code true} if this map contains a mapping for the specified
+     * key.
      *
-     * @param key the key whose presence in this map is to be tested.
-     * @return {@code true} if this map contains a mapping for the specified key.
+     * @param key
+     *            the key whose presence in this map is to be tested.
+     * @return {@code true} if this map contains a mapping for the specified
+     *         key.
      */
     @Override
     public boolean containsKey(Object key) {
@@ -74,10 +82,13 @@ public class MapDecorator<K, V> implements Map<K, V> {
     }
 
     /**
-     * Returns {@code true} if the map maps one or more keys to the specified value.
+     * Returns {@code true} if the map maps one or more keys to the specified
+     * value.
      *
-     * @param value the value whose presence in the map is to be tested.
-     * @return {@code true} if the map maps one or more keys to the specified value.
+     * @param value
+     *            the value whose presence in the map is to be tested.
+     * @return {@code true} if the map maps one or more keys to the specified
+     *         value.
      */
     @Override
     public boolean containsValue(Object value) {
@@ -85,11 +96,13 @@ public class MapDecorator<K, V> implements Map<K, V> {
     }
 
     /**
-     * Returns the value to which the specified key is mapped, or {@code null} if the map
-     * contains no mapping for the key.
+     * Returns the value to which the specified key is mapped, or {@code null}
+     * if the map contains no mapping for the key.
      *
-     * @param key the key whose associated value is to be returned.
-     * @return the value to which the specified key is mapped, or {@code null} if no mapping.
+     * @param key
+     *            the key whose associated value is to be returned.
+     * @return the value to which the specified key is mapped, or {@code null}
+     *         if no mapping.
      */
     @Override
     public V get(Object key) {
@@ -98,10 +111,13 @@ public class MapDecorator<K, V> implements Map<K, V> {
 
     /**
      * Associates the specified value with the specified key in the map.
-     * 
-     * @param key key with which the specified value is to be associated.
-     * @param value value to be associated with the specified key.
-     * @return the previous value associated with key, or {@code null} if no mapping.
+     *
+     * @param key
+     *            key with which the specified value is to be associated.
+     * @param value
+     *            value to be associated with the specified key.
+     * @return the previous value associated with key, or {@code null} if no
+     *         mapping.
      */
     @Override
     public V put(K key, V value) {
@@ -111,8 +127,10 @@ public class MapDecorator<K, V> implements Map<K, V> {
     /**
      * Removes the mapping for a key from the map if it is present.
      *
-     * @param key key whose mapping is to be removed from the map.
-     * @return the previous value associated with key, or {@code null} if no mapping.
+     * @param key
+     *            key whose mapping is to be removed from the map.
+     * @return the previous value associated with key, or {@code null} if no
+     *         mapping.
      */
     @Override
     public V remove(Object key) {
@@ -121,8 +139,9 @@ public class MapDecorator<K, V> implements Map<K, V> {
 
     /**
      * Copies all of the mappings from the specified map to the map.
-     * 
-     * @param m mappings to be stored in the map.
+     *
+     * @param m
+     *            mappings to be stored in the map.
      */
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
@@ -172,7 +191,8 @@ public class MapDecorator<K, V> implements Map<K, V> {
     /**
      * Compares the specified object with the map for equality.
      *
-     * @param o object to be compared for equality with the map.
+     * @param o
+     *            object to be compared for equality with the map.
      * @return {@code true} if the specified object is equal to the map.
      */
     @Override

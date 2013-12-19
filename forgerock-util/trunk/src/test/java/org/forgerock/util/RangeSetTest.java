@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
- * Copyright © 2011 ForgeRock AS. All rights reserved.
+ * Copyright 2011-2013 ForgeRock AS.
  */
 
 package org.forgerock.util;
@@ -22,9 +22,7 @@ import static org.fest.assertions.Assertions.assertThat;
 // TestNG
 import org.testng.annotations.Test;
 
-/**
- * @author Paul C. Bryan
- */
+@SuppressWarnings("javadoc")
 public class RangeSetTest {
 
     @Test
@@ -71,6 +69,6 @@ public class RangeSetTest {
 
     @Test(expectedExceptions=IllegalArgumentException.class)
     public void illegalStep() {
-        RangeSet range = new RangeSet(0, 100, 0); // meet infinity
+        new RangeSet(0, 100, 0); // meet infinity
     }
 }
