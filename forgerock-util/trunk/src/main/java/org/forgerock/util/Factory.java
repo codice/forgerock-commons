@@ -12,7 +12,7 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright © 2010–2011 ApexIdentity Inc. All rights reserved.
- * Portions Copyrighted 2011 ForgeRock AS.
+ * Portions Copyright 2011-2013 ForgeRock AS.
  */
 
 package org.forgerock.util;
@@ -20,12 +20,15 @@ package org.forgerock.util;
 /**
  * A factory interface.
  *
- * @author Paul C. Bryan
+ * @param <T>
+ *            The type of object created by this factory.
  */
 public interface Factory<T> {
 
     /**
      * Creates and returns a new object instance.
+     *
+     * @return The new object instance.
      */
     T newInstance();
 }
