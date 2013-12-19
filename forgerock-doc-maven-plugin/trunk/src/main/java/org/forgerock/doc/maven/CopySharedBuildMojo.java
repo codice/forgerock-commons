@@ -106,7 +106,7 @@ public class CopySharedBuildMojo extends AbstractBuildMojo {
     /**
      * Version of the common content artifact to use.
      *
-     * @parameter default-value="1.0.0" property="commonContentVersion"
+     * @parameter default-value="2.0.0" property="commonContentVersion"
      * @required
      */
     private String commonContentVersion;
