@@ -3,7 +3,7 @@
 This Maven plugin centralizes configuration of core documentation, to ensure
 that documents are formatted uniformly.
 
-_This document covers functionality present in 2.0.0-SNAPSHOT._
+_This document covers functionality present in 2.0.0._
 
 With centralized configuration handled by this Maven plugin, the core
 documentation-related project configuration takes at least two arguments:
@@ -163,6 +163,27 @@ To avoid using common content, turn off the feature:
 
     <useSharedContent>false</useSharedContent> <!-- true by default -->
 
+If you want different shared content from the default,
+you can use a different version,
+or create your own Maven module for shared content,
+and include it in the configuration
+for the `<goal>boilerplate</goal>` execution.
+
+The following example shows the configuration to use the 1.0.0 version.
+
+     <execution>
+      <id>copy-common</id>
+      <phase>pre-site</phase>
+      <configuration>
+       <commonContentGroupId>org.forgerock.commons</commonContentGroupId>
+       <commonContentArtifactId>forgerock-doc-common-content</commonContentArtifactId>
+       <commonContentVersion>1.0.0</commonContentVersion>
+      </configuration>
+      <goals>
+       <goal>boilerplate</goal>
+      </goals>
+     </execution>
+
 ## PNG Image Manipulation
 
 Getting screenshots and other images to look okay in PDF can be a hassle.
@@ -252,6 +273,18 @@ The following command generates only PDF output for your single chapter.
     mvn -DdocumentSrcName=chap-one.xml -Dinclude=pdf clean pre-site
 
 Formats include `epub`, `html`, `man`, `pdf`, and `rtf`.
+
+## Alternate Branding
+
+The plugin uses a branding module that lets you configure alternatives
+as in the following example, taken from the top-level plugin configuration.
+
+     <brandingGroupId>org.forgerock.commons</brandingGroupId>
+     <brandingArtifactId>forgerock-doc-default-branding</brandingArtifactId>
+     <brandingVersion>1.0.1</brandingVersion>
+
+If you need to create your own branding,
+consider the `forgerock-doc-default-branding` module as an example.
 
 ## Expected Results
 
