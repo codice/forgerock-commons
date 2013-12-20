@@ -139,8 +139,8 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
                     final URL url = getHTTPUrl(partialURL);
                     c = url.openConnection();
                     c.setUseCaches(false);
-                    c.setConnectTimeout(500);
-                    c.setReadTimeout(500);
+                    c.setConnectTimeout(3000);
+                    c.setReadTimeout(3000);
                     c.setDoOutput(false);
                     c.setRequestProperty("Authorization",
                             "Basic " + Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP));
