@@ -35,7 +35,7 @@
     The following example shows a basic <code>src/site/site.xml</code> file.
    </p>
 
-   <pre>
+   <source>
 &lt;project name="\${project.name}"
     xmlns="http://maven.apache.org/DECORATION/1.0.1"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -74,7 +74,7 @@
         &lt;siteSearchFQDN>forgerock.org&lt;/siteSearchFQDN>
     &lt;/custom>
 &lt;/project>
-   </pre>
+   </source>
   </section>
  </body>
 </document>
