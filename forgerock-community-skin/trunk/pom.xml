@@ -1,37 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
-  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
-  ~
-  ~ Copyright © 2011-2012. ForgeRock AS. All rights reserved.
-  ~
-  ~ The contents of this file are subject to the terms
-  ~ of the Common Development and Distribution License
-  ~ (the License). You may not use this file except in
-  ~ compliance with the License.
-  ~
-  ~ You can obtain a copy of the License at
-  ~ http://forgerock.org/license/CDDLv1.0.html
-  ~ See the License for the specific language governing
-  ~ permission and limitations under the License.
-  ~
-  ~ When distributing Covered Code, include this CDDL
-  ~ Header Notice in each file and include the License file
-  ~ at http://forgerock.org/license/CDDLv1.0.html
-  ~ If applicable, add the following below the CDDL Header,
-  ~ with the fields enclosed by brackets [] replaced by
-  ~ your own identifying information:
-  ~ "Portions Copyrighted [year] [name of copyright owner]"
-  ~
-  ~ $Id$
--->
+   Copyright 2011-2014 ForgeRock AS
 
+   The contents of this file are subject to the terms of the Common Development and
+   Distribution License (the License). You may not use this file except in compliance with the
+   License.
+
+   You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+   specific language governing permission and limitations under the License.
+
+   When distributing Covered Software, include this CDDL Header Notice in each file and include
+   the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+   Header, with the fields enclosed by brackets [] replaced by your own identifying
+   information: "Portions copyright [year] [name of copyright owner]".
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.forgerock</groupId>
         <artifactId>forgerock-parent</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.0</version>
     </parent>
     <groupId>org.forgerock.commons</groupId>
     <artifactId>forgerock-community-skin</artifactId>
@@ -39,11 +27,32 @@
     <packaging>jar</packaging>
     <name>ForgeRock Community Site Skin</name>
     <description>Maven site skin for ForgeRock community projects</description>
+    <url>http://commons.forgerock.org/forgerock-community-skin/</url>
+    <issueManagement>
+        <system>Jira</system>
+        <url>https://bugster.forgerock.org/jira/browse/COMMWEB</url>
+    </issueManagement>
     <scm>
         <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-community-skin/trunk/</connection>
         <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-community-skin/trunk/</developerConnection>
         <url>http://sources.forgerock.org/browse/commons/forgerock-community-skin/trunk/</url>
     </scm>
+    <licenses>
+        <license>
+            <name>CDDL-1.0</name>
+            <url>http://www.opensource.org/licenses/cddl1.php</url>
+            <comments>Common Development and Distribution License (CDDL) 1.0.
+            This license applies as indicated in the source files.</comments>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <distributionManagement>
+        <site>
+            <id>forgerock.org</id>
+            <name>ForgeRock Community</name>
+            <url>scp://forgerock.org/var/www/vhosts/commons.forgerock.org/httpdocs/forgerock-community-skin</url>
+        </site>
+    </distributionManagement>
     <repositories>
         <repository>
             <id>forgerock-staging-repository</id>
@@ -52,7 +61,7 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-      <releases>
+            <releases>
                 <enabled>true</enabled>
             </releases>
         </repository>
@@ -63,7 +72,7 @@
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-      <releases>
+            <releases>
                 <enabled>false</enabled>
             </releases>
         </repository>

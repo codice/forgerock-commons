@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Copyright 2014 ForgeRock AS
+
+   The contents of this file are subject to the terms of the Common Development and
+   Distribution License (the License). You may not use this file except in compliance with the
+   License.
+
+   You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+   specific language governing permission and limitations under the License.
+
+   When distributing Covered Software, include this CDDL Header Notice in each file and include
+   the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+   Header, with the fields enclosed by brackets [] replaced by your own identifying
+   information: "Portions copyright [year] [name of copyright owner]".
+-->
+<document
+ xmlns="http://maven.apache.org/XDOC/2.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/XDOC/2.0
+                     http://maven.apache.org/xsd/xdoc-2.0.xsd">
+ <properties>
+
+  <title>${project.name}</title>
+  <author email="commons@forgerock.org">ForgeRock AS</author>
+ </properties>
+ <body>
+  <section name="About ${project.name}">
+
+   <p>
+    This provides a Maven site skin for ForgeRock community projects.
+   </p>
+
+   <p>
+    The following example shows a basic <code>src/site/site.xml</code> file.
+   </p>
+
+   <pre>
+&lt;project name="\${project.name}"
+    xmlns="http://maven.apache.org/DECORATION/1.0.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.1
+                        http://maven.apache.org/xsd/decoration-1.0.1.xsd">
+    &lt;skin>
+        &lt;groupId>org.forgerock.commons&lt;/groupId>
+        &lt;artifactId>forgerock-community-skin&lt;/artifactId>
+        &lt;version>1.0.0&lt;/version>
+    &lt;/skin>
+    &lt;publishDate position="right" format="yyyy.MM.dd"/>
+    &lt;version position="right"/>
+
+    &lt;body>
+        &lt;breadcrumbs>
+            &lt;item name="Developer Community" href="http://forgerock.org/" />
+            &lt;item name="\${project.name}" href="\${project.url}" />
+        &lt;/breadcrumbs>
+
+        &lt;menu name="Welcome">
+            &lt;item name="About" href="index.html" />
+            &lt;item name="Join" href="https://sso.forgerock.com/openam/UI/Login" />
+            &lt;item name="Issue Tracking" href="issue-tracking.html" />
+            &lt;item name="License" href="license.html" />
+            &lt;item name="Source Repository" href="source-repository.html" />
+        &lt;/menu>
+    &lt;/body>
+
+    &lt;custom>
+        &lt;googleAnalytics>UA-...&lt;/googleAnalytics>
+        &lt;openproject>
+            &lt;href>http://project.forgerock.org/&lt;/href>
+            &lt;src>./images/project-logo.png&lt;/src>
+            &lt;alt>Project&lt;/alt>
+        &lt;/openproject>
+        &lt;siteSearchFQDN>forgerock.org&lt;/siteSearchFQDN>
+    &lt;/custom>
+&lt;/project>
+   </pre>
+  </section>
+ </body>
+</document>
