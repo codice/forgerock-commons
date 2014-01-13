@@ -1,0 +1,298 @@
+/* MENU & SUBMENU */
+
+.menubar {
+    
+    margin-bottom: 10px;
+
+    .menu {
+        .rounded-corners(5px);     
+        background-color: @inactive-menu-color;
+        height: 38px;
+       
+        li {
+            float: left;
+            height: 38px;
+
+            a {
+                display: block;
+                color: @inactive-menu-font-color;
+                font-size: 16px;
+                padding: 10px 20px 10px 20px;
+                text-decoration: none;
+            }
+        }
+
+        .active {
+            background-color: @active-menu-color;
+            a{
+                color: @active-menu-font-color;
+            }
+        }
+
+        .active:first-child {
+            .rounded-left-corners(5px);
+        }
+    }
+}
+
+.submenubar {
+    height: 31px;
+    clear: both;
+    border-left: 1px solid #D5D5D5;
+    border-right: 1px solid #D5D5D5;
+    border-bottom: 1px solid #D5D5D5;
+    margin-left: 3px;
+    margin-right: 3px;
+
+    li {
+        float: left;
+        height: 30px;
+
+        a {
+            display: block;
+            color: @color-active;
+            padding: 3px 8px 4px 8px;
+            margin: 3px 5px 0 5px;
+        }
+    }
+
+    a:hover, .active a {
+        .rounded-corners(5px);
+        background-color: #F98624;
+        color: #F9F9F9;
+    }
+}
+
+/* HEADER */
+#header {
+    height: 80px;
+    padding-top: 15px;
+    margin-bottom: 10px;
+}
+
+#logo {
+    margin-left: 10px;
+}
+
+#user-nav {
+    margin: 5px 10px 0 0;
+}
+
+/* MAIN CONTENT */
+
+#wrapper {
+    min-height: 100%;
+}
+
+#content {
+    color:@font-color;
+    overflow: auto;
+    height: 100%;
+    padding-bottom: @footer-height+10;
+}
+
+
+/* FOOTER */
+#footer {
+    position: relative;
+    clear: both;
+    background: @footer-background-color;
+    font-size: 11px;
+    margin-top: -@footer-height;
+    padding: 45px 0 45px 0;
+    text-align: center;
+    .container {
+        width: auto;
+    }
+}
+/* DATATABLES */
+
+.dataTable {
+    tbody tr:hover {
+        cursor: pointer;
+    }
+}
+
+/* DIALOGS */
+
+.dialog-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    background-color: #000;
+    opacity: 0.8;
+    display: none;
+}
+
+.dialogContainer {
+    .rounded-corners(5px);
+
+    position: fixed;
+    top: 0;
+    margin: 0 auto;
+    background: @background-color;
+    border: 1px solid @font-color;
+    padding: 15px;
+    padding: 15px;
+    opacity: 1.0;
+    z-index: 6;
+
+    h1 {
+        line-height: 20px;
+    }
+
+    .dialogCloseCross {
+        width: 16px;
+        height: 16px;
+        position: relative;
+        float: right;
+    }
+
+    .dialogContent {
+        form {
+            padding: 15px;
+        }
+
+        p {
+            padding: 8px 0 8px 0;
+            font-size: 14px;
+        }
+    }
+
+    .dialogActions {
+        margin-top: 12px;
+        text-align: right;
+    }
+}
+
+/* MESSAGES*/
+
+#messages {
+    div {
+        .rounded-corners(5px);
+
+        width: 360px;
+        position: fixed;
+        margin-left: -180px;
+        top: 10px;
+        left: 50%;
+        text-align: center;
+        font-size: 14px;
+        line-height: 14px;
+        padding: 5px;
+        border: 1px solid darken(@input-border-basic, 20%);
+        background: @message-background-color;
+        z-index: 10;
+    }
+
+    span {
+        padding: 0 20px 0 10px;
+    }
+
+    .confirmMessage { 
+        color: @color-success;
+    }
+
+    .errorMessage {
+        color: @color-error;
+    }
+
+}
+
+/* POPUP */
+#popup {
+    display: none;
+    position: absolute;
+}
+
+#popup-content {
+    background: #fff;
+    border: 1px solid @font-color;
+    padding: 10px;
+}
+
+/* BUTTONS */
+button.button, a.button, input.button {
+    display: inline-block;
+    vertical-align: middle;
+    border: 0;
+    font-size: 12px;
+    line-height: 16px;
+    color: white;
+    font-weight: bold;
+    padding: 0 10px 1px;
+    cursor: pointer;
+    .rounded-corners(5px);
+    background-color: @color-inactive;
+    padding: 7px 10px 7px 10px;
+    margin-left: 5px;
+    
+    &:hover {
+        background-color: lighten(@color-inactive, @button-hover-lightness);    
+    }
+    
+    &.active {
+        background-color: @color-active;
+        &:hover {
+            background-color: lighten(@color-active, @button-hover-lightness);    
+        }
+        &.gray {
+            .linear-gradient;
+            border: 1px solid #C2C2C2;
+            color: #636D76;
+            &:hover {
+                /*background-color: lighten(#EFEFEF, @button-hover-lightness);*/
+                .linear-gradient-reverse; 
+            }
+        }
+    }
+    
+    &.inactive {
+        background-color: @color-inactive;
+        &:hover {
+            background-color: lighten(@color-inactive, @button-hover-lightness);    
+        }
+    }
+    &.choosable {
+        color: inherit;
+        font-weight: normal;
+        margin-right: 5px;
+        background: transparent;
+        padding: 9px 4px;
+        &.choosen-decision {
+            border: 1px solid #288ED7;
+            padding: 3px; 
+            .linear-gradient;
+        }
+        &.choosable-static {
+            border: 1px solid lightBlue;
+            padding: 3px;
+            .linear-gradient; 
+        }
+    }
+}
+
+input[type="button"].link, button.link {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    color: @href-color;
+    &:hover {
+        text-decoration: underline;
+    }
+    font-size: @font-size;
+}
+
+span.hr-vertical {
+    padding: 0 5px;
+}
+
+h3.black {
+    a {
+       display: block;
+       font-size: 15px;
+    }
+}
