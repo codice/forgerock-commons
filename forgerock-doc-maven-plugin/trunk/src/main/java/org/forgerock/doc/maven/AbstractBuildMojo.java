@@ -8,7 +8,7 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2012-2013 ForgeRock AS
+ *     Copyright 2012-2014 ForgeRock AS
  *
  */
 
@@ -312,7 +312,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     /**
      * Version of the branding artifact to use.
      *
-     * @parameter default-value="2.0.0" property="brandingVersion"
+     * @parameter default-value="2.0.1-SNAPSHOT" property="brandingVersion"
      * @required
      */
     private String brandingVersion;

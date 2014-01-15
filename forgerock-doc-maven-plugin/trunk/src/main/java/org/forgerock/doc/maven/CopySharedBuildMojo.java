@@ -8,7 +8,7 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2013 ForgeRock AS
+ *     Copyright 2013-2014 ForgeRock AS
  *
  */
 
@@ -106,7 +106,7 @@ public class CopySharedBuildMojo extends AbstractBuildMojo {
     /**
      * Version of the common content artifact to use.
      *
-     * @parameter default-value="2.0.0" property="commonContentVersion"
+     * @parameter default-value="2.0.1-SNAPSHOT" property="commonContentVersion"
      * @required
      */
     private String commonContentVersion;
