@@ -13,7 +13,7 @@
 !
 ! MPL 2.0 HEADER END
 !
-!     Copyright 2013 ForgeRock AS
+!     Copyright 2013-2014 ForgeRock AS
 !
 -->
 <xsl:stylesheet
@@ -35,6 +35,7 @@
  <xsl:template match="db:imagedata">
   <xsl:element name="imagedata" namespace="http://docbook.org/ns/docbook">
    <xsl:apply-templates select="node()|@*"/>
+   <xsl:attribute name="align">center</xsl:attribute>
    <xsl:attribute name="scalefit">1</xsl:attribute>
    <xsl:attribute name="width">100%</xsl:attribute>
    <xsl:attribute name="contentdepth">100%</xsl:attribute>
