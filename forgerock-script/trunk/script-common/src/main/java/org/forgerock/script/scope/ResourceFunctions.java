@@ -574,8 +574,8 @@ public final class ResourceFunctions {
 
             // warning: if you dont use poll or peek and only iterator()
             // (+.remove()) it will leak memory.
-            LinkedList<Map<String, Object>> results =
-                    null != callback ? null : new LinkedList<Map<String, Object>>();
+            LinkedList<Object> results =
+                    null != callback ? null : new LinkedList<Object>();
 
             QueryResult queryResult =
                     query(scope, resourceContainer, params, fieldFilter, context, results, callback);
@@ -593,7 +593,7 @@ public final class ResourceFunctions {
 
         private final QueryResult query(final Parameter scope, String resourceContainer,
                 JsonValue params, List<Object> fieldFilter, JsonValue context,
-                final Collection<Map<String, Object>> results, final Function<?> callback)
+                final Collection<Object> results, final Function<?> callback)
                 throws ResourceException {
             if (params.isDefined("_queryId") ^ params.isDefined("_queryExpression")
                     ^ params.isDefined("_filter")) {
@@ -688,7 +688,7 @@ public final class ResourceFunctions {
                                         if (null != callback) {
                                             try {
                                                 callback.call(scope, null, null, resource
-                                                        .getContent().asMap());
+                                                        .getContent().getObject());
                                             } catch (ResourceException e) {
                                                 // TODO log
                                                 return false;
@@ -697,7 +697,7 @@ public final class ResourceFunctions {
                                                 return false;
                                             }
                                         } else {
-                                            results.add(resource.getContent().asMap());
+                                            results.add(resource.getContent().getObject());
                                         }
                                         return true;
                                     }
