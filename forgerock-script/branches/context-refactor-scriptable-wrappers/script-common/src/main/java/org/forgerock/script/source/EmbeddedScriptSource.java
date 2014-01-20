@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2014 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -45,16 +45,16 @@ public class EmbeddedScriptSource implements ScriptSource {
 
     public EmbeddedScriptSource(String source, ScriptName scriptName) {
         this.source = source;
-        this.scriptName =
-                new ScriptName(scriptName.getName(), scriptName.getType(), scriptName.getRevision());
+        this.scriptName = new ScriptName(
+                scriptName.getName(), scriptName.getType(), scriptName.getRevision(), scriptName.getRequestBinding());
     }
 
     public EmbeddedScriptSource(ScriptEntry.Visibility visibility, String source,
             ScriptName scriptName) {
         this.visibility = visibility;
         this.source = source;
-        this.scriptName =
-                new ScriptName(scriptName.getName(), scriptName.getType(), scriptName.getRevision());
+        this.scriptName = new ScriptName(
+                scriptName.getName(), scriptName.getType(), scriptName.getRevision(), scriptName.getRequestBinding());
     }
 
     public String guessType() {

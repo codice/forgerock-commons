@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2014 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -42,6 +42,7 @@ public interface SourceUnit {
     public static final String ATTR_REVISION = "revision";
     public static final String ATTR_SOURCE = "source";
     public static final String ATTR_VISIBILITY = "visibility";
+    public static final String ATTR_REQUEST_BINDING = "request-binding";
 
     ScriptName getName();
 
