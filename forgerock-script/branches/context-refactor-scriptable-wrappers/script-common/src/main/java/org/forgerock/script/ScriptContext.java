@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2013 ForgeRock AS. All Rights Reserved
+ * Copyright (c) 2013-2014 ForgeRock AS. All Rights Reserved
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -25,7 +25,9 @@
 package org.forgerock.script;
 
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.resource.AbstractContext;
 import org.forgerock.json.resource.Context;
+import org.forgerock.json.resource.ContextName;
 import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.json.resource.ResourceException;
 
@@ -34,37 +36,24 @@ import org.forgerock.json.resource.ResourceException;
  * 
  * @author Laszlo Hordos
  */
-public class ScriptContext extends Context {
+public class ScriptContext extends AbstractContext {
+
+    /** the friendly name for this context */
+    private static final ContextName CONTEXT_NAME = ContextName.valueOf("script");
 
     public static final String ATTR_TYPE = "type";
     public static final String ATTR_NAME = "name";
     public static final String ATTR_REVISION = "revision";
 
-    private final String name;
-    private final String type;
-    private final String revision;
-
     public ScriptContext(Context parent, String name, String type, String revision) {
-        super(parent);
-        this.name = name;
-        this.type = type;
-        this.revision = revision;
+        super(CONTEXT_NAME, parent);
+        data.put(ATTR_NAME, name);
+        data.put(ATTR_TYPE, type);
+        data.put(ATTR_REVISION, revision);
     }
 
     public ScriptContext(JsonValue savedContext, PersistenceConfig config) throws ResourceException {
-        super(savedContext, config);
-        name = savedContext.get(ATTR_NAME).required().asString();
-        type = savedContext.get(ATTR_TYPE).required().asString();
-        revision = savedContext.get(ATTR_REVISION).asString();
+        super(CONTEXT_NAME, savedContext, config);
 
-    }
-
-    @Override
-    protected void saveToJson(JsonValue savedContext, PersistenceConfig config)
-            throws ResourceException {
-        super.saveToJson(savedContext, config);
-        savedContext.put(ATTR_NAME, name);
-        savedContext.put(ATTR_TYPE, type);
-        savedContext.put(ATTR_REVISION, revision);
     }
 }
