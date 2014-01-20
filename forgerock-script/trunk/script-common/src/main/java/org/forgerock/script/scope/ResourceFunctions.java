@@ -659,8 +659,14 @@ public final class ResourceFunctions {
                         JsonValue additionalParam = params.get(name);
                         if (additionalParam.isString()) {
                             qr.setAdditionalQueryParameter(name, additionalParam.asString());
+                        } else if (additionalParam.isNumber()) {
+                            qr.setAdditionalQueryParameter(name, additionalParam.asNumber().toString());
+                        } else if (additionalParam.isBoolean()) {
+                            qr.setAdditionalQueryParameter(name, additionalParam.asBoolean().toString());
                         } else {
-                            // TODO log
+                            throw new BadRequestException("The value '" + additionalParam.toString()
+                                    + "' for parameter '" + name
+                                    + "' could not be represented as a string");
                         }
                     }
                 }
