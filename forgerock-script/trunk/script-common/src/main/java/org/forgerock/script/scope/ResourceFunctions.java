@@ -596,7 +596,7 @@ public final class ResourceFunctions {
                 final Collection<Object> results, final Function<?> callback)
                 throws ResourceException {
             if (params.isDefined("_queryId") ^ params.isDefined("_queryExpression")
-                    ^ params.isDefined("_filter")) {
+                    ^ params.isDefined("_queryFilter")) {
 
                 QueryRequest qr = Requests.newQueryRequest(resourceContainer);
                 // add fieldFilter
@@ -645,7 +645,7 @@ public final class ResourceFunctions {
                         qr.setPagedResultsOffset(params.get(name).required().asInteger());
                     } else if (name.equalsIgnoreCase("_pageSize")) {
                         qr.setPageSize(params.get(name).required().asInteger());
-                    } else if (name.equalsIgnoreCase("_filter")) {
+                    } else if (name.equalsIgnoreCase("_queryFilter")) {
                         final String s = params.get(name).required().asString();
                         try {
                             qr.setQueryFilter(QueryFilter.valueOf(s));
@@ -742,7 +742,8 @@ public final class ResourceFunctions {
                 }
 
             } else {
-                throw new BadRequestException("XOR [_queryId, _queryExpression, _filter] is false");
+                throw new BadRequestException(
+                        "Only one of [_queryId, _queryExpression, _queryFilter] is supported; multiple detected");
             }
         }
     }
