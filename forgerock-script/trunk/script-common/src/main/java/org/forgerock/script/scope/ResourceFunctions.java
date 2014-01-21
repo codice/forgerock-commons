@@ -664,7 +664,7 @@ public final class ResourceFunctions {
                         } else if (additionalParam.isBoolean()) {
                             qr.setAdditionalQueryParameter(name, additionalParam.asBoolean().toString());
                         } else {
-                            throw new BadRequestException("The value '" + additionalParam.toString()
+                            throw new BadRequestException("The value '" + String.valueOf(additionalParam.getObject())
                                     + "' for parameter '" + name
                                     + "' could not be represented as a string");
                         }
