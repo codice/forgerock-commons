@@ -112,7 +112,7 @@
         </siteDistributionURL>
 
         <!-- Commons forgerock-rest versions -->
-        <commons.forgerock-rest.version>2.1.0-SNAPSHOT</commons.forgerock-rest.version>
+        <commons.forgerock-rest.version>2.2.0-SNAPSHOT</commons.forgerock-rest.version>
 
         <!--<commons.script.osgi.import.default.version>-->
         <!--[$(version;==;$(@)),$(version;+;$(@)))-->
