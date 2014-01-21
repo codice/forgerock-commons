@@ -87,7 +87,7 @@ var queryParams1 = {
     "_queryId": "query-all-ids"
 }
 var queryParams2 = {
-    "_filter": "nickName eq \"Babs\""
+    "_queryFilter": "nickName eq \"Babs\""
 }
 
 try {
