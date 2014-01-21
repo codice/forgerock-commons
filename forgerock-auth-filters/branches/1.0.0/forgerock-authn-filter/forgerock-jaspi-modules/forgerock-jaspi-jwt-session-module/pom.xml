@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.forgerock.commons</groupId>
         <artifactId>forgerock-jaspi-modules</artifactId>
-        <version>1.0.6</version>
+        <version>1.0.6-SNAPSHOT</version>
     </parent>
 
     <artifactId>forgerock-jaspi-jwt-session-module</artifactId>
