@@ -24,6 +24,7 @@
 
 package org.forgerock.script.javascript;
 
+import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.Context;
 import org.forgerock.json.resource.ContextName;
 import org.forgerock.script.scope.Parameter;
@@ -32,6 +33,9 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Wrapper;
 import org.mozilla.javascript.annotations.JSFunction;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Provides a {@code Scriptable} wrapper for an abstract {@code Context} object.
  */
@@ -39,13 +43,13 @@ class ScriptableContext extends NativeObject implements Wrapper {
 
     private static final long serialVersionUID = 1L;
 
-    /** The context being wrapped. */
+    private static final String CURRENT = "current";
+    private static final String PARENT = "parent";
+
     final transient Parameter parameter;
 
-    /** The context being wrapped. */
-    private final Context context;
-
-    public ScriptableContext() { parameter = null; context = null; }
+    /** map of contexts exposed by this wrapper by context name */
+    private Map<String,Context> contexts;
 
     /**
      * Constructs a new scriptable wrapper around the specified context.
@@ -58,14 +62,21 @@ class ScriptableContext extends NativeObject implements Wrapper {
     public ScriptableContext(final Parameter parameter, final Context context) {
         if (null == context) {
             throw new NullPointerException();
+        } this.parameter = parameter;
+        contexts = new HashMap<String, Context>();
+        contexts.put(CURRENT, context);
+        if (context.getParent() != null) {
+            contexts.put(PARENT, context.getParent());
         }
-        this.parameter = parameter;
-        this.context = context;
+        for (Context aContext = context; aContext != null; aContext = aContext.getParent()) {
+            if (!contexts.containsKey(aContext.getContextName().toString())) {
+                contexts.put(aContext.getContextName().toString(), aContext);
+            }
+        }
     }
 
     Context getWrappedContext() {
-        //return contexts.get("current");
-        return context;
+        return contexts.get(CURRENT);
     }
 
     @JSFunction
@@ -75,7 +86,7 @@ class ScriptableContext extends NativeObject implements Wrapper {
 
     @JSFunction
     public Object asContext(Class clazz, Scriptable start) {
-        return Converter.wrap(parameter, getWrappedContext().asContext(clazz), start, false);
+        return Converter.wrap(parameter, getWrappedContext().asContext(clazz).toJsonValue(), start, false);
     }
 
     @JSFunction
@@ -85,7 +96,7 @@ class ScriptableContext extends NativeObject implements Wrapper {
 
     @JSFunction
     public Object getContext(String contextName, Scriptable start) {
-        return Converter.wrap(parameter, getWrappedContext().getContext(ContextName.valueOf(contextName)), start, false);
+        return Converter.wrap(parameter, getWrappedContext().getContext(ContextName.valueOf(contextName)).toJsonValue(), start, false);
     }
 
     @JSFunction
@@ -96,29 +107,26 @@ class ScriptableContext extends NativeObject implements Wrapper {
     @Override
     @SuppressWarnings("unchecked")
     public Object get(String name, Scriptable start) {
-        return getWrappedContext().toJsonValue().isMap()
-                ? Converter.wrap(parameter, context.toJsonValue().get(name), start, false)
-                : NOT_FOUND;
+        if (contexts.containsKey(name)) {
+            return Converter.wrap(parameter, contexts.get(name).toJsonValue(), start, false);
+        } else {
+            return NOT_FOUND;
+        }
     }
 
     @Override
     public Object get(int index, Scriptable start) {
-        return getWrappedContext().toJsonValue().isList()
-                ? Converter.wrap(parameter, context.toJsonValue().get(index), start, false)
-                : NOT_FOUND;
+        return NOT_FOUND;
     }
 
     @Override
     public boolean has(String name, Scriptable start) {
-        return getWrappedContext().toJsonValue().isMap()
-                && !getWrappedContext().toJsonValue().get(name).isNull();
+        return contexts.containsKey(name);
     }
 
     @Override
     public boolean has(int index, Scriptable start) {
-        return getWrappedContext().toJsonValue().isList()
-                && index < getWrappedContext().toJsonValue().size()
-                && getWrappedContext().toJsonValue().get(index).isNull();
+        return false;
     }
 
     @Override
@@ -139,7 +147,7 @@ class ScriptableContext extends NativeObject implements Wrapper {
 
     @Override
     public Object[] getIds() {
-        return context.toJsonValue().keys().toArray();
+        return contexts.keySet().toArray();
     }
 
     @Override
@@ -153,6 +161,6 @@ class ScriptableContext extends NativeObject implements Wrapper {
     }
 
     public String toString() {
-        return getWrappedContext() == null ? "null" : getWrappedContext().toJsonValue().toString();
+        return new JsonValue(contexts).toString();
     }
 }
