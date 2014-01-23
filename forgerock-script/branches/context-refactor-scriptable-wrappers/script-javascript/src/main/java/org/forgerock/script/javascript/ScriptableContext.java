@@ -25,6 +25,7 @@
 package org.forgerock.script.javascript;
 
 import org.forgerock.json.resource.Context;
+import org.forgerock.json.resource.ContextName;
 import org.forgerock.script.scope.Parameter;
 import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
@@ -79,12 +80,12 @@ class ScriptableContext extends NativeObject implements Wrapper {
 
     @JSFunction
     public boolean containsContext(String contextName, Scriptable start) {
-        return getWrappedContext().containsContext(contextName);
+        return getWrappedContext().containsContext(ContextName.valueOf(contextName));
     }
 
     @JSFunction
     public Object getContext(String contextName, Scriptable start) {
-        return Converter.wrap(parameter, getWrappedContext().getContext(contextName), start, false);
+        return Converter.wrap(parameter, getWrappedContext().getContext(ContextName.valueOf(contextName)), start, false);
     }
 
     @JSFunction
