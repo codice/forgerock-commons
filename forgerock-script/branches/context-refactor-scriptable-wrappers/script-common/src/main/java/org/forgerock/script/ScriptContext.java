@@ -46,14 +46,24 @@ public class ScriptContext extends AbstractContext {
     public static final String ATTR_REVISION = "revision";
 
     public ScriptContext(Context parent, String name, String type, String revision) {
-        super(CONTEXT_NAME, parent);
+        super(parent);
         data.put(ATTR_NAME, name);
         data.put(ATTR_TYPE, type);
         data.put(ATTR_REVISION, revision);
     }
 
     public ScriptContext(JsonValue savedContext, PersistenceConfig config) throws ResourceException {
-        super(CONTEXT_NAME, savedContext, config);
+        super(savedContext, config);
 
     }
+
+    /**
+     * Get this Context's {@link ContextName}.
+     *
+     * @return this object's ContextName
+     */
+    public ContextName getContextName() {
+        return CONTEXT_NAME;
+    }
+
 }
