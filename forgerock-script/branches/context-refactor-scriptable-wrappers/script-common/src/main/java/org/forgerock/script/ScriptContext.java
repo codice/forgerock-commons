@@ -65,5 +65,4 @@ public class ScriptContext extends AbstractContext {
     public ContextName getContextName() {
         return CONTEXT_NAME;
     }
-
 }

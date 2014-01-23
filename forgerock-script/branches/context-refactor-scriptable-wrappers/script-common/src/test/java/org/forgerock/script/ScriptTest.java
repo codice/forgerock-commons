@@ -215,10 +215,7 @@ public abstract class ScriptTest {
         updateContent.put("profileUrl", "https://login.example.com/bjensen");
 
         final Context context = new ApiInfoContext(new SecurityContext(new RootContext(), "bjensen@example.com", null), "", "");
-        script.put("context", new HashMap<String, Object>() {{
-            put("current", context);
-            put("security", context.asContext(SecurityContext.class));
-        }});
+        script.put("context", context);
 
         CreateRequest createRequest = Requests.newCreateRequest("/Users", "701984", createContent);
         script.put("createRequest", createRequest);
