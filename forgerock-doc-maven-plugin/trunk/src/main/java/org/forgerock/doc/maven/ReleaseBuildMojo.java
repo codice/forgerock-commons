@@ -8,7 +8,7 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2012-2013 ForgeRock AS
+ *     Copyright 2012-2014 ForgeRock AS
  *
  */
 
@@ -119,6 +119,13 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
     private boolean buildReleaseZip;
 
     /**
+     * Whether to keep a custom index.html file for the documentation set.
+     *
+     * @parameter default-value="false" property="keepCustomIndexHtml"
+     */
+    private boolean keepCustomIndexHtml;
+
+    /**
      * Whether to build a .zip containing the release content.
      *
      * @return true if the .zip should be built.
@@ -140,11 +147,15 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
         String releaseDocDirectory = getReleaseDirectory().getPath()
                 + File.separator + getReleaseVersion();
 
-        getLog().info("Adding index.html file...");
-        try {
-            addIndexHtml(releaseDocDirectory);
-        } catch (IOException e) {
-            throw new MojoExecutionException("Failed to copy index.html.", e);
+        if (!keepCustomIndexHtml) {
+            getLog().info("Adding index.html file...");
+            try {
+                addIndexHtml(releaseDocDirectory);
+            } catch (IOException e) {
+                throw new MojoExecutionException("Failed to copy index.html.", e);
+            }
+        } else {
+            getLog().info("Keeping custom index.html file...");
         }
 
         getLog().info("Renaming .pdfs...");
