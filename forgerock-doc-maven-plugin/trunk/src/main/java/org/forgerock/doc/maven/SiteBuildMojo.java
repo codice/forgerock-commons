@@ -78,13 +78,15 @@ public class SiteBuildMojo extends AbstractBuildMojo {
 
         getLog().info("Add redirect to docs.html under layout directory...");
         try {
-            String redirect = IOUtils.toString(
-                    getClass().getResourceAsStream("/index.html"), "UTF-8");
-            redirect = redirect.replaceAll("PROJECT", getProjectName())
-                    .replaceAll("LOWERCASE", getProjectName().toLowerCase());
             File file = new File(getSiteDirectory().getPath() + File.separator
                     + "doc" + File.separator + "index.html");
-            FileUtils.write(file, redirect, "UTF-8");
+            if (!file.exists()) {
+                String redirect = IOUtils.toString(
+                        getClass().getResourceAsStream("/index.html"), "UTF-8");
+                redirect = redirect.replaceAll("PROJECT", getProjectName())
+                        .replaceAll("LOWERCASE", getProjectName().toLowerCase());
+                FileUtils.write(file, redirect, "UTF-8");
+            }
         } catch (IOException e) {
             throw new MojoExecutionException("Failed to copy redirect file: "
                     + e.getMessage());

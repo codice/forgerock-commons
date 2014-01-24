@@ -17,8 +17,10 @@ fixes.
 
 ## Bugs Fixed
 
-TODO
+**DOCS-129: Doc build plugin should not overwrite site/doc/index.html**
 
+If you want to keep a custom `index.html` file for your documentation set,
+then set `-DkeepCustomIndexHtml=true` for the `release` goal configuration.
 
 ## Known Issues
 
