@@ -31,7 +31,7 @@
     </parent>
     <groupId>org.forgerock.commons</groupId>
     <artifactId>forgerock-script</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>ForgeRock Script Parent</name>
     <description>The Script libraries supports a common implementation of various scripting languages to use the JSON
@@ -60,9 +60,9 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-script/tags/1.0.0</connection>
-        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-script/tags/1.0.0</developerConnection>
-        <url>http://sources.forgerock.org/browse/commons/forgerock-script/tags/1.0.0</url>
+        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-script/trunk</connection>
+        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-script/trunk</developerConnection>
+        <url>http://sources.forgerock.org/browse/commons/forgerock-script/trunk</url>
     </scm>
     <distributionManagement>
         <site>
