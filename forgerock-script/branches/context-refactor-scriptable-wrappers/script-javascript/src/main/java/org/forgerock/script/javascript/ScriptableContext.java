@@ -26,7 +26,6 @@ package org.forgerock.script.javascript;
 
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.Context;
-import org.forgerock.json.resource.ContextName;
 import org.forgerock.json.resource.servlet.HttpContext;
 import org.forgerock.script.scope.Parameter;
 import org.mozilla.javascript.NativeObject;
@@ -71,8 +70,8 @@ class ScriptableContext extends NativeObject implements Wrapper {
             contexts.put(PARENT, context.getParent());
         }
         for (Context aContext = context; aContext != null; aContext = aContext.getParent()) {
-            if (!contexts.containsKey(aContext.getContextName().toString())) {
-                contexts.put(aContext.getContextName().toString(), aContext);
+            if (!contexts.containsKey(aContext.getContextName())) {
+                contexts.put(aContext.getContextName(), aContext);
             }
         }
     }
@@ -93,12 +92,12 @@ class ScriptableContext extends NativeObject implements Wrapper {
 
     @JSFunction
     public boolean containsContext(String contextName, Scriptable start) {
-        return getWrappedContext().containsContext(ContextName.valueOf(contextName));
+        return getWrappedContext().containsContext(contextName);
     }
 
     @JSFunction
     public Object getContext(String contextName, Scriptable start) {
-        return Converter.wrap(parameter, getWrappedContext().getContext(ContextName.valueOf(contextName)).toJsonValue(), start, false);
+        return Converter.wrap(parameter, getWrappedContext().getContext(contextName).toJsonValue(), start, false);
     }
 
     @JSFunction
@@ -110,7 +109,7 @@ class ScriptableContext extends NativeObject implements Wrapper {
     @SuppressWarnings("unchecked")
     public Object get(String name, Scriptable start) {
         if (contexts.containsKey(name)) {
-            if (HttpContext.CONTEXT_NAME.toString().equals(name)) {
+            if (HttpContext.CONTEXT_NAME.equals(name)) {
                 final JsonValue value = contexts.get(name).toJsonValue();
                 // Join all header/parameter values for the same header/parameter into comma-separated-value String
                 value.put(HttpContext.ATTR_HEADERS, listValuesAsStrings(value.get(HttpContext.ATTR_HEADERS)));

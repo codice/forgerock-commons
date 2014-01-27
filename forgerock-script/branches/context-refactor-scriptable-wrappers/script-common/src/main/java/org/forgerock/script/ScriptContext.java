@@ -27,7 +27,6 @@ package org.forgerock.script;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.AbstractContext;
 import org.forgerock.json.resource.Context;
-import org.forgerock.json.resource.ContextName;
 import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.json.resource.ResourceException;
 
@@ -39,7 +38,7 @@ import org.forgerock.json.resource.ResourceException;
 public class ScriptContext extends AbstractContext {
 
     /** the friendly name for this context */
-    private static final ContextName CONTEXT_NAME = ContextName.valueOf("script");
+    private static final String CONTEXT_NAME = "script";
 
     public static final String ATTR_TYPE = "type";
     public static final String ATTR_NAME = "name";
@@ -58,11 +57,11 @@ public class ScriptContext extends AbstractContext {
     }
 
     /**
-     * Get this Context's {@link ContextName}.
+     * Get this Context's name.
      *
-     * @return this object's ContextName
+     * @return this object's name
      */
-    public ContextName getContextName() {
+    public String getContextName() {
         return CONTEXT_NAME;
     }
 }
