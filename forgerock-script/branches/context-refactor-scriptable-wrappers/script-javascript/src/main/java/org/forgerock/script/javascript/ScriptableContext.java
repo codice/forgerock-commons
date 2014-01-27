@@ -27,6 +27,7 @@ package org.forgerock.script.javascript;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.Context;
 import org.forgerock.json.resource.ContextName;
+import org.forgerock.json.resource.servlet.HttpContext;
 import org.forgerock.script.scope.Parameter;
 import org.mozilla.javascript.NativeObject;
 import org.mozilla.javascript.Scriptable;
@@ -34,6 +35,7 @@ import org.mozilla.javascript.Wrapper;
 import org.mozilla.javascript.annotations.JSFunction;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -108,10 +110,31 @@ class ScriptableContext extends NativeObject implements Wrapper {
     @SuppressWarnings("unchecked")
     public Object get(String name, Scriptable start) {
         if (contexts.containsKey(name)) {
-            return Converter.wrap(parameter, contexts.get(name).toJsonValue(), start, false);
+            if (HttpContext.CONTEXT_NAME.toString().equals(name)) {
+                final JsonValue value = contexts.get(name).toJsonValue();
+                // Join all header/parameter values for the same header/parameter into comma-separated-value String
+                value.put(HttpContext.ATTR_HEADERS, listValuesAsStrings(value.get(HttpContext.ATTR_HEADERS)));
+                value.put(HttpContext.ATTR_PARAMETERS, listValuesAsStrings(value.get(HttpContext.ATTR_PARAMETERS)));
+                return Converter.wrap(parameter, value, start, false);
+            } else {
+                return Converter.wrap(parameter, contexts.get(name).toJsonValue(), start, false);
+            }
         } else {
             return NOT_FOUND;
         }
+    }
+
+    private Map<String, Object> listValuesAsStrings(JsonValue values) {
+        final Map<String, Object> map = new LinkedHashMap<String, Object>();
+        for (final String key : values.keys()) {
+            final StringBuilder sb = new StringBuilder();
+            for (final Object value : values.get(key).asList()) {
+                sb.append(value.toString());
+                sb.append(",");
+            }
+            map.put(key, sb.substring(0, sb.length() - 1));
+        }
+        return map;
     }
 
     @Override
