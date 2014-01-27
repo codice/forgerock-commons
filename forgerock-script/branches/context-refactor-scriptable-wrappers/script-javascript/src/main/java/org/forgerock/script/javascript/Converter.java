@@ -38,7 +38,6 @@ import org.forgerock.json.resource.QueryRequest;
 import org.forgerock.json.resource.ReadRequest;
 import org.forgerock.json.resource.Request;
 import org.forgerock.json.resource.UpdateRequest;
-import org.forgerock.json.resource.servlet.HttpContext;
 import org.forgerock.script.scope.AbstractFactory;
 import org.forgerock.script.scope.Function;
 import org.forgerock.script.scope.Parameter;
@@ -201,13 +200,7 @@ class Converter {
     }
 
     public static final Object wrap(final Parameter parameter, final org.forgerock.json.resource.Context value, final Scriptable scope) {
-        ScriptableContext result = null;
-        if (value instanceof HttpContext) {
-            // special handling of HttpContext
-            result = new ScriptableHttpContext(parameter, value);
-        } else {
-            result = new ScriptableContext(parameter, value);
-        }
+        ScriptableContext result = new ScriptableContext(parameter, value);
         ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
         return result;
     }
