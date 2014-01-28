@@ -25,6 +25,7 @@
 package org.forgerock.script.javascript;
 
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.resource.ClientContext;
 import org.forgerock.json.resource.Context;
 import org.forgerock.json.resource.servlet.HttpContext;
 import org.forgerock.script.scope.Parameter;
@@ -34,8 +35,10 @@ import org.mozilla.javascript.Wrapper;
 import org.mozilla.javascript.annotations.JSFunction;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Provides a {@code Scriptable} wrapper for an abstract {@code Context} object.
@@ -44,6 +47,7 @@ class ScriptableContext extends NativeObject implements Wrapper {
 
     private static final long serialVersionUID = 1L;
 
+    private static final String CALLER = "caller";
     private static final String CURRENT = "current";
     private static final String PARENT = "parent";
 
@@ -51,6 +55,9 @@ class ScriptableContext extends NativeObject implements Wrapper {
 
     /** map of contexts exposed by this wrapper by context name */
     private Map<String,Context> contexts;
+
+    /** set of keys that this context wrapper "responds to */
+    private Set<String> ids;
 
     /**
      * Constructs a new scriptable wrapper around the specified context.
@@ -74,6 +81,9 @@ class ScriptableContext extends NativeObject implements Wrapper {
                 contexts.put(aContext.getContextName(), aContext);
             }
         }
+        // respond to all context names and "caller"
+        ids = new HashSet<String>(contexts.keySet());
+        ids.add(CALLER);
     }
 
     Context getWrappedContext() {
@@ -108,7 +118,13 @@ class ScriptableContext extends NativeObject implements Wrapper {
     @Override
     @SuppressWarnings("unchecked")
     public Object get(String name, Scriptable start) {
-        if (contexts.containsKey(name)) {
+        if (CALLER.equals(name)) {
+            return Converter.wrap(parameter,
+                    getWrappedContext().containsContext(ClientContext.class)
+                            ? getWrappedContext().asContext(ClientContext.class).getProtocol()
+                            : "none",
+                    start, false);
+        } else if (contexts.containsKey(name)) {
             if (HttpContext.CONTEXT_NAME.equals(name)) {
                 final JsonValue value = contexts.get(name).toJsonValue();
                 // Join all header/parameter values for the same header/parameter into comma-separated-value String
@@ -143,7 +159,7 @@ class ScriptableContext extends NativeObject implements Wrapper {
 
     @Override
     public boolean has(String name, Scriptable start) {
-        return contexts.containsKey(name);
+        return ids.contains(name);
     }
 
     @Override
@@ -169,7 +185,7 @@ class ScriptableContext extends NativeObject implements Wrapper {
 
     @Override
     public Object[] getIds() {
-        return contexts.keySet().toArray();
+        return ids.toArray();
     }
 
     @Override
