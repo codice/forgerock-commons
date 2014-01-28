@@ -27,11 +27,11 @@
     <parent>
         <groupId>org.forgerock</groupId>
         <artifactId>forgerock-parent</artifactId>
-        <version>1.2.0</version>
+        <version>1.2.1</version>
     </parent>
     <groupId>org.forgerock.commons</groupId>
     <artifactId>forgerock-script</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>ForgeRock Script Parent</name>
     <description>The Script libraries supports a common implementation of various scripting languages to use the JSON
@@ -111,7 +111,7 @@
         </siteDistributionURL>
 
         <!-- Commons forgerock-rest versions -->
-        <commons.forgerock-rest.version>2.1.0-SNAPSHOT</commons.forgerock-rest.version>
+        <commons.forgerock-rest.version>2.1.0</commons.forgerock-rest.version>
 
         <!--<commons.script.osgi.import.default.version>-->
         <!--[$(version;==;$(@)),$(version;+;$(@)))-->
@@ -158,12 +158,6 @@
                 <optional>true</optional>
             </dependency>
 
-            <dependency>
-                <groupId>org.forgerock.commons</groupId>
-                <artifactId>i18n-slf4j</artifactId>
-                <version>1.4.1-SNAPSHOT</version>
-            </dependency>
-
             <!-- SLF4J -->
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -202,24 +196,6 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.forgerock.commons</groupId>
-                    <artifactId>i18n-maven-plugin</artifactId>
-                    <version>1.4.1-SNAPSHOT</version>
-                    <executions>
-                        <execution>
-                            <phase>generate-sources</phase>
-                            <goals>
-                                <goal>generate-messages</goal>
-                            </goals>
-                            <!--<configuration>
-                                <messageFiles>
-                                    <messageFile>com/example/my_tool.properties</messageFile>
-                                </messageFiles>
-                            </configuration>-->
-                        </execution>
-                    </executions>
-                </plugin>
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
