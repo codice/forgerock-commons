@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.CreateRequest;
@@ -108,6 +109,8 @@ class Converter {
             return wrap(parameter, (Function) value, scope, doCopy);
         } else if (value instanceof JsonValue) {
             return wrap(parameter, (JsonValue) value, scope, doCopy);
+        } else if (value instanceof JsonPointer) {
+            return wrap(parameter, value.toString(), scope, doCopy);
         } else if (value instanceof Request) {
             return wrap(parameter, (Request) value, scope);
         } else if (value instanceof org.forgerock.json.resource.Context) {
