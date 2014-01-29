@@ -24,10 +24,14 @@
 
 package org.forgerock.script.javascript;
 
+import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.resource.PatchOperation;
 import org.forgerock.json.resource.PatchRequest;
 import org.forgerock.script.scope.Parameter;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Wrapper;
+
+import java.util.ArrayList;
 
 /**
  * Provides a {@code Scriptable} wrapper for a {@code PatchRequest} object.
@@ -62,7 +66,11 @@ class ScriptablePatchRequest extends AbstractScriptableRequest implements Wrappe
     @SuppressWarnings("unchecked")
     public Object get(String name, Scriptable start) {
         if (PatchRequest.FIELD_PATCH_OPERATIONS.equals(name)) {
-            return Converter.wrap(parameter, request.getPatchOperations(), start, false);
+            final JsonValue value = new JsonValue(new ArrayList<Object>());
+            for (final PatchOperation operation : request.getPatchOperations()) {
+                value.add(operation.toJsonValue().getObject());
+            }
+            return Converter.wrap(parameter, value, start, false);
         } else if (PatchRequest.FIELD_REVISION.equals(name)) {
             return Converter.wrap(parameter, request.getRevision(), start, false);
         } else {
