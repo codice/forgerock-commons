@@ -24,6 +24,7 @@
 
 package org.forgerock.script.javascript;
 
+import org.forgerock.json.resource.CreateRequest;
 import org.forgerock.json.resource.UpdateRequest;
 import org.forgerock.script.scope.Parameter;
 import org.mozilla.javascript.Scriptable;
@@ -61,7 +62,8 @@ class ScriptableUpdateRequest extends AbstractScriptableRequest implements Wrapp
     @Override
     @SuppressWarnings("unchecked")
     public Object get(String name, Scriptable start) {
-        if (UpdateRequest.FIELD_NEW_CONTENT.equals(name)) {
+        if (CreateRequest.FIELD_CONTENT.equals(name)) {
+            // map newContent to content for consistency!
             return Converter.wrap(parameter, request.getNewContent(), start, false);
         } else if (UpdateRequest.FIELD_REVISION.equals(name)) {
             return Converter.wrap(parameter, request.getRevision(), start, false);
@@ -72,7 +74,7 @@ class ScriptableUpdateRequest extends AbstractScriptableRequest implements Wrapp
 
     @Override
     public boolean has(String name, Scriptable start) {
-        return UpdateRequest.FIELD_NEW_CONTENT.equals(name)
+        return CreateRequest.FIELD_CONTENT.equals(name) // map newContent to content for consistency!
                 || UpdateRequest.FIELD_REVISION.equals(name)
                 || super.has(name, start);
     }
@@ -88,7 +90,7 @@ class ScriptableUpdateRequest extends AbstractScriptableRequest implements Wrapp
 
     /** concatenate the UpdateRequest properties with the generic request properties */
     private static Object[] PROPERTIES = concatIds(
-            UpdateRequest.FIELD_NEW_CONTENT,
+            CreateRequest.FIELD_CONTENT, // map newContent to content for consistency!
             UpdateRequest.FIELD_REVISION);
 
     @Override
