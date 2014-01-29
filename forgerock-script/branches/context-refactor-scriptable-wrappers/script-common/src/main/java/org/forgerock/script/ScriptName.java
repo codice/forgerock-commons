@@ -32,8 +32,6 @@ package org.forgerock.script;
  * @author Laszlo Hordos
  */
 public final class ScriptName {
-    public static final String REQUEST_BINDING_2_1 = "OPENIDM-2.1";
-
     private final String name;
     private final String type;
     private final String revision;
@@ -50,9 +48,6 @@ public final class ScriptName {
     public ScriptName(String name, String type, String revision, String requestBinding) {
         if (null == name || null == type || name.trim().isEmpty() || type.trim().isEmpty()) {
             throw new IllegalArgumentException("Required name and type");
-        }
-        if (null != requestBinding && !REQUEST_BINDING_2_1.equals(requestBinding)) {
-            throw new IllegalArgumentException("Only request binding " + REQUEST_BINDING_2_1 + " is supported");
         }
         this.name = name;
         this.type = type;
@@ -74,10 +69,6 @@ public final class ScriptName {
 
     public String getRequestBinding() {
         return requestBinding;
-    }
-
-    public boolean isOpenIDM21RequestBinding() {
-        return REQUEST_BINDING_2_1.equals(requestBinding);
     }
 
     @Override
