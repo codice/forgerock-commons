@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012-2013 ForgeRock AS. All Rights Reserved
+ * Copyright (c) 2012-2014 ForgeRock AS. All Rights Reserved
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -161,7 +161,7 @@ public final class ResourceFunctions {
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<Resource> future =
-                    serverContext.getConnection().createAsync(serverContext, cr,
+                    scope.getConnection().createAsync(serverContext, cr,
                             this.<Resource> getResultHandler(scope, callback));
             try {
                 return future.get();
@@ -257,7 +257,7 @@ public final class ResourceFunctions {
 
             final ServerContext serverContext = parameter.getServerContext(context);
             final FutureResult<Resource> future =
-                    serverContext.getConnection().readAsync(serverContext, rr,
+                    parameter.getConnection().readAsync(serverContext, rr,
                             this.<Resource> getResultHandler(parameter, callback));
             try {
                 return future.get();
@@ -370,7 +370,7 @@ public final class ResourceFunctions {
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<Resource> future =
-                    serverContext.getConnection().updateAsync(serverContext, ur,
+                    scope.getConnection().updateAsync(serverContext, ur,
                             this.<Resource> getResultHandler(scope, callback));
             try {
                 return future.get();
@@ -484,7 +484,7 @@ public final class ResourceFunctions {
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<Resource> future =
-                    serverContext.getConnection().patchAsync(serverContext, pr,
+                    scope.getConnection().patchAsync(serverContext, pr,
                             this.<Resource> getResultHandler(scope, callback));
             try {
                 return future.get();
@@ -673,7 +673,7 @@ public final class ResourceFunctions {
 
                 final ServerContext serverContext = scope.getServerContext(context);
                 final FutureResult<QueryResult> future =
-                        serverContext.getConnection().queryAsync(serverContext, qr,
+                        scope.getConnection().queryAsync(serverContext, qr,
                                 new QueryResultHandler() {
                                     @Override
                                     public void handleError(final ResourceException error) {
@@ -835,7 +835,7 @@ public final class ResourceFunctions {
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<Resource> future =
-                    serverContext.getConnection().deleteAsync(serverContext, dr,
+                    scope.getConnection().deleteAsync(serverContext, dr,
                             this.<Resource> getResultHandler(scope, callback));
             try {
                 return future.get();
@@ -976,7 +976,7 @@ public final class ResourceFunctions {
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<JsonValue> future =
-                    serverContext.getConnection().actionAsync(serverContext, ar,
+                    scope.getConnection().actionAsync(serverContext, ar,
                             this.<JsonValue> getResultHandler(scope, callback));
             try {
                 return future.get();

@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2014 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -29,6 +29,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.forgerock.json.fluent.JsonPointer;
+import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.json.resource.ActionRequest;
+import org.forgerock.json.resource.CreateRequest;
+import org.forgerock.json.resource.DeleteRequest;
+import org.forgerock.json.resource.PatchRequest;
+import org.forgerock.json.resource.QueryRequest;
+import org.forgerock.json.resource.ReadRequest;
+import org.forgerock.json.resource.Request;
+import org.forgerock.json.resource.UpdateRequest;
 import org.forgerock.script.scope.AbstractFactory;
 import org.forgerock.script.scope.Function;
 import org.forgerock.script.scope.Parameter;
@@ -40,22 +50,11 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.TopLevel;
 import org.mozilla.javascript.Wrapper;
 
+
 /**
  * Converts scriptable types provided by Rhino into standard Java objects.
- *
- * @author Paul C. Bryan
  */
 class Converter {
-
-    private static final long LONG_HIGH_BITS = 0xFFFFFFFF80000000L;
-
-    private int longToInteger(Long number, Integer defaultTo) {
-        if ((number & LONG_HIGH_BITS) == 0 || (number & LONG_HIGH_BITS) == LONG_HIGH_BITS) {
-            return number.intValue();
-        } else {
-            return defaultTo;
-        }
-    }
 
     /**
      * Returns {@code true} if the specified number can be converted to an
@@ -103,32 +102,110 @@ class Converter {
         if (value == null) {
             return null;
         } else if (value instanceof Map) {
-            if (doCopy) {
-                ScriptableMap result = new ScriptableMap(getMap(parameter, (Map) value));
-                ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
-                return result;
-            } else {
-                ScriptableMap result = new ScriptableMap(parameter, (Map) value);
-                ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
-                return result;
-            }
+            return wrap(parameter, (Map) value, scope, doCopy);
         } else if (value instanceof List) {
-            if (doCopy) {
-                ScriptableList result = new ScriptableList(getList(parameter, (List) value));
-                ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Array);
-                return result;
-            } else {
-                ScriptableList result = new ScriptableList(parameter, (List) value);
-                ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Array);
-                return result;
-            }
+            return wrap(parameter, (List) value, scope, doCopy);
         } else if (value instanceof Function) {
-            ScriptableFunction result = new ScriptableFunction(parameter, (Function) value);
-            ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Function);
-            return result;
+            return wrap(parameter, (Function) value, scope, doCopy);
+        } else if (value instanceof JsonValue) {
+            return wrap(parameter, (JsonValue) value, scope, doCopy);
+        } else if (value instanceof JsonPointer) {
+            return wrap(parameter, value.toString(), scope, doCopy);
+        } else if (value instanceof Request) {
+            return wrap(parameter, (Request) value, scope);
+        } else if (value instanceof org.forgerock.json.resource.Context) {
+           return wrap(parameter, (org.forgerock.json.resource.Context) value, scope);
         } else {
             return Context.javaToJS(value, scope);
         }
+    }
+
+    public static final Object wrap(final Parameter parameter, final Map value, final Scriptable scope, boolean doCopy) {
+        if (doCopy) {
+            ScriptableMap result = new ScriptableMap(getMap(parameter, (Map) value));
+            ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
+            return result;
+        } else {
+            ScriptableMap result = new ScriptableMap(parameter, (Map) value);
+            ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
+            return result;
+        }
+    }
+
+    public static final Object wrap(final Parameter parameter, final List value, final Scriptable scope, boolean doCopy) {
+        if (doCopy) {
+            ScriptableList result = new ScriptableList(getList(parameter, (List) value));
+            ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Array);
+            return result;
+        } else {
+            ScriptableList result = new ScriptableList(parameter, (List) value);
+            ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Array);
+            return result;
+        }
+    }
+
+    public static final Object wrap(final Parameter parameter, final Function value, final Scriptable scope, boolean doCopy) {
+        ScriptableFunction result = new ScriptableFunction(parameter, (Function) value);
+        ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Function);
+        return result;
+    }
+
+    public static final Object wrap(final Parameter parameter, final JsonValue value, final Scriptable scope, boolean doCopy) {
+        // wrap JsonValues as either the wrapped Map, the wrapped List, or the wrapped primitive
+        if (value.isMap()) {
+            return wrap(parameter, value.asMap(), scope, doCopy);
+        } else if (value.isList()) {
+            return wrap(parameter, value.asList(), scope, doCopy);
+        } else {
+            return wrap(parameter, value.getObject(), scope, doCopy);
+        }
+    }
+
+    public static final Object wrap(final Parameter parameter, final Request value, final Scriptable scope) {
+        if (value instanceof CreateRequest) {
+            ScriptableCreateRequest result = new ScriptableCreateRequest(parameter, (CreateRequest) value);
+            ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
+            return result;
+        }
+        else if (value instanceof DeleteRequest) {
+            ScriptableDeleteRequest result = new ScriptableDeleteRequest(parameter, (DeleteRequest) value);
+            ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
+            return result;
+        }
+        else if (value instanceof PatchRequest) {
+            ScriptablePatchRequest result = new ScriptablePatchRequest(parameter, (PatchRequest) value);
+            ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
+            return result;
+        }
+        else if (value instanceof QueryRequest) {
+            ScriptableQueryRequest result = new ScriptableQueryRequest(parameter, (QueryRequest) value);
+            ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
+            return result;
+        }
+        else if (value instanceof ReadRequest) {
+            ScriptableReadRequest result = new ScriptableReadRequest(parameter, (ReadRequest) value);
+            ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
+            return result;
+        }
+        else if (value instanceof UpdateRequest) {
+            ScriptableUpdateRequest result = new ScriptableUpdateRequest(parameter, (UpdateRequest) value);
+            ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
+            return result;
+        }
+        else if (value instanceof ActionRequest) {
+            ScriptableActionRequest result = new ScriptableActionRequest(parameter, (ActionRequest) value);
+            ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
+            return result;
+        } else {
+            // we shouldn't get here...
+            return Context.javaToJS(value, scope);
+        }
+    }
+
+    public static final Object wrap(final Parameter parameter, final org.forgerock.json.resource.Context value, final Scriptable scope) {
+        ScriptableContext result = new ScriptableContext(parameter, value);
+        ScriptRuntime.setBuiltinProtoAndParent(result, scope, TopLevel.Builtins.Object);
+        return result;
     }
 
     /**
@@ -186,7 +263,7 @@ class Converter {
                 || value instanceof Map || value instanceof List) {
             result = value; // already valid JSON element
         } else if (value instanceof CharSequence) {
-            result = ((CharSequence) value).toString();
+            result = value.toString();
         }
         return result;
     }

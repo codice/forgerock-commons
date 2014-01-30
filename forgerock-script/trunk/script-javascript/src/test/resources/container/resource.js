@@ -167,9 +167,8 @@ if (!actionRequest instanceof org.forgerock.json.resource.ActionRequest) {
     throw { "message": "actionRequest type is not match"};
 }
 
-var securityContextClass = Packages.org.forgerock.json.resource.SecurityContext;
-if (context.containsContext(securityContextClass)) {
-    var securityContext = context.asContext(securityContextClass);
+if (context.security) {
+    var securityContext = context.security;
     if (!securityContext.authenticationId == "bjensen@example.com") {
         throw {
             "code": 401,

@@ -29,6 +29,7 @@ import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.ApiInfoContext;
 import org.forgerock.json.resource.Connection;
 import org.forgerock.json.resource.ConnectionProvider;
+import org.forgerock.json.resource.Context;
 import org.forgerock.json.resource.CreateRequest;
 import org.forgerock.json.resource.DeleteRequest;
 import org.forgerock.json.resource.InternalServerErrorException;
@@ -213,8 +214,8 @@ public abstract class ScriptTest {
         updateContent.put("_id", UUID.randomUUID().toString());
         updateContent.put("profileUrl", "https://login.example.com/bjensen");
 
-        script.put("context", new ApiInfoContext(new SecurityContext(new RootContext(),
-                "bjensen@example.com", null), "", ""));
+        final Context context = new ApiInfoContext(new SecurityContext(new RootContext(), "bjensen@example.com", null), "", "");
+        script.put("context", context);
 
         CreateRequest createRequest = Requests.newCreateRequest("/Users", "701984", createContent);
         script.put("createRequest", createRequest);
