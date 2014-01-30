@@ -111,7 +111,7 @@
         </siteDistributionURL>
 
         <!-- Commons forgerock-rest versions -->
-        <commons.forgerock-rest.version>2.1.0</commons.forgerock-rest.version>
+        <commons.forgerock-rest.version>2.2.0</commons.forgerock-rest.version>
 
         <!--<commons.script.osgi.import.default.version>-->
         <!--[$(version;==;$(@)),$(version;+;$(@)))-->
@@ -147,6 +147,11 @@
             <!-- ForgeRock Commons -->
             <dependency>
                 <groupId>org.forgerock.commons</groupId>
+                <artifactId>json-fluent</artifactId>
+                <version>${commons.forgerock-rest.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.forgerock.commons</groupId>
                 <artifactId>json-resource</artifactId>
                 <version>${commons.forgerock-rest.version}</version>
             </dependency>
@@ -165,12 +170,24 @@
                 <version>${slf4j.version}</version>
             </dependency>
 
+            <!-- CodeHaus JSON -->
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-core-asl</artifactId>
+                <version>1.9.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>1.9.2</version>
+            </dependency>
+
             <!-- Provided Dependencies -->
             <!-- Core OSGi -->
             <dependency>
                 <groupId>org.osgi</groupId>
                 <artifactId>org.osgi.core</artifactId>
-                <version>4.3.0</version>
+                <version>4.3.1</version>
                 <scope>provided</scope>
             </dependency>
 

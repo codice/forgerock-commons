@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2014 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -35,18 +35,24 @@ public final class ScriptName {
     private final String name;
     private final String type;
     private final String revision;
+    private final String requestBinding;
 
     public ScriptName(String name, String type) {
         this(name, type, null);
     }
 
     public ScriptName(String name, String type, String revision) {
+        this(name, type, revision, null);
+    }
+
+    public ScriptName(String name, String type, String revision, String requestBinding) {
         if (null == name || null == type || name.trim().isEmpty() || type.trim().isEmpty()) {
             throw new IllegalArgumentException("Required name and type");
         }
         this.name = name;
         this.type = type;
         this.revision = revision;
+        this.requestBinding = requestBinding;
     }
 
     public String getName() {
@@ -59,6 +65,10 @@ public final class ScriptName {
 
     public String getRevision() {
         return revision != null ? revision : "0";
+    }
+
+    public String getRequestBinding() {
+        return requestBinding;
     }
 
     @Override

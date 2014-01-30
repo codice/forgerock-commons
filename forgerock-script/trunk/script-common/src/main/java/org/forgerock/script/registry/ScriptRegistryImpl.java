@@ -186,6 +186,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
         JsonValue name = script.get(SourceUnit.ATTR_NAME);
         JsonValue type = script.get(SourceUnit.ATTR_TYPE);
         JsonValue source = script.get(SourceUnit.ATTR_SOURCE);
+        JsonValue requestBinding = script.get(SourceUnit.ATTR_REQUEST_BINDING);
 
         if (!source.isNull()
                 && (type.isNull() || type.expect(String.class).asString().equals(
@@ -194,10 +195,11 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
         }
 
         ScriptName scriptName =
-                new ScriptName(name.isNull() || !name.isString() ? UUID.randomUUID().toString()
-                        : name.asString(),
-                        type.isNull() || !type.isString() ? SourceUnit.AUTO_DETECT : type
-                                .asString());
+                new ScriptName(
+                        name.isNull() || !name.isString() ? UUID.randomUUID().toString() : name.asString(),
+                        type.isNull() || !type.isString() ? SourceUnit.AUTO_DETECT : type.asString(),
+                        null,
+                        requestBinding.isNull() || !requestBinding.isString() ? null : requestBinding.asString());
 
         if (!source.isNull()) {
             JsonValue visibility = script.get(SourceUnit.ATTR_VISIBILITY);

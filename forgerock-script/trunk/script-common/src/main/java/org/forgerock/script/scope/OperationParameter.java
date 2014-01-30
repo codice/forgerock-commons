@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock AS. All Rights Reserved
+ * Copyright (c) 2012-2014 ForgeRock AS. All Rights Reserved
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -63,11 +63,11 @@ public class OperationParameter implements Parameter {
      */
     public ServerContext getServerContext(JsonValue savedContext) throws ResourceException {
         if (null != savedContext) {
-            return ServerContext.loadFromJson(savedContext, getPersistenceConfig());
+            return new ServerContext(savedContext, getPersistenceConfig());
         } else if (context instanceof ServerContext) {
             return (ServerContext) context;
         } else if (null != context) {
-            return new ServerContext(context, getConnection());
+            return new ServerContext(context);
         }
         throw new InternalServerErrorException("Failed to get ServerContext.");
     }

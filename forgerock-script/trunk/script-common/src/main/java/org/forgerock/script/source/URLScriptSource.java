@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2014 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -60,9 +60,11 @@ public class URLScriptSource implements ScriptSource {
         this.visibility = visibility;
         this.source = source;
 
-        this.scriptName =
-                new ScriptName(scriptName.getName(), scriptName.getType(), Long
-                        .toHexString(getURLRevision(source, null)));
+        this.scriptName = new ScriptName(
+                scriptName.getName(),
+                scriptName.getType(),
+                Long.toHexString(getURLRevision(source, null)),
+                scriptName.getRequestBinding());
     }
 
     public static long getURLRevision(URL source, String revision) {
@@ -108,9 +110,11 @@ public class URLScriptSource implements ScriptSource {
         }
         this.visibility = visibility;
         this.source = source;
-        this.scriptName =
-                new ScriptName(scriptName.getName(), scriptName.getType(), Long
-                        .toHexString(getURLRevision(source, null)));
+        this.scriptName = new ScriptName(
+                scriptName.getName(),
+                scriptName.getType(),
+                Long.toHexString(getURLRevision(source, null)),
+                scriptName.getRequestBinding());
         this.parent = parent;
     }
 

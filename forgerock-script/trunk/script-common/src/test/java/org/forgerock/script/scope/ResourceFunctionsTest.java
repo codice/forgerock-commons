@@ -157,8 +157,7 @@ public class ResourceFunctionsTest {
         }).when(resource).handleAction(any(ServerContext.class), any(ActionRequest.class),
                 any(ResultHandler.class));
 
-        ServerContext serverContext =
-                new ServerContext(new RootContext(), Resources.newInternalConnection(resource));
+        ServerContext serverContext = new ServerContext(new RootContext());
         final PersistenceConfig persistenceConfig =
                 PersistenceConfig.builder().connectionProvider(new ConnectionProvider() {
                     @Override
@@ -197,8 +196,7 @@ public class ResourceFunctionsTest {
 
         Object[] arguments =
                 new Object[] { "resourceName", "actionId", new HashMap<String, Object>(),
-                    new HashMap<String, Object>(), new ArrayList<String>(),
-                    ServerContext.saveToJson(serverContext, persistenceConfig) };
+                    new HashMap<String, Object>(), new ArrayList<String>(), serverContext.toJsonValue() };
         Assert.assertTrue(ResourceFunctions.ACTION.call(parameter, null, arguments).asBoolean());
 
         arguments =
