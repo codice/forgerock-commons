@@ -39,7 +39,7 @@ abstract class AbstractScriptableRequest extends NativeObject implements Wrapper
 
     private static final long serialVersionUID = 1L;
 
-    private static final String FIELD_TYPE = "type";
+    private static final String FIELD_METHOD = "method";
 
     /** The request being wrapped. */
     final transient Parameter parameter;
@@ -66,8 +66,8 @@ abstract class AbstractScriptableRequest extends NativeObject implements Wrapper
     @Override
     @SuppressWarnings("unchecked")
     public Object get(String name, Scriptable start) {
-        if (FIELD_TYPE.equals(name)) {
-            return Converter.wrap(parameter, request.getRequestType().toString(), start, false);
+        if (FIELD_METHOD.equals(name)) {
+            return Converter.wrap(parameter, request.getRequestType().toString().toLowerCase(), start, false);
         } else if (Request.FIELD_FIELDS.equals(name)) {
             return Converter.wrap(parameter, request.getFields(), start, false);
         } else if (Request.FIELD_RESOURCE_NAME.equals(name)) {
@@ -84,7 +84,7 @@ abstract class AbstractScriptableRequest extends NativeObject implements Wrapper
 
     @Override
     public boolean has(String name, Scriptable start) {
-        return FIELD_TYPE.equals(name)
+        return FIELD_METHOD.equals(name)
                 || Request.FIELD_FIELDS.equals(name)
                 || Request.FIELD_RESOURCE_NAME.equals(name);
     }
@@ -114,7 +114,7 @@ abstract class AbstractScriptableRequest extends NativeObject implements Wrapper
 
     /** the generic request properties common to all request types */
     private static final Object[] PROPERTIES = new Object[] {
-        FIELD_TYPE,
+        FIELD_METHOD,
         Request.FIELD_FIELDS,
         Request.FIELD_RESOURCE_NAME
     };
