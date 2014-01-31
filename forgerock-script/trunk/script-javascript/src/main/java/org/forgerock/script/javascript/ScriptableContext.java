@@ -121,7 +121,7 @@ class ScriptableContext extends NativeObject implements Wrapper {
         if (CALLER.equals(name)) {
             return Converter.wrap(parameter,
                     getWrappedContext().containsContext(ClientContext.class)
-                            ? getWrappedContext().asContext(ClientContext.class).getProtocol()
+                            ? getWrappedContext().asContext(ClientContext.class).getProtocol().toString()
                             : "none",
                     start, false);
         } else if (contexts.containsKey(name)) {
