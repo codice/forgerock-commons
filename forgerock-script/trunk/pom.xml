@@ -111,7 +111,7 @@
         </siteDistributionURL>
 
         <!-- Commons forgerock-rest versions -->
-        <commons.forgerock-rest.version>2.2.0</commons.forgerock-rest.version>
+        <commons.forgerock-rest.version>2.2.1</commons.forgerock-rest.version>
 
         <!--<commons.script.osgi.import.default.version>-->
         <!--[$(version;==;$(@)),$(version;+;$(@)))-->
