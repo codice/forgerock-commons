@@ -62,8 +62,8 @@ class ScriptableQueryRequest extends AbstractScriptableRequest implements Wrappe
     @SuppressWarnings("unchecked")
     public Object get(String name, Scriptable start) {
 
-        if (QueryRequest.FIELD_ADDITIONAL_QUERY_PARAMETERS.equals(name)) {
-            return Converter.wrap(parameter, request.getAdditionalQueryParameters(), start, false);
+        if (QueryRequest.FIELD_ADDITIONAL_PARAMETERS.equals(name)) {
+            return Converter.wrap(parameter, request.getAdditionalParameters(), start, false);
         } else if (QueryRequest.FIELD_PAGED_RESULTS_COOKIE.equals(name)) {
             return Converter.wrap(parameter, request.getPagedResultsCookie(), start, false);
         } else if (QueryRequest.FIELD_PAGED_RESULTS_OFFSET.equals(name)) {
@@ -85,7 +85,7 @@ class ScriptableQueryRequest extends AbstractScriptableRequest implements Wrappe
 
     @Override
     public boolean has(String name, Scriptable start) {
-        return QueryRequest.FIELD_ADDITIONAL_QUERY_PARAMETERS.equals(name)
+        return QueryRequest.FIELD_ADDITIONAL_PARAMETERS.equals(name)
                 || QueryRequest.FIELD_PAGED_RESULTS_COOKIE.equals(name)
                 || QueryRequest.FIELD_PAGED_RESULTS_OFFSET.equals(name)
                 || QueryRequest.FIELD_PAGE_SIZE.equals(name)
@@ -107,7 +107,7 @@ class ScriptableQueryRequest extends AbstractScriptableRequest implements Wrappe
 
     /** concatenate the QueryRequest properties with the generic request properties */
     private static Object[] PROPERTIES = concatIds(
-            QueryRequest.FIELD_ADDITIONAL_QUERY_PARAMETERS,
+            QueryRequest.FIELD_ADDITIONAL_PARAMETERS,
             QueryRequest.FIELD_PAGED_RESULTS_COOKIE,
             QueryRequest.FIELD_PAGED_RESULTS_OFFSET,
             QueryRequest.FIELD_PAGE_SIZE,
