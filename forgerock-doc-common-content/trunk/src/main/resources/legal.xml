@@ -18,7 +18,7 @@
   !
   ! CCPL HEADER END
   !
-  !      Copyright 2011-2013 ForgeRock AS
+  !      Copyright 2011-2014 ForgeRock AS
   !    
 -->
 <legalnotice xml:id='legalnotice'
@@ -50,6 +50,8 @@
  </para>
   
  <para>
+  <trademark>ForgeRock</trademark> is the trademark of ForgeRock Inc.
+  or its subsidiaries in the U.S. and in other countries.
   Trademarks are the property of their respective owners.
  </para>
 
