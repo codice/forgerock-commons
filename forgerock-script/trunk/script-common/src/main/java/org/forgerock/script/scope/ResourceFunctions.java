@@ -658,11 +658,11 @@ public final class ResourceFunctions {
                     } else {
                         JsonValue additionalParam = params.get(name);
                         if (additionalParam.isString()) {
-                            qr.setAdditionalQueryParameter(name, additionalParam.asString());
+                            qr.setAdditionalParameter(name, additionalParam.asString());
                         } else if (additionalParam.isNumber()) {
-                            qr.setAdditionalQueryParameter(name, additionalParam.asNumber().toString());
+                            qr.setAdditionalParameter(name, additionalParam.asNumber().toString());
                         } else if (additionalParam.isBoolean()) {
-                            qr.setAdditionalQueryParameter(name, additionalParam.asBoolean().toString());
+                            qr.setAdditionalParameter(name, additionalParam.asBoolean().toString());
                         } else {
                             throw new BadRequestException("The value '" + String.valueOf(additionalParam.getObject())
                                     + "' for parameter '" + name
@@ -967,7 +967,7 @@ public final class ResourceFunctions {
             for (String name : params.keys()) {
                 final JsonValue additionalActionParameter = params.get(name);
                 if (additionalActionParameter.isString()) {
-                    ar.setAdditionalActionParameter(name, additionalActionParameter.asString());
+                    ar.setAdditionalParameter(name, additionalActionParameter.asString());
                 } else {
                     // TODO logger
                 }
