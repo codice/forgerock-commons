@@ -63,7 +63,7 @@
    </ul>
 
    <p>
-    The directory data itself is exposed as REST resources of HTTP
+    The directory data itself is exposed as REST resources over HTTP
     using the directory HTTP connection handler,
     with a mapping from LDAP entries to REST resources
     configured in a file called <code>http-config.json</code>.
