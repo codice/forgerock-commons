@@ -40,31 +40,44 @@
             <item name="${project.name}" href="${project.url}" />
         </breadcrumbs>
 
-        <menu name="Commons Projects">
-            <item name="Authn &amp; Authz filters" href="./forgerock-auth-filters/" />
-            <item name="Build tools" href="./forgerock-build-tools/" />
-            <item name="Community site skin" href="./forgerock-community-skin/" />
-            <item name="Core docs build plugin" href="./forgerock-doc-maven-plugin/" />
-            <item name="Core docs common content" href="./forgerock-doc-common-content/" />
-            <item name="Core docs default branding" href="./forgerock-doc-default-branding/" />
-            <item name="ForgeRock parent POM" href="./forgerock-parent/" />
-            <item name="I18N framework" href="./i18n-framework/" />
+        <menu name="Access">
+            <item name="Authn/authz filters" href="./forgerock-auth-filters/" />
             <item name="JSON Web Token" href="./json-web-token/" />
-            <item name="OpenAM OAuth 2.0 iOS Sample App" href="./samples/mobile/ios/openam-ios-oauth2-sample-app/" />
-            <item name="OpenDJ Contact Manager" href="./mobile/contact-manager/" />
+            <item name="XACML" href="./xacml3/" />
+        </menu>
+
+        <menu name="Docs">
+            <item name="Build plugin" href="./forgerock-doc-maven-plugin/" />
+            <item name="Common content" href="./forgerock-doc-common-content/" />
+            <item name="Default branding" href="./forgerock-doc-default-branding/" />
+        </menu>
+
+        <menu name="General">
+            <item name="Build tools" href="./forgerock-build-tools/" />
+            <item name="I18N framework" href="./i18n-framework/" />
             <item name="OSGi launcher" href="./forgerock-launcher/" />
+            <item name="Parent POM" href="./forgerock-parent/" />
             <item name="REST libraries" href="./forgerock-rest/" />
-            <item name="Restlet utility classes" href="./forgerock-restlet/" />
+            <item name="Restlet utilities" href="./forgerock-restlet/" />
             <item name="Script libraries" href="./forgerock-script/" />
             <item name="Utility classes" href="./forgerock-util/" />
+        </menu>
+
+        <menu name="OpenAM apps">
+            <item name="iOS (OAuth 2.0)" href="./samples/mobile/ios/openam-ios-oauth2-sample-app/" />
+            <item name="iOS (REST SDK)" href="./samples/mobile/ios/openam-ios-rest-sdk/" />
+            <item name="iOS (SSO)" href="./samples/mobile/ios/openam-sso-sample-app/" />
+            <item name="Android apps" href="/samples/mobile/android/openam-apps/" />
+            <item name="PhoneGap app" href="/samples/mobile/phonegap/" />
+        </menu>
+
+        <menu name="OpenDJ apps">
+            <item name="Android Contact Mgr" href="./mobile/contact-manager/" />
+        </menu>
+
+        <menu name="Web">
+            <item name="Skin" href="./forgerock-community-skin/" />
             <item name="Web UI" href="./forgerock-ui/" />
-            <item name="XACML Engine" href="./xacml3/" />
-            <!-- TODO: other mobile samples...
-            <item name="" href="" />
-            <item name="" href="" />
-            <item name="" href="" />
-            <item name="" href="" />
-            -->
         </menu>
     </body>
     <custom>
