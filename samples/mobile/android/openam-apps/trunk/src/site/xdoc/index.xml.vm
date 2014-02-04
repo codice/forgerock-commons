@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ! CCPL HEADER START
+  !
+  ! This work is licensed under the Creative Commons
+  ! Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+  ! To view a copy of this license, visit
+  ! http://creativecommons.org/licenses/by-nc-nd/3.0/
+  ! or send a letter to Creative Commons, 444 Castro Street,
+  ! Suite 900, Mountain View, California, 94041, USA.
+  !
+  ! See the License for the specific language governing permissions
+  ! and limitations under the License.
+  !
+  ! If applicable, add the following below this CCPL HEADER, with the fields
+  ! enclosed by brackets "[]" replaced with your own identifying information:
+  !      Portions Copyright [yyyy] [name of copyright owner]
+  !
+  ! CCPL HEADER END
+  !
+  !      Copyright 2014 ForgeRock AS
+  !
+-->
+<document
+ xmlns="http://maven.apache.org/XDOC/2.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/XDOC/2.0
+                     http://maven.apache.org/xsd/xdoc-2.0.xsd">
+ <properties>
+
+  <title>${project.name}</title>
+  <author email="commons@forgerock.org">ForgeRock AS</author>
+ </properties>
+ <body>
+  <section name="About ${project.description}">
+
+   <p>
+	   This project demonstrates an interface and basic implementation
+	   for communicating with a collection of OpenAM Rest endpoints
+	   through Android applications.
+   </p>
+
+   <p>
+	These Apps and their supported libraries present
+	an asynchronous Model-View-Presenter approach to building Android apps
+	with support for OpenAM's REST interfaces.
+	The supplied clients support basic functions such as logging in,
+	requesting validity of a token,
+	storing and offering the stored token out to other applications
+	on the Android system through the content provider mechanism.
+   </p>
+
+   <p>
+	There are two apps.
+	The Authentication app <code>android_auth_app</code> is supported
+	by its authentication client library <code>android_auth</code>.
+	Likewise, the OAuth2.0 app <code>android_oauth2_app</code> is supported
+	by its authorization client library <code>android_oauth</code>.
+	Both applications are supported by the content-sharing library
+	<code>android_auth_content</code> as well as the common REST library
+	<code>android_commons</code>.
+   </p>
+
+  </section>
+  
+  <section name="List of Modules">
+  
+<h2><code>android_commons</code></h2>
+
+   <p>
+	Shared library used between both applications.
+	This contains classes to allow users to generate their own clients
+	using the base requests supplied. This library implements
+	a simple series of asynchronous requests built
+	from the Android-supplied AsyncTask and Apache HttpClient libraries.
+	A number of supported requests are included
+	(GetRestRequest, JSONRestRequest, etc.)
+	see inside the individual files for more information.
+   </p>
+
+   <p>
+	The library provides a simple framework for using
+	these asynchronous requests through a listener system,
+	the core interfaces of which are simply Listener and Relay.
+	In this system, Listeners are the endpoints (often Android Activities)
+	which will finally act upon the information sent to them,
+	and Relays act as intermediaries
+	between the asynchronous request and the Listener endpoints. 
+   </p>
+
+   <p>
+	For example, in the supplied demo application,
+	android_auth_app, the Request/Relay/Listener implementation resembles:
+   </p>
+
+   <p>
+	ASynchronousRequest <code>android_commons</code> created and executed
+	by the AuthenticationClient <code>android_auth</code>
+	which notifies the Presenter <code>android_auth_app</code>
+	which notifies the appropriate Activity <code>android_auth_app</code>.
+   </p>
+
+   <p>
+	In this model, the Presenter is able to perform
+	some tasks on the response provided by the Client
+    before informing the UI to update. 
+   </p>
+
+   <p>
+	This system uses ActionTypes to determine which request has been performed.
+	The ActionType interface is defined within <code>android_commons</code>,
+	and is used and extended by both <code>android_oauth2</code>
+	and <code>android_auth</code> projects.
+	These ActionTypes are used by the Listener and Relay system
+	to inform the respective implementing classes.
+   </p>
+
+<h2><code>android_auth</code></h2>
+
+   <p>
+	Authentication client library.
+	The core of this package is the AuthenticationClient
+	along with its configuration class, OpenAMServerResource.
+	The basic implementation of AuthenticationClient provides functionality to:
+   </p>
+
+	<ul>
+		<li>Request the cookie domain from the OpenAM server
+		- cookieName(), ActionTypes: GET_COOKIE_NAME, GET_COOKIE_NAME_FAIL</li>
+		<li>Request the list of appropriate domains from the OpenAM server
+		- cookieDomain(), ActionTypes: GET_COOKIE_DOMAIN, GET_COOKIE_DOMAIN_FAIL</li>
+		<li>Attempt to start or continue an authentication process
+		- authenticate(JSONObject data), ActionTypes: AUTH, AUTH_FAIL, AUTH_CONT</li>
+		<li>Logout - logout(String token)
+		- ActionTypes: LOGOUT, LOGOUT_FAIL</li>
+		<li>Query if a token is valid - isTokenValid(String token)
+		- ActionTypes: VALIDATE, VALIDATE_FAIL</li>
+	</ul>
+
+   <p>
+	Each of these methods uses the Listener/Relay mechanism provided from the
+	<code>android_commons</code> libraries to asynchronously return the results,
+	with the appropriate ActionType being set.
+   </p>
+
+   <p>
+	The client acts as a relay without altering the data contained by the response
+	- it will however alter the ActionType returned if it's able to detect a failure (TODO).
+   </p>
+
+<h2><code>android_oauth2</code></h2>
+
+   <p>
+	Authorization client library.
+	The core of this package is the AuthorizationClient
+	along with its configuration class, OAuth2ServerResource.
+	The basic implementation of AuthorizationClient provides functionality to:
+   </p>
+
+	<ul>
+		<li>Convert an OAuth2.0 grant code into an access token
+		- convertCodeToAccesToken(String code, String base, String ssoToken, String cookieName),
+		ActionTypes: GET_TOKEN, GET_TOKEN_FAIL</li>
+		<li>Read the authenticated user's profile from OpenAM
+		- getProfile(String base, String accessToken, String cookieName, String ssoToken),
+		ActionTypes: GET_PROFILE, GET_PROFILE_FAIL</li>
+		<li>Validate an OAuth2.0 token
+		- isAccessTokenValid(String base, String accessToken, String cookieName, String ssoToken),
+		AcitonTypes: VALIDATE, VALIDATE_FAIL.</li>
+	</ul>
+
+   <p>
+	The OAuth2.0 client does not provide any functionality
+	for getting the OAuth2.0 code from the OpenAM server.
+	In the example application detailed below
+	this initial step is done via a web view,
+	following the authorization grant flow.
+	To ensure this functionality is built in the same style
+	as the rest of the application
+	however, the supported ActionTypes are GET_CODE and GET_CODE_FAIL. 
+   </p>
+
+   <p>
+	The client acts as a relay without altering the data contained by the response
+	- it will however alter the ActionType returned if it's able to detect a failure (TODO).
+   </p>
+
+<h2><code>android_auth_content</code></h2>
+
+   <p>
+	This small library allows for the sharing of information
+	between the two supplied applications.
+	It is an implementation of a SQLite Content Provider,
+	allowing for the sharing of a single SSO token
+	between the Auth and OAuth2.0 apps.
+	It is not recommended to be used as anything
+	more than a simple demonstration of sharing a token.
+   </p>
+
+<h2><code>android_auth_app</code></h2>
+
+   <p>
+	The Android Activities and supporting Presenter
+	used to authenticate the user and retrieve an SSO token.
+	This SSO token is then stored
+	and exposed using the <code>android_auth_content</code>.
+	The application offers two mechanisms for logging in to OpenAM
+	- the first through a native UI (described in more detail below)
+	and the second through a web view interface.
+	While the REST communication with the client is performed
+	by the AuthenticatonClient provided by the <code>android_auth</code> package,
+	the apps rendering of this information and interface
+	is demonstrated in a number of ways.
+   </p>
+
+   <p>
+	First, through allowing the user to log in via a web view
+	instead of through the native interface
+	we demonstrate capturing an SSO token from a browser and storing it.
+   </p>
+
+   <p>
+	Second, the native UI implementation of the same login functionality
+	has two implementations.
+	The first of these is an adaptive implementation, the latter is a static one. 
+   </p>
+
+   <p>
+	The adaptive implementation - AuthenticateActivity
+	- demonstrates how a single Activity can be used
+	to draw the appropriate authentication module.
+	In this case, the AuthenticateActivity supports
+	the drawing of NameCallbacks and PasswordCallbacks.
+	The Activity continually loops on itself,
+	drawing the appropriate callbacks to the screen
+	and passing their results to the OpenAM server
+	via the AuthenticationClient until the Activity determines
+	that it has either succeeded or failed in logging in
+	(this process is documented in the code,
+	and is performed through the Activity
+	acting as a Listener and responding to the AUTH_CONT ActionType).
+   </p>
+
+   <p>
+	The static implementation - of which there is currently only
+	a single authentication module coded, DataStoreActivity
+	- demonstrates determining the returning authentication module
+	and displaying a specific Activity in response. 
+   </p>
+
+<h2><code>android_oauth2_app</code></h2>
+
+   <p>
+	The Android Activities and supporting Presenter
+	used to display an interface
+	to the authentication client's basic functionality.
+	The application allows the user to configure the OAuth2.0 client
+	(client ID, client secret, etc.),
+	and retrieves an OpenAM authentication token from the Auth App,
+	as such this app requires the Auth App to function.
+	This app uses a web view to perform the code retrieval part
+	of the authorization grant process,
+	and then uses the AuthorizationClient to transform the code
+	into an access token.
+	The code is documented to describe its mechanisms.
+   </p>
+
+	<ul>
+		<li>After initial setting of the Authentication application's settings
+		for the first time, the application will close
+		instead of returning to the home screen.</li>
+		<li>Querying for an authorization token generates
+		a new android activity instance
+		without shutting down the old home screen activity,
+		so multiple home screen activities occur in the task stack.</li>
+	</ul>
+
+  </section>
+ </body>
+</document>
