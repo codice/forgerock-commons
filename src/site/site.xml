@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ! CCPL HEADER START
+  !
+  ! This work is licensed under the Creative Commons
+  ! Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+  ! To view a copy of this license, visit
+  ! http://creativecommons.org/licenses/by-nc-nd/3.0/
+  ! or send a letter to Creative Commons, 444 Castro Street,
+  ! Suite 900, Mountain View, California, 94041, USA.
+  !
+  ! See the License for the specific language governing permissions
+  ! and limitations under the License.
+  !
+  ! If applicable, add the following below this CCPL HEADER, with the fields
+  ! enclosed by brackets "[]" replaced with your own identifying information:
+  !      Portions Copyright [yyyy] [name of copyright owner]
+  !
+  ! CCPL HEADER END
+  !
+  !      Copyright 2014 ForgeRock AS
+  !
+-->
+<project name="${project.name}"
+    xmlns="http://maven.apache.org/DECORATION/1.0.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.1
+                        http://maven.apache.org/xsd/decoration-1.0.1.xsd">
+    <skin>
+        <groupId>org.forgerock.commons</groupId>
+        <artifactId>forgerock-community-skin</artifactId>
+        <version>1.0.0</version>
+    </skin>
+    <publishDate position="right" format="yyyy.MM.dd"/>
+    <version position="right"/>
+
+    <body>
+        <breadcrumbs>
+            <item name="Developer Community" href="http://forgerock.org/" />
+            <item name="${project.name}" href="${project.url}" />
+        </breadcrumbs>
+
+        <menu name="Commons Projects">
+            <item name="Authn &amp; Authz filters" href="./forgerock-auth-filters/" />
+            <item name="Build tools" href="./forgerock-build-tools/" />
+            <item name="Community site skin" href="./forgerock-community-skin/" />
+            <item name="Core docs build plugin" href="./forgerock-doc-maven-plugin/" />
+            <item name="Core docs common content" href="./forgerock-doc-common-content/" />
+            <item name="Core docs default branding" href="./forgerock-doc-default-branding/" />
+            <item name="ForgeRock parent POM" href="./forgerock-parent/" />
+            <item name="I18N framework" href="./i18n-framework/" />
+            <item name="JSON Web Token" href="./json-web-token/" />
+            <item name="OpenAM OAuth 2.0 iOS Sample App" href="./samples/mobile/ios/openam-ios-oauth2-sample-app/" />
+            <item name="OpenDJ Contact Manager" href="./mobile/contact-manager/" />
+            <item name="OSGi launcher" href="./forgerock-launcher/" />
+            <item name="REST libraries" href="./forgerock-rest/" />
+            <item name="Restlet utility classes" href="./forgerock-restlet/" />
+            <item name="Script libraries" href="./forgerock-script/" />
+            <item name="Utility classes" href="./forgerock-util/" />
+            <item name="Web UI" href="./forgerock-ui/" />
+            <item name="XACML Engine" href="./xacml3/" />
+            <!-- TODO: other mobile samples...
+            <item name="" href="" />
+            <item name="" href="" />
+            <item name="" href="" />
+            <item name="" href="" />
+            -->
+        </menu>
+    </body>
+    <custom>
+    </custom>
+</project>
