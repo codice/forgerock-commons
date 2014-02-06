@@ -16,7 +16,7 @@
   ! enclosed by brackets "[]" replaced with your own identifying information:
   !      Portions Copyright [yyyy] [name of copyright owner]
   !
-  !      Copyright 2012 ForgeRock AS
+  !      Copyright 2012-2014 ForgeRock AS
   !
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
@@ -79,7 +79,7 @@
  <xsl:param name="docbook.css.link" select="0" />
  <xsl:param name="html.stylesheet">css/coredoc.css</xsl:param>
  <xsl:param name="admon.style">
-  <xsl:value-of select="string('font-style: italic;')"></xsl:value-of>
+  <xsl:value-of select="string('font-style: italic;')" />
  </xsl:param>
  <xsl:param name="default.table.frame">none</xsl:param>
  <xsl:param name="default.table.rules">none</xsl:param>
