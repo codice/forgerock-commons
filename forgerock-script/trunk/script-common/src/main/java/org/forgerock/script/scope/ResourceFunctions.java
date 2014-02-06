@@ -959,8 +959,8 @@ public final class ResourceFunctions {
                 final Function<?> callback) throws ResourceException {
 
             ActionRequest ar =
-                    Requests.newActionRequest(resourceName, null != actionId ? actionId : params
-                            .get("_actionId").required().asString());
+                    Requests.newActionRequest(resourceName,
+                            null != actionId ? actionId : params.get("_action").required().asString());
             // add fieldFilter
             ar.addField(fetchFields(fieldFilter));
 
