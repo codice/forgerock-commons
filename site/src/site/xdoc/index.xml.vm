@@ -27,7 +27,6 @@
  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0
                      http://maven.apache.org/xsd/xdoc-2.0.xsd">
  <properties>
-
   <title>${project.name}</title>
   <author email="commons@forgerock.org">ForgeRock AS</author>
  </properties>
@@ -47,6 +46,11 @@
     Sources for the projects are visible under
     <a href="http://sources.forgerock.org/browse/commons/"
     >http://sources.forgerock.org/browse/commons/</a>.
+   </p>
+   
+   <p>
+   Nabble.com hosts a <a href="http://forgerock-commons.1100771.n5.nabble.com/"
+   >mailing list archive</a>.
    </p>
    
    <p>
