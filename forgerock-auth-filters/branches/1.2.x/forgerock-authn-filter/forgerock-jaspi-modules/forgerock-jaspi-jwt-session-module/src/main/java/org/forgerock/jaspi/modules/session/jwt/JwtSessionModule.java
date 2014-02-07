@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2013 ForgeRock Inc.
+ * Copyright 2013-2014 ForgeRock AS.
  */
 
 package org.forgerock.jaspi.modules.session.jwt;
@@ -19,6 +19,7 @@ package org.forgerock.jaspi.modules.session.jwt;
 import org.forgerock.common.util.KeystoreManager;
 import org.forgerock.jaspi.filter.AuthNFilter;
 import org.forgerock.json.jose.builders.JwtBuilderFactory;
+import org.forgerock.json.jose.exceptions.JweDecryptionException;
 import org.forgerock.json.jose.jwe.EncryptedJwt;
 import org.forgerock.json.jose.jwe.EncryptionMethod;
 import org.forgerock.json.jose.jwe.JweAlgorithm;
@@ -224,7 +225,13 @@ public class JwtSessionModule implements ServerAuthModule {
 
         if (jwtSessionCookie != null && !isEmpty(jwtSessionCookie.getValue())) {
 
-            Jwt jwt = verifySessionJwt(jwtSessionCookie.getValue());
+            final Jwt jwt;
+            try {
+                jwt = verifySessionJwt(jwtSessionCookie.getValue());
+            } catch (JweDecryptionException e) {
+                DEBUG.error("Failed to decrypt Jwt", e);
+                return null;
+            }
             if (jwt != null) {
                 //if all goes well!
                 Map<String, Object> claimsSetContext = jwt.getClaimsSet().getClaim(AuthNFilter.ATTRIBUTE_AUTH_CONTEXT, Map.class);
