@@ -26,6 +26,7 @@ package org.forgerock.script;
 
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.AbstractContext;
+import org.forgerock.json.resource.ClientContext;
 import org.forgerock.json.resource.Context;
 import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.json.resource.ResourceException;
@@ -35,7 +36,7 @@ import org.forgerock.json.resource.ResourceException;
  * 
  * @author Laszlo Hordos
  */
-public class ScriptContext extends AbstractContext {
+public class ScriptContext extends AbstractContext implements ClientContext {
 
     /** the friendly name for this context */
     private static final String CONTEXT_NAME = "script";
@@ -53,7 +54,6 @@ public class ScriptContext extends AbstractContext {
 
     public ScriptContext(JsonValue savedContext, PersistenceConfig config) throws ResourceException {
         super(savedContext, config);
-
     }
 
     /**
@@ -63,5 +63,12 @@ public class ScriptContext extends AbstractContext {
      */
     public String getContextName() {
         return CONTEXT_NAME;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isExternal() {
+        return false;
     }
 }
