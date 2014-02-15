@@ -56,6 +56,9 @@ class ScriptableContext extends NativeObject implements Wrapper {
     /** map of contexts exposed by this wrapper by context name */
     private Map<String,Context> contexts;
 
+    /** information about the calling client */
+    private JsonValue caller;
+
     /** set of keys that this context wrapper "responds to */
     private Set<String> ids;
 
@@ -81,9 +84,18 @@ class ScriptableContext extends NativeObject implements Wrapper {
                 contexts.put(aContext.getContextName(), aContext);
             }
         }
-        // respond to all context names and "caller"
+
         ids = new HashSet<String>(contexts.keySet());
-        ids.add(CALLER);
+
+        if (context.containsContext(ClientContext.class)) {
+            // add "caller" to the scope if there is client context information
+            ids.add(CALLER);
+
+            final ClientContext client = context.asContext(ClientContext.class);
+            caller = new JsonValue(new HashMap<String,Object>());
+            caller.put("name", client.getContextName());
+            caller.put("external", client.isExternal());
+        }
     }
 
     Context getWrappedContext() {
@@ -119,11 +131,7 @@ class ScriptableContext extends NativeObject implements Wrapper {
     @SuppressWarnings("unchecked")
     public Object get(String name, Scriptable start) {
         if (CALLER.equals(name)) {
-            return Converter.wrap(parameter,
-                    getWrappedContext().containsContext(ClientContext.class)
-                            ? getWrappedContext().asContext(ClientContext.class).getContextName()
-                            : "none",
-                    start, false);
+            return Converter.wrap(parameter, caller, start, false);
         } else if (contexts.containsKey(name)) {
             if (HttpContext.CONTEXT_NAME.equals(name)) {
                 final JsonValue value = contexts.get(name).toJsonValue();
