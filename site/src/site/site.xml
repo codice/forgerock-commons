@@ -54,6 +54,7 @@
 
         <menu name="General">
             <item name="Build tools" href="./forgerock-build-tools/" />
+            <item name="Guice implementation" href="./forgerock-guice/" />
             <item name="I18N framework" href="./i18n-framework/" />
             <item name="OSGi launcher" href="./forgerock-launcher/" />
             <item name="Parent POM" href="./forgerock-parent/" />
