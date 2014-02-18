@@ -18,7 +18,7 @@
   !
   ! CCPL HEADER END
   !
-  !      Copyright 2012 ForgeRock AS
+  !      Copyright 2012-2014 ForgeRock AS
   !
 -->
 <document
@@ -48,9 +48,10 @@
     <li>A <code>layout</code> goal in the <code>site</code> phase to copy
     content under <code>site-doc</code></li>
    </ol>
-   <p>For details, see <a
-   href="https://github.com/markcraig/forgerock-doc-maven-plugin/blob/master/README.md"
-   >the project README</a>.</p>
+
+   <p>
+    For more information, see the <a href="README.html">README</a>.
+   </p>
   </section>
  </body>
 </document>
