@@ -33,21 +33,6 @@
   <section name="About the Plugin">
    <p>This Maven plugin centralizes configuration of core documentation, to
    ensure that output documents are formatted uniformly.</p>
-   <p>With centralized configuration handled by this Maven plugin, the core
-   documentation-related project configuration takes at least two arguments:</p>
-   <ul>
-    <li>&lt;projectName>, the short name for the project such as OpenAM,
-    OpenDJ, or OpenIDM</li>
-    <li>&lt;googleAnalyticsId>, to add Google Analytics JavaScript to the HTML
-    output</li>
-   </ul>
-   <p>The project then runs two plugin executions:</p>
-   <ol>
-    <li>A <code>build</code> goal in the <code>pre-site</code> phase to build
-    and massage output</li>
-    <li>A <code>layout</code> goal in the <code>site</code> phase to copy
-    content under <code>site-doc</code></li>
-   </ol>
 
    <p>
     For more information, see the <a href="README.html">README</a>.
