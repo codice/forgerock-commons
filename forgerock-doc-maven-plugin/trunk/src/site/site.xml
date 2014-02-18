@@ -18,7 +18,7 @@
   !
   ! CCPL HEADER END
   !
-  !      Copyright 2012-2013 ForgeRock AS
+  !      Copyright 2012-2014 ForgeRock AS
   !    
 -->
 <project name="${project.name}" xmlns="http://maven.apache.org/DECORATION/1.0.1"
@@ -39,8 +39,10 @@
             href="http://commons.forgerock.org/forgerock-doc-maven-plugin"/>
     </breadcrumbs>
     <menu name="Documentation">
-      <item name="README"
-            href="https://github.com/markcraig/forgerock-doc-maven-plugin/blob/master/README.md"/>
+      <item name="README" href="README.html"/>
+      <!--item name="2.1.0 release notes" href="Release Notes 2.1.0.html" /-->
+      <item name="2.0.0 release notes" href="Release Notes 2.0.0.html"/>
+      <item name="1.2.0 release notes" href="Release Notes 1.2.0.html"/>
     </menu>
     <menu name="Development">
       <item name="Join"
