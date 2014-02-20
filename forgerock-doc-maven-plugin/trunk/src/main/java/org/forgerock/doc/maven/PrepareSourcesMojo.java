@@ -46,7 +46,7 @@ public class PrepareSourcesMojo extends AbstractBuildMojo {
 
     /**
      * Maximum height for PNG images used in PDF, in inches.
-     * @parameter default-value="6" property="maxImageHeightInInches"
+     * @parameter default-value="5" property="maxImageHeightInInches"
      * @required
      */
     private int maxImageHeightInInches;
