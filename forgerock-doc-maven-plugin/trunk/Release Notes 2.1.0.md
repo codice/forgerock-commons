@@ -26,6 +26,9 @@ The resolution is a bit violent. Images taller than 5" are scaled to 5" high.
 If you want to keep a custom `index.html` file for your documentation set,
 then set `-DkeepCustomIndexHtml=true` for the `release` goal configuration.
 
+**DOCS-131: max-height CSS setting squashes tall images in HTML**
+
+
 ## Known Issues
 
 **DOCS-71: Soft hyphens displayed in mid line in PDF**
