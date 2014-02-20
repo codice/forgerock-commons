@@ -17,6 +17,10 @@ fixes.
 
 ## Bugs Fixed
 
+**DOCS-124: Very tall images are not resized appropriately in the pdf output**
+
+The resolution is a bit violent. Images taller than 5" are scaled to 5" high.
+
 **DOCS-129: Doc build plugin should not overwrite site/doc/index.html**
 
 If you want to keep a custom `index.html` file for your documentation set,

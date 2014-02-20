@@ -8,7 +8,7 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2013 ForgeRock AS
+ *     Copyright 2013-2014 ForgeRock AS
  *
  */
 
@@ -34,6 +34,41 @@ import java.util.Iterator;
  * Set dots per inch in the metadata of a Portable Network Graphics image.
  */
 public final class PNGUtils {
+
+    /**
+     * Return image height in pixels.
+     *
+     * @param image image file.
+     * @throws IOException Failed to read the image.
+     * @return Image height in pixels.
+     */
+    public static int getHeight(final File image) throws IOException {
+        BufferedImage bufferedImage = ImageIO.read(image);
+        return bufferedImage.getHeight();
+    }
+
+    /**
+     * Set the DPI on {@code image} so that it fits in {@code maxHeightInInches},
+     * or to 160 if short enough.
+     *
+     * @param image PNG image file.
+     * @param maxHeightInInches maximum available image height in inches.
+     * @throws IOException Failed to save the image.
+     */
+    public static void setSafeDpi(final File image, final int maxHeightInInches)
+            throws IOException {
+        final int imageHeight = getHeight(image);
+        final int defaultDpi = 160;
+        final int defaultMaxHeight = maxHeightInInches * defaultDpi;
+
+        // Images that do not fit by default must be
+        if (imageHeight > defaultMaxHeight) {
+            final double dpi = imageHeight * 1.0 / maxHeightInInches;
+            setDPI(image, (int) Math.round(dpi));
+        } else {
+            setDPI(image);
+        }
+    }
 
     /**
      * Set the DPI on {@code image} to 160.

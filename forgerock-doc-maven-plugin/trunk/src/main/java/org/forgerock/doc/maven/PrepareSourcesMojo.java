@@ -8,7 +8,7 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2013 ForgeRock AS
+ *     Copyright 2013-2014 ForgeRock AS
  *
  */
 
@@ -43,6 +43,21 @@ public class PrepareSourcesMojo extends AbstractBuildMojo {
      * DocBook XML sources found here.
      */
     private File sourceDirectory;
+
+    /**
+     * Maximum height for PNG images used in PDF, in inches.
+     * @parameter default-value="6" property="maxImageHeightInInches"
+     * @required
+     */
+    private int maxImageHeightInInches;
+
+    /**
+     * Get maximum height for PNG images used in PDF, in inches.
+     * @return Maximum height for PNG images used in PDF, in inches.
+     */
+    public int getMaxImageHeightInInches() {
+        return maxImageHeightInInches;
+    }
 
     /**
      * Transform ImageData elements in the XML, generate PNG images from
@@ -95,7 +110,7 @@ public class PrepareSourcesMojo extends AbstractBuildMojo {
                     sourceDirectory,
                     new WildcardFileFilter("*.png"),
                     TrueFileFilter.INSTANCE)) {
-                PNGUtils.setDPI(image);
+                PNGUtils.setSafeDpi(image, maxImageHeightInInches);
                 getLog().info("\t" + image.getPath());
             }
 
