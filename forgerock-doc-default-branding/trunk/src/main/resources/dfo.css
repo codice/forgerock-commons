@@ -15,7 +15,7 @@
  * enclosed by brackets "[]" replaced with your own identifying information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2011-2013 ForgeRock AS
+ *     Copyright 2011-2014 ForgeRock AS
  *
 */
 
@@ -197,9 +197,10 @@ div.refentry {
 }
 
 img {
+    width: auto;
     height: auto;
     max-width: 640px;
-    max-height: 480px;
+    max-height: 640px;
 }
 
 table {
