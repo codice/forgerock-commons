@@ -86,6 +86,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         if (formats.contains("epub")) {
             getLog().info("Building EPUB...");
             exec.buildEPUB(baseConf);
+            getLog().info("...post-processing EPUB...");
             postProcessEPUB(getDocbkxOutputDirectory().getPath()
                     + File.separator + "epub");
         }
@@ -93,8 +94,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         // Build and prepare PDF for publishing.
         if (formats.contains("pdf")) {
             getLog().info("Building PDF...");
+            getLog().info("...generating olink DB files for PDF...");
             exec.buildFoOlinkDB(baseConf, "pdf");
+            getLog().info("...generating PDF files...");
             exec.buildPDF(baseConf);
+            getLog().info("...post-processing PDF...");
             postProcessPDF(getDocbkxOutputDirectory().getPath()
                     + File.separator + "pdf");
         }
@@ -102,8 +106,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         // Build and prepare RTF for publishing.
         if (formats.contains("rtf")) {
             getLog().info("Building RTF...");
+            getLog().info("...generating olink DB files for RTF...");
             exec.buildFoOlinkDB(baseConf, "rtf");
+            getLog().info("...generating RTF files...");
             exec.buildRTF(baseConf);
+            getLog().info("...post-processing RTF...");
             postProcessRTF(getDocbkxOutputDirectory().getPath()
                     + File.separator + "rtf");
         }
@@ -117,12 +124,18 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         // Build and prepare HTML for publishing.
         if (formats.contains("html")) {
             getLog().info("Building single page HTML...");
+            getLog().info("...generating olink DB files for single page HTML...");
             exec.buildSingleHTMLOlinkDB(baseConf);
+            getLog().info("...generating single page HTML files...");
             exec.buildSingleHTML(baseConf);
 
             getLog().info("Building chunked HTML...");
+            getLog().info("...generating olink DB files for chunked HTML...");
             exec.buildChunkedHTMLOlinkDB(baseConf);
+            getLog().info("...generating chunked HTML files...");
             exec.buildChunkedHTML(baseConf);
+
+            getLog().info("...post-processing HTML...");
             postProcessHTML(getDocbkxOutputDirectory().getPath()
                     + File.separator + "html");
         }
@@ -173,13 +186,12 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
     /**
      * Prepare built EPUB documents for publication. Currently this method
-     * renames the files.
+     * does nothing.
      *
-     * @param epubDir Directory under which to find the built files
      * @throws MojoExecutionException Something went wrong updating files.
      */
     final void postProcessEPUB(final String epubDir) throws MojoExecutionException {
-        renameDocuments(epubDir, "epub");
+        // Do nothing.
     }
 
     /**
@@ -264,8 +276,14 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             }
 
             for (String docName : docNames) {
+/*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
                 String sysId = getBuildDirectory().getAbsolutePath()
                         + File.separator + docName + "-" + extension + ".target.db";
+*/
+                String sysId = baseDir.getAbsolutePath()
+                        + "/target/docbkx/" + extension + "/" + docName
+                        + "/index.fo.target.db";
+
                 content.append("<!ENTITY ").append(docName)
                         .append(" SYSTEM '").append(sysId).append("'>\n");
             }
@@ -356,6 +374,14 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     private String singleHTMLCustomization;
 
     /**
+     * Project base directory, needed to find target.db files.
+     *
+     * @parameter default-value="${basedir}"
+     * @required
+     */
+    private File baseDir;
+
+    /**
      * Get absolute path to a temporary Olink target database XML document that
      * points to the individual generated Olink DB files, for single page HTML.
      *
@@ -368,7 +394,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         try {
             StringBuilder content = new StringBuilder();
             content.append("<?xml version='1.0' encoding='utf-8'?>\n")
-                    .append("<!DOCTYPE targetset[\n");
+                    .append("<!DOCTYPE targetset [\n");
 
             String targetDbDtd = IOUtils.toString(getClass()
                     .getResourceAsStream("/targetdatabase.dtd"));
@@ -381,8 +407,14 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             }
 
             for (String docName : docNames) {
+
+/*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
                 String sysId = getBuildDirectory().getAbsolutePath()
                         + File.separator + docName + "-single.target.db";
+*/
+                String sysId = baseDir.getAbsolutePath()
+                        + "/target/docbkx/html/" + docName + "/index.html.target.db";
+
                 content.append("<!ENTITY ").append(docName)
                         .append(" SYSTEM '").append(sysId).append("'>\n");
             }
@@ -439,7 +471,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         try {
             StringBuilder content = new StringBuilder();
             content.append("<?xml version='1.0' encoding='utf-8'?>\n")
-                    .append("<!DOCTYPE targetset[\n");
+                    .append("<!DOCTYPE targetset [\n");
 
             String targetDbDtd = IOUtils.toString(getClass()
                     .getResourceAsStream("/targetdatabase.dtd"));
@@ -452,8 +484,13 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             }
 
             for (String docName : docNames) {
+/*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
                 String sysId = getBuildDirectory().getAbsolutePath()
                         + File.separator + docName + "-chunked.target.db";
+*/
+                String sysId = baseDir.getAbsolutePath() + "/target/docbkx/html/"
+                        + docName + "/index.html.target.db";
+
                 content.append("<!ENTITY ").append(docName)
                         .append(" SYSTEM '").append(sysId).append("'>\n");
             }
@@ -1008,16 +1045,25 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.addAll(baseConfiguration);
-            cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
             cfg.add(element(name("epubCustomization"), FilenameUtils
                     .separatorsToUnix(getEpubCustomization().getPath())));
             cfg.add(element(name("targetDirectory"), FilenameUtils
                     .separatorsToUnix(getDocbkxOutputDirectory().getPath()
                             + File.separator + "epub")));
 
-            copyImages("epub", FilenameUtils.getBaseName(getDocumentSrcName()));
+            copyImages("epub");
 
-            executeMojo(
+            Set<String> docNames = DocUtils.getDocumentNames(
+                    sourceDirectory, getDocumentSrcName());
+            if (docNames.isEmpty()) {
+                throw new MojoExecutionException("No document names found.");
+            }
+
+            for (String docName : docNames) {
+                cfg.add(element(name("includes"), docName + "/"
+                        + getDocumentSrcName()));
+
+                executeMojo(
                     plugin(groupId("com.agilejava.docbkx"),
                             artifactId("docbkx-maven-plugin"),
                             version(getDocbkxVersion())),
@@ -1025,6 +1071,12 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                     configuration(cfg.toArray(new Element[cfg.size()])),
                     executionEnvironment(getProject(), getSession(),
                             getPluginManager()));
+
+                File outputEpub = new File(
+                        new File(getDocbkxOutputDirectory(), "epub"),
+                        FilenameUtils.getBaseName(getDocumentSrcName()) + ".epub");
+                renameDocument(outputEpub, docName);
+            }
         }
 
         /**
@@ -1061,15 +1113,27 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                 cfg.add(element(name("collectXrefTargets"), "yes"));
                 cfg.add(element(name("currentDocid"), docName));
                 cfg.add(element(name("insertOlinkPdfFrag"), "1"));
-                cfg.add(element(
+
+/*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
+                 cfg.add(element(
                         name("targetsFilename"),
                         FilenameUtils.separatorsToUnix(getBuildDirectory().getPath())
                                 + "/" + docName + "-" + extension + ".target.db"));
+*/
+
+                // Due to https://code.google.com/p/docbkx-tools/issues/detail?id=112
+                // RTF generation does not work with docbkx-tools 2.0.15.
+                // If the format is RTF, stick with 2.0.14 for now.
+                // TODO: Remove this sick hack when docbkx-tools #112 is fixed.
+                String docbkxVersion = getDocbkxVersion();
+                if (extension.equalsIgnoreCase("rtf")) {
+                    docbkxVersion = "2.0.14";
+                }
 
                 executeMojo(
                         plugin(groupId("com.agilejava.docbkx"),
                                 artifactId("docbkx-maven-plugin"),
-                                version(getDocbkxVersion())),
+                                version(docbkxVersion)),
                         goal("generate-" + extension),
                         configuration(cfg.toArray(new Element[cfg.size()])),
                         executionEnvironment(getProject(), getSession(),
@@ -1204,11 +1268,20 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                         FilenameUtils.separatorsToUnix(getDocbkxOutputDirectory().getPath())
                                 + "/" + format));
 
+                // Due to https://code.google.com/p/docbkx-tools/issues/detail?id=112
+                // RTF generation does not work with docbkx-tools 2.0.15.
+                // If the format is RTF, stick with 2.0.14 for now.
+                // TODO: Remove this sick hack when docbkx-tools #112 is fixed.
+                String docbkxVersion = getDocbkxVersion();
+                if (format.equalsIgnoreCase("rtf")) {
+                    docbkxVersion = "2.0.14";
+                }
+
                 executeMojo(
                         plugin(
                                 groupId("com.agilejava.docbkx"),
                                 artifactId("docbkx-maven-plugin"),
-                                version(getDocbkxVersion()),
+                                version(docbkxVersion),
                                 dependencies(
                                         dependency(
                                                 groupId("net.sf.offo"),
@@ -1290,6 +1363,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
             cfg.add(element(name("sourceDirectory"), FilenameUtils
                     .separatorsToUnix(sourceDirectory.getPath())));
+            cfg.add(element(name("chunkedOutput"), "false"));
+            cfg.add(element(name("htmlCustomization"), FilenameUtils
+                    .separatorsToUnix(getSingleHTMLCustomization().getPath())));
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     sourceDirectory, getDocumentSrcName());
@@ -1301,6 +1377,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                 cfg.add(element(name("includes"), docName + "/"
                         + getDocumentSrcName()));
                 cfg.add(element(name("collectXrefTargets"), "only"));
+
+/*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
                 cfg.add(element(
                         name("targetsFilename"),
                         FilenameUtils.separatorsToUnix(getBuildDirectory()
@@ -1308,6 +1386,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                                 + "/"
                                 + docName
                                 + "-single.target.db"));
+*/
 
                 executeMojo(
                         plugin(groupId("com.agilejava.docbkx"),
@@ -1376,6 +1455,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             cfg.add(element(name("sourceDirectory"), FilenameUtils
                     .separatorsToUnix(sourceDirectory.getPath())));
             cfg.add(element(name("chunkedOutput"), "true"));
+
             cfg.add(element(name("htmlCustomization"), FilenameUtils
                     .separatorsToUnix(getChunkedHTMLCustomization().getPath())));
 
@@ -1390,6 +1470,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                 cfg.add(element(name("includes"), docName + "/"
                         + getDocumentSrcName()));
                 cfg.add(element(name("collectXrefTargets"), "only"));
+
+/*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
                 cfg.add(element(
                         name("targetsFilename"),
                         FilenameUtils.separatorsToUnix(getBuildDirectory()
@@ -1397,6 +1479,12 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                                 + "/"
                                 + docName
                                 + "-chunked.target.db"));
+*/
+
+                final String chunkBaseDir = FilenameUtils
+                        .separatorsToUnix(getDocbkxOutputDirectory().getPath())
+                        + "/html/" + docName + "/index/";
+                cfg.add(element(name("chunkBaseDir"), chunkBaseDir));
 
                 executeMojo(
                         plugin(groupId("com.agilejava.docbkx"),
@@ -1430,26 +1518,43 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.addAll(baseConfiguration);
-            cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
             cfg.add(element(name("chunkedOutput"), "true"));
             cfg.add(element(name("htmlCustomization"), FilenameUtils
                     .separatorsToUnix(getChunkedHTMLCustomization().getPath())));
             cfg.add(element(name("targetDatabaseDocument"),
                     buildChunkedHTMLTargetDB()));
-            cfg.add(element(name("targetDirectory"), FilenameUtils
-                    .separatorsToUnix(getDocbkxOutputDirectory().getPath()
-                            + File.separator + "html")));
+            cfg.add(element(name("generateManifest"), "1"));
 
             copyImages("html", FilenameUtils.getBaseName(getDocumentSrcName()));
 
-            executeMojo(
-                    plugin(groupId("com.agilejava.docbkx"),
-                            artifactId("docbkx-maven-plugin"),
-                            version(getDocbkxVersion())),
-                    goal("generate-html"),
-                    configuration(cfg.toArray(new Element[cfg.size()])),
-                    executionEnvironment(getProject(), getSession(),
-                            getPluginManager()));
+            Set<String> docNames = DocUtils.getDocumentNames(
+                    sourceDirectory, getDocumentSrcName());
+            if (docNames.isEmpty()) {
+                throw new MojoExecutionException("No document names found.");
+            }
+
+            for (String docName : docNames) {
+                cfg.add(element(name("includes"),
+                        docName + "/" + getDocumentSrcName()));
+
+                final String chunkBaseDir = FilenameUtils
+                        .separatorsToUnix(getDocbkxOutputDirectory().getPath())
+                        + "/html/" + docName + "/index/";
+                cfg.add(element(name("chunkBaseDir"), chunkBaseDir));
+
+                cfg.add(element(name("manifest"),
+                        getDocbkxOutputDirectory().getPath()
+                                + "/" + docName + ".manifest"));
+
+                executeMojo(
+                        plugin(groupId("com.agilejava.docbkx"),
+                                artifactId("docbkx-maven-plugin"),
+                                version(getDocbkxVersion())),
+                        goal("generate-html"),
+                        configuration(cfg.toArray(new Element[cfg.size()])),
+                        executionEnvironment(getProject(), getSession(),
+                                getPluginManager()));
+            }
         }
     }
 }
