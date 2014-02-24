@@ -35,7 +35,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      * Docbkx Tools plugin version to use. Executions seem to hit an NPE when
      * the version is not specified.
      *
-     * @parameter default-value="2.0.14" property="docbkxVersion"
+     * @parameter default-value="2.0.15" property="docbkxVersion"
      * @required
      */
     private String docbkxVersion;

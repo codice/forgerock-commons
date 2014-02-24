@@ -123,17 +123,15 @@ public class SiteBuildMojo extends AbstractBuildMojo {
             List<String> formats = getOutputFormats();
 
             if (formats.contains("epub")) {
-                for (String docName : docNames) {
-                    String epubDir = FilenameUtils
-                            .separatorsToUnix(getDocbkxOutputDirectory()
-                                    .getPath())
-                            + "/epub/" + docName;
-                    r.add(element(
-                            name("resource"),
-                            element(name("directory"), epubDir),
-                            element(name("includes"),
-                                    element(name("include"), "**/*.epub"))));
-                }
+                String epubDir = FilenameUtils
+                        .separatorsToUnix(getDocbkxOutputDirectory()
+                                .getPath())
+                        + "/epub/";
+                r.add(element(
+                        name("resource"),
+                        element(name("directory"), epubDir),
+                        element(name("includes"),
+                                element(name("include"), "**/*.epub"))));
             }
 
             if (formats.contains("html")) {
