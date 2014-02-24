@@ -12,6 +12,11 @@ fixes.
 
 ## Improvements & New Features
 
+**DOCS-81: Evaluate impact of a move to docbkx-tools 2.0.15**
+
+This has not simply been evaluated, but also implemented.
+The plugin now _requires_ 2.0.15.
+
 **DOCS-127: Center narrow images by default in PDF**
 
 
