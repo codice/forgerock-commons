@@ -17,6 +17,13 @@ fixes.
 This has not simply been evaluated, but also implemented.
 The plugin now _requires_ 2.0.15.
 
+**DOCS-122: Center narrow images by default in PDF**
+
+Moved to version 7993 of PlantUML by default,
+which includes support for bidirectional arrows.
+
+Use `<plantUmlVersion>` if necessary to set the artifact version.
+
 **DOCS-127: Center narrow images by default in PDF**
 
 
