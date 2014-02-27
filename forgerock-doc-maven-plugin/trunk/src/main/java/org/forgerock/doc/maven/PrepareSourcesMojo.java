@@ -141,6 +141,13 @@ public class PrepareSourcesMojo extends AbstractBuildMojo {
         return idt.update(xmlSourceDirectory);
     }
 
+    /**
+     * Version of the PlantUML artifact to use.
+     * @parameter default-value="7993" property="plantUmlVersion"
+     * @required
+     */
+    private String plantUmlVersion;
+
     class Executor extends MojoExecutor {
 
         /**
@@ -155,13 +162,13 @@ public class PrepareSourcesMojo extends AbstractBuildMojo {
             executeMojo(
                     plugin(
                             groupId("com.github.jeluard"),
-                            artifactId("maven-plantuml-plugin"),
-                            version("7940"),
+                            artifactId("plantuml-maven-plugin"),
+                            version("1.0"),
                             dependencies(
                                     dependency(
                                             groupId("net.sourceforge.plantuml"),
                                             artifactId("plantuml"),
-                                            version("7940")))),
+                                            version(plantUmlVersion)))),
                     goal("generate"),
                     configuration(
                             element(name("sourceFiles"),
