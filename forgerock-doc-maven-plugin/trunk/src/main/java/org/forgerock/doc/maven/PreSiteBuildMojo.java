@@ -8,7 +8,7 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2012-2013 ForgeRock AS
+ *     Copyright 2012-2014 ForgeRock AS
  *
  */
 
@@ -123,6 +123,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
         // Build and prepare HTML for publishing.
         if (formats.contains("html")) {
+            getLog().info("Drop in CSS for HTML...");
+            exec.addCustomCss();
             getLog().info("Building single page HTML...");
             getLog().info("...generating olink DB files for single page HTML...");
             exec.buildSingleHTMLOlinkDB(baseConf);
@@ -584,11 +586,6 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             replacements.put("</body>", linkToJira + "\n" + gascript);
 
             HTMLUtils.updateHTML(htmlDir, replacements);
-
-            getLog().info("Adding CSS...");
-            File css = new File(getBuildDirectory().getPath(), getPreSiteCssFileName());
-            HTMLUtils.addCss(htmlDir, css,
-                    FilenameUtils.getBaseName(getDocumentSrcName()) + ".html");
         } catch (IOException e) {
             throw new MojoExecutionException(
                     "Failed to update output HTML correctly: " + e.getMessage());
@@ -1348,6 +1345,56 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                     configuration(cfg.toArray(new Element[cfg.size()])),
                     executionEnvironment(getProject(), getSession(),
                             getPluginManager()));
+        }
+
+        /**
+         * Add custom CSS with XML wrapper to document source directories.
+         * See <a href="http://docbook.sourceforge.net/release/xsl/current/doc/html/custom.css.source.html"
+         * >custom.css.source</a> for details.
+         *
+         * @throws MojoExecutionException Failed to add custom CSS.
+         */
+        void addCustomCss() throws MojoExecutionException {
+
+            // For each document source directory, add CSS with an XML wrapper.
+            final String cssFileName = getPreSiteCssFileName();
+            final File cssFile = new File(getBuildDirectory(), cssFileName);
+
+            if (!cssFile.exists()) {
+                throw new MojoExecutionException(cssFile.getPath() + " not found");
+            }
+
+            final String cssString;
+            try {
+                cssString = FileUtils.readFileToString(cssFile);
+            } catch (IOException ie) {
+                throw new MojoExecutionException(
+                        "Failed to read CSS " + cssFile.getPath(), ie);
+            }
+
+            Set<String> docNames = DocUtils.getDocumentNames(
+                    sourceDirectory, getDocumentSrcName());
+            if (docNames.isEmpty()) {
+                throw new MojoExecutionException("No document names found.");
+            }
+
+            for (String docName : docNames) {
+
+                final File parent = new File(sourceDirectory, docName);
+                final File xmlFile = new File(parent, cssFileName + ".xml");
+
+                try {
+                    FileUtils.write(xmlFile, "<?xml version=\"1.0\"?>\n", true);
+                    FileUtils.write(xmlFile, "<style>\n", true);
+                    FileUtils.write(xmlFile, cssString, true);
+                    FileUtils.write(xmlFile, "</style>\n", true);
+                } catch (IOException ie) {
+                    throw new MojoExecutionException(
+                            "Failed to write XML to " + xmlFile.getPath(), ie);
+                }
+
+            }
+
         }
 
         /**
