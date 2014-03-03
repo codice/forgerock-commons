@@ -30,23 +30,23 @@ import org.forgerock.script.ScriptName;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.URI;
 import java.net.URL;
 
 /**
- * A NAME does ...
+ * A script whose source is not in a file, or resource, but embedded in
+ * configuration string, database entry, or other "in-line" entity.
  *
  * @author Laszlo Hordos
  */
 public class EmbeddedScriptSource implements ScriptSource {
 
-    private ScriptEntry.Visibility visibility = ScriptEntry.Visibility.DEFAULT;
-    private String source;
-    private ScriptName scriptName;
+    private final ScriptEntry.Visibility visibility;
+    private final String source;
+    private final ScriptName scriptName;
 
     public EmbeddedScriptSource(String source, ScriptName scriptName) {
-        this.source = source;
-        this.scriptName = new ScriptName(
-                scriptName.getName(), scriptName.getType(), scriptName.getRevision(), scriptName.getRequestBinding());
+        this(ScriptEntry.Visibility.DEFAULT, source, scriptName);
     }
 
     public EmbeddedScriptSource(ScriptEntry.Visibility visibility, String source,
@@ -62,8 +62,12 @@ public class EmbeddedScriptSource implements ScriptSource {
     }
 
     public URL getSource() {
-        // TODO Cache the source and get that URL. The cache should be
-        // centralised.
+        // TODO Cache the source and get that URL. The cache should be centralised.
+        return null;
+    }
+
+    public URI getSourceURI() {
+        // TODO Cache the source and get that URL. The cache should be centralised.
         return null;
     }
 

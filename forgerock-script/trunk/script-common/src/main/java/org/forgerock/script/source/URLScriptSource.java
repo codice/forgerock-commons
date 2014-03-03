@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.AccessController;
@@ -39,69 +41,28 @@ import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 
 /**
- * A NAME does ...
+ * A script sourced from a URL.
  *
  * @author Laszlo Hordos
  */
 public class URLScriptSource implements ScriptSource {
 
-    private ScriptEntry.Visibility visibility;
-    private URL source;
-    private ScriptName scriptName;
-    private SourceContainer parent = null;
+    private final ScriptEntry.Visibility visibility;
 
-    public URLScriptSource(ScriptEntry.Visibility visibility, URL source, ScriptName scriptName) {
-        if (null == source) {
-            throw new IllegalArgumentException("URL source is null");
-        }
-        if (null == scriptName) {
-            throw new IllegalArgumentException("ScriptName is null");
-        }
-        this.visibility = visibility;
-        this.source = source;
+    /** the script source URL */
+    private final URL source;
+    /** the script source as a URI */
+    private final URI sourceURI;
 
-        this.scriptName = new ScriptName(
-                scriptName.getName(),
-                scriptName.getType(),
-                Long.toHexString(getURLRevision(source, null)),
-                scriptName.getRequestBinding());
-    }
+    private final ScriptName scriptName;
+    private final SourceContainer parent;
 
-    public static long getURLRevision(URL source, String revision) {
-        if (null == source) {
-            throw new NullPointerException();
-        }
-        long lastMod = 0;
-
-        if (null == revision || "0".equals(revision)) {
-            InputStream in = null;
-            try {
-                URLConnection urlConnection = source.openConnection();
-                if (urlConnection != null) {
-                    lastMod = ((urlConnection.getLastModified() / 1000) + 1) * 1000 - 1;
-                    // We need to get the input stream and close it to force the
-                    // open
-                    // file descriptor to be released. Otherwise, we will reach
-                    // the limit
-                    // for number of files open at one time.
-                    in = urlConnection.getInputStream();
-                }
-            } catch (IOException e) {
-                /* ignore */
-            } finally {
-                if (in != null) {
-                    try {
-                        in.close();
-                    } catch (IOException e) {
-                    }
-                }
-            }
-        }
-        return lastMod;
+    public URLScriptSource(ScriptEntry.Visibility visibility, URL source, ScriptName scriptName) throws URISyntaxException {
+        this(visibility, source, scriptName, null);
     }
 
     public URLScriptSource(ScriptEntry.Visibility visibility, URL source, ScriptName scriptName,
-            final SourceContainer parent) {
+            final SourceContainer parent) throws URISyntaxException {
         if (null == source) {
             throw new IllegalArgumentException("URL source is null");
         }
@@ -110,6 +71,7 @@ public class URLScriptSource implements ScriptSource {
         }
         this.visibility = visibility;
         this.source = source;
+        this.sourceURI = source.toURI();
         this.scriptName = new ScriptName(
                 scriptName.getName(),
                 scriptName.getType(),
@@ -128,6 +90,10 @@ public class URLScriptSource implements ScriptSource {
 
     public URL getSource() {
         return source;
+    }
+
+    public URI getSourceURI() {
+        return sourceURI;
     }
 
     public Reader getReader() throws IOException {
@@ -153,5 +119,36 @@ public class URLScriptSource implements ScriptSource {
 
     public SourceContainer getParentContainer() {
         return parent;
+    }
+
+    public static long getURLRevision(URL source, String revision) {
+        if (null == source) {
+            throw new NullPointerException();
+        }
+        long lastMod = 0;
+
+        if (null == revision || "0".equals(revision)) {
+            InputStream in = null;
+            try {
+                URLConnection urlConnection = source.openConnection();
+                if (urlConnection != null) {
+                    lastMod = ((urlConnection.getLastModified() / 1000) + 1) * 1000 - 1;
+                    // We need to get the input stream and close it to force the open
+                    // file descriptor to be released. Otherwise, we will reach the limit
+                    // for number of files open at one time.
+                    in = urlConnection.getInputStream();
+                }
+            } catch (IOException e) {
+                /* ignore */
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                    }
+                }
+            }
+        }
+        return lastMod;
     }
 }

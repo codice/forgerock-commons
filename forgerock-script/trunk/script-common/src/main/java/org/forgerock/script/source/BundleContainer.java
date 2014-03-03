@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2014
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -28,10 +28,12 @@ import org.forgerock.script.ScriptEntry;
 import org.forgerock.script.ScriptName;
 import org.osgi.framework.Bundle;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
- * A BundleContainer loads the scrips from an OSGi bundle.
+ * A BundleContainer loads the scripts from an OSGi bundle.
  *
  * @author Laszlo Hordos
  */
@@ -39,17 +41,28 @@ public class BundleContainer implements SourceContainer {
 
     private final ScriptName unitName;
     private final Bundle bundle;
+    private final URL source;
+    private final URI sourceURI;
     private final ScriptEntry.Visibility visibility = ScriptEntry.Visibility.DEFAULT;
 
-    public BundleContainer(String unitName, Bundle bundle) {
+    public BundleContainer(String unitName, Bundle bundle) throws URISyntaxException {
         this.unitName = new ScriptName(unitName, AUTO_DETECT);
         this.bundle = bundle;
+        this.source = bundle.getResource("/");
+        this.sourceURI = source.toURI();
     }
 
     public ScriptSource findScriptSource(ScriptName name) {
         URL source = bundle.getResource(name.getName());
         if (source != null) {
-            return new URLScriptSource(getVisibility(), source, name, this);
+            try {
+                return new URLScriptSource(getVisibility(), source, name, this);
+            } catch (URISyntaxException e) {
+                // return null (below) as URLScriptSource was not able to convert
+                // source to a URI.  In practice, this should never be triggered
+                // as this object's constructor does the same thing and will
+                // throw an exception at instantiation
+            }
         }
         return null;
     }
@@ -59,7 +72,11 @@ public class BundleContainer implements SourceContainer {
     }
 
     public URL getSource() {
-        return bundle.getResource("/");
+        return source;
+    }
+
+    public URI getSourceURI() {
+        return sourceURI;
     }
 
     public ScriptEntry.Visibility getVisibility() {

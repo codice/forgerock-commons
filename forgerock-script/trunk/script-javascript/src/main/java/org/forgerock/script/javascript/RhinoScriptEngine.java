@@ -31,10 +31,16 @@ import org.forgerock.script.engine.CompilationHandler;
 import org.forgerock.script.engine.ScriptEngineFactory;
 import org.forgerock.script.scope.OperationParameter;
 import org.forgerock.script.source.ScriptSource;
+import org.forgerock.script.source.SourceContainer;
 import org.forgerock.script.source.URLScriptSource;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.Script;
+import org.mozilla.javascript.commonjs.module.ModuleScriptProvider;
+import org.mozilla.javascript.commonjs.module.RequireBuilder;
+import org.mozilla.javascript.commonjs.module.provider.ModuleSourceProvider;
+import org.mozilla.javascript.commonjs.module.provider.SoftCachingModuleScriptProvider;
+import org.mozilla.javascript.commonjs.module.provider.UrlModuleSourceProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +48,10 @@ import javax.script.Bindings;
 import javax.script.ScriptException;
 import java.io.IOException;
 import java.io.Reader;
+import java.net.URI;
 import java.net.URLDecoder;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -69,7 +78,10 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
 
     private long minimumRecompilationInterval = -1;
 
-    RhinoScriptEngine(Map<String, Object> configuration, final ScriptEngineFactory factory) {
+    private RequireBuilder requireBuilder;
+
+    RhinoScriptEngine(final Map<String, Object> configuration, final ScriptEngineFactory factory,
+            final Collection<SourceContainer> sourceContainers) {
         this.factory = factory;
 
         Object debugProperty = configuration.get(CONFIG_DEBUG_PROPERTY);
@@ -80,15 +92,48 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
         if (recompile instanceof String) {
             minimumRecompilationInterval = Long.valueOf((String) recompile);
         }
+
+        // Use an Iterable over the SourceContainer collection--that way if it
+        // changes (adds, removes, changes)--the new collection is reflected in
+        // the UrlModuleSourceProvider.
+        final Iterable<URI> sourceContainerURIIterable = new Iterable<URI>() {
+            @Override
+            public Iterator<URI> iterator() {
+                final Iterator<SourceContainer> iter = sourceContainers.iterator();
+                return new Iterator<URI>() {
+                    @Override
+                    public boolean hasNext() {
+                        return iter.hasNext();
+                    }
+
+                    @Override
+                    public URI next() {
+                        return iter.next().getSourceURI();
+                    }
+
+                    @Override
+                    public void remove() {
+                        // Not supported
+                    }
+                };
+            }
+        };
+
+        // Configure the CommonJS module providers per unoffoicial commonjs author documentation
+        // https://groups.google.com/d/msg/mozilla-rhino/HCMh_lAKiI4/P1MA3sFsNKQJ
+        ModuleSourceProvider sourceProvider = new UrlModuleSourceProvider(sourceContainerURIIterable, null);
+        ModuleScriptProvider scriptProvider = new SoftCachingModuleScriptProvider(sourceProvider);
+        requireBuilder = new RequireBuilder();
+        requireBuilder.setModuleScriptProvider(scriptProvider);
     }
 
     private static final class ScriptCacheEntry {
         private final Script compiledScript;
-        private final URLScriptSource scriptSource;
+        private final ScriptSource scriptSource;
         private final long lastModified;
         private final long lastCheck;
 
-        private ScriptCacheEntry(final Script compiledScript, final URLScriptSource scriptSource,
+        private ScriptCacheEntry(final Script compiledScript, final ScriptSource scriptSource,
                 long lastModified, long lastCheck) {
             this.compiledScript = compiledScript;
             this.scriptSource = scriptSource;
@@ -155,13 +200,15 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
                 Script script = compileScript(name, source.getReader());
                 long now = System.currentTimeMillis();
                 scriptCache.put(name, new ScriptCacheEntry(script, source, now, now));
-                rhinoScript = new RhinoScript(name, this, sharedScope);
+                rhinoScript = new RhinoScript(name, script, this, requireBuilder, sharedScope);
             } else {
                 // TODO Cache the source for debugger
                 ScriptSource source = handler.getScriptSource();
                 String name = source.getName().getName();
                 Script script = compileScript(name, source.getReader());
-                rhinoScript = new RhinoScript(name, script, this, sharedScope);
+                long now = System.currentTimeMillis();
+                scriptCache.put(name, new ScriptCacheEntry(script, source, now, now));
+                rhinoScript = new RhinoScript(name, script, this, requireBuilder, sharedScope);
             }
             handler.setCompiledScript(rhinoScript);
         } catch (Throwable e) {

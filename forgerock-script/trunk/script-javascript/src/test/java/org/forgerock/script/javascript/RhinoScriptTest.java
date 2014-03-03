@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2014 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -28,10 +28,15 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.forgerock.json.resource.RootContext;
+import org.forgerock.script.Script;
+import org.forgerock.script.ScriptEntry;
 import org.forgerock.script.ScriptName;
 import org.forgerock.script.ScriptTest;
 import org.forgerock.script.source.EmbeddedScriptSource;
 import org.testng.annotations.Test;
+
+import static org.fest.assertions.api.Assertions.assertThat;
 
 /**
  * A NAME does ...
@@ -72,5 +77,14 @@ public class RhinoScriptTest extends ScriptTest {
      *
      * Object o = ((Map)b.get("router")).get("read"); o.getClass(); }
      */
+
+
+    @Test
+    public void testRequire() throws Exception {
+        ScriptEntry scriptEntry = getScriptRegistry().takeScript(new ScriptName("require", getLanguageName()));
+        Script script = scriptEntry.getScript(new RootContext());
+        script.put("ketto", 5);
+        assertThat(script.eval()).isEqualTo(25);
+    }
 
 }

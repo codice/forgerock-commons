@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2014 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -52,6 +52,7 @@ import org.mozilla.javascript.ScriptRuntime;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.WrappedException;
+import org.mozilla.javascript.commonjs.module.RequireBuilder;
 import org.mozilla.javascript.tools.shell.Global;
 import org.mozilla.javascript.tools.shell.QuitAction;
 import org.slf4j.Logger;
@@ -78,8 +79,7 @@ public class RhinoScript implements CompiledScript {
      * A sealed shared scope to improve performance; avoids allocating standard
      * objects on every exec call.
      */
-    private/* static */ScriptableObject topSharedScope = null; // lazily
-                                                               // initialized
+    private/* static */ScriptableObject topSharedScope = null; // lazily initialized
 
     /** The script level scope to use */
     private Scriptable scriptScope = null;
@@ -90,8 +90,11 @@ public class RhinoScript implements CompiledScript {
     /** The script name */
     private final String scriptName;
 
-    /** The parent ScriptEngin */
+    /** The parent ScriptEngine */
     private final RhinoScriptEngine engine;
+
+    /** The CommonJS module builder for Require instances. */
+    private final RequireBuilder requireBuilder;
 
     public static final Global GLOBAL = new Global();
 
@@ -118,6 +121,7 @@ public class RhinoScript implements CompiledScript {
      * etc.) will be used for script execution; otherwise a new unsealed scope
      * will be allocated for each execution.
      *
+     *
      * @param compiledScript
      *            the source code of the JavaScript script.
      * @param sharedScope
@@ -127,11 +131,12 @@ public class RhinoScript implements CompiledScript {
      *             if there was an exception encountered while compiling the
      *             script.
      */
-    public RhinoScript(String name, Script compiledScript, final RhinoScriptEngine engine,
+    public RhinoScript(String name, Script compiledScript, final RhinoScriptEngine engine, RequireBuilder requireBuilder,
             boolean sharedScope) throws ScriptException {
         this.scriptName = name;
         this.sharedScope = sharedScope;
         this.engine = engine;
+        this.requireBuilder = requireBuilder;
         Context cx = Context.enter();
         try {
             scriptScope = getScriptScope(cx);
@@ -147,11 +152,12 @@ public class RhinoScript implements CompiledScript {
     /**
      * TEMPORARY
      */
-    public RhinoScript(String name, final RhinoScriptEngine engine, boolean sharedScope)
+    public RhinoScript(String name, final RhinoScriptEngine engine, RequireBuilder requireBuilder, boolean sharedScope)
             throws ScriptException {
         this.scriptName = name;
         this.sharedScope = sharedScope;
         this.engine = engine;
+        this.requireBuilder = requireBuilder;
         Context cx = Context.enter();
         try {
             scriptScope = getScriptScope(cx);
@@ -185,13 +191,11 @@ public class RhinoScript implements CompiledScript {
             scope.initQuitAction(new IProxy());
             // ScriptableList.init(scope, false);
 
-            context.setApplicationClassLoader(new InnerClassLoader(context
-                    .getApplicationClassLoader()));
+            context.setApplicationClassLoader(new InnerClassLoader(context.getApplicationClassLoader()));
             InputStream init = RhinoScript.class.getResourceAsStream("/resources/init.js");
             if (null != init) {
                 try {
-                    context.evaluateString(scope, Utils.readStream(init), "/resources/init.js", 1,
-                            null);
+                    context.evaluateString(scope, Utils.readStream(init), "/resources/init.js", 1, null);
                 } catch (IOException e) {
                     logger.error("Failed to evaluate init.js", e);
                 }
@@ -230,23 +234,21 @@ public class RhinoScript implements CompiledScript {
      */
     private void addLoggerProperty(Scriptable scope) {
         String loggerName = "org.forgerock.script.javascript.JavaScript." + trimPath(scriptName);
-        scope.put("logger", scope, Converter.wrap(null, FunctionFactory.getLogger(loggerName),
-                scope, false));
+        scope.put("logger", scope, Converter.wrap(null, FunctionFactory.getLogger(loggerName), scope, false));
     }
 
     private String trimPath(String name) {
         return name.indexOf("/") != -1 ? name.substring(name.lastIndexOf("/") + 1) : name;
     }
 
-    public Bindings prepareBindings(org.forgerock.json.resource.Context context, Bindings request,
-            Bindings... scopes) {
+    public Bindings prepareBindings(org.forgerock.json.resource.Context context, Bindings request, Bindings... scopes) {
         // TODO Fix it later
         return new SimpleBindings();
     }
 
     @Override
-    public Object eval(final org.forgerock.json.resource.Context ctx, Bindings request,
-            Bindings... scopes) throws ScriptException {
+    public Object eval(final org.forgerock.json.resource.Context ctx, Bindings request, Bindings... scopes)
+            throws ScriptException {
 
         Context context = Context.enter();
         try {
@@ -300,6 +302,10 @@ public class RhinoScript implements CompiledScript {
                                                          // properties
             inner.setPrototype(outer);
             inner.setParentScope(null);
+
+            // install require function per unoffoicial commonjs author documentation
+            // https://groups.google.com/d/msg/mozilla-rhino/HCMh_lAKiI4/P1MA3sFsNKQJ
+            requireBuilder.createRequire(context, inner).install(inner);
 
             final Script scriptInstance = null != script ? script : engine.createScript(scriptName);
             Object result = Converter.convert(scriptInstance.exec(context, inner));

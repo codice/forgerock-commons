@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2014 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -25,7 +25,9 @@
 package org.forgerock.script.engine;
 
 import org.forgerock.json.resource.PersistenceConfig;
+import org.forgerock.script.source.SourceContainer;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -110,9 +112,12 @@ public interface ScriptEngineFactory {
      * {@code ScriptEngineFactory}. A new ScriptEngine is generally returned,
      * but implementations may pool, share or reuse engines.
      *
+     * @param connectionFactory a reference to the ConnectionFactory provider
+     * @param confiugration script engine configuration
+     * @param sourceContainers a collection of SourceContainers used to locate scripts
      * @return A new {@code ScriptEngine} instance.
      */
     public ScriptEngine getScriptEngine(AtomicReference<PersistenceConfig> connectionFactory,
-            Map<String, Object> configuration);
+            Map<String, Object> configuration, Collection<SourceContainer> sourceContainers);
 
 }
