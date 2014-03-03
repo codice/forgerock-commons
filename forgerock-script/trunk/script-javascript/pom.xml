@@ -27,7 +27,7 @@
     <parent>
         <groupId>org.forgerock.commons</groupId>
         <artifactId>forgerock-script</artifactId>
-        <version>1.0.9-SNAPSHOT</version>
+        <version>1.1.4-SNAPSHOT</version>
     </parent>
     <artifactId>script-javascript</artifactId>
     <packaging>bundle</packaging>
