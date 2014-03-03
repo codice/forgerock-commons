@@ -12,6 +12,8 @@ fixes.
 
 ## Improvements & New Features
 
+**DOCS-7: Use make.clean.html and docbook.css.source for styling HTML output**
+
 **DOCS-81: Evaluate impact of a move to docbkx-tools 2.0.15**
 
 This has not simply been evaluated, but also implemented.
