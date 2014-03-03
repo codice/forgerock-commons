@@ -27,6 +27,7 @@ package org.forgerock.script.source;
 import org.forgerock.script.ScriptEntry;
 import org.forgerock.script.ScriptName;
 
+import java.net.URI;
 import java.net.URL;
 
 /**
@@ -47,6 +48,8 @@ public interface SourceUnit {
     ScriptName getName();
 
     URL getSource();
+
+    URI getSourceURI();
 
     ScriptEntry.Visibility getVisibility();
 

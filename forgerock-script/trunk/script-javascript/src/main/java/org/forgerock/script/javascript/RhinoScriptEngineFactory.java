@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2014 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -27,8 +27,10 @@ package org.forgerock.script.javascript;
 import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.script.engine.ScriptEngine;
 import org.forgerock.script.engine.ScriptEngineFactory;
+import org.forgerock.script.source.SourceContainer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -103,11 +105,12 @@ public class RhinoScriptEngineFactory implements ScriptEngineFactory {
 
     public ScriptEngine getScriptEngine(
             final AtomicReference<PersistenceConfig> persistenceConfigReference,
-            Map<String, Object> configuration) {
+            final Map<String, Object> configuration,
+            final Collection<SourceContainer> sourceContainers) {
         if (null == engine) {
             synchronized (this) {
                 if (null == engine) {
-                    engine = new RhinoScriptEngine(configuration, this);
+                    engine = new RhinoScriptEngine(configuration, this, sourceContainers);
                     engine.setPersistenceConfig(persistenceConfigReference);
                 }
             }

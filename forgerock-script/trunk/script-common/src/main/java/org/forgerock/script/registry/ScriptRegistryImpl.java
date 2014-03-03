@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2013 ForgeRock AS. All Rights Reserved
+ * Copyright (c) 2013-2014 ForgeRock AS. All Rights Reserved
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -260,9 +260,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
                         if (null == engine) {
                             for (ScriptEngineFactory f : engines.keySet()) {
                                 if (f.getLanguageName().equalsIgnoreCase(factory.getLanguageName())) {
-                                    // Avoid the duplicated factories for the
-                                    // same
-                                    // language!
+                                    // Avoid the duplicated factories for the same language!
                                     return engines.get(f);
                                 }
                             }
@@ -286,7 +284,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
             configuration = new HashMap<String, Object>();
         }
         configuration.put(Bindings.class.getName(), globalScope);
-        engine = factory.getScriptEngine(persistenceConfigReference, configuration);
+        engine = factory.getScriptEngine(persistenceConfigReference, configuration, sourceCache.values());
         return engine;
     }
 

@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock Inc. All rights reserved.
+ * Copyright (c) 2012-2014 ForgeRock Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -31,6 +31,8 @@ import org.forgerock.script.engine.ScriptEngineFactory;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.security.AccessController;
@@ -47,7 +49,8 @@ public class DirectoryContainer implements SourceContainer, ScriptEngineFactoryA
     private final ScriptEntry.Visibility visibility = ScriptEntry.Visibility.DEFAULT;
     private final ScriptName unitName;
     private final URL context;
-    private boolean subdirectories = true;
+    private final URI contextURI;
+    private final boolean subdirectories = true;
 
     Iterable<ScriptEngineFactory> factories = null;
 
@@ -56,9 +59,10 @@ public class DirectoryContainer implements SourceContainer, ScriptEngineFactoryA
      * "visibility" : "public", "type" : "auto-detect" }
      */
 
-    public DirectoryContainer(String name, URL context) {
+    public DirectoryContainer(String name, URL context) throws URISyntaxException {
         this.unitName = new ScriptName(name, SourceUnit.AUTO_DETECT);
         this.context = context;
+        this.contextURI = context.toURI();
     }
 
     public ScriptSource findScriptSource(ScriptName name) {
@@ -72,9 +76,14 @@ public class DirectoryContainer implements SourceContainer, ScriptEngineFactoryA
             }
         }
         if (null != sourceURL) {
-            URLScriptSource fileSource =
-                    new URLScriptSource(getVisibility(), sourceURL, name, this);
-            return fileSource;
+            try {
+                return new URLScriptSource(getVisibility(), sourceURL, name, this);
+            } catch (URISyntaxException e) {
+                // return null (below) as URLScriptSource was not able to convert
+                // source to a URI.  In practice, this should never be triggered
+                // as this object's constructor does the same thing and will
+                // throw an exception at instantiation
+            }
         }
         return null;
     }
@@ -123,8 +132,8 @@ public class DirectoryContainer implements SourceContainer, ScriptEngineFactoryA
             return new URL(context, name);
         } catch (MalformedURLException e) {
             /* ignore */
+            return null;
         }
-        return null;
     }
 
     private boolean isFile(URL ret) {
@@ -196,6 +205,10 @@ public class DirectoryContainer implements SourceContainer, ScriptEngineFactoryA
 
     public URL getSource() {
         return context;
+    }
+
+    public URI getSourceURI() {
+        return contextURI;
     }
 
     public SourceContainer getParentContainer() {
