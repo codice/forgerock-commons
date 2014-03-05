@@ -306,9 +306,9 @@ table.simplelist {
     display: none !important;
 }
 
-.cornerBanner {
-    color: #f58220;
-    background-color: #333;
+.latest {
+    color: white;
+    background-color: #111;
     -moz-box-shadow: 2px 2px 20px #868686;
     -moz-transform: rotate(45deg);
     -moz-transform-origin: 50% 50%;
@@ -323,7 +323,11 @@ table.simplelist {
     text-align: center;
 }
 
-.cornerBanner a {
-    color: #f58220;
+.latest a {
+    color: white;
     text-decoration: none;
+}
+
+.latest a:hover {
+    color: #f58220;
 }
