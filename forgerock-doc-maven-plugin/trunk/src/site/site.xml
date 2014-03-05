@@ -40,7 +40,7 @@
     </breadcrumbs>
     <menu name="Documentation">
       <item name="README" href="README.html"/>
-      <item name="2.1.0 release notes" href="Release Notes 2.1.0.html">
+      <item name="2.1.0 release notes" href="Release Notes 2.1.0.html"/>
       <item name="2.0.0 release notes" href="Release Notes 2.0.0.html"/>
       <item name="1.2.0 release notes" href="Release Notes 1.2.0.html"/>
     </menu>
