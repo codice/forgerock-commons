@@ -6,10 +6,11 @@ that documents are formatted uniformly.
 _This document covers functionality present in 2.0.0._
 
 With centralized configuration handled by this Maven plugin, the core
-documentation-related project configuration takes at least two arguments:
+documentation-related project configuration takes at least three arguments:
 
 *   `<projectName>`: the short name for the project such as OpenAM, OpenDJ,
     OpenICF, OpenIDM, OpenIG, and so forth
+*   `<projectVersion>`: the version, such as `1.0.0-SNAPSHOT`, or `3.3.1`
 *   `<googleAnalyticsId>`: to add Google Analytics JavaScript to the HTML
     output
 
@@ -37,6 +38,7 @@ POM property called `gaId`, whose value is the Google Analytics ID.
            <inherited>false</inherited>
            <configuration>
             <projectName>MyProject</projectName>
+            <projectVersion>1.0.0-SNAPSHOT</projectVersion>
             <googleAnalyticsId>${gaId}</googleAnalyticsId>
            </configuration>
            <executions>
@@ -397,4 +399,4 @@ To view a copy of this license, visit
 or send a letter to Creative Commons, 444 Castro Street,
 Suite 900, Mountain View, California, 94041, USA.
 
-Copyright 2012-2013 ForgeRock AS
+Copyright 2012-2014 ForgeRock AS
