@@ -79,6 +79,8 @@
  <xsl:param name="docbook.css.link" select="0" />
  <xsl:param name="docbook.css.source" select="0" />
  <xsl:param name="custom.css.source">coredoc.css.xml</xsl:param>
+ <xsl:param name="html.script">uses-jquery.js</xsl:param>
+
  <xsl:param name="admon.style">
   <xsl:value-of select="string('font-style: italic;')" />
  </xsl:param>
