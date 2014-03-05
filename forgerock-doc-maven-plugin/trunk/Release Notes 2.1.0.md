@@ -19,6 +19,26 @@ fixes.
 This has not simply been evaluated, but also implemented.
 The plugin now _requires_ 2.0.15.
 
+**DOCS-117: Advertise latest stable doc release in in-progress documentation**
+
+At present this change adds a small ribbon banner
+with a link to the latest released doc in the upper right corner of HTML output.
+No banner appears if the current HTML is in fact the latest stable release.
+
+Because the script to generate a banner advertising the latest released doc
+compares the current version with the latest version
+to determine whether to show the banner,
+the fix requires a new configuration parameter specifying the project version,
+as in the following example:
+
+    <projectVersion>3.0.0-SNAPSHOT</projectVersion>
+
+The script relies on the latest versions being published as a JSON resource
+that is safely accessible wherever the in-progress documentation is published.
+
+TODO: Fix the default value for latestJson in AbstractBuildMojo.java,
+and mention this at <https://github.com/markcraig/docs.forgerock.org>.
+
 **DOCS-122: Center narrow images by default in PDF**
 
 Moved to version 7993 of PlantUML by default,

@@ -137,7 +137,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             getLog().info("...generating chunked HTML files...");
             exec.buildChunkedHTML(baseConf);
 
-            getLog().info("...post-processing HTML...");
+            getLog().info("Add JavaScript used in HTML...");
+            addScript();
+            getLog().info("...additional post-processing for HTML...");
             postProcessHTML(getDocbkxOutputDirectory().getPath()
                     + File.separator + "html");
         }
@@ -374,6 +376,82 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * @required
      */
     private String singleHTMLCustomization;
+
+    /**
+     * URL to site for published documentation.
+     *
+     * @parameter default-value="http://docs.forgerock.org/" property="docsSite"
+     * @required
+     */
+    private String docsSite;
+
+    /**
+     * JavaScript file name, found under {@code /js/} in plugin resources.
+     *
+     * @parameter default-value="uses-jquery.js" property="javaScriptFileName"
+     * @required
+     */
+    private String javaScriptFileName;
+
+    /**
+     * Add JavaScript to include in HTML in each document source directory.
+     * See <a href="http://docbook.sourceforge.net/release/xsl/current/doc/html/html.script.html"
+     * >html.script</a> for details.
+     *
+     * @throws MojoExecutionException Failed to add script.
+     */
+    void addScript() throws MojoExecutionException {
+
+        final URL scriptUrl = getClass().getResource("/js/" + javaScriptFileName);
+        String scriptString;
+        try {
+            scriptString = IOUtils.toString(scriptUrl);
+        } catch (IOException ie) {
+            throw new MojoExecutionException("Failed to read " + scriptUrl, ie);
+        }
+
+        if (scriptString != null) {
+            scriptString = scriptString.replace("PROJECT_NAME", getProjectName().toLowerCase());
+            scriptString = scriptString.replace("PROJECT_VERSION", getProjectVersion());
+            scriptString = scriptString.replace("LATEST_JSON", getLatestJson());
+            scriptString = scriptString.replace("DOCS_SITE", docsSite);
+        } else {
+            throw new MojoExecutionException(scriptUrl + " was empty");
+        }
+
+        final Set<String> docNames = DocUtils.getDocumentNames(
+                sourceDirectory, getDocumentSrcName());
+        if (docNames.isEmpty()) {
+            throw new MojoExecutionException("No document names found.");
+        }
+
+        // The html.script parameter should probably take URLs.
+        // When local files are referenced,
+        // the DocBook XSL stylesheets do not copy the .js files.
+        // Instead the files must be copied to the output directories.
+        final String[] outputDirectories =
+        {"", File.separator + FilenameUtils.getBaseName(getDocumentSrcName())};
+
+        for (final String outputDirectory : outputDirectories) {
+
+            for (final String docName : docNames) {
+
+                final File parent = new File(getDocbkxOutputDirectory(),
+                        "html" + File.separator + docName + outputDirectory);
+                final File scriptFile = new File(parent, javaScriptFileName);
+
+                try {
+                    FileUtils.writeStringToFile(scriptFile, scriptString, "UTF-8");
+                } catch (IOException ie) {
+                    throw new MojoExecutionException(
+                            "Failed to write to " + scriptFile.getPath(), ie);
+                }
+
+            }
+
+        }
+
+    }
 
     /**
      * Project base directory, needed to find target.db files.

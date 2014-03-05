@@ -103,6 +103,14 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     private String projectName;
 
     /**
+     * Project version.
+     *
+     * @parameter property="projectVersion"
+     * @required
+     */
+    private String projectVersion;
+
+    /**
      * Google Analytics identifier for the project.
      *
      * @parameter default-value="UA-23412190-14" property="googleAnalyticsId"
@@ -390,6 +398,34 @@ abstract class AbstractBuildMojo extends AbstractMojo {
      */
     public String getProjectName() {
         return projectName;
+    }
+
+    /**
+     * Project version.
+     *
+     * @return {@link #projectVersion}
+     */
+    public String getProjectVersion() {
+        return projectVersion;
+    }
+
+    /**
+     * URL to JSON object showing latest versions for each project.
+     *
+     * Note: Ultimately the default value should be on docs.forgerock.org,
+     * for example http://docs.forgerock.org/latest.php.
+     * The current default value represents a temporary workaround.
+     *
+     * @parameter default-value="http://mcraig.org/fr/latest.php" property="latestJson"
+     * @required
+     */
+    private String latestJson;
+
+    /**
+     * URL to JSON object showing latest versions for each project.
+     */
+    public String getLatestJson() {
+        return latestJson;
     }
 
     /**
