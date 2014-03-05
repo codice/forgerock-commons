@@ -7,12 +7,28 @@ sites where we post documentation, and the documentation about
 documentation. The link to the online issue tracker is
 <https://bugster.forgerock.org/jira/browse/DOCS>.
 
-This release includes the following improvements, new features, and bug
-fixes.
+This release includes the following improvements, new features, and bug fixes.
 
 ## Improvements & New Features
 
 **DOCS-7: Use make.clean.html and docbook.css.source for styling HTML output**
+
+**DOCS-10: Keep overall TOC present as side menu in core documentation**
+
+DocBook XSL webhelp output includes a (retractable) left menu TOC,
+among other features, such as JavaScript for local search.
+For more information on webhelp,
+see <http://docbook.sourceforge.net/release/xsl/current/webhelp/docs/>.
+
+The fix for this issue is to build webhelp output.
+At present the webhelp output shows up
+under `target/docbkx/webhelp/` after `mvn pre-site`,
+and `site/doc/webhelp/` after `mvn site`.
+For now the webhelp is not copied during `mvn release`.
+The files to start with are `webhelp/_doc-name_/index.html`.
+
+TODO: The default styles are not appropriate for ForgeRock documentation,
+and so must be rewritten before we can use the webhelp format in practice.
 
 **DOCS-81: Evaluate impact of a move to docbkx-tools 2.0.15**
 

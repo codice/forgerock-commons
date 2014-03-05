@@ -11,8 +11,7 @@ documentation-related project configuration takes at least three arguments:
 *   `<projectName>`: the short name for the project such as OpenAM, OpenDJ,
     OpenICF, OpenIDM, OpenIG, and so forth
 *   `<projectVersion>`: the version, such as `1.0.0-SNAPSHOT`, or `3.3.1`
-*   `<googleAnalyticsId>`: to add Google Analytics JavaScript to the HTML
-    output
+*   `<googleAnalyticsId>`: to add Google Analytics JavaScript to HTML output
 
 The project runs multiple plugin executions:
 
@@ -258,6 +257,7 @@ excludes all formats but HTML from the build.
       <exclude>man</exclude>
       <exclude>pdf</exclude>
       <exclude>rtf</exclude>
+      <exclude>webhelp</exclude>
      </excludes>
 
 ## Generating Single-Chapter Output
@@ -269,12 +269,14 @@ named `chap-one.xml`, then you would set `documentSrcName` as follows.
 
     mvn -DdocumentSrcName=chap-one.xml clean pre-site
 
+## Generating Only One Format
+
 If you want only one type of output, then specify that using `include`.
 The following command generates only PDF output for your single chapter.
 
     mvn -DdocumentSrcName=chap-one.xml -Dinclude=pdf clean pre-site
 
-Formats include `epub`, `html`, `man`, `pdf`, and `rtf`.
+Formats include `epub`, `html`, `man`, `pdf`, `rtf`, and `webhelp`.
 
 ## Alternate Branding
 
