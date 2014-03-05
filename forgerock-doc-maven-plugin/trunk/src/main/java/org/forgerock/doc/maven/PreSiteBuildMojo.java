@@ -143,6 +143,15 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             postProcessHTML(getDocbkxOutputDirectory().getPath()
                     + File.separator + "html");
         }
+
+        // Build and prepare webhelp for publishing.
+        if (formats.contains("webhelp")) {
+            getLog().info("Building webhelp...");
+            getLog().info("...generating olink DB files for webhelp...");
+            exec.buildWebHelpOlinkDB(baseConf);
+            getLog().info("...generating webhelp output...");
+            exec.buildWebHelp(baseConf);
+        }
     }
 
     /**
@@ -284,7 +293,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                 String sysId = getBuildDirectory().getAbsolutePath()
                         + File.separator + docName + "-" + extension + ".target.db";
 */
-                String sysId = baseDir.getAbsolutePath()
+                String sysId = getBaseDir().getAbsolutePath()
                         + "/target/docbkx/" + extension + "/" + docName
                         + "/index.fo.target.db";
 
@@ -454,14 +463,6 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * Project base directory, needed to find target.db files.
-     *
-     * @parameter default-value="${basedir}"
-     * @required
-     */
-    private File baseDir;
-
-    /**
      * Get absolute path to a temporary Olink target database XML document that
      * points to the individual generated Olink DB files, for single page HTML.
      *
@@ -492,7 +493,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                 String sysId = getBuildDirectory().getAbsolutePath()
                         + File.separator + docName + "-single.target.db";
 */
-                String sysId = baseDir.getAbsolutePath()
+                String sysId = getBaseDir().getAbsolutePath()
                         + "/target/docbkx/html/" + docName + "/index.html.target.db";
 
                 content.append("<!ENTITY ").append(docName)
@@ -568,7 +569,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                 String sysId = getBuildDirectory().getAbsolutePath()
                         + File.separator + docName + "-chunked.target.db";
 */
-                String sysId = baseDir.getAbsolutePath() + "/target/docbkx/html/"
+                String sysId = getBaseDir().getAbsolutePath() + "/target/docbkx/html/"
                         + docName + "/index.html.target.db";
 
                 content.append("<!ENTITY ").append(docName)
@@ -713,6 +714,71 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             link = link.replaceFirst("JIRA-URL", jiraURL);
         }
         return link;
+    }
+
+    /**
+     * Get absolute path to a temporary Olink target database XML document that
+     * points to the individual generated Olink DB files, for webhelp.
+     *
+     * @return Absolute path to the temporary file
+     * @throws MojoExecutionException Could not write target DB file.
+     */
+    final String buildWebHelpTargetDB() throws MojoExecutionException {
+
+        File targetDB = new File(getBuildDirectory() + File.separator + "olinkdb-webhelp.xml");
+
+        try {
+            StringBuilder content = new StringBuilder();
+            content.append("<?xml version='1.0' encoding='utf-8'?>\n")
+                    .append("<!DOCTYPE targetset [\n");
+
+            String targetDbDtd = IOUtils.toString(getClass()
+                    .getResourceAsStream("/targetdatabase.dtd"));
+            content.append(targetDbDtd).append("\n");
+
+            Set<String> docNames = DocUtils.getDocumentNames(
+                    sourceDirectory, getDocumentSrcName());
+            if (docNames.isEmpty()) {
+                throw new MojoExecutionException("No document names found.");
+            }
+
+            for (String docName : docNames) {
+
+/*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
+                String sysId = getBuildDirectory().getAbsolutePath()
+                        + File.separator + docName + "-webhelp.target.db";
+*/
+                String sysId = getBaseDir().getAbsolutePath()
+                        + "/target/docbkx/webhelp/" + docName + "/index.webhelp.target.db";
+
+                content.append("<!ENTITY ").append(docName)
+                        .append(" SYSTEM '").append(sysId).append("'>\n");
+            }
+
+            content.append("]>\n")
+
+                    .append("<targetset>\n")
+                    .append(" <targetsetinfo>Target DB for ForgeRock DocBook content,\n")
+                    .append(" for use with webhelp only.</targetsetinfo>\n")
+                    .append(" <sitemap>\n")
+                    .append("  <dir name='doc'>\n");
+
+            for (String docName : docNames) {
+                content.append("   <document targetdoc='").append(docName).append("'\n")
+                        .append("             baseuri='../").append(docName).append("/'>\n")
+                        .append("    &").append(docName).append(";\n")
+                        .append("   </document>\n");
+            }
+            content.append("  </dir>\n")
+                    .append(" </sitemap>\n")
+                    .append("</targetset>\n");
+
+            FileUtils.writeStringToFile(targetDB, content.toString());
+        } catch (IOException e) {
+            throw new MojoExecutionException(
+                    "Failed to write link target database: " + e.getMessage());
+        }
+        return targetDB.getPath();
     }
 
     /**
@@ -1011,10 +1077,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
          *
          * @param docType Type of output document such as {@code epub} or {@code html}
          * @param baseName Directory name to add, such as {@code index}.
+         * @param outBaseDir Base directory where the output is found.
          *
          * @throws MojoExecutionException Something went wrong copying images.
          */
-        private void copyImages(final String docType, final String baseName)
+        private void copyImages(final String docType, final String baseName, final File outBaseDir)
                 throws MojoExecutionException {
 
             Set<String> docNames = DocUtils.getDocumentNames(
@@ -1035,8 +1102,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
                 // Copy images specific to the document.
                 File srcDir = new File(sourceDirectory, docName + s + "images");
-                File destDir = new File(getDocbkxOutputDirectory(),
-                        docType + s + docName + extra + s + "images");
+                File destDir = new File(outBaseDir, docType + s + docName + extra + s + "images");
                 try {
                     if (srcDir.exists()) {
                         FileUtils.copyDirectory(srcDir, destDir, onlyImages);
@@ -1049,8 +1115,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                 // Copy any shared images.
                 String shared = "shared" + s + "images";
                 srcDir = new File(sourceDirectory, shared);
-                destDir = new File(getDocbkxOutputDirectory(),
-                        docType + s + docName + extra + s + shared);
+                destDir = new File(outBaseDir, docType + s + docName + extra + s + shared);
                 try {
                     if (srcDir.exists()) {
                         FileUtils.copyDirectory(srcDir, destDir, onlyImages);
@@ -1060,6 +1125,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                             "Failed to copy images from " + srcDir + " to " + destDir);
                 }
             }
+        }
+
+        private void copyImages(final String docType, final String baseName)
+                throws MojoExecutionException {
+            copyImages(docType, baseName, getDocbkxOutputDirectory());
         }
 
         private void copyImages(final String docType) throws MojoExecutionException {
@@ -1676,6 +1746,96 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                                 artifactId("docbkx-maven-plugin"),
                                 version(getDocbkxVersion())),
                         goal("generate-html"),
+                        configuration(cfg.toArray(new Element[cfg.size()])),
+                        executionEnvironment(getProject(), getSession(),
+                                getPluginManager()));
+            }
+        }
+
+        /**
+         * Prepare Olink database files for webhelp output.
+         *
+         * @param baseConfiguration Common configuration for all executions
+         * @throws MojoExecutionException Failed to prepare the target DB files.
+         */
+        void buildWebHelpOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration)
+                throws MojoExecutionException {
+
+            ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
+            cfg.addAll(baseConfiguration);
+
+            cfg.add(element(name("webhelpAutolabel"), "1"));
+            //cfg.add(element(name("webhelpCustomization"), "TODO"));
+
+            Set<String> docNames = DocUtils.getDocumentNames(
+                    sourceDirectory, getDocumentSrcName());
+            if (docNames.isEmpty()) {
+                throw new MojoExecutionException("No document names found.");
+            }
+
+            for (String docName : docNames) {
+                cfg.add(element(name("collectXrefTargets"), "only"));
+                cfg.add(element(name("currentDocid"), docName));
+                cfg.add(element(name("includes"), docName + "/" + getDocumentSrcName()));
+
+/*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
+                cfg.add(element(
+                        name("targetsFilename"),
+                        FilenameUtils.separatorsToUnix(getBuildDirectory()
+                                .getPath())
+                                + "/"
+                                + docName
+                                + "-webhelp.target.db"));
+*/
+                executeMojo(
+                        plugin(groupId("com.agilejava.docbkx"),
+                                artifactId("docbkx-maven-plugin"),
+                                version(getDocbkxVersion())),
+                        goal("generate-webhelp"),
+                        configuration(cfg.toArray(new Element[cfg.size()])),
+                        executionEnvironment(getProject(), getSession(),
+                                getPluginManager()));
+            }
+        }
+
+        /**
+         * Build webhelp from DocBook XML sources.
+         *
+         * @param baseConfiguration Common configuration for all executions
+         * @throws MojoExecutionException Failed to build the output.
+         */
+        void buildWebHelp(final ArrayList<MojoExecutor.Element> baseConfiguration)
+                throws MojoExecutionException {
+
+            ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
+            cfg.addAll(baseConfiguration);
+
+            cfg.add(element(name("webhelpAutolabel"), "1"));
+            //cfg.add(element(name("webhelpCustomization"), "TODO"));
+
+            cfg.add(element(name("targetDatabaseDocument"), buildWebHelpTargetDB()));
+
+            /* This fails with 2.0.15.
+            final String webhelpBaseDir = getDocbkxOutputDirectory().getPath() + "/webhelp/";
+            cfg.add(element(name("webhelpBaseDir"), webhelpBaseDir));
+             */
+            copyImages("webhelp", "", new File(getBaseDir(), "target" + File.separator + "docbkx"));
+
+            Set<String> docNames = DocUtils.getDocumentNames(
+                    sourceDirectory, getDocumentSrcName());
+            if (docNames.isEmpty()) {
+                throw new MojoExecutionException("No document names found.");
+            }
+
+            for (String docName : docNames) {
+                cfg.add(element(name("currentDocid"), docName));
+                cfg.add(element(name("includes"), docName + "/" + getDocumentSrcName()));
+
+                executeMojo(
+                        plugin(groupId("com.agilejava.docbkx"),
+                                artifactId("docbkx-maven-plugin"),
+                                version(getDocbkxVersion())),
+                        goal("generate-webhelp"),
                         configuration(cfg.toArray(new Element[cfg.size()])),
                         executionEnvironment(getProject(), getSession(),
                                 getPluginManager()));
