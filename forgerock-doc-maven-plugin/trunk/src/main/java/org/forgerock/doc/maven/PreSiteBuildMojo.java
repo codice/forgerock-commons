@@ -922,6 +922,63 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
+     * Webhelp XSL stylesheet customization file, relative to the build
+     * directory.
+     * <p/>
+     * docbkx-tools element: &lt;webhelpCustomization&gt;
+     *
+     * @parameter default-value="docbkx-stylesheets/webhelp/coredoc.xsl"
+     * @required
+     */
+    private String webhelpCustomization;
+
+    /**
+     * Webhelp XSL stylesheet customization file, relative to the build
+     * directory.
+     * <p/>
+     * docbkx-tools element: &lt;webhelpCustomization&gt;
+     *
+     * @return {@link #webhelpCustomization}
+     */
+    public final File getWebHelpCustomization() {
+        return new File(getBuildDirectory(), webhelpCustomization);
+    }
+
+    /**
+     * Logo for webhelp documents.
+     *
+     * @parameter default-value="docbkx-stylesheets/webhelp/logo.png" property="webhelpLogo"
+     * @required
+     */
+    private String webhelpLogo;
+
+    /**
+     * Logo for webhelp documents.
+     *
+     * @return {@link #webhelpLogo}
+     */
+    public final File getWebHelpLogo() {
+        return new File(getBuildDirectory(), webhelpLogo);
+    }
+
+    /**
+     * Main CSS for webhelp documents.
+     *
+     * @parameter default-value="docbkx-stylesheets/webhelp/positioning.css" property="webhelpCss"
+     * @required
+     */
+    private String webhelpCss;
+
+    /**
+     * Main CSS for webhelp documents.
+     *
+     * @return {@link #webhelpCss}
+     */
+    public final File getWebHelpCss() {
+        return new File(getBuildDirectory(), webhelpCss);
+    }
+
+    /**
      * Directory where fonts and font metrics are stored, relative to the build
      * directory.
      *
@@ -1765,7 +1822,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             cfg.addAll(baseConfiguration);
 
             cfg.add(element(name("webhelpAutolabel"), "1"));
-            //cfg.add(element(name("webhelpCustomization"), "TODO"));
+            cfg.add(element(name("webhelpCustomization"),
+                    FilenameUtils.separatorsToUnix(getWebHelpCustomization().getPath())));
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     sourceDirectory, getDocumentSrcName());
@@ -1811,7 +1869,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             cfg.addAll(baseConfiguration);
 
             cfg.add(element(name("webhelpAutolabel"), "1"));
-            //cfg.add(element(name("webhelpCustomization"), "TODO"));
+            cfg.add(element(name("webhelpCustomization"),
+                    FilenameUtils.separatorsToUnix(getWebHelpCustomization().getPath())));
 
             cfg.add(element(name("targetDatabaseDocument"), buildWebHelpTargetDB()));
 
@@ -1819,13 +1878,17 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             final String webhelpBaseDir = getDocbkxOutputDirectory().getPath() + "/webhelp/";
             cfg.add(element(name("webhelpBaseDir"), webhelpBaseDir));
              */
-            copyImages("webhelp", "", new File(getBaseDir(), "target" + File.separator + "docbkx"));
+            final File baseOutputDirectory =
+                    new File(getBaseDir(), "target" + File.separator + "docbkx");
+            copyImages("webhelp", "", baseOutputDirectory);
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     sourceDirectory, getDocumentSrcName());
             if (docNames.isEmpty()) {
                 throw new MojoExecutionException("No document names found.");
             }
+
+            final File webHelpBase = new File(baseOutputDirectory, "webhelp");
 
             for (String docName : docNames) {
                 cfg.add(element(name("currentDocid"), docName));
@@ -1839,6 +1902,24 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                         configuration(cfg.toArray(new Element[cfg.size()])),
                         executionEnvironment(getProject(), getSession(),
                                 getPluginManager()));
+
+                // Copy CSS and logo into place in the new webhelp output.
+                final File webHelpCss = new File(webHelpBase,
+                        docName + File.separator
+                                + "common" + File.separator
+                                + "css" + File.separator
+                                + "positioning.css");
+                final File webHelpLogo = new File(webHelpBase,
+                        docName + File.separator
+                                + "common" + File.separator
+                                + "images" + File.separator
+                                + "logo.png");
+                try {
+                    FileUtils.copyFile(getWebHelpCss(), webHelpCss);
+                    FileUtils.copyFile(getWebHelpLogo(), webHelpLogo);
+                } catch (IOException ie) {
+                    throw new MojoExecutionException("Failed to copy file", ie);
+                }
             }
         }
     }
