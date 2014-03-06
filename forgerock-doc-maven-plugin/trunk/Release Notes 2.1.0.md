@@ -27,9 +27,6 @@ and `site/doc/webhelp/` after `mvn site`.
 For now the webhelp is not copied during `mvn release`.
 The files to start with are `webhelp/_doc-name_/index.html`.
 
-TODO: The default styles are not appropriate for ForgeRock documentation,
-and so must be rewritten before we can use the webhelp format in practice.
-
 **DOCS-81: Evaluate impact of a move to docbkx-tools 2.0.15**
 
 This has not simply been evaluated, but also implemented.
