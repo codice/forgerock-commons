@@ -44,13 +44,18 @@ $(document).ready(function () {
      Include both a wrapped (.screen) and unwrapped (.flat) version of
      each screen element, with [-] image to collapse and [+] image
      to expand content.
+
+     The fix for DOCS-76 removes backslash and caret at the end of a line
+     when flattening the line for copying.
+     This fix can leave extra (hopefully, not significant) white spaces
+     in flattened lines.
      */
     $(".screen").each(function () {
         $(this).replaceWith(
             "<div class=\"screen\" title=\"Click [-] to flatten lines.\">"
                 + minus + $(this).html() + "</div>" +
                 "<div class=\"flat nodisplay\" title=\"Click [+] to wrap long lines.\">"
-                + plus + $(this).html().replace(/(\n|\r\n) /g, " ") + "</div>"
+                + plus + $(this).html().replace(/([\\\^]?\n|[\\\^]?\r\n) /g, " ") + "</div>"
         )
     });
 
