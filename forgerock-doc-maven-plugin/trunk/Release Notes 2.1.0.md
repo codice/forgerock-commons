@@ -64,6 +64,26 @@ Use `<plantUmlVersion>` if necessary to set the artifact version.
 
 ## Bugs Fixed
 
+**DOCS-76: Cannot copy/paste examples from PDF**
+
+With previous versions of the doc build plugin, continuation characters clashed
+with the JavaScript line flattening mechanism using in HTML output.
+
+Authors can now use backslashes and carets as continuation characters
+in `<screen>` content, as in the following example:
+
+    <screen>
+    $ mvn clean install && mvn jetty:run & \
+     sleep 20 ; mvn exec:java \
+     -Dexec.mainClass=org.forgerock.commons.doc.Main \
+     -Dexec.args="./Users.json ./Groups.json" ; \
+     fg
+    </screen>
+
+Continuation characters must be added to the document sources
+in order for them to appear in output formats such as HTML and PDF.
+Do leave a space at the outset of continued lines to allow folding.
+
 **DOCS-124: Very tall images are not resized appropriately in the pdf output**
 
 The resolution is a bit violent. Images taller than 5" are scaled to 5" high.
@@ -91,15 +111,6 @@ First, you can use `&#8230;` for horizontal ellipsis rather than `...`.
 Second, if you have a construction like `.]` where brackets mean
 optional, then add an extra space. It's technically wrong, but readers
 will have to interpret the optional characters anyway.
-
-**DOCS-76: Cannot copy/paste examples from PDF**
-
-`<screen>` content is formatted for readability, but without backslashes
-before newlines, so cannot be copy/pasted directly from the PDF.
-
-Workaround: Access the HTML version, click on the [-] icon to flatten
-the formatted example, and then copy the resulting content. (not
-accessible)
 
 * * *
 This work is licensed under the Creative Commons
