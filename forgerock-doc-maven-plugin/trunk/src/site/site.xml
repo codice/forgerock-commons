@@ -23,7 +23,8 @@
 -->
 <project name="${project.name}" xmlns="http://maven.apache.org/DECORATION/1.0.1"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.1 http://maven.apache.org/xsd/decoration-1.0.1.xsd">
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.1
+                             http://maven.apache.org/xsd/decoration-1.0.1.xsd">
   <skin>
     <groupId>org.forgerock.commons</groupId>
     <artifactId>forgerock-community-skin</artifactId>
@@ -48,9 +49,9 @@
       <item name="Join"
             href="https://sso.forgerock.com/openam/UI/Login"/>
       <item name="Issue Tracking" href="issue-tracking.html"/>
-      <item name="License" href="license.html"/>
       <item name="Source Repository" href="source-repository.html"/>
       <item name="Javadoc" href="apidocs/index.html" />
+      <item name="Usage" href="plugin-info.html"/>
     </menu>
 
     <menu ref="reports"/>
