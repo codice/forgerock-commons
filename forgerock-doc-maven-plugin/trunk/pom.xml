@@ -307,6 +307,7 @@
       <reports>
        <report>dependencies</report>
        <report>dependency-management</report>
+       <report>issue-tracking</report>
        <report>scm</report>
       </reports>
      </reportSet>
