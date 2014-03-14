@@ -38,6 +38,7 @@ import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.commonjs.module.ModuleScriptProvider;
 import org.mozilla.javascript.commonjs.module.RequireBuilder;
+import org.mozilla.javascript.commonjs.module.provider.DefaultUrlConnectionExpiryCalculator;
 import org.mozilla.javascript.commonjs.module.provider.ModuleSourceProvider;
 import org.mozilla.javascript.commonjs.module.provider.SoftCachingModuleScriptProvider;
 import org.mozilla.javascript.commonjs.module.provider.UrlModuleSourceProvider;
@@ -121,7 +122,13 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
 
         // Configure the CommonJS module providers per unoffoicial commonjs author documentation
         // https://groups.google.com/d/msg/mozilla-rhino/HCMh_lAKiI4/P1MA3sFsNKQJ
-        ModuleSourceProvider sourceProvider = new UrlModuleSourceProvider(sourceContainerURIIterable, null);
+        ModuleSourceProvider sourceProvider = new UrlModuleSourceProvider(
+                sourceContainerURIIterable,
+                null,
+                minimumRecompilationInterval < 0
+                        ? new DefaultUrlConnectionExpiryCalculator(0)
+                        : new DefaultUrlConnectionExpiryCalculator(minimumRecompilationInterval),
+                null);
         ModuleScriptProvider scriptProvider = new SoftCachingModuleScriptProvider(sourceProvider);
         requireBuilder = new RequireBuilder();
         requireBuilder.setModuleScriptProvider(scriptProvider);
