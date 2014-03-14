@@ -21,9 +21,8 @@ For more information on webhelp,
 see <http://docbook.sourceforge.net/release/xsl/current/webhelp/docs/>.
 
 The fix for this issue is to build webhelp output.
-At present the webhelp output shows up
-under `target/docbkx/webhelp/` after `mvn pre-site`,
-and `site/doc/webhelp/` after `mvn site`.
+In order to distinguish it from other HTML output,
+the webhelp output shows up under `/webhelp` after generation.
 For now the webhelp is not copied during `mvn release`.
 The files to start with are `webhelp/_doc-name_/index.html`.
 
