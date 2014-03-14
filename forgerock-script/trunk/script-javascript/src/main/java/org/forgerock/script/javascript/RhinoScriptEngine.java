@@ -200,14 +200,12 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
                 Script script = compileScript(name, source.getReader());
                 long now = System.currentTimeMillis();
                 scriptCache.put(name, new ScriptCacheEntry(script, source, now, now));
-                rhinoScript = new RhinoScript(name, script, this, requireBuilder, sharedScope);
+                rhinoScript = new RhinoScript(name, this, requireBuilder, sharedScope);
             } else {
                 // TODO Cache the source for debugger
                 ScriptSource source = handler.getScriptSource();
                 String name = source.getName().getName();
                 Script script = compileScript(name, source.getReader());
-                long now = System.currentTimeMillis();
-                scriptCache.put(name, new ScriptCacheEntry(script, source, now, now));
                 rhinoScript = new RhinoScript(name, script, this, requireBuilder, sharedScope);
             }
             handler.setCompiledScript(rhinoScript);
