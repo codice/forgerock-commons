@@ -8,7 +8,7 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2012-2013 ForgeRock AS
+ *     Copyright 2012-2014 ForgeRock AS
  *
  */
 
@@ -199,8 +199,8 @@ public class SiteBuildMojo extends AbstractBuildMojo {
                 // 2.0.15 does not allow <webhelpBaseDir> to be set,
                 // so the output location is hard-coded for now.
                 String webHelpDir =
-                        FilenameUtils.separatorsToUnix(getBaseDir().getPath())
-                                + "/target/docbkx/webhelp";
+                        FilenameUtils.separatorsToUnix(
+                                getDocbkxOutputDirectory().getPath() + "/webhelp");
                 executeMojo(
                         plugin(groupId("org.apache.maven.plugins"),
                                 artifactId("maven-resources-plugin"),

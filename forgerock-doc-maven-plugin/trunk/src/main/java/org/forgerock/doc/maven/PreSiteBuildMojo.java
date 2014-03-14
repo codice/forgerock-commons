@@ -1874,21 +1874,17 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
             cfg.add(element(name("targetDatabaseDocument"), buildWebHelpTargetDB()));
 
-            /* This fails with 2.0.15.
-            final String webhelpBaseDir = getDocbkxOutputDirectory().getPath() + "/webhelp/";
-            cfg.add(element(name("webhelpBaseDir"), webhelpBaseDir));
-             */
-            final File baseOutputDirectory =
-                    new File(getBaseDir(), "target" + File.separator + "docbkx");
-            copyImages("webhelp", "", baseOutputDirectory);
+            final File webHelpBase = new File(getDocbkxOutputDirectory(), "webhelp");
+            cfg.add(element(name("targetDirectory"), FilenameUtils
+                    .separatorsToUnix(webHelpBase.getPath())));
+
+            copyImages("webhelp");
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     sourceDirectory, getDocumentSrcName());
             if (docNames.isEmpty()) {
                 throw new MojoExecutionException("No document names found.");
             }
-
-            final File webHelpBase = new File(baseOutputDirectory, "webhelp");
 
             for (String docName : docNames) {
                 cfg.add(element(name("currentDocid"), docName));
