@@ -139,6 +139,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
             getLog().info("Add JavaScript used in HTML...");
             addScript();
+            getLog().info("Add files for SyntaxHighlighter in HTML...");
+            addShScripts();
+            addShCss();
             getLog().info("...additional post-processing for HTML...");
             postProcessHTML(getDocbkxOutputDirectory().getPath()
                     + File.separator + "html");
@@ -463,6 +466,111 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
+     * SyntaxHighlighter JavaScript files.
+     */
+    private final String[] shJavaScriptFiles = {"shCore.js",
+        "shBrushAci.js",
+        "shBrushBash.js",
+        "shBrushCsv.js",
+        "shBrushHttp.js",
+        "shBrushJava.js",
+        "shBrushJScript.js",
+        "shBrushLDIF.js",
+        "shBrushPlain.js",
+        "shBrushProperties.js",
+        "shBrushXml.js"};
+
+    /**
+     * Add SyntaxHighlighter JavaScript files in each HTML document source directory.
+     *
+     * @throws MojoExecutionException Failed to add scripts.
+     */
+    void addShScripts() throws MojoExecutionException {
+
+        final Set<String> docNames = DocUtils.getDocumentNames(
+                sourceDirectory, getDocumentSrcName());
+        if (docNames.isEmpty()) {
+            throw new MojoExecutionException("No document names found.");
+        }
+
+        for (String scriptName : shJavaScriptFiles) {
+            URL scriptUrl = getClass().getResource("/js/" + scriptName);
+
+            // The html.script parameter should probably take URLs.
+            // When local files are referenced,
+            // the DocBook XSL stylesheets do not copy the .js files.
+            // Instead the files must be copied to the output directories.
+            final String[] outputDirectories =
+            {"", File.separator + FilenameUtils.getBaseName(getDocumentSrcName())};
+
+            for (final String outputDirectory : outputDirectories) {
+
+                for (final String docName : docNames) {
+
+                    final File parent = new File(getDocbkxOutputDirectory(),
+                            "html" + File.separator + docName + outputDirectory
+                                    + File.separator + "sh");
+                    final File scriptFile = new File(parent, scriptName);
+
+                    try {
+                        FileUtils.copyURLToFile(scriptUrl, scriptFile);
+                    } catch (IOException ie) {
+                        throw new MojoExecutionException(
+                                "Failed to write to " + scriptFile.getPath(), ie);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * SyntaxHighlighter CSS files.
+     */
+    private final String[] shCssFiles = {"shCoreEclipse.css", "shThemeEclipse.css"};
+
+    /**
+     * Add SyntaxHighlighter CSS files in each HTML document source directory.
+     *
+     * @throws MojoExecutionException Failed to add scripts.
+     */
+    void addShCss() throws MojoExecutionException {
+
+        final Set<String> docNames = DocUtils.getDocumentNames(
+                sourceDirectory, getDocumentSrcName());
+        if (docNames.isEmpty()) {
+            throw new MojoExecutionException("No document names found.");
+        }
+
+        for (String styleSheetName : shCssFiles) {
+            URL styleSheetUrl = getClass().getResource("/css/" + styleSheetName);
+
+            // The html.stylesheet parameter should probably take URLs.
+            // When local files are referenced,
+            // the DocBook XSL stylesheets do not copy the .css files.
+            // Instead the files must be copied to the output directories.
+            final String[] outputDirectories =
+            {"", File.separator + FilenameUtils.getBaseName(getDocumentSrcName())};
+
+            for (final String outputDirectory : outputDirectories) {
+
+                for (final String docName : docNames) {
+
+                    final File parent = new File(getDocbkxOutputDirectory(),
+                            "html" + File.separator + docName + outputDirectory
+                                + File.separator + "sh");
+                    final File styleSheetFile = new File(parent, styleSheetName);
+
+                    try {
+                        FileUtils.copyURLToFile(styleSheetUrl, styleSheetFile);
+                    } catch (IOException ie) {
+                        throw new MojoExecutionException(
+                                "Failed to write to " + styleSheetFile.getPath(), ie);
+                    }
+                }
+            }
+        }
+    }
+    /**
      * Get absolute path to a temporary Olink target database XML document that
      * points to the individual generated Olink DB files, for single page HTML.
      *
@@ -653,10 +761,10 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                     "UTF-8");
             replacements.put("<html>", doctype);
 
-            String javascript = IOUtils.toString(getClass()
-                    .getResourceAsStream("/endhead-js-favicon.txt"), "UTF-8");
-            javascript = javascript.replace("FAVICON-LINK", getFaviconLink());
-            replacements.put("</head>", javascript);
+            String favicon = IOUtils.toString(getClass()
+                    .getResourceAsStream("/endhead-favicon.txt"), "UTF-8");
+            favicon = favicon.replace("FAVICON-LINK", getFaviconLink());
+            replacements.put("</head>", favicon);
 
             String linkToJira = getLinkToJira();
             String gascript = IOUtils.toString(
