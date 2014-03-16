@@ -62,6 +62,7 @@ Use `<plantUmlVersion>` if necessary to set the artifact version.
 
 **DOCS-139: Use &lt;htmlScript&gt; to add JavaScript to pages**
 
+
 ## Bugs Fixed
 
 **DOCS-76: Cannot copy/paste examples from PDF**
@@ -95,6 +96,8 @@ then set `-DkeepCustomIndexHtml=true` for the `release` goal configuration.
 
 **DOCS-131: max-height CSS setting squashes tall images in HTML**
 
+**DOCS-141: In Chrome, copy pasting code extracts from the html results in spaces being interpreted as special characters**
+
 
 ## Known Issues
 
@@ -111,6 +114,7 @@ First, you can use `&#8230;` for horizontal ellipsis rather than `...`.
 Second, if you have a construction like `.]` where brackets mean
 optional, then add an extra space. It's technically wrong, but readers
 will have to interpret the optional characters anyway.
+
 
 * * *
 This work is licensed under the Creative Commons

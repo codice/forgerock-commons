@@ -526,7 +526,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     /**
      * SyntaxHighlighter CSS files.
      */
-    private final String[] shCssFiles = {"shCoreEclipse.css", "shThemeEclipse.css"};
+    private final String[] shCssFiles = {"shCore.css", "shCoreEclipse.css", "shThemeEclipse.css"};
 
     /**
      * Add SyntaxHighlighter CSS files in each HTML document source directory.
