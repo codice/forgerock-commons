@@ -60,6 +60,7 @@ Use `<plantUmlVersion>` if necessary to set the artifact version.
 
 **DOCS-127: Center narrow images by default in PDF**
 
+**DOCS-139: Use <htmlScript> to add JavaScript to pages**
 
 ## Bugs Fixed
 
