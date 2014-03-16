@@ -6,28 +6,28 @@
  * http://alexgorbatchev.com/SyntaxHighlighter/donate.html
  *
  * @version
- * 3.0.83 (July 02 2010)
- * 
+ * 3.0.83 (Fri, 14 Mar 2014 17:58:18 GMT)
+ *
  * @copyright
- * Copyright (C) 2004-2010 Alex Gorbatchev.
+ * Copyright (C) 2004-2013 Alex Gorbatchev.
  *
  * @license
  * Dual licensed under the MIT and GPL licenses.
  */
 ;(function()
 {
- // CommonJS
- typeof(require) != 'undefined' ? SyntaxHighlighter = require('shCore').SyntaxHighlighter : null;
+	// CommonJS
+	SyntaxHighlighter = SyntaxHighlighter || (typeof require !== 'undefined'? require('shCore').SyntaxHighlighter : null);
 
- function Brush()
- {
- };
+	function Brush()
+	{
+	};
 
- Brush.prototype = new SyntaxHighlighter.Highlighter();
- Brush.aliases = ['text', 'plain'];
+	Brush.prototype	= new SyntaxHighlighter.Highlighter();
+	Brush.aliases	= ['text', 'plain'];
 
- SyntaxHighlighter.brushes.Plain = Brush;
+	SyntaxHighlighter.brushes.Plain = Brush;
 
- // CommonJS
- typeof(exports) != 'undefined' ? exports.Brush = Brush : null;
+	// CommonJS
+	typeof(exports) != 'undefined' ? exports.Brush = Brush : null;
 })();
