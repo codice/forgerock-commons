@@ -82,6 +82,7 @@
  <xsl:param name="custom.css.source">coredoc.css.xml</xsl:param>
  <xsl:param name="html.stylesheet">
   css/coredoc.css
+  sh/shCore.css
   sh/shCoreEclipse.css
   sh/shThemeEclipse.css
  </xsl:param>
