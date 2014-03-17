@@ -346,6 +346,8 @@ rather than DocBook's syntax highlighting capabilities for HTML output, as
 SyntaxHighlighter includes handy features for selecting and numbering lines
 in HTML.
 
+The highlighting operates only inside `<programlisting>`.
+
      Source         SyntaxHighlighter   Brush Name
      ---            ---                 ---
      aci            aci                 shBrushAci.js
