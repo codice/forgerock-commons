@@ -24,7 +24,7 @@ The fix for this issue is to build webhelp output.
 In order to distinguish it from other HTML output,
 the webhelp output shows up under `/webhelp` after generation.
 For now the webhelp is not copied during `mvn release`.
-The files to start with are `webhelp/_doc-name_/index.html`.
+The files to start with are `webhelp/doc-name/index.html`.
 
 **DOCS-81: Evaluate impact of a move to docbkx-tools 2.0.15**
 
@@ -114,6 +114,12 @@ First, you can use `&#8230;` for horizontal ellipsis rather than `...`.
 Second, if you have a construction like `.]` where brackets mean
 optional, then add an extra space. It's technically wrong, but readers
 will have to interpret the optional characters anyway.
+
+**DOCS-132: Soft hyphens used to break lines are rendered in PDF as hyphen + space**
+
+See <https://issues.apache.org/jira/browse/FOP-2358>.
+
+Workaround: Fix the content after copy/paste.
 
 
 * * *
