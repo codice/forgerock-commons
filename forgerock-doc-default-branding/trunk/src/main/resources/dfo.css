@@ -252,6 +252,12 @@ div.synopsis {
     white-space: pre;
 }
 
+div.flat,
+div.screen {
+    border: thin dashed #ccc;
+    padding: 0.25em;
+}
+
 .toggle, .tocollapse, .toexpand, .bookcollapse, .bookexpand {
     position: relative;
     left: -24px;
