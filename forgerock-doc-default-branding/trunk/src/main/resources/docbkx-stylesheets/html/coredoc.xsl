@@ -23,7 +23,8 @@
  xmlns:d="http://docbook.org/ns/docbook" exclude-result-prefixes="d">
  <xsl:import href="urn:docbkx:stylesheet" />
  <xsl:output method="html" encoding="UTF-8" indent="no" />
- <xsl:preserve-space elements="d:programlisting d:screen"/>
+ <xsl:preserve-space
+ elements="d:computeroutput d:programlisting d:screen d:userinput"/>
 
  <xsl:template match="d:programlisting">
   <xsl:choose>
@@ -65,15 +66,20 @@
 
  <xsl:template match="d:screen">
   <div class="screen">
-   <xsl:choose>
-    <xsl:when test="@language='shell'">
-     <pre class="brush: shell;"><xsl:value-of select="." /></pre>
-    </xsl:when>
-    <xsl:otherwise>
-     <pre class="brush: plain;"><xsl:value-of select="." /></pre>
-    </xsl:otherwise>
-   </xsl:choose>
+     <pre>
+      <xsl:apply-templates mode="screen"/>
+     </pre>
   </div>
+ </xsl:template>
+
+ <xsl:template match="*" mode="screen"><xsl:value-of select="."/></xsl:template>
+
+ <xsl:template match="d:userinput" mode="screen">
+  <strong><xsl:value-of select="."/></strong>
+ </xsl:template>
+
+ <xsl:template match="d:computeroutput" mode="screen">
+  <em><xsl:value-of select="."/></em>
  </xsl:template>
 
  <xsl:param name="make.clean.html" select="1" />
