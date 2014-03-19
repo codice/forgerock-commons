@@ -132,6 +132,10 @@ ul {
     list-style-image: url("../images/bulletpoint.png");
 }
 
+ol {
+    list-style: decimal outside none;
+}
+
 div.refentry h2 {
     font-size: 1.1em;
 }
