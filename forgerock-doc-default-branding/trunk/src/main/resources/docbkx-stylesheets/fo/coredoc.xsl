@@ -16,13 +16,12 @@
   ! enclosed by brackets "[]" replaced with your own identifying information:
   !      Portions Copyright [yyyy] [name of copyright owner]
   !
-  !      Copyright 2011-2013 ForgeRock AS
+  !      Copyright 2011-2014 ForgeRock AS
   !
 -->
 <xsl:stylesheet
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 xmlns:d="http://docbook.org/ns/docbook"
-xmlns:xlink="http://www.w3.org/1999/xlink"
 exclude-result-prefixes="d"
 version="1.0">
 
@@ -32,8 +31,10 @@ version="1.0">
 
   <xsl:param name="page.height.portrait">9in</xsl:param>
   <xsl:param name="page.width.portrait">7.5in</xsl:param>
-  <xsl:param name="double.sided" select="1"></xsl:param>
+  <xsl:param name="double.sided" select="1" />
   <xsl:param name="fop1.extensions" select="1"/>
+
+  <xsl:param name="alignment">left</xsl:param>
 
   <xsl:attribute-set name="root.properties">
    <xsl:attribute name="orphans">5</xsl:attribute>
@@ -94,8 +95,8 @@ version="1.0">
   <xsl:param name="default.table.rules">none</xsl:param>
   <xsl:param name="table.cell.border.thickness">0pt</xsl:param>
   
-  <xsl:param name="variablelist.as.blocks" select="1"></xsl:param>
-  <xsl:param name="variablelist.term.separator"></xsl:param>
+  <xsl:param name="variablelist.as.blocks" select="1" />
+  <xsl:param name="variablelist.term.separator" select="''"/>
   <xsl:param name="variablelist.term.break.after">1</xsl:param>
   
   <xsl:attribute-set name="monospace.properties">
