@@ -62,6 +62,8 @@ Use `<plantUmlVersion>` if necessary to set the artifact version.
 
 **DOCS-139: Use &lt;htmlScript&gt; to add JavaScript to pages**
 
+**DOCS-143: Left-Justify PDF Text**
+
 
 ## Bugs Fixed
 
