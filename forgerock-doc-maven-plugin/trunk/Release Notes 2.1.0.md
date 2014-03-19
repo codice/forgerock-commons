@@ -105,6 +105,8 @@ As of this fix, SyntaxHighlighter is no longer applied for `<screen>`.
 
 **DOCS-141: In Chrome, copy pasting code extracts from the html results in spaces being interpreted as special characters**
 
+**DOCS-145: Nested ordered lists (within itemized lists) do not render correctly in the html**
+
 
 ## Known Issues
 
