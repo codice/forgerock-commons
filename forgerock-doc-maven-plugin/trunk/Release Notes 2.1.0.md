@@ -47,8 +47,10 @@ as in the following example:
 The script relies on the latest versions being published as a JSON resource
 that is safely accessible wherever the in-progress documentation is published.
 
-TODO: Fix the default value for latestJson in AbstractBuildMojo.java,
-and mention this at <https://github.com/markcraig/docs.forgerock.org>.
+If <http://docs.forgerock.org/latest.php> shows source rather than JSON,
+use the following temporary workaround in the plugin configuration.
+
+    <latestJson>http://mcraig.org/fr/latest.php</latestJson>
 
 **DOCS-122: Center narrow images by default in PDF**
 

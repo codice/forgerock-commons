@@ -429,11 +429,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     /**
      * URL to JSON object showing latest versions for each project.
      *
-     * Note: Ultimately the default value should be on docs.forgerock.org,
-     * for example http://docs.forgerock.org/latest.php.
-     * The current default value represents a temporary workaround.
-     *
-     * @parameter default-value="http://mcraig.org/fr/latest.php" property="latestJson"
+     * @parameter default-value="http://docs.forgerock.org/latest.php" property="latestJson"
      * @required
      */
     private String latestJson;
