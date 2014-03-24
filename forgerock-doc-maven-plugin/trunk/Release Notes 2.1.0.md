@@ -63,6 +63,13 @@ Use `<plantUmlVersion>` if necessary to set the artifact version.
 
 **DOCS-139: Use &lt;htmlScript&gt; to add JavaScript to pages**
 
+**DOCS-140: Improve readability of long commands**
+
+You can now use `<userinput>` in `<screen>`, rendered in **bold** in HTML,
+and `<computeroutput>` in `<screen>`, rendered in _italic_ in HTML.
+
+As of this fix, SyntaxHighlighter is no longer applied for `<screen>`.
+
 **DOCS-143: Left-Justify PDF Text**
 
 
@@ -98,13 +105,6 @@ If you want to keep a custom `index.html` file for your documentation set,
 then set `-DkeepCustomIndexHtml=true` for the `release` goal configuration.
 
 **DOCS-131: max-height CSS setting squashes tall images in HTML**
-
-**DOCS-140: Improve readability of long commands**
-
-You can now use `<userinput>` in `<screen>`, rendered in **bold** in HTML,
-and `<computeroutput>` in `<screen>`, rendered in _italic_ in HTML.
-
-As of this fix, SyntaxHighlighter is no longer applied for `<screen>`.
 
 **DOCS-141: In Chrome, copy pasting code extracts from the html results in spaces being interpreted as special characters**
 
