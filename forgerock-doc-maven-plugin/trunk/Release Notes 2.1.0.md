@@ -26,10 +26,9 @@ the webhelp output shows up under `/webhelp` after generation.
 For now the webhelp is not copied during `mvn release`.
 The files to start with are `webhelp/doc-name/index.html`.
 
-**DOCS-81: Evaluate impact of a move to docbkx-tools 2.0.15**
+**DOCS-81: Move to docbkx-tools 2.0.15**
 
-This has not simply been evaluated, but also implemented.
-The plugin now _requires_ 2.0.15.
+The plugin now _requires_ 2.0.15, except for RTF, which requires 2.0.14.
 
 **DOCS-117: Advertise latest stable doc release in in-progress documentation**
 
