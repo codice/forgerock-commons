@@ -7,6 +7,11 @@ sites where we post documentation, and the documentation about
 documentation. The link to the online issue tracker is
 <https://bugster.forgerock.org/jira/browse/DOCS>.
 
+**Note** DOCS-117 added a required `<projectVersion>` configuration setting.
+Set this to the current version of your project, as in:
+
+    <projectVersion>3.0.0-SNAPSHOT</projectVersion>
+
 This release includes the following improvements, new features, and bug fixes.
 
 ## Improvements & New Features
