@@ -316,17 +316,24 @@ ID using the property.
      mvn -DisDraftMode=no -DreleaseVersion=1.0.0 -D"gaId=UA-23412190-14" \
      -D"releaseDate=Software release date: January 1, 1970" \
      -D"pubDate=Publication date: December 31, 1969" \
+     -DbuildReleaseZip=true \
      clean site org.forgerock.commons:forgerock-doc-maven-plugin:release
 
 Both dates are reflected in the documents to publish.
 * The `releaseDate` indicates the date the software was released.
 * The `pubDate` indicates the date you published the documentation.
 
+If the plugin configuration is not inherited,
+then also set `-N` (`--non-recursive`) for the release goal.
+Run the `site` goal separately if it must be recursive
+(because you build Javadoc during the `site` goal for example).
+
 ## Zip of Release Documentation
 
 To build a .zip of the release documentation, you can further set
 `-DbuildReleaseZip=true` when running the `release` goal on the command line,
 or `<buildReleaseZip>true</buildReleaseZip>` in the execution configuration.
+Also set `-DprojectName=MyProject` if you perform the `release` goal separately.
 
 The file, `projectName-releaseVersion-docs.zip`, can be found
 after the build in the project build directory. When unzipped, it unpacks
@@ -341,7 +348,7 @@ you must still build the final release .zip yourself.
 
 ## Notes on Syntax Highlighting
 
-Uses [SyntaxHighlighter](http://alexgorbatchev.com/SyntaxHighlighter/) 3.0.83,
+Uses [SyntaxHighlighter](http://alexgorbatchev.com/SyntaxHighlighter/),
 rather than DocBook's syntax highlighting capabilities for HTML output, as
 SyntaxHighlighter includes handy features for selecting and numbering lines
 in HTML.
@@ -396,6 +403,7 @@ following example:
 See the `forgerock-doc-maven-plugin-test` project for an example.
 
 * * *
+
 This work is licensed under the Creative Commons
 Attribution-NonCommercial-NoDerivs 3.0 Unported License.
 To view a copy of this license, visit
