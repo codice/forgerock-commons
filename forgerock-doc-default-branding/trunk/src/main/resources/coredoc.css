@@ -241,6 +241,7 @@ div.synopsis {
 
 div.flat,
 div.screen {
+    background-color: #eee;
     border: thin dashed #ccc;
     margin: 0.25em 0 0.25em 0;
     padding: 0 0.25em 0 0.25em;
