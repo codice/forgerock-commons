@@ -242,7 +242,8 @@ div.synopsis {
 div.flat,
 div.screen {
     border: thin dashed #ccc;
-    padding: 0.25em;
+    margin: 0.25em 0 0.25em 0;
+    padding: 0 0.25em 0 0.25em;
 }
 
 .toggle, .tocollapse, .toexpand, .bookcollapse, .bookexpand {
