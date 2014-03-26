@@ -92,6 +92,8 @@ and `<computeroutput>` in `<screen>`, rendered in _italic_ in HTML.
 
 As of this fix, SyntaxHighlighter is no longer applied for `<screen>`.
 
+**DOCS-142: Fix Subheading Styles**
+
 **DOCS-143: Left-Justify PDF Text**
 
 
