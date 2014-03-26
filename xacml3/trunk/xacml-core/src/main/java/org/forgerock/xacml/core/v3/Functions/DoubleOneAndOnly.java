@@ -40,7 +40,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  * urn:oasis:names:tc:xacml:1.0:function:double-one-and-only
  */
-public class DoubleOneAndOnly extends XACMLFunction {
+public class DoubleOneAndOnly extends TypeOneAndOnly {
 
     public DoubleOneAndOnly()  {
     }

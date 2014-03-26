@@ -31,9 +31,9 @@ functions form a minimal set for comparing two numbers, yielding a Boolean resul
 For doubles they SHALL comply with the rules governed by IEEE 754 [IEEE754].
 */
 
-import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 /**

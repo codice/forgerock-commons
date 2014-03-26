@@ -39,7 +39,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  * urn:oasis:names:tc:xacml:1.0:function:x500Name-one-and-only
  */
-public class X500NameOneAndOnly extends XACMLFunction {
+public class X500NameOneAndOnly extends TypeOneAndOnly {
 
     public X500NameOneAndOnly()  {
     }

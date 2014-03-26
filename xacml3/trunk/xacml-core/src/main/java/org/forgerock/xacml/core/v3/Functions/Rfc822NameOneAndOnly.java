@@ -39,7 +39,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  * urn:oasis:names:tc:xacml:1.0:function:rfc822Name-one-and-only
  */
-public class Rfc822NameOneAndOnly extends XACMLFunction {
+public class Rfc822NameOneAndOnly extends TypeOneAndOnly {
 
     public Rfc822NameOneAndOnly()  {
     }

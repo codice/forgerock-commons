@@ -25,10 +25,10 @@
  */
 package org.forgerock.xacml.core.v3.profiles;
 
+import org.forgerock.xacml.core.v3.engine.XACML3Request;
 import org.forgerock.xacml.core.v3.interfaces.XACML3AttributeHandler;
 import org.forgerock.xacml.core.v3.model.DataBag;
 import org.forgerock.xacml.core.v3.model.DataDesignator;
-import org.forgerock.xacml.core.v3.engine.XACML3Request;
 
 import java.util.ArrayList;
 import java.util.List;

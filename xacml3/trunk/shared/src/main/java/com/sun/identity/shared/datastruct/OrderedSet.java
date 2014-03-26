@@ -29,11 +29,7 @@
 package com.sun.identity.shared.datastruct;
 
 import java.io.Serializable;
-import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class extends from AbstractSet. It uses List for storing data so that

@@ -2,9 +2,9 @@ package org.forgerock.xacml.core.v3.interfaces;
 
 
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
+import org.forgerock.xacml.core.v3.engine.XACML3Request;
 import org.forgerock.xacml.core.v3.model.DataBag;
 import org.forgerock.xacml.core.v3.model.DataDesignator;
-import org.forgerock.xacml.core.v3.engine.XACML3Request;
 
 import java.util.List;
 

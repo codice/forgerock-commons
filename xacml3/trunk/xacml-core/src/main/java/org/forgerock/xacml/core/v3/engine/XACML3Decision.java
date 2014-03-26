@@ -25,8 +25,10 @@
  */
 package org.forgerock.xacml.core.v3.engine;
 
+import com.sun.identity.entitlement.xacml3.core.DecisionType;
+import com.sun.identity.entitlement.xacml3.core.Status;
+import com.sun.identity.entitlement.xacml3.core.StatusCode;
 import org.forgerock.xacml.core.v3.interfaces.Entitlement;
-import com.sun.identity.entitlement.xacml3.core.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;

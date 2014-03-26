@@ -5,14 +5,14 @@
     <ignored path="OS-XACML.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/pom.xml" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377791453596" ignored="false" />
-    <file path="/XACML3Policy.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379085488871" ignored="false" />
+    <file path="/XACML3Policy.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395303566136" ignored="false" />
     <file path="/XACML3Entitlement.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377096045955" ignored="false" />
-    <file path="/fragment.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378553765381" ignored="false" />
+    <file path="/fragment.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395248632622" ignored="false" />
     <file path="/Entitlement.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377096105976" ignored="false" />
     <file path="/XACML3RequestHandler.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377979348822" ignored="false" />
     <file path="/XACML3EntitlementCombiner.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378540421561" ignored="false" />
     <file path="/EntitlementCombiner.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378547933198" ignored="false" />
-    <file path="/XACMLEvalContext.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377976392538" ignored="false" />
+    <file path="/XACMLEvalContext.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1389638273264" ignored="false" />
     <file path="/web.xml" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377908464143" ignored="false" />
     <file path="$PROJECT_DIR$/.idea/misc.xml" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377122372707" ignored="false" />
     <file path="$PROJECT_DIR$/.idea/workspace.xml" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377132181032" ignored="false" />
@@ -57,34 +57,32 @@
     <file path="$PROJECT_DIR$/os-xacml/src/main/java/org/forgerock/xacml/xacml/v3/resources/package-info.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377129554405" ignored="false" />
     <file path="$PROJECT_DIR$/os-xacml/src/main/java/org/forgerock/xacml/xacml/v3/interfaces/Entitlement.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377129554405" ignored="false" />
     <file path="/a.dummy" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379165531585" ignored="false" />
-    <file path="/XACML3PolicyRule.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379254152568" ignored="false" />
-    <file path="/XACML3PrivilegeUtils.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379101770810" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/model/TestURNValidation.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377130992312" ignored="false" />
+    <file path="/XACML3PolicyRule.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395303453690" ignored="false" />
+    <file path="/XACML3PrivilegeUtils.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1391657466303" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/model/TestURNValidation.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
     <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/model/TestDNValidation.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377130992312" ignored="false" />
-    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/commons/TestContentType.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377130992312" ignored="false" />
-    <file path="/PolicyStore.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377803182398" ignored="false" />
-    <file path="/ReferenceRequestHandler.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377885670995" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/commons/TestContentType.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203110" ignored="false" />
+    <file path="/PolicyStore.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1390266133523" ignored="false" />
+    <file path="/ReferenceRequestHandler.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395303405306" ignored="false" />
     <file path="/RestService.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378549351511" ignored="false" />
-    <file path="/XACML3PolicySet.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379314413999" ignored="false" />
-    <file path="/XACML3PolicyItem.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377885855066" ignored="false" />
+    <file path="/XACML3PolicySet.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395303507991" ignored="false" />
+    <file path="/XACML3PolicyItem.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395303535216" ignored="false" />
     <file path="$MAVEN_REPOSITORY$/org/forgerock/forgerock-parent/1.0.0/forgerock-parent-1.0.0.pom" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377269519785" ignored="false" />
     <file path="/PolicyStoreManager.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377736837940" ignored="false" />
-    <file path="/PolicyStoreImpl.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377886205436" ignored="false" />
+    <file path="/PolicyStoreImpl.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395247381829" ignored="false" />
     <file path="/AttributeResolverManager.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377791082053" ignored="false" />
     <file path="/AttributeResolver.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377796185178" ignored="false" />
     <file path="/EvaluatorManager.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377798742705" ignored="false" />
-    <file path="/Evaluator.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377801367230" ignored="false" />
+    <file path="/Evaluator.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1389637827946" ignored="false" />
     <file path="/XACML3Response.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378246359089" ignored="false" />
-    <file path="/EvaluatorImpl.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378541214682" ignored="false" />
+    <file path="/EvaluatorImpl.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1389638316476" ignored="false" />
     <file path="/index.jsp" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378230161205" ignored="false" />
-    <file path="$MAVEN_REPOSITORY$/org/forgerock/openam/openam-xacml3-schema/10.2.0-SNAPSHOT/openam-xacml3-schema-10.2.0-SNAPSHOT.jar!/xsd/xml.xsd" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377917826418" ignored="false" />
-    <file path="$MAVEN_REPOSITORY$/org/forgerock/openam/openam-xacml3-schema/10.2.0-SNAPSHOT/openam-xacml3-schema-10.2.0-SNAPSHOT.jar!/xsd/xacml-core-v3-schema-wd-17.xsd" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378540905997" ignored="false" />
     <file path="/JaxbJacksonObjectMapper.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377924028360" ignored="false" />
-    <file path="/XACML3ContextResolver.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379316172251" ignored="false" />
+    <file path="/XACML3ContextResolver.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1391840458119" ignored="false" />
     <file path="/XACML3Decision.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378553451832" ignored="false" />
-    <file path="/XACML3Advice.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377975575417" ignored="false" />
-    <file path="/DataAssignment.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377975824162" ignored="false" />
-    <file path="/XACML3Obligation.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1377976280172" ignored="false" />
+    <file path="/XACML3Advice.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1389645751998" ignored="false" />
+    <file path="/DataAssignment.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395303674887" ignored="false" />
+    <file path="/XACML3Obligation.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1389645419449" ignored="false" />
     <file path="/CombinerManager.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378549974997" ignored="false" />
     <file path="/CombinerBase.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378550025138" ignored="false" />
     <file path="/DenyOverrides.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378554596615" ignored="false" />
@@ -95,15 +93,61 @@
     <file path="/org.forgerock.xacml.core.v3.interfaces.EntitlementCombiner" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378549057627" ignored="false" />
     <file path="/FirstApplicable.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378554660911" ignored="false" />
     <file path="/OnlyOneApplicable.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1378554682982" ignored="false" />
-    <file path="/XACMLFunction.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379254602410" ignored="false" />
+    <file path="/XACMLFunction.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395702819014" ignored="false" />
     <file path="/AnyOfAny.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379008483434" ignored="false" />
     <file path="/AnyOf.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379018632556" ignored="false" />
-    <file path="/FunctionArgument.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379081543127" ignored="false" />
-    <file path="/DataValue.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379058940138" ignored="false" />
-    <file path="/MatchAllOf.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379064399105" ignored="false" />
-    <file path="/DataDesignator.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379171427980" ignored="false" />
-    <file path="/Debug.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379164187076" ignored="false" />
+    <file path="/FunctionArgument.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395303219709" ignored="false" />
+    <file path="/DataValue.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395243284015" ignored="false" />
+    <file path="/MatchAllOf.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395796848483" ignored="false" />
+    <file path="/DataDesignator.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395303477567" ignored="false" />
+    <file path="/Debug.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379499715985" ignored="false" />
     <file path="/PolicySet.xml" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379315006181" ignored="false" />
+    <file path="/development_process.html" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379420750648" ignored="false" />
+    <file path="/DebugImpl.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379499726877" ignored="false" />
+    <file path="/IDebug.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1379499692608" ignored="false" />
+    <file path="/DataType.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1390106940663" ignored="false" />
+    <file path="/MatchAnyOf.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1391752049144" ignored="false" />
+    <file path="/DataBag.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395303284090" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-openam/src/main/java/org/forgerock/xacml/core/v3/profiles/XACML3ProfileManager.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154201988" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-openam/src/main/java/org/forgerock/xacml/core/v3/profiles/XACML3CoreProfile.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154201989" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-openam/src/main/java/org/forgerock/xacml/core/v3/profiles/XACML3ECProfile.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154201989" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/CombinerBase.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154201989" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-openam/src/main/java/org/forgerock/xacml/core/v3/profiles/XACML3IPCProfile.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154201989" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlBagFunctionsGroup3.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203108" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlBagFunctionsGroup4.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203108" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlBagSetFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203108" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlCombinedNestedFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203108" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlDataUtils.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203108" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlDateAndTimeArithmetricFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlEqualityPredicateFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlHigherOrderBagFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlLogicalFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlNonNumericComparisonFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlNumericComparisonFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlNumericConversionFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlOtherFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlRegularExpressionBasedFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlSpecialMatchFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlStringConversionFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlStringFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlStringFunctionsGroup2.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlXPathFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlBagFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlBagFunctionsGroup2.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/resources/XACML3HomeResource.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203109" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlAccessPermitted.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203110" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/test/java/org/forgerock/xacml/core/v3/Functions/TestXacmlArithmeticFunctions.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203110" ignored="false" />
+    <file path="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/interfaces/XACML3AttributeHandler.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154203110" ignored="false" />
+    <file path="$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/configuration/ConfigurationFileLocator.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154204580" ignored="false" />
+    <file path="$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/datastruct/CollectionHelper.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154204580" ignored="false" />
+    <file path="$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/datastruct/OrderedSet.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154204580" ignored="false" />
+    <file path="$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/debug/Debug.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154204580" ignored="false" />
+    <file path="$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/debug/impl/DebugImpl.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154204580" ignored="false" />
+    <file path="$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/debug/impl/DebugProviderImpl.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154204580" ignored="false" />
+    <file path="$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/locale/AMResourceBundleCache.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154204580" ignored="false" />
+    <file path="$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/locale/Locale.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1392154204581" ignored="false" />
+    <file path="/TypeOneAndOnly.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395707788399" ignored="false" />
+    <file path="/And.java" changelist="29fbb88b-5f5e-414c-8ef3-579a467ac349" time="1395708260303" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +162,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -154,7 +197,7 @@
       </breakpoint>
     </breakpoint_any>
     <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
-      <breakpoint url="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/rest/XACML3RequestHandler.java" line="137" class="org.forgerock.xacml.core.v3.rest.XACML3RequestHandler" package="org.forgerock.xacml.core.v3.rest">
+      <breakpoint url="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/rest/XACML3PDPHandler.java" line="134" class="org.forgerock.xacml.core.v3.rest.XACML3PDPHandler" package="org.forgerock.xacml.core.v3.rest">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -168,21 +211,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/storage/PolicyStoreImpl.java" line="55" class="org.forgerock.xacml.reference.storage.PolicyStoreImpl" package="org.forgerock.xacml.reference.storage">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/rest/ReferenceRequestHandler.java" line="98" class="org.forgerock.xacml.reference.rest.ReferenceRequestHandler" package="org.forgerock.xacml.reference.rest">
+      <breakpoint url="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/rest/ReferenceRequestHandler.java" line="96" class="org.forgerock.xacml.reference.rest.ReferenceRequestHandler" package="org.forgerock.xacml.reference.rest">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -224,7 +253,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/XACMLFunction.java" line="171" class="org.forgerock.xacml.core.v3.model.XACMLFunction" package="org.forgerock.xacml.core.v3.model">
+      <breakpoint url="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/XACMLFunction.java" line="199" class="org.forgerock.xacml.core.v3.model.XACMLFunction" package="org.forgerock.xacml.core.v3.model">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -238,7 +267,119 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/configuration/SystemPropertiesManager.java" line="52" class="com.sun.identity.shared.configuration.SystemPropertiesManager" package="com.sun.identity.shared.configuration">
+      <breakpoint url="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/rest/ReferenceRequestHandler.java" line="68" class="org.forgerock.xacml.reference.rest.ReferenceRequestHandler" package="org.forgerock.xacml.reference.rest">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/storage/PolicyStoreImpl.java" line="86" class="org.forgerock.xacml.reference.storage.PolicyStoreImpl" package="org.forgerock.xacml.reference.storage">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/rest/ReferenceRequestHandler.java" line="182" class="org.forgerock.xacml.reference.rest.ReferenceRequestHandler" package="org.forgerock.xacml.reference.rest">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/rest/ReferenceRequestHandler.java" line="197" class="org.forgerock.xacml.reference.rest.ReferenceRequestHandler" package="org.forgerock.xacml.reference.rest">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/storage/PolicyStoreImpl.java" line="161" class="org.forgerock.xacml.reference.storage.PolicyStoreImpl" package="org.forgerock.xacml.reference.storage">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicySet.java" line="241" class="org.forgerock.xacml.core.v3.engine.XACML3PolicySet" package="org.forgerock.xacml.core.v3.engine">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicySet.java" line="126" class="org.forgerock.xacml.core.v3.engine.XACML3PolicySet" package="org.forgerock.xacml.core.v3.engine">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicySet.java" line="164" class="org.forgerock.xacml.core.v3.engine.XACML3PolicySet" package="org.forgerock.xacml.core.v3.engine">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/storage/PolicyStoreImpl.java" line="103" class="org.forgerock.xacml.reference.storage.PolicyStoreImpl" package="org.forgerock.xacml.reference.storage">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -253,6 +394,7 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </line_breakpoints>
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -263,49 +405,48 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="XACML3IPCProfile.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-openam/src/main/java/org/forgerock/xacml/core/v3/profiles/XACML3IPCProfile.java">
+      <file leaf-file-name="TypeOneAndOnly.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/TypeOneAndOnly.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="69" column="18" selection-start="3262" selection-end="3265" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="2013-RSA-XACML-Demo-PolicySet.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/2013-RSA-XACML-Demo-PolicySet.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="98" selection-start="1482" selection-end="1489" vertical-scroll-proportion="0.0">
+            <state line="31" column="40" selection-start="839" selection-end="839" vertical-scroll-proportion="0.0">
               <folding>
-                <element signature="tag#Rule#0;tag#Policy#0;tag#PolicySet#0" expanded="false" />
-                <element signature="tag#Rule#1;tag#Policy#0;tag#PolicySet#0" expanded="false" />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="request-curtiss.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/request-curtiss.xml">
+      <file leaf-file-name="And.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/And.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="84" column="0" selection-start="2395" selection-end="2831" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="response-curtiss.json" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/response-curtiss.json">
+      <file leaf-file-name="2013-RSA-XACML-Demo-PolicySet.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/2013-RSA-XACML-Demo-PolicySet.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="49" column="84" selection-start="2883" selection-end="2962" vertical-scroll-proportion="0.17525773">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="policy-HealthCare.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/policy-HealthCare.xml">
+      <file leaf-file-name="ReferenceRequestHandler.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/rest/ReferenceRequestHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="55" column="113" selection-start="4628" selection-end="4635" vertical-scroll-proportion="0.0">
+            <state line="138" column="43" selection-start="5017" selection-end="5080" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="XACMLFunction.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/XACMLFunction.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="157" column="13" selection-start="4458" selection-end="4458" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -314,34 +455,34 @@
       <file leaf-file-name="FunctionArgument.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/FunctionArgument.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="168" column="7" selection-start="4395" selection-end="4397" vertical-scroll-proportion="0.0">
+            <state line="50" column="22" selection-start="1610" selection-end="1610" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="XACMLFunction.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/XACMLFunction.java">
+      <file leaf-file-name="XACML3PolicyRule.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicyRule.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="284" column="60" selection-start="7807" selection-end="7880" vertical-scroll-proportion="-6.421466">
+            <state line="199" column="0" selection-start="5990" selection-end="6502" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DataType.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/DataType.java">
+      <file leaf-file-name="MatchAllOf.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/MatchAllOf.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="13" selection-start="1028" selection-end="1028" vertical-scroll-proportion="0.0">
+            <state line="91" column="53" selection-start="3138" selection-end="3138" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="request-curtiss.json" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/request-curtiss.json">
+      <file leaf-file-name="MatchAnyOf.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/MatchAnyOf.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+            <state line="93" column="52" selection-start="3260" selection-end="3260" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -357,22 +498,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/DataValue.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/AccessPermitted.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/AllOf.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/AllOfAll.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/MatchAllOf.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/MatchAnyOf.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3Policy.java" />
-        <option value="$PROJECT_DIR$/shared/src/main/java/com/sun/identity/shared/debug/Debug.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/FunctionArgument.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PrivilegeUtils.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/DataDesignator.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicyRule.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/DNSNameOneAndOnly.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/DoubleOneAndOnly.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/HexbinaryOneAndOnly.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/IntegerOneAndOnly.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/IPAddressOneAndOnly.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/Rfc822NameOneAndOnly.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/StringOneAndOnly.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/TimeOneAndOnly.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/X500NameOneAndOnly.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/YearmonthdurationOneAndOnly.java" />
         <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/XACMLFunction.java" />
-        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicySet.java" />
-        <option value="$PROJECT_DIR$/xacml-server/src/main/webapp/samples/PolicySet.xml" />
-        <option value="$PROJECT_DIR$/xacml-server/src/main/java/org/forgerock/xacml/rest/XACML3ContextResolver.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/TypeOneAndOnly.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/And.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicyRule.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/MatchAnyOf.java" />
+        <option value="$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/MatchAllOf.java" />
       </list>
     </option>
   </component>
@@ -433,7 +574,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -462,6 +602,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="xacml-reference" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="XACML-Engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trunk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="xacml-core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -566,7 +720,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="ImplementationManagers" />
+              <option name="myItemId" value="model" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -607,6 +761,7 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -617,7 +772,8 @@
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="recentsLimit" value="5" />
     <property name="MemberChooser.sorted" value="false" />
-    <property name="options.lastSelected" value="fileTemplates" />
+    <property name="options.lastSelected" value="project.propDebugger" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Documents/maven/xacml/openam" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="MemberChooser.copyJavadoc" value="false" />
@@ -625,9 +781,10 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="MemberChooser.showClasses" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -641,7 +798,7 @@
       <recent name="org.forgerock.xacml.core.v3.engine" />
     </key>
   </component>
-  <component name="RunManager" selected="Tomcat Server.Xacml">
+  <component name="RunManager" selected="Remote.Unnamed">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
@@ -654,6 +811,19 @@
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="9009" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
@@ -682,19 +852,6 @@
       <envs />
       <properties />
       <listeners />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -853,33 +1010,33 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1366" height="685" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21061946" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37168142" sideWeight="0.9972702" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32627866" sideWeight="0.5280303" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32743362" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.6017699" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32920355" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24924242" sideWeight="0.78938055" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32920355" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286219" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29924244" sideWeight="0.6283186" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32566372" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32566372" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32508835" sideWeight="0.46666667" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -943,123 +1100,102 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/DenyUnlessPermit.java">
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/X500NameOneAndOnly.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="13" selection-start="387" selection-end="387" vertical-scroll-proportion="0.0">
+        <state line="41" column="54" selection-start="1571" selection-end="1571" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/YearmonthdurationOneAndOnly.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="63" selection-start="1590" selection-end="1590" vertical-scroll-proportion="0.33333334" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/TimeOneAndOnly.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="50" selection-start="1565" selection-end="1565" vertical-scroll-proportion="0.30819672" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/StringOneAndOnly.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="52" selection-start="1568" selection-end="1568" vertical-scroll-proportion="0.28658536" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/Rfc822NameOneAndOnly.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="56" selection-start="1575" selection-end="1575" vertical-scroll-proportion="0.28658536" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/IPAddressOneAndOnly.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="55" selection-start="1574" selection-end="1574" vertical-scroll-proportion="0.28658536" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/DNSNameOneAndOnly.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="53" selection-start="1570" selection-end="1570" vertical-scroll-proportion="0.28658536" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/rest/ReferenceRequestHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="138" column="43" selection-start="5017" selection-end="5080" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/TypeOneAndOnly.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="40" selection-start="839" selection-end="839" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#1084#1100#0" expanded="false" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/Services/CombinerLoader.java">
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/XACMLFunction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="13" selection-start="386" selection-end="386" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/resources/META-INF/services/org.forgerock.xacml.core.v3.interfaces.EntitlementCombiner">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-reference/src/main/java/org/forgerock/xacml/reference/combiner/DenyOverrides.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="13" selection-start="387" selection-end="387" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#1096#1112#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/interfaces/XACML3AttributeHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="17" selection-start="646" selection-end="646" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-openam/src/main/java/org/forgerock/openam/openam/xacml/v3/openam/XACML3NameIndexGenerator.javaNOT">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-1.8366762">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-openam/src/main/java/org/forgerock/xacml/core/v3/profiles/XACML3IPCProfile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="18" selection-start="3262" selection-end="3265" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/2013-RSA-XACML-Demo-PolicySet.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="98" selection-start="1482" selection-end="1489" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="tag#Rule#0;tag#Policy#0;tag#PolicySet#0" expanded="false" />
-            <element signature="tag#Rule#1;tag#Policy#0;tag#PolicySet#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/request-curtiss.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/request-curtiss.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/response-curtiss.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/policy-HealthCare.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="113" selection-start="4628" selection-end="4635" vertical-scroll-proportion="0.0">
+        <state line="157" column="13" selection-start="4458" selection-end="4458" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/FunctionArgument.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="168" column="7" selection-start="4395" selection-end="4397" vertical-scroll-proportion="0.0">
+        <state line="50" column="22" selection-start="1610" selection-end="1610" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/DataValue.java">
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/engine/XACML3PolicyRule.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="9" selection-start="1110" selection-end="1111" vertical-scroll-proportion="-2.164557">
+        <state line="199" column="0" selection-start="5990" selection-end="6502" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/DataType.java">
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/And.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="13" selection-start="1028" selection-end="1028" vertical-scroll-proportion="0.0">
+        <state line="84" column="0" selection-start="2395" selection-end="2831" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/model/XACMLFunction.java">
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/MatchAnyOf.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="284" column="60" selection-start="7807" selection-end="7880" vertical-scroll-proportion="-6.421466">
+        <state line="93" column="52" selection-start="3260" selection-end="3260" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/main/java/org/forgerock/xacml/core/v3/Functions/MatchAllOf.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="91" column="53" selection-start="3138" selection-end="3138" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xacml-core/src/test/resources/test_data/2013-RSA-XACML-Demo-PolicySet.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="49" column="84" selection-start="2883" selection-end="2962" vertical-scroll-proportion="0.17525773">
           <folding />
         </state>
       </provider>
@@ -1118,7 +1254,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>xacml-reference</last-edited>
+          <last-edited>xacml-server</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

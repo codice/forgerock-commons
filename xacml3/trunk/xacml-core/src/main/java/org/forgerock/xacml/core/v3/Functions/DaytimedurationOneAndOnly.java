@@ -43,7 +43,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  * urn:oasis:names:tc:xacml:3.0:function:dayTimeDuration-one-and-only
  */
-public class DaytimedurationOneAndOnly extends XACMLFunction {
+public class DaytimedurationOneAndOnly extends TypeOneAndOnly {
 
     public DaytimedurationOneAndOnly()  {
     }

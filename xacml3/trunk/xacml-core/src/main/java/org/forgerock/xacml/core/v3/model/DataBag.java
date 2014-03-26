@@ -27,12 +27,16 @@
 package org.forgerock.xacml.core.v3.model;
 
 
+import com.sun.identity.entitlement.xacml3.core.AttributeValue;
+import com.sun.identity.entitlement.xacml3.core.ObjectFactory;
+import com.sun.identity.entitlement.xacml3.core.XACMLRootElement;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,6 +152,26 @@ public class DataBag extends FunctionArgument {
         return jo;
     }
 
+    public String asJSONExpression() {
+        String retVal = "[";
+        String sep = "";
+        for (DataValue arg : data ) {
+            retVal= retVal + sep + arg.asJSONExpression();
+            sep = ",";
+        }
+        retVal = retVal + "]";
+        return  retVal;
+    }
+
+    public String asRPNExpression() {
+        String retVal = "[";
+        for (DataValue arg : data ) {
+            retVal= retVal + arg.asRPNExpression() + " ";
+        }
+        retVal = retVal + "] ";
+        return  retVal;
+    }
+
     /**
      * Initialize Data Value from a JSON Object.
      *
@@ -163,6 +187,26 @@ public class DataBag extends FunctionArgument {
         }
         return;
     }
+
+    public XACMLRootElement getXACMLRoot () {
+        AttributeValue av = new AttributeValue();
+        av.setDataType(getType().getTypeName());
+        for (DataValue arg : data ) {
+            av.getContent().add(arg);
+        }
+        return av;
+    }
+
+    public JAXBElement<?> getXACML() {
+
+        JAXBElement<?> retVal;
+
+        ObjectFactory objectFactory = new ObjectFactory();
+        retVal = objectFactory.createAttributeValue((AttributeValue)getXACMLRoot());
+        return retVal;
+
+    }
+
 
     /**
      * UnMarshal the exiting DataType to XML.

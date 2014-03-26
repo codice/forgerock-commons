@@ -66,7 +66,9 @@ import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
 import org.forgerock.xacml.core.v3.model.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 public class AnyOfAny extends XACMLFunction {

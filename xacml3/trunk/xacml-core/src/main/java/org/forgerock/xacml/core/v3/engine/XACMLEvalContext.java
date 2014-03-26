@@ -26,7 +26,9 @@
 
 package org.forgerock.xacml.core.v3.engine;
 
-import com.sun.identity.entitlement.xacml3.core.*;
+import com.sun.identity.entitlement.xacml3.core.Request;
+import com.sun.identity.entitlement.xacml3.core.Response;
+import com.sun.identity.entitlement.xacml3.core.Result;
 import org.forgerock.xacml.core.v3.ImplementationManagers.AttributeResolverManager;
 import org.forgerock.xacml.core.v3.ImplementationManagers.EvaluatorManager;
 import org.forgerock.xacml.core.v3.ImplementationManagers.PolicyStoreManager;
@@ -93,6 +95,10 @@ public class XACMLEvalContext  {
           */
 
     }
+    /*
+    We really should have a method to Find_Policy() followed by the call to Evaluate_Policy()
+
+     */
     public static Response XACMLEvaluate(Request request, String appname) {
         XACML3Request xReq = new  XACML3Request(request);
         XACMLEvalContext eContext =  new XACMLEvalContext();
@@ -103,9 +109,8 @@ public class XACMLEvalContext  {
 
         try {
             Evaluator eval = EvaluatorManager.newInstance();
-            eval.setScope(appname);
 
-            response = eval.evaluate(eContext);
+            response = eval.evaluate(eContext,appname);
 
         } catch (Exception ex) {
 

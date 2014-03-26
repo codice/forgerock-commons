@@ -25,10 +25,16 @@
  */
 package org.forgerock.xacml.core.v3.Functions;
 
-import org.forgerock.xacml.core.v3.model.FunctionArgument;
+import com.sun.identity.entitlement.xacml3.core.ObjectFactory;
+import com.sun.identity.entitlement.xacml3.core.Target;
+import com.sun.identity.entitlement.xacml3.core.XACMLRootElement;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.model.XACMLFunction;
+
+import javax.xml.bind.JAXBElement;
+import java.util.List;
 
 /**
  * ForgeRock Specific
@@ -41,6 +47,8 @@ public class MatchAnyOf extends XACMLFunction {
 
         FunctionArgument retVal = FunctionArgument.falseObject;
 
+        if (getArgCount() == 0) return   FunctionArgument.trueObject;
+
         for (int i = 0; i < getArgCount(); i++) {
             FunctionArgument res = getArg(i).doEvaluate(pip);
             if (res.isTrue()) {
@@ -50,21 +58,43 @@ public class MatchAnyOf extends XACMLFunction {
         }
         return retVal;
     }
-    public String toXML(String type) {
-        String retVal = "";
-        /*
-             Handle Match AnyOf and AllOf specially
-        */
 
-        retVal = "<AnyOf>" ;
+    public XACMLRootElement getXACMLRoot() {
+        Target result = new Target();
 
-        for (FunctionArgument arg : arguments){
-            retVal = retVal + arg.toXML(type);
+        List<com.sun.identity.entitlement.xacml3.core.AnyOf> ma = result.getAnyOf();
+
+        for (FunctionArgument arg : arguments) {
+            com.sun.identity.entitlement.xacml3.core.AnyOf aof = new com.sun.identity.entitlement.xacml3.core.AnyOf();
+            aof.getAllOf().add((com.sun.identity.entitlement.xacml3.core.AllOf)arg.getXACMLRoot());
+            ma.add(aof);
+        }
+        return result;
+
+    }
+    public JAXBElement<?> getXACML() {
+
+        JAXBElement<?>  retVal;
+        ObjectFactory objectFactory = new ObjectFactory();
+
+        retVal = objectFactory.createAnyOf((com.sun.identity.entitlement.xacml3.core.AnyOf) getXACMLRoot());
+        return retVal;
+    }
+
+    public String asJSONExpression() {
+
+        int args = arguments.size();
+        FunctionArgument f = arguments.get(0);
+        String retVal = f.asJSONExpression() + " " ;
+
+        if (args > 1) { retVal = retVal + " OR " ; }
+        for (int i = 1; i<args;i++) {
+            f = arguments.get(i);
+            retVal = retVal  + f.asJSONExpression();
+            if (i < args -1) retVal = retVal + " OR ";
         }
 
-        retVal = retVal + "</AnyOf>" ;
-
-        return retVal;
+        return retVal + "\n";
     }
 
 }

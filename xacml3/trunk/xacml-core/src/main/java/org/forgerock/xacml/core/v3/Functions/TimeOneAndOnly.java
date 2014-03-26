@@ -40,7 +40,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  *  urn:oasis:names:tc:xacml:1.0:function:time-one-and-only
  */
-public class TimeOneAndOnly extends XACMLFunction {
+public class TimeOneAndOnly extends TypeOneAndOnly {
 
     public TimeOneAndOnly()  {
     }

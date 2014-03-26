@@ -26,7 +26,9 @@
 package org.forgerock.xacml.core.v3.engine;
 
 
-import com.sun.identity.entitlement.xacml3.core.*;
+import com.sun.identity.entitlement.xacml3.core.DecisionType;
+import com.sun.identity.entitlement.xacml3.core.Response;
+import com.sun.identity.entitlement.xacml3.core.Result;
 
 import java.io.Serializable;
 

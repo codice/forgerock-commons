@@ -35,10 +35,15 @@ package org.forgerock.xacml.core.v3.model;
  */
 
 
+import com.sun.identity.entitlement.xacml3.core.AttributeDesignator;
+import com.sun.identity.entitlement.xacml3.core.ObjectFactory;
+import com.sun.identity.entitlement.xacml3.core.XACMLRootElement;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import javax.xml.bind.JAXBElement;
 
 public class DataDesignator extends FunctionArgument {
     private String category;
@@ -94,6 +99,15 @@ public class DataDesignator extends FunctionArgument {
         return ob;
     }
 
+    public String asJSONExpression() {
+
+        return  leftID(attributeID, ":");
+    }
+    public String asRPNExpression() {
+
+        return  leftID(attributeID, ":");
+    }
+
     public JSONObject toJSONObject() throws JSONException {
         JSONObject jo = super.toJSONObject();
         jo.put("category",category);
@@ -108,18 +122,20 @@ public class DataDesignator extends FunctionArgument {
     };
 
 
-    public String toXML(String type) {
-        /*
-             Handle Match AnyOf and AllOf specially
-        */
-        String retVal = "<AttributeDesignator DataType=\"" + getType() + "\" "
-                + "AttributeId=\"" + attributeID + "\" "
-                + "Category=\"" + category + "\" "
-                + "MustBePresent=\"" + mustExist + "\" >" ;
 
-        return retVal;
+    public XACMLRootElement getXACMLRoot () {
+        AttributeDesignator att = new AttributeDesignator();
+
+        att.setAttributeId(attributeID);
+        att.setCategory(category);
+        att.setDataType(getType().getTypeName());
+        return att;
     }
 
+    public JAXBElement<?> getXACML() {
+        ObjectFactory objectFactory = new ObjectFactory();
 
+        return objectFactory.createAttributeDesignator((AttributeDesignator)getXACMLRoot());
+    }
 
 }

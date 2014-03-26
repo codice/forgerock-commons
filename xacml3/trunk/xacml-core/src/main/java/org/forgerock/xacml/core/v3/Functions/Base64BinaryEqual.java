@@ -40,7 +40,8 @@ urn:oasis:names:tc:xacml:1.0:function:base64Binary-equal
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACML3PrivilegeUtils;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
-import org.forgerock.xacml.core.v3.model.*;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
+import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 import java.util.Arrays;
 

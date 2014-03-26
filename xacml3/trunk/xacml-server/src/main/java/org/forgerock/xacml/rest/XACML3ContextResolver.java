@@ -26,19 +26,17 @@
 package org.forgerock.xacml.rest;
 
 
-
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.api.json.JSONJAXBContext;
 
-
 import javax.ws.rs.Produces;
 import javax.ws.rs.ext.ContextResolver;
-import javax.ws.rs.ext.Provider;
-import javax.xml.bind.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Provider
+
 @Produces({"application/xml","application/json"})
 public class XACML3ContextResolver implements ContextResolver<JAXBContext> {
     private final static String ENTITY_PACKAGE = "com.sun.identity.entitlement.xacml3.core";
@@ -49,15 +47,16 @@ public class XACML3ContextResolver implements ContextResolver<JAXBContext> {
         try {
             Map<String,String> nameSpace = new HashMap<String,String>();
             nameSpace.put(XACML3_NAMESPACE,"");
-            //context = new JSONJAXBContext( JSONConfiguration.mappedJettison()
-            //        .xml2JsonNs(nameSpace)
-            //        .build(), ENTITY_PACKAGE);
-            context = new JSONJAXBContext(JSONConfiguration.natural().build(),
-                    ENTITY_PACKAGE);
+            context = new JSONJAXBContext( JSONConfiguration.mapped()
+                    .xml2JsonNs(nameSpace)
+                    .build(), ENTITY_PACKAGE);
+            //context = new JSONJAXBContext(JSONConfiguration.natural().build(),
+            //        ENTITY_PACKAGE);
 
         } catch (final JAXBException ex) {
             throw new IllegalStateException("Could not resolve JAXBContext.", ex);
         }
+
     }
 
     public JAXBContext getContext(final Class<?> type) {

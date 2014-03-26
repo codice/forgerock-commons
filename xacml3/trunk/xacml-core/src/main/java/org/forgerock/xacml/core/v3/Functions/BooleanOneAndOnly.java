@@ -39,7 +39,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  * urn:oasis:names:tc:xacml:1.0:function:boolean-one-and-only
  */
-public class BooleanOneAndOnly extends XACMLFunction {
+public class BooleanOneAndOnly extends TypeOneAndOnly {
 
     public BooleanOneAndOnly()  {
     }

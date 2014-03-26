@@ -25,10 +25,10 @@
  */
 package org.forgerock.xacml.core.v3.Functions;
 
+import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.model.DataType;
 import org.forgerock.xacml.core.v3.model.DataValue;
 import org.forgerock.xacml.core.v3.model.FunctionArgument;
-import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

@@ -34,9 +34,9 @@ The function SHALL return “True”
 if and only if the values of the two arguments are equal on a codepoint-by-codepoint basis.
 */
 
-import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 /**

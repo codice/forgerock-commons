@@ -39,7 +39,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  * urn:oasis:names:tc:xacml:1.0:function:integer-one-and-only
  */
-public class IntegerOneAndOnly extends XACMLFunction {
+public class IntegerOneAndOnly extends TypeOneAndOnly {
 
     public IntegerOneAndOnly()  {
     }

@@ -36,9 +36,10 @@ This function SHALL take two arguments of data-type
 */
 
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
-import org.forgerock.xacml.core.v3.model.YearMonthDuration;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
-import org.forgerock.xacml.core.v3.model.*;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
+import org.forgerock.xacml.core.v3.model.XACMLFunction;
+import org.forgerock.xacml.core.v3.model.YearMonthDuration;
 
 /**
  * urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-equal

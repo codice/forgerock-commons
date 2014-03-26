@@ -34,7 +34,6 @@ package org.forgerock.xacml.core.v3.Functions;
  */
 
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
-import org.forgerock.xacml.core.v3.model.YearMonthDuration;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
 import org.forgerock.xacml.core.v3.model.*;
 

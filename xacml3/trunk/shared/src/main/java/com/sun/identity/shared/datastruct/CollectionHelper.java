@@ -31,13 +31,14 @@
  */
 package com.sun.identity.shared.datastruct;
 
-import com.sun.identity.shared.debug.Debug;
+import com.sun.identity.shared.Constants;
 import com.sun.identity.shared.configuration.SystemPropertiesManager;
+import com.sun.identity.shared.debug.Debug;
+
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import com.sun.identity.shared.Constants;
-import java.util.LinkedHashSet;
 
 /**
  * This class contains various Collection manipulation methods.

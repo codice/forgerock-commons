@@ -1,5 +1,6 @@
 package org.forgerock.xacml.core.v3.interfaces;
 
+import com.sun.identity.entitlement.xacml3.core.Policy;
 import com.sun.identity.entitlement.xacml3.core.PolicySet;
 import org.forgerock.xacml.core.v3.engine.XACML3Policy;
 import org.forgerock.xacml.core.v3.engine.XACML3PolicyItem;
@@ -13,8 +14,11 @@ public interface PolicyStore {
     public String loadPolicySet(PolicySet ps);
 
     public PolicySet exportPolicySet(String name);
+    public Policy exportPolicy(String name);
+
 
     public Set<String> listPolicySets();
+    public Set<String> listPolicies();
 
     public XACML3PolicyItem getPolicyForEval(String name);
 

@@ -32,9 +32,9 @@ and SHALL return an “http://www.w3.org/2001/XMLSchema#boolean”.
 The function SHALL return "True" if and only if the arguments are equal.
 Otherwise, it SHALL return “False”.*/
 
-import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 /**

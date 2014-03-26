@@ -101,28 +101,5 @@ public class AnyOf extends XACMLFunction {
         }
         return retVal;
     }
-    public String toXML(String type) {
-        String retVal = "";
-        /*
-             Handle Match AnyOf and AllOf specially
-        */
-
-        if (type.equals("Match")) {
-            retVal = "<AnyOf>" ;
-        } else if (type.equals("Allow")) {
-            retVal = "<Allow FunctionId=\"" + functionID + "\">" ;
-        }
-
-        for (FunctionArgument arg : arguments){
-            retVal = retVal + arg.toXML(type);
-        }
-        if (type.equals("Match")) {
-            retVal = retVal + "</AnyOf>" ;
-        } else if (type.equals("Allow")) {
-            retVal = retVal + "</Allow>" ;
-        }
-
-        return retVal;
-    }
 
 }

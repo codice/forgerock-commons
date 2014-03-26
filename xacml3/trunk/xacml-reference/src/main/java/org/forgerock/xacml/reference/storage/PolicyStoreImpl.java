@@ -30,22 +30,58 @@ package org.forgerock.xacml.reference.storage;
  *  This implements a way to load and dump policies from an in memory store.
  */
 
+import com.mongodb.*;
+import com.sun.identity.entitlement.xacml3.core.Policy;
 import com.sun.identity.entitlement.xacml3.core.PolicySet;
 import org.forgerock.xacml.core.v3.engine.XACML3Policy;
 import org.forgerock.xacml.core.v3.engine.XACML3PolicyItem;
 import org.forgerock.xacml.core.v3.engine.XACML3PolicySet;
 import org.forgerock.xacml.core.v3.interfaces.PolicyStore;
+import org.json.JSONObject;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PolicyStoreImpl implements PolicyStore {
 
 
-    Map<String,XACML3PolicyItem> policies;
-
+    DB policyDB;
 
     public PolicyStoreImpl() {
-        policies = new HashMap<String,XACML3PolicyItem>();
+
+        try {
+        Mongo mongo = new Mongo( "localhost" , 27017 );
+
+        policyDB = mongo.getDB("policydatabase");
+        }    catch (Exception ex ) {
+            System.out.println("Unable to open MongoDB");
+
+        }
+    }
+
+    protected   BasicDBObject findPolicy(String coll, String value, String name) {
+        DBCollection table = policyDB.getCollection(coll);
+        BasicDBObject retVal = null;
+
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put(value, name);
+
+        DBCursor cursor = table.find(searchQuery);
+
+        if (cursor.hasNext())   {
+            retVal = (BasicDBObject)cursor.next();
+        }
+        return retVal;
+    }
+    protected   DBCursor findPolicies(String coll, String value, String name) {
+        DBCollection table = policyDB.getCollection(coll);
+
+        BasicDBObject searchQuery = new BasicDBObject();
+        searchQuery.put(value, name);
+
+        DBCursor cursor = table.find(searchQuery);
+
+        return cursor;
     }
 
     public String loadPolicySet(PolicySet ps) {
@@ -53,33 +89,120 @@ public class PolicyStoreImpl implements PolicyStore {
     }
 
     public PolicySet exportPolicySet(String name) {
-        XACML3PolicyItem pset = policies.get(name);
-        PolicySet result = null;
 
-        if (pset instanceof XACML3Policy) {
-            String parent = ((XACML3Policy)pset).getParent(0);
-            result =  ((XACML3PolicySet)policies.get(name)).getPolicySet();
+        BasicDBObject obj = findPolicy( "policySets", "policySetID", name);
+        XACML3PolicyItem item ;
+        PolicySet retVal = null;
+
+        try {
+            String pol = (String)obj.get("policySetJSON");
+            JSONObject polJ = new JSONObject(pol) ;
+            item =  XACML3PolicySet.getInstance(polJ);
+            retVal = (PolicySet)item.getXACMLRoot();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.println("Unable to export PolicySet");
         }
-        if (pset instanceof XACML3PolicySet) {
-             result =  ((XACML3PolicySet)pset).getPolicySet();
+        return retVal;
+
+    }
+    public Policy exportPolicy(String name) {
+
+        BasicDBObject obj = findPolicy( "policies", "policyID", name);
+        XACML3PolicyItem item = null;
+        Policy retVal = null;
+
+        try {
+            String pol = (String)obj.get("policyJSON");
+            JSONObject polJ = new JSONObject(pol) ;
+
+            item =  XACML3Policy.getInstance(polJ);
+            retVal =  (Policy)item.getXACMLRoot();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.out.println("Unable to export Policy");
         }
-        return result;
+        return retVal;
+
     }
 
     public Set<String> listPolicySets() {
-        return policies.keySet();
+        DBCollection table = policyDB.getCollection("policySets");
+        Set<String> retVal = new HashSet<String>();
+
+        DBCursor cursor = table.find();
+
+        while (cursor.hasNext())   {
+            BasicDBObject obj = (BasicDBObject)cursor.next();
+            retVal.add((String)obj.get("policySetID"));
+        }
+        return retVal;
     }
 
     public void savePolicySet(XACML3PolicySet pset, String id) {
-        policies.put(id,pset);
+        DBCollection table = policyDB.getCollection("policySets");
+        BasicDBObject document = findPolicy( "policySets", "policySetID", id);
+
+        if (document == null) {
+             document = new BasicDBObject();
+        }
+        try {
+            document.put("policySetID",id);
+            document.put("policySetJSON", pset.toJSONObject().toString());
+            table.save(document);
+        } catch (Exception ex) {
+            System.out.print(ex);
+            ex.printStackTrace();
+        }
 
     }
+
+    public Set<String> listPolicies() {
+        DBCollection table = policyDB.getCollection("policies");
+        Set<String> retVal = new HashSet<String>();
+
+        DBCursor cursor = table.find();
+
+        while (cursor.hasNext())   {
+            BasicDBObject obj = (BasicDBObject)cursor.next();
+            retVal.add((String)obj.get("policyID"));
+        }
+        return retVal;
+    }
+
     public void savePolicy(XACML3Policy pol, String id) {
-        policies.put(id,pol);
+
+        DBCollection table = policyDB.getCollection("policies");
+        BasicDBObject document = findPolicy( "policies", "policyID", id);
+
+        if (document == null) {
+             document = new BasicDBObject();
+        }
+
+        try {
+            document.put("policyID",id);
+            document.put("policyJSON", pol.toJSONObject().toString());
+            table.save(document);
+        } catch (Exception ex )  {
+
+        }
     }
 
-    public XACML3PolicyItem getPolicyForEval(String name) {
-        XACML3PolicyItem it = policies.get(name);
-        return it;
+    public XACML3Policy getPolicyForEval(String name) {
+        BasicDBObject obj = findPolicy("policies", "policyID", name);
+        XACML3Policy retVal = null;
+
+        try {
+        if (obj != null)   {
+
+            String pol = (String)obj.get("policyJSON");
+            JSONObject polJ = new JSONObject(pol) ;
+
+            retVal = XACML3Policy.getInstance(polJ);
+        }
+        } catch (Exception ex) {
+
+        }
+        return retVal;
     }
 }

@@ -33,9 +33,9 @@ an “http://www.w3.org/2001/XMLSchema#boolean”.
 It SHALL perform its evaluation on doubles according to IEEE 754 [IEEE754].
 */
 
-import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 /**

@@ -33,9 +33,9 @@ package org.forgerock.xacml.core.v3.Functions;
  Equality testing SHALL be done as defined for urn:oasis:names:tc:xacml:1.0:function:string-equal.
  */
 
-import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 /**

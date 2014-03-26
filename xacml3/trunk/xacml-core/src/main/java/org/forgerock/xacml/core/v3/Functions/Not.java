@@ -33,10 +33,10 @@ then the result of the expression SHALL be "False". If the argument evaluates to
 then the result of the expression SHALL be "True".
 */
 
-import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
-import org.forgerock.xacml.core.v3.model.IndeterminateException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
+import org.forgerock.xacml.core.v3.model.IndeterminateException;
 import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 /**

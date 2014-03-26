@@ -26,9 +26,9 @@
  */
 package org.forgerock.xacml.core.v3.engine;
 
-import com.sun.identity.entitlement.xacml3.core.*;
+import com.sun.identity.entitlement.xacml3.core.AttributeAssignmentExpression;
+import com.sun.identity.entitlement.xacml3.core.Obligation;
 import com.sun.identity.entitlement.xacml3.core.ObligationExpression;
-
 import com.sun.identity.shared.debug.Debug;
 import org.forgerock.xacml.core.v3.model.DataAssignment;
 import org.forgerock.xacml.core.v3.model.FunctionArgument;
@@ -36,7 +36,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class XACML3Obligation {
     private static Debug debug = Debug.getInstance("Xacml3");
@@ -127,6 +128,9 @@ public class XACML3Obligation {
         }
 
         return result;
+    }
+    public ObligationExpression getObligationExpression() {
+        return null;
     }
 
 }

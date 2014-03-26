@@ -40,7 +40,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  * urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-one-and-only
  */
-public class YearmonthdurationOneAndOnly extends XACMLFunction {
+public class YearmonthdurationOneAndOnly extends TypeOneAndOnly {
 
     public YearmonthdurationOneAndOnly()  {
     }

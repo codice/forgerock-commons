@@ -40,7 +40,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  * urn:oasis:names:tc:xacml:2.0:function:ipAddress-one-and-only
  */
-public class IPAddressOneAndOnly extends XACMLFunction {
+public class IPAddressOneAndOnly extends TypeOneAndOnly {
 
     public IPAddressOneAndOnly()  {
     }

@@ -28,11 +28,11 @@
 
 package com.sun.identity.shared.debug.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.sun.identity.shared.debug.IDebug;
 import com.sun.identity.shared.debug.IDebugProvider;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Default debug provider implementation.

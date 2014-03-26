@@ -39,7 +39,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  * urn:oasis:names:tc:xacml:1.0:function:base64Binary-one-and-only
  */
-public class Base64BinaryOneAndOnly extends XACMLFunction {
+public class Base64BinaryOneAndOnly extends TypeOneAndOnly {
 
     public Base64BinaryOneAndOnly()  {
     }

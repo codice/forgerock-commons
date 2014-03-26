@@ -27,20 +27,16 @@
 package org.forgerock.xacml.core.v3.engine;
 
 import com.sun.identity.entitlement.xacml3.core.*;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.Map;
-import javax.xml.bind.JAXBElement;
-
-import com.sun.identity.entitlement.xacml3.core.AllOf;
-import com.sun.identity.entitlement.xacml3.core.AnyOf;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.forgerock.xacml.core.v3.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import javax.xml.bind.JAXBElement;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Class with utility methods to map from
@@ -83,9 +79,7 @@ public class XACML3PrivilegeUtils {
                     if (attrd.getCategory().contains(":resource")) {
                         rSelectors.add(attrd.getAttributeId());
                     }
-                    // XACMLFunction.getInstance("urn:oasis:names:tc:xacml:1.0:function:any-of").XACMLFunction.getInstance(mName),
-                    parent.addArgument(XACMLFunction.getInstance("urn:oasis:names:tc:xacml:3.0:function:any-of")
-                            .addArgument(XACMLFunction.getInstance(mName))
+                    parent.addArgument(XACMLFunction.getInstance(mName)
                             .addArgument(dv)
                             .addArgument(dd));
 
@@ -93,10 +87,21 @@ public class XACML3PrivilegeUtils {
             retVal.addArgument(parent);
             }
         }
+        /*
         if (retVal.getArgCount() == 0) {
             retVal.addArgument(new DataValue(DataType.XACMLBOOLEAN,"true"));
         }
+        */
         return retVal;
+    }
+
+    public static Target  getXACMLTargetFunction(FunctionArgument target) {
+        Target result = new Target();
+
+        List<AnyOf> anyofList = result.getAnyOf();
+
+
+        return null;
     }
 
     public static Map<String,FunctionArgument> getVariableDefinitions(Policy policy) {

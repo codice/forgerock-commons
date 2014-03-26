@@ -3,7 +3,6 @@ package org.forgerock.xacml.reference.Services;
 import org.forgerock.xacml.core.v3.interfaces.EntitlementCombiner;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 

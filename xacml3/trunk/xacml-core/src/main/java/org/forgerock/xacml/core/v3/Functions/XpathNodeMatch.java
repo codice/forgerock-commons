@@ -42,9 +42,10 @@ package org.forgerock.xacml.core.v3.Functions;
  NOTE: The first condition is equivalent to "xpath-node-equal", and guarantees that "xpath-node-equal"
  is a special case of "xpath-node-match".
  */
-import org.forgerock.xacml.core.v3.model.FunctionArgument;
+
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 @Deprecated

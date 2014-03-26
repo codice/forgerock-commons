@@ -35,10 +35,10 @@ if one of its arguments evaluates to "False".
 leaving the rest of the arguments unevaluated.
 */
 
-import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
-import org.forgerock.xacml.core.v3.model.IndeterminateException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
+import org.forgerock.xacml.core.v3.model.IndeterminateException;
 import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 
@@ -68,5 +68,31 @@ public class And extends XACMLFunction {
         }
         return retVal;
     }
+
+    public String asJSONExpression() {
+
+        int args = arguments.size();
+        FunctionArgument f = arguments.get(0);
+        String retVal = f.asJSONExpression() + " " + functionName() + "\n";
+
+        for (int i = 1; i<args;i++) {
+            f = arguments.get(i);
+            retVal = retVal  + f.asJSONExpression();
+            if (i < args -1) retVal = retVal + " " + functionName() + "\n";
+        }
+
+        return retVal;
+    }
+
+    public String asRPNExpression() {
+
+        String retVal = "";
+        for (FunctionArgument f : arguments) {
+            retVal = retVal + f.asRPNExpression() + " ";
+        }
+        retVal = retVal + functionName() + "\n";
+        return retVal;
+    }
+
 
 }
