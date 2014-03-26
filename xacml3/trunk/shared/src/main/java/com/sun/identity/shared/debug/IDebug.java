@@ -198,6 +198,7 @@ public interface IDebug {
      *        present will be used to record the stack trace.
      */
     public void message(String message, Throwable th);
+    public void messageH(String message, Throwable th);
 
     /**
      * Allows the recording of messages if the debug level is set to

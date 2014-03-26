@@ -25,10 +25,16 @@
  */
 package org.forgerock.xacml.core.v3.Functions;
 
-import org.forgerock.xacml.core.v3.model.FunctionArgument;
+import com.sun.identity.entitlement.xacml3.core.Match;
+import com.sun.identity.entitlement.xacml3.core.ObjectFactory;
+import com.sun.identity.entitlement.xacml3.core.XACMLRootElement;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.model.XACMLFunction;
+
+import javax.xml.bind.JAXBElement;
+import java.util.List;
 
 /**
  * ForgeRock Specific
@@ -48,19 +54,46 @@ public class MatchAllOf extends XACMLFunction {
         }
         return retVal;
     }
-    public String toXML(String type) {
-        String retVal = "";
-        /*
-             Handle Match AnyOf and AllOf specially
-        */
 
-        retVal = "<AllOf>" ;
+    public XACMLRootElement getXACMLRoot() {
+        com.sun.identity.entitlement.xacml3.core.AllOf ma = new   com.sun.identity.entitlement.xacml3.core.AllOf();
 
-        for (FunctionArgument arg : arguments){
-            retVal = retVal + arg.toXML(type);
+        List<Match> mall = ma.getMatch();
+        for (FunctionArgument arg : arguments) {
+            try {
+                Match matchFunc = (Match)arg.getXACMLMatch();
+                mall.add(matchFunc);
+            } catch (XACML3EntitlementException ex) {
+
+            }
         }
-        retVal = retVal + "</AllOf>" ;
+        return ma;
+
+    }
+    public JAXBElement<?> getXACML() {
+
+        JAXBElement<?>  retVal;
+        ObjectFactory objectFactory = new ObjectFactory();
+
+        retVal = objectFactory.createAllOf((com.sun.identity.entitlement.xacml3.core.AllOf)getXACMLRoot());
         return retVal;
     }
+
+    public String asJSONExpression() {
+
+        int args = arguments.size();
+        FunctionArgument f = arguments.get(0);
+        String retVal = f.asJSONExpression() + " " ;
+
+        if (args > 1) { retVal = retVal + " AND " ; }
+        for (int i = 1; i<args;i++) {
+            f = arguments.get(i);
+            retVal = retVal  + f.asJSONExpression();
+            if (i < args -1) retVal = retVal + " AND ";
+        }
+
+        return retVal + "\n";
+    }
+
 
 }

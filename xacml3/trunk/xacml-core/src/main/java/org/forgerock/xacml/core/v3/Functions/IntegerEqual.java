@@ -32,9 +32,9 @@ This function SHALL take two arguments of data-type “http://www.w3.org/2001/XM
  The function SHALL return “True” if and only if the two arguments represent the same number.
  */
 
-import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 /**

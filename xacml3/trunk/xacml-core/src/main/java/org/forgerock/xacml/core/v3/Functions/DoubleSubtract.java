@@ -38,7 +38,10 @@ In the case of the divide functions, if the divisor is zero, then the function S
 
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
-import org.forgerock.xacml.core.v3.model.*;
+import org.forgerock.xacml.core.v3.model.DataType;
+import org.forgerock.xacml.core.v3.model.DataValue;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
+import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 /**
  * urn:oasis:names:tc:xacml:1.0:function:double-subtract

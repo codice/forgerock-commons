@@ -28,8 +28,8 @@
 
 package com.sun.identity.shared.debug;
 
-import com.sun.identity.shared.configuration.SystemPropertiesManager;
 import com.sun.identity.shared.debug.impl.DebugProviderImpl;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -396,6 +396,10 @@ public class Debug {
      */
     public void message(String msg) {
         getDebugServiceInstance().message(msg, null);
+    }
+
+    public void messageH(String msg) {
+        getDebugServiceInstance().messageH(msg, null);
     }
 
     /**

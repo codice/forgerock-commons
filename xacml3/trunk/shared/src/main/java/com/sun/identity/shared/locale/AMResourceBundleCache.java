@@ -29,11 +29,9 @@
 package com.sun.identity.shared.locale;
 
 import com.sun.identity.shared.debug.Debug;
-import java.util.HashMap;
+
+import java.util.*;
 import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 /**
  * A singleton class that cache resource bundle object.

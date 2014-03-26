@@ -40,7 +40,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  * urn:oasis:names:tc:xacml:1.0:function:string-one-and-only
  */
-public class StringOneAndOnly extends XACMLFunction {
+public class StringOneAndOnly extends TypeOneAndOnly {
 
     public StringOneAndOnly()  {
     }

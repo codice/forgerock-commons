@@ -25,7 +25,10 @@
  */
 package org.forgerock.xacml.reference.evaluator;
 
-import org.forgerock.xacml.core.v3.engine.*;
+import org.forgerock.xacml.core.v3.engine.XACML3Decision;
+import org.forgerock.xacml.core.v3.engine.XACML3PolicyItem;
+import org.forgerock.xacml.core.v3.engine.XACML3Response;
+import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
 import org.forgerock.xacml.core.v3.interfaces.Evaluator;
 
 import java.util.List;
@@ -33,7 +36,7 @@ import java.util.List;
 public class EvaluatorImpl implements Evaluator {
     private String scope;
 
-    public XACML3Response evaluate(XACMLEvalContext context) {
+    public XACML3Response evaluate(XACMLEvalContext context,String policyName) {
 
         XACML3PolicyItem pSet = context.getPolicyForEval(scope);
 

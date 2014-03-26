@@ -39,7 +39,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  *  urn:oasis:names:tc:xacml:1.0:function:dateTime-one-and-only
  */
-public class DatetimeOneAndOnly extends XACMLFunction {
+public class DatetimeOneAndOnly extends TypeOneAndOnly {
 
     public DatetimeOneAndOnly()  {
     }

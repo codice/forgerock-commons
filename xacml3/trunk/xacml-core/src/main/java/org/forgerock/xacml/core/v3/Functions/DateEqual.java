@@ -32,9 +32,10 @@ and SHALL return an “http://www.w3.org/2001/XMLSchema#boolean”.
 It SHALL perform its evaluation according to the “op:date-equal” function [XF] Section 10.4.9.
 */
 
-import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
-import org.forgerock.xacml.core.v3.model.*;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
+import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
+import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 import java.util.Date;
 

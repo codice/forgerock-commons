@@ -34,18 +34,10 @@ package com.sun.identity.shared.debug.impl;
 import com.sun.identity.shared.configuration.SystemPropertiesManager;
 import com.sun.identity.shared.debug.IDebug;
 import com.sun.identity.shared.locale.Locale;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+
+import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Debug implementation class.
@@ -361,6 +353,15 @@ public class DebugImpl implements IDebug {
     public void message(String message, Throwable th){
         if (messageEnabled()) {
             record(message, th);
+        }
+    }
+    public void messageH(String message, Throwable th){
+        if (messageEnabled()) {
+            if (needsRotate()) {
+                rotate();
+            }
+
+            writeIt("", message, th);
         }
     }
 

@@ -25,13 +25,18 @@
  */
 package org.forgerock.xacml.core.v3.model;
 
+import com.sun.identity.entitlement.xacml3.core.*;
+import com.sun.identity.shared.debug.Debug;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.*;
+import javax.xml.bind.JAXBElement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -48,6 +53,7 @@ public abstract class XACMLFunction extends FunctionArgument {
      */
     public static final String URN_SYNTAX_ERROR = "urn:oasis:names:tc:xacml:1.0:status:syntax-error";
     public static final String URN_PROCESSING_ERROR = "urn:oasis:names:tc:xacml:1.0:status:processing-error";
+    private static Debug debug = Debug.getInstance("Xacml3");
 
     public static String spaces = "                                                                                                                                                                             ";
 
@@ -126,7 +132,30 @@ public abstract class XACMLFunction extends FunctionArgument {
      */
     public abstract FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException;
 
-    private String functionName() {
+
+    public String asJSONExpression() {
+
+        String retVal = functionName() + "(";
+        String sep = " ";
+        for (FunctionArgument f : arguments) {
+            retVal = retVal  +sep +f.asJSONExpression();
+            sep = ", ";
+        }
+        retVal = retVal + ")";
+        return retVal;
+    }
+
+    public String asRPNExpression() {
+
+        String retVal = "";
+        for (FunctionArgument f : arguments) {
+            retVal = retVal + f.asRPNExpression() + " ";
+        }
+        retVal = retVal + functionName() + "\n";
+        return retVal;
+    }
+
+    protected String functionName() {
         return functionID.substring(functionID.lastIndexOf(':')+1);
     }
     public String printDebugItem() {
@@ -139,20 +168,21 @@ public abstract class XACMLFunction extends FunctionArgument {
 
     public void printDebugEntry() {
 
-        System.out.print(printIndent() + functionName()+ "( ");
+        String msg = "";
+        msg = printIndent() + functionName()+ "( ";
         String sep = " ";
         for (FunctionArgument f : arguments) {
-            System.out.print(sep +f.printDebugItem());
+            msg = msg + sep +f.printDebugItem();
             sep = ", ";
         }
-        System.out.println(")");
+        msg = msg + ")";
+        debug.messageH(msg);
         indent+= 2;
     }
     public void printDebugExit( FunctionArgument res) {
 
         indent-= 2;
-        System.out.print(printIndent() +"=" +res.printDebugItem());
-        System.out.println("");
+        debug.messageH(printIndent() +"=" +res.printDebugItem());
     }
 
 
@@ -169,7 +199,7 @@ public abstract class XACMLFunction extends FunctionArgument {
         try {
             result = evaluate(pip);
         } catch (XACML3EntitlementException ex)  {
-            System.out.println("!!Exception");
+            debug.message("!!Exception");
             throw ex;
         } finally  {
             printDebugExit( result) ;
@@ -235,36 +265,51 @@ public abstract class XACMLFunction extends FunctionArgument {
         }
         return;
     }
+    public XACMLRootElement getXACMLRoot() {
+
+        Apply apply = new Apply();
+
+        apply.setFunctionId(functionID);
+        for (FunctionArgument arg : arguments) {
+            if (arg instanceof DataDesignator)   {
+                apply.getExpression().add(arg.getXACML());
+            } else if (arg instanceof DataValue)  {
+                apply.getExpression().add(arg.getXACML());
+            } else if (arg instanceof XACMLFunction) {
+                apply.getExpression().add(arg.getXACML());
+            }
+        }
+        return apply;
+    };
+    public XACMLRootElement getXACMLMatch() {
+
+        Match match = new Match();
+
+        match.setMatchId(functionID);
+
+        for (FunctionArgument arg : arguments) {
+            if (arg instanceof DataDesignator)   {
+                match.setAttributeDesignator((AttributeDesignator)arg.getXACMLRoot());
+            } else if (arg instanceof DataValue)  {
+                match.setAttributeValue ((AttributeValue)arg.getXACMLRoot());
+            } else if (arg instanceof XACMLFunction) {
+            }
+        }
+        return match;
+    };
+
+    public JAXBElement<?> getXACML() {
+
+        JAXBElement<?> retVal;
+
+        ObjectFactory objectFactory = new ObjectFactory();
+        retVal = objectFactory.createApply((Apply)getXACMLRoot());
+        return retVal;
+
+    }
 
     ;
 
-    /**
-     * Perform a String to XML  Allow Matching Functions.
-     *
-     * @param type
-     * @return String - XML String Object.
-     */
-    public String toXMLAllow(String type) {
-        String retVal = "";
-        /*
-             Handle Match AnyOf and AllOf specially
-        */
-
-        if (type.equals("Match")) {
-            retVal = "<Match MatchId=\"" + functionID + "\">";
-        } else if (type.equals("Allow")) {
-            retVal = "<Allow FunctionId=\"" + functionID + "\">";
-        }
-        for (FunctionArgument arg : arguments) {
-            retVal = retVal + arg.toXML(type);
-        }
-        if (type.equals("Match")) {
-            retVal = "</Match\">";
-        } else if (type.equals("Allow")) {
-            retVal = "</Allow\">";
-        }
-        return retVal;
-    }
 
     /**
      * Obtain the instance of the specific Function by URN.

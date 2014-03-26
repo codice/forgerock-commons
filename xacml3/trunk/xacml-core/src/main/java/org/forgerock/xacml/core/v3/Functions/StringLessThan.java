@@ -34,9 +34,9 @@ package org.forgerock.xacml.core.v3.Functions;
  as defined for the identifier http://www.w3.org/2005/xpath-functions/collation/codepoint by [XF].
  */
 
-import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 /**

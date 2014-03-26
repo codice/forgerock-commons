@@ -27,12 +27,14 @@
 package org.forgerock.xacml.core.v3.model;
 
 
+import com.sun.identity.entitlement.xacml3.core.XACMLRootElement;
 import com.sun.identity.shared.debug.Debug;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.xml.bind.JAXBElement;
 import java.util.Date;
 
 /**
@@ -187,25 +189,32 @@ public abstract class FunctionArgument {
         return null;
     }
 
-    /**
-     * Return the jaxbElement for the Function.
-     *
-     * @param type
-     * @return String representing JSON/XML Data Fragment.
-     */
-    public String toXML(String type) {
-        // TODO ::
-        return "";
-    }
 
-    /**
-     * Function Argument Abstract evaluation method. All Implementations are based upon the XACML v3
-     * Functions Library.
-     *
-     * @param pip
-     * @return FunctionArgument -- Result based upon the FunctionArgument's return value.
-     * @throws XACML3EntitlementException
-     */
+    public abstract JAXBElement<?> getXACML();
+    public abstract XACMLRootElement getXACMLRoot() ;
+
+    public abstract String asJSONExpression();
+    public abstract String asRPNExpression();
+
+
+    protected String leftID(String src, String delim) {
+
+        return src.substring(src.lastIndexOf(delim)+1);
+
+    }
+    public  XACMLRootElement getXACMLMatch() throws XACML3EntitlementException {
+        throw new XACML3EntitlementException("getXACMLMatch should not be called on this object");
+        };
+
+
+        /**
+         * Function Argument Abstract evaluation method. All Implementations are based upon the XACML v3
+         * Functions Library.
+         *
+         * @param pip
+         * @return FunctionArgument -- Result based upon the FunctionArgument's return value.
+         * @throws XACML3EntitlementException
+         */
     public abstract FunctionArgument evaluate(XACMLEvalContext pip) throws XACML3EntitlementException;
 
     /**

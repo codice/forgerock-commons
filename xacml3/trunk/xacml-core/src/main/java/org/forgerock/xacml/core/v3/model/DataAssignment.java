@@ -35,12 +35,17 @@ package org.forgerock.xacml.core.v3.model;
  */
 
 
-import com.sun.identity.entitlement.xacml3.core.*;
+import com.sun.identity.entitlement.xacml3.core.AttributeAssignment;
+import com.sun.identity.entitlement.xacml3.core.AttributeAssignmentExpression;
+import com.sun.identity.entitlement.xacml3.core.ObjectFactory;
+import com.sun.identity.entitlement.xacml3.core.XACMLRootElement;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACML3PrivilegeUtils;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import javax.xml.bind.JAXBElement;
 
 public class DataAssignment extends FunctionArgument {
     private String category;
@@ -70,7 +75,17 @@ public class DataAssignment extends FunctionArgument {
         jo.put("expression",expression.toJSONObject());
         return jo;
     }
-    protected void init(JSONObject jo) throws JSONException {
+
+    public String asJSONExpression() {
+
+        return  leftID(attributeID, ":");
+    }
+    public String asRPNExpression() {
+
+        return  leftID(attributeID, ":");
+    }
+
+        protected void init(JSONObject jo) throws JSONException {
         super.init(jo);
         this.category = jo.optString("category");
         this.attributeID = jo.optString("attributeID");
@@ -91,16 +106,23 @@ public class DataAssignment extends FunctionArgument {
         return result;
     }
 
+    public XACMLRootElement getXACMLRoot () {
+        AttributeAssignmentExpression att = new AttributeAssignmentExpression();
 
-    public String toXML(String type) {
-        /*
-             Handle Match AnyOf and AllOf specially
-        */
-        String retVal = "<AttributeAssignmentExpression AttributeId=\"" + attributeID + "\" >";
-        retVal = retVal + expression.toXML("Allow");
-        retVal = retVal + "</AttributeAssignmentExpression>";
+        att.setAttributeId(attributeID);
+        att.setCategory(category);
+        att.setExpression(expression.getXACML());
 
-        return retVal;
+        return att;
+    }
+
+
+
+    public JAXBElement<?> getXACML() {
+        ObjectFactory objectFactory = new ObjectFactory();
+
+        return objectFactory.createAttributeAssignmentExpression((AttributeAssignmentExpression)getXACMLRoot());
+
     }
 
 

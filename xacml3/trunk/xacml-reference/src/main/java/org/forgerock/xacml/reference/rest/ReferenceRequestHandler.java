@@ -26,16 +26,15 @@
 package org.forgerock.xacml.reference.rest;
 
 import com.sun.identity.entitlement.xacml3.core.ObjectFactory;
+import com.sun.identity.entitlement.xacml3.core.Policy;
+import com.sun.identity.entitlement.xacml3.core.PolicySet;
+import com.sun.identity.shared.debug.Debug;
+import org.forgerock.xacml.core.v3.ImplementationManagers.PolicyStoreManager;
+import org.forgerock.xacml.core.v3.engine.XACML3PolicyItem;
+import org.forgerock.xacml.core.v3.interfaces.PolicyStore;
+
 import javax.ws.rs.*;
 import javax.xml.bind.JAXBElement;
-
-
-import com.sun.identity.entitlement.xacml3.core.*;
-import com.sun.identity.shared.debug.Debug;
-
-import org.forgerock.xacml.core.v3.interfaces.PolicyStore;
-import org.forgerock.xacml.core.v3.ImplementationManagers.PolicyStoreManager;
-
 import java.util.Set;
 
 
@@ -88,7 +87,7 @@ public class ReferenceRequestHandler {
     @GET
     @Consumes({"application/xml", "application/xacml+xml", "application/json", "application/xacml+json"})
     @Produces({"application/xml", "application/xacml+xml", "application/json", "application/xacml+json"})
-    @Path("/export/{policyname}")
+    @Path("/exportSet/{policyname}")
     public JAXBElement<PolicySet> exportPolicySet(@PathParam("policyname") String policyname) {
 
         final String methodName = "ReferenceRequestHandler.exportPolicySet: ";
@@ -106,6 +105,69 @@ public class ReferenceRequestHandler {
         return objectFactory.createPolicySet(result);
     }
 
+    @GET
+    @Consumes({"application/xml", "application/xacml+xml", "application/json", "application/xacml+json"})
+    @Produces({"application/xml", "application/xacml+xml", "application/json", "application/xacml+json"})
+    @Path("/export/{policyname}")
+    public JAXBElement<Policy> exportPolicy(@PathParam("policyname") String policyname) {
+
+        final String methodName = "ReferenceRequestHandler.exportPolicy: ";
+        Policy result =null;
+
+        try {
+            PolicyStore ps = PolicyStoreManager.getInstance();
+            result = ps.exportPolicy(policyname);
+
+        } catch (Exception exception) {
+            DEBUG.error(methodName + "Exception Occurred: " + exception.getMessage() + ", Returning Indeterminate.",
+                    exception);
+        }
+        ObjectFactory objectFactory = new ObjectFactory();
+        return objectFactory.createPolicy(result);
+    }
+
+    @GET
+    @Consumes({"application/xml", "application/xacml+xml", "application/json", "application/xacml+json"})
+    @Produces({"application/xml", "application/xacml+xml", "application/json", "application/xacml+json"})
+    @Path("/exportJSON/{policyname}")
+    public String exportPolicyasJSON(@PathParam("policyname") String policyname) {
+
+        final String methodName = "ReferenceRequestHandler.exportPolicy: ";
+        String result = "";
+
+        try {
+            PolicyStore ps = PolicyStoreManager.getInstance();
+            XACML3PolicyItem pol = ps.getPolicyForEval(policyname);
+            result = pol.asJSONExpression();
+
+        } catch (Exception exception) {
+            DEBUG.error(methodName + "Exception Occurred: " + exception.getMessage() + ", Returning Indeterminate.",
+                    exception);
+        }
+        return result;
+    }
+
+    @GET
+    @Consumes({"application/xml", "application/xacml+xml", "application/json", "application/xacml+json"})
+    @Produces({"application/xml", "application/xacml+xml", "application/json", "application/xacml+json"})
+    @Path("/exportRPN/{policyname}")
+    public String exportPolicyasRPN(@PathParam("policyname") String policyname) {
+
+        final String methodName = "ReferenceRequestHandler.exportPolicy: ";
+        String result = "";
+
+        try {
+            PolicyStore ps = PolicyStoreManager.getInstance();
+            XACML3PolicyItem pol = ps.getPolicyForEval(policyname);
+            result = pol.asRPNExpression();
+
+        } catch (Exception exception) {
+            DEBUG.error(methodName + "Exception Occurred: " + exception.getMessage() + ", Returning Indeterminate.",
+                    exception);
+        }
+        return result;
+    }
+
     /**
      * POST
      * Handle XML Requests
@@ -116,7 +178,25 @@ public class ReferenceRequestHandler {
     @Consumes
     @Produces({"application/xml", "application/xacml+xml", "application/json", "application/xacml+json","*/*"})
     @Path("/list")
-    public String listPolicySet() {
+    public String listPolicies() {
+
+        final String methodName = "ReferenceRequestHandler.listPolicySet: ";
+        Set<String> names = null;
+        try {
+            PolicyStore ps = PolicyStoreManager.getInstance();
+            names = ps.listPolicies();
+
+        } catch (Exception exception) {
+            DEBUG.error(methodName + "Exception Occurred: " + exception.getMessage() + ", Returning Indeterminate.",
+                    exception);
+        }
+        return names.toString();
+    }
+    @GET
+    @Consumes
+    @Produces({"application/xml", "application/xacml+xml", "application/json", "application/xacml+json","*/*"})
+    @Path("/listsets")
+    public String listPolicySets() {
 
         final String methodName = "ReferenceRequestHandler.listPolicySet: ";
         Set<String> names = null;
@@ -132,3 +212,19 @@ public class ReferenceRequestHandler {
     }
 }
 
+
+                /*
+@javax.xml.bind.annotation.XmlSchema(
+       namespace = "urn:oasis:names:tc:xacml:3.0:core:schema:wd-17",
+        xmlns = {
+                @javax.xml.bind.annotation.XmlNs(prefix = "xacml",
+                        namespaceURI = "classpath:xsd/xacml-core-v3-schema-wd-17.xsd"),
+                @javax.xml.bind.annotation.XmlNs(prefix = "xacml3",
+                        namespaceURI = "classpath:xsd/xacml-core-v3-schema-wd-17.xsd"),
+                @javax.xml.bind.annotation.XmlNs(prefix = "xacml-context",
+                        namespaceURI = "classpath:xsd/xacml-core-v3-schema-wd-17.xsd"),
+                @javax.xml.bind.annotation.XmlNs(prefix = "xacml-ctx",
+                        namespaceURI = "classpath:xsd/xacml-core-v3-schema-wd-17.xsd")
+                },
+        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+   */

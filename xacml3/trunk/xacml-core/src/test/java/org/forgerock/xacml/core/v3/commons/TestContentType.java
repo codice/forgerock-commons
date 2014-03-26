@@ -32,7 +32,8 @@ import org.testng.annotations.Test;
 
 import javax.ws.rs.core.MediaType;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 
 /**
  * Very simple test to check parsing and validation of URNs.

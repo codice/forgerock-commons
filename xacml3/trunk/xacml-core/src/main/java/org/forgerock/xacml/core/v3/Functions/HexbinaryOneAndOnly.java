@@ -41,7 +41,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  * urn:oasis:names:tc:xacml:1.0:function:hexBinary-one-and-only
  */
-public class HexbinaryOneAndOnly extends XACMLFunction {
+public class HexbinaryOneAndOnly extends TypeOneAndOnly {
 
     public HexbinaryOneAndOnly()  {
     }

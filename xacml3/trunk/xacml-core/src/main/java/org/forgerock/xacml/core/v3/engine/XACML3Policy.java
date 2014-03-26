@@ -25,22 +25,24 @@
  */
 package org.forgerock.xacml.core.v3.engine;
 
+import com.sun.identity.entitlement.xacml3.core.ObjectFactory;
+import com.sun.identity.entitlement.xacml3.core.Policy;
+import com.sun.identity.entitlement.xacml3.core.Target;
+import com.sun.identity.entitlement.xacml3.core.XACMLRootElement;
 import com.sun.identity.shared.debug.Debug;
 import org.forgerock.xacml.core.v3.ImplementationManagers.CombinerManager;
-import org.forgerock.xacml.core.v3.interfaces.Entitlement;
-import com.sun.identity.entitlement.xacml3.core.*;
 import org.forgerock.xacml.core.v3.interfaces.EntitlementCombiner;
 import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.xml.bind.JAXBElement;
 import java.util.*;
+
 
 public class XACML3Policy implements XACML3PolicyItem {
     private static Debug debug = Debug.getInstance("Xacml3");
-
-    private Policy policy;
 
     private List<String> policySets;
     private String policyName;
@@ -48,13 +50,12 @@ public class XACML3Policy implements XACML3PolicyItem {
     private FunctionArgument target;
     private List<XACML3PolicyRule> rules;
 
-    private java.util.Map<String,FunctionArgument> definedVars;
+    private Map<String,FunctionArgument> definedVars;
     private String ruleCombiner;
     private Set<String> resourceSelectors;
 
 
     public XACML3Policy(Policy policy) {
-        this.policy = policy;
         policySets = new ArrayList<String>();
 
         policyName = policy.getPolicyId();
@@ -82,9 +83,6 @@ public class XACML3Policy implements XACML3PolicyItem {
     }
     public void addParent(String parent) {
         policySets.add(parent);
-    }
-    public Policy getPolicy() {
-        return policy;
     }
     public String getParent(int index) {
         return policySets.get(index);
@@ -129,6 +127,53 @@ public class XACML3Policy implements XACML3PolicyItem {
         return results;
     }
 
+    public XACMLRootElement getXACMLRoot() {
+        Policy policy = new Policy();
+
+        policy.setPolicyId(policyName);
+        policy.setRuleCombiningAlgId(ruleCombiner);
+        policy.setTarget((Target)target.getXACMLRoot());
+
+        List<Object> elements = policy.getCombinerParametersOrRuleCombinerParametersOrVariableDefinition();
+
+        for (XACML3PolicyRule r : rules) {
+            elements.add(r.getXACMLRoot());
+        }
+
+        return policy;
+    }
+    public JAXBElement<?> getXACML() {
+        Policy policy = (Policy)getXACMLRoot();
+
+        ObjectFactory objectFactory = new ObjectFactory();
+        return objectFactory.createPolicy(policy);
+    }
+
+    public String asJSONExpression() {
+        String retVal = policyName + "\n\n";
+
+        retVal = retVal + target.asJSONExpression() + "\n\n";
+
+        for (XACML3PolicyRule r: rules) {
+            retVal = retVal + r.asJSONExpression() + "\n\n";
+        }
+
+        return retVal;
+
+    }
+
+    public String asRPNExpression() {
+        String retVal = policyName + "\n\n";
+
+        retVal = retVal + target.asRPNExpression() + "\n\n";
+
+        for (XACML3PolicyRule r: rules) {
+            retVal = retVal + r.asRPNExpression() + "\n\n";
+        }
+
+        return retVal;
+
+    }
 
     public JSONObject toJSONObject() throws JSONException {
         JSONObject jo = new JSONObject();
@@ -150,7 +195,6 @@ public class XACML3Policy implements XACML3PolicyItem {
         for (XACML3PolicyRule r: rules) {
             jo.append("rules", r.toJSONObject());
         }
-
         return jo;
     }
 

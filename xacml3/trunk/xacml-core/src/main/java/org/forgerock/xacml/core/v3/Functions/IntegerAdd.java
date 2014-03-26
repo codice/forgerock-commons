@@ -41,7 +41,10 @@ This function MUST accept two or more arguments.
 
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
-import org.forgerock.xacml.core.v3.model.*;
+import org.forgerock.xacml.core.v3.model.DataType;
+import org.forgerock.xacml.core.v3.model.DataValue;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
+import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 /**
  * urn:oasis:names:tc:xacml:1.0:function:integer-add

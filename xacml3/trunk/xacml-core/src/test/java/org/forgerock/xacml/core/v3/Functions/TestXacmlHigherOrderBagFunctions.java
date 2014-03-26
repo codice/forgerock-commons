@@ -26,14 +26,15 @@
 package org.forgerock.xacml.core.v3.Functions;
 
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
-import org.forgerock.xacml.core.v3.model.*;
+import org.forgerock.xacml.core.v3.model.DataBag;
+import org.forgerock.xacml.core.v3.model.DataType;
+import org.forgerock.xacml.core.v3.model.DataValue;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.*;
 
 /**
  * A.3.12 Higher-order bag functions

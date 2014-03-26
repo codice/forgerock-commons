@@ -39,7 +39,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  * urn:oasis:names:tc:xacml:1.0:function:anyURI-one-and-only
  */
-public class AnyuriOneAndOnly extends XACMLFunction {
+public class AnyuriOneAndOnly extends TypeOneAndOnly {
 
     public AnyuriOneAndOnly()  {
     }

@@ -5,7 +5,6 @@ import org.forgerock.xacml.core.v3.engine.XACML3Decision;
 import org.forgerock.xacml.core.v3.interfaces.EntitlementCombiner;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.

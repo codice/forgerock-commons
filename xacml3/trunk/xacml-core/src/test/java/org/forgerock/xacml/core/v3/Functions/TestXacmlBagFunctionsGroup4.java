@@ -27,7 +27,6 @@ package org.forgerock.xacml.core.v3.Functions;
 
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACML3PrivilegeUtils;
-import org.forgerock.xacml.core.v3.model.YearMonthDuration;
 import org.forgerock.xacml.core.v3.model.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -35,7 +34,8 @@ import org.testng.annotations.Test;
 
 import java.util.Date;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 /**
  * A.3.10 Bag functions

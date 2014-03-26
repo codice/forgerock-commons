@@ -28,10 +28,8 @@
 
 package com.sun.identity.shared.configuration;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Collection;
 import javax.servlet.ServletContext;
+import java.net.MalformedURLException;
 
 /**
  * This class provides method to locate configuration file.

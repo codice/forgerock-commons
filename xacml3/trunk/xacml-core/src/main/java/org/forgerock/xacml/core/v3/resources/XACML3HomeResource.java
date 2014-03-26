@@ -1,7 +1,6 @@
 package org.forgerock.xacml.core.v3.resources;
 
 import com.sun.identity.shared.debug.Debug;
-
 import org.forgerock.xacml.core.v3.model.CommonType;
 import org.forgerock.xacml.core.v3.model.ContentType;
 import org.json.JSONArray;

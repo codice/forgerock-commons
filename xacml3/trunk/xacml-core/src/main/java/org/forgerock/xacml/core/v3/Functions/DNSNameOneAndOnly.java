@@ -40,7 +40,7 @@ import org.forgerock.xacml.core.v3.model.*;
 /**
  * urn:oasis:names:tc:xacml:2.0:function:dnsName-one-and-only
  */
-public class DNSNameOneAndOnly extends XACMLFunction {
+public class DNSNameOneAndOnly extends TypeOneAndOnly {
 
     public DNSNameOneAndOnly()  {
     }

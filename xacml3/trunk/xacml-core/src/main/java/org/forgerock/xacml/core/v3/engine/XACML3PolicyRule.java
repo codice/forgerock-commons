@@ -25,16 +25,17 @@
  */
 package org.forgerock.xacml.core.v3.engine;
 
-import com.sun.identity.shared.debug.Debug;
 import com.sun.identity.entitlement.xacml3.core.*;
+import com.sun.identity.shared.debug.Debug;
 import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class XACML3PolicyRule {
-    private XACML3Policy     parentPolicy;
     private FunctionArgument target;
     private FunctionArgument condition;
 
@@ -54,7 +55,7 @@ public class XACML3PolicyRule {
 
 
     public XACML3PolicyRule(Rule rule, XACML3Policy parent) {
-        parentPolicy = parent;
+//        parentPolicy = parent;
         target = XACML3PrivilegeUtils.getTargetFunction(rule.getTarget(), new HashSet<String>());
         ruleName = rule.getRuleId();
         effect = rule.getEffect().value();
@@ -76,6 +77,38 @@ public class XACML3PolicyRule {
         } catch (Exception ex) {
 
         }
+    }
+
+    public XACMLRootElement getXACMLRoot() {
+        Rule rule = new Rule();
+
+        rule.setTarget((Target)target.getXACMLRoot());
+
+        rule.setRuleId(ruleName);
+        rule.setEffect( EffectType.fromValue(effect));
+
+        Condition cond = new Condition();
+
+        cond.setExpression(condition.getXACML());
+        rule.setCondition(cond);
+
+        try {
+            List<ObligationExpression> obs = rule.getObligationExpressions().getObligationExpression();
+            for (XACML3Obligation o : obligations) {
+                obs.add(o.getObligationExpression());
+            }
+        } catch (Exception ex) {
+
+        }
+        try {
+            List<AdviceExpression> obs = rule.getAdviceExpressions().getAdviceExpression();
+            for (XACML3Advice o : advices) {
+                obs.add(o.getAdviceExpression());
+            }
+        } catch (Exception ex) {
+
+        }
+        return rule;
     }
 
     public XACML3Decision evaluate(XACMLEvalContext pip) {
@@ -143,6 +176,28 @@ public class XACML3PolicyRule {
 
         return jo;
     }
+
+    public String asJSONExpression() {
+        String retVal = ruleName + "\n\n";
+
+        retVal = retVal + "return (" + target.asJSONExpression() + ");\n\n";
+
+        retVal = retVal + "return (" + condition.asJSONExpression() + "); \n\n";
+
+        return retVal;
+
+    }
+    public String asRPNExpression() {
+        String retVal = ruleName + "\n\n";
+
+        retVal = retVal + target.asRPNExpression() + "\n\n";
+
+        retVal = retVal + condition.asRPNExpression() + "\n\n";
+
+        return retVal;
+
+    }
+
 
 
     static public XACML3PolicyRule getInstance(JSONObject jo) {

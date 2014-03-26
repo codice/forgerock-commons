@@ -1,9 +1,5 @@
 <xacml-samlp:XACMLAuthzDecisionQuery
-        xmlns:ds="http://www.w3.org/2000//09/xmldsig#"
-        xmlns:pds="urn:sesgg:sc:security:1.0:spec:PolicyDecisionService"
         xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-        xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-        xmlns:xacml="urn:oasis:names:tc:xacml:2.0:policy:schema:os"
         xmlns:xacml-context="urn:oasis:names:tc:xacml:2.0:context:schema:os"
         xmlns:xacml-samlp="urn:oasis:xacml:2.0:saml:protocol:schema:os"
         ID="ID_1e469be0-ecc4-11da-8ad9-0800200c9a66"

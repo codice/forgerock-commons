@@ -36,9 +36,9 @@ package org.forgerock.xacml.core.v3.Functions;
  to which either XPath expression applies to is not present in the request, this function SHALL return a value of “False”.
  */
 
-import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.engine.XACML3EntitlementException;
 import org.forgerock.xacml.core.v3.engine.XACMLEvalContext;
+import org.forgerock.xacml.core.v3.model.FunctionArgument;
 import org.forgerock.xacml.core.v3.model.XACMLFunction;
 
 @Deprecated

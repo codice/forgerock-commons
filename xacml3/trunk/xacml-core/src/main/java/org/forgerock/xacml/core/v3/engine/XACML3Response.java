@@ -27,11 +27,9 @@ package org.forgerock.xacml.core.v3.engine;
 
 import com.sun.identity.entitlement.xacml3.core.*;
 
-import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class XACML3Response {
     private List<XACML3Decision> decisions;
