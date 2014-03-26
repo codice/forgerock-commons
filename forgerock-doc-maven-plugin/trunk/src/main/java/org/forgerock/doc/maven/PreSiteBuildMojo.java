@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -1449,14 +1450,22 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                         executionEnvironment(getProject(), getSession(),
                                 getPluginManager()));
 
-
-                File outputDir = new File(getDocbkxOutputDirectory(),
-                        extension + File.separator + docName);
+                // <targetsFilename> is ignored with docbkx-tools 2.0.15:
+                //File outputDir = new File(getDocbkxOutputDirectory(),
+                //        extension + File.separator + docName);
+                File outputDir = new File(getBaseDir(),
+                        "target" + File.separator + "docbkx" + File.separator
+                                + extension + File.separator + docName);
                 try {
-                    FileUtils.deleteDirectory(outputDir);
+                    String[] extensions = {"fo", extension};
+                    Iterator<File> files =
+                            FileUtils.iterateFiles(outputDir, extensions, true);
+                    while (files.hasNext()) {
+                        FileUtils.forceDelete(files.next());
+                    }
                 } catch (IOException e) {
                     throw new MojoExecutionException(
-                            "Cannot delete " + outputDir + ": " + e.getMessage());
+                            "Cannot delete a file: " + e.getMessage());
                 }
             }
         }
@@ -1756,15 +1765,6 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                         configuration(cfg.toArray(new Element[cfg.size()])),
                         executionEnvironment(getProject(), getSession(),
                                 getPluginManager()));
-
-                File outputDir = new File(getDocbkxOutputDirectory(), "html"
-                        + File.separator + docName);
-                try {
-                    FileUtils.deleteDirectory(outputDir);
-                } catch (IOException e) {
-                    throw new MojoExecutionException("Cannot delete "
-                            + outputDir);
-                }
             }
         }
 
@@ -1854,16 +1854,6 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                         configuration(cfg.toArray(new Element[cfg.size()])),
                         executionEnvironment(getProject(), getSession(),
                                 getPluginManager()));
-
-                File outputDir = new File(getDocbkxOutputDirectory(), "html"
-                        + File.separator + docName + File.separator
-                        + FilenameUtils.getBaseName(getDocumentSrcName()));
-                try {
-                    FileUtils.deleteDirectory(outputDir);
-                } catch (IOException e) {
-                    throw new MojoExecutionException("Cannot delete "
-                            + outputDir);
-                }
             }
         }
 
