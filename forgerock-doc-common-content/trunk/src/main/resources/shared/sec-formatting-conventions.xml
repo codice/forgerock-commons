@@ -20,7 +20,7 @@
   !
   ! CCPL HEADER END
   !
-  !      Copyright 2011-2013 ForgeRock AS
+  !      Copyright 2011-2014 ForgeRock AS
   !
 -->
  <section xml:id="formatting-conventions"
@@ -55,8 +55,8 @@
   Command line, terminal sessions are formatted as follows.
  </para>
 
- <screen>$ echo $JAVA_HOME
-/path/to/jdk</screen>
+ <screen>$ <userinput>echo $JAVA_HOME</userinput>
+<computeroutput>/path/to/jdk</computeroutput></screen>
 
  <para>
   Program listings are formatted as follows.
