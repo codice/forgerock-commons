@@ -15,18 +15,21 @@ improvements & new features, and bug fixes.
 The following changes impact how you use the plugin, and your source XML.
 
 **Project version must new be set in the plugin configuration.**
+
 DOCS-117 added a required `<projectVersion>` configuration setting.
 Set this to the current version of your project, as in:
 
     <projectVersion>3.0.0-SNAPSHOT</projectVersion>
 
-**In HTML outputs `<screen>` content now allows child elements**
+**In HTML outputs child elements of `<screen>` are processed.**
+
 DOCS-140 eliminates the use of SyntaxHighlighter for rendering `<screen>`.
 
 You can therefore now use child elements to affect the formatting,
 such as `<userinput>` and `<computeroutput>`.
 
 The trade off is that setting `language=shell` no longer has an effect.
+
 
 ## Improvements & New Features
 
