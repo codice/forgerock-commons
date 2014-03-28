@@ -1,5 +1,3 @@
-# DRAFT - IN PROGRESS
-
 # ForgeRock Documentation Tools 2.1.0 Release Notes
 
 ForgeRock Documentation Tools is a catch all for the doc build plugin,
