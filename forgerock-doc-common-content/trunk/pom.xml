@@ -28,7 +28,7 @@
  <artifactId>forgerock-doc-common-content</artifactId>
  <groupId>org.forgerock.commons</groupId>
  <name>ForgeRock Common Documentation Content</name>
- <version>2.1.0</version>
+ <version>3.0.0-SNAPSHOT</version>
  <description>
     This common ForgeRock content includes text and images
     in formats suitable for inclusion in core documentation.
@@ -36,9 +36,9 @@
  <packaging>jar</packaging>
 
   <scm>
-  <url>https://svn.forgerock.org/commons/forgerock-doc-common-content/tags/2.1.0</url>
-  <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-common-content/tags/2.1.0</connection>
-  <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-common-content/tags/2.1.0</developerConnection>
+  <url>https://svn.forgerock.org/commons/forgerock-doc-common-content/</url>
+  <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-common-content/trunk/</connection>
+  <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-common-content/trunk/</developerConnection>
  </scm>
 
  <licenses>
