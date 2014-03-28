@@ -32,11 +32,19 @@
  </properties>
  <body>
   <section name="About the Plugin">
-   <p>This Maven plugin centralizes configuration of core documentation, to
-   ensure that output documents are formatted uniformly.</p>
+   <p>
+    This Maven plugin centralizes configuration of core documentation, to
+    ensure that output documents are formatted uniformly.
+   </p>
 
    <p>
     For more information, see the <a href="README.html">README</a>.
+   </p>
+
+   <p>
+    ForgeRock hosts the sources, CI jobs, and artifacts,
+    but the source is also periodically synced
+    to <a href="https://github.com/markcraig/forgerock-doc-maven-plugin">GitHub</a>.
    </p>
   </section>
  </body>
