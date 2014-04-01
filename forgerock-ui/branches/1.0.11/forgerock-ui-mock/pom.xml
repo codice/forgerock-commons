@@ -22,13 +22,12 @@
   ~ your own identifying information:
   ~ "Portions Copyrighted [year] [name of copyright owner]"
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.forgerock.commons.ui</groupId>
         <artifactId>forgerock-ui</artifactId>
-        <version>1.0.11-SNAPSHOT</version>
+        <version>1.0.11</version>
     </parent>
 
     <artifactId>forgerock-ui-mock</artifactId>
@@ -154,8 +153,7 @@
                                         
                                         <delete dir="${project.build.directory}/www" />
 
-                                        <move   file="${project.build.directory}/www_minified" 
-                                                tofile="${project.build.directory}/www" />
+                                        <move file="${project.build.directory}/www_minified" tofile="${project.build.directory}/www" />
 
                                     </target>
                                 </configuration>
@@ -193,7 +191,7 @@
         <dependency>
             <groupId>org.forgerock.commons.ui</groupId>
             <artifactId>forgerock-ui-user</artifactId>
-            <version>1.0.11-SNAPSHOT</version>
+            <version>1.0.11</version>
             <type>zip</type>
             <classifier>www</classifier>
         </dependency>
