@@ -48,36 +48,26 @@ version="1.0">
   <xsl:param name="sans.font.family">DejaVuSans</xsl:param>
   <xsl:param name="title.font.family">DejaVuSans</xsl:param>
 
- <!-- DOCS-142 Fix Sub-heading styles -->
+ <xsl:attribute-set name="section.title.properties">
+  <xsl:attribute name="space-before">1.6em</xsl:attribute>
+ </xsl:attribute-set>
+
  <xsl:attribute-set name="section.title.level1.properties">
   <xsl:attribute name="font-size">14pt</xsl:attribute>
-  <xsl:attribute name="space-before.minimum">1.5em</xsl:attribute>
-  <xsl:attribute name="space-before.optimum">1.7em</xsl:attribute>
-  <xsl:attribute name="space-before.maximum">1.9em</xsl:attribute>
-  <xsl:attribute name="text-align">start</xsl:attribute>
  </xsl:attribute-set>
 
  <xsl:attribute-set name="section.title.level2.properties">
   <xsl:attribute name="font-size">12pt</xsl:attribute>
-  <xsl:attribute name="space-before.minimum">1.4em</xsl:attribute>
-  <xsl:attribute name="space-before.optimum">1.6em</xsl:attribute>
-  <xsl:attribute name="space-before.maximum">1.8em</xsl:attribute>
-  <xsl:attribute name="text-align">start</xsl:attribute>
  </xsl:attribute-set>
 
  <xsl:attribute-set name="section.title.level3.properties">
   <xsl:attribute name="font-size">11pt</xsl:attribute>
-  <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
-  <xsl:attribute name="space-before.minimum">1.3em</xsl:attribute>
-  <xsl:attribute name="space-before.optimum">1.5em</xsl:attribute>
-  <xsl:attribute name="space-before.maximum">1.7em</xsl:attribute>
-  <xsl:attribute name="text-align">start</xsl:attribute>
  </xsl:attribute-set>
- <!-- End of DOCS-142 Fix Sub-Heading styles -->
 
   <xsl:attribute-set name="section.title.level4.properties">
    <xsl:attribute name="font-size">10pt</xsl:attribute>
   </xsl:attribute-set>
+
   <xsl:attribute-set name="section.title.level5.properties">
    <xsl:attribute name="font-size">10pt</xsl:attribute>
    <xsl:attribute name="font-weight">normal</xsl:attribute>
