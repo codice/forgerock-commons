@@ -56,7 +56,7 @@ package org.forgerock.xacml.rest;
 
 import org.forgerock.xacml.core.v3.rest.XACML3PDPHandler;
 import org.forgerock.xacml.reference.Services.CombinerLoader;
-import org.forgerock.xacml.reference.rest.ReferenceRequestHandler;
+import org.forgerock.xacml.reference.rest.PAPResource;
 
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
@@ -74,7 +74,7 @@ public class RestService extends Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> s = new HashSet<Class<?>>();
 
-        s.add(ReferenceRequestHandler.class);
+        s.add(PAPResource.class);
         s.add(XACML3PDPHandler.class);
 
  //       s.add(XACML3ContextResolver.class);
@@ -82,3 +82,15 @@ public class RestService extends Application {
         return s;
     }
 }
+
+/*
+  REST architecture is as follows:
+
+  /pap/             Policy Admin Point
+  /pap/policy/{policyID}    GET    -         list policy ID
+                            PUT    -         create policy
+                            DELETE -         Delete Policy
+
+  /pdp/             Policy Decision Point
+
+*/

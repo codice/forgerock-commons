@@ -88,25 +88,25 @@ public class PolicyStoreImpl implements PolicyStore {
         return XACML3PolicySet.parsePolicySet(ps, this);
     }
 
-    public PolicySet exportPolicySet(String name) {
+    public XACML3PolicyItem exportPolicySet(String name) {
 
         BasicDBObject obj = findPolicy( "policySets", "policySetID", name);
-        XACML3PolicyItem item ;
+        XACML3PolicyItem item =null;
         PolicySet retVal = null;
 
         try {
             String pol = (String)obj.get("policySetJSON");
             JSONObject polJ = new JSONObject(pol) ;
             item =  XACML3PolicySet.getInstance(polJ);
-            retVal = (PolicySet)item.getXACMLRoot();
+            // (PolicySet)item.getXACMLRoot();
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.println("Unable to export PolicySet");
         }
-        return retVal;
+        return item;
 
     }
-    public Policy exportPolicy(String name) {
+    public XACML3PolicyItem exportPolicy(String name) {
 
         BasicDBObject obj = findPolicy( "policies", "policyID", name);
         XACML3PolicyItem item = null;
@@ -117,12 +117,12 @@ public class PolicyStoreImpl implements PolicyStore {
             JSONObject polJ = new JSONObject(pol) ;
 
             item =  XACML3Policy.getInstance(polJ);
-            retVal =  (Policy)item.getXACMLRoot();
+            // retVal =  (Policy)item.getXACMLRoot();
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.println("Unable to export Policy");
         }
-        return retVal;
+        return item ;
 
     }
 

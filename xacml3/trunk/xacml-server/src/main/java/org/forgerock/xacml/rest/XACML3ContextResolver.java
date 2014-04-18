@@ -26,18 +26,16 @@
 package org.forgerock.xacml.rest;
 
 
-import com.sun.jersey.api.json.JSONConfiguration;
-import com.sun.jersey.api.json.JSONJAXBContext;
-
 import javax.ws.rs.Produces;
 import javax.ws.rs.ext.ContextResolver;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
 
-@Produces({"application/xml","application/json"})
 public class XACML3ContextResolver implements ContextResolver<JAXBContext> {
     private final static String ENTITY_PACKAGE = "com.sun.identity.entitlement.xacml3.core";
     public static final String XACML3_NAMESPACE = "urn:oasis:names:tc:xacml:3.0:core:schema:wd-17";
@@ -70,3 +68,5 @@ public class XACML3ContextResolver implements ContextResolver<JAXBContext> {
         return null;
     }
 }
+
+    */

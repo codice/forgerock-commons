@@ -13,8 +13,8 @@ public interface PolicyStore {
 
     public String loadPolicySet(PolicySet ps);
 
-    public PolicySet exportPolicySet(String name);
-    public Policy exportPolicy(String name);
+    public XACML3PolicyItem exportPolicySet(String name);
+    public XACML3PolicyItem exportPolicy(String name);
 
 
     public Set<String> listPolicySets();
