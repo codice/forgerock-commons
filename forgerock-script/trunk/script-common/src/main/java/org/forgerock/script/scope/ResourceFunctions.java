@@ -666,7 +666,7 @@ public final class ResourceFunctions {
                         } else {
                             throw new BadRequestException("The value '" + String.valueOf(additionalParam.getObject())
                                     + "' for parameter '" + name
-                                    + "' could not be represented as a string");
+                                    + "' is not of expected type String");
                         }
                     }
                 }
@@ -969,7 +969,9 @@ public final class ResourceFunctions {
                 if (additionalActionParameter.isString()) {
                     ar.setAdditionalParameter(name, additionalActionParameter.asString());
                 } else {
-                    // TODO logger
+                    throw new BadRequestException("The value '" + String.valueOf(additionalActionParameter.getObject())
+                                    + "' for parameter '" + name
+                                    + "' is not of expected type String");
                 }
             }
             ar.setContent(content);
