@@ -57,9 +57,4 @@ class ScriptableReadRequest extends AbstractScriptableRequest implements Wrapper
         return "ScriptableReadRequest";
     }
 
-    @Override
-    public Object getDefaultValue(Class<?> hint) {
-        return "[object ReadRequest]";
-    }
-
 }

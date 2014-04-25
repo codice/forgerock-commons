@@ -104,9 +104,4 @@ class ScriptablePatchRequest extends AbstractScriptableRequest implements Wrappe
         return PROPERTIES;
     }
 
-    @Override
-    public Object getDefaultValue(Class<?> hint) {
-        return "[object PatchRequest]";
-    }
-
 }
