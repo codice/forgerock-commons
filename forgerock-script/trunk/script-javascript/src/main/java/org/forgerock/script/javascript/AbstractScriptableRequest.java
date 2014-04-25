@@ -24,6 +24,7 @@
 
 package org.forgerock.script.javascript;
 
+import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.Request;
 import org.forgerock.script.scope.Parameter;
 import org.mozilla.javascript.NativeObject;
@@ -31,6 +32,7 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.Wrapper;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Provides a {@code Scriptable} wrapper for an abstract {@code Request} object.
@@ -141,6 +143,24 @@ abstract class AbstractScriptableRequest extends NativeObject implements Wrapper
     }
 
     public String toString() {
-        return request == null ? "null" : request.toString();
+        if (request == null) {
+            return "null";
+        }
+
+        JsonValue value = new JsonValue(new HashMap<String, Object>());
+        for (Object id : getIds()) {
+            value.put((String) id, get((String) id, this));
+        }
+
+        return value.toString();
+    }
+
+    @Override
+    public Object getDefaultValue(Class<?> hint) {
+        if (hint == null || hint == String.class) {
+            return toString();
+        } else {
+            return super.getDefaultValue(hint);
+        }
     }
 }

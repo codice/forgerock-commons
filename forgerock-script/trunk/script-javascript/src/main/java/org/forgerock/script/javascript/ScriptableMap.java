@@ -24,6 +24,7 @@
 
 package org.forgerock.script.javascript;
 
+import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.script.scope.AbstractFactory;
 import org.forgerock.script.scope.Parameter;
 import org.forgerock.util.LazyMap;
@@ -141,7 +142,7 @@ class ScriptableMap extends NativeObject implements Wrapper {
     @Override
     public Object getDefaultValue(Class<?> hint) {
         if (hint == null || hint == String.class) {
-            return "[object ScriptableMap]";
+            return toString();
         } else if (hint == Number.class) {
             return Double.NaN;
         } else if (hint == Boolean.class) {
@@ -162,6 +163,6 @@ class ScriptableMap extends NativeObject implements Wrapper {
     }
 
     public String toString() {
-        return map == null ? "null" : map.toString();
+        return map == null ? "null" : new JsonValue(map).toString();
     }
 }

@@ -120,9 +120,4 @@ class ScriptableCreateRequest extends AbstractScriptableRequest implements Wrapp
         return PROPERTIES;
     }
 
-    @Override
-    public Object getDefaultValue(Class<?> hint) {
-        return "[object CreateRequest]";
-    }
-
 }

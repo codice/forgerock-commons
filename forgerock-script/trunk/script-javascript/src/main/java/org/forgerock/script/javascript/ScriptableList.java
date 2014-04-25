@@ -83,8 +83,7 @@ class ScriptableList extends IdScriptableObject implements Wrapper {
     @Override
     public String toString()
     {
-        //return null == list ? "null" : new JsonValue(list).toString();
-        return "[object ScriptableList]";
+        return null == list ? "null" : new JsonValue(list).toString();
     }
 
     private static final int
@@ -454,7 +453,7 @@ class ScriptableList extends IdScriptableObject implements Wrapper {
     @Override
     public Object getDefaultValue(Class<?> hint) {
         if (hint == null || hint == String.class) {
-            return "[object ScriptableList]";
+            return toString();
         } else if (hint == Number.class) {
             return Double.NaN;
         } else if (hint == Boolean.class) {
