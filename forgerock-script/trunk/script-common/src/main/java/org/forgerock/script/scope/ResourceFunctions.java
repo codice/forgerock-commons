@@ -657,7 +657,9 @@ public final class ResourceFunctions {
                         }
                     } else {
                         JsonValue additionalParam = params.get(name);
-                        if (additionalParam.isString()) {
+                        if (additionalParam.isNull()) {
+                            // ignore null values
+                        } else if (additionalParam.isString()) {
                             qr.setAdditionalParameter(name, additionalParam.asString());
                         } else if (additionalParam.isNumber()) {
                             qr.setAdditionalParameter(name, additionalParam.asNumber().toString());
@@ -665,7 +667,7 @@ public final class ResourceFunctions {
                             qr.setAdditionalParameter(name, additionalParam.asBoolean().toString());
                         } else {
                             throw new BadRequestException("The value '" + String.valueOf(additionalParam.getObject())
-                                    + "' for parameter '" + name
+                                    + "' for additional parameter '" + name
                                     + "' is not of expected type String");
                         }
                     }
@@ -772,7 +774,7 @@ public final class ResourceFunctions {
             JsonValue context = null;
 
             if (arguments.length < 2) {
-                throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage("update",
+                throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage("delete",
                         arguments));
             }
 
@@ -784,7 +786,7 @@ public final class ResourceFunctions {
                         resourceName = (String) value;
                     } else {
                         throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
-                                "update", arguments));
+                                "delete", arguments));
                     }
                     break;
                 case 1:
@@ -792,7 +794,7 @@ public final class ResourceFunctions {
                         revision = (String) value;
                     } else if (null != value) {
                         throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
-                                "update", arguments));
+                                "delete", arguments));
                     }
                     break;
                 case 2:
@@ -804,7 +806,7 @@ public final class ResourceFunctions {
                         break;
                     } else if (null != value && arguments.length > 3) {
                         throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
-                                "update", arguments));
+                                "delete", arguments));
                     }
                 case 3:
                     if (value instanceof Map) {
@@ -813,7 +815,7 @@ public final class ResourceFunctions {
                         context = (JsonValue) value;
                     } else if (null != value) {
                         throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
-                                "update", arguments));
+                                "delete", arguments));
                     }
                     break;
                 default: // TODO log unused arguments
@@ -966,11 +968,17 @@ public final class ResourceFunctions {
 
             for (String name : params.keys()) {
                 final JsonValue additionalActionParameter = params.get(name);
-                if (additionalActionParameter.isString()) {
+                if (additionalActionParameter.isNull()) {
+                    // ignore null values
+                } else if (additionalActionParameter.isString()) {
                     ar.setAdditionalParameter(name, additionalActionParameter.asString());
+                } else if (additionalActionParameter.isNumber()) {
+                    ar.setAdditionalParameter(name, String.valueOf(additionalActionParameter.asNumber()));
+                } else if (additionalActionParameter.isBoolean()) {
+                    ar.setAdditionalParameter(name, String.valueOf(additionalActionParameter.asBoolean()));
                 } else {
                     throw new BadRequestException("The value '" + String.valueOf(additionalActionParameter.getObject())
-                                    + "' for parameter '" + name
+                                    + "' for additional parameter '" + name
                                     + "' is not of expected type String");
                 }
             }
