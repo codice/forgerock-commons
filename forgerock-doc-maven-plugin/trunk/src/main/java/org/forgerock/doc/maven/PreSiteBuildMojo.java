@@ -79,14 +79,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             exec.prepareFOP();
         }
 
-        // Get the common configuration for all output generation.
-        getLog().info("Preparing common configuration...");
-        ArrayList<MojoExecutor.Element> baseConf = exec.getBaseConfiguration();
 
         // Build and prepare EPUB for publishing.
         if (formats.contains("epub")) {
             getLog().info("Building EPUB...");
-            exec.buildEPUB(baseConf);
+            exec.buildEPUB();
             getLog().info("...post-processing EPUB...");
             postProcessEPUB(getDocbkxOutputDirectory().getPath()
                     + File.separator + "epub");
@@ -96,9 +93,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         if (formats.contains("pdf")) {
             getLog().info("Building PDF...");
             getLog().info("...generating olink DB files for PDF...");
-            exec.buildFoOlinkDB(baseConf, "pdf");
+            exec.buildFoOlinkDB("pdf");
             getLog().info("...generating PDF files...");
-            exec.buildPDF(baseConf);
+            exec.buildPDF();
             getLog().info("...post-processing PDF...");
             postProcessPDF(getDocbkxOutputDirectory().getPath()
                     + File.separator + "pdf");
@@ -108,9 +105,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         if (formats.contains("rtf")) {
             getLog().info("Building RTF...");
             getLog().info("...generating olink DB files for RTF...");
-            exec.buildFoOlinkDB(baseConf, "rtf");
+            exec.buildFoOlinkDB("rtf");
             getLog().info("...generating RTF files...");
-            exec.buildRTF(baseConf);
+            exec.buildRTF();
             getLog().info("...post-processing RTF...");
             postProcessRTF(getDocbkxOutputDirectory().getPath()
                     + File.separator + "rtf");
@@ -119,7 +116,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         // Build and prepare man pages for publishing.
         if (formats.contains("man")) {
             getLog().info("Building man pages...");
-            exec.buildManpages(baseConf);
+            exec.buildManpages();
         }
 
         // Build and prepare HTML for publishing.
@@ -128,15 +125,15 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             exec.addCustomCss();
             getLog().info("Building single page HTML...");
             getLog().info("...generating olink DB files for single page HTML...");
-            exec.buildSingleHTMLOlinkDB(baseConf);
+            exec.buildSingleHTMLOlinkDB();
             getLog().info("...generating single page HTML files...");
-            exec.buildSingleHTML(baseConf);
+            exec.buildSingleHTML();
 
             getLog().info("Building chunked HTML...");
             getLog().info("...generating olink DB files for chunked HTML...");
-            exec.buildChunkedHTMLOlinkDB(baseConf);
+            exec.buildChunkedHTMLOlinkDB();
             getLog().info("...generating chunked HTML files...");
-            exec.buildChunkedHTML(baseConf);
+            exec.buildChunkedHTML();
 
             getLog().info("Add JavaScript used in HTML...");
             addScript();
@@ -152,9 +149,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         if (formats.contains("webhelp")) {
             getLog().info("Building webhelp...");
             getLog().info("...generating olink DB files for webhelp...");
-            exec.buildWebHelpOlinkDB(baseConf);
+            exec.buildWebHelpOlinkDB();
             getLog().info("...generating webhelp output...");
-            exec.buildWebHelp(baseConf);
+            exec.buildWebHelp();
         }
     }
 
@@ -1348,19 +1345,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Build EPUB documents from DocBook XML sources.
          *
-         * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to build the output.
          */
-        void buildEPUB(final ArrayList<MojoExecutor.Element> baseConfiguration)
-                throws MojoExecutionException {
-
-            ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
-            cfg.addAll(baseConfiguration);
-            cfg.add(element(name("epubCustomization"), FilenameUtils
-                    .separatorsToUnix(getEpubCustomization().getPath())));
-            cfg.add(element(name("targetDirectory"), FilenameUtils
-                    .separatorsToUnix(getDocbkxOutputDirectory().getPath()
-                            + File.separator + "epub")));
+        void buildEPUB() throws MojoExecutionException {
 
             copyImages("epub");
 
@@ -1371,6 +1358,14 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             }
 
             for (String docName : docNames) {
+                ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
+                cfg.addAll(getBaseConfiguration());
+                cfg.add(element(name("epubCustomization"), FilenameUtils
+                        .separatorsToUnix(getEpubCustomization().getPath())));
+                cfg.add(element(name("targetDirectory"), FilenameUtils
+                        .separatorsToUnix(getDocbkxOutputDirectory().getPath()
+                                + File.separator + "epub")));
+
                 cfg.add(element(name("includes"), docName + "/"
                         + getDocumentSrcName()));
 
@@ -1393,24 +1388,15 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Prepare Olink database files for FO output.
          *
-         * @param baseConfiguration Common configuration for all executions
          * @param extension File extension without the ., "pdf" or "rtf"
          * @throws MojoExecutionException Failed to prepare the target DB files.
          */
-        void buildFoOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration,
-                            final String extension) throws MojoExecutionException {
+        void buildFoOlinkDB(final String extension) throws MojoExecutionException {
 
             if (!(extension.equalsIgnoreCase("pdf") || extension.equalsIgnoreCase("rtf"))) {
                 throw new MojoExecutionException("Output format " + extension
                         + " is not supported." + " Use either pdf or rtf.");
             }
-
-            ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
-            cfg.addAll(baseConfiguration);
-            cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
-            cfg.add(element(name("sourceDirectory"), FilenameUtils
-                    .separatorsToUnix(sourceDirectory.getPath())));
-            cfg.add(element(name("fop1Extensions"), "1"));
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     sourceDirectory, getDocumentSrcName());
@@ -1419,11 +1405,19 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             }
 
             for (String docName : docNames) {
+                ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
+                cfg.addAll(getBaseConfiguration());
+                cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
+                cfg.add(element(name("sourceDirectory"), FilenameUtils
+                        .separatorsToUnix(sourceDirectory.getPath())));
+                cfg.add(element(name("fop1Extensions"), "1"));
+                cfg.add(element(name("collectXrefTargets"), "yes"));
+                if (extension.equalsIgnoreCase("pdf")) {
+                    cfg.add(element(name("insertOlinkPdfFrag"), "1"));
+                }
                 cfg.add(element(name("includes"), docName + "/"
                         + getDocumentSrcName()));
-                cfg.add(element(name("collectXrefTargets"), "yes"));
                 cfg.add(element(name("currentDocid"), docName));
-                cfg.add(element(name("insertOlinkPdfFrag"), "1"));
 
 /*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
                  cfg.add(element(
@@ -1448,7 +1442,8 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                         goal("generate-" + extension),
                         configuration(cfg.toArray(new Element[cfg.size()])),
                         executionEnvironment(getProject(), getSession(),
-                                getPluginManager()));
+                                getPluginManager())
+                );
 
                 // <targetsFilename> is ignored with docbkx-tools 2.0.15:
                 //File outputDir = new File(getDocbkxOutputDirectory(),
@@ -1471,34 +1466,15 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         }
 
         /**
-         * Build FO documents from DocBook XML sources, including fonts.
+         * Return a fonts element that includes all the custom fonts.
+         * <p>
+         * If you update this list, also see copyFonts().
          *
-         * @param baseConfiguration Common configuration for all executions
-         * @param format            Specific output format (pdf, rtf)
-         * @throws MojoExecutionException Failed to build the output.
+         * @param fontDir Directory containing the custom fonts.
+         * @return Fonts element.
          */
-        void buildFO(final ArrayList<MojoExecutor.Element> baseConfiguration,
-                     final String format) throws MojoExecutionException {
-
-            if (!(format.equalsIgnoreCase("pdf") || format
-                    .equalsIgnoreCase("rtf"))) {
-                throw new MojoExecutionException("Output format " + format
-                        + " is not supported." + " Use either pdf or rtf.");
-            }
-
-            ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
-            cfg.addAll(baseConfiguration);
-            cfg.add(element(name("foCustomization"),
-                    FilenameUtils.separatorsToUnix(getFoCustomization().getPath())));
-            cfg.add(element(name("targetDirectory"), FilenameUtils
-                    .separatorsToUnix(getDocbkxOutputDirectory().getPath()
-                            + File.separator + format.toLowerCase())));
-            cfg.add(element(name("fop1Extensions"), "1"));
-            cfg.add(element(name("targetDatabaseDocument"), buildFOTargetDB(format)));
-
-            // If you update this list, also see copyFonts().
-            String fontDir = FilenameUtils.separatorsToUnix(getFontsDirectory().getPath());
-            cfg.add(element(
+        final Element getFontsElement(final String fontDir) {
+            return element(
                     name("fonts"),
                     element(name("font"),
                             element(name("name"), "DejaVuSans"),
@@ -1571,7 +1547,22 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                             element(name("style"), "italic"),
                             element(name("weight"), "bold"),
                             element(name("embedFile"), fontDir + "/DejaVuSerifCondensed-BoldItalic.ttf"),
-                            element(name("metricsFile"), fontDir + "/DejaVuSerifCondensed-BoldItalic-metrics.xml"))));
+                            element(name("metricsFile"), fontDir + "/DejaVuSerifCondensed-BoldItalic-metrics.xml")));
+        }
+
+        /**
+         * Build FO documents from DocBook XML sources, including fonts.
+         *
+         * @param format            Specific output format (pdf, rtf)
+         * @throws MojoExecutionException Failed to build the output.
+         */
+        void buildFO(final String format) throws MojoExecutionException {
+
+            if (!(format.equalsIgnoreCase("pdf") || format
+                    .equalsIgnoreCase("rtf"))) {
+                throw new MojoExecutionException("Output format " + format
+                        + " is not supported." + " Use either pdf or rtf.");
+            }
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     sourceDirectory, getDocumentSrcName());
@@ -1580,12 +1571,27 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             }
 
             for (String docName : docNames) {
-                cfg.add(element(name("includes"), docName + "/" + getDocumentSrcName()));
-                cfg.add(element(name("insertOlinkPdfFrag"), "1"));
-                cfg.add(element(name("currentDocid"), docName));
+                ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
+                cfg.addAll(getBaseConfiguration());
+                cfg.add(element(name("foCustomization"),
+                        FilenameUtils.separatorsToUnix(getFoCustomization().getPath())));
+                cfg.add(element(name("targetDirectory"), FilenameUtils
+                        .separatorsToUnix(getDocbkxOutputDirectory().getPath()
+                                + File.separator + format.toLowerCase())));
+                cfg.add(element(name("fop1Extensions"), "1"));
+                cfg.add(element(name("targetDatabaseDocument"), buildFOTargetDB(format)));
+                if (format.equalsIgnoreCase("pdf")) {
+                    cfg.add(element(name("insertOlinkPdfFrag"), "1"));
+                }
                 cfg.add(element(name("targetDirectory"),
                         FilenameUtils.separatorsToUnix(getDocbkxOutputDirectory().getPath())
                                 + "/" + format));
+
+                String fontDir = FilenameUtils.separatorsToUnix(getFontsDirectory().getPath());
+                cfg.add(getFontsElement(fontDir));
+
+                cfg.add(element(name("includes"), docName + "/" + getDocumentSrcName()));
+                cfg.add(element(name("currentDocid"), docName));
 
                 // Due to https://code.google.com/p/docbkx-tools/issues/detail?id=112
                 // RTF generation does not work with docbkx-tools 2.0.15.
@@ -1623,35 +1629,30 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Build PDF documents from DocBook XML sources.
          *
-         * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to build the output.
          */
-        void buildPDF(final ArrayList<MojoExecutor.Element> baseConfiguration)
+        void buildPDF()
                 throws MojoExecutionException {
-            buildFO(baseConfiguration, "pdf");
+            buildFO("pdf");
         }
 
         /**
          * Build RTF documents from DocBook XML sources.
          *
-         * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to build the output.
          */
-        void buildRTF(final ArrayList<MojoExecutor.Element> baseConfiguration)
-                throws MojoExecutionException {
-            buildFO(baseConfiguration, "rtf");
+        void buildRTF() throws MojoExecutionException {
+            buildFO("rtf");
         }
 
         /**
          * Build reference manual pages from DocBook XML sources.
          *
-         * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to build the output.
          */
-        void buildManpages(final ArrayList<MojoExecutor.Element> baseConfiguration)
-                throws MojoExecutionException {
+        void buildManpages() throws MojoExecutionException {
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
-            cfg.addAll(baseConfiguration);
+            cfg.addAll(getBaseConfiguration());
             cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
             cfg.add(element(name("manpagesCustomization"), FilenameUtils
                     .separatorsToUnix(getManpagesCustomization().getPath())));
@@ -1722,19 +1723,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Prepare Olink database files for single page HTML output.
          *
-         * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to prepare the target DB files.
          */
-        void buildSingleHTMLOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration)
-                throws MojoExecutionException {
-
-            ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
-            cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
-            cfg.add(element(name("sourceDirectory"), FilenameUtils
-                    .separatorsToUnix(sourceDirectory.getPath())));
-            cfg.add(element(name("chunkedOutput"), "false"));
-            cfg.add(element(name("htmlCustomization"), FilenameUtils
-                    .separatorsToUnix(getSingleHTMLCustomization().getPath())));
+        void buildSingleHTMLOlinkDB() throws MojoExecutionException {
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     sourceDirectory, getDocumentSrcName());
@@ -1743,9 +1734,16 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             }
 
             for (String docName : docNames) {
-                cfg.add(element(name("includes"), docName + "/"
-                        + getDocumentSrcName()));
+                ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
+                cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
+                cfg.add(element(name("sourceDirectory"), FilenameUtils
+                        .separatorsToUnix(sourceDirectory.getPath())));
+                cfg.add(element(name("chunkedOutput"), "false"));
+                cfg.add(element(name("htmlCustomization"), FilenameUtils
+                        .separatorsToUnix(getSingleHTMLCustomization().getPath())));
                 cfg.add(element(name("collectXrefTargets"), "only"));
+
+                cfg.add(element(name("includes"), docName + "/" + getDocumentSrcName()));
 
 /*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
                 cfg.add(element(
@@ -1771,14 +1769,12 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Build single page HTML from DocBook XML sources.
          *
-         * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to build the output.
          */
-        void buildSingleHTML(final ArrayList<MojoExecutor.Element> baseConfiguration)
-                throws MojoExecutionException {
+        void buildSingleHTML() throws MojoExecutionException {
 
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
-            cfg.addAll(baseConfiguration);
+            cfg.addAll(getBaseConfiguration());
             cfg.add(element(name("includes"), "*/" + getDocumentSrcName()));
             cfg.add(element(name("chunkedOutput"), "false"));
             cfg.add(element(name("htmlCustomization"), FilenameUtils
@@ -1804,20 +1800,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Prepare Olink database files for chunked HTML output.
          *
-         * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to prepare the target DB files.
          */
-        void buildChunkedHTMLOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration)
-                throws MojoExecutionException {
-
-            ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
-            cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
-            cfg.add(element(name("sourceDirectory"), FilenameUtils
-                    .separatorsToUnix(sourceDirectory.getPath())));
-            cfg.add(element(name("chunkedOutput"), "true"));
-
-            cfg.add(element(name("htmlCustomization"), FilenameUtils
-                    .separatorsToUnix(getChunkedHTMLCustomization().getPath())));
+        void buildChunkedHTMLOlinkDB() throws MojoExecutionException {
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     sourceDirectory, getDocumentSrcName());
@@ -1826,10 +1811,18 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             }
 
             for (String docName : docNames) {
-                cfg.add(element(name("currentDocid"), docName));
-                cfg.add(element(name("includes"), docName + "/"
-                        + getDocumentSrcName()));
+                ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
+                cfg.add(element(name("xincludeSupported"), isXincludeSupported()));
+                cfg.add(element(name("sourceDirectory"), FilenameUtils
+                        .separatorsToUnix(sourceDirectory.getPath())));
+                cfg.add(element(name("chunkedOutput"), "true"));
+
+                cfg.add(element(name("htmlCustomization"), FilenameUtils
+                        .separatorsToUnix(getChunkedHTMLCustomization().getPath())));
                 cfg.add(element(name("collectXrefTargets"), "only"));
+
+                cfg.add(element(name("currentDocid"), docName));
+                cfg.add(element(name("includes"), docName + "/" + getDocumentSrcName()));
 
 /*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
                 cfg.add(element(
@@ -1860,22 +1853,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Build chunked HTML pages from DocBook XML sources.
          *
-         * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to build the output.
          */
-        void buildChunkedHTML(final ArrayList<MojoExecutor.Element> baseConfiguration)
-                throws MojoExecutionException {
-
-            ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
-            cfg.addAll(baseConfiguration);
-            cfg.add(element(name("chunkedOutput"), "true"));
-            cfg.add(element(name("htmlCustomization"), FilenameUtils
-                    .separatorsToUnix(getChunkedHTMLCustomization().getPath())));
-            cfg.add(element(name("targetDatabaseDocument"),
-                    buildChunkedHTMLTargetDB()));
-            cfg.add(element(name("generateManifest"), "1"));
-
-            copyImages("html", FilenameUtils.getBaseName(getDocumentSrcName()));
+        void buildChunkedHTML() throws MojoExecutionException {
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     sourceDirectory, getDocumentSrcName());
@@ -1883,9 +1863,19 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                 throw new MojoExecutionException("No document names found.");
             }
 
+            copyImages("html", FilenameUtils.getBaseName(getDocumentSrcName()));
+
             for (String docName : docNames) {
-                cfg.add(element(name("includes"),
-                        docName + "/" + getDocumentSrcName()));
+                ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
+                cfg.addAll(getBaseConfiguration());
+                cfg.add(element(name("chunkedOutput"), "true"));
+                cfg.add(element(name("htmlCustomization"), FilenameUtils
+                        .separatorsToUnix(getChunkedHTMLCustomization().getPath())));
+                cfg.add(element(name("targetDatabaseDocument"),
+                        buildChunkedHTMLTargetDB()));
+                cfg.add(element(name("generateManifest"), "1"));
+
+                cfg.add(element(name("includes"), docName + "/" + getDocumentSrcName()));
 
                 final String chunkBaseDir = FilenameUtils
                         .separatorsToUnix(getDocbkxOutputDirectory().getPath())
@@ -1910,18 +1900,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Prepare Olink database files for webhelp output.
          *
-         * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to prepare the target DB files.
          */
-        void buildWebHelpOlinkDB(final ArrayList<MojoExecutor.Element> baseConfiguration)
-                throws MojoExecutionException {
-
-            ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
-            cfg.addAll(baseConfiguration);
-
-            cfg.add(element(name("webhelpAutolabel"), "1"));
-            cfg.add(element(name("webhelpCustomization"),
-                    FilenameUtils.separatorsToUnix(getWebHelpCustomization().getPath())));
+        void buildWebHelpOlinkDB() throws MojoExecutionException {
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     sourceDirectory, getDocumentSrcName());
@@ -1930,7 +1911,14 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             }
 
             for (String docName : docNames) {
+                ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
+                cfg.addAll(getBaseConfiguration());
+
+                cfg.add(element(name("webhelpAutolabel"), "1"));
+                cfg.add(element(name("webhelpCustomization"),
+                        FilenameUtils.separatorsToUnix(getWebHelpCustomization().getPath())));
                 cfg.add(element(name("collectXrefTargets"), "only"));
+
                 cfg.add(element(name("currentDocid"), docName));
                 cfg.add(element(name("includes"), docName + "/" + getDocumentSrcName()));
 
@@ -1957,26 +1945,9 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
         /**
          * Build webhelp from DocBook XML sources.
          *
-         * @param baseConfiguration Common configuration for all executions
          * @throws MojoExecutionException Failed to build the output.
          */
-        void buildWebHelp(final ArrayList<MojoExecutor.Element> baseConfiguration)
-                throws MojoExecutionException {
-
-            ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
-            cfg.addAll(baseConfiguration);
-
-            cfg.add(element(name("webhelpAutolabel"), "1"));
-            cfg.add(element(name("webhelpCustomization"),
-                    FilenameUtils.separatorsToUnix(getWebHelpCustomization().getPath())));
-
-            cfg.add(element(name("targetDatabaseDocument"), buildWebHelpTargetDB()));
-
-            final File webHelpBase = new File(getDocbkxOutputDirectory(), "webhelp");
-            cfg.add(element(name("targetDirectory"), FilenameUtils
-                    .separatorsToUnix(webHelpBase.getPath())));
-
-            copyImages("webhelp");
+        void buildWebHelp() throws MojoExecutionException {
 
             Set<String> docNames = DocUtils.getDocumentNames(
                     sourceDirectory, getDocumentSrcName());
@@ -1984,7 +1955,22 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                 throw new MojoExecutionException("No document names found.");
             }
 
+            copyImages("webhelp");
+
             for (String docName : docNames) {
+                ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
+                cfg.addAll(getBaseConfiguration());
+
+                cfg.add(element(name("webhelpAutolabel"), "1"));
+                cfg.add(element(name("webhelpCustomization"),
+                        FilenameUtils.separatorsToUnix(getWebHelpCustomization().getPath())));
+
+                cfg.add(element(name("targetDatabaseDocument"), buildWebHelpTargetDB()));
+
+                final File webHelpBase = new File(getDocbkxOutputDirectory(), "webhelp");
+                cfg.add(element(name("targetDirectory"), FilenameUtils
+                        .separatorsToUnix(webHelpBase.getPath())));
+
                 cfg.add(element(name("currentDocid"), docName));
                 cfg.add(element(name("includes"), docName + "/" + getDocumentSrcName()));
 
