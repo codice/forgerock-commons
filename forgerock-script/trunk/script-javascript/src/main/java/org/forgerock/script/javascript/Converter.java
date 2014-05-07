@@ -212,9 +212,16 @@ class Converter {
      * Converts a value provided from JavaScript into a standard Java object.
      * Used when the script is attempting to assign a value to a supplied scope
      * or any properties/elements within. If the value is already suitable for
-     * such assignment, it is returned unmolested. If the value is not suitable,
-     * {@code null} is returned. This method performs recursive conversion for
-     * any converted array elements or object properties.
+     * such assignment, it is unknown whether it is suitable, it is returned 
+     * unaltered.
+     * <p>
+     * <em> NOTE: If the value is not suitable, but not explicitly handled, it
+     * will be return unaltered, but this may not be what is desired.  This
+     * method needs to be updated for objects requiring special handling.
+     * </em>
+     * <p>
+     * This method performs recursive conversion for any converted array 
+     * elements or object properties.
      *
      * @param value
      *            the value to be converted.
@@ -262,8 +269,13 @@ class Converter {
         } else if (value instanceof Number || value instanceof String || value instanceof Boolean
                 || value instanceof Map || value instanceof List) {
             result = value; // already valid JSON element
+        } else if (value instanceof Request || value instanceof org.forgerock.json.resource.Context) {
+            return value;
         } else if (value instanceof CharSequence) {
             result = value.toString();
+        } else {
+            // assume the value is already suitable for Java - beats null
+            result = value;
         }
         return result;
     }
