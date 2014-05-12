@@ -207,6 +207,10 @@ class ScriptableContext extends NativeObject implements Wrapper {
     }
 
     public String toString() {
-        return new JsonValue(contexts).toString();
+        final JsonValue allContexts = new JsonValue(new HashMap<String,Object>(contexts.size()));
+        for (final Map.Entry<String,Context> entry : contexts.entrySet()) {
+            allContexts.put(entry.getKey(), entry.getValue().toJsonValue().getObject());
+        }
+        return allContexts.toString();
     }
 }
