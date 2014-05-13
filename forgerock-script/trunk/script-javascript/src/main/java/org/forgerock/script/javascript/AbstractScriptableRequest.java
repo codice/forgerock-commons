@@ -74,6 +74,8 @@ abstract class AbstractScriptableRequest extends NativeObject implements Wrapper
             return Converter.wrap(parameter, request.getFields(), start, false);
         } else if (Request.FIELD_RESOURCE_NAME.equals(name)) {
             return Converter.wrap(parameter, request.getResourceName(), start, false);
+        } else if (Request.FIELD_ADDITIONAL_PARAMETERS.equals(name)) {
+            return Converter.wrap(parameter, request.getAdditionalParameters(), start, false);
         } else {
             return NOT_FOUND;
         }
@@ -88,7 +90,8 @@ abstract class AbstractScriptableRequest extends NativeObject implements Wrapper
     public boolean has(String name, Scriptable start) {
         return FIELD_METHOD.equals(name)
                 || Request.FIELD_FIELDS.equals(name)
-                || Request.FIELD_RESOURCE_NAME.equals(name);
+                || Request.FIELD_RESOURCE_NAME.equals(name)
+                || Request.FIELD_ADDITIONAL_PARAMETERS.equals(name);
     }
 
     @Override
@@ -118,7 +121,8 @@ abstract class AbstractScriptableRequest extends NativeObject implements Wrapper
     private static final Object[] PROPERTIES = new Object[] {
         FIELD_METHOD,
         Request.FIELD_FIELDS,
-        Request.FIELD_RESOURCE_NAME
+        Request.FIELD_RESOURCE_NAME,
+        Request.FIELD_ADDITIONAL_PARAMETERS
     };
 
     @Override

@@ -64,8 +64,6 @@ class ScriptableActionRequest extends AbstractScriptableRequest implements Wrapp
 
         if (ActionRequest.FIELD_ACTION.equals(name)) {
             return Converter.wrap(parameter, request.getAction(), start, false);
-        } else if (ActionRequest.FIELD_ADDITIONAL_PARAMETERS.equals(name)) {
-            return Converter.wrap(parameter, request.getAdditionalParameters(), start, false);
         } else if (ActionRequest.FIELD_CONTENT.equals(name)) {
             return Converter.wrap(parameter, request.getContent(), start, false);
         } else {
@@ -76,7 +74,6 @@ class ScriptableActionRequest extends AbstractScriptableRequest implements Wrapp
     @Override
     public boolean has(String name, Scriptable start) {
         return ActionRequest.FIELD_ACTION.equals(name)
-                || ActionRequest.FIELD_ADDITIONAL_PARAMETERS.equals(name)
                 || ActionRequest.FIELD_CONTENT.equals(name)
                 || super.has(name, start);
     }
@@ -93,7 +90,6 @@ class ScriptableActionRequest extends AbstractScriptableRequest implements Wrapp
     /** concatenate the ActionRequest properties with the generic request properties */
     private static Object[] PROPERTIES = concatIds(
             ActionRequest.FIELD_ACTION,
-            ActionRequest.FIELD_ADDITIONAL_PARAMETERS,
             ActionRequest.FIELD_CONTENT);
 
     @Override

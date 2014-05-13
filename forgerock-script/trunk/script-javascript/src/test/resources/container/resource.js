@@ -46,6 +46,17 @@ var userC1 = router.create("Users", null, scimUser1)
 
 var userC2 = router.create("Users", "bjensen@example.com", scimUser1)
 
+var userC3 = router.create("Users", "paramTest", scimUser1, { "x" : "marksTheSpot" })
+
+try {
+    var userC4 = router.create("Users", "badParamTest", scimUser1, { "_x" : "badParam" })
+    throw { "error" : "Assertion failed: router.create should have disallowed unknown paramter" } ;
+} catch (e) {
+    if (e.error) {
+        throw e;
+    }
+}
+
 /**
  * <pre>
  * read(String resourceName[, List fieldFilter][,Map context])
@@ -54,6 +65,17 @@ var userC2 = router.create("Users", "bjensen@example.com", scimUser1)
 var userR1 = router.read("Users/" + userC1._id)
 
 var userR2 = router.read("Users/bjensen@example.com")
+
+var userR3 = router.read("Users/paramTest", { "x" : "marksTheSpot" })
+
+try {
+    var userR4 = router.read("Users/badParamTest", { "_x" : "badParam" })
+    throw { "error" : "Assertion failed: router.read should have disallowed unknown paramter" } ;
+} catch (e) {
+    if (e.error) {
+        throw e;
+    }
+}
 
 /**
  * <pre>
@@ -71,6 +93,17 @@ scimUser1Updated.active = true
 var userU1 = router.update("Users/" + userC1._id, userR1._rev, scimUser1Updated)
 
 var userU2 = router.update("Users/bjensen@example.com", userR2._rev, scimUser1Updated)
+
+var userU3 = router.update("Users/paramTest", userR3._rev, scimUser1Updated, { "x" : "marksTheSpot" })
+
+try {
+    var userU4 = router.update("Users/paramTest", userR4._rev, scimUser1Updated, { "_x" : "badParam" })
+    throw { "error" : "Assertion failed: router.update should have disallowed unknown paramter" } ;
+} catch (e) {
+    if (e.error) {
+        throw e;
+    }
+}
 
 /**
  * <pre>
@@ -107,18 +140,42 @@ var printResult = function (resource, error) {
 }
 var userQ4 = router.query("Users", queryParams2, printResult)
 
+queryParams2.x = "marksTheSpot"
+var userQ5 = router.query("Users", queryParams2, printResult)
+
+try {
+    queryParams2._x = "badParam"
+    var userQ6 = router.query("Users", queryParams2, printResult)
+    throw { "error" : "Assertion failed: router.query should have disallowed unknown paramter" } ;
+} catch (e) {
+    if (e.error) {
+        throw e;
+    }
+}
+
 /**
  * <pre>
- * delete(String resourceName, String revision [, List fieldFilter][,Map context])
+ * delete(String resourceName, String revision [, params][, List fieldFilter][,Map context])
  * </pre>
  */
+try {
+    var userD2 = router.delete("Users", null, { "_illegal" : "parameter"})
+    throw { "error" : "Assertion failed: router.delete should have disallowed unknown paramter" } ;
+} catch (e) {
+    if (e.error) {
+        throw e;
+    }
+}
 
 /**
  * <pre>
  * action(String resourceName, [String actionId,] Map params, Map content[, List fieldFilter][,Map context])
  * </pre>
  */
-var userA1 = router.action("Users", "clear", {"_action": "clear"})
+var userA1 = router.action("Users", "clear", {}, {})
+
+// _parameters are allowed on action requests
+var userA2 = router.action("Users", "clear", {}, {"_allowThis" : "parameter"})
 
 var arrayVar = ["Salesforce", "Google", "ConstantContact"]
 

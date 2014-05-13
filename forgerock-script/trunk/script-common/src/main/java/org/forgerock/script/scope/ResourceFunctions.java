@@ -45,6 +45,7 @@ import org.forgerock.json.resource.QueryRequest;
 import org.forgerock.json.resource.QueryResult;
 import org.forgerock.json.resource.QueryResultHandler;
 import org.forgerock.json.resource.ReadRequest;
+import org.forgerock.json.resource.Request;
 import org.forgerock.json.resource.Requests;
 import org.forgerock.json.resource.Resource;
 import org.forgerock.json.resource.ResourceException;
@@ -67,7 +68,7 @@ public final class ResourceFunctions {
 
     /**
      * <pre>
-     * create(String resourceContainer, String newResourceId, Map content[, List fieldFilter][,Map context])
+     * create(String resourceContainer, String newResourceId, Map content[, Map params][, List fieldFilter][, Map context])
      * </pre>
      */
     public static final class CreateFunction extends AbstractFunction {
@@ -84,6 +85,7 @@ public final class ResourceFunctions {
             String resourceContainer = null;
             String newResourceId = null;
             JsonValue content = null;
+            JsonValue params = new JsonValue(null);
             List<Object> fieldFilter = null;
             JsonValue context = null;
 
@@ -122,17 +124,27 @@ public final class ResourceFunctions {
                     }
                     break;
                 case 3:
+                    if (value instanceof Map) {
+                        params = new JsonValue(value);
+                    } else if (value instanceof JsonValue && ((JsonValue) value).isMap()) {
+                        params = (JsonValue) value;
+                    } else if (null != value && arguments.length > 4) {
+                        throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
+                                "create", arguments));
+                    }
+                    break;
+                case 4:
                     if (value instanceof List) {
                         fieldFilter = (List<Object>) value;
                         break;
                     } else if (value instanceof JsonValue && ((JsonValue) value).isList()) {
                         fieldFilter = ((JsonValue) value).asList();
                         break;
-                    } else if (null != value && arguments.length > 3) {
+                    } else if (null != value && arguments.length > 5) {
                         throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
                                 "create", arguments));
                     }
-                case 4:
+                case 5:
                     if (value instanceof Map) {
                         context = new JsonValue(value);
                     } else if (value instanceof JsonValue && ((JsonValue) value).isMap()) {
@@ -146,18 +158,21 @@ public final class ResourceFunctions {
                 }
             }
 
-            return create(scope, resourceContainer, newResourceId, content, fieldFilter, context,
+            return create(scope, resourceContainer, newResourceId, content, params, fieldFilter, context,
                     callback).getContent();
         }
 
         public Resource create(final Parameter scope, String resourceContainer,
-                String newResourceId, JsonValue content, List<Object> fieldFilter,
+                String newResourceId, JsonValue content, JsonValue params, List<Object> fieldFilter,
                 JsonValue context, final Function<?> callback) throws ResourceException {
             CreateRequest cr =
                     Requests.newCreateRequest(resourceContainer, newResourceId, new JsonValue(
                             content));
             // add fieldFilter
             cr.addField(fetchFields(fieldFilter));
+            for (String name : params.keys()) {
+                setAdditionalParameter(cr, name, params.get(name));
+            }
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<Resource> future =
@@ -179,7 +194,7 @@ public final class ResourceFunctions {
 
     /**
      * <pre>
-     * read(String resourceName[, List fieldFilter][,Map context])
+     * read(String resourceName[, Map params][, List fieldFilter][,Map context])
      * </pre>
      */
     public static final class ReadFunction extends AbstractFunction {
@@ -195,6 +210,7 @@ public final class ResourceFunctions {
                 Object... arguments) throws ResourceException, NoSuchMethodException {
             String resourceName = null;
             List<Object> fieldFilter = null;
+            JsonValue params = new JsonValue(null);
             JsonValue context = null;
             if (arguments.length < 1) {
                 throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage("read",
@@ -213,6 +229,16 @@ public final class ResourceFunctions {
                     }
                     break;
                 case 1:
+                    if (value instanceof Map) {
+                        params = new JsonValue(value);
+                    } else if (value instanceof JsonValue && ((JsonValue) value).isMap()) {
+                        params = (JsonValue) value;
+                    } else if (null != value && arguments.length > 2) {
+                        throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
+                                "read", arguments));
+                    }
+                    break;
+                case 2:
                     if (value instanceof List) {
                         fieldFilter = (List<Object>) value;
                         break;
@@ -223,7 +249,7 @@ public final class ResourceFunctions {
                         throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
                                 "read", arguments));
                     }
-                case 2:
+                case 3:
                     if (value instanceof Map) {
                         context = new JsonValue(value);
                     } else if (value instanceof JsonValue && ((JsonValue) value).isMap()) {
@@ -239,7 +265,7 @@ public final class ResourceFunctions {
 
             JsonValue result = null;
 			try {
-				result = read(scope, resourceName, fieldFilter, context, callback).getContent();
+				result = read(scope, resourceName, params, fieldFilter, context, callback).getContent();
 			} catch (NotFoundException e) {
 				// indicates no such record without throwing exception
 				return null;
@@ -247,13 +273,16 @@ public final class ResourceFunctions {
             return result;
         }
 
-        public Resource read(final Parameter parameter, String resourceName,
+        public Resource read(final Parameter parameter, String resourceName, JsonValue params,
                 List<Object> fieldFilter, JsonValue context, final Function<?> callback)
                 throws ResourceException {
 
             ReadRequest rr = Requests.newReadRequest(resourceName);
             // add fieldFilter
             rr.addField(fetchFields(fieldFilter));
+            for (String name : params.keys()) {
+                setAdditionalParameter(rr, name, params.get(name));
+            }
 
             final ServerContext serverContext = parameter.getServerContext(context);
             final FutureResult<Resource> future =
@@ -274,7 +303,7 @@ public final class ResourceFunctions {
 
     /**
      * <pre>
-     * update(String resourceName, String revision, Map content [, List fieldFilter][,Map context])
+     * update(String resourceName, String revision, Map content [, Map params][, List fieldFilter][,Map context])
      * </pre>
      */
     public static final class UpdateFunction extends AbstractFunction {
@@ -292,6 +321,7 @@ public final class ResourceFunctions {
             String resourceName = null;
             String revision = null;
             JsonValue content = null;
+            JsonValue params = new JsonValue(null);
             List<Object> fieldFilter = null;
             JsonValue context = null;
 
@@ -330,17 +360,27 @@ public final class ResourceFunctions {
                     }
                     break;
                 case 3:
+                    if (value instanceof Map) {
+                        params = new JsonValue(value);
+                    } else if (value instanceof JsonValue && ((JsonValue) value).isMap()) {
+                        params = (JsonValue) value;
+                    } else if (null != value && arguments.length > 4) {
+                        throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
+                                "update", arguments));
+                    }
+                    break;
+                case 4:
                     if (value instanceof List) {
                         fieldFilter = (List<Object>) value;
                         break;
                     } else if (value instanceof JsonValue && ((JsonValue) value).isList()) {
                         fieldFilter = ((JsonValue) value).asList();
                         break;
-                    } else if (null != value && arguments.length > 3) {
+                    } else if (null != value && arguments.length > 5) {
                         throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
                                 "update", arguments));
                     }
-                case 4:
+                case 5:
                     if (value instanceof Map) {
                         context = new JsonValue(value);
                     } else if (value instanceof JsonValue && ((JsonValue) value).isMap()) {
@@ -354,12 +394,12 @@ public final class ResourceFunctions {
                 }
             }
 
-            return update(scope, resourceName, revision, content, fieldFilter, context, callback)
+            return update(scope, resourceName, revision, content, params, fieldFilter, context, callback)
                     .getContent();
         }
 
         private final Resource update(final Parameter scope, String resourceName, String revision,
-                JsonValue content, List<Object> fieldFilter, JsonValue context,
+                JsonValue content, JsonValue params, List<Object> fieldFilter, JsonValue context,
                 final Function<?> callback) throws ResourceException {
 
             UpdateRequest ur = Requests.newUpdateRequest(resourceName, content);
@@ -367,6 +407,10 @@ public final class ResourceFunctions {
             ur.addField(fetchFields(fieldFilter));
             // set revision
             ur.setRevision(revision);
+            // set additional parameters
+            for (String name : params.keys()) {
+                setAdditionalParameter(ur, name, params.get(name));
+            }
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<Resource> future =
@@ -387,7 +431,7 @@ public final class ResourceFunctions {
 
     /**
      * <pre>
-     * patch(String resourceName, String revision, Map patch [, List fieldFilter][,Map context])
+     * patch(String resourceName, String revision, Map patch[, Map params][, List fieldFilter][,Map context])
      * </pre>
      */
     public static final class PatchFunction extends AbstractFunction {
@@ -404,6 +448,7 @@ public final class ResourceFunctions {
             String resourceName = null;
             String revision = null;
             JsonValue patch = null;
+            JsonValue params = new JsonValue(null);
             List<Object> fieldFilter = null;
             JsonValue context = null;
 
@@ -442,17 +487,27 @@ public final class ResourceFunctions {
                     }
                     break;
                 case 3:
+                    if (value instanceof Map) {
+                        params = new JsonValue(value);
+                    } else if (value instanceof JsonValue && ((JsonValue) value).isMap()) {
+                        params = (JsonValue) value;
+                    } else if (null != value && arguments.length > 4) {
+                        throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
+                                "patch", arguments));
+                    }
+                    break;
+                case 4:
                     if (value instanceof List) {
                         fieldFilter = (List<Object>) value;
                         break;
                     } else if (value instanceof JsonValue && ((JsonValue) value).isList()) {
                         fieldFilter = ((JsonValue) value).asList();
                         break;
-                    } else if (null != value && arguments.length > 3) {
+                    } else if (null != value && arguments.length > 5) {
                         throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
                                 "patch", arguments));
                     }
-                case 4:
+                case 5:
                     if (value instanceof Map) {
                         context = new JsonValue(value);
                     } else if (value instanceof JsonValue && ((JsonValue) value).isMap()) {
@@ -466,11 +521,11 @@ public final class ResourceFunctions {
                 }
             }
 
-            return patch(scope, resourceName, revision, patch, fieldFilter, context, callback).getContent();
+            return patch(scope, resourceName, revision, patch, params, fieldFilter, context, callback).getContent();
         }
 
         private final Resource patch(Parameter scope, String resourceName, String revision,
-                JsonValue patch, List<Object> fieldFilter, JsonValue context,
+                JsonValue patch, JsonValue params, List<Object> fieldFilter, JsonValue context,
                 final Function<?> callback) throws ResourceException {
             // create the request
             PatchRequest pr = Requests.newPatchRequest(resourceName);
@@ -481,6 +536,10 @@ public final class ResourceFunctions {
             pr.addField(fetchFields(fieldFilter));
             // set revision
             pr.setRevision(revision);
+            // set additional params
+            for (String name : params.keys()) {
+                setAdditionalParameter(pr, name, params.get(name));
+            }
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<Resource> future =
@@ -517,7 +576,7 @@ public final class ResourceFunctions {
                 throws ResourceException, NoSuchMethodException {
 
             String resourceContainer = null;
-            JsonValue params = null;
+            JsonValue params = new JsonValue(null);
             List<Object> fieldFilter = null;
             JsonValue context = null;
 
@@ -656,20 +715,7 @@ public final class ResourceFunctions {
 
                         }
                     } else {
-                        JsonValue additionalParam = params.get(name);
-                        if (additionalParam.isNull()) {
-                            // ignore null values
-                        } else if (additionalParam.isString()) {
-                            qr.setAdditionalParameter(name, additionalParam.asString());
-                        } else if (additionalParam.isNumber()) {
-                            qr.setAdditionalParameter(name, additionalParam.asNumber().toString());
-                        } else if (additionalParam.isBoolean()) {
-                            qr.setAdditionalParameter(name, additionalParam.asBoolean().toString());
-                        } else {
-                            throw new BadRequestException("The value '" + String.valueOf(additionalParam.getObject())
-                                    + "' for additional parameter '" + name
-                                    + "' is not of expected type String");
-                        }
+                        setAdditionalParameter(qr, name, params.get(name));
                     }
                 }
 
@@ -754,7 +800,7 @@ public final class ResourceFunctions {
 
     /**
      * <pre>
-     * delete(String resourceName, String revision [, List fieldFilter][,Map context])
+     * delete(String resourceName, String revision [, Map params][, List fieldFilter][,Map context])
      * </pre>
      */
     public static final class DeleteFunction extends AbstractFunction {
@@ -770,6 +816,7 @@ public final class ResourceFunctions {
                 throws ResourceException, NoSuchMethodException {
             String resourceName = null;
             String revision = null;
+            JsonValue params = new JsonValue(null);
             List<Object> fieldFilter = null;
             JsonValue context = null;
 
@@ -798,17 +845,27 @@ public final class ResourceFunctions {
                     }
                     break;
                 case 2:
+                    if (value instanceof Map) {
+                        params = new JsonValue(value);
+                    } else if (value instanceof JsonValue && ((JsonValue) value).isMap()) {
+                        params = (JsonValue) value;
+                    } else if (null != value && arguments.length > 4) {
+                        throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
+                                "patch", arguments));
+                    }
+                    break;
+                case 3:
                     if (value instanceof List) {
                         fieldFilter = (List<Object>) value;
                         break;
                     } else if (value instanceof JsonValue && ((JsonValue) value).isList()) {
                         fieldFilter = ((JsonValue) value).asList();
                         break;
-                    } else if (null != value && arguments.length > 3) {
+                    } else if (null != value && arguments.length > 4) {
                         throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
                                 "delete", arguments));
                     }
-                case 3:
+                case 4:
                     if (value instanceof Map) {
                         context = new JsonValue(value);
                     } else if (value instanceof JsonValue && ((JsonValue) value).isMap()) {
@@ -821,11 +878,11 @@ public final class ResourceFunctions {
                 default: // TODO log unused arguments
                 }
             }
-            return delete(scope, resourceName, revision, fieldFilter, context, callback)
+            return delete(scope, resourceName, revision, params, fieldFilter, context, callback)
                     .getContent();
         }
 
-        private Resource delete(Parameter scope, String resourceName, String revision,
+        private Resource delete(Parameter scope, String resourceName, String revision, JsonValue params,
                 List<Object> fieldFilter, JsonValue context, final Function<?> callback)
                 throws ResourceException {
 
@@ -834,6 +891,10 @@ public final class ResourceFunctions {
             dr.addField(fetchFields(fieldFilter));
             // set revision
             dr.setRevision(revision);
+            // set additional parameters
+            for (String name : params.keys()) {
+                setAdditionalParameter(dr, name, params.get(name));
+            }
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<Resource> future =
@@ -854,7 +915,7 @@ public final class ResourceFunctions {
 
     /**
      * <pre>
-     * action(String resourceName, [String actionId,] Map params, Map content[, List fieldFilter][,Map context])
+     * action(String resourceName, [String actionId,] Map content, Map params [, List fieldFilter][,Map context])
      * </pre>
      */
     public static final class ActionFunction extends AbstractFunction {
@@ -871,8 +932,8 @@ public final class ResourceFunctions {
 
             String resourceName = null;
             String actionId = null;
-            JsonValue params = null;
             JsonValue content = null;
+            JsonValue params = new JsonValue(null);
             List<Object> fieldFilter = null;
             JsonValue context = null;
 
@@ -908,20 +969,20 @@ public final class ResourceFunctions {
                     }
                 case 2:
                     if (value instanceof Map) {
-                        params = new JsonValue(value);
+                        content = new JsonValue(value);
                     } else if (value instanceof JsonValue && ((JsonValue) value).isMap()) {
-                        params = (JsonValue) value;
-                    } else {
+                        content = (JsonValue) value;
+                    } else if (null != value) {
                         throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
                                 "action", arguments));
                     }
                     break;
                 case 3:
                     if (value instanceof Map) {
-                        content = new JsonValue(value);
+                        params = new JsonValue(value);
                     } else if (value instanceof JsonValue && ((JsonValue) value).isMap()) {
-                        content = (JsonValue) value;
-                    } else if (null != value) {
+                        params = (JsonValue) value;
+                    } else {
                         throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
                                 "action", arguments));
                     }
@@ -933,7 +994,7 @@ public final class ResourceFunctions {
                     } else if (value instanceof JsonValue && ((JsonValue) value).isList()) {
                         fieldFilter = ((JsonValue) value).asList();
                         break;
-                    } else if (null != value && arguments.length > 3) {
+                    } else if (null != value && arguments.length > 5) {
                         throw new NoSuchMethodException(FunctionFactory.getNoSuchMethodMessage(
                                 "action", arguments));
                     }
@@ -952,12 +1013,12 @@ public final class ResourceFunctions {
                 pointer++;
             }
 
-            return action(scope, resourceName, actionId, params, content, fieldFilter, context,
+            return action(scope, resourceName, actionId, content, params, fieldFilter, context,
                     callback);
         }
 
         public JsonValue action(final Parameter scope, String resourceName, String actionId,
-                JsonValue params, JsonValue content, List<Object> fieldFilter, JsonValue context,
+                JsonValue content, JsonValue params, List<Object> fieldFilter, JsonValue context,
                 final Function<?> callback) throws ResourceException {
 
             ActionRequest ar =
@@ -965,23 +1026,11 @@ public final class ResourceFunctions {
                             null != actionId ? actionId : params.get("_action").required().asString());
             // add fieldFilter
             ar.addField(fetchFields(fieldFilter));
-
+            // set additional parameters
             for (String name : params.keys()) {
-                final JsonValue additionalActionParameter = params.get(name);
-                if (additionalActionParameter.isNull()) {
-                    // ignore null values
-                } else if (additionalActionParameter.isString()) {
-                    ar.setAdditionalParameter(name, additionalActionParameter.asString());
-                } else if (additionalActionParameter.isNumber()) {
-                    ar.setAdditionalParameter(name, String.valueOf(additionalActionParameter.asNumber()));
-                } else if (additionalActionParameter.isBoolean()) {
-                    ar.setAdditionalParameter(name, String.valueOf(additionalActionParameter.asBoolean()));
-                } else {
-                    throw new BadRequestException("The value '" + String.valueOf(additionalActionParameter.getObject())
-                                    + "' for additional parameter '" + name
-                                    + "' is not of expected type String");
-                }
+                setAdditionalParameter(ar, name, params.get(name));
             }
+            // set content
             ar.setContent(content);
 
             final ServerContext serverContext = scope.getServerContext(context);
@@ -1054,6 +1103,22 @@ public final class ResourceFunctions {
                 return Arrays.copyOfRange(checkedFields, 0, idx);
             }
             return new String[0];
+        }
+
+        protected void setAdditionalParameter(Request request, String name, JsonValue value) throws BadRequestException {
+            if (value.isNull()) {
+                // ignore null values
+            } else if (value.isString()) {
+                request.setAdditionalParameter(name, value.asString());
+            } else if (value.isNumber()) {
+                request.setAdditionalParameter(name, String.valueOf(value.asNumber()));
+            } else if (value.isBoolean()) {
+                request.setAdditionalParameter(name, String.valueOf(value.asBoolean()));
+            } else {
+                throw new BadRequestException("The value '" + String.valueOf(value.getObject())
+                        + "' for additional parameter '" + name
+                        + "' is not of expected type String");
+            }
         }
     }
 }

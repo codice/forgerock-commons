@@ -140,4 +140,8 @@ public class ScriptThrownException extends ScriptException {
         }
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + " " + getValue().toString();
+    }
 }
