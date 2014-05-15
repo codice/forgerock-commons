@@ -22,6 +22,7 @@
 <xsl:stylesheet
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 xmlns:d="http://docbook.org/ns/docbook"
+xmlns:fo="http://www.w3.org/1999/XSL/Format"
 exclude-result-prefixes="d"
 version="1.0">
 
@@ -29,35 +30,67 @@ version="1.0">
  <xsl:import href="titlepages.xsl"/>
  <xsl:import href="urn:docbkx:stylesheet/highlight.xsl"/>
 
+<!--  =====================================================================  -->
+<!--                          Page Settings                                  -->
+<!--  =====================================================================  -->
+
   <xsl:param name="page.height.portrait">9in</xsl:param>
   <xsl:param name="page.width.portrait">7.5in</xsl:param>
-  <xsl:param name="double.sided" select="1" />
+
+  <!--  Testing Single.sided  -->
+  <xsl:param name="double.sided" select="0" />
+
+<!--  =====================================================================  -->
+<!--                         FOP Extensions                                  -->
+<!--  =====================================================================  -->
+
   <xsl:param name="fop1.extensions" select="1"/>
 
+<!--  =====================================================================  -->
+<!--                         Default Text Alignment                          -->
+<!--  =====================================================================  -->
+
   <xsl:param name="alignment">left</xsl:param>
+
+<!--  =====================================================================  -->
+<!--                      XSL:FO Default Properties                          -->
+<!--  =====================================================================  -->
 
   <xsl:attribute-set name="root.properties">
    <xsl:attribute name="orphans">5</xsl:attribute>
    <xsl:attribute name="widows">5</xsl:attribute>
   </xsl:attribute-set>
 
+<!--  =====================================================================  -->
+<!--                                Fonts                                    -->
+<!--  =====================================================================  -->
+
+
   <xsl:param name="body.font.master">9</xsl:param>
+
   <xsl:param name="body.font.family">DejaVuSerif</xsl:param>
   <xsl:param name="dingbat.font.family">DejaVuSerif</xsl:param>
   <xsl:param name="monospace.font.family">DejaVuSansMono</xsl:param>
+
+  <!--- Using Universe instead of DejaVuSans -->
   <xsl:param name="sans.font.family">DejaVuSans</xsl:param>
   <xsl:param name="title.font.family">DejaVuSans</xsl:param>
 
+<!--  =====================================================================  -->
+<!--                         Section Headings                                -->
+<!--  =====================================================================  -->
+
+ <!-- DOCS-142 -->
  <xsl:attribute-set name="section.title.properties">
-  <xsl:attribute name="space-before">1.6em</xsl:attribute>
+  <xsl:attribute name="space-before.minimum">24pt</xsl:attribute>
  </xsl:attribute-set>
 
  <xsl:attribute-set name="section.title.level1.properties">
-  <xsl:attribute name="font-size">14pt</xsl:attribute>
+  <xsl:attribute name="font-size">12pt</xsl:attribute>
  </xsl:attribute-set>
 
  <xsl:attribute-set name="section.title.level2.properties">
-  <xsl:attribute name="font-size">12pt</xsl:attribute>
+  <xsl:attribute name="font-size">11pt</xsl:attribute>
  </xsl:attribute-set>
 
  <xsl:attribute-set name="section.title.level3.properties">
@@ -110,7 +143,9 @@ version="1.0">
   <xsl:attribute-set name="monospace.properties">
    <xsl:attribute name="font-size">0.9em</xsl:attribute>
   </xsl:attribute-set>
+
   <xsl:param name="shade.verbatim" select="1"/>
+
   <xsl:attribute-set name="shade.verbatim.style">
    <xsl:attribute name="background-color">#d4d4d4</xsl:attribute>
    <xsl:attribute name="border">0.5pt dashed #626d75</xsl:attribute>
@@ -122,6 +157,11 @@ version="1.0">
   <xsl:param name="ulink.footnotes" select="0"/>
   <xsl:param name="ulink.show" select="0"/>
   <xsl:param name="ulink.hyphenate">&#xAD;</xsl:param>
+
+
+<!--  =====================================================================  -->
+<!--                            Hyphenation                                  -->
+<!--  =====================================================================  -->
 
   <!-- Hyphenate long literals at literal.hyphenate.chars
        Adapted from the hyphenate-url template. -->
@@ -161,6 +201,11 @@ version="1.0">
   <!-- Do not hyphenate in general. -->
   <xsl:param name="hyphenate">false</xsl:param>
 
+
+<!--  =====================================================================  -->
+<!--                            Admonitions                                  -->
+<!--  =====================================================================  -->
+
   <!--
    When https://code.google.com/p/docbkx-tools/issues/detail?id=35
    is resolved, it might be nice to use admonition graphics
@@ -172,8 +217,18 @@ version="1.0">
     <xsl:attribute name="padding">3pt</xsl:attribute>
   </xsl:attribute-set>
 
+
+<!--  =====================================================================  -->
+<!--                   Monospace Verbatim Font Width                         -->
+<!--  =====================================================================  -->
+
   <!-- DOCS-75: Wide programlisting shading extends to the right edge of the page in PDF -->
   <xsl:param name="monospace.verbatim.font.width">0.445em</xsl:param>
+
+
+<!--  =====================================================================  -->
+<!--                        Table Cell Padding                               -->
+<!--  =====================================================================  -->
 
   <!-- DOCS-86: Leave more space between table cells in PDF -->
   <xsl:attribute-set name="table.cell.padding">
@@ -185,4 +240,240 @@ version="1.0">
   <xsl:attribute-set name="xref.properties">
     <xsl:attribute name="color">#47a</xsl:attribute>
   </xsl:attribute-set>
+
+
+<!--  =====================================================================  -->
+<!--                     Chapter Headings                                    -->
+<!--  =====================================================================  -->
+
+ <!-- DOCS-146: Fix Chapter Headings -->
+ <!-- This snippet customizes the generated 'Chapter N' to just 'N' -->
+ <xsl:param name="local.l10n.xml" select="document('')"/>
+ <l:i18n xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0">
+  <l:l10n language="en">
+   <l:context name="title-numbered">
+    <l:template name="chapter" text="%n %t" />
+   </l:context>
+  </l:l10n>
+ </l:i18n>
+
+ <xsl:template name="chap.title">
+  <xsl:param name="node" select="."/>
+
+  <fo:block xsl:use-attribute-sets="chap.label.properties">
+   <xsl:call-template name="gentext">
+    <xsl:with-param name="key">
+     <xsl:choose>
+      <xsl:when test="$node/self::chapter">chapter</xsl:when>
+     </xsl:choose>
+    </xsl:with-param>
+   </xsl:call-template>
+   <xsl:text>Chapter </xsl:text>
+   <xsl:apply-templates select="$node" mode="label.markup"/>
+  </fo:block>
+  <fo:block xsl:use-attribute-sets="chap.title.properties">
+   <xsl:apply-templates select="$node" mode="title.markup"/>
+  </fo:block>
+ </xsl:template>
+
+ <xsl:attribute-set name="chap.label.properties">
+  <xsl:attribute name="font-size">14pt</xsl:attribute>
+  <xsl:attribute name="font-weight">bold</xsl:attribute>
+  <xsl:attribute name="text-align">left</xsl:attribute>
+  <xsl:attribute name="margin-top">1.5in</xsl:attribute>
+  <xsl:attribute name="font-family">Helvetica</xsl:attribute>
+ </xsl:attribute-set>
+
+ <xsl:attribute-set name="chap.title.properties">
+  <xsl:attribute name="font-size">20pt</xsl:attribute>
+  <xsl:attribute name="text-align">left</xsl:attribute>
+  <xsl:attribute name="space-after">1.0in</xsl:attribute>
+ </xsl:attribute-set>
+
+
+<!--  =====================================================================  -->
+<!--                          Body Indent                                    -->
+<!--  =====================================================================  -->
+
+ <!-- DOCS-152: Fix Subheading Horizontal Spacing  -->
+ <!-- This really fixes the subheadings  -->
+ <xsl:param name="body.start.indent">20mm</xsl:param>
+
+
+<!--  =====================================================================  -->
+<!--                          Section Headings                               -->
+<!--  =====================================================================  -->
+
+
+ <!--  This section is for the subheadings -->
+ <xsl:template name="section.heading">
+  <xsl:param name="level" select="1"/>
+  <xsl:param name="marker" select="1"/>
+  <xsl:param name="title"/>
+  <xsl:param name="marker.title"/>
+
+  <xsl:variable name="title.block">
+   <fo:list-block start-indent="0mm"
+                  provisional-distance-between-starts="{$body.start.indent}"
+                  provisional-label-separation="5mm">
+    <fo:list-item>
+     <fo:list-item-label end-indent="label-end()" text-align="start">
+      <fo:block>
+       <xsl:apply-templates select="parent::*" mode="label.markup"/>
+      </fo:block>
+     </fo:list-item-label>
+     <fo:list-item-body start-indent="body-start()" text-align="start">
+      <fo:block>
+       <xsl:apply-templates select="parent::*" mode="title.markup"/>
+      </fo:block>
+     </fo:list-item-body>
+    </fo:list-item>
+   </fo:list-block>
+  </xsl:variable>
+
+  <fo:block xsl:use-attribute-sets="section.title.properties">
+   <xsl:if test="$marker != 0">
+    <fo:marker marker-class-name="section.head.marker">
+     <xsl:copy-of select="$marker.title"/>
+    </fo:marker>
+   </xsl:if>
+
+   <xsl:choose>
+    <xsl:when test="$level=1">
+     <fo:block xsl:use-attribute-sets="section.title.level1.properties">
+      <xsl:copy-of select="$title.block"/>
+     </fo:block>
+    </xsl:when>
+    <xsl:when test="$level=2">
+     <fo:block xsl:use-attribute-sets="section.title.level2.properties">
+      <xsl:copy-of select="$title.block"/>
+     </fo:block>
+    </xsl:when>
+    <xsl:when test="$level=3">
+     <fo:block xsl:use-attribute-sets="section.title.level3.properties">
+      <xsl:copy-of select="$title.block"/>
+     </fo:block>
+    </xsl:when>
+    <xsl:otherwise>
+     <fo:block xsl:use-attribute-sets="section.title.properties"/>
+    </xsl:otherwise>
+   </xsl:choose>
+
+  </fo:block>
+ </xsl:template>
+
+<!--  =====================================================================  -->
+<!--                         Book Title Page                                 -->
+<!--  =====================================================================  -->
+
+ <!-- DOCS-28 Fix PDF Cover Page  -->
+ <xsl:template name="book.titlepage.recto" >
+  <!--fo:block-container absolute-position="fixed"
+                      width="720px" height="572px"
+                      left="-5cm" top="-5cm" bottom="0cm" right="0cm"
+                      background-image="images/fr-cover-bkgrnd-4.png">
+  <fo:block />
+ </fo:block-container-->
+ <!--fo:block-container>
+  <fo:block/>
+ </fo:block-container-->
+
+ <fo:block-container>
+  <fo:block >
+   <fo:table inline-progression-dimension="100%" table-layout="fixed"
+             border-collapse="collapse">
+
+    <fo:table-body>
+
+     <!-- Mediaobject -->
+     <fo:table-row>
+      <fo:table-cell>
+       <fo:block xsl:use-attribute-sets="book.titlepage.mediaobject.recto.style">
+        <xsl:choose>
+         <xsl:when test="d:info/d:mediaobject">
+          <xsl:apply-templates
+           mode="book.titlepage.recto.auto.mode"
+           select="d:info/d:mediaobject"/>
+         </xsl:when>
+        </xsl:choose>
+       </fo:block>
+      </fo:table-cell>
+     </fo:table-row>
+
+     <fo:table-row>
+      <fo:table-cell>
+         <fo:block xsl:use-attribute-sets="book.titlepage.title.recto.style">
+          <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="d:info/d:title"/>
+         </fo:block>
+      </fo:table-cell>
+     </fo:table-row>
+
+     <fo:table-row>
+      <fo:table-cell>
+         <fo:block xsl:use-attribute-sets="book.titlepage.subtitle.recto.style">
+          <xsl:apply-templates mode="book.titlepage.recto.auto.mode" select="d:info/d:subtitle"/>
+         </fo:block>
+      </fo:table-cell>
+     </fo:table-row>
+
+     <fo:table-row>
+      <fo:table-cell xsl:use-attribute-sets="book.titlepage.authorgroup.recto.style">
+       <fo:block margin-top="3.5in">
+        <xsl:apply-templates mode="book.titlepage.recto.mode" select="d:info/d:authorgroup/d:author/d:orgname"/>
+       </fo:block>
+       <fo:block >
+        <xsl:apply-templates mode="book.titlepage.recto.mode" select="d:info/d:authorgroup/d:author/d:address/d:street"/>
+        <xsl:text>, </xsl:text>
+        <xsl:apply-templates mode="book.titlepage.recto.mode" select="d:info/d:authorgroup/d:author/d:address/d:otheraddr"/>
+       </fo:block>
+       <fo:block >
+        <xsl:apply-templates mode="book.titlepage.recto.mode" select="d:info/d:authorgroup/d:author/d:address/d:city"/>
+        <xsl:text>, </xsl:text>
+        <xsl:apply-templates mode="book.titlepage.recto.mode" select="d:info/d:authorgroup/d:author/d:address/d:state"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates mode="book.titlepage.recto.mode" select="d:info/d:authorgroup/d:author/d:address/d:postcode"/>
+        <xsl:text>, </xsl:text>
+        <xsl:apply-templates mode="book.titlepage.recto.mode" select="d:info/d:authorgroup/d:author/d:address/d:country"/>
+       </fo:block>
+       <fo:block>
+        <xsl:apply-templates mode="book.titlepage.recto.mode" select="d:info/d:authorgroup/d:author/d:address/d:phone"/>
+       </fo:block>
+       <fo:block >
+        <xsl:apply-templates mode="book.titlepage.recto.mode" select="d:info/d:authorgroup/d:author/d:address/d:uri"/>
+       </fo:block>
+      </fo:table-cell>
+     </fo:table-row>
+    </fo:table-body>
+   </fo:table>
+  </fo:block>
+ </fo:block-container>
+</xsl:template>
+
+<xsl:attribute-set name="book.titlepage.mediaobject.recto.style">
+ <xsl:attribute name="text-align">left</xsl:attribute>
+ <xsl:attribute name="margin-top">80px</xsl:attribute>
+ <xsl:attribute name="margin-left">-10cm</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="book.titlepage.title.recto.style">
+ <xsl:attribute name="font-family">DejaVuSans</xsl:attribute>
+ <xsl:attribute name="font-size">18pt</xsl:attribute>
+ <xsl:attribute name="margin-left">20px</xsl:attribute>
+ <xsl:attribute name="text-align">left</xsl:attribute>
+</xsl:attribute-set>
+
+ <xsl:attribute-set name="book.titlepage.subtitle.recto.style">
+  <xsl:attribute name="font-family">DejaVuSans</xsl:attribute>
+  <xsl:attribute name="font-size">12pt</xsl:attribute>
+  <xsl:attribute name="margin-left">20px</xsl:attribute>
+  <xsl:attribute name="text-align">left</xsl:attribute>
+ </xsl:attribute-set>
+
+ <xsl:attribute-set name="book.titlepage.authorgroup.recto.style">
+  <xsl:attribute name="font-family">DejaVuSans</xsl:attribute>
+  <xsl:attribute name="font-size">8pt</xsl:attribute>
+  <xsl:attribute name="text-align">right</xsl:attribute>
+  <xsl:attribute name="margin-right">20px</xsl:attribute>
+ </xsl:attribute-set>
+
 </xsl:stylesheet>
