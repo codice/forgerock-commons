@@ -60,7 +60,7 @@
 
  <properties>
   <checkstyleHeaderLocation>${basedir}/src/main/resources/org/forgerock/checkstyle/mpl2-java-header</checkstyleHeaderLocation>
-  <docbkxVersion>2.0.14</docbkxVersion>
+  <docbkxVersion>2.0.15</docbkxVersion>
   <jCiteVersion>1.13.0</jCiteVersion>
   <maven.compiler.source>1.6</maven.compiler.source>
   <maven.compiler.target>1.6</maven.compiler.target>
