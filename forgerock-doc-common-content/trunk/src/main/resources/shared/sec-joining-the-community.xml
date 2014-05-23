@@ -20,7 +20,7 @@
   !
   ! CCPL HEADER END
   !
-  !      Copyright 2011-2013 ForgeRock AS
+  !      Copyright 2011-2014 ForgeRock AS
   !
 -->
  <section xml:id="joining-the-community"
@@ -33,7 +33,9 @@
 
  <para>
   After you
-  <link xlink:show="new" xlink:href="https://sso.forgerock.com/openam/UI/Login"
+  <link
+   xlink:show="new"
+   xlink:href="https://backstage.forgerock.com/#/account/register"
   >sign up</link> to join the ForgeRock community,
   you can edit the
   <link xlink:href="https://wikis.forgerock.org/" xlink:show="new"
