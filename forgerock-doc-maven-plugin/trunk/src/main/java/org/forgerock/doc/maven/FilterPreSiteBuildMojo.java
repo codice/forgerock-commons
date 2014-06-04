@@ -8,15 +8,22 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2013 ForgeRock AS
+ *     Copyright 2013-2014 ForgeRock AS
  *
  */
 
 package org.forgerock.doc.maven;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Set;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.StringUtils;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 /**
@@ -33,6 +40,8 @@ import org.twdata.maven.mojoexecutor.MojoExecutor;
  * @phase pre-site
  */
 public class FilterPreSiteBuildMojo extends AbstractBuildMojo {
+
+    private static final String CURRENT_DOCID = "CURRENT.DOCID#";
 
     /**
      * {@inheritDoc}
@@ -51,6 +60,38 @@ public class FilterPreSiteBuildMojo extends AbstractBuildMojo {
 
         getLog().info("Filtering DocBook XML sources to resolve Maven properties...");
         exec.filter();
+
+        Set<String> docNames =
+                DocUtils.getDocumentNames(getFilteredDocbkxSourceDirectory(), getDocumentSrcName());
+        String sourceEncoding =
+                getProject().getProperties().getProperty("project.build.sourceEncoding", "UTF-8");
+
+        if (!docNames.isEmpty()) {
+
+            for (String docName : docNames) {
+                getLog().info(
+                        "Filtering DocBook '" + docName + "' to resolve 'CURRENT.DOCID' variable");
+
+                File documentDirectory = new File(getFilteredDocbkxSourceDirectory(), docName);
+                DirectoryScanner scanner = new DirectoryScanner();
+                scanner.setBasedir(documentDirectory);
+                scanner.setIncludes(new String[] { "**/*.xml" });
+                scanner.addDefaultExcludes();
+                scanner.scan();
+
+                for (String docFile : scanner.getIncludedFiles()) {
+                    try {
+                        File documentFile = new File(documentDirectory, docFile);
+                        String content = FileUtils.fileRead(documentFile, sourceEncoding);
+                        String newContent = StringUtils.replace(content, CURRENT_DOCID, docName + "#");
+                        FileUtils.fileWrite(documentFile, sourceEncoding, newContent);
+                    } catch (IOException e) {
+                        getLog().error(e);
+                        throw new MojoExecutionException(e.getMessage(), e);
+                    }
+                }
+            }
+        }
     }
 
     /**
