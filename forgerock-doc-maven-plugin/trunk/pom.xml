@@ -74,7 +74,7 @@
   <dependency>
    <groupId>org.codehaus.plexus</groupId>
    <artifactId>plexus-utils</artifactId>
-   <version>3.0.4</version>
+   <version>3.0.17</version>
   </dependency>
   <dependency>
    <groupId>org.apache.maven</groupId>
@@ -176,6 +176,14 @@
 
  <build>
   <plugins>
+   <plugin>
+     <groupId>org.apache.maven.plugins</groupId>
+     <artifactId>maven-plugin-plugin</artifactId>
+     <version>${mavenPluginPluginVersion}</version>
+     <configuration>
+      <goalPrefix>forgerock-doc</goalPrefix>
+     </configuration>
+   </plugin>
    <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-release-plugin</artifactId>
