@@ -72,6 +72,12 @@ See <https://issues.apache.org/jira/browse/FOP-2358>.
 
 Workaround: Fix the content after copy/paste.
 
+**DOCS-150: When a code sample is unwrapped, it it not limited to the width of the page**
+
+**DOCS-162: `<replaceable>` tags within `<screen>` tags have no effect in the HTML**
+
+**DOCS-163: The performance="optional" attr in a step has no effect**
+
 
 * * *
 
