@@ -716,22 +716,6 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * CSS file for the pre-site version of the HTML.
-     *
-     * @parameter default-value="coredoc.css" property="releaseCssFileName"
-     * @required
-     */
-    private String preSiteCssFileName;
-
-    /**
-     * Get the name of the CSS file for the pre-site version of the HTML.
-     * @return The file name
-     */
-    public final String getPreSiteCssFileName() {
-        return preSiteCssFileName;
-    }
-
-    /**
      * Prepare single and chunked HTML for publication.
      * <p/>
      * The HTML built by docbkx-tools does not currently include the following,

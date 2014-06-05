@@ -96,22 +96,6 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * CSS file for the release version of the HTML.
-     *
-     * @parameter default-value="dfo.css" property="releaseCssFileName"
-     * @required
-     */
-    private String releaseCssFileName;
-
-    /**
-     * Get the name of the CSS file for the release version of the HTML.
-     * @return The file name
-     */
-    public final String getReleaseCssFileName() {
-        return releaseCssFileName;
-    }
-
-    /**
      * Whether to build a .zip of the release content.
      *
      * @parameter default-value="false" property="buildReleaseZip"
@@ -234,7 +218,7 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
     }
 
     /**
-     * Replace CSS files for released documentation.
+     * Replace the basic CSS file in released documentation.
      *
      * @param directory Directory enclosing HTML documents with CSS.
      * @throws IOException Could not replace CSS file with new content.
@@ -246,7 +230,9 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
         final String[] ext = {"css"};
         final boolean isRecursive = true;
         for (File oldCss : FileUtils.listFiles(dir, ext, isRecursive)) {
-            FileUtils.copyFile(newCss, oldCss);
+            if (getPreSiteCssFileName().equals(oldCss.getName())) {
+                FileUtils.copyFile(newCss, oldCss);
+            }
         }
     }
 
