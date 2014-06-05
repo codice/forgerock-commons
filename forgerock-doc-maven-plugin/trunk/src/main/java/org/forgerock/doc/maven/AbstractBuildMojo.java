@@ -665,4 +665,37 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     public boolean useSharedContent() {
         return useSharedContent;
     }
+
+    /**
+     * CSS file for the pre-site version of the HTML.
+     *
+     * @parameter default-value="coredoc.css" property="preSiteCssFileName"
+     * @required
+     */
+    private String preSiteCssFileName;
+
+    /**
+     * Get the name of the CSS file for the pre-site version of the HTML.
+     * @return The file name
+     */
+    public final String getPreSiteCssFileName() {
+        return preSiteCssFileName;
+    }
+
+    /**
+     * CSS file for the release version of the HTML.
+     *
+     * @parameter default-value="dfo.css" property="releaseCssFileName"
+     * @required
+     */
+    private String releaseCssFileName;
+
+    /**
+     * Get the name of the CSS file for the release version of the HTML.
+     * @return The file name
+     */
+    public final String getReleaseCssFileName() {
+        return releaseCssFileName;
+    }
+
 }
