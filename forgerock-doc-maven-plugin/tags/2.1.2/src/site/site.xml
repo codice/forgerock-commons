@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ! CCPL HEADER START
+  !
+  ! This work is licensed under the Creative Commons
+  ! Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+  ! To view a copy of this license, visit
+  ! http://creativecommons.org/licenses/by-nc-nd/3.0/
+  ! or send a letter to Creative Commons, 444 Castro Street,
+  ! Suite 900, Mountain View, California, 94041, USA.
+  !
+  ! See the License for the specific language governing permissions
+  ! and limitations under the License.
+  !
+  ! If applicable, add the following below this CCPL HEADER, with the fields
+  ! enclosed by brackets "[]" replaced with your own identifying information:
+  !      Portions Copyright [yyyy] [name of copyright owner]
+  !
+  ! CCPL HEADER END
+  !
+  !      Copyright 2012-2014 ForgeRock AS
+  !    
+-->
+<project name="${project.name}" xmlns="http://maven.apache.org/DECORATION/1.0.1"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.1
+                             http://maven.apache.org/xsd/decoration-1.0.1.xsd">
+  <skin>
+    <groupId>org.forgerock.commons</groupId>
+    <artifactId>forgerock-community-skin</artifactId>
+    <version>1.0.0</version>
+  </skin>
+  <publishDate position="right" format="yyyy.MM.dd"/>
+  <version position="right"/>
+  <body>
+    <breadcrumbs>
+      <item name="Developer Community" href="http://www.forgerock.org"/>
+      <item name="Commons" href="http://commons.forgerock.org"/>
+      <item name="Doc Maven Plugin"
+            href="http://commons.forgerock.org/forgerock-doc-maven-plugin"/>
+    </breadcrumbs>
+    <menu name="Documentation">
+      <item name="README" href="README.html"/>
+      <!--item name="3.0.0 release notes" href="Release Notes 3.0.0.html"/-->
+      <item name="2.1.2 release notes" href="Release Notes 2.1.2.html"/>
+      <item name="2.1.0 release notes" href="Release Notes 2.1.0.html"/>
+      <item name="2.0.0 release notes" href="Release Notes 2.0.0.html"/>
+      <item name="1.2.0 release notes" href="Release Notes 1.2.0.html"/>
+    </menu>
+    <menu name="Development">
+      <item name="Join"
+            href="https://sso.forgerock.com/openam/UI/Login"/>
+      <item name="Issue Tracking" href="issue-tracking.html"/>
+      <item name="Source Repository" href="source-repository.html"/>
+      <item name="Javadoc" href="apidocs/index.html" />
+      <item name="Usage" href="plugin-info.html"/>
+    </menu>
+
+    <menu ref="reports"/>
+  </body>
+</project>
