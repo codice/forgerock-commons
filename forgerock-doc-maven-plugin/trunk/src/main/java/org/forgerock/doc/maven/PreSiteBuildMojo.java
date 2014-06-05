@@ -1403,12 +1403,15 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                         + getDocumentSrcName()));
                 cfg.add(element(name("currentDocid"), docName));
 
-/*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
-                 cfg.add(element(
+                // <targetsFilename> is ignored with docbkx-tools 2.0.15,
+                // but not with 2.0.14.
+
+                // The following configuration should be kept
+                // for versions of docbkx-tools that honor <targetsFilename>.
+                cfg.add(element(
                         name("targetsFilename"),
                         FilenameUtils.separatorsToUnix(getBuildDirectory().getPath())
                                 + "/" + docName + "-" + extension + ".target.db"));
-*/
 
                 // Due to https://code.google.com/p/docbkx-tools/issues/detail?id=112
                 // RTF generation does not work with docbkx-tools 2.0.15.
@@ -1429,12 +1432,19 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                                 getPluginManager())
                 );
 
-                // <targetsFilename> is ignored with docbkx-tools 2.0.15:
-                //File outputDir = new File(getDocbkxOutputDirectory(),
-                //        extension + File.separator + docName);
                 File outputDir = new File(getBaseDir(),
                         "target" + File.separator + "docbkx" + File.separator
                                 + extension + File.separator + docName);
+
+                // <targetsFilename> is ignored with docbkx-tools 2.0.15,
+                // but not with 2.0.14.
+                // The following output directory should be where the files are
+                // for versions of docbkx-tools that honor <targetsFilename>.
+                if (!outputDir.exists()) {
+                    outputDir = new File(getDocbkxOutputDirectory(),
+                            extension + File.separator + docName);
+                }
+
                 try {
                     String[] extensions = {"fo", extension};
                     Iterator<File> files =

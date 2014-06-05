@@ -536,7 +536,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     }
 
     /**
-     * Build directory for this plugin, usually {@code ${project.build.directory}.
+     * Build directory for this plugin, usually {@code ${project.build.directory}}.
      *
      * @return {@link #buildDirectory}
      */
