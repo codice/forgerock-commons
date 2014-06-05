@@ -158,21 +158,24 @@ version="1.0">
    <xsl:attribute name="wrap-option">no-wrap</xsl:attribute>
    <xsl:attribute name="font-size">0.75em</xsl:attribute>
   </xsl:attribute-set>
-  
+
   <xsl:param name="ulink.footnotes" select="0"/>
   <xsl:param name="ulink.show" select="0"/>
-  <xsl:param name="ulink.hyphenate">&#xAD;</xsl:param>
-
 
 <!--  =====================================================================  -->
 <!--                            Hyphenation                                  -->
 <!--  =====================================================================  -->
 
-  <!-- Hyphenate long literals at literal.hyphenate.chars
-       Adapted from the hyphenate-url template. -->
-  <xsl:param name="literal.hyphenate">&#xAD;</xsl:param>
-  <xsl:param name="literal.hyphenate.chars">./,</xsl:param>
-  <!-- soft hyphen: &#xAD; -->
+ <!-- Hyphenate URLs in running text at ? and &. -->
+ <xsl:param name="ulink.hyphenate">&#x200B;</xsl:param><!-- Zero-width space -->
+ <xsl:param name="ulink.hyphenate.chars">?&amp;</xsl:param>
+
+ <!--
+      Hyphenate long literals at literal.hyphenate.chars.
+      Adapted from the hyphenate-url template.
+ -->
+  <xsl:param name="literal.hyphenate">&#x200B;</xsl:param><!-- Zero-width space -->
+  <xsl:param name="literal.hyphenate.chars">./,-?&amp;</xsl:param>
 
   <xsl:template match="d:literal//text()">
     <xsl:call-template name="hyphenate-literal">
@@ -201,6 +204,38 @@ version="1.0">
         <xsl:value-of select="$literal"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <!--
+       Wrap screen text containing HTTP* URLs at the start of the query string.
+  -->
+  <xsl:template match="d:screen//text()">
+   <xsl:call-template name="string-replace">
+    <xsl:with-param name="text" select="." />
+    <xsl:with-param name="replace" select="'?'" />
+    <xsl:with-param name="by" select="'&#x000A; ?'" />
+   </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="string-replace">
+   <xsl:param name="text" />
+   <xsl:param name="replace" />
+   <xsl:param name="by" />
+   <xsl:choose>
+     <xsl:when test="contains($text, 'http') and contains($text, $replace)">
+       <xsl:value-of select="substring-before($text, $replace)" />
+       <xsl:value-of select="$by" />
+       <xsl:call-template name="string-replace">
+         <xsl:with-param name="text"
+                         select="substring-after($text, $replace)" />
+         <xsl:with-param name="replace" select="$replace" />
+         <xsl:with-param name="by" select="$by" />
+       </xsl:call-template>
+     </xsl:when>
+     <xsl:otherwise>
+       <xsl:value-of select="$text" />
+     </xsl:otherwise>
+   </xsl:choose>
   </xsl:template>
 
   <!-- Do not hyphenate in general. -->
