@@ -3,7 +3,7 @@
 This Maven plugin centralizes configuration of core documentation, to ensure
 that documents are formatted uniformly.
 
-_This document covers functionality present in 2.1.0-SNAPSHOT._
+_This document covers functionality present in 2.1.2._
 
 With centralized configuration handled by this Maven plugin, the core
 documentation-related project configuration takes at least three arguments:
@@ -401,6 +401,12 @@ following example:
     >[jcp:org.forgerock.doc.jcite.test.Test:--- mainMethod]</programlisting>
 
 See the `forgerock-doc-maven-plugin-test` project for an example.
+
+## Links in Shared Content
+
+You can now use `xlink:href="CURRENT.DOCID#linkend"` in your links.
+The doc build plugin replaces `CURRENT.DOCID` with the current document name.
+
 
 * * *
 
