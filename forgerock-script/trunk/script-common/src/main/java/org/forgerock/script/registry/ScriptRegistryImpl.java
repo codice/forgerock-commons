@@ -96,6 +96,8 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
             new AtomicReference<PersistenceConfig>();
 
     private Map<String, Object> properties;
+    
+    private ClassLoader registryLevelScriptClassLoader;
 
     /**
      * This is the global scope bindings. By default, a null value (which means
@@ -104,11 +106,17 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
     protected final AtomicReference<Bindings> globalScope;
 
     public ScriptRegistryImpl() {
-        this(new HashMap<String, Object>(0), null, null);
+        this(new HashMap<String, Object>(0), null, null, null);
+    }
+    
+    public ScriptRegistryImpl(final Map<String, Object> properties,
+            final Iterable<ScriptEngineFactory> engine, final Bindings globalScope) {
+        this(properties, engine, globalScope, null);
     }
 
     public ScriptRegistryImpl(final Map<String, Object> properties,
-            final Iterable<ScriptEngineFactory> engine, final Bindings globalScope) {
+            final Iterable<ScriptEngineFactory> engine, final Bindings globalScope,
+            final ClassLoader registryLevelScriptClassLoader) {
         this.properties = properties;
         this.engineFactories = new HashSet<ScriptEngineFactory>();
         if (null != engine) {
@@ -120,6 +128,8 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
                 globalScope != null ? new AtomicReference<Bindings>(globalScope)
                         : new AtomicReference<Bindings>();
 
+        this.registryLevelScriptClassLoader = registryLevelScriptClassLoader;
+                
         // properties.get(SCRIPT_CACHE_DIR);
     }
 
@@ -137,6 +147,16 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
 
     public void setPersistenceConfig(PersistenceConfig persistenceConfig) {
         persistenceConfigReference.set(persistenceConfig);
+    }
+
+    @Override
+    public ClassLoader getRegistryLevelScriptClassLoader() {
+        return this.registryLevelScriptClassLoader;
+    }
+
+    @Override
+    public void setRegistryLevelScriptClassLoader(final ClassLoader registryLevelScriptClassLoader) {
+        this.registryLevelScriptClassLoader = registryLevelScriptClassLoader;
     }
 
     public void put(String key, Object value) {
@@ -275,7 +295,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
     }
 
     private ScriptEngine initializeScriptEngine(ScriptEngineFactory factory) {
-        ScriptEngine engine;// TODO Make the initialization type safe!!
+        // TODO Make the initialization type safe!!
         Object o = properties.get(factory.getLanguageName());
         Map<String, Object> configuration = null;
         if (o instanceof Map) {
@@ -284,8 +304,8 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
             configuration = new HashMap<String, Object>();
         }
         configuration.put(Bindings.class.getName(), globalScope);
-        engine = factory.getScriptEngine(persistenceConfigReference, configuration, sourceCache.values());
-        return engine;
+        return factory.getScriptEngine(persistenceConfigReference, configuration, sourceCache.values(),
+                getRegistryLevelScriptClassLoader());
     }
 
     // private classes
@@ -415,7 +435,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
         }
 
         public ClassLoader getParentClassLoader() {
-            return null;
+            return ScriptRegistryImpl.this.getRegistryLevelScriptClassLoader();
         }
 
         public void setCompiledScript(CompiledScript script) {

@@ -111,11 +111,12 @@ public class RhinoScriptEngineFactory implements ScriptEngineFactory {
     public ScriptEngine getScriptEngine(
             final AtomicReference<PersistenceConfig> persistenceConfigReference,
             final Map<String, Object> configuration,
-            final Collection<SourceContainer> sourceContainers) {
+            final Collection<SourceContainer> sourceContainers,
+            final ClassLoader registryLevelClassLoader) {
         if (null == engine) {
             synchronized (this) {
                 if (null == engine) {
-                    engine = new RhinoScriptEngine(configuration, this, sourceContainers);
+                    engine = new RhinoScriptEngine(configuration, this, sourceContainers, registryLevelClassLoader);
                     engine.setPersistenceConfig(persistenceConfigReference);
                 }
             }

@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012-2013 ForgeRock AS. All rights reserved.
+ * Copyright (c) 2012-2014 ForgeRock AS. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -81,8 +81,10 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
 
     private RequireBuilder requireBuilder;
 
+    private ClassLoader classLoader;
+
     RhinoScriptEngine(final Map<String, Object> configuration, final ScriptEngineFactory factory,
-            final Collection<SourceContainer> sourceContainers) {
+            final Collection<SourceContainer> sourceContainers, ClassLoader registryLevelClassLoader) {
         this.factory = factory;
 
         Object debugProperty = configuration.get(CONFIG_DEBUG_PROPERTY);
@@ -132,6 +134,10 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
         ModuleScriptProvider scriptProvider = new SoftCachingModuleScriptProvider(sourceProvider);
         requireBuilder = new RequireBuilder();
         requireBuilder.setModuleScriptProvider(scriptProvider);
+
+        this.classLoader = registryLevelClassLoader != null
+                ? registryLevelClassLoader
+                : RhinoScriptEngine.class.getClassLoader();
     }
 
     private static final class ScriptCacheEntry {
@@ -196,7 +202,7 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
     public void compileScript(CompilationHandler handler) {
         try {
             boolean sharedScope = true;// config.get("sharedScope").defaultTo(true).asBoolean();
-            handler.setClassLoader(RhinoScriptEngine.class.getClassLoader());
+            handler.setClassLoader(classLoader);
             RhinoScript rhinoScript = null;
             if (handler.getScriptSource() instanceof URLScriptSource) {
                 URLScriptSource source = (URLScriptSource) handler.getScriptSource();
@@ -269,14 +275,11 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
             if (null != configString) {
                 try {
                     if (null == debugListener) {
-                        debugListener =
-                                new org.eclipse.wst.jsdt.debug.rhino.debugger.RhinoDebugger(
-                                        configString);
+                        debugListener = new org.eclipse.wst.jsdt.debug.rhino.debugger.RhinoDebugger(configString);
                         Context.enter().getFactory().addListener(debugListener);
                         Context.exit();
                     }
-                    ((org.eclipse.wst.jsdt.debug.rhino.debugger.RhinoDebugger) debugListener)
-                            .start();
+                    ((org.eclipse.wst.jsdt.debug.rhino.debugger.RhinoDebugger) debugListener).start();
                     debugInitialised = Boolean.TRUE;
                 } catch (Throwable ex) {
                     // Catch NoClassDefFoundError exception
