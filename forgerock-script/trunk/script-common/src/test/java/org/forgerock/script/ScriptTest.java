@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock AS. All rights reserved.
+ * Copyright (c) 2012-2014 ForgeRock AS.. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -104,7 +104,7 @@ public abstract class ScriptTest {
 
         scriptRegistry =
                 new ScriptRegistryImpl(configuration,
-                        ServiceLoader.load(ScriptEngineFactory.class), null);
+                        ServiceLoader.load(ScriptEngineFactory.class), null, null);
 
         RequestHandler resource = mock(RequestHandler.class);
 

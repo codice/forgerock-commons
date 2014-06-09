@@ -98,11 +98,13 @@ public interface ScriptEngineFactory {
      * but implementations may pool, share or reuse engines.
      *
      * @param connectionFactory a reference to the ConnectionFactory provider
-     * @param confiugration script engine configuration
+     * @param configuration script engine configuration
      * @param sourceContainers a collection of SourceContainers used to locate scripts
+     * @param registryLevelClassLoader the ScriptRegistry's class loader
      * @return A new {@code ScriptEngine} instance.
      */
     public ScriptEngine getScriptEngine(AtomicReference<PersistenceConfig> connectionFactory,
-            Map<String, Object> configuration, Collection<SourceContainer> sourceContainers);
+            Map<String, Object> configuration, Collection<SourceContainer> sourceContainers,
+            ClassLoader registryLevelClassLoader);
 
 }

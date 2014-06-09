@@ -96,10 +96,12 @@ public class GroovyScriptEngineFactory implements ScriptEngineFactory {
     }
 
     public ScriptEngine getScriptEngine(final AtomicReference<PersistenceConfig> persistenceConfig,
-            Map<String, Object> configuration, Collection<SourceContainer> sourceContainers) {
+            Map<String, Object> configuration, Collection<SourceContainer> sourceContainers,
+            ClassLoader registryLevelClassLoader) {
         if (null == engine) {
             synchronized (this) {
                 if (null == engine) {
+                    // TODO use registry-level class loader
                     engine = new GroovyScriptEngineImpl(configuration, this, persistenceConfig);
                 }
             }
