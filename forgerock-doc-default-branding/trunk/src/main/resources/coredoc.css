@@ -326,3 +326,7 @@ table.simplelist {
 .latest a:hover {
     color: #f58220;
 }
+
+.latest a:visited {
+    color: white;
+}
