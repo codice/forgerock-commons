@@ -17,7 +17,13 @@ TODO
 
 ## Improvements & New Features
 
-TODO
+**DOCS-72: Improve widow and orphans control in PDF**
+
+You can now use the processing instruction `<?hard-pagebreak?>`
+to force an unconditional page break in the output.
+
+This processing instruction cannot be used inline,
+but instead must be used between block elements.
 
 
 ## Bugs Fixed
