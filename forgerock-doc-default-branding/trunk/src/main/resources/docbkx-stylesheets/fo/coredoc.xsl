@@ -59,10 +59,10 @@ version="1.0">
 <!--                      XSL:FO Default Properties                          -->
 <!--  =====================================================================  -->
 
-  <xsl:attribute-set name="root.properties">
-   <xsl:attribute name="orphans">5</xsl:attribute>
-   <xsl:attribute name="widows">5</xsl:attribute>
-  </xsl:attribute-set>
+ <!-- DOCS-72  Improve widow and orphans control in PDF  -->
+ <xsl:template match="processing-instruction('hard-pagebreak')">
+  <fo:block break-after='page'/>
+ </xsl:template>
 
 <!--  =====================================================================  -->
 <!--                                Fonts                                    -->
