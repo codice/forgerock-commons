@@ -74,12 +74,16 @@
 
  <xsl:template match="*" mode="screen"><xsl:value-of select="."/></xsl:template>
 
+ <xsl:template match="d:replaceable" mode="screen">
+  <em><strong><xsl:apply-templates mode="screen"/></strong></em>
+ </xsl:template>
+
  <xsl:template match="d:userinput" mode="screen">
-  <strong><xsl:value-of select="."/></strong>
+  <strong><xsl:apply-templates mode="screen"/></strong>
  </xsl:template>
 
  <xsl:template match="d:computeroutput" mode="screen">
-  <em><xsl:value-of select="."/></em>
+  <em><xsl:apply-templates mode="screen"/></em>
  </xsl:template>
 
  <xsl:param name="make.clean.html" select="1" />
