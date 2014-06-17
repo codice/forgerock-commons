@@ -30,6 +30,7 @@ but instead must be used between block elements.
 
 **DOCS-156: Configuration of docbkx-plugin is cluttered with repeat elements**
 
+**DOCS-162: `<replaceable>` tags within `<screen>` tags have no effect in the HTML**
 
 
 ## Known Issues
