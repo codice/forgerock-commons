@@ -41,7 +41,7 @@
     </breadcrumbs>
     <menu name="Documentation">
       <item name="README" href="README.html"/>
-      <!--item name="3.0.0 release notes" href="Release Notes 3.0.0.html"/-->
+      <item name="2.1.3 release notes" href="Release Notes 2.1.3.html"/>
       <item name="2.1.2 release notes" href="Release Notes 2.1.2.html"/>
       <item name="2.1.0 release notes" href="Release Notes 2.1.0.html"/>
       <item name="2.0.0 release notes" href="Release Notes 2.0.0.html"/>

@@ -3,7 +3,7 @@
 This Maven plugin centralizes configuration of core documentation, to ensure
 that documents are formatted uniformly.
 
-_This document covers functionality present in 2.1.2._
+_This document covers functionality present in 2.1.3._
 
 With centralized configuration handled by this Maven plugin, the core
 documentation-related project configuration takes at least three arguments:
@@ -327,6 +327,14 @@ If the plugin configuration is not inherited,
 then also set `-N` (`--non-recursive`) for the release goal.
 Run the `site` goal separately if it must be recursive
 (because you build Javadoc during the `site` goal for example).
+
+## Hard Page Breaks in PDF and RTF
+
+You can now use the processing instruction `<?hard-pagebreak?>`
+to force an unconditional page break in the PDF (and RTF) output.
+
+This processing instruction cannot be used inline,
+but instead must be used between block elements.
 
 ## Zip of Release Documentation
 
