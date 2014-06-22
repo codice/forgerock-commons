@@ -23,6 +23,27 @@ The project runs multiple plugin executions:
 6.  A `layout` goal in the `site` phase to copy content under `site/doc`
 7.  A `release` goal to prepare site documentation for release
 
+## Table of Contents
+
+* [Example Plugin Specification](#Example_Plugin_Specification)
+* [Source Layout Requirements](#Source_Layout_Requirements)
+* [Resolving Maven Properties](#Resolving_Maven_Properties)
+* [Using Shared Content](#Using_Shared_Content)
+* [PNG Image Manipulation](#PNG_Image_Manipulation)
+* [Link Checking](#Link_Checking)
+* [Excluding Output Formats](#Excluding_Output_Formats)
+* [Generating Single-Chapter Output](#Generating_Single-Chapter_Output)
+* [Generating Only One Format](#Generating_Only_One_Format)
+* [Alternate Branding](#Alternate_Branding)
+* [Expected Results](#Expected_Results)
+* [Release Layout](#Release_Layout)
+* [Hard Page Breaks in PDF and RTF](#Hard_Page_Breaks_in_PDF_and_RTF)
+* [Zip of Release Documentation](#Zip_of_Release_Documentation)
+* [Notes on Syntax Highlighting](#Notes_on_Syntax_Highlighting)
+* [JCite Integration](#JCite_Integration)
+* [Links in Shared Content](#Links_in_Shared_Content)
+
+
 ## Example Plugin Specification
 
 You call the plugin from your `pom.xml` as follows. This example uses a
