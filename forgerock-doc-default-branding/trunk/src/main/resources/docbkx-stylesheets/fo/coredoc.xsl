@@ -43,6 +43,8 @@ version="1.0">
   <!--  Testing Single.sided  -->
   <xsl:param name="double.sided" select="1" />
 
+  <xsl:param name="draft.mode" select="no" />
+
 <!--  =====================================================================  -->
 <!--                         FOP Extensions                                  -->
 <!--  =====================================================================  -->
@@ -60,6 +62,7 @@ version="1.0">
 <!--  =====================================================================  -->
 
  <!-- DOCS-72  Improve widow and orphans control in PDF  -->
+ <!--                use: <?hard-pagebreak?>             -->
  <xsl:template match="processing-instruction('hard-pagebreak')">
   <fo:block break-after='page'/>
  </xsl:template>
@@ -88,9 +91,10 @@ version="1.0">
   <xsl:attribute name="space-before">14pt</xsl:attribute>
  </xsl:attribute-set>
 
+ <!-- DOCS-171 -->
  <xsl:attribute-set name="section.title.level1.properties">
-  <xsl:attribute name="space-before">20pt</xsl:attribute>
-  <xsl:attribute name="font-size">12pt</xsl:attribute>
+  <xsl:attribute name="space-before">22pt</xsl:attribute>
+  <xsl:attribute name="font-size">15pt</xsl:attribute>
  </xsl:attribute-set>
 
  <xsl:attribute-set name="section.title.level2.properties">
@@ -99,17 +103,18 @@ version="1.0">
  </xsl:attribute-set>
 
  <xsl:attribute-set name="section.title.level3.properties">
+  <xsl:attribute name="space-before">16pt</xsl:attribute>
   <xsl:attribute name="font-size">11pt</xsl:attribute>
  </xsl:attribute-set>
 
   <xsl:attribute-set name="section.title.level4.properties">
+   <xsl:attribute name="space-before">16pt</xsl:attribute>
    <xsl:attribute name="font-size">10pt</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="section.title.level5.properties">
+   <xsl:attribute name="font-size">14pt</xsl:attribute>
    <xsl:attribute name="font-size">10pt</xsl:attribute>
-   <xsl:attribute name="font-weight">normal</xsl:attribute>
-   <xsl:attribute name="font-style">italic</xsl:attribute>
   </xsl:attribute-set>
   
   <xsl:param name="generate.toc">
@@ -246,16 +251,37 @@ version="1.0">
 <!--                            Admonitions                                  -->
 <!--  =====================================================================  -->
 
-  <!--
-   When https://code.google.com/p/docbkx-tools/issues/detail?id=35
-   is resolved, it might be nice to use admonition graphics
-   rather than gray backgrounds.
-  -->
-  <xsl:attribute-set name="admonition.properties">
-    <xsl:attribute name="background-color">#d4d4d4</xsl:attribute>
-    <xsl:attribute name="border">0.5pt dashed #626d75</xsl:attribute>
-    <xsl:attribute name="padding">3pt</xsl:attribute>
-  </xsl:attribute-set>
+ <!-- DOCS-137 -->
+ <xsl:param name="admon.graphics" select="1" />
+ <xsl:param name="admon.graphics.path"
+            select="'../shared/images/'" />
+ <xsl:param name="admon.graphics.extension">.png</xsl:param>
+
+ <xsl:template match="*" mode="admon.graphic.width">
+  <xsl:text>32pt</xsl:text>
+ </xsl:template>
+
+ <xsl:attribute-set name="admonition.properties">
+  <xsl:attribute name="border-top">0.5pt solid black</xsl:attribute>
+  <xsl:attribute name="border-bottom">0.5pt solid black</xsl:attribute>
+  <xsl:attribute name="padding-top">2pt</xsl:attribute>
+  <xsl:attribute name="padding-bottom">4pt</xsl:attribute>
+  <xsl:attribute name="margin-bottom">12pt</xsl:attribute>
+  <xsl:attribute name="margin-right">10mm</xsl:attribute>
+ </xsl:attribute-set>
+
+ <xsl:attribute-set name="admonition.title.properties">
+  <xsl:attribute name="font-family">Arial</xsl:attribute>
+  <xsl:attribute name="font-size">12pt</xsl:attribute>
+  <xsl:attribute name="font-weight">bold</xsl:attribute>
+  <xsl:attribute name="margin-top">12pt</xsl:attribute>
+ </xsl:attribute-set>
+
+ <xsl:attribute-set name="graphical.admonition.properties">
+  <xsl:attribute name="space-before.optimum">1.4em</xsl:attribute>
+  <xsl:attribute name="space-before.minimum">1.2em</xsl:attribute>
+  <xsl:attribute name="space-before.maximum">1.6em</xsl:attribute>
+ </xsl:attribute-set>
 
 
 <!--  =====================================================================  -->
@@ -547,7 +573,15 @@ version="1.0">
   <xsl:attribute name="font-family">Helvetica</xsl:attribute>
   <xsl:attribute name="space-after">0pt</xsl:attribute>
   <xsl:attribute name="margin-top">20pt</xsl:attribute>
+ </xsl:attribute-set>
 
+ <!--  =====================================================================  -->
+ <!--                      Headers and Footers                                -->
+ <!--  =====================================================================  -->
+
+ <!-- DOCS-160 -->
+ <xsl:attribute-set name="header.content.properties">
+  <xsl:attribute name="font-size">8pt</xsl:attribute>
  </xsl:attribute-set>
 
 </xsl:stylesheet>
