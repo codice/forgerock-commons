@@ -136,7 +136,7 @@ public class ScriptThrownException extends ScriptException {
         } else if (value == null) {
             return getException(defaultCode, null, this);
         } else {
-            return getException(defaultCode, String.valueOf(value.toString()), this);
+            return getException(defaultCode, String.valueOf(value), this);
         }
     }
 
