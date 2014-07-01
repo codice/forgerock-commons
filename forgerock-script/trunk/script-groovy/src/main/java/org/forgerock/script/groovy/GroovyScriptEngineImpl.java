@@ -113,7 +113,7 @@ public class GroovyScriptEngineImpl extends AbstractScriptEngine {
         if (jointCompilationOptions instanceof Map) {
             config.setJointCompilationOptions((Map<String, Object>) jointCompilationOptions);
         }
-        this.loader = new GroovyClassLoader(getParentLoader(), config, false /* true */);
+        this.loader = new GroovyClassLoader(getParentLoader(), config, true);
         groovyScriptEngine = new GroovyScriptEngine(new ResourceConnector() {
             @Override
             public URLConnection getResourceConnection(String resourceName)
