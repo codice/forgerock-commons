@@ -36,6 +36,7 @@ import javax.script.Bindings;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
+import org.forgerock.json.resource.ResourceException;
 import org.forgerock.script.engine.CompiledScript;
 import org.forgerock.script.engine.Utils;
 import org.forgerock.script.exception.ScriptThrownException;
@@ -303,7 +304,7 @@ public class RhinoScript implements CompiledScript {
             inner.setPrototype(outer);
             inner.setParentScope(null);
 
-            // install require function per unoffoicial commonjs author documentation
+            // install require function per unofficial CommonJS author documentation
             // https://groups.google.com/d/msg/mozilla-rhino/HCMh_lAKiI4/P1MA3sFsNKQJ
             requireBuilder.createRequire(context, inner).install(inner);
 
@@ -313,21 +314,28 @@ public class RhinoScript implements CompiledScript {
         } catch (ScriptException e) {
             throw e;
         } catch (WrappedException e) {
-            // TODO Implement properly
-            if (e.getWrappedException() instanceof NoSuchMethodException) {
-                throw new ScriptThrownException(e.getMessage(), e.getWrappedException());
-            } else if (e.getWrappedException() instanceof Exception) {
-                throw new ScriptThrownException(e.getMessage(), e.getWrappedException());
+            if (e.getWrappedException() instanceof ResourceException) {
+                throw new ScriptThrownException(e.getMessage(), e.sourceName(), e.lineNumber(), e.columnNumber(),
+                        ((ResourceException) e.getWrappedException()).toJsonValue().getObject());
             } else {
-                throw new ScriptThrownException(e.getMessage(), e.getWrappedException());
+                ScriptException exception =
+                        new ScriptThrownException(e.getMessage(), e.sourceName(), e.lineNumber(), e.columnNumber(),
+                                e.getWrappedException());
+                exception.initCause(e.getWrappedException());
+                throw exception;
             }
         } catch (JavaScriptException e) {
             logger.debug("Failed to evaluate {} script.", scriptName, e);
-            throw new ScriptThrownException(e, Converter.convert(e.getValue()));
+            ScriptThrownException exception =
+                    new ScriptThrownException(e.getMessage(), e.sourceName(), e.lineNumber(), e.columnNumber(),
+                            Converter.convert(e.getValue()));
+            exception.initCause(e);
+            throw exception;
         } catch (RhinoException e) {
             logger.debug("Failed to evaluate {} script.", scriptName, e);
             // some other runtime exception encountered
-            final ScriptException exception = new ScriptException(e.getMessage());
+            final ScriptException exception =
+                    new ScriptException(e.getMessage(), e.sourceName(), e.lineNumber(), e.columnNumber());
             exception.initCause(e);
             throw exception;
         } catch (Exception e) {
