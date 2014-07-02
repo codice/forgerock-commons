@@ -262,6 +262,14 @@ div.screen {
     border: thin dashed #ccc;
     margin: 0.25em 0 0.25em 0;
     padding: 0 0.25em 0 0.25em;
+
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+
+    -ms-word-break: break-all;
+        word-break: break-all;
+        word-break: break-word;
 }
 
 .toggle, .tocollapse, .toexpand, .bookcollapse, .bookexpand {
