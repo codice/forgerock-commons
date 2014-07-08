@@ -12,7 +12,7 @@
   Header, with the fields enclosed by brackets [] replaced by your own identifying
   information: "Portions Copyrighted [year] [name of copyright owner]".
 
-  Copyright 2012 ForgeRock AS.
+  Copyright 2012-2014 ForgeRock AS.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -33,9 +33,9 @@
         <url>https://bugster.forgerock.org/jira/browse/CREST</url>
     </issueManagement>
     <scm>
-        <url>https://svn.forgerock.org/commons/forgerock-rest/tags/2.0.2</url>
-        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-rest/tags/2.0.2</connection>
-        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-rest/tags/2.0.2</developerConnection>
+        <url>https://svn.forgerock.org/commons/forgerock-rest/branches/2.0.x</url>
+        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-rest/branches/2.0.x</connection>
+        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-rest/branches/2.0.x</developerConnection>
     </scm>
     <ciManagement>
         <system>jenkins</system>
