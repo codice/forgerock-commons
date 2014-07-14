@@ -1828,9 +1828,10 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                                 + "-chunked.target.db"));
 */
 
+                final String base = FilenameUtils.getBaseName(getDocumentSrcName());
                 final String chunkBaseDir = FilenameUtils
                         .separatorsToUnix(getDocbkxOutputDirectory().getPath())
-                        + "/html/" + docName + "/index/";
+                        + "/html/" + docName + "/" + base + "/";
                 cfg.add(element(name("chunkBaseDir"), chunkBaseDir));
 
                 executeMojo(
@@ -1871,9 +1872,10 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
 
                 cfg.add(element(name("includes"), docName + "/" + getDocumentSrcName()));
 
+                final String base = FilenameUtils.getBaseName(getDocumentSrcName());
                 final String chunkBaseDir = FilenameUtils
                         .separatorsToUnix(getDocbkxOutputDirectory().getPath())
-                        + "/html/" + docName + "/index/";
+                        + "/html/" + docName + "/" + base + "/";
                 cfg.add(element(name("chunkBaseDir"), chunkBaseDir));
 
                 cfg.add(element(name("manifest"),
