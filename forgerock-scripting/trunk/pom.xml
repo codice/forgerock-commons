@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    /*
+    * The contents of this file are subject to the terms of the Common Development and
+    * Distribution License (the License). You may not use this file except in compliance with the
+    * License.
+    *
+    * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+    * specific language governing permission and limitations under the License.
+    *
+    * When distributing Covered Software, include this CDDL Header Notice in each file and include
+    * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+    * Header, with the fields enclosed by brackets [] replaced by your own identifying
+    * information: "Portions copyright [year] [name of copyright owner]".
+    *
+    * Copyright 2014 ForgeRock AS.
+    */
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.forgerock</groupId>
+        <artifactId>forgerock-parent</artifactId>
+        <version>1.2.1</version>
+    </parent>
+    <groupId>org.forgerock.commons</groupId>
+    <artifactId>forgerock-scripting</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>ForgeRock Scripting Parent</name>
+    <description>Intended to be the location for provision of JSR223 scripting support and an HTTP/REST client.
+    </description>
+    <inceptionYear>2014</inceptionYear>
+    <url>http://www.forgerock.org</url>
+    <licenses>
+        <license>
+            <name>CDDL-1.0</name>
+            <url>http://www.opensource.org/licenses/CDDL-1.0</url>
+            <comments>Common Development and Distribution License (CDDL) 1.0.
+                This license applies to OpenIDM source code as indicated in the
+                source code.
+            </comments>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-scripting/trunk</connection>
+        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-scripting/trunk</developerConnection>
+        <url>http://sources.forgerock.org/browse/commons/forgerock-scripting/trunk</url>
+    </scm>
+    <repositories>
+        <repository>
+            <id>forgerock-staging-repository</id>
+            <name>ForgeRock Release Repository</name>
+            <url>http://maven.forgerock.org/repo/releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>forgerock-snapshots-repository</id>
+            <name>ForgeRock Snapshot Repository</name>
+            <url>http://maven.forgerock.org/repo/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
+</project>
