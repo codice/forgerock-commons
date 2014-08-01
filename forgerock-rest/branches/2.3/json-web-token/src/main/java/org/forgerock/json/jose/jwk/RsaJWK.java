@@ -450,7 +450,7 @@ public class RsaJWK extends JWK {
             BigInteger publicExponent = new BigInteger(Base64url.decode(getPublicExponent()));
             BigInteger p = new BigInteger(Base64url.decode(getPrimeP()));
             BigInteger q = new BigInteger(Base64url.decode(getPrimeQ()));
-            BigInteger dp = new BigInteger(Base64url.decode(getCRTCoefficient()));
+            BigInteger dp = new BigInteger(Base64url.decode(getPrimePExponent()));
             BigInteger dq = new BigInteger(Base64url.decode(getPrimeQExponent()));
             BigInteger qi = new BigInteger(Base64url.decode(getCRTCoefficient()));
 
