@@ -35,7 +35,7 @@ import org.forgerock.util.Reject;
  * <em>minor</em> version numbers than the supported client version (i.e., it is assumed that a version translator for
  * client version 2.1 can also translate requests from a 2.0 client).
  *
- * @since 3.0.0
+ * @since 2.4.0
  */
 public final class ResourceAPIVersionTranslationAdapter implements RequestHandler {
 
