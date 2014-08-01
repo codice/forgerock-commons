@@ -77,11 +77,25 @@ public class HmacSigningHandler implements SigningHandler {
     }
 
     /**
-     * {@inheritDoc}
+     * Verifies that the given signature is valid for the given data.
+     * <p>
+     * Uses the Java Cryptographic algorithm defined by the JwsAlgorithm and private key to create a new signature
+     * of the data to compare against the given signature to see if they are identical.
+     *
+     * This implementation avoids timing attacks by enforcing checking of each element of the
+     * array against one another. We do not rely on Arrays.equal or other methods which
+     * may return early upon discovering a mistake.
+     *
+     * @param algorithm The JwsAlgorithm defining the JavaCryptographic algorithm.
+     * @param privateKey The private key.
+     * @param data The data that was signed.
+     * @param signature The signature of the data.
+     * @return <code>true</code> if the signature is a valid signature of the data.
      */
     @Override
     public boolean verify(JwsAlgorithm algorithm, byte[] data, byte[] signature) {
         byte[] signed = signWithHMAC(algorithm.getAlgorithm(), sharedSecret, data);
-        return Arrays.equals(signed, signature);
+
+        return MessageDigest.isEqual(signed, signature);
     }
 }

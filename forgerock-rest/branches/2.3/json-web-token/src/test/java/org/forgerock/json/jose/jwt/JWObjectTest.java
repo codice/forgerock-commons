@@ -199,6 +199,7 @@ public class JWObjectTest {
         String jwString = jwObject.toString();
 
         //Then
-        assertEquals(jwString, "{ \"KEY2\": \"VALUE2\", \"KEY1\": \"VALUE1\" }");
+        assertTrue(jwString.contains("\"KEY2\": \"VALUE2\""));
+        assertTrue(jwString.contains("\"KEY1\": \"VALUE1\""));
     }
 }
