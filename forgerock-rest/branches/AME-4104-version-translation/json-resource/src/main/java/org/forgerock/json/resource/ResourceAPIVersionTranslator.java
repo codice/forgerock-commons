@@ -21,7 +21,7 @@ import org.forgerock.json.fluent.JsonValue;
 /**
  * Interface for translations between different resource API versions of requests and responses.
  *
- * @since 3.0.0
+ * @since 2.4.0
  */
 public interface ResourceAPIVersionTranslator {
 

@@ -23,7 +23,7 @@ import org.forgerock.util.Reject;
  * Provides default implementations of version translation methods that simply return the original values without any
  * translation. Sub-classes can override particular parts of the translation process.
  *
- * @since 3.0.0
+ * @since 2.4.0
  */
 public abstract class AbstractResourceAPIVersionTranslator implements ResourceAPIVersionTranslator {
     private final Version supportedClientVersion;
