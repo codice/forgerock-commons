@@ -37,7 +37,7 @@ import org.forgerock.util.Reject;
  *
  * @since 2.4.0
  */
-public final class ResourceAPIVersionTranslationAdapter implements RequestHandler {
+final class ResourceAPIVersionTranslationAdapter implements RequestHandler {
 
     private final RequestHandler delegate;
     private final ResourceAPIVersionTranslator translator;

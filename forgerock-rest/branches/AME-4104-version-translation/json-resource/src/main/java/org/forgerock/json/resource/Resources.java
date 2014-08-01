@@ -562,6 +562,22 @@ public final class Resources {
     }
 
     /**
+     * Returns a new request handler which will forward requests on to the provided collection resource provider, and
+     * will translate requests and responses to/from a different version of the collection provider API. Incoming
+     * requests which are not appropriate from a resource collection or resource instance, or which are for a version
+     * of the API that cannot be translated, will result in a bad request error being returned to the client.
+     *
+     * @param provider The collection resource provider.
+     * @param translator The resource API version translator to use to convert requests/responses.
+     * @return A new request handler which will forward requests on to the provided collection resource provider and
+     *      convert requests/responses between different API versions.
+     */
+    public static RequestHandler newTranslatedCollection(final CollectionResourceProvider provider,
+                                                         final ResourceAPIVersionTranslator translator) {
+        return new ResourceAPIVersionTranslationAdapter(newCollection(provider), translator);
+    }
+
+    /**
      * Creates a new connection to a {@link RequestHandler}.
      *
      * @param handler
@@ -603,6 +619,23 @@ public final class Resources {
      */
     public static RequestHandler newSingleton(final SingletonResourceProvider provider) {
         return new SingletonHandler(provider);
+    }
+
+    /**
+     * Returns a new request handler which will forward requests on to the provided singleton resource provider and
+     * that will convert requests/responses for different versions of the resource API. Incoming requests which are not
+     * appropriate for a singleton resource (e.g. query), or which cannot be translated by the API version translator,
+     * will result in a bad request error being returned to the client.
+     *
+     * @param provider
+     *            The singleton resource provider.
+     * @param translator The resource API version translator to use to convert requests/responses.
+     * @return A new request handler which will forward requests on to the
+     *         provided singleton resource provider.
+     */
+    public static RequestHandler newTranslatedSingleton(final SingletonResourceProvider provider,
+                                                        final ResourceAPIVersionTranslator translator) {
+        return new ResourceAPIVersionTranslationAdapter(newSingleton(provider), translator);
     }
 
     /**
