@@ -31,6 +31,8 @@ import javax.security.auth.message.module.ServerAuthModule;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.forgerock.jaspi.runtime.AuthStatusUtils.asString;
+
 /**
  * Encapsulates ServerAuthModules that are used to validate service requests received from clients, and to secure any
  * response returned for those requests.
@@ -157,7 +159,13 @@ public abstract class JaspiServerAuthContext<T extends ServerAuthModule> impleme
         AuthStatus authStatus = null;
         // validate session module
         if (sessionAuthModule != null) {
-            authStatus = sessionAuthModule.validateRequest(messageInfo, clientSubject, serviceSubject);
+            try {
+                authStatus = sessionAuthModule.validateRequest(messageInfo, clientSubject, serviceSubject);
+            } catch (AuthException e) {
+                LOGGER.debug("Auditing authentication result");
+                contextHandler.audit(messageInfo, authStatus);
+                throw e;
+            }
 
             if (AuthStatus.SUCCESS.equals(authStatus)) {
                 // The module has successfully authenticated the client.
@@ -181,21 +189,27 @@ public abstract class JaspiServerAuthContext<T extends ServerAuthModule> impleme
                         + "client");
                 return authStatus;
             }  else {
-                LOGGER.error("Invalid AuthStatus returned from validateRequest, " + authStatus.toString());
+                LOGGER.error("Invalid AuthStatus returned from validateRequest, " + asString(authStatus));
                 throw new JaspiAuthException("Invalid AuthStatus returned from validateRequest, "
-                        + authStatus.toString());
+                        + asString(authStatus));
             }
         }
 
         try {
-            authStatus = validateRequest(authModules, messageInfo, clientSubject, serviceSubject);
+            try {
+                authStatus = validateRequest(authModules, messageInfo, clientSubject, serviceSubject);
+            } catch (AuthException e) {
+                LOGGER.debug("Auditing authentication result");
+                contextHandler.audit(messageInfo, authStatus);
+                throw e;
+            }
             if (authStatus == null || AuthStatus.FAILURE.equals(authStatus)) {
                 final AuthStatus exceptionAuthStatus = authStatus;
                 // Setting authStatus to null so auditing does not happen. As this exception is a configuration issue.
                 authStatus = null;
-                LOGGER.error("Invalid AuthStatus returned from validateRequest, " + exceptionAuthStatus);
+                LOGGER.error("Invalid AuthStatus returned from validateRequest, " + asString(exceptionAuthStatus));
                 throw new JaspiAuthException("Invalid AuthStatus returned from validateRequest, "
-                        + exceptionAuthStatus);
+                        + asString(exceptionAuthStatus));
             }
         } finally {
             // Should not audit if the authentication process hasn't yet finished
@@ -297,9 +311,9 @@ public abstract class JaspiServerAuthContext<T extends ServerAuthModule> impleme
 
         AuthStatus authStatus = secureResponse(authModules, messageInfo, serviceSubject);
         if (AuthStatus.SUCCESS.equals(authStatus) || AuthStatus.FAILURE.equals(authStatus)) {
-            LOGGER.error("Invalid AuthStatus returned from validateRequest, " + authStatus.toString());
+            LOGGER.error("Invalid AuthStatus returned from validateRequest, " + asString(authStatus));
             throw new JaspiAuthException("Invalid AuthStatus returned from validateRequest, "
-                    + authStatus.toString());
+                    + asString(authStatus));
         }
 
         /*
