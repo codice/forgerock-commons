@@ -8,11 +8,11 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2013 ForgeRock AS
+ *     Copyright 2013-2014 ForgeRock AS
  *
  */
 
-package org.forgerock.doc.maven;
+package org.forgerock.doc.maven.utils;
 
 import org.apache.commons.io.DirectoryWalker;
 import org.apache.commons.io.FileUtils;
@@ -28,11 +28,12 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * Update XML files, transforming &lt;imagedata> elements to make sure they use
+ * Update XML files, transforming &lt;imagedata&gt; elements to make sure they use
  * {@code scalefit="1"}, {@code width="100%"}, and {@code contentdepth="100%"}
  * attributes.
  */
@@ -46,8 +47,10 @@ public class ImageDataTransformer extends DirectoryWalker<File> {
      * The files are updated in place.
      *
      * <p>
+     *
      * The following example shows how this might be used in your code with
      * tools from Apache Commons.
+     *
      * <pre>
      *     File xmlSourceDirectory = new File("/path/to/xml/files/");
      *
@@ -73,18 +76,19 @@ public class ImageDataTransformer extends DirectoryWalker<File> {
         try {
             this.transformer = getTransformer();
         } catch (IOException ie) {
-            System.err.println(ie.getStackTrace());
+            System.err.println(Arrays.toString(ie.getStackTrace()));
             System.exit(1);
         } catch (TransformerConfigurationException tce) {
-            System.err.println(tce.getStackTrace());
+            System.err.println(Arrays.toString(tce.getStackTrace()));
             System.exit(1);
         }
     }
 
     private Transformer transformer;
-    private final String imageDataXSLT = "/xslt/imagedata.xsl";
+
     private Transformer getTransformer() throws IOException, TransformerConfigurationException {
         TransformerFactory factory = TransformerFactory.newInstance();
+        final String imageDataXSLT = "/xslt/imagedata.xsl";
         Source xslt = new StreamSource(getClass().getResource(imageDataXSLT).openStream());
         return factory.newTransformer(xslt);
     }
@@ -117,7 +121,9 @@ public class ImageDataTransformer extends DirectoryWalker<File> {
      *             Something went wrong changing a file's content.
      */
     @Override
-    protected final void handleFile(final File file, final int depth, final Collection<File> results)
+    protected final void handleFile(final File file,
+                                    final int depth,
+                                    final Collection<File> results)
             throws IOException {
         if (file.isFile()) {
             try {
@@ -129,8 +135,7 @@ public class ImageDataTransformer extends DirectoryWalker<File> {
                 FileUtils.moveFile(tmpFile, file);
                 results.add(file);
             } catch (TransformerException te) {
-                throw new IOException("Failed to transform " + file.getPath()
-                        + ": " + te.getStackTrace());
+                throw new IOException(te.getMessageAndLocation(), te);
             }
         }
     }

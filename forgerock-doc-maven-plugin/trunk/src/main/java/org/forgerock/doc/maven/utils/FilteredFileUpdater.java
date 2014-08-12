@@ -8,11 +8,11 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2012 ForgeRock AS
+ *     Copyright 2012-2014 ForgeRock AS
  *
  */
 
-package org.forgerock.doc.maven;
+package org.forgerock.doc.maven.utils;
 
 import java.io.File;
 import java.io.FileFilter;

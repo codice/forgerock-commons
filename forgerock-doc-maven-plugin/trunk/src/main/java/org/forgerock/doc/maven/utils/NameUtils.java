@@ -8,30 +8,34 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2012-2013 ForgeRock AS
+ *     Copyright 2012-2014 ForgeRock AS
  *
  */
 
-package org.forgerock.doc.maven;
+package org.forgerock.doc.maven.utils;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Utility methods to work with documents.
  */
-public final class DocUtils {
+public final class NameUtils {
     /**
      * Pattern to validate the document names.
-     * <p/>
-     * <p> <br>Valid names:</p>
+     *
+     * <p>Valid names:</p>
      * <ul>
      *     <li>guide</li>
      *     <li>admin-quide</li>
@@ -47,8 +51,8 @@ public final class DocUtils {
      *     <li>OpenTEST-10.1.0-Xpress2-admin-guide</li>
      *     <li>db2-connector-1.1.0.0-SNAPSHOT</li>
      * </ul>
-     * <p/>
-     * <p> <br>Invalid names:</p>
+     *
+     * <p>Invalid names:</p>
      * <ul>
      *     <li>guide.</li>
      *     <li>guide-1</li>
@@ -63,6 +67,7 @@ public final class DocUtils {
      * Pattern to find version sting.
      */
     private static final Pattern VERSION_PATTERN = Pattern.compile("(-[0-9].[0-9.]*[0-9])");
+
     /**
      * Rename document to reflect project and document name. For example,
      * index.pdf could be renamed OpenAM-Admin-Guide.pdf.
@@ -196,8 +201,35 @@ public final class DocUtils {
     }
 
     /**
+     * Rename a single built document.
+     * For example, rename {@code index.pdf} to {@code OpenAM-Admin-Guide.pdf}.
+     *
+     * @param builtDocument File to rename, such as {@code index.pdf}.
+     * @param docName       Simple document name such as {@code admin-guide}.
+     * @param projectName   Project name, such as {@code OpenAM}.
+     * @throws MojoExecutionException Something went wrong renaming the file.
+     */
+    public static void renameDocument(final File builtDocument,
+                                            final String docName,
+                                            final String projectName)
+            throws MojoExecutionException {
+
+        String ext = FilenameUtils.getExtension(builtDocument.getName());
+        String newName = builtDocument.getParent() + File.separator
+                + renameDoc(projectName, docName, ext);
+        try {
+            File newFile = new File(newName);
+            if (!newFile.exists()) {
+                FileUtils.moveFile(builtDocument, newFile);
+            }
+        } catch (IOException e) {
+            throw new MojoExecutionException("Failed to rename " + builtDocument);
+        }
+    }
+
+    /**
      * Not used.
      */
-    private DocUtils() {
+    private NameUtils() {
     }
 }

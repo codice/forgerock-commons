@@ -8,18 +8,12 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2012-2014 ForgeRock AS
+ *     Copyright 2014 ForgeRock AS
  *
  */
 
 /**
- * Provides the implementation for building ForgeRock core documentation from <a
- * href="http://www.docbook.org/tdg51/en/html/docbook.html">DocBook XML</a>
- * using <a href="http://code.google.com/p/docbkx-tools/">docbkx-tools</a>.
- *
- * <p>
- *
- * See the plugin README.md for more information
- * and example specifications for adding the plugin to your Maven project.
+ * Classes for preparing the release documents.
  */
-package org.forgerock.doc.maven;
+
+package org.forgerock.doc.maven.release;
