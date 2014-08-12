@@ -5,15 +5,41 @@ Latest release is 2.1.3. These are draft release notes.
 
 # ForgeRock Documentation Tools 3.0.0 Release Notes
 
-ForgeRock Documentation Tools is a catch all for the doc build plugin,
-sites where we post documentation, and the documentation about
-documentation. The link to the online issue tracker is
+ForgeRock Documentation Tools is a catch all for
+the doc Maven plugin,
+default branding and common content,
+sites where we post documentation,
+and the documentation about documentation.
+
+The link to the online issue tracker is
 <https://bugster.forgerock.org/jira/browse/DOCS>.
+
+
+## Compatibility
+
+The fix DOCS-108 is a major refactoring of the doc Maven plugin.
+
+As a result of the refactoring, the plugin now has only three goals:
+
+*   A `pre-site` phase `build` goal to generate output
+*   A `site` phase `site` goal to copy documents to a site layout
+*   A `site` phase `release` goal to copy documents to a release layout
+
+All configuration elements can be used in the top-level plugin configuration,
+rather than the per-execution configurations.
+
+These changes mean that you must update your POM in order to use this version.
+See the README for this version for details.
 
 
 ## What's New
 
-TODO
+**DOCS-108: Reconsider forgerock-doc-maven-plugin architecture**
+
+The fix for this issue is a major refactoring of the doc Maven plugin,
+and a simplification of the plugin configuration model.
+
+The new architecture is described in the Design document.
 
 
 ## Fixes

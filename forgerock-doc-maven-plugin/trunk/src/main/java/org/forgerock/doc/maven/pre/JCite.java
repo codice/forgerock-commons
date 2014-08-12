@@ -8,70 +8,92 @@
  * information:
  *     Portions Copyright [yyyy] [name of copyright owner]
  *
- *     Copyright 2013 ForgeRock AS
+ *     Copyright 2013-2014 ForgeRock AS
  *
  */
 
-package org.forgerock.doc.maven;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.util.List;
+package org.forgerock.doc.maven.pre;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.DirectoryFileFilter;
-import org.apache.commons.io.filefilter.FileFileFilter;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.forgerock.doc.maven.AbstractDocbkxMojo;
+import org.forgerock.doc.maven.utils.FilteredFileCopier;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
+import java.io.File;
+import java.io.IOException;
+
 /**
- * Implementation using <a href="http://arrenbrecht.ch/jcite/">JCite</a> to cite
- * Java code in DocBook XML. This Mojo generates source including the citations.
- * For example, if your DocBook source file includes the following
- * &lt;programlisting&gt;:
+ * Use <a href="http://arrenbrecht.ch/jcite/">JCite</a> to quote Java code.
+ *
+ * <p>
+ *
+ * This class generates source including the citations.
+ * For example, if your DocBook source file includes
+ * the following &lt;programlisting&gt;:
  *
  * <pre>
  * &lt;programlisting language=&quot;java&quot;
  * &gt;[jcp:org.forgerock.doc.jcite.test.Test:--- mainMethod]&lt;/programlisting&gt;
  * </pre>
  *
- * Then class replaces the citation with the code in between // --- mainMethod
- * comments, suitable for inclusion in XML, and places the new file in the
- * generated sources directory for further processing.
+ * <p>
  *
- * @Checkstyle:ignoreFor 2
- * @goal jcite
- * @phase pre-site
+ * Then this class replaces the citation with the code
+ * in between {@code // --- mainMethod} comments,
+ * suitable for inclusion in XML,
+ * and leaves the new file with the modifiable copy of the sources
+ * for further processing.
  */
-public class JCiteBuildMojo extends AbstractBuildMojo {
+public class JCite {
 
     /**
-     * {@inheritDoc}
+     * The Mojo that holds configuration and related methods.
      */
-    @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
-        // The Executor is what actually calls other plugins.
-        Executor exec = new Executor();
+    private AbstractDocbkxMojo m;
 
-        getLog().info("Running JCite on DocBook XML sources...");
-        exec.runJCite();
+    /**
+     * Constructor setting the Mojo that holds the configuration.
+     *
+     * @param mojo The Mojo that holds the configuration.
+     */
+    public JCite(final AbstractDocbkxMojo mojo) {
+        m = mojo;
+        sourceDir = m.path(m.getDocbkxModifiableSourcesDirectory());
+        tempOutputDirectory = new File(m.getBuildDirectory(), "docbkx-jcite");
+        outputDir = m.path(tempOutputDirectory);
     }
 
+    // JCite the sources in the modifiable copy.
+    private final String sourceDir;
+
+    // JCite to a temporary directory.
+    private final File tempOutputDirectory;
+    private final String outputDir;
+
     /**
-     * When running JCite, the set of source paths where cited Java files are to
-     * be found.
+     * Run JCite on the XML source files.
      *
-     * If source paths are not set, {@code src/main/java} is used.
-     *
-     * @parameter
+     * @throws MojoExecutionException Failed to run JCite.
      */
-    private List<File> sourcePaths;
+    public void execute() throws MojoExecutionException {
+
+        // JCite to a temporary directory...
+        Executor exec = new Executor();
+        exec.runJCite();
+
+        // ...and then overwrite the copy of sources with the new files.
+        try {
+            FilteredFileCopier.copyOthers(
+                    ".xml", m.getDocbkxModifiableSourcesDirectory(), tempOutputDirectory);
+            FileUtils.copyDirectory(tempOutputDirectory, m.getDocbkxModifiableSourcesDirectory());
+            FileUtils.deleteDirectory(tempOutputDirectory);
+        } catch (IOException e) {
+            throw new MojoExecutionException(e.getMessage(), e);
+        }
+    }
 
     /**
      * Enclose methods to run plugins.
@@ -80,24 +102,16 @@ public class JCiteBuildMojo extends AbstractBuildMojo {
 
         /**
          * Run JCite on the DocBook XML source files.
-         * @throws MojoExecutionException
+         *
+         * @throws MojoExecutionException Failed to run JCite.
          */
         void runJCite() throws MojoExecutionException {
 
-            String outputDir = FilenameUtils.separatorsToUnix(
-                    getJCiteOutputDirectory().getPath());
-            String sourceDir = FilenameUtils.separatorsToUnix(
-                    getFilteredDocbkxSourceDirectory().getPath());
-            if (doUseFilteredSources()) {
-                sourceDir = FilenameUtils.separatorsToUnix(
-                        getFilteredDocbkxSourceDirectory().getPath());
-            }
-
             // mojo-executor lacks fluent support for element attributes.
-            // You can hack around this by including attributes in the name
-            // of elements without children. But the hack does not work for
-            // elements with children: SAX barfs on closing tags containing
-            // a bunch of attributes.
+            // You can hack around this by including attributes
+            // in the name of elements without children.
+            // But the hack does not work for elements with children:
+            // SAX barfs on closing tags containing a bunch of attributes.
             Xpp3Dom mkdir = new Xpp3Dom("mkdir");
             mkdir.setAttribute("dir", outputDir);
 
@@ -112,8 +126,8 @@ public class JCiteBuildMojo extends AbstractBuildMojo {
 
             // Might have multiple paths to sources.
             Xpp3Dom sourcepath = new Xpp3Dom("sourcepath");
-            if (sourcePaths != null && !sourcePaths.isEmpty()) {
-                for (File sourcePath : sourcePaths) {
+            if (m.getJCiteSourcePaths() != null && !m.getJCiteSourcePaths().isEmpty()) {
+                for (File sourcePath : m.getJCiteSourcePaths()) {
                     String location = FilenameUtils
                             .separatorsToSystem(sourcePath.getPath());
                     Xpp3Dom pathelement = new Xpp3Dom("pathelement");
@@ -149,28 +163,10 @@ public class JCiteBuildMojo extends AbstractBuildMojo {
                                     // See https://code.google.com/r/markcraig-jcite/.
                                             groupId("org.mcraig"),
                                             artifactId("jcite"),
-                                            version(getJCiteVersion())))),
+                                            version(m.getJCiteVersion())))),
                     goal("run"),
                     configuration,
-                    executionEnvironment(
-                            getProject(),
-                            getSession(),
-                            getPluginManager()));
-
-            // Copy non-XML files to the generated sources directory as well.
-            IOFileFilter nonXMLFilter = FileFilterUtils.notFileFilter(
-                    FileFilterUtils.suffixFileFilter(".xml"));
-            IOFileFilter nonXMLFiles = FileFilterUtils.and(
-                    FileFileFilter.FILE, nonXMLFilter);
-            FileFilter filter = FileFilterUtils.or(
-                    DirectoryFileFilter.DIRECTORY, nonXMLFiles);
-            try {
-                FileUtils.copyDirectory(
-                        new File(sourceDir), new File(outputDir), filter);
-            } catch (IOException ioe) {
-                throw new MojoExecutionException(
-                        "Failed to copy non-XML files.", ioe);
-            }
+                    executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
         }
     }
 }
