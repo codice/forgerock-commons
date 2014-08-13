@@ -79,14 +79,14 @@
     </properties>
 
     <scm>
-        <url>https://svn.forgerock.org/commons/forgerock-auth-filters/trunk</url>
-        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-auth-filters/trunk</connection>
-        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-auth-filters/trunk</developerConnection>
+        <url>https://svn.forgerock.org/commons/forgerock-auth-filters/branches/1.x</url>
+        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-auth-filters/branches/1.x</connection>
+        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-auth-filters/branches/1.x</developerConnection>
     </scm>
 
     <ciManagement>
         <system>jenkins</system>
-        <url>https://builds.forgerock.org/job/Commons%20Auth%20Filters</url>
+        <url>https://builds.forgerock.org/job/Commons%20-%20Auth%20Filters%20-%201.x%20-%20postcommit</url>
         <notifiers>
             <notifier>
                 <type>mail</type>
