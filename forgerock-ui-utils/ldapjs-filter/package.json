@@ -1,0 +1,10 @@
+{
+  "name": "build",
+  "author": "Jake Feasel <jake.feasel@forgerock.com>",
+  "version": "0.0.1",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-svn": "~0.1.1",
+    "grunt-contrib-requirejs": "~0.4.4"
+  }
+}
