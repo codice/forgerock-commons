@@ -17,7 +17,6 @@ package org.forgerock.doc.maven.pre;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
-import org.forgerock.doc.maven.utils.FilteredFileCopier;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 import java.io.File;
@@ -64,9 +63,8 @@ public class Filter {
         Executor exec = new Executor();
         exec.filter();
 
-        // ...and then overwrite the copy of sources with filtered files.
+        // ...and then overwrite the modifiable sources with filtered files.
         try {
-            FilteredFileCopier.copyOthers(".xml", m.getDocbkxModifiableSourcesDirectory(), tempOutputDirectory);
             FileUtils.copyDirectory(tempOutputDirectory, m.getDocbkxModifiableSourcesDirectory());
             FileUtils.deleteDirectory(tempOutputDirectory);
         } catch (IOException e) {
@@ -99,11 +97,15 @@ public class Filter {
                                             element(name("directory"), sourceDirectory),
                                             element(name("filtering"), "true"),
                                             element(name("includes"),
+                                                    element(name("include"), "**/*.json"),
+                                                    element(name("include"), "**/*.txt"),
                                                     element(name("include"), "**/*.xml"))),
                                     element(name("resource"),
                                             element(name("directory"), sourceDirectory),
                                             element(name("filtering"), "false"),
                                             element(name("excludes"),
+                                                    element(name("exclude"), "**/*.json"),
+                                                    element(name("exclude"), "**/*.txt"),
                                                     element(name("exclude"), "**/*.xml"))))),
                     executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
         }
