@@ -88,6 +88,7 @@ public class Html {
             scriptString = scriptString.replace("PROJECT_VERSION", m.getProjectVersion());
             scriptString = scriptString.replace("LATEST_JSON", m.getLatestJson());
             scriptString = scriptString.replace("DOCS_SITE", m.getDocsSite());
+            scriptString = scriptString.replace("EOSL_JSON", m.getEoslJson());
         } else {
             throw new MojoExecutionException(scriptUrl + " was empty");
         }

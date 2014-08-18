@@ -544,6 +544,23 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
+     * URL to JSON object showing EOSL versions for each project.
+     *
+     * @parameter default-value="http://docs.forgerock.org/eosl.php" property="eoslJson"
+     * @required
+     */
+    private String eoslJson;
+
+    /**
+     * Get the URL to JSON object showing EOSL versions for each project.
+     *
+     * @return The URL to the JSON object.
+     */
+    public String getEoslJson() {
+        return eoslJson;
+    }
+
+    /**
      * Location of the EPUB XSL stylesheet customization file,
      * relative to the build directory.
      *
