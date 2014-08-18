@@ -34,6 +34,15 @@ See the README for this version for details.
 
 ## What's New
 
+**DOCS-187: Documentation for legacy versions should not have the report bug footer**
+
+The fix for this relies on a list of EOSL versions.
+If the current version matches a version in the EOSL list,
+then the footer is not shown in the HTML pages.
+
+For the full list of EOSL versions, see the
+[EOSL page at support.forgerock.com](https://support.forgerock.com/entries/24898647-Product-release-and-EOSL-dates).
+
 **DOCS-178: Apply Maven resource filtering to .txt files as well**
 
 The fix for this issue addresses both .txt and also .json files.

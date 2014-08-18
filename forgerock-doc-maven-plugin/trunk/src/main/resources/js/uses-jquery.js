@@ -152,6 +152,21 @@ $(document).ready(function () {
         }
     });
 
+    /*
+     * DOCS-187: Documentation for legacy versions should not have the report bug footer
+     *
+     * If the projectName/projectVersion is EOSL, then hide the footer,
+     * which makes it easy to file JIRA issues on this documentation.
+     */
+    jsonUrl = "EOSL_JSON";        // E.g. "http://docs.forgerock.org/eosl.php"
+
+    $.getJSON(jsonUrl, function( data ) {
+        var eoslVersions = data[project];
+
+        if (eoslVersions.indexOf(version) !== -1) { // Matched EOSL version.
+            $("#footer").addClass("nodisplay");
+        }
+    });
 });
 
 /*
