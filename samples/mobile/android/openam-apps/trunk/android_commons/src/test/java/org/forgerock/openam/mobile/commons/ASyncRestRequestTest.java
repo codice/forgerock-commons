@@ -81,6 +81,7 @@ public class ASyncRestRequestTest {
 
         assert(request.getURI().toString().contains(keyEqualsValue));
         assertEquals(request.getFirstHeader(KEY).getValue(), VALUE);
+        assertEquals(request.getHeaders("Accept-API-Version")[0].getValue(), "protocol=1.0, resource=1.0");
         assertEquals(restRequest.getCurrentActionState(), successAction);
     }
 
@@ -111,6 +112,7 @@ public class ASyncRestRequestTest {
         verify(client).execute(request);
 
         assertEquals(request.getFirstHeader(KEY).getValue(), VALUE);
+        assertEquals(request.getHeaders("Accept-API-Version")[0].getValue(), "protocol=1.0, resource=1.0");
         assertEquals(restRequest.getCurrentActionState(), failAction);
     }
 
@@ -150,6 +152,7 @@ public class ASyncRestRequestTest {
         verify(unwrapper).unwrapHttpResponse();
 
         assertEquals(request.getFirstHeader(KEY).getValue(), VALUE);
+        assertEquals(request.getHeaders("Accept-API-Version")[0].getValue(), "protocol=1.0, resource=1.0");
         assertEquals(restRequest.getCurrentActionState(), failAction);
     }
 

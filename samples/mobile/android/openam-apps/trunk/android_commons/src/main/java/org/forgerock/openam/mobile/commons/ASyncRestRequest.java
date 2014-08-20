@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 ForgeRock AS.
+ * Copyright 2013-2014 ForgeRock AS.
  *
  * The contents of this file are subject to the terms of the Common Development and
  * Distribution License (the License). You may not use this file except in compliance with the
@@ -18,13 +18,13 @@ package org.forgerock.openam.mobile.commons;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import org.apache.http.HttpResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -43,6 +43,9 @@ public abstract class ASyncRestRequest<T extends HttpRequestBase> extends AsyncT
     private final Listener<UnwrappedResponse> listener;
     private final ActionType successAction;
     private final ActionType failAction;
+
+    private final String versionHeaderKey = "Accept-API-Version";
+    private final String versionHeaderValue = "protocol=1.0, resource=1.0";
 
     private ActionType action;
 
@@ -68,14 +71,31 @@ public abstract class ASyncRestRequest<T extends HttpRequestBase> extends AsyncT
         this.request = request;
         this.action = failAction; //assume failure
 
+        addHeaders(headers);
+
+        if (params != null) {
+            appendParams(params);
+        }
+    }
+
+    /**
+     * Adds headers to all requests heading out of the HTTP Client. Ensures that we include
+     * version information.
+     */
+    private void addHeaders(HashMap<String, String> headers) {
+        boolean versionAdded = false;
+
         if (headers != null) {
             for (String key : headers.keySet()) {
+                if (key.equalsIgnoreCase(versionHeaderKey)) { //http headers are case-insensitive
+                    versionAdded = true;
+                }
                 request.addHeader(key, headers.get(key));
             }
         }
 
-        if (params != null) {
-            appendParams(params);
+        if (!versionAdded) {
+            request.addHeader(versionHeaderKey, versionHeaderValue); //add default
         }
     }
 

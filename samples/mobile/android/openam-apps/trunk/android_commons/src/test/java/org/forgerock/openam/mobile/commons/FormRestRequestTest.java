@@ -50,6 +50,7 @@ public class FormRestRequestTest {
         String entity = EntityUtils.toString(restRequest.getRequest().getEntity());
 
         assertEquals(entity, keyEqualsValue);
+        assertEquals(request.getHeaders("Accept-API-Version")[0].getValue(), "protocol=1.0, resource=1.0");
     }
 
 }
