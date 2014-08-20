@@ -2,6 +2,7 @@ package org.forgerock.openam.mobile.commons;
 
 import java.io.IOException;
 import java.util.HashMap;
+import junit.framework.Assert;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
@@ -52,6 +53,7 @@ public class JSONRestRequestTest {
         String entity = EntityUtils.toString(restRequest.getRequest().getEntity());
 
         assertEquals(entity, JSON_STRING);
+        Assert.assertEquals(request.getHeaders("Accept-API-Version")[0].getValue(), "protocol=1.0, resource=1.0");
     }
 
     @Test
@@ -64,6 +66,7 @@ public class JSONRestRequestTest {
         String entity = EntityUtils.toString(restRequest.getRequest().getEntity());
 
         assertEquals(entity, EMPTY_JSON_STRING);
+        Assert.assertEquals(request.getHeaders("Accept-API-Version")[0].getValue(), "protocol=1.0, resource=1.0");
     }
 
 }

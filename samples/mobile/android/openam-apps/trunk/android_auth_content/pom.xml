@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.forgerock.openam.mobile</groupId>
-    <artifactId>android-auth-content</artifactId>
+    <artifactId>android_auth_content</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <packaging>jar</packaging>
