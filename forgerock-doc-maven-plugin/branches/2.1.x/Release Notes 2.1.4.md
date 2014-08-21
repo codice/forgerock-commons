@@ -19,7 +19,12 @@ TODO
 
 ## Improvements & New Features
 
-**DOCS-xx: TODO**
+**DOCS-194: Add option to allow merge of generated and docbkx source directories**
+
+You can now use the maven configuration `<overwriteGeneratedSource>true</overwriteGeneratedSource>`
+together the boilerplate goal to allow to copy and overwrites files from docbkxSourceDirectory to docbkxGeneratedSourceDirectory 
+
+The default value is 'false' that does not change the default behaviour.
 
 
 ## Bugs Fixed
