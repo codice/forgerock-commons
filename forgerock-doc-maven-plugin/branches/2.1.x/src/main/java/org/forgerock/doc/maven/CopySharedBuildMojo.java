@@ -34,6 +34,14 @@ import org.twdata.maven.mojoexecutor.MojoExecutor;
 public class CopySharedBuildMojo extends AbstractBuildMojo {
 
     /**
+     * Allow overwrite generated source with project source.
+     *
+     * @parameter default-value="false" property="overwriteGeneratedSource"
+     * @required
+     */
+    private boolean overwriteGeneratedSource = false;
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -61,7 +69,7 @@ public class CopySharedBuildMojo extends AbstractBuildMojo {
 
         // Are there already generated sources? If not, copy sources over.
         final File outputDir = getDocbkxGeneratedSourceDirectory();
-        if (!outputDir.isDirectory()) {
+        if (overwriteGeneratedSource || !outputDir.isDirectory()) {
             final File sourceDir = getDocbkxSourceDirectory();
             try {
                 FileUtils.copyDirectory(sourceDir, outputDir);
