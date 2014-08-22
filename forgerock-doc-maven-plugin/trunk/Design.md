@@ -92,6 +92,7 @@ The final stage copies output to a release directory.
 *  Rename PDFs in release docs to include the version number (`PdfNames`)
 *  Fix favicon links in release HTML (`Favicon`)
 *  Replace CSS in release HTML (`Css`)
+*  Replace robots meta tag in release HTML (`Robots`)
 *  Zip release docs (`Zip`)
 
 This stage is performed during the `site` phase, `release` goal. (`ReleaseMojo`)
