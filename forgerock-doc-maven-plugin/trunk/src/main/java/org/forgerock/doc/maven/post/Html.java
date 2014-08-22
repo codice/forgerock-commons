@@ -219,7 +219,8 @@ public class Html {
      *
      * <ul>
      * <li>A DOCTYPE declaration (needed by Internet Explorer to interpret CSS</li>
-     * <li>JavaScript to to call the SyntaxHighlighter brushes</li>
+     * <li>A meta tag for controlling crawling and indexing</li>
+     * <li>JavaScript to call the SyntaxHighlighter brushes</li>
      * <li>A favicon link</li>
      * <li>A paragraph about logging issues with a link to JIRA</li>
      * <li>JavaScript used by Google Analytics</li>
@@ -235,6 +236,11 @@ public class Html {
             String doctype = IOUtils.toString(
                     getClass().getResourceAsStream("/starthtml-doctype.txt"), "UTF-8");
             replacements.put("<html>", doctype);
+
+            // See https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag
+            String robots = "<head>" + System.getProperty("line.separator")
+                    + IOUtils.toString(getClass().getResourceAsStream("/robots.txt"), "UTF-8");
+            replacements.put("<head>", robots);
 
             String favicon = IOUtils.toString(
                     getClass().getResourceAsStream("/endhead-favicon.txt"), "UTF-8");

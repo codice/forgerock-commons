@@ -20,6 +20,7 @@ import org.forgerock.doc.maven.release.Favicon;
 import org.forgerock.doc.maven.release.IndexHtml;
 import org.forgerock.doc.maven.release.Layout;
 import org.forgerock.doc.maven.release.PdfNames;
+import org.forgerock.doc.maven.release.Robots;
 import org.forgerock.doc.maven.release.Zip;
 
 /**
@@ -43,6 +44,7 @@ public class ReleaseMojo extends AbstractDocbkxMojo {
         (new PdfNames(this)).execute();
         (new Favicon(this)).execute();
         (new Css(this)).execute();
+        (new Robots(this)).execute();
         (new Zip(this)).execute();
     }
 }
