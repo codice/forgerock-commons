@@ -159,6 +159,13 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
             throw new MojoExecutionException("Failed to replace CSS.", e);
         }
 
+        getLog().info("Removing robots meta tag...");
+        try {
+            removeRobots(releaseDocDirectory);
+        } catch (IOException e) {
+            throw new MojoExecutionException("Failed to remove robots meta tags.", e);
+        }
+
         getLog().info("Zipping release content if <buildReleaseZip>true</buildReleaseZip>...");
         exec.zip();
     }
@@ -234,6 +241,19 @@ public class ReleaseBuildMojo extends AbstractBuildMojo {
                 FileUtils.copyFile(newCss, oldCss);
             }
         }
+    }
+
+    /**
+     * Remove robots meta tag in release HTML.
+     *
+     * @param directory Directory holding HTML documents.
+     * @throws IOException Could not remove robots meta tags.
+     */
+    final void removeRobots(final String directory) throws IOException {
+        HashMap<String, String> replacements = new HashMap<String, String>();
+        final String robots = IOUtils.toString(getClass().getResourceAsStream("/robots.txt"), "UTF-8");
+        replacements.put(robots, ""); // Replace the tag with an empty string.
+        HTMLUtils.updateHTML(directory, replacements);
     }
 
     /**
