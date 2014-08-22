@@ -29,8 +29,10 @@ The default value is 'false' that does not change the default behaviour.
 
 ## Bugs Fixed
 
-**DOCS-xx: TODO**
+**DOCS-59: Only the draft documents are optimized to appear in Google searches; the final docs need to be SEO too.**
 
+The fix adds a robots meta tag (noindex, nofollow) to site HTML,
+that it then removes from release HTML.
 
 
 ## Known Issues

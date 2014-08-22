@@ -723,6 +723,7 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
      * <ul>
      * <li>A DOCTYPE declaration (needed to get Internet Explorer to interpret
      * CSS correctly</li>
+     * <li>A meta tag for controlling crawling and indexing</li>
      * <li>JavaScript to workaround a long-standing Firefox issue, and the
      * fold/unfold long lines in Screen elements</li>
      * <li>A favicon link</li>
@@ -742,6 +743,11 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
                     getClass().getResourceAsStream("/starthtml-doctype.txt"),
                     "UTF-8");
             replacements.put("<html>", doctype);
+
+            // See https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag
+            String robots = "<head>" + System.getProperty("line.separator")
+                    + IOUtils.toString(getClass().getResourceAsStream("/robots.txt"), "UTF-8");
+            replacements.put("<head>", robots);
 
             String favicon = IOUtils.toString(getClass()
                     .getResourceAsStream("/endhead-favicon.txt"), "UTF-8");
