@@ -337,7 +337,7 @@ abstract class AbstractBuildMojo extends AbstractMojo {
     /**
      * Version of the branding artifact to use.
      *
-     * @parameter default-value="2.1.3" property="brandingVersion"
+     * @parameter default-value="2.1.4-SNAPSHOT" property="brandingVersion"
      * @required
      */
     private String brandingVersion;

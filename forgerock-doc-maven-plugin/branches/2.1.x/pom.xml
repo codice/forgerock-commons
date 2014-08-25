@@ -35,9 +35,9 @@
  <url>http://commons.forgerock.org/forgerock-doc-maven-plugin</url>
 
  <scm>
-  <url>https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/tags/2.1.3</url>
-  <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/tags/2.1.3</connection>
-  <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/tags/2.1.3</developerConnection>
+  <url>https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/branches/2.1.x</url>
+  <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/branches/2.1.x</connection>
+  <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-plugin/branches/2.1.x</developerConnection>
  </scm>
 
  <licenses>
