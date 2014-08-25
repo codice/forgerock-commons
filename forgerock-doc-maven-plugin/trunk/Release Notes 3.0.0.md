@@ -17,7 +17,9 @@ The link to the online issue tracker is
 
 ## Compatibility
 
-The fix DOCS-108 is a major refactoring of the doc Maven plugin.
+**Changes to plugin execution goals**
+
+The fix for DOCS-108 is a major refactoring of the doc Maven plugin.
 
 As a result of the refactoring, the plugin now has only three goals:
 
@@ -31,8 +33,38 @@ rather than the per-execution configurations.
 These changes mean that you must update your POM in order to use this version.
 See the README for this version for details.
 
+**Changes to plugin configuration**
+
+Due to changes in the plugin architecture,
+the fix for DOCS-194 in this release does not provide
+the configuration option `<overwriteGeneratedSource>`,
+but instead provides similar capability through other settings.
+See the explanation below for details.
+
 
 ## What's New
+
+**DOCS-194:  Add option to allow merge of generated and docbkx source directories**
+
+This release introduces a boolean option,
+`<overwriteProjectFilesWithSharedContent>` (Default: `true`),
+that allows you to prevent shared content from being overwritten
+with shared content from the common content artifact.
+To avoid overwriting existing files with shared content,
+set the option to `false`.
+
+One of the first things the plugin does when preparing DocBook sources
+is to make a working copy of the files that is separate from the sources
+in the `<docbkxModifiableSourcesDirectory>`.
+This allows the plugin to make changes to the files as necessary.
+
+If for some reason you must provide the copy yourself,
+and your copy must be in the `<docbkxModifiableSourcesDirectory>`,
+then to prevent the plugin from replacing the copy,
+set `<overwriteModifiableCopy>` to `false`.
+The plugin with then pre-process the copy, however,
+so expect the files in your modifiable copy to be changed.
+
 
 **DOCS-187: Documentation for legacy versions should not have the report bug footer**
 
