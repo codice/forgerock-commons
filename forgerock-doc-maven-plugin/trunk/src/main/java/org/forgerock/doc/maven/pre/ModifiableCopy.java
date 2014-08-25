@@ -52,7 +52,9 @@ public class ModifiableCopy {
         final File outputDir = m.getDocbkxModifiableSourcesDirectory();
 
         try {
-            FileUtils.copyDirectory(sourceDir, outputDir);
+            if (m.doOverwriteModifiableCopy()) {
+                FileUtils.copyDirectory(sourceDir, outputDir);
+            }
         } catch (IOException e) {
             throw new MojoExecutionException("Failed to copy sources", e);
         }

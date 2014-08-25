@@ -14,9 +14,13 @@
 
 package org.forgerock.doc.maven.pre;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Augment the modifiable copy DocBook XML sources with common content.
@@ -45,7 +49,49 @@ public class CommonContent {
      */
     public void execute() throws MojoExecutionException {
         Executor executor = new Executor();
-        executor.unpack();
+
+        // As shown in https://github.com/markcraig/unpack-test
+        // the maven-dependency-plugin overWrite* options
+        // do not prevent existing files from being overwritten.
+
+        File sharedContentUnpackDir;
+
+        if (m.doOverwriteProjectFilesWithSharedContent()) { // Do overwrite
+            sharedContentUnpackDir = m.getDocbkxModifiableSourcesDirectory();
+            executor.unpack(m.path(sharedContentUnpackDir));
+        } else {                                            // Do not overwrite
+            try {
+                // Unpack without overwriting.
+                sharedContentUnpackDir = createTemporaryDirectory();
+                executor.unpack(m.path(sharedContentUnpackDir));
+
+                // Now overwrite what was unpacked with the existing files,
+                // and then replace our copy with the updated unpacked files.
+                FileUtils.copyDirectory(m.getDocbkxModifiableSourcesDirectory(), sharedContentUnpackDir);
+                FileUtils.deleteDirectory(m.getDocbkxModifiableSourcesDirectory());
+                FileUtils.moveDirectory(sharedContentUnpackDir, m.getDocbkxModifiableSourcesDirectory());
+            } catch (IOException e) {
+                throw new MojoExecutionException("Failed to unpack common content.", e);
+            }
+        }
+    }
+
+    /**
+     * Try to create a writable temporary directory with a unique name.
+     *
+     * @return The temporary directory.
+     * @throws IOException Failed to create the directory.
+     */
+    private File createTemporaryDirectory() throws IOException {
+        File temporaryDirectory = new File(
+                m.getBuildDirectory(), Long.toString(System.nanoTime()));
+
+        if (!temporaryDirectory.mkdir() && temporaryDirectory.canWrite()) {
+            throw new IOException("Failed to create temporary directory: "
+                    + temporaryDirectory.getAbsolutePath());
+        }
+
+        return temporaryDirectory;
     }
 
     /**
@@ -56,10 +102,10 @@ public class CommonContent {
         /**
          * Unpack common content from the common content artifact.
          *
+         * @param outputDir Where to unpack common content
          * @throws MojoExecutionException Failed to unpack common content.
          */
-        public void unpack() throws MojoExecutionException {
-            final String outputDir = m.path(m.getDocbkxModifiableSourcesDirectory());
+        public void unpack(final String outputDir) throws MojoExecutionException {
 
             executeMojo(
                     plugin(

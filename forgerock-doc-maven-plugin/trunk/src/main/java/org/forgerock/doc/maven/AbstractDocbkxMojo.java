@@ -999,6 +999,66 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
+     * Overwrite the copy of DocBook sources if it exists.
+     *
+     * @parameter default-value="true" property="overwriteModifiableCopy"
+     * @required
+     */
+    private boolean overwriteModifiableCopy;
+
+    /**
+     * Whether to overwrite the copy of DocBook sources if it exists.
+     *
+     * <p>
+     *
+     * One of the first things the plugin does when preparing DocBook sources
+     * is to make a working copy of the files that is separate from the sources.
+     * This allows the plugin to make changes to the files as necessary.
+     *
+     * <p>
+     *
+     * If for some reason you must provide the copy yourself,
+     * and your copy must be in the {@code docbkxModifiableSourcesDirectory},
+     * then you can set this to {@code false}
+     * to prevent the plugin from replacing the copy.
+     * The plugin with then pre-process the copy, however,
+     * so expect the files in the modifiable copy to be changed.
+     *
+     * <p>
+     *
+     * Default: true
+     *
+     * @return Whether to overwrite the copy of DocBook sources if it exists.
+     */
+    public boolean doOverwriteModifiableCopy() {
+        return overwriteModifiableCopy;
+    }
+
+    /**
+     * Overwrite project files with shared content.
+     *
+     * @parameter default-value="true" property="overwriteProjectFilesWithSharedContent"
+     * @required
+     */
+    private boolean overwriteProjectFilesWithSharedContent;
+
+    /**
+     * Whether to overwrite project files with shared content.
+     *
+     * <p>
+     *
+     * Default: true
+     *
+     * @return Whether to overwrite project files with shared content.
+     */
+    public boolean doOverwriteProjectFilesWithSharedContent() {
+        return overwriteProjectFilesWithSharedContent;
+    }
+
+    /**
+     *
+     */
+    /**
      * Get path name in UNIX format.
      *
      * @param file Path to return in UNIX format.
