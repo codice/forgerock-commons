@@ -61,33 +61,17 @@
  <para>
   Command output is sometimes formatted for narrower, more readable output
   even though formatting parameters are not shown in the command.
-  In the following example, the query string parameter
-  <literal>_prettyPrint=true</literal> is omitted.
+  In the following example,
+  the query string parameter <literal>_prettyPrint=true</literal> is omitted
+  and some of the output is replaced with an ellipsis (<literal>...</literal>).
  </para>
 
  <screen>
 $ <userinput>curl https://bjensen:hifalutin@opendj.example.com:8443/users/newuser</userinput>
 <computeroutput>{
   "_rev" : "000000005b337348",
-  "schemas" : [ "urn:scim:schemas:core:1.0" ],
-  "contactInformation" : {
-    "telephoneNumber" : "+1 408 555 1212",
-    "emailAddress" : "newuser@example.com"
-  },
   "_id" : "newuser",
-  "name" : {
-    "familyName" : "New",
-    "givenName" : "User"
-  },
-  "userName" : "newuser@example.com",
-  "displayName" : "New User",
-  "meta" : {
-    "created" : "2014-06-03T09:58:27Z"
-  },
-  "manager" : [ {
-    "_id" : "kvaughan",
-    "displayName" : "Kirsten Vaughan"
-  } ]
+  ...
 }</computeroutput>
  </screen>
 
