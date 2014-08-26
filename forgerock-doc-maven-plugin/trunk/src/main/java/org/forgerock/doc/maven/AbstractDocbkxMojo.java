@@ -591,7 +591,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
-     * Do not process these formats. Choices include: epub, html, man, pdf, rtf.
+     * Do not process these default formats.
+     * Choices include: epub, html, man, pdf, webhelp.
      * Do not set both excludes and includes in the same configuration.
      *
      * @parameter
@@ -599,17 +600,17 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     private List<String> excludes;
 
     /**
-     * Do not process these formats.
+     * Do not process these default formats.
      *
      * <p>
      *
-     * Choices include: epub, html, man, pdf, rtf, webhelp.
+     * Choices include: epub, html, man, pdf, webhelp.
      *
      * <p>
      *
      * Do not set both excludes and includes in the same configuration.
      *
-     * @return The list of formats to exclude.
+     * @return The list of default formats to exclude.
      */
     public List<String> getExcludes() {
         return excludes;
@@ -692,7 +693,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * <p>
      *
      * If no defaults are specified, then the default list of formats includes
-     * epub, html, man, pdf, rtf, webhelp.
+     * epub, html, man, pdf, webhelp.
+     *
+     * <p>
+     *
+     * The rtf format is also supported but not in the default list.
      *
      * @param defaults (Restricted) list of formats to consider.
      *                 Set this to limit the list of output formats.
@@ -707,7 +712,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
         if (defaults.length != 0) {                  // Restrict list.
             formats.addAll(Arrays.asList(defaults));
         } else {
-            formats.addAll(Arrays.asList("epub", "html", "man", "pdf", "rtf", "webhelp"));
+            formats.addAll(Arrays.asList("epub", "html", "man", "pdf", "webhelp"));
         }
 
         ArrayList<String> excludes = new ArrayList<String>();
@@ -724,11 +729,13 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
         if (!excludes.isEmpty() && !include.equals("")) {
             throw new MojoExecutionException("<excludes> and <include> are mutually exclusive.");
 
-        } else if (!excludes.isEmpty()) {            // Exclude formats.
+        } else if (!excludes.isEmpty()) {
+            // Exclude formats.
             for (String format : excludes) {
                 formats.remove(format);
             }
-        } else if (formats.contains(getInclude())) { // Include one format.
+        } else if (!include.isEmpty()) {
+            // Include one format.
             formats.clear();
             formats.add(include);
         }

@@ -17,6 +17,11 @@ The link to the online issue tracker is
 
 ## Compatibility
 
+**Changes to default output formats**
+
+With the fix for DOCS-189, RTF is no longer a default format.
+As a result, you should no doubt remove links to in-progress RTF documents.
+
 **Changes to plugin execution goals**
 
 The fix for DOCS-108 is a major refactoring of the doc Maven plugin.
@@ -75,6 +80,7 @@ then the footer is not shown in the HTML pages.
 For the full list of EOSL versions, see the
 [EOSL page at support.forgerock.com](https://support.forgerock.com/entries/24898647-Product-release-and-EOSL-dates).
 
+
 **DOCS-178: Apply Maven resource filtering to .txt files as well**
 
 The fix for this issue addresses both .txt and also .json files.
@@ -90,12 +96,15 @@ The new architecture is described in the Design document.
 
 ## Fixes
 
+**DOCS-189: Discontinue default support for RTF**
+
 **DOCS-179: Issue with Maven HTML builds and images**
 
 **DOCS-59: Only the draft documents are optimized to appear in Google searches; the final docs need to be SEO too.**
 
 The fix adds a robots meta tag (noindex, nofollow) to site HTML,
 that it then removes from release HTML.
+
 
 ## Known Issues
 

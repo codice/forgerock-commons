@@ -245,7 +245,11 @@ The following command generates only PDF output for your single chapter.
 
     mvn -DdocumentSrcName=chap-one.xml -Dinclude=pdf clean pre-site
 
-Formats include `epub`, `html`, `man`, `pdf`, `rtf`, and `webhelp`.
+It is also possible to generate only RTF output using `include`.
+
+    mvn -Dinclude=rtf clean pre-site
+
+Default formats, however, only include `epub`, `html`, `man`, `pdf`, and `webhelp`.
 
 To exclude formats from the build,
 you can use the optional `<excludes>` configuration element.
@@ -256,7 +260,6 @@ The following example excludes all formats but HTML from the build.
       <exclude>epub</exclude>
       <exclude>man</exclude>
       <exclude>pdf</exclude>
-      <exclude>rtf</exclude>
       <exclude>webhelp</exclude>
      </excludes>
 
