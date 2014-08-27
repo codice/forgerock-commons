@@ -243,6 +243,7 @@ div.sidebar-title,
 div.table-title,
 div.toc-title,
 div.variablelist-title {
+    color: #333;
     font-weight: bold;
 }
 
@@ -303,6 +304,12 @@ span.msgorig-title,
 span.msgaud-title,
 span.msgexplan-title {
     font-weight: bold;
+}
+
+span.showlink {
+    color: lightgray;
+    display: none;
+    font-size: smaller;
 }
 
 table.simplelist {
