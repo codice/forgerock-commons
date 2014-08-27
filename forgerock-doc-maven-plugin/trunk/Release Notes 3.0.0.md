@@ -96,6 +96,8 @@ The new architecture is described in the Design document.
 
 ## Fixes
 
+**DOCS-197: Prepending ↪ on mouseover is distracting**
+
 **DOCS-189: Discontinue default support for RTF**
 
 **DOCS-179: Issue with Maven HTML builds and images**
