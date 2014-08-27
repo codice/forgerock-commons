@@ -64,6 +64,10 @@ $(document).ready(function () {
      * Some of the anchors are children, but some are siblings. And some just
      * do not have name anchors.
      *
+     * DOCS-197: Prepending ↪ on mouseover is distracting
+     *
+     * Instead of prepending a ↪, append a link symbol.
+     *
      */
     $("[class$=title]").each(function () {
         var href = $(this).children("a").prop("name");
@@ -75,12 +79,13 @@ $(document).ready(function () {
             return;
         }
 
-        $(this).prepend('<a href=\"#' + href
-            + '\" class=\"showlink\" style=\"display: none;\">&#x021AA; </a>');
+        $(this).append('<span class=\"showlink\" ' +
+                             'title=\"Scroll heading to top of page\"> &#x1f517;</span>');
+        $(this).wrap('<a href=\"#' + href + '\"></a>');
         $(this).mouseenter(function () {
-            $(this).children('a.showlink').show();
+            $(this).children('span.showlink').show();
         }).mouseleave(function () {
-            $(this).children('a.showlink').hide();
+            $(this).children('span.showlink').hide();
         });
     });
 
