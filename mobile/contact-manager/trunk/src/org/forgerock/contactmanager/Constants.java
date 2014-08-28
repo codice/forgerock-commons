@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- *       Copyright 2013 ForgeRock AS.
+ *       Copyright 2013-2014 ForgeRock AS.
  */
 
 package org.forgerock.contactmanager;
@@ -27,11 +27,6 @@ final class Constants {
     final static String SEARCH_SPECIFICUSER_BY_ID = "/users/%s";
     final static String FILTER_FAMILYNAME_STARTSWITH =
         "/users?_queryFilter=name/familyName+sw+\"%s\"+or+name/givenName+sw+\"%s\"";
-    // TODO Add other filter
-    // e.g. :
-    // final static String FILTER_GIVENNAME_STARTSWITH
-    //    = "/users?_queryFilter=name/givenName+sw+\"%s\"";
-    // final static String FILTER_MAIL_STARTSWITH = "/users?_queryFilter=userName+sw+\"%s\"";
 
     // List pagination
     final static int PAGED_RESULT = 8;
