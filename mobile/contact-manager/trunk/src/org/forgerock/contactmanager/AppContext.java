@@ -11,13 +11,14 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- *       Copyright 2013 ForgeRock AS.
+ *       Copyright 2013-2014 ForgeRock AS.
  */
 package org.forgerock.contactmanager;
 
-import static android.os.Environment.MEDIA_MOUNTED;
-import static android.os.Environment.getExternalStorageDirectory;
-import static android.os.Environment.getExternalStorageState;
+import static android.content.Context.MODE_PRIVATE;
+import static android.os.Environment.*;
+import static java.lang.String.valueOf;
+import static org.forgerock.contactmanager.Constants.*;
 
 import java.io.File;
 
@@ -57,10 +58,10 @@ public class AppContext {
      */
     AppContext(final Context ctx) {
         context = ctx;
-        pref = context.getSharedPreferences(Constants.PREF_NAME_APPLICATION, Context.MODE_PRIVATE);
+        pref = context.getSharedPreferences(PREF_NAME_APPLICATION, MODE_PRIVATE);
         serverConfiguration = Utils.loadActiveServer();
         if (getExternalStorageState().equals(MEDIA_MOUNTED)) {
-            cacheDir = new File(getExternalStorageDirectory(), Constants.PREF_STORAGE_APPLICATION);
+            cacheDir = new File(getExternalStorageDirectory(), PREF_STORAGE_APPLICATION);
         } else {
             cacheDir = context.getCacheDir();
         }
@@ -73,7 +74,7 @@ public class AppContext {
      * Returns a file from the selected URL.
      */
     static File get(final String url) {
-        return new File(cacheDir, String.valueOf(url.hashCode()));
+        return new File(cacheDir, valueOf(url.hashCode()));
     }
 
     /**
@@ -96,7 +97,7 @@ public class AppContext {
      */
     public static SharedPreferences getPref() {
         if (pref == null) {
-            pref = context.getSharedPreferences(Constants.PREF_NAME_APPLICATION, Context.MODE_PRIVATE);
+            pref = context.getSharedPreferences(PREF_NAME_APPLICATION, MODE_PRIVATE);
         }
         return pref;
     }
