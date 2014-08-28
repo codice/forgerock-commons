@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- *       Copyright 2013 ForgeRock AS.
+ *       Copyright 2013-2014 ForgeRock AS.
  */
 
 package org.forgerock.contactmanager;
@@ -203,7 +203,7 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
         SSLContext sslContext = null;
         try {
             sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, trustManager, new java.security.SecureRandom());
+            sslContext.init(null, trustManager, null);
         } catch (final NoSuchAlgorithmException e) {
             logError(e, "NoSuchAlgorithmException.");
         } catch (final KeyManagementException e) {
