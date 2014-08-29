@@ -29,6 +29,8 @@ The default value is 'false' that does not change the default behaviour.
 
 ## Bugs Fixed
 
+**DOCS-197: Prepending ↪ on mouseover is distracting**
+
 **DOCS-59: Only the draft documents are optimized to appear in Google searches; the final docs need to be SEO too.**
 
 The fix adds a robots meta tag (noindex, nofollow) to site HTML,
