@@ -49,6 +49,18 @@ See the explanation below for details.
 
 ## What's New
 
+**DOCS-198: Build a cleaner version of the HTML**
+
+You can now build XHTML5 that applies only default styles,
+plus syntax highlighting.
+
+XHTML5 is not built automatically. Specify the format as an include.
+
+    mvn -Dinclude=xhtml5 clean pre-site
+
+The resulting documents are single pages, not chunked.
+
+
 **DOCS-194:  Add option to allow merge of generated and docbkx source directories**
 
 This release introduces a boolean option,

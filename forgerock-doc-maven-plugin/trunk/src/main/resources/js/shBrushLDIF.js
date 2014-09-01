@@ -15,7 +15,7 @@
  * Dual licensed under the MIT and GPL licenses.
  */
 /**
- * Portions Copyright 2013 ForgeRock AS
+ * Portions Copyright 2013-2014 ForgeRock AS
  */
 ;(function()
 {
@@ -32,11 +32,10 @@
 		  { regex: new RegExp(this.getKeywords(keywords), 'gmi'),     css: 'keyword' },
 		  { regex: SyntaxHighlighter.regexLib.singleLinePerlComments, css: 'comments' },
 		  { regex: SyntaxHighlighter.regexLib.url,                    css: 'a' },
-		  { regex: /\b(\d+\.)+\d+\b/g,                                css: 'constants' },// OID
-		  { regex: /\b(true|false)\b/g,                               css: 'constants' },
-		  { regex: /-(\n|$)/g,                                        css: 'color3' },	// Separator
-		  { regex: /:<|:&lt;|:/g,                                     css: 'color3' },	// Separator
-		  { regex: /[\w;-]+(?=:.*(\r|\n)?)/g,                         css: 'string' }	// Attr type
+		  { regex: /\b(\d+\.)+\d+\b/,                                 css: 'constants' },	// OID
+		  { regex: /\b(true|false)\b/,                                css: 'constants' },
+		  { regex: /(:<|:&lt;|:)/,                                    css: 'color3' },		// Separator
+		  { regex: /\w[\d\w-]+((;[\d\w-]))*(?=:.*)/,                  css: 'string' }		// Attr type
 		];
 	}
 

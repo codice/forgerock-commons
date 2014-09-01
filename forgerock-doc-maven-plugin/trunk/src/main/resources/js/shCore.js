@@ -6,7 +6,7 @@
  * http://alexgorbatchev.com/SyntaxHighlighter/donate.html
  *
  * @version
- * 3.0.83 (Fri, 14 Mar 2014 17:58:18 GMT)
+ * 3.0.9 (Sat, 30 Aug 2014 18:16:56 GMT)
  *
  * @copyright
  * Copyright (C) 2004-2013 Alex Gorbatchev.
@@ -18,6 +18,9 @@
  * XRegExp v2.0.0
  * (c) 2007-2012 Steven Levithan <http://xregexp.com/>
  * MIT License
+ */
+/**
+ * Portions Copyright 2014 ForgeRock AS
  */
 
 /**
@@ -1346,7 +1349,7 @@ var sh = {
 	},
 
 	config : {
-		space : '&nbsp;',
+		space : '&#160;',
 
 		/** Enables use of <SCRIPT type="syntaxhighlighter" /> tags. */
 		useScriptTags : true,
@@ -1367,7 +1370,7 @@ var sh = {
 			brushNotHtmlScript : 'Brush wasn\'t configured for html-script option: ',
 
 			// this is populated by the build script
-			aboutDialog : '<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"><html xmlns=\"http://www.w3.org/1999/xhtml\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><title>About SyntaxHighlighter</title></head><body style=\"font-family:Geneva,Arial,Helvetica,sans-serif;background-color:#fff;color:#000;font-size:1em;text-align:center;\"><div style=\"text-align:center;margin-top:1.5em;\"><div style=\"font-size:xx-large;\">SyntaxHighlighter</div><div style=\"font-size:.75em;margin-bottom:3em;\"><div>version 3.0.83 (Fri, 14 Mar 2014 17:58:18 GMT)</div><div><a href=\"http://alexgorbatchev.com/SyntaxHighlighter\" target=\"_blank\" style=\"color:#005896\">http://alexgorbatchev.com/SyntaxHighlighter</a></div><div>JavaScript code syntax highlighter.</div><div>Copyright 2004-2013 Alex Gorbatchev.</div></div><div>If you like this script, please <a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2930402\" style=\"color:#005896\">donate</a> to <br/>keep development active!</div></div></body></html>'
+			aboutDialog : '<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"><html xmlns=\"http://www.w3.org/1999/xhtml\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><title>About SyntaxHighlighter</title></head><body style=\"font-family:Geneva,Arial,Helvetica,sans-serif;background-color:#fff;color:#000;font-size:1em;text-align:center;\"><div style=\"text-align:center;margin-top:1.5em;\"><div style=\"font-size:xx-large;\">SyntaxHighlighter</div><div style=\"font-size:.75em;margin-bottom:3em;\"><div>version 3.0.9 (Sat, 30 Aug 2014 18:16:56 GMT)</div><div><a href=\"http://alexgorbatchev.com/SyntaxHighlighter\" target=\"_blank\" style=\"color:#005896\">http://alexgorbatchev.com/SyntaxHighlighter</a></div><div>JavaScript code syntax highlighter.</div><div>Copyright 2004-2013 Alex Gorbatchev.</div></div><div>If you like this script, please <a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2930402\" style=\"color:#005896\">donate</a> to <br/>keep development active!</div></div></body></html>'
 		}
 	},
 
@@ -1433,10 +1436,12 @@ var sh = {
 		 */
 		getButtonHtml: function(highlighter, commandName, label)
 		{
+			commandName = escapeHtml(commandName);
+
 			return '<span><a href="#" class="toolbar_item'
 				+ ' command_' + commandName
 				+ ' ' + commandName
-				+ '">' + label + '</a></span>'
+				+ '">' + escapeHtml(label) + '</a></span>'
 				;
 		},
 
@@ -1636,6 +1641,11 @@ var sh = {
 		);
 	}
 }; // end of sh
+
+function escapeHtml(html)
+{
+	return document.createElement('div').appendChild(document.createTextNode(html)).parentNode.innerHTML.replace(/"/g, '&quot;');
+};
 
 /**
  * Checks if target DOM elements has specified CSS class.
@@ -2050,7 +2060,7 @@ function wrapLinesWithCode(str, css)
 
 	str = str.replace(/</g, '&lt;');
 
-	// Replace two or more sequential spaces with &nbsp; leaving last space untouched.
+	// Replace two or more sequential spaces with &#160; leaving last space untouched.
 	str = str.replace(/ {2,}/g, function(m)
 	{
 		var spaces = '';
@@ -2071,7 +2081,7 @@ function wrapLinesWithCode(str, css)
 
 			var spaces = '';
 
-			line = line.replace(/^(&nbsp;| )+/, function(s)
+			line = line.replace(/^(&#160;| )+/, function(s)
 			{
 				spaces = s;
 				return '';
@@ -2732,7 +2742,7 @@ sh.Highlighter.prototype = {
 		for (var i = 0, l = lines.length; i < l; i++)
 		{
 			var line = lines[i],
-				indent = /^(&nbsp;|\s)+/.exec(line),
+				indent = /^(&#160;|\s)+/.exec(line),
 				spaces = null,
 				lineNumber = lineNumbers ? lineNumbers[i] : firstLine + i;
 				;
@@ -2764,7 +2774,7 @@ sh.Highlighter.prototype = {
 	 */
 	getTitleHtml: function(title)
 	{
-		return title ? '<caption>' + title + '</caption>' : '';
+		return title ? '<caption>' + escapeHtml(title) + '</caption>' : '';
 	},
 
 	/**
@@ -2878,9 +2888,9 @@ sh.Highlighter.prototype = {
 			classes.push('ie');
 
 		html =
-			'<div id="' + getHighlighterId(this.id) + '" class="' + classes.join(' ') + '">'
+			'<div xmlns="http://www.w3.org/1999/xhtml" id="' + getHighlighterId(this.id) + '" class="' + escapeHtml(classes.join(' ')) + '">'
 				+ (this.getParam('toolbar') ? sh.toolbar.getHtml(this) : '')
-				+ '<table border="0" cellpadding="0" cellspacing="0">'
+				+ '<table style="border: none;">'
 					+ this.getTitleHtml(this.getParam('title'))
 					+ '<tbody>'
 						+ '<tr>'

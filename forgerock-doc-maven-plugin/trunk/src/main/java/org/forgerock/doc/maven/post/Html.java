@@ -20,6 +20,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
 import org.forgerock.doc.maven.utils.HtmlUtils;
+import org.forgerock.doc.maven.utils.SyntaxHighlighterCopier;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,9 +56,44 @@ public class Html {
      * @throws MojoExecutionException Failed to post-process HTML.
      */
     public void execute() throws MojoExecutionException {
+        // Add JavaScript for manipulating HTML content.
         addScript();
-        addShScripts();
-        addShCss();
+
+
+        // Add SyntaxHighlighter files.
+        String[] outputDirectories = new String[2 * m.getDocNames().size()];
+
+        int i = 0;
+        for (final String docName : m.getDocNames()) {
+
+            // Examples:
+            // ${project.build.directory}/docbkx/html/my-book
+            outputDirectories[i] =
+                    m.getDocbkxOutputDirectory().getPath()
+                            + File.separator + "html"
+                            + File.separator + docName;
+            ++i;
+
+            // ${project.build.directory}/docbkx/html/my-book/index
+            outputDirectories[i] =
+                    m.getDocbkxOutputDirectory().getPath()
+                            + File.separator + "html"
+                            + File.separator + docName
+                            + File.separator + FilenameUtils.getBaseName(m.getDocumentSrcName());
+            ++i;
+        }
+
+        SyntaxHighlighterCopier copier =
+                new SyntaxHighlighterCopier(outputDirectories);
+        try {
+            copier.copy();
+        } catch (IOException e) {
+            throw new MojoExecutionException(
+                    "Failed to copy files: " + e.getMessage(), e);
+        }
+
+
+        // Edit the HTML for publication.
         editBuiltHtml(m.getDocbkxOutputDirectory().getPath() + File.separator + "html");
     }
 
@@ -111,99 +147,6 @@ public class Html {
                 } catch (IOException ie) {
                     throw new MojoExecutionException(
                             "Failed to write to " + scriptFile.getPath(), ie);
-                }
-            }
-        }
-    }
-
-    /**
-     * SyntaxHighlighter JavaScript files.
-     */
-    private final String[] shJavaScriptFiles = {
-        "shCore.js",
-        "shBrushAci.js",
-        "shBrushBash.js",
-        "shBrushCsv.js",
-        "shBrushHttp.js",
-        "shBrushJava.js",
-        "shBrushJScript.js",
-        "shBrushLDIF.js",
-        "shBrushPlain.js",
-        "shBrushProperties.js",
-        "shBrushXml.js"
-    };
-
-    /**
-     * Add SyntaxHighlighter JavaScript files in each HTML document source directory.
-     *
-     * @throws MojoExecutionException Failed to add scripts.
-     */
-    void addShScripts() throws MojoExecutionException {
-
-        for (String scriptName : shJavaScriptFiles) {
-            URL scriptUrl = getClass().getResource("/js/" + scriptName);
-
-            // The html.script parameter should probably take URLs.
-            // When local files are referenced,
-            // the DocBook XSL stylesheets do not copy the .js files.
-            // Instead the files must be copied to the output directories.
-
-            for (final String outputDirectory : outputDirectories) {
-
-                for (final String docName : m.getDocNames()) {
-
-                    final File parent = new File(m.getDocbkxOutputDirectory(),
-                            "html" + File.separator + docName + outputDirectory
-                                    + File.separator + "sh");
-                    final File scriptFile = new File(parent, scriptName);
-
-                    try {
-                        FileUtils.copyURLToFile(scriptUrl, scriptFile);
-                    } catch (IOException ie) {
-                        throw new MojoExecutionException(
-                                "Failed to write to " + scriptFile.getPath(), ie);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * SyntaxHighlighter CSS files.
-     */
-    private final String[] shCssFiles =
-    {"shCore.css", "shCoreEclipse.css", "shThemeEclipse.css"};
-
-    /**
-     * Add SyntaxHighlighter CSS files in each HTML document source directory.
-     *
-     * @throws MojoExecutionException Failed to add scripts.
-     */
-    void addShCss() throws MojoExecutionException {
-
-        for (String styleSheetName : shCssFiles) {
-            URL styleSheetUrl = getClass().getResource("/css/" + styleSheetName);
-
-            // The html.stylesheet parameter should probably take URLs.
-            // When local files are referenced,
-            // the DocBook XSL stylesheets do not copy the .css files.
-            // Instead the files must be copied to the output directories.
-
-            for (final String outputDirectory : outputDirectories) {
-
-                for (final String docName : m.getDocNames()) {
-
-                    final File parent = new File(m.getDocbkxOutputDirectory(),
-                            "html" + File.separator + docName + outputDirectory
-                                    + File.separator + "sh");
-                    final File styleSheetFile = new File(parent, styleSheetName);
-
-                    try {
-                        FileUtils.copyURLToFile(styleSheetUrl, styleSheetFile);
-                    } catch (IOException ie) {
-                        throw new MojoExecutionException(
-                                "Failed to write to " + styleSheetFile.getPath(), ie);
-                    }
                 }
             }
         }
