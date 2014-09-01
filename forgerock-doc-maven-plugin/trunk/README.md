@@ -3,7 +3,7 @@
 This Maven plugin centralizes configuration of core documentation, to ensure
 that documents are formatted uniformly.
 
-_This document covers functionality present in 2.1.3._
+_This document covers functionality present in 2.1.4._
 
 With centralized configuration handled by this Maven plugin, the core
 documentation-related project configuration takes at least three arguments:
