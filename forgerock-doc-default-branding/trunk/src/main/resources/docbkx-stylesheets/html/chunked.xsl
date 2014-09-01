@@ -91,24 +91,25 @@
  <xsl:param name="custom.css.source">coredoc.css.xml</xsl:param>
  <xsl:param name="html.stylesheet">
   css/coredoc.css
-  sh/shCore.css
-  sh/shCoreEclipse.css
-  sh/shThemeEclipse.css
+  sh/css/shCore.css
+  sh/css/shCoreEclipse.css
+  sh/css/shThemeEclipse.css
  </xsl:param>
  <xsl:param name="html.script">
   http://code.jquery.com/jquery-1.11.0.min.js
   uses-jquery.js
-  sh/shCore.js
-  sh/shBrushAci.js
-  sh/shBrushBash.js
-  sh/shBrushCsv.js
-  sh/shBrushHttp.js
-  sh/shBrushJava.js
-  sh/shBrushJScript.js
-  sh/shBrushLDIF.js
-  sh/shBrushPlain.js
-  sh/shBrushProperties.js
-  sh/shBrushXml.js
+  sh/js/shCore.js
+  sh/js/shBrushAci.js
+  sh/js/shBrushBash.js
+  sh/js/shBrushCsv.js
+  sh/js/shBrushHttp.js
+  sh/js/shBrushJava.js
+  sh/js/shBrushJScript.js
+  sh/js/shBrushLDIF.js
+  sh/js/shBrushPlain.js
+  sh/js/shBrushProperties.js
+  sh/js/shBrushXml.js
+  sh/js/shAll.js
  </xsl:param>
 
  <xsl:param name="admon.style">
