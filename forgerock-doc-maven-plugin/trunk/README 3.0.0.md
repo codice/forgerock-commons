@@ -245,9 +245,10 @@ The following command generates only PDF output for your single chapter.
 
     mvn -DdocumentSrcName=chap-one.xml -Dinclude=pdf clean pre-site
 
-It is also possible to generate only RTF output using `include`.
+It is also possible to generate only RTF & XHTML5 output using `include`.
 
     mvn -Dinclude=rtf clean pre-site
+    mvn -Dinclude=xhtml5 clean pre-site
 
 Default formats, however, only include `epub`, `html`, `man`, `pdf`, and `webhelp`.
 

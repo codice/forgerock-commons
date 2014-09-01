@@ -697,7 +697,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * <p>
      *
-     * The rtf format is also supported but not in the default list.
+     * The rtf, xhtml5 formats are also supported,
+     * but are not included in the default list.
      *
      * @param defaults (Restricted) list of formats to consider.
      *                 Set this to limit the list of output formats.
@@ -1519,5 +1520,35 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public final File getWebHelpLogo() {
         return new File(getBuildDirectory(), webhelpLogo);
+    }
+
+    /**
+     * Location of the XHTML5 XSL stylesheet customization file,
+     * relative to the build directory.
+     *
+     * <p>
+     *
+     * docbkx-tools element: &lt;xhtml5Customization&gt;
+     *
+     * @parameter default-value="docbkx-stylesheets/xhtml5/coredoc.xsl"
+     * @required
+     */
+    private String xhtml5Customization;
+
+    /**
+     * Get the location of the FO XSL stylesheet customization file (for PDF, RTF).
+     *
+     * <p>
+     *
+     * Default: {@code ${project.build.directory}/docbkx-stylesheets/fo/coredoc.xsl}
+     *
+     * <p>
+     *
+     * docbkx-tools element: &lt;foCustomization&gt;
+     *
+     * @return The location of the FO XSL stylesheet.
+     */
+    public final File getXhtml5Customization() {
+        return new File(getBuildDirectory(), xhtml5Customization);
     }
 }

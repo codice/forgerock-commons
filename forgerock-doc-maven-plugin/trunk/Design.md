@@ -49,6 +49,7 @@ including olink generation:
 *  RTF (`Rtf`, which is a wrapper for `Fo`)
 *  Single-page HTML (`SingleHtml`)
 *  Webhelp (`Webhelp`)
+*  XHTML5 (`Xhtml5`)
 
 This stage is performed during the `pre-site` phase, `build` goal. (`PreSiteMojo`)
 
@@ -63,6 +64,7 @@ Most formats currently require no post-processing.
 
 *  HTML post-processing (`Html`)
 *  No post-processing (`NoOp`)
+*  XHTML post-processing (`Xhtml`)
 
 This stage is performed during the `pre-site` phase, `build` goal. (`PreSiteMojo`)
 
