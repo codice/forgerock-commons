@@ -1,5 +1,3 @@
-# DRAFT IN PROGRESS
-
 # ForgeRock Documentation Tools 2.1.4 Release Notes
 
 ForgeRock Documentation Tools is a catch all for the doc build artifacts,
@@ -9,22 +7,23 @@ and the documentation about documentation.
 The link to the online issue tracker is
 <https://bugster.forgerock.org/jira/browse/DOCS>.
 
-This release brings the following changes,
-and has the following known issues.
-
 ## Compatibility
 
-TODO
+This release introduces a new configuration setting with the fix for DOCS-194.
+
+It does not introduce any incompatible changes.
 
 
 ## Improvements & New Features
 
 **DOCS-194: Add option to allow merge of generated and docbkx source directories**
 
-You can now use the maven configuration `<overwriteGeneratedSource>true</overwriteGeneratedSource>`
-together the boilerplate goal to allow to copy and overwrites files from docbkxSourceDirectory to docbkxGeneratedSourceDirectory 
+You can now use the Maven configuration setting
+`<overwriteGeneratedSource>true</overwriteGeneratedSource>`
+together the `boilerplate` goal to overwrite files
+from `docbkxSourceDirectory` to `docbkxGeneratedSourceDirectory`.
 
-The default value is 'false' that does not change the default behaviour.
+The default value, `false`, maintains compatibility with earlier versions.
 
 
 ## Bugs Fixed
