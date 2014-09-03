@@ -928,7 +928,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * URL to JSON object showing latest versions for each project.
      *
-     * @parameter default-value="http://docs.forgerock.org/latest.php" property="latestJson"
+     * @parameter default-value="http://docs.forgerock.org/latest.json" property="latestJson"
      * @required
      */
     private String latestJson;
