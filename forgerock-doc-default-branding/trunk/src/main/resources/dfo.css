@@ -310,6 +310,7 @@ span.showlink {
     color: lightgray;
     display: none;
     font-size: smaller;
+    vertical-align: text-top;
 }
 
 table.simplelist {
