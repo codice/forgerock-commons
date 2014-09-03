@@ -546,7 +546,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * URL to JSON object showing EOSL versions for each project.
      *
-     * @parameter default-value="http://docs.forgerock.org/eosl.php" property="eoslJson"
+     * @parameter default-value="http://docs.forgerock.org/eosl.json" property="eoslJson"
      * @required
      */
     private String eoslJson;
