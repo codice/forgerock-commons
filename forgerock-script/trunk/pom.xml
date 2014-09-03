@@ -121,8 +121,8 @@
         <commons.script.osgi.import.defaults />
         <commons.script.osgi.import.additional />
         <commons.script.osgi.import>
-            org.forgerock.json.resource*;provide:=true,
             org.forgerock.script*;provide:=true,
+            org.forgerock.json.resource*,
             ${commons.script.osgi.import.before.defaults},
             ${commons.script.osgi.import.defaults},
             ${commons.script.osgi.import.additional},
