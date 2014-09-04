@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- *       Copyright 2013 ForgeRock AS.
+ *       Copyright 2013-2014 ForgeRock AS.
  */
 
 package org.forgerock.contactmanager;
@@ -98,9 +98,9 @@ public class SearchListAdapter extends BaseAdapter {
             final JSONObject contactDetails = contact.optJSONObject(MapperConstants.CONTACT_INFORMATION);
 
             holder.tvContactName.setText(contact.optString(MapperConstants.DISPLAY_NAME));
-            final String strBMP = !TextUtils.isEmpty(contactDetails.optString(MapperConstants.JPEGPHOTO))
-                    ? contactDetails.optString(MapperConstants.JPEGPHOTO)
-                            : contactDetails.optString(MapperConstants.JPEGURL);
+            final String strBMP = !TextUtils.isEmpty(contactDetails.optString(MapperConstants.JPEG_PHOTO))
+                    ? contactDetails.optString(MapperConstants.JPEG_PHOTO)
+                            : contactDetails.optString(MapperConstants.JPEG_URL);
 
             final ImageLoader imageLoader = new ImageLoader(AppContext.getContext());
             imageLoader.displayIn(strBMP, holder.ivJpegPhoto);
