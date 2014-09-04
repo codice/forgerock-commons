@@ -30,13 +30,13 @@ import android.widget.EditText;
  */
 public class ServerWizardPart1Activity extends AugmentedActivity {
 
-    private boolean isEdit = false;
+    private boolean isEdit;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_server_wizard_part1);
 
         final Button btnNext = (Button) findViewById(R.id.sw1NextBtn);

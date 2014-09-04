@@ -51,7 +51,7 @@ final class MapperConstants {
     static final String LOCATION = "location";
     static final String STATE = "state";
 
-    // Prevent instantiation.
+    /** Prevent instantiation. */
     private MapperConstants() {
         throw new AssertionError();
     }

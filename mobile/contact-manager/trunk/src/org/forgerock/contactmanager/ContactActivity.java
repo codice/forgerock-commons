@@ -474,10 +474,8 @@ public class ContactActivity extends AugmentedActivity {
     }
 
     private String getContent(final TextView textView) {
-        if (textView != null) {
-            if (textView.getText() != null) {
-                return textView.getText().toString();
-            }
+        if (textView != null && textView.getText() != null) {
+            return textView.getText().toString();
         }
         return "";
     }
@@ -537,7 +535,7 @@ public class ContactActivity extends AugmentedActivity {
             managers = myDisplayedContact.getManagers();
         }
 
-        if (data != null && data.size() > 0 || managers != null && managers.size() > 0) {
+        if ((data != null && data.size() > 0) || (managers != null && managers.size() > 0)) {
             final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.ctDetailsLayout);
 
             final TableLayout tableLayout = getTableLayout();

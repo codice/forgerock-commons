@@ -60,7 +60,7 @@ public class AppContext {
         context = ctx;
         pref = context.getSharedPreferences(PREF_NAME_APPLICATION, MODE_PRIVATE);
         serverConfiguration = Utils.loadActiveServer();
-        if (getExternalStorageState().equals(MEDIA_MOUNTED)) {
+        if (MEDIA_MOUNTED.equals(getExternalStorageState())) {
             cacheDir = new File(getExternalStorageDirectory(), PREF_STORAGE_APPLICATION);
         } else {
             cacheDir = context.getCacheDir();

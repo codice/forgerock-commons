@@ -43,7 +43,7 @@ public class SettingsActivity extends AugmentedActivity {
      */
     private ServerConfiguration serverConfiguration;
 
-    private boolean isNoServerConfigured = false;
+    private boolean isNoServerConfigured;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -149,17 +149,9 @@ public class SettingsActivity extends AugmentedActivity {
         for (int i = 0; i < menu.size(); i++) {
             final MenuItem mi = menu.getItem(i);
             if (mi.getItemId() == R.id.settings_action_edit) {
-                if (isNoServerConfigured) {
-                    mi.setEnabled(false);
-                } else {
-                    mi.setEnabled(true);
-                }
+                mi.setEnabled(!isNoServerConfigured);
             } else if (mi.getItemId() == R.id.settings_action_delete) {
-                if (isNoServerConfigured) {
-                    mi.setEnabled(false);
-                } else {
-                    mi.setEnabled(true);
-                }
+                mi.setEnabled(!isNoServerConfigured);
             }
         }
         return true;
@@ -176,7 +168,7 @@ public class SettingsActivity extends AugmentedActivity {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
-                        /** When yes is clicked, proceed to deletion of the selected server. */
+                        /* When yes is clicked, proceed to deletion of the selected server. */
                         final boolean isOk = Utils.deleteServerConfigurationFromPreferences(serverConfiguration
                                 .getServerName());
                         if (isOk) {

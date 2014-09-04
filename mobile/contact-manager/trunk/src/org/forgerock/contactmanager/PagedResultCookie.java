@@ -26,7 +26,7 @@ final class PagedResultCookie {
     static String cookie = "";
 
     static void setCookie(final String prCookie) {
-        if (prCookie == null || prCookie.equals("null")) {
+        if (prCookie == null || "null".equals(prCookie)) {
             cookie = "";
         } else {
             cookie = prCookie;

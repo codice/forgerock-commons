@@ -51,8 +51,8 @@ public class ServerConfiguration {
      */
     public ServerConfiguration(final String serverName, final String srvAddress) {
         super();
-        this.name = serverName;
-        this.serverAddress = srvAddress;
+        name = serverName;
+        serverAddress = srvAddress;
     }
 
     /**
@@ -62,7 +62,7 @@ public class ServerConfiguration {
      *            The server name used in this application.
      */
     ServerConfiguration(final String serverName) {
-        this.setServerName(serverName);
+        setServerName(serverName);
     }
 
     /**
@@ -119,7 +119,7 @@ public class ServerConfiguration {
      *            The address of the server.
      */
     public void setAddress(final String srvAddress) {
-        this.serverAddress = srvAddress;
+        serverAddress = srvAddress;
     }
 
     /**
@@ -138,7 +138,7 @@ public class ServerConfiguration {
      *            The name of this configuration.
      */
     public void setServerName(final String serverName) {
-        this.name = serverName;
+        name = serverName;
     }
 
     /**
@@ -157,7 +157,7 @@ public class ServerConfiguration {
      *            {@code: true} if SSL is enabled.
      */
     public void setSSL(final boolean ssl) {
-        this.isSSL = ssl;
+        isSSL = ssl;
     }
 
     /**
@@ -166,7 +166,7 @@ public class ServerConfiguration {
      * @return {@code true} if the configuration is valid.
      */
     public boolean isValid() {
-        return !TextUtils.isEmpty(this.serverAddress);
+        return !TextUtils.isEmpty(serverAddress);
     }
 
     /**

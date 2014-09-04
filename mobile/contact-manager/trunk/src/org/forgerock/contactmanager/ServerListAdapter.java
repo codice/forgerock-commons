@@ -33,7 +33,7 @@ public class ServerListAdapter extends BaseAdapter {
 
     private LinkedList<ServerConfiguration> listData = new LinkedList<ServerConfiguration>();
     private final LayoutInflater layoutInflater;
-    private static int selectedIndex = 0;
+    private static int selectedIndex;
 
     /**
      * Constructor.
@@ -151,10 +151,10 @@ public class ServerListAdapter extends BaseAdapter {
      *            The new list of server configurations.
      */
     public void refresh(final LinkedList<ServerConfiguration> newServerList) {
-        this.listData = newServerList;
+        listData = newServerList;
         if (listData != null && !listData.isEmpty()) {
             setSelectedIndex(0);
         }
-        this.notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 }

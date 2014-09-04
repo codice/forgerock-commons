@@ -56,7 +56,7 @@ public class SearchActivity extends AugmentedActivity {
     /**
      * Index of the current page displayed.
      */
-    static int currentPage = 0;
+    static int currentPage;
 
     /**
      * Search bar.
@@ -134,7 +134,7 @@ public class SearchActivity extends AugmentedActivity {
     void displayContactList(final JSONObject contactList) {
         final LinkedList<JSONObject> contacts = Utils.read(contactList != null ? contactList.toString() : null);
         final SearchListAdapter adapter = new SearchListAdapter(SearchActivity.this, contacts);
-        if (contacts == null || contacts != null && contacts.isEmpty()) {
+        if (contacts == null || (contacts != null && contacts.isEmpty())) {
             lvSearchResult.setEmptyView(findViewById(R.id.empty_list_item));
         } else {
             if (contacts.size() < Constants.PAGED_RESULT && currentPage == 0) {
@@ -159,7 +159,7 @@ public class SearchActivity extends AugmentedActivity {
         });
     }
 
-    // TODO to remove with listview endless implementation
+    /** TODO to remove with listview endless implementation. */
     void displayFooterList() {
         footer = new LinearLayout(this);
         footer.setOrientation(LinearLayout.HORIZONTAL);
