@@ -46,7 +46,7 @@
     self.delegate = delegate;
     self.authenticateUrl = [NSString stringWithFormat:@"%@%@", baseUri, @"/json/authenticate"]; //TODO check to see if base URI has trailing slash!!
     
-    NSDictionary *headers = [[NSDictionary alloc] initWithObjectsAndKeys:username, @"X-OpenAM-Username", password, @"X-OpenAM-Password", nil];
+    NSDictionary *headers = [[NSDictionary alloc] initWithObjectsAndKeys:username, @"X-OpenAM-Username", password, @"X-OpenAM-Password", @"protocol=1.0, resource=1.0", @"Accept-API-Version", nil];
     
     [self initiateAuthenticationWithHeaders:headers];
 }
@@ -56,7 +56,7 @@
 }
 
 - (void)submitCallbacks:(NSDictionary *)callbacks {
-    [self.restService post:self.authenticateUrl withHeaders:nil withParams:nil withBody:callbacks onCompletion:[self completionBlock]];
+    [self.restService post:self.authenticateUrl withHeaders:[[NSDictionary alloc] initWithObjectsAndKeys:@"protocol=1.0, resource=1.0", @"Accept-API-Version", nil] withParams:nil withBody:callbacks onCompletion:[self completionBlock]];
 }
 
 - (void (^)(NSDictionary *response, NSError *err))completionBlock {
