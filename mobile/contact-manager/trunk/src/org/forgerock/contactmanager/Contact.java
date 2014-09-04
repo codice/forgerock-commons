@@ -371,30 +371,30 @@ public class Contact {
     void fillDetailsFromJSON(final String jsonContact) throws JSONException {
         contact = new JSONObject(jsonContact);
 
-        this.setDisplayName(contact.optString(MapperConstants.DISPLAY_NAME));
-        this.setName(contact.optString(MapperConstants.GIVEN_NAME));
-        this.setSurname(contact.optString(MapperConstants.FAMILY_NAME));
+        setDisplayName(contact.optString(MapperConstants.DISPLAY_NAME));
+        setName(contact.optString(MapperConstants.GIVEN_NAME));
+        setSurname(contact.optString(MapperConstants.FAMILY_NAME));
 
-        this.contactDetails = contact.optJSONObject(MapperConstants.CONTACT_INFORMATION);
+        contactDetails = contact.optJSONObject(MapperConstants.CONTACT_INFORMATION);
         if (contactDetails != null) {
-            this.setFunction(contactDetails.optString(MapperConstants.DESCRIPTION));
-            this.setOrganization(contactDetails.optString(MapperConstants.ORGANIZATION));
+            setFunction(contactDetails.optString(MapperConstants.DESCRIPTION));
+            setOrganization(contactDetails.optString(MapperConstants.ORGANIZATION));
 
-            this.photoLink = !TextUtils.isEmpty(contactDetails.optString(MapperConstants.JPEG_PHOTO)) ? contactDetails
+            photoLink = !TextUtils.isEmpty(contactDetails.optString(MapperConstants.JPEG_PHOTO)) ? contactDetails
                     .optString(MapperConstants.JPEG_PHOTO) : contactDetails.optString(MapperConstants.JPEG_URL);
         }
 
-        this.setMobilePhoneNumbers(getSubValuesFromJson(SECTION.MOBILE_PHONE));
-        this.setHomePhoneNumbers(getSubValuesFromJson(SECTION.HOME_PHONE));
-        this.setMails(getSubValuesFromJson(SECTION.MAIL));
-        this.setManagers(getManagerFromJSONContact());
+        setMobilePhoneNumbers(getSubValuesFromJson(SECTION.MOBILE_PHONE));
+        setHomePhoneNumbers(getSubValuesFromJson(SECTION.HOME_PHONE));
+        setMails(getSubValuesFromJson(SECTION.MAIL));
+        setManagers(getManagerFromJSONContact());
 
-        this.contactAddress = contact.optJSONObject(MapperConstants.CONTACT_ADDRESS);
+        contactAddress = contact.optJSONObject(MapperConstants.CONTACT_ADDRESS);
         if (contactAddress != null) {
-            this.setAddress(contactAddress.optString(MapperConstants.POSTAL_ADDRESS));
-            this.setPostalCode(contactAddress.optString(MapperConstants.POSTAL_CODE));
-            this.setLocation(contactAddress.optString(MapperConstants.LOCATION));
-            this.setState(contactAddress.optString(MapperConstants.STATE));
+            setAddress(contactAddress.optString(MapperConstants.POSTAL_ADDRESS));
+            setPostalCode(contactAddress.optString(MapperConstants.POSTAL_CODE));
+            setLocation(contactAddress.optString(MapperConstants.LOCATION));
+            setState(contactAddress.optString(MapperConstants.STATE));
         }
 
     }

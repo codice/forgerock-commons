@@ -46,7 +46,7 @@ import android.widget.Toast;
  */
 public final class Utils {
 
-    // Prevent instantiation.
+    /** Prevent instantiation. */
     private Utils() {
         throw new AssertionError();
     }

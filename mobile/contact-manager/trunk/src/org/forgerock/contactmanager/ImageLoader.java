@@ -191,7 +191,7 @@ public class ImageLoader {
          *            The photo to load.
          */
         PhotosLoader(final PhotoToLoad photoToLoad) {
-            this.photo = photoToLoad;
+            photo = photoToLoad;
         }
 
         @Override
@@ -212,13 +212,10 @@ public class ImageLoader {
 
     boolean imageViewReused(final PhotoToLoad photoToLoad) {
         final String tag = imageViews.get(photoToLoad.imageView);
-        if (tag == null || !tag.equals(photoToLoad.url)) {
-            return true;
-        }
-        return false;
+        return tag == null || !tag.equals(photoToLoad.url);
     }
 
-    // Used to display bitmap in the UI thread
+    /** Used to display bitmap in the UI thread. */
     class BitmapDisplayer implements Runnable {
         Bitmap bitmap;
         PhotoToLoad photoToLoad;

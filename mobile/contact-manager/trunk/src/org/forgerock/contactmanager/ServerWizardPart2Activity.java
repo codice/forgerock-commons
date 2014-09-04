@@ -31,17 +31,17 @@ import android.widget.ToggleButton;
  */
 public class ServerWizardPart2Activity extends AugmentedActivity {
 
-    private boolean isEdit = false;
-    ServerConfiguration original = null;
+    private boolean isEdit;
+    ServerConfiguration original;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_server_wizard_part2);
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        /**
+        /*
          * Declare used objects.
          */
         final Button btnFinish = (Button) findViewById(R.id.sw2AccountFinishBtn);
@@ -50,7 +50,7 @@ public class ServerWizardPart2Activity extends AugmentedActivity {
         final ToggleButton toogleSSL = (ToggleButton) findViewById(R.id.sw2_toggle_ssl);
         etUsername.requestFocus();
 
-        /**
+        /*
          * Retrieves previous server configuration.
          */
         final Intent previous = getIntent();
@@ -66,7 +66,7 @@ public class ServerWizardPart2Activity extends AugmentedActivity {
         final ServerConfiguration newServerConfiguration = new ServerConfiguration(
                 previous.getStringExtra("serverName"), previous.getStringExtra("address"));
 
-        /**
+        /*
          * Finish. Sends data to main menu.
          */
         btnFinish.setOnClickListener(new OnClickListener() {

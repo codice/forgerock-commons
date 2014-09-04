@@ -22,22 +22,22 @@ final class Constants {
     /**
      * The default picture used in list / contact to be displayed if none exists.
      */
-    final static int DEFAULT_ID_PICTURE = R.drawable.avatar_male_gray_frame_200x200;
+    static final int DEFAULT_ID_PICTURE = R.drawable.avatar_male_gray_frame_200x200;
 
-    final static String SEARCH_SPECIFICUSER_BY_ID = "/users/%s";
-    final static String FILTER_FAMILYNAME_STARTSWITH =
+    static final String SEARCH_SPECIFICUSER_BY_ID = "/users/%s";
+    static final String FILTER_FAMILYNAME_STARTSWITH =
         "/users?_queryFilter=name/familyName+sw+\"%s\"+or+name/givenName+sw+\"%s\"";
 
-    // Pagination
-    final static int PAGED_RESULT = 8;
-    final static String LIST_PAGINATION = "&_pageSize=" + PAGED_RESULT;
-    final static String PAGE_RESULT_OFFSET = "&_pagedResultsOffset=%s";
+    /** Pagination. */
+    static final int PAGED_RESULT = 8;
+    static final String LIST_PAGINATION = "&_pageSize=" + PAGED_RESULT;
+    static final String PAGE_RESULT_OFFSET = "&_pagedResultsOffset=%s";
 
-    // Internal use
-    final static String ALL_SERVER_CONFIGURATIONS = "srvconf";
-    final static String SELECTED_SERVER_CONFIGURATION = "selectedsrvconf";
-    final static String PREF_NAME_APPLICATION = "OPENDJ";
-    final static String PREF_STORAGE_APPLICATION = "ContactManager_cache";
+    /** Internal use. */
+    static final String ALL_SERVER_CONFIGURATIONS = "srvconf";
+    static final String SELECTED_SERVER_CONFIGURATION = "selectedsrvconf";
+    static final String PREF_NAME_APPLICATION = "OPENDJ";
+    static final String PREF_STORAGE_APPLICATION = "ContactManager_cache";
 
     private Constants() {
         throw new AssertionError();

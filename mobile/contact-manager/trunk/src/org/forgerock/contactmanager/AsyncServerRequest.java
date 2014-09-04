@@ -83,7 +83,7 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
     /**
      * The page offset.
      */
-    int pageOffset = 0;
+    int pageOffset;
 
     AsyncServerRequest(final Activity act, final boolean paged) {
         activity = act;
@@ -251,7 +251,7 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
     }
 
     private void logError(final Exception e, final String details) {
-        if (error.equals("")) {
+        if ("".equals(error)) {
             error = details + " " + (e.getMessage() != null ? e.getMessage() : "");
         }
         Log.e("Unable to connect to server : ", error);
