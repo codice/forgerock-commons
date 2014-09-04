@@ -28,18 +28,17 @@ final class Constants {
     final static String FILTER_FAMILYNAME_STARTSWITH =
         "/users?_queryFilter=name/familyName+sw+\"%s\"+or+name/givenName+sw+\"%s\"";
 
-    // List pagination
+    // Pagination
     final static int PAGED_RESULT = 8;
     final static String LIST_PAGINATION = "&_pageSize=" + PAGED_RESULT;
     final static String PAGE_RESULT_OFFSET = "&_pagedResultsOffset=%s";
 
-    // Internal
+    // Internal use
     final static String ALL_SERVER_CONFIGURATIONS = "srvconf";
     final static String SELECTED_SERVER_CONFIGURATION = "selectedsrvconf";
     final static String PREF_NAME_APPLICATION = "OPENDJ";
     final static String PREF_STORAGE_APPLICATION = "ContactManager_cache";
 
-    // Prevent instantiation.
     private Constants() {
         throw new AssertionError();
     }
