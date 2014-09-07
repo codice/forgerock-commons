@@ -16,9 +16,10 @@
 
 package org.forgerock.contactmanager;
 
-import java.util.LinkedList;
-
-import org.json.JSONObject;
+import static android.view.KeyEvent.*;
+import static android.view.ViewGroup.LayoutParams.*;
+import static org.forgerock.contactmanager.Constants.*;
+import static org.forgerock.contactmanager.MapperConstants.*;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -37,6 +38,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+
+import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * This class is main activity of this application.
@@ -85,7 +90,6 @@ public class SearchActivity extends AugmentedActivity {
         displayContactList(null);
 
         searchText.addTextChangedListener(new PendingTextWatcher(700) {
-
             @Override
             public void afterTextChangedDelayed(final Editable s) {
                 if (s.length() > 0) {
@@ -100,7 +104,7 @@ public class SearchActivity extends AugmentedActivity {
         searchText.setOnKeyListener(new OnKeyListener() {
             @Override
             public boolean onKey(final View v, final int keyCode, final KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER
+                if (event.getAction() == ACTION_DOWN && keyCode == KEYCODE_ENTER
                         && searchText.getText() != null && searchText.getText().length() > 0) {
                     initializePageCounter();
                     new AsyncServerRequest(SearchActivity.this, progressBar).execute(getFilterRequest(searchText
@@ -132,18 +136,18 @@ public class SearchActivity extends AugmentedActivity {
     }
 
     void displayContactList(final JSONObject contactList) {
-        final LinkedList<JSONObject> contacts = Utils.read(contactList != null ? contactList.toString() : null);
+        final List<JSONObject> contacts = Utils.read(contactList != null ? contactList.toString() : null);
         final SearchListAdapter adapter = new SearchListAdapter(SearchActivity.this, contacts);
         if (contacts == null || (contacts != null && contacts.isEmpty())) {
             lvSearchResult.setEmptyView(findViewById(R.id.empty_list_item));
         } else {
-            if (contacts.size() < Constants.PAGED_RESULT && currentPage == 0) {
+            if (contacts.size() < PAGED_RESULT && currentPage == 0) {
                 lvSearchResult.removeFooterView(footer);
             } else if (lvSearchResult.getFooterViewsCount() == 0) {
                 displayFooterList();
             }
-            // Sets the pagedResultsCookie
-            PagedResultCookie.setCookie(contactList.optString(MapperConstants.PAGED_RESULT_COOKIE));
+            // Sets the pagedResultsCookie used to manage pagination.
+            PagedResultCookie.setCookie(contactList.optString(PAGED_RESULT_COOKIE));
         }
 
         lvSearchResult.setAdapter(adapter);
@@ -165,16 +169,14 @@ public class SearchActivity extends AugmentedActivity {
         footer.setOrientation(LinearLayout.HORIZONTAL);
 
         final ImageButton btnLoadLess = new ImageButton(this);
-        btnLoadLess.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT, 0.5f));
+        btnLoadLess.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT, 0.5f));
         btnLoadLess.setImageResource(R.drawable.ic_action_previous);
         btnLoadLess.setBackgroundColor(getResources().getColor(R.color.transparent));
         btnLoadLess.setContentDescription(getResources().getText(R.string.search_previous));
         footer.addView(btnLoadLess);
 
         final ImageButton btnLoadMore = new ImageButton(this);
-        btnLoadMore.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT, 0.5f));
+        btnLoadMore.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT, 0.5f));
         btnLoadMore.setImageResource(R.drawable.ic_action_next);
         btnLoadMore.setBackgroundColor(getResources().getColor(R.color.transparent));
         btnLoadMore.setContentDescription(getResources().getText(R.string.search_next));
@@ -205,7 +207,7 @@ public class SearchActivity extends AugmentedActivity {
 
     private String getFilterRequest(final String searchValue) {
         final String encodedValue = Utils.getURLEncoded(searchValue);
-        return String.format(Constants.FILTER_FAMILYNAME_STARTSWITH, encodedValue, encodedValue);
+        return String.format(FILTER_FAMILYNAME_STARTSWITH, encodedValue, encodedValue);
     }
 
     static void initializePageCounter() {

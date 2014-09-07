@@ -20,10 +20,10 @@ import static android.os.Environment.*;
 import static java.lang.String.valueOf;
 import static org.forgerock.contactmanager.Constants.*;
 
-import java.io.File;
-
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import java.io.File;
 
 /**
  * This class defines the context of the current application.

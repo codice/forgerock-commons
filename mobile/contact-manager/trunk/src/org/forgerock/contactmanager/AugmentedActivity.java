@@ -16,9 +16,10 @@
 
 package org.forgerock.contactmanager;
 
+import static android.view.Window.FEATURE_CUSTOM_TITLE;
+
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Window;
 
 /**
  * This class allows the use of a custom title bar in all activities in the application.
@@ -28,9 +29,9 @@ public abstract class AugmentedActivity extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        requestWindowFeature(FEATURE_CUSTOM_TITLE);
 
         setContentView(R.layout.activity_search);
-        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.forgerock_title_bar);
+        getWindow().setFeatureInt(FEATURE_CUSTOM_TITLE, R.layout.forgerock_title_bar);
     }
 }

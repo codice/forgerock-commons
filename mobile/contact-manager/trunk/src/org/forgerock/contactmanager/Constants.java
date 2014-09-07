@@ -37,7 +37,7 @@ final class Constants {
     static final String ALL_SERVER_CONFIGURATIONS = "srvconf";
     static final String SELECTED_SERVER_CONFIGURATION = "selectedsrvconf";
     static final String PREF_NAME_APPLICATION = "OPENDJ";
-    static final String PREF_STORAGE_APPLICATION = "ContactManager_cache";
+    static final String PREF_STORAGE_APPLICATION = "ContactManagerCache";
 
     private Constants() {
         throw new AssertionError();

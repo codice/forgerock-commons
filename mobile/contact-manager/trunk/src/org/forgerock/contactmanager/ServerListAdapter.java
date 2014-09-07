@@ -16,8 +16,6 @@
 
 package org.forgerock.contactmanager;
 
-import java.util.LinkedList;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,13 +23,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * This class, used by the list contained in the settings activity, manage the display of the list containing server
  * configuration. (spinner)
  */
 public class ServerListAdapter extends BaseAdapter {
 
-    private LinkedList<ServerConfiguration> listData = new LinkedList<ServerConfiguration>();
+    private List<ServerConfiguration> listData = new LinkedList<ServerConfiguration>();
     private final LayoutInflater layoutInflater;
     private static int selectedIndex;
 
@@ -43,7 +44,7 @@ public class ServerListAdapter extends BaseAdapter {
      * @param listData
      *            The adapter's data.
      */
-    public ServerListAdapter(final Context context, final LinkedList<ServerConfiguration> listData) {
+    public ServerListAdapter(final Context context, final List<ServerConfiguration> listData) {
         this.listData = listData;
         layoutInflater = LayoutInflater.from(context);
     }
@@ -150,7 +151,7 @@ public class ServerListAdapter extends BaseAdapter {
      * @param newServerList
      *            The new list of server configurations.
      */
-    public void refresh(final LinkedList<ServerConfiguration> newServerList) {
+    public void refresh(final List<ServerConfiguration> newServerList) {
         listData = newServerList;
         if (listData != null && !listData.isEmpty()) {
             setSelectedIndex(0);
