@@ -16,6 +16,21 @@
 
 package org.forgerock.contactmanager;
 
+import static java.lang.String.format;
+import static org.forgerock.contactmanager.Constants.LIST_PAGINATION;
+import static org.forgerock.contactmanager.Constants.PAGE_RESULT_OFFSET;
+
+import android.app.Activity;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.util.Base64;
+import android.util.Log;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,17 +48,6 @@ import java.security.NoSuchAlgorithmException;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.app.Activity;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.util.Base64;
-import android.util.Log;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 /**
  * This class executes an asynchronous request. It connects to the server, authenticating and making the request then,
@@ -69,11 +73,6 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
      * The progress bar linked to the request process.
      */
     private ProgressBar progressBar;
-
-    /**
-     * The progress value.
-     */
-    static int progressValue;
 
     /**
      * A marker for a pagination request.
@@ -104,7 +103,6 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
 
     @Override
     protected void onPreExecute() {
-        progressValue = 0;
         if (progressBar != null) {
             progressBar.setVisibility(0);
         }
@@ -123,7 +121,7 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
         try {
             String partialURL = serverConfiguration.getAddress() + givenUrl[0];
             if (activity instanceof SearchActivity) {
-                partialURL += Constants.LIST_PAGINATION;
+                partialURL += LIST_PAGINATION;
                 if (isPagedCookie) {
                     partialURL += getPagedCookie();
                 } else {
@@ -347,7 +345,7 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
      */
     private String getPageOffset() {
         if (pageOffset != 0) {
-            return String.format(Constants.PAGE_RESULT_OFFSET, pageOffset);
+            return format(PAGE_RESULT_OFFSET, pageOffset);
         }
         return "";
     }

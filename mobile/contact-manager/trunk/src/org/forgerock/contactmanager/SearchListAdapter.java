@@ -16,9 +16,7 @@
 
 package org.forgerock.contactmanager;
 
-import java.util.LinkedList;
-
-import org.json.JSONObject;
+import static org.forgerock.contactmanager.MapperConstants.*;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -29,11 +27,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
+import java.util.List;
+
 /**
  * The adapter class sets for the search result list from search result activity.
  */
 public class SearchListAdapter extends BaseAdapter {
-    private final LinkedList<JSONObject> listData;
+    private final List<JSONObject> listData;
 
     private final LayoutInflater layoutInflater;
 
@@ -45,7 +47,7 @@ public class SearchListAdapter extends BaseAdapter {
      * @param listData
      *            The data to display.
      */
-    public SearchListAdapter(final Context context, final LinkedList<JSONObject> listData) {
+    public SearchListAdapter(final Context context, final List<JSONObject> listData) {
         this.listData = listData;
         layoutInflater = LayoutInflater.from(context);
     }
@@ -93,14 +95,14 @@ public class SearchListAdapter extends BaseAdapter {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            // Loads data from JSON.
+            // Loads data from http-config.json file configuration
             final JSONObject contact = listData.get(position);
-            final JSONObject contactDetails = contact.optJSONObject(MapperConstants.CONTACT_INFORMATION);
+            final JSONObject contactDetails = contact.optJSONObject(CONTACT_INFORMATION);
 
-            holder.tvContactName.setText(contact.optString(MapperConstants.DISPLAY_NAME));
-            final String strBMP = !TextUtils.isEmpty(contactDetails.optString(MapperConstants.JPEG_PHOTO))
-                    ? contactDetails.optString(MapperConstants.JPEG_PHOTO)
-                            : contactDetails.optString(MapperConstants.JPEG_URL);
+            holder.tvContactName.setText(contact.optString(DISPLAY_NAME));
+            final String strBMP = !TextUtils.isEmpty(contactDetails.optString(JPEG_PHOTO))
+                    ? contactDetails.optString(JPEG_PHOTO)
+                            : contactDetails.optString(JPEG_URL);
 
             final ImageLoader imageLoader = new ImageLoader(AppContext.getContext());
             imageLoader.displayIn(strBMP, holder.ivJpegPhoto);

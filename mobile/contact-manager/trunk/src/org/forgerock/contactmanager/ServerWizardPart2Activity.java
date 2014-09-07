@@ -16,7 +16,8 @@
 
 package org.forgerock.contactmanager;
 
-import static org.forgerock.contactmanager.Utils.checkEditValue;
+import static org.forgerock.contactmanager.Utils.*;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -79,10 +80,10 @@ public class ServerWizardPart2Activity extends AugmentedActivity {
                     newServerConfiguration.setSSL(toogleSSL.isChecked());
 
                     if (isEdit) {
-                        Utils.deleteServerConfigurationFromPreferences(original.getServerName());
+                        deleteServerConfigurationFromPreferences(original.getServerName());
                     }
-                    Utils.saveCurrentServer(newServerConfiguration);
-                    Utils.saveActiveServer(newServerConfiguration);
+                    saveCurrentServer(newServerConfiguration);
+                    saveActiveServer(newServerConfiguration);
 
                     final Intent intent = getIntent();
                     intent.putExtra("returnedData", "new server added");

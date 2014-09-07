@@ -17,12 +17,12 @@
 
 package org.forgerock.contactmanager;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.LinkedList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import static android.content.Intent.*;
+import static android.net.Uri.parse;
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
+import static java.lang.String.format;
+import static org.forgerock.contactmanager.AppContext.getContext;
 
 import android.app.AlertDialog;
 import android.content.ContentProviderOperation;
@@ -56,7 +56,14 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Launches the Contact activity screen.
@@ -66,17 +73,17 @@ public class ContactActivity extends AugmentedActivity {
     /**
      * The current history. Used to go back when this activity is reloaded.
      */
-    static LinkedList<JSONObject> historyBack;
+    private static LinkedList<JSONObject> historyBack;
 
     /**
      * The current displayed contact.
      */
-    Contact myDisplayedContact;
+    private Contact myDisplayedContact;
 
     /**
      * Actions are linked to image buttons.
      */
-    public enum Action {
+    private enum Action {
         /**
          * Phone call .
          */
@@ -94,10 +101,6 @@ public class ContactActivity extends AugmentedActivity {
          */
         GEOLOCATION,
         /**
-         * Add contact to phone address book action.
-         */
-        ADD_CONTACT,
-        /**
          * See linked manager action.
          */
         SEE_MANAGER
@@ -106,7 +109,7 @@ public class ContactActivity extends AugmentedActivity {
     /**
      * The section represents information groups which need to be displayed.
      */
-    public enum SECTION {
+    enum SECTION {
         /**
          * Home phone(s).
          */
@@ -163,13 +166,12 @@ public class ContactActivity extends AugmentedActivity {
                 display(SECTION.MAIL);
                 display(SECTION.ADDRESS);
 
-                final ImageLoader imageLoader = new ImageLoader(AppContext.getContext());
-                imageLoader.displayIn(myDisplayedContact.getPhotoLink(), ivPhoto);
+                new ImageLoader(getContext()).displayIn(myDisplayedContact.getPhotoLink(), ivPhoto);
 
                 display(SECTION.MANAGER);
 
             } catch (final JSONException e) {
-                Toast.makeText(getApplicationContext(), "Unable to load the contact data.", Toast.LENGTH_SHORT).show();
+                makeText(getApplicationContext(), "Unable to load the contact data.", LENGTH_SHORT).show();
                 Log.w("Json error", "Unable to load contact data : " + e.getMessage());
             }
         } else {
@@ -234,7 +236,7 @@ public class ContactActivity extends AugmentedActivity {
      */
     private void launchSMSAction(final String number) {
         final Intent intent = new Intent("android.intent.action.VIEW");
-        intent.setData(Uri.parse("sms:" + number));
+        intent.setData(parse("sms:" + number));
         startActivity(intent);
     }
 
@@ -245,8 +247,8 @@ public class ContactActivity extends AugmentedActivity {
      *            The phone number to call.
      */
     private void launchCallPhoneAction(final String number) {
-        final Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:" + number));
+        final Intent callIntent = new Intent(ACTION_CALL);
+        callIntent.setData(parse("tel:" + number));
         startActivity(callIntent);
     }
 
@@ -260,11 +262,11 @@ public class ContactActivity extends AugmentedActivity {
         try {
             // Checks if Google Maps is supported on given device
             Class.forName("com.google.android.maps.MapActivity");
-            final Intent i = new Intent("android.intent.action.VIEW", Uri.parse("geo:0,0?q="
+            final Intent i = new Intent("android.intent.action.VIEW", parse("geo:0,0?q="
                     + address.replace(' ', '+')));
             startActivity(i);
         } catch (final Exception e) {
-            Toast.makeText(getApplicationContext(), "Google Maps is not installed.", Toast.LENGTH_SHORT).show();
+            makeText(getApplicationContext(), "Google Maps is not installed.", LENGTH_SHORT).show();
         }
     }
 
@@ -275,7 +277,7 @@ public class ContactActivity extends AugmentedActivity {
     private void launchAddContact() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(
-                String.format(getResources().getString(R.string.contact_warning_add_contact),
+                format(getResources().getString(R.string.contact_warning_add_contact),
                         myDisplayedContact.getDisplayName())).setIcon(android.R.drawable.ic_dialog_info)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -293,10 +295,10 @@ public class ContactActivity extends AugmentedActivity {
      *            The email address to send the message.
      */
     private void launchMailAction(final String email) {
-        final Intent intent = new Intent(Intent.ACTION_SEND);
+        final Intent intent = new Intent(ACTION_SEND);
         intent.setType("message/rfc822");
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
-        startActivity(Intent.createChooser(intent, "Send an email to " + email));
+        intent.putExtra(EXTRA_EMAIL, new String[] { email });
+        startActivity(createChooser(intent, "Send an email to " + email));
     }
 
     private void launchSeeManagerAction(final String managerId) {
@@ -304,7 +306,7 @@ public class ContactActivity extends AugmentedActivity {
             historyBack = new LinkedList<JSONObject>();
         }
         historyBack.add(myDisplayedContact.getContact());
-        new AsyncServerRequest(ContactActivity.this, false).execute(String.format(Constants.SEARCH_SPECIFICUSER_BY_ID,
+        new AsyncServerRequest(ContactActivity.this, false).execute(format(Constants.SEARCH_SPECIFICUSER_BY_ID,
                 managerId));
     }
 
@@ -335,7 +337,7 @@ public class ContactActivity extends AugmentedActivity {
      */
     private void launchCall(final String phoneNumber) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(String.format(getResources().getString(R.string.warning_call_number), phoneNumber))
+        builder.setTitle(format(getResources().getString(R.string.warning_call_number), phoneNumber))
                 .setIcon(android.R.drawable.ic_dialog_dialer)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -467,7 +469,7 @@ public class ContactActivity extends AugmentedActivity {
         }
         final Uri uri = ContactsContract.RawContacts.getContactLookupUri(cr, res[0].uri);
         final Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_EDIT);
+        intent.setAction(ACTION_EDIT);
         intent.setData(uri);
         startActivityForResult(intent, RESULT_OK);
 
@@ -519,8 +521,8 @@ public class ContactActivity extends AugmentedActivity {
      *            {@code true} if a separation is needed at the end of the section.
      */
     private void display(final SECTION section, final boolean isEndingWithASeparator) {
-        LinkedList<String> data = new LinkedList<String>();
-        LinkedList<String[]> managers = null;
+        List<String> data = new LinkedList<String>();
+        List<String[]> managers = null;
         if (section == SECTION.MOBILE_PHONE) {
             data = myDisplayedContact.getMobilePhoneNumbers();
         } else if (section == SECTION.HOME_PHONE) {

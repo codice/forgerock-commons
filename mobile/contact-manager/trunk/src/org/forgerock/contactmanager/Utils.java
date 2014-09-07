@@ -16,7 +16,21 @@
 
 package org.forgerock.contactmanager;
 
+import static android.text.TextUtils.isEmpty;
+import static org.forgerock.contactmanager.AppContext.*;
+import static org.forgerock.contactmanager.Constants.ALL_SERVER_CONFIGURATIONS;
+import static org.forgerock.contactmanager.Constants.SELECTED_SERVER_CONFIGURATION;
 import static org.forgerock.contactmanager.MapperConstants.RESULT;
+
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.util.Log;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,19 +41,9 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.text.TextUtils;
-import android.util.Log;
-import android.widget.EditText;
-import android.widget.Toast;
 
 /**
  * This class contains utilities function for the android application.
@@ -61,7 +65,7 @@ public final class Utils {
      * @return {@code true} if the server has been successfully being deleted.
      */
     static final boolean deleteServerConfigurationFromPreferences(final String target) {
-        final LinkedList<ServerConfiguration> registered = loadRegisteredServerList();
+        final List<ServerConfiguration> registered = loadRegisteredServerList();
         final Iterator<ServerConfiguration> it = registered.iterator();
         final JSONArray jsonArray = new JSONArray();
         while (it.hasNext()) {
@@ -71,13 +75,13 @@ public final class Utils {
             }
         }
 
-        final Editor edit = AppContext.getPref().edit();
+        final Editor edit = getPref().edit();
         edit.remove("srvconf");
         edit.commit();
         edit.putString("srvconf", jsonArray.toString());
         edit.commit();
 
-        AppContext.setServerConfiguration(null);
+        setServerConfiguration(null);
 
         return true;
     }
@@ -89,9 +93,9 @@ public final class Utils {
      *            User shared preferences for this application.
      * @return A linked list of server configurations.
      */
-    static final LinkedList<ServerConfiguration> loadRegisteredServerList() {
-        LinkedList<ServerConfiguration> registered = null;
-        final String registeredListPref = AppContext.getPref().getString(Constants.ALL_SERVER_CONFIGURATIONS, null);
+    static final List<ServerConfiguration> loadRegisteredServerList() {
+        List<ServerConfiguration> registered = null;
+        final String registeredListPref = getPref().getString(ALL_SERVER_CONFIGURATIONS, null);
         if (registeredListPref != null) {
             registered = new LinkedList<ServerConfiguration>();
             try {
@@ -119,8 +123,8 @@ public final class Utils {
      */
     static final boolean saveCurrentServer(final ServerConfiguration configuration) {
 
-        final SharedPreferences pref = AppContext.getPref();
-        final String jsonArrayString = pref.getString(Constants.ALL_SERVER_CONFIGURATIONS, null);
+        final SharedPreferences pref = getPref();
+        final String jsonArrayString = pref.getString(ALL_SERVER_CONFIGURATIONS, null);
         JSONArray jsonArray = null;
         try {
             if (jsonArrayString != null) {
@@ -131,7 +135,7 @@ public final class Utils {
             jsonArray.put(configuration.toJSON());
 
             final Editor edit = pref.edit();
-            edit.putString(Constants.ALL_SERVER_CONFIGURATIONS, jsonArray.toString());
+            edit.putString(ALL_SERVER_CONFIGURATIONS, jsonArray.toString());
             edit.commit();
             return true;
         } catch (final JSONException e) {
@@ -151,8 +155,8 @@ public final class Utils {
      */
     static final boolean saveActiveServer(final ServerConfiguration configuration) {
         try {
-            final Editor edit = AppContext.getPref().edit();
-            edit.putString(Constants.SELECTED_SERVER_CONFIGURATION, configuration.toJSON());
+            final Editor edit = getPref().edit();
+            edit.putString(SELECTED_SERVER_CONFIGURATION, configuration.toJSON());
             edit.commit();
 
             return true;
@@ -169,7 +173,7 @@ public final class Utils {
      */
     static final ServerConfiguration loadActiveServer() {
         ServerConfiguration serverconfiguration = null;
-        final String active = AppContext.getPref().getString(Constants.SELECTED_SERVER_CONFIGURATION, null);
+        final String active = getPref().getString(SELECTED_SERVER_CONFIGURATION, null);
         if (active != null) {
             serverconfiguration = new ServerConfiguration();
             try {
@@ -189,7 +193,7 @@ public final class Utils {
      *            The JSON string representation.
      * @return A list of JSON objects.
      */
-    static final LinkedList<JSONObject> read(final String json) {
+    static final List<JSONObject> read(final String json) {
         if (json != null) {
             try {
                 return read(new JSONObject(json));
@@ -207,9 +211,9 @@ public final class Utils {
      *            The main SON object to parse.
      * @return A list of JSON objects.
      */
-    static final LinkedList<JSONObject> read(final JSONObject json) {
+    private static final List<JSONObject> read(final JSONObject json) {
         if (json != null) {
-            final LinkedList<JSONObject> results = new LinkedList<JSONObject>();
+            final List<JSONObject> results = new LinkedList<JSONObject>();
 
             try {
                 if (json.getString(RESULT) != null) {
@@ -297,8 +301,8 @@ public final class Utils {
      * @return {@code true} if the text is not empty.
      */
     static final boolean checkEditValue(final EditText editText) {
-        if (TextUtils.isEmpty(editText.getText())) {
-            Toast.makeText(AppContext.getContext(), String.format("Invalid input : '%s' ", editText.getHint()),
+        if (isEmpty(editText.getText())) {
+            Toast.makeText(getContext(), String.format("Invalid input : '%s' ", editText.getHint()),
                     Toast.LENGTH_SHORT).show();
             return false;
         }

@@ -16,16 +16,17 @@
 
 package org.forgerock.contactmanager;
 
-import java.util.LinkedList;
+import android.graphics.Bitmap;
+import android.text.TextUtils;
+import android.util.Log;
 
 import org.forgerock.contactmanager.ContactActivity.SECTION;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.graphics.Bitmap;
-import android.text.TextUtils;
-import android.util.Log;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class represents a contact which is actually a full representation of the json config file.
@@ -35,16 +36,16 @@ public class Contact {
     private String name;
     private String surname;
     private String displayName;
-    private LinkedList<String> homePhoneNumbers = new LinkedList<String>();
-    private LinkedList<String> mobilePhoneNumbers = new LinkedList<String>();
-    private LinkedList<String> mails = new LinkedList<String>();
+    private List<String> homePhoneNumbers = new LinkedList<String>();
+    private List<String> mobilePhoneNumbers = new LinkedList<String>();
+    private List<String> mails = new LinkedList<String>();
     private String address;
     private String postalCode;
     private String location;
     private String state;
     private String function;
     private String organization;
-    private LinkedList<String[]> managers = new LinkedList<String[]>();
+    private List<String[]> managers = new LinkedList<String[]>();
 
     private JSONObject contactDetails;
     private JSONObject contactAddress;
@@ -103,7 +104,7 @@ public class Contact {
      *
      * @return The home phone numbers of the contact.
      */
-    public LinkedList<String> getHomePhoneNumbers() {
+    public List<String> getHomePhoneNumbers() {
         return homePhoneNumbers;
     }
 
@@ -113,7 +114,7 @@ public class Contact {
      * @param homePhoneNumbers
      *            The home phone numbers of this contact.
      */
-    public void setHomePhoneNumbers(final LinkedList<String> homePhoneNumbers) {
+    public void setHomePhoneNumbers(final List<String> homePhoneNumbers) {
         this.homePhoneNumbers = homePhoneNumbers;
     }
 
@@ -122,7 +123,7 @@ public class Contact {
      *
      * @return The mobile phone numbers of the contact.
      */
-    public LinkedList<String> getMobilePhoneNumbers() {
+    public List<String> getMobilePhoneNumbers() {
         return mobilePhoneNumbers;
     }
 
@@ -132,7 +133,7 @@ public class Contact {
      * @param mobilePhoneNumbers
      *            The mobile phone numbers of this contact.
      */
-    public void setMobilePhoneNumbers(final LinkedList<String> mobilePhoneNumbers) {
+    public void setMobilePhoneNumbers(final List<String> mobilePhoneNumbers) {
         this.mobilePhoneNumbers = mobilePhoneNumbers;
     }
 
@@ -141,7 +142,7 @@ public class Contact {
      *
      * @return The e-mail addresses of this contact.
      */
-    public LinkedList<String> getMails() {
+    public List<String> getMails() {
         return mails;
     }
 
@@ -151,7 +152,7 @@ public class Contact {
      * @param mails
      *            The e-mail addresses of this contact.
      */
-    public void setMails(final LinkedList<String> mails) {
+    public void setMails(final List<String> mails) {
         this.mails = mails;
     }
 
@@ -337,7 +338,7 @@ public class Contact {
      *
      * @return The list of managers.
      */
-    public LinkedList<String[]> getManagers() {
+    public List<String[]> getManagers() {
         return managers;
     }
 
@@ -347,7 +348,7 @@ public class Contact {
      * @param managers
      *            A list of managers.
      */
-    public void setManagers(final LinkedList<String[]> managers) {
+    public void setManagers(final List<String[]> managers) {
         this.managers = managers;
     }
 
@@ -404,8 +405,8 @@ public class Contact {
      *
      * @return A list of managers.
      */
-    LinkedList<String[]> getManagerFromJSONContact() {
-        final LinkedList<String[]> extractedValues = new LinkedList<String[]>();
+    List<String[]> getManagerFromJSONContact() {
+        final List<String[]> extractedValues = new LinkedList<String[]>();
         final JSONArray pDetails = contact.optJSONArray(MapperConstants.MANAGER);
         if (pDetails != null) {
             try {
@@ -429,8 +430,8 @@ public class Contact {
      *            The selected section.
      * @return A list of sub values linked to a section.
      */
-    LinkedList<String> getSubValuesFromJson(final SECTION section) {
-        final LinkedList<String> extractedValues = new LinkedList<String>();
+    List<String> getSubValuesFromJson(final SECTION section) {
+        final List<String> extractedValues = new LinkedList<String>();
         JSONArray pDetails = null;
         if (section == SECTION.MOBILE_PHONE && contactDetails != null) {
             pDetails = contactDetails.optJSONArray(MapperConstants.MOBILE_NUMBER);

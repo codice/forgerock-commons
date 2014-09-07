@@ -16,6 +16,17 @@
 
 package org.forgerock.contactmanager;
 
+import static org.forgerock.contactmanager.Utils.copyStream;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
+import android.webkit.URLUtil;
+import android.widget.ImageView;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -30,15 +41,6 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
-import android.util.Log;
-import android.webkit.URLUtil;
-import android.widget.ImageView;
 
 /**
  * This class is utility to load image from URL or even base encoded JSON string.
@@ -113,7 +115,7 @@ public class ImageLoader {
             } else {
                 is = new BufferedInputStream(new URL(url).openStream(), 8 * 1024);
             }
-            Utils.copyStream(is, new FileOutputStream(f));
+            copyStream(is, new FileOutputStream(f));
             return decodeFile(f);
         } catch (final IllegalArgumentException ex) {
             Log.w("Illegal argument", ex.getMessage());

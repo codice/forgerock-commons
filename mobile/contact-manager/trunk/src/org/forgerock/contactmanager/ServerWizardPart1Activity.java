@@ -17,6 +17,7 @@
 package org.forgerock.contactmanager;
 
 import static org.forgerock.contactmanager.Utils.checkEditValue;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -31,6 +32,8 @@ import android.widget.EditText;
 public class ServerWizardPart1Activity extends AugmentedActivity {
 
     private boolean isEdit;
+
+    private static final int EXPECTED_RETURN_CODE = 10;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -58,17 +61,17 @@ public class ServerWizardPart1Activity extends AugmentedActivity {
             public void onClick(final View v) {
 
                 if (checkEditValue(etServerAddress)) {
-                    final Intent intent2 = new Intent(ServerWizardPart1Activity.this, ServerWizardPart2Activity.class);
-                    intent2.putExtra("serverName", etServerName.getText().toString().trim());
+                    final Intent next = new Intent(ServerWizardPart1Activity.this, ServerWizardPart2Activity.class);
+                    next.putExtra("serverName", etServerName.getText().toString().trim());
                     final String address = etServerAddress.getText().toString()
                             .replace("https://", "")
                             .replace("http://", "")
                             .trim();
-                    intent2.putExtra("address", address);
+                    next.putExtra("address", address);
                     if (isEdit) {
-                        intent2.putExtra("isEdit", true);
+                        next.putExtra("isEdit", true);
                     }
-                    startActivityForResult(intent2, 10);
+                    startActivityForResult(next, EXPECTED_RETURN_CODE);
                 }
             }
         });
@@ -77,7 +80,7 @@ public class ServerWizardPart1Activity extends AugmentedActivity {
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == 10) {
+        if (resultCode == RESULT_OK && requestCode == EXPECTED_RETURN_CODE) {
             final String msg = data.getStringExtra("returnedData");
             final Intent intent = new Intent();
             intent.putExtra("returnedData", msg);

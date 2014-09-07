@@ -16,14 +16,14 @@
 
 package org.forgerock.contactmanager;
 
-import android.text.TextUtils;
+import static android.text.TextUtils.isEmpty;
 
 /**
  * The paged result cookie class is utility to maintain pagination on main 'search activity'.
  */
 final class PagedResultCookie {
 
-    static String cookie = "";
+    private static String cookie = "";
 
     static void setCookie(final String prCookie) {
         if (prCookie == null || "null".equals(prCookie)) {
@@ -34,7 +34,7 @@ final class PagedResultCookie {
     }
 
     static String getPagedResultCookie() {
-        return !TextUtils.isEmpty(cookie) ? "&_pagedResultsCookie=" + cookie : "";
+        return !isEmpty(cookie) ? "&_pagedResultsCookie=" + cookie : "";
     }
 
     static void initialize() {

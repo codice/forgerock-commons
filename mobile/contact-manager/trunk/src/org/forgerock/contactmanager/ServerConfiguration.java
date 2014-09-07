@@ -16,11 +16,11 @@
 
 package org.forgerock.contactmanager;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.text.TextUtils;
 import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * This class represents common server configuration which is used by this application to connect to the REST OpenDJ

@@ -16,7 +16,9 @@
 
 package org.forgerock.contactmanager;
 
-import java.util.LinkedList;
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
+import static org.forgerock.contactmanager.Utils.*;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -31,8 +33,9 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import java.util.List;
 
 /**
  * The 'settings' class activity.
@@ -54,7 +57,7 @@ public class SettingsActivity extends AugmentedActivity {
         final Spinner serverSpinner = (Spinner) findViewById(R.id.settings_spinner_servers);
         final ToggleButton toogleSSL = (ToggleButton) findViewById(R.id.settings_toggle_ssl);
 
-        final LinkedList<ServerConfiguration> servers = Utils.loadRegisteredServerList();
+        final List<ServerConfiguration> servers = loadRegisteredServerList();
         final TextView tvSrvAddress = (TextView) findViewById(R.id.settings_selected_server_address_content);
         final TextView tvAuthentication = (TextView) findViewById(R.id.settings_selected_authentication_content);
 
@@ -63,8 +66,9 @@ public class SettingsActivity extends AugmentedActivity {
 
         if (servers != null && servers.size() > 0) {
             serverListViewMode();
-            serverConfiguration = (ServerConfiguration) adapter.getItem(ServerListAdapter.getSelectedIndex());
-            serverSpinner.setSelection(ServerListAdapter.getSelectedIndex());
+            final int selectedSrvIndex = ServerListAdapter.getSelectedIndex();
+            serverConfiguration = (ServerConfiguration) adapter.getItem(selectedSrvIndex);
+            serverSpinner.setSelection(selectedSrvIndex);
             tvSrvAddress.setText(serverConfiguration.getAddress());
         } else {
             emptyServerListViewMode();
@@ -77,13 +81,13 @@ public class SettingsActivity extends AugmentedActivity {
                 serverConfiguration = (ServerConfiguration) serverSpinner.getAdapter().getItem(
                         serverSpinner.getSelectedItemPosition());
                 AppContext.setServerConfiguration(serverConfiguration);
-                Utils.saveActiveServer(serverConfiguration);
+                saveActiveServer(serverConfiguration);
                 ServerListAdapter.setSelectedIndex(arg0.getSelectedItemPosition());
 
-                Toast.makeText(
+                makeText(
                         getApplicationContext(),
                         String.format(getResources().getString(R.string.warning_selected_server),
-                                serverConfiguration.getServerName()), Toast.LENGTH_SHORT).show();
+                                serverConfiguration.getServerName()), LENGTH_SHORT).show();
 
                 tvSrvAddress.setText(serverConfiguration.getAddress());
                 toogleSSL.setChecked(serverConfiguration.isSSL());
@@ -126,7 +130,7 @@ public class SettingsActivity extends AugmentedActivity {
                 startActivityForResult(intentEdit, 1);
                 return true;
             } else {
-                Toast.makeText(getApplicationContext(), "No selected server", Toast.LENGTH_SHORT).show();
+                makeText(getApplicationContext(), "No selected server", LENGTH_SHORT).show();
             }
 
         } else if (itemId == R.id.settings_action_delete) {
@@ -134,7 +138,7 @@ public class SettingsActivity extends AugmentedActivity {
                 deleteSelectedServerWarning();
                 return true;
             } else {
-                Toast.makeText(getApplicationContext(), "No selected server", Toast.LENGTH_SHORT).show();
+                makeText(getApplicationContext(), "No selected server", LENGTH_SHORT).show();
             }
 
         } else if (itemId == R.id.settings_action_about) {
@@ -169,12 +173,12 @@ public class SettingsActivity extends AugmentedActivity {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
                         /* When yes is clicked, proceed to deletion of the selected server. */
-                        final boolean isOk = Utils.deleteServerConfigurationFromPreferences(serverConfiguration
+                        final boolean isOk = deleteServerConfigurationFromPreferences(serverConfiguration
                                 .getServerName());
                         if (isOk) {
                             refreshSpinner();
                         } else {
-                            Toast.makeText(getApplicationContext(), "Could not retrieve data ", Toast.LENGTH_SHORT)
+                            makeText(getApplicationContext(), "Could not retrieve data ", LENGTH_SHORT)
                                     .show();
                         }
                     }
@@ -186,10 +190,9 @@ public class SettingsActivity extends AugmentedActivity {
      */
     private void refreshSpinner() {
         final Spinner serverSpinner = (Spinner) findViewById(R.id.settings_spinner_servers);
-        final ServerListAdapter adapter = new ServerListAdapter(this, Utils.loadRegisteredServerList());
-        final ServerConfiguration activeServer = Utils.loadActiveServer();
+        final ServerListAdapter adapter = new ServerListAdapter(this, loadRegisteredServerList());
         serverSpinner.setAdapter(adapter);
-        serverSpinner.setSelection(adapter.getPosition(activeServer.getServerName()));
+        serverSpinner.setSelection(adapter.getPosition(loadActiveServer().getServerName()));
         if (serverSpinner.getCount() == 0) {
             emptyServerListViewMode();
         } else {

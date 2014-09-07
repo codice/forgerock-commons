@@ -16,6 +16,8 @@
 
 package org.forgerock.contactmanager;
 
+import static android.content.Intent.*;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,8 +41,8 @@ public class AboutActivity extends AugmentedActivity {
             @Override
             public void onClick(final View v) {
                 final Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                intent.setAction(ACTION_VIEW);
+                intent.addCategory(CATEGORY_BROWSABLE);
                 intent.setData(Uri.parse("http://www.forgerock.com"));
                 startActivity(intent);
             }
