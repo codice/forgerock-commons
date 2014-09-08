@@ -25,6 +25,7 @@ import org.forgerock.doc.maven.build.Webhelp;
 import org.forgerock.doc.maven.build.Xhtml5;
 import org.forgerock.doc.maven.post.Html;
 import org.forgerock.doc.maven.post.NoOp;
+import org.forgerock.doc.maven.post.WebhelpPost;
 import org.forgerock.doc.maven.post.Xhtml;
 import org.forgerock.doc.maven.pre.Branding;
 import org.forgerock.doc.maven.pre.CommonContent;
@@ -124,7 +125,7 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
             (new NoOp(this)).execute();
         }
         if (formats.contains("webhelp")) {
-            (new NoOp(this)).execute();
+            (new WebhelpPost(this)).execute();
         }
         if (formats.contains("xhtml5")) {
             (new Xhtml(this)).execute();

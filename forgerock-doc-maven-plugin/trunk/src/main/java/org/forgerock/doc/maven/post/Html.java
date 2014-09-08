@@ -61,25 +61,23 @@ public class Html {
 
 
         // Add SyntaxHighlighter files.
+        final File htmlDir = new File(m.getDocbkxOutputDirectory(), "html");
+        final String chunkDirName = FilenameUtils.getBaseName(m.getDocumentSrcName());
+
         String[] outputDirectories = new String[2 * m.getDocNames().size()];
 
         int i = 0;
         for (final String docName : m.getDocNames()) {
 
+            final File docDir = new File(htmlDir, docName);
+
             // Examples:
             // ${project.build.directory}/docbkx/html/my-book
-            outputDirectories[i] =
-                    m.getDocbkxOutputDirectory().getPath()
-                            + File.separator + "html"
-                            + File.separator + docName;
+            outputDirectories[i] = docDir.getPath();
             ++i;
 
             // ${project.build.directory}/docbkx/html/my-book/index
-            outputDirectories[i] =
-                    m.getDocbkxOutputDirectory().getPath()
-                            + File.separator + "html"
-                            + File.separator + docName
-                            + File.separator + FilenameUtils.getBaseName(m.getDocumentSrcName());
+            outputDirectories[i] = new File(docDir, chunkDirName).getPath();
             ++i;
         }
 
@@ -94,7 +92,25 @@ public class Html {
 
 
         // Edit the HTML for publication.
-        editBuiltHtml(m.getDocbkxOutputDirectory().getPath() + File.separator + "html");
+        editBuiltHtml(htmlDir.getPath());
+
+
+        // Optionally fix links to arbitrary resources in chunked HTML.
+        if (m.doCopyResourceFiles() && m.getResourcesDirectory().exists()) {
+
+            final String baseName = FilenameUtils.getBaseName(m.getResourcesDirectory().getPath());
+
+            for (final String docName : m.getDocNames()) {
+
+                final File docDir = new File(htmlDir, docName);
+
+                try {
+                    HtmlUtils.fixResourceLinks(new File(docDir, chunkDirName).getPath(), baseName);
+                } catch (IOException e) {
+                    throw new MojoExecutionException("Failed to update resource links", e);
+                }
+            }
+        }
     }
 
     /**
@@ -109,7 +125,7 @@ public class Html {
      *
      * @throws MojoExecutionException Failed to add script.
      */
-    void addScript() throws MojoExecutionException {
+    private void addScript() throws MojoExecutionException {
 
         final URL scriptUrl = getClass().getResource("/js/" + m.getJavaScriptFileName());
         String scriptString;
@@ -172,7 +188,7 @@ public class Html {
      * @param htmlDir Directory under which to find HTML output
      * @throws MojoExecutionException Something went wrong when updating HTML.
      */
-    final void editBuiltHtml(final String htmlDir) throws MojoExecutionException {
+    private void editBuiltHtml(final String htmlDir) throws MojoExecutionException {
         try {
             HashMap<String, String> replacements = new HashMap<String, String>();
 
@@ -210,7 +226,7 @@ public class Html {
      *
      * @return &lt;p&gt; containing a link to log a bug in JIRA.
      */
-    final String getLinkToJira() {
+    private String getLinkToJira() {
         String link = "<p>&nbsp;</p><div id=\"footer\"><p>Something wrong on this page? "
                 + "<a href=\"JIRA-URL\">Log a documentation bug.</a></p></div>";
 

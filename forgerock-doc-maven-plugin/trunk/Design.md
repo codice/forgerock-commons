@@ -64,6 +64,7 @@ Most formats currently require no post-processing.
 
 *  HTML post-processing (`Html`)
 *  No post-processing (`NoOp`)
+*  Webhelp post-processing (`WebhelpPost`)
 *  XHTML post-processing (`Xhtml`)
 
 This stage is performed during the `pre-site` phase, `build` goal. (`PreSiteMojo`)

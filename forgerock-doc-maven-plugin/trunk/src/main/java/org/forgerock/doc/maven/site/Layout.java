@@ -17,10 +17,13 @@ package org.forgerock.doc.maven.site;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.element;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.name;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,6 +106,11 @@ public class Layout {
                             element(name("include"), "**/*.rtf"))));
         }
 
+        if (formats.contains("xhtml5")) {
+            r.add(element(name("resource"),
+                    element(name("directory"), outputDir + "/xhtml/")));
+        }
+
         // Webhelp is handled separately.
 
         return element("resources", r.toArray(new MojoExecutor.Element[r.size()]));
@@ -154,6 +162,16 @@ public class Layout {
                                                 element(name("excludes"),
                                                         element(name("exclude"), "**/*.target.db"))))),
                         executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
+            }
+
+            // Optionally copy an entire directory of arbitrary resources, too.
+            if (m.doCopyResourceFiles() && m.getResourcesDirectory().exists()) {
+                try {
+                    FileUtils.copyDirectoryToDirectory(m.getResourcesDirectory(),
+                            new File(m.getSiteDirectory(), "doc"));
+                } catch (IOException e) {
+                    throw new MojoExecutionException("Failed to copy resources", e);
+                }
             }
         }
     }

@@ -305,6 +305,27 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
+     * Whether to copy resource files alongside docs for site, release.
+     *
+     * @parameter default-value="false" property="copyResourceFiles"
+     * @required
+     */
+    private boolean copyResourceFiles;
+
+    /**
+     * Whether to copy resource files alongside docs for site, release.
+     *
+     * <p>
+     *
+     * Default: false
+     *
+     * @return true if resource files should be copied.
+     */
+    public boolean doCopyResourceFiles() {
+        return copyResourceFiles;
+    }
+
+    /**
      * Base directory for the modifiable copy of DocBook XML source files,
      * relative to the build directory.
      *
@@ -1294,6 +1315,28 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public String getResourcesVersion() {
         return resourcesVersion;
+    }
+
+    /**
+     * File system directory for arbitrary documentation set resources,
+     * relative to the modifiable sources directory.
+     *
+     * @parameter default-value="resources" property="resourcesDirectory"
+     * @required
+     */
+    private String resourcesDirectory;
+
+    /**
+     * Directory for arbitrary documentation set resources.
+     *
+     * <p>
+     *
+     * Default: {@code ${basedir}/src/main/docbkx/resources}
+     *
+     * @return The resources directory.
+     */
+    public File getResourcesDirectory() {
+        return new File(getDocbkxModifiableSourcesDirectory(), resourcesDirectory);
     }
 
     /**

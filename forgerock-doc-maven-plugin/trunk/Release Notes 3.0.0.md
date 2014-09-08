@@ -49,6 +49,14 @@ See the explanation below for details.
 
 ## What's New
 
+**DOCS-203: Provide a convention for copying arbitrary files to the built documentation**
+
+The fix introduces two settings, `<copyResourceFiles>` (default: `false`),
+and `<resourcesDirectory>` (default: `src/main/docbkx/resources`).
+
+See the README for additional information. 
+
+
 **DOCS-198: Build a cleaner version of the HTML**
 
 You can now build XHTML5 that applies only default styles,

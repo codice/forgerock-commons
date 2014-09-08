@@ -22,6 +22,7 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -119,6 +120,31 @@ public final class HtmlUtils {
 
         FilteredFileUpdater ffu = new FilteredFileUpdater(replacements, filter);
         return ffu.update(new File(baseDir));
+    }
+
+
+    /**
+     * Fix links to arbitrary resources in HTML files.
+     *
+     * <p>
+     *
+     * Chunked HTML and webhelp have extra directories in the path.
+     * Links like {@code ../resources/file.txt} that work in the source
+     * do not work as is in these formats.
+     * Instead the links need an extra .. as in {@code ../../resources/file.txt}.
+     *
+     * @param htmlDir              Path to a directory containing HTML.
+     * @param resourcesDirBaseName Base name of the resources directory.
+     * @throws IOException Something went wrong updating links.
+     */
+    public static void fixResourceLinks(final String htmlDir, final String resourcesDirBaseName)
+            throws IOException {
+
+        HashMap<String, String> replacements = new HashMap<String, String>();
+        replacements.put("href=\'../" + resourcesDirBaseName, "href=\'../../" + resourcesDirBaseName);
+        replacements.put("href=\"../" + resourcesDirBaseName, "href=\"../../" + resourcesDirBaseName);
+
+        updateHtml(htmlDir, replacements);
     }
 
     /**
