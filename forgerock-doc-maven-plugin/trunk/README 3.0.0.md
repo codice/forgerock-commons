@@ -327,6 +327,22 @@ on the `<programlisting>` element, as in the following example:
     </programlisting>
 
 
+## Copying Arbitrary Documentation Set Resources
+
+If the documentation set includes resource files such as large samples
+that you link to, but that are not cited in the documentation,
+those resource files are not automatically copied alongside the output.
+
+Instead you must set `<copyResourceFiles>` to `true`.
+
+The plugin expects to find the resources under `src/main/docbkx/resources`.
+You can set this to another directory under `src/main/docbkx`
+by using the `<resourcesDirectory>` setting.
+
+These settings have an effect only for the `site` and `release` goals.
+The plugin does not copy resources during the `pre-site` phase `build` goal.
+
+
 ## Citing Java Code
 
 [JCite](http://arrenbrecht.ch/jcite/) lets you cite, rather than copy and paste,

@@ -17,10 +17,13 @@ package org.forgerock.doc.maven.release;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.element;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.name;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,6 +103,7 @@ public class Layout {
          * @throws MojoExecutionException Failed to lay out documents.
          */
         public void layout() throws MojoExecutionException {
+            final File outputDir = new File(m.getReleaseDirectory(), m.getReleaseVersion());
 
             executeMojo(
                     plugin(groupId("org.apache.maven.plugins"),
@@ -108,10 +112,19 @@ public class Layout {
                     goal("copy-resources"),
                     configuration(
                             element(name("encoding"), "UTF-8"),
-                            element(name("outputDirectory"),
-                                    m.path(m.getReleaseDirectory()) + "/" + m.getReleaseVersion()),
+                            element(name("outputDirectory"), m.path(outputDir)),
                             getResources()),
                     executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
+
+
+            // Optionally copy an entire directory of arbitrary resources, too.
+            if (m.doCopyResourceFiles() && m.getResourcesDirectory().exists()) {
+                try {
+                    FileUtils.copyDirectoryToDirectory(m.getResourcesDirectory(), outputDir);
+                } catch (IOException e) {
+                    throw new MojoExecutionException("Failed to copy resources", e);
+                }
+            }
         }
     }
 }
