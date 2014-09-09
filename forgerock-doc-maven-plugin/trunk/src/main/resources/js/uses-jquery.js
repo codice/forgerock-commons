@@ -80,7 +80,7 @@ $(document).ready(function () {
         }
 
         $(this).append('<span class=\"showlink\" ' +
-                             'title=\"Scroll heading to top of page\"> &#x1f517;</span>');
+                             'title=\"Scroll heading to top of page\"> &#x2693;</span>');
         $(this).wrap('<a href=\"#' + href + '\"></a>');
         $(this).mouseenter(function () {
             $(this).children('span.showlink').show();
