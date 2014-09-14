@@ -166,7 +166,7 @@ public final class Fop {
             for (String font : fonts) {
                 final URL source = getClass().getResource(font);
                 final File destination = new File(
-                        m.getBuildDirectory() + font.replaceAll("/", File.separator));
+                        m.getBuildDirectory(), font.replaceAll("/", File.separator));
                 try {
                     FileUtils.copyURLToFile(source, destination);
                 } catch (IOException e) {
@@ -186,11 +186,13 @@ public final class Fop {
             final String fontsDir = m.path(m.getFontsDirectory());
 
             executeMojo(
-                    plugin(groupId("com.agilejava.docbkx"),
+                    plugin(
+                            groupId("com.agilejava.docbkx"),
                             artifactId("docbkx-fop-support"),
                             version(m.getDocbkxVersion())),
                     goal("generate"),
-                    configuration(element(name("ansi"), m.useAnsi()),
+                    configuration(
+                            element(name("ansi"), m.useAnsi()),
                             element(name("sourceDirectory"), fontsDir),
                             element(name("targetDirectory"), fontsDir)),
                     executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));

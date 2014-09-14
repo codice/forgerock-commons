@@ -73,13 +73,12 @@ public class Manpage {
             ArrayList<Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.addAll(m.getBaseConfiguration());
             cfg.add(element(name("includes"), "*/" + m.getDocumentSrcName()));
-            cfg.add(element(name("manpagesCustomization"),
-                    m.path(m.getManpagesCustomization())));
-            cfg.add(element(name("targetDirectory"),
-                    m.path(m.getDocbkxOutputDirectory()) + "/manpages"));
+            cfg.add(element(name("manpagesCustomization"), m.path(m.getManpagesCustomization())));
+            cfg.add(element(name("targetDirectory"), m.path(m.getDocbkxOutputDirectory()) + "/manpages"));
 
             executeMojo(
-                    plugin(groupId("com.agilejava.docbkx"),
+                    plugin(
+                            groupId("com.agilejava.docbkx"),
                             artifactId("docbkx-maven-plugin"),
                             version(m.getDocbkxVersion())),
                     goal("generate-manpages"),

@@ -48,7 +48,7 @@ public class IndexHtml {
      */
     public void execute() throws MojoExecutionException {
         if (!m.keepCustomIndexHtml()) {
-            final File indexHtml = new File(m.getReleaseVersionPath() + File.separator + "index.html");
+            final File indexHtml = new File(m.getReleaseVersionPath(), "index.html");
             FileUtils.deleteQuietly(indexHtml);
 
             try {

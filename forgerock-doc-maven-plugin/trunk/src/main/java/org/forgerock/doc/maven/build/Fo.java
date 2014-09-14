@@ -170,8 +170,7 @@ public class Fo {
                 ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
                 cfg.addAll(m.getBaseConfiguration());
                 cfg.add(element(name("xincludeSupported"), m.isXincludeSupported()));
-                cfg.add(element(name("sourceDirectory"),
-                        m.path(m.getDocbkxModifiableSourcesDirectory())));
+                cfg.add(element(name("sourceDirectory"), m.path(m.getDocbkxModifiableSourcesDirectory())));
                 cfg.add(element(name("fop1Extensions"), "1"));
                 cfg.add(element(name("collectXrefTargets"), "yes"));
                 if (getFormat().equalsIgnoreCase("pdf")) {
@@ -199,7 +198,8 @@ public class Fo {
                 }
 
                 executeMojo(
-                        plugin(groupId("com.agilejava.docbkx"),
+                        plugin(
+                                groupId("com.agilejava.docbkx"),
                                 artifactId("docbkx-maven-plugin"),
                                 version(docbkxVersion)),
                         goal("generate-" + getFormat()),
@@ -207,9 +207,8 @@ public class Fo {
                         executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager())
                 );
 
-                File outputDir = new File(m.getBaseDir(),
-                        "target" + File.separator + "docbkx" + File.separator
-                                + getFormat() + File.separator + docName);
+                File outputDir = FileUtils.getFile(
+                        m.getBaseDir(), "target", "docbkx", getFormat(), docName);
 
                 // <targetsFilename> is ignored with docbkx-tools 2.0.15,
                 // but not with 2.0.14.
@@ -250,8 +249,7 @@ public class Fo {
                     cfg.add(element(name("insertOlinkPdfFrag"), "1"));
                 }
                 cfg.add(element(name("targetDatabaseDocument"), getTargetDB()));
-                cfg.add(element(name("targetDirectory"),
-                        m.path(m.getDocbkxOutputDirectory()) + "/" + getFormat()));
+                cfg.add(element(name("targetDirectory"), m.path(m.getDocbkxOutputDirectory()) + "/" + getFormat()));
 
                 final String fontDir = m.path(m.getFontsDirectory());
                 cfg.add(Fop.getFontsElement(fontDir));
@@ -283,10 +281,9 @@ public class Fo {
                         executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
 
                 // Avoid each new document overwriting the last.
-                File file = new File(m.getDocbkxOutputDirectory(), getFormat()
-                        + File.separator
-                        + FilenameUtils.getBaseName(m.getDocumentSrcName()) + "."
-                        + getFormat());
+                File file = FileUtils.getFile(
+                        m.getDocbkxOutputDirectory(), getFormat(),
+                        FilenameUtils.getBaseName(m.getDocumentSrcName()) + "." + getFormat());
                 NameUtils.renameDocument(file, docName, m.getProjectName());
             }
         }

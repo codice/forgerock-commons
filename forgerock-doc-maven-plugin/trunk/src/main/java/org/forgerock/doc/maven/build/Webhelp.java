@@ -64,7 +64,7 @@ public class Webhelp {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = new File(m.getBuildDirectory() + File.separator + "olinkdb-webhelp.xml");
+        File targetDB = new File(m.getBuildDirectory(), "olinkdb-webhelp.xml");
 
         try {
             StringBuilder content = new StringBuilder();
@@ -149,7 +149,8 @@ public class Webhelp {
                                 + "-webhelp.target.db"));
 */
                 executeMojo(
-                        plugin(groupId("com.agilejava.docbkx"),
+                        plugin(
+                                groupId("com.agilejava.docbkx"),
                                 artifactId("docbkx-maven-plugin"),
                                 version(m.getDocbkxVersion())),
                         goal("generate-webhelp"),
@@ -185,7 +186,8 @@ public class Webhelp {
                 cfg.add(element(name("includes"), docName + "/" + m.getDocumentSrcName()));
 
                 executeMojo(
-                        plugin(groupId("com.agilejava.docbkx"),
+                        plugin(
+                                groupId("com.agilejava.docbkx"),
                                 artifactId("docbkx-maven-plugin"),
                                 version(m.getDocbkxVersion())),
                         goal("generate-webhelp"),
@@ -193,16 +195,10 @@ public class Webhelp {
                         executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
 
                 // Copy CSS and logo into place in the new webhelp output.
-                final File webHelpCss = new File(webHelpBase,
-                        docName + File.separator
-                                + "common" + File.separator
-                                + "css" + File.separator
-                                + "positioning.css");
-                final File webHelpLogo = new File(webHelpBase,
-                        docName + File.separator
-                                + "common" + File.separator
-                                + "images" + File.separator
-                                + "logo.png");
+                final File webHelpCss = FileUtils.getFile(
+                        webHelpBase, docName, "common", "css", "positioning.css");
+                final File webHelpLogo = FileUtils.getFile(
+                        webHelpBase, docName, "common", "images", "logo.png");
                 try {
                     FileUtils.copyFile(m.getWebHelpCss(), webHelpCss);
                     FileUtils.copyFile(m.getWebHelpLogo(), webHelpLogo);

@@ -154,8 +154,8 @@ public class Html {
 
             for (final String docName : m.getDocNames()) {
 
-                final File parent = new File(m.getDocbkxOutputDirectory(),
-                        "html" + File.separator + docName + outputDirectory);
+                final File parent = FileUtils.getFile(
+                        m.getDocbkxOutputDirectory(), "html", docName + outputDirectory);
                 final File scriptFile = new File(parent, m.getJavaScriptFileName());
 
                 try {
@@ -188,7 +188,7 @@ public class Html {
      * @param htmlDir Directory under which to find HTML output
      * @throws MojoExecutionException Something went wrong when updating HTML.
      */
-    private void editBuiltHtml(final String htmlDir) throws MojoExecutionException {
+    final void editBuiltHtml(final String htmlDir) throws MojoExecutionException {
         try {
             HashMap<String, String> replacements = new HashMap<String, String>();
 

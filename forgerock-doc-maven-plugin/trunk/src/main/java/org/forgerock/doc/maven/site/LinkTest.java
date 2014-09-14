@@ -72,14 +72,14 @@ public class LinkTest {
 
             final String include =
                     m.getDocbkxModifiableSourcesDirectory().getPath() + "/**/" + m.getDocumentSrcName();
-            final String log =
-                    m.getDocbkxOutputDirectory().getPath() + File.separator + "linktester.err";
+            final String log = m.path(new File(m.getDocbkxOutputDirectory(), "linktester.err"));
             final String jiraUrlPattern =
                     "^https://bugster.forgerock.org/jira/browse/OPEN(AM|DJ|ICF|IDM|IG)-[0-9]{1,4}$";
             final String rfcUrlPattern = "^http://tools.ietf.org/html/rfc[0-9]+$";
 
             executeMojo(
-                    plugin(groupId("org.forgerock.maven.plugins"),
+                    plugin(
+                            groupId("org.forgerock.maven.plugins"),
                             artifactId("linktester-maven-plugin"),
                             version(m.getLinkTesterVersion())),
                     goal("check"),

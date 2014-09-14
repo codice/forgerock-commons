@@ -79,10 +79,9 @@ public final class ImageCopier {
             throw new MojoExecutionException("No document names found.");
         }
 
-        String s = File.separator;
         String extra = "";
         if (!(baseName == null) && !baseName.equalsIgnoreCase("")) {
-            extra = s + baseName;
+            extra = File.separator + baseName;
         }
 
         FileFilter onlyImages = new SuffixFileFilter(IMAGE_FILE_SUFFIXES);
@@ -90,8 +89,8 @@ public final class ImageCopier {
         for (String docName : docNames) {
 
             // Copy images specific to the document.
-            File srcDir = new File(sourceDirectory, docName + s + "images");
-            File destDir = new File(outputDirectory, docType + s + docName + extra + s + "images");
+            File srcDir = FileUtils.getFile(sourceDirectory, docName, "images");
+            File destDir = FileUtils.getFile(outputDirectory, docType, docName + extra, "images");
             try {
                 if (srcDir.exists()) {
                     FileUtils.copyDirectory(srcDir, destDir, onlyImages);
@@ -102,9 +101,9 @@ public final class ImageCopier {
             }
 
             // Copy any shared images.
-            String shared = "shared" + s + "images";
+            String shared = "shared" + File.separator + "images";
             srcDir = new File(sourceDirectory, shared);
-            destDir = new File(outputDirectory, docType + s + docName + extra + s + shared);
+            destDir = FileUtils.getFile(outputDirectory, docType, docName + extra, shared);
             try {
                 if (srcDir.exists()) {
                     FileUtils.copyDirectory(srcDir, destDir, onlyImages);

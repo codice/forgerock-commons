@@ -66,8 +66,7 @@ public class Xhtml5 {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = new File(
-                m.getBuildDirectory() + File.separator + "olinkdb-xhtml.xml");
+        File targetDB = new File(m.getBuildDirectory(), "olinkdb-xhtml.xml");
 
         try {
             StringBuilder content = new StringBuilder();
@@ -154,7 +153,8 @@ public class Xhtml5 {
 */
 
                 executeMojo(
-                        plugin(groupId("com.agilejava.docbkx"),
+                        plugin(
+                                groupId("com.agilejava.docbkx"),
                                 artifactId("docbkx-maven-plugin"),
                                 version(m.getDocbkxVersion())),
                         goal("generate-xhtml5"),
@@ -185,7 +185,8 @@ public class Xhtml5 {
             cfg.add(element(name("xincludeSupported"), m.isXincludeSupported()));
 
             executeMojo(
-                    plugin(groupId("com.agilejava.docbkx"),
+                    plugin(
+                            groupId("com.agilejava.docbkx"),
                             artifactId("docbkx-maven-plugin"),
                             version(m.getDocbkxVersion())),
                     goal("generate-xhtml5"),
