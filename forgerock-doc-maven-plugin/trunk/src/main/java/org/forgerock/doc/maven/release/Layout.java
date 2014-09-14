@@ -106,7 +106,8 @@ public class Layout {
             final File outputDir = new File(m.getReleaseDirectory(), m.getReleaseVersion());
 
             executeMojo(
-                    plugin(groupId("org.apache.maven.plugins"),
+                    plugin(
+                            groupId("org.apache.maven.plugins"),
                             artifactId("maven-resources-plugin"),
                             version(m.getResourcesVersion())),
                     goal("copy-resources"),

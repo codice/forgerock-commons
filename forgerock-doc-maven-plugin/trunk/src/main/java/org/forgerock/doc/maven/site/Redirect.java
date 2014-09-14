@@ -48,8 +48,7 @@ public class Redirect {
      */
     public void execute() throws MojoExecutionException {
         try {
-            String s = File.separator;
-            File file = new File(m.getSiteDirectory().getPath() + s + "doc" + s + "index.html");
+            File file = FileUtils.getFile(m.getSiteDirectory(), "doc", "index.html");
             if (!file.exists()) {
                 String redirect = IOUtils.toString(getClass().getResourceAsStream("/index.html"), "UTF-8");
                 redirect = redirect.replaceAll("PROJECT", m.getProjectName())

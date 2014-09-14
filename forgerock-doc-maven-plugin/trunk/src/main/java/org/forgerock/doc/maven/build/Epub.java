@@ -14,6 +14,7 @@
 
 package org.forgerock.doc.maven.build;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
@@ -81,22 +82,21 @@ public class Epub {
                 ArrayList<Element> cfg = new ArrayList<MojoExecutor.Element>();
                 cfg.addAll(m.getBaseConfiguration());
                 cfg.add(element(name("epubCustomization"), m.path(m.getEpubCustomization())));
-                cfg.add(element(name("targetDirectory"),
-                        m.path(m.getDocbkxOutputDirectory()) + "/epub"));
+                cfg.add(element(name("targetDirectory"), m.path(m.getDocbkxOutputDirectory()) + "/epub"));
 
-                cfg.add(element(name("includes"), docName + "/"
-                        + m.getDocumentSrcName()));
+                cfg.add(element(name("includes"), docName + "/" + m.getDocumentSrcName()));
 
                 executeMojo(
-                        plugin(groupId("com.agilejava.docbkx"),
+                        plugin(
+                                groupId("com.agilejava.docbkx"),
                                 artifactId("docbkx-maven-plugin"),
                                 version(m.getDocbkxVersion())),
                         goal("generate-epub"),
                         configuration(cfg.toArray(new Element[cfg.size()])),
                         executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
 
-                File outputEpub = new File(
-                        new File(m.getDocbkxOutputDirectory(), "epub"),
+                File outputEpub = FileUtils.getFile(
+                        m.getDocbkxOutputDirectory(), "epub",
                         FilenameUtils.getBaseName(m.getDocumentSrcName()) + ".epub");
                 NameUtils.renameDocument(outputEpub, docName, m.getProjectName());
             }

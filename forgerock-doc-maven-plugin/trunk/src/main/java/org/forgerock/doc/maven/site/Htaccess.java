@@ -47,8 +47,8 @@ public class Htaccess {
      * @throws MojoExecutionException Failed to copy file.
      */
     public void execute() throws MojoExecutionException {
-        final String layoutDir = m.getSiteDirectory().getPath() + File.separator + "doc";
-        final File htaccess = new File(m.getBuildDirectory().getPath() + File.separator + ".htaccess");
+        final String layoutDir = new File(m.getSiteDirectory(), "doc").getPath();
+        final File htaccess = new File(m.getBuildDirectory(), ".htaccess");
 
         FileUtils.deleteQuietly(htaccess);
         try {

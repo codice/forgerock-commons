@@ -111,8 +111,7 @@ public final class SyntaxHighlighterCopier {
             // Instead the files must be copied to the output directories.
 
             for (final String outputDirectory : outputDirectories) {
-                final File parent = new File(outputDirectory, "sh");
-                final File styleSheetFile = new File(parent, resource);
+                final File styleSheetFile = FileUtils.getFile(outputDirectory, "sh", resource);
                 FileUtils.copyURLToFile(resourceUrl, styleSheetFile);
             }
         }

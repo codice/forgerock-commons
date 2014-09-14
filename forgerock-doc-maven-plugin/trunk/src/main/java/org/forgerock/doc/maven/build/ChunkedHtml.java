@@ -66,7 +66,7 @@ public class ChunkedHtml {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = new File(m.getBuildDirectory() + File.separator  + "olinkdb-chunked-html.xml");
+        File targetDB = new File(m.getBuildDirectory(), "olinkdb-chunked-html.xml");
 
         try {
             StringBuilder content = new StringBuilder();
@@ -139,12 +139,10 @@ public class ChunkedHtml {
             for (String docName : m.getDocNames()) {
                 ArrayList<Element> cfg = new ArrayList<MojoExecutor.Element>();
                 cfg.add(element(name("xincludeSupported"), m.isXincludeSupported()));
-                cfg.add(element(name("sourceDirectory"),
-                        m.path(m.getDocbkxModifiableSourcesDirectory())));
+                cfg.add(element(name("sourceDirectory"), m.path(m.getDocbkxModifiableSourcesDirectory())));
                 cfg.add(element(name("chunkedOutput"), "true"));
 
-                cfg.add(element(name("htmlCustomization"),
-                        m.path(m.getChunkedHTMLCustomization())));
+                cfg.add(element(name("htmlCustomization"), m.path(m.getChunkedHTMLCustomization())));
                 cfg.add(element(name("collectXrefTargets"), "only"));
 
                 cfg.add(element(name("currentDocid"), docName));
@@ -166,7 +164,8 @@ public class ChunkedHtml {
                 cfg.add(element(name("chunkBaseDir"), chunkBaseDir));
 
                 executeMojo(
-                        plugin(groupId("com.agilejava.docbkx"),
+                        plugin(
+                                groupId("com.agilejava.docbkx"),
                                 artifactId("docbkx-maven-plugin"),
                                 version(m.getDocbkxVersion())),
                         goal("generate-html"),
@@ -205,7 +204,8 @@ public class ChunkedHtml {
                                 + "/" + docName + ".manifest"));
 
                 executeMojo(
-                        plugin(groupId("com.agilejava.docbkx"),
+                        plugin(
+                                groupId("com.agilejava.docbkx"),
                                 artifactId("docbkx-maven-plugin"),
                                 version(m.getDocbkxVersion())),
                         goal("generate-html"),

@@ -106,12 +106,12 @@ public class Layout {
                             element(name("include"), "**/*.rtf"))));
         }
 
+        // Webhelp is handled separately.
+
         if (formats.contains("xhtml5")) {
             r.add(element(name("resource"),
                     element(name("directory"), outputDir + "/xhtml/")));
         }
-
-        // Webhelp is handled separately.
 
         return element("resources", r.toArray(new MojoExecutor.Element[r.size()]));
     }
@@ -131,11 +131,13 @@ public class Layout {
             final String siteDocDirectory = m.path(m.getSiteDirectory()) + "/doc";
 
             executeMojo(
-                    plugin(groupId("org.apache.maven.plugins"),
+                    plugin(
+                            groupId("org.apache.maven.plugins"),
                             artifactId("maven-resources-plugin"),
                             version(m.getResourcesVersion())),
                     goal("copy-resources"),
-                    configuration(element(name("encoding"), "UTF-8"),
+                    configuration(
+                            element(name("encoding"), "UTF-8"),
                             element(name("outputDirectory"), siteDocDirectory),
                             getResources()),
                     executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
@@ -150,11 +152,13 @@ public class Layout {
                 final String webHelpDir = m.path(m.getDocbkxOutputDirectory()) + "/webhelp";
 
                 executeMojo(
-                        plugin(groupId("org.apache.maven.plugins"),
+                        plugin(
+                                groupId("org.apache.maven.plugins"),
                                 artifactId("maven-resources-plugin"),
                                 version(m.getResourcesVersion())),
                         goal("copy-resources"),
-                        configuration(element(name("encoding"), "UTF-8"),
+                        configuration(
+                                element(name("encoding"), "UTF-8"),
                                 element(name("outputDirectory"), siteDocDirectory + "/webhelp"),
                                 element(name("resources"),
                                         element(name("resource"),

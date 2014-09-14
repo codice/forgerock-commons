@@ -14,11 +14,11 @@
 
 package org.forgerock.doc.maven.post;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
 import org.forgerock.doc.maven.utils.SyntaxHighlighterCopier;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -53,10 +53,8 @@ public class Xhtml {
         for (final String docName : m.getDocNames()) {
 
             // Example: ${project.build.directory}/docbkx/xhtml/my-book
-            outputDirectories[i] =
-                    m.getDocbkxOutputDirectory().getPath()
-                            + File.separator + "xhtml"
-                            + File.separator + docName;
+            outputDirectories[i] = FileUtils.getFile(
+                    m.getDocbkxOutputDirectory(), "xhtml", docName).getPath();
             ++i;
         }
 
