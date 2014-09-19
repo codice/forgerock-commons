@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Main -->
+    <string name="app_name">Contact Manager</string>
+    <string name="windows_title">OpenDJ Contact Manager</string>
+    <string name="logo_description">Forgerock</string>
+
+    <!-- Search activity -->
+    <string name="photo_description">Photo</string>
+    <string name="arrow_description">Cliquer pour voir le détail</string>
+    <string name="search">Rechercher&#8230;</string>
+    <string name="search_previous">Précédent</string>
+    <string name="search_next">Suivant</string>
+
+    <!-- Contact activity -->
+    <string name="contact_mobile_title">Mobile</string>
+    <string name="contact_home_phone_title">Home</string>
+    <string name="contact_mail_title">E-mail</string>
+    <string name="contact_address_title">Adresse</string>
+    <string name="contact_manager_title">Manager</string>
+    <string name="act_mail_description">Envoyer un e-mail</string>
+    <string name="act_call_description">Appeler</string>
+    <string name="act_sms_description">Envoyer un SMS</string>
+    <string name="act_geolocation_description">Géolocalisation</string>
+    <string name="act_manager_description">Voir mon manager</string>
+    <string name="act_add_description">Ajoute moi</string>
+    <string name="contact_warning_add_contact">Ajouter %s a vos contacts ?</string>
+
+    <!-- Settings activity -->
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_title_description">Configurer, gérer vos configurations.</string>
+    <string name="settings_action_add">Ajouter</string>
+    <string name="settings_action_delete">Supprimer</string>
+    <string name="settings_action_edit">Modifier</string>
+    <string name="settings_selection_label">Choisir un server</string>
+    <string name="settings_selected_server_title">Host details</string>
+    <string name="settings_selected_security_title">Securité</string>
+    <string name="settings_authentication_title">Authentification</string>
+    <string name="settings_authentication_basic">Basique</string>
+    <string name="settings_no_server_configuration">Aucun serveur trouvé. \n\nVeuillez configurer un nouveau serveur via les options pour pouvoir utiliser OpenDJ Contact Manager.</string>
+
+    <!-- Actions -->
+    <string name="action_about">A propos</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="action_search">Rechercher</string>
+
+    <!-- Server wizard part 1 -->
+    <string name="sw1_image_title">Nouveau server</string>
+    <string name="act_next_description">Continuer</string>
+    <string name="sw1_server_address">Adresse du serveur</string>
+    <string name="sw1_title">Configurez votre connection via REST à votre serveur LDAP en deux étapes.</string>
+    <string name="sw1_server_address_hint">IP:port/opendj</string>
+    <string name="sw1_server_name">Nom du serveur</string>
+    <string name="sw1_server_name_hint">OpenDJ office</string>
+
+    <!-- Server wizard part 2 -->
+    <string name="sw2_title">Identifiants de connexion</string>
+    <string name="sw2_account_title">Saisissez vos identifiants de connexion</string>
+    <string name="sw2_account_username">Nom d\'utilisateur</string>
+    <string name="sw2_account_username_hint">Nom d\'utilisateur</string>
+    <string name="sw2_account_password">Mot de passe</string>
+    <string name="sw2_account_password_hint">password</string>
+    <string name="sw2_security">Securité</string>
+    <string name="sw2_security_ssl">SSL/TLS</string>
+    <string name="finish">Valider</string>
+
+    <!-- About activity -->
+    <string name="about_opendj">OpenDJ Contact Manager est une application basique du projet open source OpenDJ, démontrant l\'utilisation de l\'API REST pour accéder aux données de votre annuaire.
+    OpenDJ est un annuaire conforme LDAPv3 et REST, développé pour la plateforme Java, qui allie grandes performances, disponibilité, et le stockage sécurisé des identités gérées par votre organisation.
+    </string>         
+    <string name="about_website">www.forgerock.com </string>
+
+    <!-- Status messages -->
+    <string name="warning_delete_server">Supprimer le serveur %s</string>
+    <string name="warning_approval">Êtes-vous sûr?</string>
+    <string name="warning_selected_server">%s est defini comme serveur par défaut</string>
+    <string name="warning_call_number">Appeler %s?</string>
+    <string name="warning_no_result_found">Aucun résultat</string>
+
+</resources>
