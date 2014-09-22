@@ -28,7 +28,7 @@ A variety of pre-processing tasks are performed in the following order:
 *  Perform Maven resource filtering on the copy to replace variables. (`Filter`)
 *  Edit `<imagedata>` elements in the resource filtered files. (`ImageData`)
 *  Perform image generation on the resource filtered files. (`PlantUml`)
-*  Set DPI on .png images in the resource filtered files. (`Dpi`)
+*  If building FO, set DPI on .png images in the resource filtered files. (`Dpi`)
 *  Perform additional pre-processing on the resource filtered files. (`CurrentDocId`)
 *  When generating FO output, prepare fonts for use with Apache FOP. (`Fop`)
 *  When generating HTML output, add custom CSS to the sources. (`CustomCss`)
