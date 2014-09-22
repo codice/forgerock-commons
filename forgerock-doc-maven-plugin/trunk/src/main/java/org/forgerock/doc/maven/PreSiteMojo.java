@@ -65,6 +65,8 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
             throw new MojoExecutionException("No build directory available.");
         }
 
+        final List<String> formats = getFormats();
+
         // Perform pre-processing.
         (new Branding(this)).execute();
         (new ModifiableCopy(this)).execute();
@@ -73,10 +75,13 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
         (new Filter(this)).execute();
         (new ImageData(this)).execute();
         (new PlantUml(this)).execute();
-        (new Dpi(this)).execute();
+
+        if (formats.contains("pdf") || formats.contains("rtf")) {
+            (new Dpi(this)).execute();
+        }
+
         (new CurrentDocId(this)).execute();
 
-        final List<String> formats = getFormats();
         if (formats.contains("pdf") || formats.contains("rtf")) {
             (new Fop(this)).execute();
         }
