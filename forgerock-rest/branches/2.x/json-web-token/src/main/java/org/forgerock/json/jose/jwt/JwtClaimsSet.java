@@ -22,7 +22,7 @@ import static org.forgerock.json.jose.jwt.JwtClaimsSetKey.IAT;
 import static org.forgerock.json.jose.jwt.JwtClaimsSetKey.ISS;
 import static org.forgerock.json.jose.jwt.JwtClaimsSetKey.JTI;
 import static org.forgerock.json.jose.jwt.JwtClaimsSetKey.NBF;
-import static org.forgerock.json.jose.jwt.JwtClaimsSetKey.PRN;
+import static org.forgerock.json.jose.jwt.JwtClaimsSetKey.SUB;
 import static org.forgerock.json.jose.jwt.JwtClaimsSetKey.TYP;
 import static org.forgerock.json.jose.jwt.JwtClaimsSetKey.getClaimSetKey;
 
@@ -140,22 +140,60 @@ public class JwtClaimsSet extends JWObject implements Payload {
      * The given principal can be any arbitrary string without any ":" characters, if the string does contain a ":"
      * character then it must be a valid URI.
      *
+     * @deprecated use {@link #setSubject(String)} instead.
      * @param principal The JWT's principal.
      * @see #setPrincipal(java.net.URI)
      */
+    @Deprecated
     public void setPrincipal(String principal) {
-        StringOrURI.validateStringOrURI(principal);
-        put(PRN.value(), principal);
+        setSubject(principal);
     }
 
     /**
      * Sets the principal this JWT is issued to.
      *
+     * @deprecated use {@link #setSubject(URI)} instead.
      * @param principal The JWT's principal.
      * @see #setPrincipal(String)
      */
+    @Deprecated
     public void setPrincipal(URI principal) {
-        put(PRN.value(), principal.toString());
+        setSubject(principal);
+    }
+
+    /**
+     * Gets the principal this JWT is issued to.
+     *
+     * @deprecated use {@link #getSubject()} instead.
+     * @return The JWT's principal.
+     */
+    @Deprecated
+    public String getPrincipal() {
+        return getSubject();
+    }
+
+    /**
+     * Sets the subject this JWT is issued to.
+     * <p>
+     * The given subject can be any arbitrary string without any ":" characters, if the string does contain a ":"
+     * character then it must be a valid URI.
+     *
+     * @param subject The JWT's subject.
+     * @see #setSubject(java.net.URI)
+     */
+    public void setSubject(String subject) {
+        StringOrURI.validateStringOrURI(subject);
+        put(SUB.value(), subject);
+    }
+
+    /**
+     * Sets the principal this JWT is issued to.
+     *
+     * @param subject The JWT's principal.
+     * @see #setSubject(String)
+     */
+    public void setSubject(URI subject) {
+        put(SUB.value(), subject.toString());
     }
 
     /**
@@ -163,8 +201,8 @@ public class JwtClaimsSet extends JWObject implements Payload {
      *
      * @return The JWT's principal.
      */
-    public String getPrincipal() {
-        return get(PRN.value()).asString();
+    public String getSubject() {
+        return get(SUB.value()).asString();
     }
 
     /**
@@ -354,6 +392,15 @@ public class JwtClaimsSet extends JWObject implements Payload {
             }
             break;
         }
+        case SUB: {
+            if (isValueOfType(value, URI.class)) {
+                setSubject((URI) value);
+            } else {
+                checkValueIsOfType(value, String.class);
+                setSubject((String) value);
+            }
+            break;
+        }
         case AUD: {
             if (isValueOfType(value, List.class)) {
                 List<?> audienceList = (List<?>) value;
@@ -449,6 +496,10 @@ public class JwtClaimsSet extends JWObject implements Payload {
         }
         case PRN: {
             value = getPrincipal();
+            break;
+        }
+        case SUB: {
+            value = getSubject();
             break;
         }
         case AUD: {

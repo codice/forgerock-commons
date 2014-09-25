@@ -53,9 +53,16 @@ public enum JwtClaimsSetKey {
     /**
      * Principal Claim.
      * <p>
+     * Identities the principal of the JWT.
+     */
+    @Deprecated
+    PRN,
+    /**
+     * Subject Claim.
+     * <p>
      * Identifies the subject of the JWT.
      */
-    PRN,
+    SUB,
     /**
      * Audience Claim.
      * <p>
