@@ -18,6 +18,7 @@ package org.forgerock.jaspi;
 
 import org.forgerock.jaspi.logging.LogFactory;
 import org.forgerock.jaspi.runtime.JaspiRuntime;
+import org.forgerock.jaspi.runtime.ResourceExceptionHandler;
 import org.forgerock.jaspi.runtime.config.inject.DefaultRuntimeInjector;
 import org.forgerock.jaspi.runtime.config.inject.RuntimeInjector;
 import org.forgerock.jaspi.utils.DebugLoggerBuffer;
@@ -50,6 +51,11 @@ public class JaspiRuntimeFilter implements Filter {
 
     private static final String INIT_PARAM_INJECTOR_CLASS = "runtime-injector-class";
     private static final String INIT_PARAM_INJECTOR_METHOD = "runtime-injector-method";
+    /**
+     * Filter config can register different {@code ResourceException} handlers.
+     * @see org.forgerock.jaspi.runtime.ResourceExceptionHandler
+     */
+    public static final String INIT_PARAM_EXCEPTION_HANDLERS = "resource-exception-handlers";
     private static final String INIT_PARAM_INJECTOR_METHOD_DEFAULT = "getRuntimeInjector";
 
     private final FilterConfiguration filterConfiguration;
@@ -96,6 +102,18 @@ public class JaspiRuntimeFilter implements Filter {
             RuntimeInjector runtimeInjector = getRuntimeInjector(filterConfig);
             LOGGER.debug("Initialising the JaspiRuntime");
             jaspiRuntime = runtimeInjector.getInstance(JaspiRuntime.class);
+            String exceptionHandlers = filterConfig.getInitParameter(INIT_PARAM_EXCEPTION_HANDLERS);
+            if (exceptionHandlers != null) {
+                for (String handlerClassName : exceptionHandlers.split(",")) {
+                    try {
+                        Class<? extends ResourceExceptionHandler> handlerClass = Class.forName(handlerClassName.trim())
+                                .asSubclass(ResourceExceptionHandler.class);
+                        jaspiRuntime.registerExceptionHandler(handlerClass);
+                    } catch (ClassNotFoundException e) {
+                        LOGGER.warn("Class is not available: " + handlerClassName, e);
+                    }
+                }
+            }
         }
         return jaspiRuntime;
     }

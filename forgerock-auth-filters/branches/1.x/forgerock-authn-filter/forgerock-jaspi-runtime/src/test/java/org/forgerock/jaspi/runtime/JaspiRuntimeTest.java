@@ -57,8 +57,7 @@ public class JaspiRuntimeTest {
     }
 
     @Test
-    public void shouldProcessMessageAndPassStraightToChainWhenServerAuthContextNotConfigured() throws AuthException,
-            IOException, ServletException {
+    public void shouldProcessMessageAndPassStraightToChainWhenServerAuthContextNotConfigured() throws Exception {
 
         //Given
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -78,8 +77,7 @@ public class JaspiRuntimeTest {
     }
 
     @Test
-    public void shouldProcessMessageAndNotCallChainIfValidateRequestIsNotSUCCESS() throws AuthException, IOException,
-            ServletException {
+    public void shouldProcessMessageAndNotCallChainIfValidateRequestIsNotSUCCESS() throws Exception {
 
         //Given
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -104,7 +102,7 @@ public class JaspiRuntimeTest {
     }
 
     @Test
-    public void shouldProcessMessage() throws AuthException, IOException, ServletException {
+    public void shouldProcessMessage() throws Exception {
 
         //Given
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -135,8 +133,7 @@ public class JaspiRuntimeTest {
     }
 
     @Test
-    public void shouldConvertAuthExceptionToCrestResponseWhenDoFilterFails() throws ServletException, IOException,
-            AuthException {
+    public void shouldConvertAuthExceptionToCrestResponseWhenDoFilterFails() throws Exception {
 
         //Given
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -165,7 +162,7 @@ public class JaspiRuntimeTest {
     }
 
     @Test
-    public void shouldUnwrapResourceExceptionCause() throws IOException, ServletException, AuthException {
+    public void shouldUnwrapResourceExceptionCause() throws Exception {
 
         //Given
         HttpServletRequest req = mock(HttpServletRequest.class);
@@ -196,5 +193,41 @@ public class JaspiRuntimeTest {
         assertTrue(writerArgumentCaptor.getValue().contains("DETAIL_KEY"));
         assertTrue(writerArgumentCaptor.getValue().contains("DETAIL_VALUE"));
         verify(resp).setContentType("application/json");
+    }
+
+    @Test
+    public void shouldUseExceptionHandlerIfAvailable() throws Exception {
+
+        //Given
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        FilterChain filterChain = mock(FilterChain.class);
+        PrintWriter writer = mock(PrintWriter.class);
+
+        doThrow(Exception.class).when(filterChain).doFilter(request, response);
+
+        given(response.getWriter()).willReturn(writer);
+
+        JaspiRuntime jaspiRuntime = new JaspiRuntime(null, runtimeResultHandler, auditApi);
+        jaspiRuntime.registerExceptionHandler(TestExceptionHandler.class);
+
+        //When
+        jaspiRuntime.processMessage(request, response, filterChain);
+
+        //Then
+        verify(response).setStatus(500);
+        verify(writer).write(eq("Hello 500"), anyInt(), anyInt());
+    }
+
+    public static final class TestExceptionHandler implements ResourceExceptionHandler {
+
+        public boolean canHandle(HttpServletRequest request) {
+            return true;
+        }
+
+        public void write(ResourceException exception, HttpServletResponse response) throws IOException {
+            response.getWriter().write("Hello "+exception.getCode());
+        }
+
     }
 }
