@@ -16,9 +16,10 @@
 
 package org.forgerock.jaspi;
 
-import org.forgerock.jaspi.runtime.JaspiRuntime;
-import org.forgerock.jaspi.runtime.config.inject.RuntimeInjector;
 import org.forgerock.auth.common.FilterConfiguration;
+import org.forgerock.jaspi.runtime.JaspiRuntime;
+import org.forgerock.jaspi.runtime.JaspiRuntimeTest;
+import org.forgerock.jaspi.runtime.config.inject.RuntimeInjector;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -31,13 +32,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.fail;
+import static org.mockito.BDDMockito.*;
+import static org.testng.Assert.*;
 
 public class JaspiRuntimeFilterTest {
 
@@ -45,6 +41,7 @@ public class JaspiRuntimeFilterTest {
 
     private RuntimeInjector runtimeInjector;
     private JaspiRuntime jaspiRuntime;
+    private FilterConfig filterConfig;
 
     @BeforeMethod
     public void setUp() throws ServletException {
@@ -58,7 +55,7 @@ public class JaspiRuntimeFilterTest {
 
         given(runtimeInjector.getInstance(JaspiRuntime.class)).willReturn(jaspiRuntime);
 
-        FilterConfig filterConfig = mock(FilterConfig.class);
+        filterConfig = mock(FilterConfig.class);
         given(filterConfiguration.get(eq(filterConfig), anyString(), anyString(), anyString()))
                 .willReturn(runtimeInjector);
         jaspiRuntimeFilter.init(filterConfig);
@@ -130,5 +127,21 @@ public class JaspiRuntimeFilterTest {
         jaspiRuntimeFilter.destroy();
 
         //Then
+    }
+
+    @Test
+    public void shouldRegisterExceptionHandlers() throws Exception {
+        // given
+        doReturn("\n\t " + JaspiRuntimeTest.TestExceptionHandler.class.getName() + " , com.acme.NotARealClass")
+                .when(filterConfig).getInitParameter(JaspiRuntimeFilter.INIT_PARAM_EXCEPTION_HANDLERS);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        FilterChain filterChain = mock(FilterChain.class);
+
+        // when
+        jaspiRuntimeFilter.doFilter(request, response, filterChain);
+
+        // then
+        verify(jaspiRuntime).registerExceptionHandler(JaspiRuntimeTest.TestExceptionHandler.class);
     }
 }
