@@ -21,14 +21,17 @@ import org.forgerock.auth.common.DebugLogger;
 import org.forgerock.auth.common.FilterConfiguration;
 import org.forgerock.auth.common.FilterConfigurationImpl;
 import org.forgerock.auth.common.LoggingConfigurator;
+import org.forgerock.jaspi.JaspiRuntimeFilter;
 import org.forgerock.jaspi.context.DefaultServerContextFactory;
 import org.forgerock.jaspi.logging.LogFactory;
 import org.forgerock.jaspi.runtime.AuditApi;
 import org.forgerock.jaspi.runtime.HttpServletCallbackHandler;
 import org.forgerock.jaspi.runtime.JaspiRuntime;
+import org.forgerock.jaspi.runtime.ResourceExceptionHandler;
 import org.forgerock.jaspi.runtime.RuntimeResultHandler;
 import org.forgerock.jaspi.runtime.config.ServerContextFactory;
 import org.forgerock.jaspi.runtime.context.ContextHandler;
+import org.forgerock.jaspi.runtime.response.FailureResponseHandler;
 import org.forgerock.jaspi.utils.DebugLoggerBuffer;
 import org.forgerock.jaspi.utils.MessageInfoUtils;
 import org.forgerock.json.fluent.JsonValue;
@@ -107,7 +110,20 @@ public class DefaultRuntimeInjector implements RuntimeInjector {
 
         RuntimeResultHandler runtimeResultHandler = new RuntimeResultHandler();
 
-        this.jaspiRuntime = new JaspiRuntime(serverAuthContext, runtimeResultHandler, auditApi);
+        FailureResponseHandler failureResponseHandler = new FailureResponseHandler();
+        String exceptionHandlers = config.getInitParameter(JaspiRuntimeFilter.INIT_PARAM_EXCEPTION_HANDLERS);
+        if (exceptionHandlers != null) {
+            for (String handlerClassName : exceptionHandlers.split(",")) {
+                try {
+                    Class<? extends ResourceExceptionHandler> handlerClass = Class.forName(handlerClassName.trim())
+                            .asSubclass(ResourceExceptionHandler.class);
+                    failureResponseHandler.registerExceptionHandler(handlerClass);
+                } catch (ClassNotFoundException e) {
+                    LOGGER.warn("Class is not available: " + handlerClassName, e);
+                }
+            }
+        }
+        this.jaspiRuntime = new JaspiRuntime(serverAuthContext, runtimeResultHandler, auditApi, failureResponseHandler);
         LOGGER.debug("Finished initialising the DefaultRuntimeInjector");
     }
 

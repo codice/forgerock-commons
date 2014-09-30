@@ -25,6 +25,7 @@ import org.forgerock.jaspi.runtime.AuditApi;
 import org.forgerock.jaspi.runtime.JaspiRuntime;
 import org.forgerock.jaspi.runtime.RuntimeResultHandler;
 import org.forgerock.jaspi.runtime.context.ContextHandler;
+import org.forgerock.jaspi.runtime.response.FailureResponseHandler;
 import org.forgerock.jaspi.utils.MessageInfoUtils;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.Resource;
@@ -89,7 +90,7 @@ public class GuiceModule extends AbstractModule {
     @Singleton
     public JaspiRuntime getJaspiRuntime(ServerAuthContext serverAuthContext,
             RuntimeResultHandler resultHandler, AuditApi auditApi) {
-        return new JaspiRuntime(serverAuthContext, resultHandler, auditApi);
+        return new JaspiRuntime(serverAuthContext, resultHandler, auditApi, new FailureResponseHandler());
     }
 
     /**

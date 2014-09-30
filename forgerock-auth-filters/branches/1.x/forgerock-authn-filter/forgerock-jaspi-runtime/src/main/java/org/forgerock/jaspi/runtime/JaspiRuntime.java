@@ -18,6 +18,7 @@ package org.forgerock.jaspi.runtime;
 
 import org.forgerock.auth.common.DebugLogger;
 import org.forgerock.jaspi.logging.LogFactory;
+import org.forgerock.jaspi.runtime.response.FailureResponseHandler;
 import org.forgerock.json.resource.ResourceException;
 
 import javax.security.auth.Subject;
@@ -33,12 +34,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-import static org.forgerock.jaspi.runtime.AuthStatusUtils.isSendContinue;
-import static org.forgerock.jaspi.runtime.AuditTrail.AUDIT_TRAIL_KEY;
+import static org.forgerock.jaspi.runtime.AuditTrail.*;
+import static org.forgerock.jaspi.runtime.AuthStatusUtils.*;
 
 /**
  * This class is the entry point for the JASPI runtime.
@@ -91,7 +90,7 @@ public class JaspiRuntime {
     private final ServerAuthContext serverAuthContext;
     private final RuntimeResultHandler resultHandler;
     private final AuditApi auditApi;
-    private final Set<ResourceExceptionHandler> exceptionHandlers = new HashSet<ResourceExceptionHandler>();
+    private final FailureResponseHandler failureResponseHandler;
 
     /**
      * Constructs a new instance of the JaspiRuntime.
@@ -102,10 +101,11 @@ public class JaspiRuntime {
      * @param auditApi An instance of the {@code AuditApi}.
      */
     public JaspiRuntime(final ServerAuthContext serverAuthContext, final RuntimeResultHandler resultHandler,
-            AuditApi auditApi) {
+            AuditApi auditApi, FailureResponseHandler failureResponseHandler) {
         this.serverAuthContext = serverAuthContext;
         this.resultHandler = resultHandler;
         this.auditApi = auditApi;
+        this.failureResponseHandler = failureResponseHandler;
     }
 
     /**
@@ -184,17 +184,8 @@ public class JaspiRuntime {
             } else {
                 jre = ResourceException.getException(ResourceException.INTERNAL_ERROR, e.getMessage());
             }
-            HttpServletResponse httpResponse = (HttpServletResponse) messageInfo.getResponseMessage();
-            httpResponse.setStatus(jre.getCode());
             try {
-                for (ResourceExceptionHandler handler : exceptionHandlers) {
-                    if (handler.canHandle(request)) {
-                        handler.write(jre, httpResponse);
-                        return;
-                    }
-                }
-                httpResponse.getWriter().write(jre.toJsonValue().toString());
-                httpResponse.setContentType(JSON_HTTP_MEDIA_TYPE);
+                failureResponseHandler.handle(jre, messageInfo);
             } catch (IOException ioe) {
                 throw new ServletException(ioe.getMessage(), ioe);
             }
@@ -205,17 +196,4 @@ public class JaspiRuntime {
         }
     }
 
-    /**
-     * Register a class to handle {@code ResourceException}s.
-     * @param handlerClass The implementation class.
-     */
-    public void registerExceptionHandler(Class<? extends ResourceExceptionHandler> handlerClass) {
-        try {
-            this.exceptionHandlers.add(handlerClass.newInstance());
-        } catch (InstantiationException e) {
-            throw new IllegalArgumentException("Cannot instantiate " + handlerClass.getName(), e);
-        } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException("Cannot access " + handlerClass.getName(), e);
-        }
-    }
 }

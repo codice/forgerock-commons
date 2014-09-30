@@ -19,11 +19,14 @@ package org.forgerock.jaspi.runtime.config.inject;
 import org.forgerock.auth.common.AuditLogger;
 import org.forgerock.auth.common.DebugLogger;
 import org.forgerock.auth.common.LoggingConfigurator;
+import org.forgerock.jaspi.JaspiRuntimeFilter;
 import org.forgerock.jaspi.logging.LogFactory;
 import org.forgerock.jaspi.runtime.JaspiRuntime;
+import org.forgerock.jaspi.runtime.JaspiRuntimeTest;
 import org.forgerock.jaspi.runtime.config.ServerContextFactory;
 import org.forgerock.jaspi.runtime.context.ContextHandler;
 import org.forgerock.auth.common.FilterConfiguration;
+import org.forgerock.jaspi.runtime.response.FailureResponseHandlerTest;
 import org.forgerock.jaspi.utils.MessageInfoUtils;
 import org.mockito.Matchers;
 import org.testng.annotations.BeforeMethod;
@@ -33,13 +36,14 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.message.AuthException;
 import javax.security.auth.message.MessageInfo;
 import javax.security.auth.message.config.ServerAuthContext;
+import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
@@ -77,6 +81,9 @@ public class DefaultRuntimeInjectorTest {
 
         given(filterConfiguration.get(eq(config), eq("logging-configurator-class"), anyString(), anyString()))
                 .willReturn(loggingConfigurator);
+
+        doReturn("\n\t " + FailureResponseHandlerTest.TestExceptionHandler.class.getName() + " , com.acme.NotARealClass")
+                .when(config).getInitParameter(JaspiRuntimeFilter.INIT_PARAM_EXCEPTION_HANDLERS);
 
         given(serverContextFactory.getServerAuthContext(Matchers.<MessageInfoUtils>anyObject(),
                 Matchers.<CallbackHandler>anyObject(), Matchers.<ContextHandler>anyObject()))
@@ -137,4 +144,5 @@ public class DefaultRuntimeInjectorTest {
         //Then
         fail();
     }
+
 }

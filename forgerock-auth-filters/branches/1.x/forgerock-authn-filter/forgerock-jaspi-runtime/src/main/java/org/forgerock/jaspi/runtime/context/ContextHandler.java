@@ -126,16 +126,9 @@ public class ContextHandler {
 
         if (authStatus == null || AuthStatus.SEND_FAILURE.equals(authStatus)) {
             LOGGER.debug("Authentication has failed.");
-            HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
             ResourceException jre = ResourceException.getException(UNAUTHORIZED_HTTP_ERROR_CODE,
                     UNAUTHORIZED_ERROR_MESSAGE);
-            try {
-                response.setContentType(JSON_HTTP_MEDIA_TYPE);
-                response.getWriter().write(jre.toJsonValue().toString());
-            } catch (IOException e) {
-                LOGGER.error("Failed to write to response", e);
-                throw new JaspiAuthException(e);
-            }
+            throw new JaspiAuthException(jre);
         } else {
             setAuthenticationRequestAttributes(messageInfo, clientSubject);
         }

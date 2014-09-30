@@ -18,7 +18,6 @@ package org.forgerock.jaspi;
 
 import org.forgerock.auth.common.FilterConfiguration;
 import org.forgerock.jaspi.runtime.JaspiRuntime;
-import org.forgerock.jaspi.runtime.JaspiRuntimeTest;
 import org.forgerock.jaspi.runtime.config.inject.RuntimeInjector;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -127,21 +126,5 @@ public class JaspiRuntimeFilterTest {
         jaspiRuntimeFilter.destroy();
 
         //Then
-    }
-
-    @Test
-    public void shouldRegisterExceptionHandlers() throws Exception {
-        // given
-        doReturn("\n\t " + JaspiRuntimeTest.TestExceptionHandler.class.getName() + " , com.acme.NotARealClass")
-                .when(filterConfig).getInitParameter(JaspiRuntimeFilter.INIT_PARAM_EXCEPTION_HANDLERS);
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        FilterChain filterChain = mock(FilterChain.class);
-
-        // when
-        jaspiRuntimeFilter.doFilter(request, response, filterChain);
-
-        // then
-        verify(jaspiRuntime).registerExceptionHandler(JaspiRuntimeTest.TestExceptionHandler.class);
     }
 }
