@@ -16,14 +16,13 @@
 
 package org.forgerock.jaspi;
 
+import org.forgerock.auth.common.FilterConfiguration;
+import org.forgerock.auth.common.FilterConfigurationImpl;
 import org.forgerock.jaspi.logging.LogFactory;
 import org.forgerock.jaspi.runtime.JaspiRuntime;
-import org.forgerock.jaspi.runtime.ResourceExceptionHandler;
 import org.forgerock.jaspi.runtime.config.inject.DefaultRuntimeInjector;
 import org.forgerock.jaspi.runtime.config.inject.RuntimeInjector;
 import org.forgerock.jaspi.utils.DebugLoggerBuffer;
-import org.forgerock.auth.common.FilterConfiguration;
-import org.forgerock.auth.common.FilterConfigurationImpl;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -102,18 +101,6 @@ public class JaspiRuntimeFilter implements Filter {
             RuntimeInjector runtimeInjector = getRuntimeInjector(filterConfig);
             LOGGER.debug("Initialising the JaspiRuntime");
             jaspiRuntime = runtimeInjector.getInstance(JaspiRuntime.class);
-            String exceptionHandlers = filterConfig.getInitParameter(INIT_PARAM_EXCEPTION_HANDLERS);
-            if (exceptionHandlers != null) {
-                for (String handlerClassName : exceptionHandlers.split(",")) {
-                    try {
-                        Class<? extends ResourceExceptionHandler> handlerClass = Class.forName(handlerClassName.trim())
-                                .asSubclass(ResourceExceptionHandler.class);
-                        jaspiRuntime.registerExceptionHandler(handlerClass);
-                    } catch (ClassNotFoundException e) {
-                        LOGGER.warn("Class is not available: " + handlerClassName, e);
-                    }
-                }
-            }
         }
         return jaspiRuntime;
     }
