@@ -19,7 +19,7 @@ package org.forgerock.json.jose.jwt;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.jose.exceptions.JwtRuntimeException;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -39,7 +39,7 @@ public abstract class JWObject {
      * Constructs a new, empty JWObject.
      */
     public JWObject() {
-        this.jsonValue = new JsonValue(new HashMap<String, Object>());
+        this.jsonValue = new JsonValue(new LinkedHashMap<String, Object>());
     }
 
     /**

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -198,7 +199,6 @@ public class JWObjectTest {
         String jwString = jwObject.toString();
 
         //Then
-        assertTrue(jwString.contains("\"KEY2\": \"VALUE2\""));
-        assertTrue(jwString.contains("\"KEY1\": \"VALUE1\""));
+        assertThat(jwString).contains("\"KEY2\": \"VALUE2\"", "\"KEY1\": \"VALUE1\"");
     }
 }

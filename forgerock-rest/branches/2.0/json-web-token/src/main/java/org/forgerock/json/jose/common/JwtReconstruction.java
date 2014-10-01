@@ -161,8 +161,8 @@ public final class JwtReconstruction {
         JweHeader jweHeader = new JweHeader(Utils.parseJson(header));
 
 
-        return new EncryptedJwt(jweHeader, encryptedContentEncryptionKey, initialisationVector, ciphertext,
-                authenticationTag);
+        return new EncryptedJwt(jweHeader, encodedHeader, encryptedContentEncryptionKey, initialisationVector,
+                ciphertext, authenticationTag);
     }
 
     /**
