@@ -38,12 +38,18 @@ public class Xhtml5 {
     private AbstractDocbkxMojo m;
 
     /**
+     * The Executor to run docbkx-tools.
+     */
+    private final Executor executor;
+
+    /**
      * Constructor setting the Mojo that holds the configuration.
      *
      * @param mojo The Mojo that holds the configuration.
      */
     public Xhtml5(final AbstractDocbkxMojo mojo) {
         m = mojo;
+        this.executor = new Executor();
     }
 
     /**
@@ -52,7 +58,6 @@ public class Xhtml5 {
      * @throws MojoExecutionException Failed to build output.
      */
     public void execute() throws MojoExecutionException {
-        Executor executor = new Executor();
         executor.prepareOlinkDB();
         executor.build();
     }

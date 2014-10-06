@@ -114,7 +114,7 @@ public final class NameUtils {
         }
 
         StringBuilder sb = StringUtils.isNotBlank(projectName)
-                           ? (new StringBuilder(projectName)).append("-")
+                           ? new StringBuilder(projectName).append("-")
                            : new StringBuilder();
 
         // Only add a . if the extension is not empty.

@@ -43,12 +43,18 @@ public class Layout {
     private AbstractDocbkxMojo m;
 
     /**
+     * The Executor to run the resources plugin.
+     */
+    private final Executor executor;
+
+    /**
      * Constructor setting the Mojo that holds the configuration.
      *
      * @param mojo The Mojo that holds the configuration.
      */
     public Layout(final AbstractDocbkxMojo mojo) {
         m = mojo;
+        this.executor = new Executor();
     }
 
     /**
@@ -57,7 +63,6 @@ public class Layout {
      * @throws MojoExecutionException Failed to layout site.
      */
     public void execute() throws MojoExecutionException {
-        Executor executor = new Executor();
         executor.layout();
     }
 

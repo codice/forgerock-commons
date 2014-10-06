@@ -36,9 +36,9 @@ public class SiteMojo extends AbstractDocbkxMojo {
      */
     @Override
     public void execute() throws MojoExecutionException {
-        (new Layout(this)).execute();
-        (new Htaccess(this)).execute();
-        (new Redirect(this)).execute();
-        (new LinkTest(this)).execute();
+        new Layout(this).execute();
+        new Htaccess(this).execute();
+        new Redirect(this).execute();
+        new LinkTest(this).execute();
     }
 }

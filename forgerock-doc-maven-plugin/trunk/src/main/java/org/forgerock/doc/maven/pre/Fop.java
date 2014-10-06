@@ -37,12 +37,18 @@ public final class Fop {
     private AbstractDocbkxMojo m;
 
     /**
+     * The Executor to run docbkx-tools.
+     */
+    private final Executor executor;
+
+    /**
      * Constructor setting the Mojo that holds the configuration.
      *
      * @param mojo The Mojo that holds the configuration.
      */
     public Fop(final AbstractDocbkxMojo mojo) {
         m = mojo;
+        this.executor = new Executor();
     }
 
     /**
@@ -51,7 +57,6 @@ public final class Fop {
      * @throws MojoExecutionException Failed to prepare to use FOP.
      */
     public void execute() throws MojoExecutionException {
-        Executor executor = new Executor();
         executor.copyFonts();
         executor.generateFontMetrics();
     }
