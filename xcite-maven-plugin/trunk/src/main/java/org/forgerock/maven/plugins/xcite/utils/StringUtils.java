@@ -38,7 +38,7 @@ public final class StringUtils {
         String prefix = "";
         for (String line: lines) {
             stringBuilder.append(prefix);
-            prefix = System.lineSeparator();
+            prefix = System.getProperty("line.separator");
             stringBuilder.append(line);
         }
 

@@ -85,7 +85,7 @@ public class Resolver {
         String prefix = "";
         for (String line: FileUtils.getStrings(absFile)) {
             stringBuilder.append(prefix);
-            prefix = System.lineSeparator();
+            prefix = System.getProperty("line.separator");
             stringBuilder.append(resolve(absFile, line));
         }
 
@@ -231,7 +231,7 @@ public class Resolver {
         String prefix = "";
         for (String quoteLine: quoteLines) {
             stringBuilder.append(prefix);
-            prefix = System.lineSeparator();
+            prefix = System.getProperty("line.separator");
             stringBuilder.append(resolve(citedFile, quoteLine)); // TODO: loop?
         }
         return stringBuilder.toString();
