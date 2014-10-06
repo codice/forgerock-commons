@@ -39,12 +39,12 @@ public class ReleaseMojo extends AbstractDocbkxMojo {
      */
     @Override
     public void execute() throws MojoExecutionException {
-        (new Layout(this)).execute();
-        (new IndexHtml(this)).execute();
-        (new PdfNames(this)).execute();
-        (new Favicon(this)).execute();
-        (new Css(this)).execute();
-        (new Robots(this)).execute();
-        (new Zip(this)).execute();
+        new Layout(this).execute();
+        new IndexHtml(this).execute();
+        new PdfNames(this).execute();
+        new Favicon(this).execute();
+        new Css(this).execute();
+        new Robots(this).execute();
+        new Zip(this).execute();
     }
 }

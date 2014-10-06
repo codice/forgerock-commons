@@ -40,12 +40,18 @@ public class Zip {
     private AbstractDocbkxMojo m;
 
     /**
+     * The Executor to run the assembly plugin.
+     */
+    private final Executor executor;
+
+    /**
      * Constructor setting the Mojo that holds the configuration.
      *
      * @param mojo The Mojo that holds the configuration.
      */
     public Zip(final AbstractDocbkxMojo mojo) {
         m = mojo;
+        this.executor = new Executor();
     }
 
     /**
@@ -54,7 +60,6 @@ public class Zip {
      * @throws MojoExecutionException Failed to zip documents.
      */
     public void execute() throws MojoExecutionException {
-        Executor executor = new Executor();
         executor.zip();
     }
 

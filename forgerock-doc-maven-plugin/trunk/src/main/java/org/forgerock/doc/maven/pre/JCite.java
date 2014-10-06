@@ -55,12 +55,18 @@ public class JCite {
     private AbstractDocbkxMojo m;
 
     /**
+     * The Executor to run JCite.
+     */
+    private final Executor executor;
+
+    /**
      * Constructor setting the Mojo that holds the configuration.
      *
      * @param mojo The Mojo that holds the configuration.
      */
     public JCite(final AbstractDocbkxMojo mojo) {
         m = mojo;
+        this.executor = new Executor();
         sourceDir = m.path(m.getDocbkxModifiableSourcesDirectory());
         tempOutputDirectory = new File(m.getBuildDirectory(), "docbkx-jcite");
         outputDir = m.path(tempOutputDirectory);
@@ -81,8 +87,7 @@ public class JCite {
     public void execute() throws MojoExecutionException {
 
         // JCite to a temporary directory...
-        Executor exec = new Executor();
-        exec.runJCite();
+        executor.runJCite();
 
         // ...and then overwrite the copy of sources with the new files.
         try {

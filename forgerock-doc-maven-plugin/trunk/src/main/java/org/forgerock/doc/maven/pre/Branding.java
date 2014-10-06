@@ -30,12 +30,18 @@ public class Branding {
     private AbstractDocbkxMojo m;
 
     /**
+     * The Executor to run the dependency plugin.
+     */
+    private final Executor executor;
+
+    /**
      * Constructor setting the Mojo that holds the configuration.
      *
      * @param mojo The Mojo that holds the configuration.
      */
     public Branding(final AbstractDocbkxMojo mojo) {
         m = mojo;
+        this.executor = new Executor();
     }
 
     /**
@@ -44,7 +50,6 @@ public class Branding {
      * @throws MojoExecutionException Failed to unpack branding.
      */
     public void execute() throws MojoExecutionException {
-        Executor executor = new Executor();
         executor.unpack();
     }
 

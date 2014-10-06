@@ -15,6 +15,7 @@
 package org.forgerock.doc.maven;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.forgerock.doc.maven.build.ChunkedHtml;
 import org.forgerock.doc.maven.build.Epub;
 import org.forgerock.doc.maven.build.Manpage;
@@ -38,6 +39,7 @@ import org.forgerock.doc.maven.pre.ImageData;
 import org.forgerock.doc.maven.pre.JCite;
 import org.forgerock.doc.maven.pre.ModifiableCopy;
 import org.forgerock.doc.maven.pre.PlantUml;
+import org.forgerock.doc.maven.pre.XCite;
 
 import java.util.List;
 
@@ -53,10 +55,11 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
     /**
      * Call other classes to perform pre-site build.
      *
-     * @throws MojoExecutionException Failed to build successfully.
+     * @throws MojoExecutionException   Failed to build successfully.
+     * @throws MojoFailureException     Failed to build successfully.
      */
     @Override
-    public void execute() throws MojoExecutionException {
+    public void execute() throws MojoExecutionException, MojoFailureException {
 
         if (!getBuildDirectory().exists()) {
             getBuildDirectory().mkdir();
@@ -68,72 +71,73 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
         final List<String> formats = getFormats();
 
         // Perform pre-processing.
-        (new Branding(this)).execute();
-        (new ModifiableCopy(this)).execute();
-        (new CommonContent(this)).execute();
-        (new JCite(this)).execute();
-        (new Filter(this)).execute();
-        (new ImageData(this)).execute();
-        (new PlantUml(this)).execute();
+        new Branding(this).execute();
+        new ModifiableCopy(this).execute();
+        new CommonContent(this).execute();
+        new JCite(this).execute();
+        new XCite(this).execute();
+        new Filter(this).execute();
+        new ImageData(this).execute();
+        new PlantUml(this).execute();
 
         if (formats.contains("pdf") || formats.contains("rtf")) {
-            (new Dpi(this)).execute();
+            new Dpi(this).execute();
         }
 
-        (new CurrentDocId(this)).execute();
+        new CurrentDocId(this).execute();
 
         if (formats.contains("pdf") || formats.contains("rtf")) {
-            (new Fop(this)).execute();
+            new Fop(this).execute();
         }
         if (formats.contains("html")) {
-            (new CustomCss(this)).execute();
+            new CustomCss(this).execute();
         }
 
         // Perform build.
         if (formats.contains("epub")) {
-            (new Epub(this)).execute();
+            new Epub(this).execute();
         }
         if (formats.contains("html")) {
-            (new SingleHtml(this)).execute();
-            (new ChunkedHtml(this)).execute();
+            new SingleHtml(this).execute();
+            new ChunkedHtml(this).execute();
         }
         if (formats.contains("man")) {
-            (new Manpage(this)).execute();
+            new Manpage(this).execute();
         }
         if (formats.contains("pdf")) {
-            (new Pdf(this)).execute();
+            new Pdf(this).execute();
         }
         if (formats.contains("rtf")) {
-            (new Rtf(this)).execute();
+            new Rtf(this).execute();
         }
         if (formats.contains("webhelp")) {
-            (new Webhelp(this)).execute();
+            new Webhelp(this).execute();
         }
         if (formats.contains("xhtml5")) {
-            (new Xhtml5(this)).execute();
+            new Xhtml5(this).execute();
         }
 
         // Perform post-processing.
         if (formats.contains("epub")) {
-            (new NoOp(this)).execute();
+            new NoOp(this).execute();
         }
         if (formats.contains("html")) {
-            (new Html(this)).execute();
+            new Html(this).execute();
         }
         if (formats.contains("man")) {
-            (new NoOp(this)).execute();
+            new NoOp(this).execute();
         }
         if (formats.contains("pdf")) {
-            (new NoOp(this)).execute();
+            new NoOp(this).execute();
         }
         if (formats.contains("rtf")) {
-            (new NoOp(this)).execute();
+            new NoOp(this).execute();
         }
         if (formats.contains("webhelp")) {
-            (new WebhelpPost(this)).execute();
+            new WebhelpPost(this).execute();
         }
         if (formats.contains("xhtml5")) {
-            (new Xhtml(this)).execute();
+            new Xhtml(this).execute();
         }
     }
 }

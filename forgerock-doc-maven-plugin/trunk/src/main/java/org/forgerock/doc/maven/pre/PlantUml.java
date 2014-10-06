@@ -38,12 +38,18 @@ public class PlantUml {
     private AbstractDocbkxMojo m;
 
     /**
+     * The Executor to run the resources plugin.
+     */
+    private final Executor executor;
+
+    /**
      * Constructor setting the Mojo that holds the configuration.
      *
      * @param mojo The Mojo that holds the configuration.
      */
     public PlantUml(final AbstractDocbkxMojo mojo) {
         m = mojo;
+        this.executor = new Executor();
     }
 
     /**
@@ -54,8 +60,7 @@ public class PlantUml {
     public void execute() throws MojoExecutionException {
 
         // JCite to a temporary directory...
-        Executor exec = new Executor();
-        exec.runPlantUml();
+        executor.runPlantUml();
     }
 
     /**

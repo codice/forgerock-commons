@@ -25,6 +25,7 @@ A variety of pre-processing tasks are performed in the following order:
 *  Make a modifiable copy of the original sources. (`ModifiableCopy`)
 *  Augment the copy with common content. (`CommonContent`)
 *  Include Java code by applying the JCite plugin. (`JCite`)
+*  Include quotes from other text files by applying the XCite plugin. (`XCite`)
 *  Perform Maven resource filtering on the copy to replace variables. (`Filter`)
 *  Edit `<imagedata>` elements in the resource filtered files. (`ImageData`)
 *  Perform image generation on the resource filtered files. (`PlantUml`)

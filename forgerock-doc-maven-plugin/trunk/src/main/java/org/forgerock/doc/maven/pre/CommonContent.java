@@ -34,12 +34,18 @@ public class CommonContent {
     private AbstractDocbkxMojo m;
 
     /**
+     * The Executor to run the dependency plugin.
+     */
+    private final Executor executor;
+
+    /**
      * Constructor setting the Mojo that holds the configuration.
      *
      * @param mojo The Mojo that holds the configuration.
      */
     public CommonContent(final AbstractDocbkxMojo mojo) {
         m = mojo;
+        this.executor = new Executor();
     }
 
     /**
@@ -48,7 +54,6 @@ public class CommonContent {
      * @throws MojoExecutionException Failed to unpack common content.
      */
     public void execute() throws MojoExecutionException {
-        Executor executor = new Executor();
 
         // As shown in https://github.com/markcraig/unpack-test
         // the maven-dependency-plugin overWrite* options

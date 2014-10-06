@@ -40,12 +40,18 @@ public class Fo {
     private AbstractDocbkxMojo m;
 
     /**
+     * The Executor to run docbkx-tools.
+     */
+    private final Executor executor;
+
+    /**
      * Constructor setting the Mojo that holds the configuration.
      *
      * @param mojo The Mojo that holds the configuration.
      */
     public Fo(final AbstractDocbkxMojo mojo) {
         m = mojo;
+        this.executor = new Executor();
     }
 
     /**
@@ -83,7 +89,6 @@ public class Fo {
      * @throws MojoExecutionException Failed to build output.
      */
     public void execute() throws MojoExecutionException {
-        Executor executor = new Executor();
         executor.prepareOlinkDB();
         executor.build();
     }

@@ -34,12 +34,18 @@ public class Filter {
     private AbstractDocbkxMojo m;
 
     /**
+     * The Executor to run the resources plugin.
+     */
+    private final Executor executor;
+
+    /**
      * Constructor setting the Mojo that holds the configuration.
      *
      * @param mojo The Mojo that holds the configuration.
      */
     public Filter(final AbstractDocbkxMojo mojo) {
         m = mojo;
+        this.executor = new Executor();
         sourceDirectory = m.path(m.getDocbkxModifiableSourcesDirectory());
         tempOutputDirectory = new File(m.getBuildDirectory(), "docbkx-filtered");
         filteredOutputDirectory = m.path(tempOutputDirectory);
@@ -60,8 +66,7 @@ public class Filter {
     public void execute() throws MojoExecutionException {
 
         // Filter to a temporary directory...
-        Executor exec = new Executor();
-        exec.filter();
+        executor.filter();
 
         // ...and then overwrite the modifiable sources with filtered files.
         try {

@@ -36,12 +36,18 @@ public class LinkTest {
     private AbstractDocbkxMojo m;
 
     /**
+     * The Executor to run the linktester plugin.
+     */
+    private final Executor executor;
+
+    /**
      * Constructor setting the Mojo that holds the configuration.
      *
      * @param mojo The Mojo that holds the configuration.
      */
     public LinkTest(final AbstractDocbkxMojo mojo) {
         m = mojo;
+        this.executor = new Executor();
     }
 
     /**
@@ -50,7 +56,6 @@ public class LinkTest {
      * @throws MojoExecutionException Failed to complete link tests.
      */
     public void execute() throws MojoExecutionException {
-        Executor executor = new Executor();
         executor.test();
     }
 

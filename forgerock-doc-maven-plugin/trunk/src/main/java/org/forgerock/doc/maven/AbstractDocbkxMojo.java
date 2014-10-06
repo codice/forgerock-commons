@@ -1119,6 +1119,22 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
+     * The version of Plexus Utils used by the XCite Maven plugin.
+     *
+     * @parameter default-value="3.0.17"
+     */
+    private String plexusUtilsVersion;
+
+    /**
+     * Return the version of Plexus Utils used by the XCite Maven plugin.
+     *
+     * @return The version of Plexus Utils used by the XCite Maven plugin.
+     */
+    public String getPlexusUtilsVersion() {
+        return plexusUtilsVersion;
+    }
+
+    /**
      * The Maven {@code BuildPluginManager} object.
      *
      * @component
@@ -1563,6 +1579,22 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public final File getWebHelpLogo() {
         return new File(getBuildDirectory(), webhelpLogo);
+    }
+
+    /**
+     * Version of the XCite Maven plugin to use.
+     *
+     * @parameter default-value="1.0.0-SNAPSHOT"
+     */
+    private String xCiteVersion;
+
+    /**
+     * Return the version of the XCite Maven plugin to use.
+     *
+     * @return The version of the XCite Maven plugin to use.
+     */
+    public String getXCiteVersion() {
+        return xCiteVersion;
     }
 
     /**
