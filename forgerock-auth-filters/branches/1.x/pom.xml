@@ -278,7 +278,7 @@
             <dependency>
                 <groupId>org.forgerock.commons.guava</groupId>
                 <artifactId>forgerock-guava-net</artifactId>
-                <version>18.0</version>
+                <version>18.0.1</version>
             </dependency>
 
             <dependency>
