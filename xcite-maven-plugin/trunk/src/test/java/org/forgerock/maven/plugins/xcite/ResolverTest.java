@@ -24,20 +24,21 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 @SuppressWarnings("javadoc")
 public class ResolverTest {
 
     @Test
-    public void resolveCitations() throws IOException {
+    public void resolveCitations() throws IOException, URISyntaxException {
         File outputDir = new File(System.getProperty("java.io.tmpdir"));
         Resolver resolver = new Resolver(outputDir, false, 0, true);
 
-        File sourceDir = new File(getClass().getResource("/").getFile());
+        File sourceDir = new File(getClass().getResource("/").toURI());
         String[] files = { "cite.txt" };
         resolver.resolve(sourceDir, files);
 
-        File resolved = new File(getClass().getResource("/resolved.txt").getFile());
+        File resolved = new File(getClass().getResource("/resolved.txt").toURI());
         File expected = File.createTempFile(resolved.getName(), null);
         org.apache.commons.io.FileUtils.copyFile(resolved, expected);
 
@@ -48,16 +49,16 @@ public class ResolverTest {
     }
 
     @Test
-    public void resolveCitationRelativePath() throws IOException {
+    public void resolveCitationRelativePath() throws IOException, URISyntaxException {
         File outputDir = new File(System.getProperty("java.io.tmpdir"));
         Resolver resolver = new Resolver(outputDir, false, 0, true);
 
         File resourcesDir = new File(outputDir, "resources");
         resourcesDir.mkdirs();
 
-        File relative = new File(getClass().getResource("/relative.txt").getFile());
+        File relative = new File(getClass().getResource("/relative.txt").toURI());
         org.apache.commons.io.FileUtils.copyFileToDirectory(relative, resourcesDir);
-        File resolved = new File(getClass().getResource("/resolved.txt").getFile());
+        File resolved = new File(getClass().getResource("/resolved.txt").toURI());
         org.apache.commons.io.FileUtils.copyFileToDirectory(resolved, resourcesDir);
 
         String s = File.separator;
@@ -71,15 +72,15 @@ public class ResolverTest {
     }
 
     @Test
-    public void resolveCitationInFile() throws IOException {
+    public void resolveCitationInFile() throws IOException, URISyntaxException {
         File outputDir = new File(System.getProperty("java.io.tmpdir"));
         Resolver resolver = new Resolver(outputDir, false, 0, true);
 
-        File file = new File(getClass().getResource("/cite.txt").getFile());
+        File file = new File(getClass().getResource("/cite.txt").toURI());
         File baseDir = file.getParentFile();
         resolver.resolve(baseDir, file);
 
-        File resolved = new File(getClass().getResource("/resolved.txt").getFile());
+        File resolved = new File(getClass().getResource("/resolved.txt").toURI());
         File expected = File.createTempFile(resolved.getName(), null);
         org.apache.commons.io.FileUtils.copyFile(resolved, expected);
 
@@ -90,13 +91,13 @@ public class ResolverTest {
     }
 
     @Test
-    public void resolveQuote() throws IOException {
+    public void resolveQuote() throws IOException, URISyntaxException {
         Resolver resolver = new Resolver(new File("."), false, 0, true);
 
-        File file = new File(getClass().getResource("/cite.txt").getFile());
+        File file = new File(getClass().getResource("/cite.txt").toURI());
         String result = resolver.resolve(file, "[file.txt%// To be included]");
 
-        File resolved = new File(getClass().getResource("/resolved.txt").getFile());
+        File resolved = new File(getClass().getResource("/resolved.txt").toURI());
         String expected = StringUtils.asString(FileUtils.getStrings(resolved));
 
         assertThat(result).isEqualTo(expected);
@@ -142,14 +143,14 @@ public class ResolverTest {
     }
 
     @Test
-    public void getQuote() throws IOException {
+    public void getQuote() throws IOException, URISyntaxException {
         Resolver resolver = new Resolver(new File("."), false, 0, true);
 
-        File file = new File(getClass().getResource("/cite.txt").getFile());
+        File file = new File(getClass().getResource("/cite.txt").toURI());
         Citation citation = Citation.valueOf("[file.txt:// To be included]");
         String result = resolver.getQuote(file, citation);
 
-        File resolved = new File(getClass().getResource("/resolved.txt").getFile());
+        File resolved = new File(getClass().getResource("/resolved.txt").toURI());
         String expected = StringUtils.asString(FileUtils.getStrings(resolved));
 
         assertThat(result).isEqualTo(expected);
