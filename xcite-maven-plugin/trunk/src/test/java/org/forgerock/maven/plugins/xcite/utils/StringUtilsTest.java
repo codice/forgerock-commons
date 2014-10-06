@@ -21,6 +21,7 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -196,10 +197,10 @@ public class StringUtilsTest {
     }
 
     @Test
-    public void extractQuoteNoMarkers() throws IOException {
+    public void extractQuoteNoMarkers() throws IOException, URISyntaxException {
 
         ArrayList<String> fileContent = FileUtils.getStrings(
-                new File(getClass().getResource("/file.txt").getFile()));
+                new File(getClass().getResource("/file.txt").toURI()));
         ArrayList<String> theExtract =
                 StringUtils.extractQuote(fileContent, null, null);
 
