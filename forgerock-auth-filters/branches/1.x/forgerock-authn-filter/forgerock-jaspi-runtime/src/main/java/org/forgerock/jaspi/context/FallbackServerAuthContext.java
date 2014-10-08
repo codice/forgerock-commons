@@ -29,14 +29,16 @@ import javax.security.auth.message.AuthException;
 import javax.security.auth.message.AuthStatus;
 import javax.security.auth.message.MessageInfo;
 import javax.security.auth.message.module.ServerAuthModule;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.forgerock.jaspi.runtime.AuditTrail.AUDIT_FAILURE_REASON_KEY;
-import static org.forgerock.jaspi.runtime.AuditTrail.AUDIT_INFO_KEY;
+import static org.forgerock.jaspi.runtime.AuditTrail.*;
+import static org.forgerock.jaspi.runtime.AuditTrail.AUDIT_PRINCIPAL_KEY;
 import static org.forgerock.jaspi.runtime.AuthStatusUtils.asString;
-import static org.forgerock.jaspi.runtime.AuditTrail.AUDIT_TRAIL_KEY;
+import static org.forgerock.jaspi.runtime.context.ContextHandler.FAILURE_REASONS;
 
 /**
  * Encapsulates ServerAuthModules that are used to validate service requests received from clients, and to secure any
@@ -55,6 +57,8 @@ public class FallbackServerAuthContext extends JaspiServerAuthContext<ServerAuth
 
     static final String AUTHENTICATING_AUTH_MODULE_KEY = "authenticatingAuthModule";
 
+    private final MessageInfoUtils messageInfoUtils;
+
     /**
      * Constructs a new FallbackServerAuthContext instance.
      *
@@ -67,6 +71,7 @@ public class FallbackServerAuthContext extends JaspiServerAuthContext<ServerAuth
     public FallbackServerAuthContext(final MessageInfoUtils messageInfoUtils, final ContextHandler contextHandler,
             final ServerAuthModule sessionAuthModule, final List<ServerAuthModule> authModules) throws AuthException {
         super(messageInfoUtils, contextHandler, sessionAuthModule, authModules);
+        this.messageInfoUtils = messageInfoUtils;
     }
 
     /**
@@ -99,20 +104,15 @@ public class FallbackServerAuthContext extends JaspiServerAuthContext<ServerAuth
             final Subject clientSubject, final Subject serviceSubject) throws AuthException {
 
         AuditTrail auditTrail = (AuditTrail) messageInfo.getMap().get(AUDIT_TRAIL_KEY);
-        Map<String, Object> moduleAuditInfo = new HashMap<String, Object>();
-        messageInfo.getMap().put(AUDIT_INFO_KEY, moduleAuditInfo);
 
         AuthStatus authStatus = AuthStatus.SEND_FAILURE;
         int index = 0;
         for (ServerAuthModule authModule : authModules) {
+            Map<String, Object> moduleAuditInfo = messageInfoUtils.getMap(messageInfo, AUDIT_INFO_KEY);
             String moduleId = "AuthModule-" + authModule.getClass().getSimpleName() + "-" + index++;
             try {
-                try {
-                    authStatus = authModule.validateRequest(messageInfo, clientSubject, serviceSubject);
-                } catch (AuthException e) {
-                    auditTrail.auditFailure(moduleId, e.getMessage(), moduleAuditInfo);
-                    throw e;
-                }
+                authStatus = doValidateRequest(authModule, messageInfo, clientSubject, serviceSubject, moduleId,
+                        auditTrail);
                 // Record the AuthModules AuthStatus to decided later whether to call secureResponse on the
                 // AuthModule.
                 if (AuthStatus.SUCCESS.equals(authStatus)) {
@@ -138,8 +138,13 @@ public class FallbackServerAuthContext extends JaspiServerAuthContext<ServerAuth
                             + "authenticated the client and has a response to return to the client");
                     break;
                 } else if (AuthStatus.SEND_FAILURE.equals(authStatus)) {
-                    String failureReason = (String) messageInfo.getMap().remove(AUDIT_FAILURE_REASON_KEY);
-                    auditTrail.auditFailure(moduleId, failureReason, moduleAuditInfo);
+                    Map<String, Object> failureReason =
+                            messageInfoUtils.removeMap(messageInfo, AUDIT_FAILURE_REASON_KEY);
+                    if (failureReason != null) {
+                        auditTrail.auditFailure(moduleId, failureReason, moduleAuditInfo);
+                    } else {
+                        auditTrail.auditFailure(moduleId, Collections.<String, Object>emptyMap(), moduleAuditInfo);
+                    }
                     // The module has failed to authenticate the client.
                     // -- In our implementation we will let subsequent modules try before sending the failure.
                     LOGGER.debug(authModule.getClass().getSimpleName() + " has failed to authenticated the "
@@ -153,7 +158,8 @@ public class FallbackServerAuthContext extends JaspiServerAuthContext<ServerAuth
                 } else {
                     String message = "Invalid AuthStatus returned from validateRequest, "
                             + asString(authStatus);
-                    auditTrail.auditFailure(moduleId, message, moduleAuditInfo);
+                    auditTrail.auditFailure(moduleId, Collections.<String, Object>singletonMap("message", message),
+                            moduleAuditInfo);
                     LOGGER.error(message);
                     throw new JaspiAuthException(message);
                 }

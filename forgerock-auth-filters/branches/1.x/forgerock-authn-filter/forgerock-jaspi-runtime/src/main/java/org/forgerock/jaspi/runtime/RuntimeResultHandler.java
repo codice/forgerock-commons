@@ -22,6 +22,7 @@ import org.forgerock.jaspi.logging.LogFactory;
 import javax.security.auth.Subject;
 import javax.security.auth.message.AuthException;
 import javax.security.auth.message.AuthStatus;
+import javax.security.auth.message.MessageInfo;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 
@@ -44,14 +45,15 @@ public class RuntimeResultHandler {
      * to 401.</p>
      *
      * @param authStatus The returned AuthStatus from the validateRequest method call.
+     * @param messageInfo A contextual object that encapsulates the client request and server response objects.
      * @param auditTrail The instance of the {@code AuditTrail} for this authentication request.
      * @param clientSubject The client's subject.
      * @param response The HttpServletResponse.
      * @return <code>true</code> if the processing of the request should proceed, <code>false</code> otherwise.
      * @throws javax.security.auth.message.AuthException If the AuthStatus is not valid for a call to validateRequest.
      */
-    public boolean handleValidateRequestResult(AuthStatus authStatus, AuditTrail auditTrail, Subject clientSubject,
-            HttpServletResponse response) throws AuthException {
+    public boolean handleValidateRequestResult(AuthStatus authStatus, MessageInfo messageInfo, AuditTrail auditTrail,
+            Subject clientSubject, HttpServletResponse response) throws AuthException {
 
         if (SUCCESS.equals(authStatus)) {
             auditTrail.completeAuditAsSuccessful(getPrincipal(clientSubject));
@@ -64,7 +66,7 @@ public class RuntimeResultHandler {
             DEBUG.debug("Successfully validated request, with response message");
             return false;
         } else if (SEND_FAILURE.equals(authStatus)) {
-            auditTrail.completeAuditAsFailure(getPrincipal(clientSubject));
+            auditTrail.completeAuditAsFailure();
             // Send HttpServletResponse to client and exit.
             DEBUG.debug("Failed to validate request, included response message.");
             response.setStatus(401);
@@ -74,7 +76,7 @@ public class RuntimeResultHandler {
             DEBUG.debug("Has not finished validating request. Requires more information from client.");
             return false;
         } else {
-            auditTrail.completeAuditAsFailure(getPrincipal(clientSubject));
+            auditTrail.completeAuditAsFailure();
             DEBUG.error("Invalid AuthStatus, " + asString(authStatus));
             throw new AuthException("Invalid AuthStatus from validateRequest: " + asString(authStatus));
         }

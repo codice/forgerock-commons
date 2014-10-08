@@ -33,15 +33,10 @@ import javax.security.auth.message.MessageInfo;
 import javax.security.auth.message.module.ServerAuthModule;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import static org.forgerock.jaspi.runtime.JaspiRuntime.JSON_HTTP_MEDIA_TYPE;
-import static org.forgerock.jaspi.runtime.JaspiRuntime.UNAUTHORIZED_ERROR_MESSAGE;
-import static org.forgerock.jaspi.runtime.JaspiRuntime.UNAUTHORIZED_HTTP_ERROR_CODE;
 
 /**
  * A handler for ServerAuthContext, which exposes helper methods that will be called at the varying end states
@@ -52,6 +47,11 @@ import static org.forgerock.jaspi.runtime.JaspiRuntime.UNAUTHORIZED_HTTP_ERROR_C
 public class ContextHandler {
 
     private static final DebugLogger LOGGER = LogFactory.getDebug();
+
+    /**
+     * Constant for the list of auth module failure reasons.
+     */
+    public static final String FAILURE_REASONS = "org.forgerock.authentication.failure.reasons";
 
     private final MessageInfoUtils messageInfoUtils;
 
@@ -126,8 +126,8 @@ public class ContextHandler {
 
         if (authStatus == null || AuthStatus.SEND_FAILURE.equals(authStatus)) {
             LOGGER.debug("Authentication has failed.");
-            ResourceException jre = ResourceException.getException(UNAUTHORIZED_HTTP_ERROR_CODE,
-                    UNAUTHORIZED_ERROR_MESSAGE);
+            ResourceException jre = ResourceException.getException(JaspiRuntime.UNAUTHORIZED_HTTP_ERROR_CODE,
+                    JaspiRuntime.UNAUTHORIZED_ERROR_MESSAGE);
             throw new JaspiAuthException(jre);
         } else {
             setAuthenticationRequestAttributes(messageInfo, clientSubject);
