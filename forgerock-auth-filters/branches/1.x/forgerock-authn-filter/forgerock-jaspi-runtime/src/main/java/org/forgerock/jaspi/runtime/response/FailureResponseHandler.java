@@ -138,7 +138,7 @@ public class FailureResponseHandler {
         }
 
         public void write(ResourceException jre, HttpServletResponse response) throws IOException {
-            response.getWriter().write(jre.toJsonValue().toString());
+            response.getWriter().write(jre.includeCauseInJsonValue().toJsonValue().toString());
             response.setContentType("application/json");
         }
     }

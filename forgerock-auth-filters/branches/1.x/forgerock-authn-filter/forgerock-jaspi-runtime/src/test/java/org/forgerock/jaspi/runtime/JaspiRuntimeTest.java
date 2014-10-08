@@ -80,7 +80,7 @@ public class JaspiRuntimeTest {
         ServerAuthContext serverAuthContext = mock(ServerAuthContext.class);
 
         given(runtimeResultHandler.handleValidateRequestResult(Matchers.<AuthStatus>anyObject(),
-                Matchers.<AuditTrail>anyObject(), Matchers.<Subject>anyObject(),
+                Matchers.<MessageInfo>anyObject(), Matchers.<AuditTrail>anyObject(), Matchers.<Subject>anyObject(),
                 Matchers.<HttpServletResponse>anyObject())).willReturn(false);
 
         JaspiRuntime jaspiRuntime = new JaspiRuntime(serverAuthContext, runtimeResultHandler, auditApi, null);
@@ -105,7 +105,7 @@ public class JaspiRuntimeTest {
         ServerAuthContext serverAuthContext = mock(ServerAuthContext.class);
 
         given(runtimeResultHandler.handleValidateRequestResult(Matchers.<AuthStatus>anyObject(),
-                Matchers.<AuditTrail>anyObject(), Matchers.<Subject>anyObject(),
+                Matchers.<MessageInfo>anyObject(), Matchers.<AuditTrail>anyObject(), Matchers.<Subject>anyObject(),
                 Matchers.<HttpServletResponse>anyObject())).willReturn(true);
 
         JaspiRuntime jaspiRuntime = new JaspiRuntime(serverAuthContext, runtimeResultHandler, auditApi, null);

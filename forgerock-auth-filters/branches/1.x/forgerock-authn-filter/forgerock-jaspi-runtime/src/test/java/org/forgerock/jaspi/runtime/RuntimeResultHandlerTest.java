@@ -22,8 +22,13 @@ import org.testng.annotations.Test;
 import javax.security.auth.Subject;
 import javax.security.auth.message.AuthException;
 import javax.security.auth.message.AuthStatus;
+import javax.security.auth.message.MessageInfo;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -46,12 +51,14 @@ public class RuntimeResultHandlerTest {
 
         //Given
         AuthStatus authStatus = AuthStatus.SUCCESS;
+        MessageInfo messageInfo = mock(MessageInfo.class);
         AuditTrail auditTrail = mock(AuditTrail.class);
         Subject clientSubject = new Subject();
         HttpServletResponse response = mock(HttpServletResponse.class);
 
         //When
-        boolean result = resultHandler.handleValidateRequestResult(authStatus, auditTrail, clientSubject, response);
+        boolean result = resultHandler.handleValidateRequestResult(authStatus, messageInfo, auditTrail, clientSubject,
+                response);
 
         //Then
         assertTrue(result);
@@ -63,12 +70,14 @@ public class RuntimeResultHandlerTest {
 
         //Given
         AuthStatus authStatus = AuthStatus.SEND_SUCCESS;
+        MessageInfo messageInfo = mock(MessageInfo.class);
         AuditTrail auditTrail = mock(AuditTrail.class);
         Subject clientSubject = new Subject();
         HttpServletResponse response = mock(HttpServletResponse.class);
 
         //When
-        boolean result = resultHandler.handleValidateRequestResult(authStatus, auditTrail, clientSubject, response);
+        boolean result = resultHandler.handleValidateRequestResult(authStatus, messageInfo, auditTrail, clientSubject,
+                response);
 
         //Then
         assertFalse(result);
@@ -76,16 +85,21 @@ public class RuntimeResultHandlerTest {
     }
 
     @Test
-    public void shouldHandleValidateRequestWithSendFailureAuthStatus() throws AuthException {
+    public void shouldHandleValidateRequestWithSendFailureAuthStatus() throws AuthException, IOException {
 
         //Given
         AuthStatus authStatus = AuthStatus.SEND_FAILURE;
+        MessageInfo messageInfo = mock(MessageInfo.class);
         AuditTrail auditTrail = mock(AuditTrail.class);
         Subject clientSubject = new Subject();
         HttpServletResponse response = mock(HttpServletResponse.class);
+        PrintWriter writer = mock(PrintWriter.class);
+
+        given(response.getWriter()).willReturn(writer);
 
         //When
-        boolean result = resultHandler.handleValidateRequestResult(authStatus, auditTrail, clientSubject, response);
+        boolean result = resultHandler.handleValidateRequestResult(authStatus, messageInfo, auditTrail, clientSubject,
+                response);
 
         //Then
         assertFalse(result);
@@ -97,12 +111,14 @@ public class RuntimeResultHandlerTest {
 
         //Given
         AuthStatus authStatus = AuthStatus.SEND_CONTINUE;
+        MessageInfo messageInfo = mock(MessageInfo.class);
         AuditTrail auditTrail = mock(AuditTrail.class);
         Subject clientSubject = new Subject();
         HttpServletResponse response = mock(HttpServletResponse.class);
 
         //When
-        boolean result = resultHandler.handleValidateRequestResult(authStatus, auditTrail, clientSubject, response);
+        boolean result = resultHandler.handleValidateRequestResult(authStatus, messageInfo, auditTrail, clientSubject,
+                response);
 
         //Then
         assertFalse(result);
@@ -114,12 +130,14 @@ public class RuntimeResultHandlerTest {
 
         //Given
         AuthStatus authStatus = AuthStatus.FAILURE;
+        MessageInfo messageInfo = mock(MessageInfo.class);
         AuditTrail auditTrail = mock(AuditTrail.class);
         Subject clientSubject = new Subject();
         HttpServletResponse response = mock(HttpServletResponse.class);
 
         //When
-        resultHandler.handleValidateRequestResult(authStatus, auditTrail, clientSubject, response);
+        resultHandler.handleValidateRequestResult(authStatus, messageInfo, auditTrail, clientSubject,
+                response);
 
         //Then
         fail();
@@ -186,12 +204,14 @@ public class RuntimeResultHandlerTest {
 
         //Given
         AuthStatus authStatus = AuthStatus.FAILURE;
+        MessageInfo messageInfo = mock(MessageInfo.class);
         AuditTrail auditTrail = mock(AuditTrail.class);
         Subject clientSubject = new Subject();
         HttpServletResponse response = mock(HttpServletResponse.class);
 
         //When
-        resultHandler.handleValidateRequestResult(authStatus, auditTrail, clientSubject, response);
+        resultHandler.handleValidateRequestResult(authStatus, messageInfo, auditTrail, clientSubject,
+                response);
 
         //Then
         fail();

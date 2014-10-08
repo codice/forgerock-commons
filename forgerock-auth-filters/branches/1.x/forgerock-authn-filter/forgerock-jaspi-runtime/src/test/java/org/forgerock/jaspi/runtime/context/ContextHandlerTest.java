@@ -36,7 +36,6 @@ import javax.security.auth.message.module.ServerAuthModule;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,15 +43,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.anyObject;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.fail;
+import static org.mockito.Mockito.*;
+import static org.testng.Assert.*;
 
 public class ContextHandlerTest {
 
