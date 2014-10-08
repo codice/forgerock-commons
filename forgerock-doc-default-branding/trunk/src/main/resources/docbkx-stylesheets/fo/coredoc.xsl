@@ -67,6 +67,13 @@ version="1.0">
   <fo:block break-after='page'/>
  </xsl:template>
 
+ <!--      linebreak   -->
+ <!-- use <?linkbreak?> -->
+ <xsl:template match="processing-instruction('linebreak')">
+  <fo:block/>
+ </xsl:template>
+
+
 <!--  =====================================================================  -->
 <!--                                Fonts                                    -->
 <!--  =====================================================================  -->
@@ -583,5 +590,8 @@ version="1.0">
  <xsl:attribute-set name="header.content.properties">
   <xsl:attribute name="font-size">8pt</xsl:attribute>
  </xsl:attribute-set>
+
+
+
 
 </xsl:stylesheet>
