@@ -118,11 +118,6 @@
                         <properties>
                             <cargo.servlet.port>${servlet.port}</cargo.servlet.port>
                             <cargo.tomcat.ajp.port>${servlet.ajp.port}</cargo.tomcat.ajp.port>
-                            <!---Xdebug-->
-                            <!--<cargo.jvmargs>-->
-                                <!-- This causes problems when shutting down tomcat. So only use to debug but don't commit -->
-                                <!---Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8787-->
-                            <!--</cargo.jvmargs>-->
                         </properties>
                     </configuration>
                     <deployables>
