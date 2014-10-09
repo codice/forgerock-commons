@@ -1,6 +1,6 @@
 # DRAFT IN PROGRESS
 
-Latest release is 2.1.3. These are draft release notes.
+Latest release is 2.1.4. These are draft release notes.
 
 
 # ForgeRock Documentation Tools 3.0.0 Release Notes
@@ -40,6 +40,10 @@ See the README for this version for details.
 
 **Changes to plugin configuration**
 
+The fix for DOCS-215 introduces a new configuration parameter,
+`<stopAfterPreProcessing>`, to interrupt output generation.
+See the explanation below for details.
+
 Due to changes in the plugin architecture,
 the fix for DOCS-194 in this release does not provide
 the configuration option `<overwriteGeneratedSource>`,
@@ -48,6 +52,17 @@ See the explanation below for details.
 
 
 ## What's New
+
+**DOCS-215: Add configuration for stopping at pre-processed DocBook**
+
+This improvement introduces a boolean configuration parameter,
+`<stopAfterPreProcessing>` (default: `false`).
+
+When `<stopAfterPreProcessing>` is set to `true`,
+the build stops when DocBook XML requires no further pre-processing.
+The plugin logs a message indicating where to find the pre-processed files:
+
+    [INFO] Pre-processed sources are available under ...
 
 **DOCS-203: Provide a convention for copying arbitrary files to the built documentation**
 

@@ -36,6 +36,13 @@ public class SiteMojo extends AbstractDocbkxMojo {
      */
     @Override
     public void execute() throws MojoExecutionException {
+
+        // When not producing final output, but only preprocessed XML,
+        // we can interrupt processing now.
+        if (stopAfterPreProcessing()) {
+            return;
+        }
+
         new Layout(this).execute();
         new Htaccess(this).execute();
         new Redirect(this).execute();

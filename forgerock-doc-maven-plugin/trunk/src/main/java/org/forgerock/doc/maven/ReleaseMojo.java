@@ -39,6 +39,13 @@ public class ReleaseMojo extends AbstractDocbkxMojo {
      */
     @Override
     public void execute() throws MojoExecutionException {
+
+        // When not producing final output, but only preprocessed XML,
+        // we can interrupt processing now.
+        if (stopAfterPreProcessing()) {
+            return;
+        }
+
         new Layout(this).execute();
         new IndexHtml(this).execute();
         new PdfNames(this).execute();
