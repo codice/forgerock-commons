@@ -66,6 +66,13 @@ public class PreSiteBuildMojo extends AbstractBuildMojo {
             sourceDirectory = getFilteredDocbkxSourceDirectory();
         }
 
+        // When not producing final output, but only preprocessed XML,
+        // we can interrupt processing now.
+        if (stopAfterPreProcessing()) {
+            getLog().info("Pre-processed sources are available under " + sourceDirectory);
+            return;
+        }
+
         // The Executor is what actually calls other plugins.
         Executor exec = new Executor();
         exec.unpackBranding();

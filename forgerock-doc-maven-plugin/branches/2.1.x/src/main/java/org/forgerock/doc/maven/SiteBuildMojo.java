@@ -57,6 +57,13 @@ public class SiteBuildMojo extends AbstractBuildMojo {
      */
     @Override
     public final void execute() throws MojoExecutionException {
+
+        // When not producing final output, but only preprocessed XML,
+        // we can interrupt processing now.
+        if (stopAfterPreProcessing()) {
+            return;
+        }
+
         Executor exec = new Executor();
         getLog().info("Laying out site...");
         exec.layout();
