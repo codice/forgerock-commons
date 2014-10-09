@@ -79,9 +79,9 @@
     </properties>
 
     <scm>
-        <url>https://svn.forgerock.org/commons/forgerock-auth-filters/branches/1.x</url>
-        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-auth-filters/branches/1.x</connection>
-        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-auth-filters/branches/1.x</developerConnection>
+        <url>https://svn.forgerock.org/commons/forgerock-auth-filters/branches/1.5</url>
+        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-auth-filters/branches/1.5</connection>
+        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-auth-filters/branches/1.5</developerConnection>
     </scm>
 
     <ciManagement>
