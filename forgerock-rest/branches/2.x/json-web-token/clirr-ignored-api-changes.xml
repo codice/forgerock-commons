@@ -48,4 +48,10 @@ Note: waiting on https://jira.codehaus.org/browse/MCLIRR-62 to be resolved to av
         <method>EncryptedJwt(org.forgerock.json.jose.jwe.JweHeader, byte[], byte[], byte[], byte[])</method>
         <justification>CREST-177 - Fix JWT compatibility across JDK 6/7/8</justification>
     </difference>
+    <difference>
+        <className>org/forgerock/json/jose/jws/JwsAlgorithm</className>
+        <differenceType>7002</differenceType>
+        <method>java.lang.String getKnownName()</method>
+        <justification>CREST-186 - Exposes the MD of JWSAlgorithms</justification>
+    </difference>
 </differences>

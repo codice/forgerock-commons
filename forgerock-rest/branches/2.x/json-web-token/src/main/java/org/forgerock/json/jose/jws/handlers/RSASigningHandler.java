@@ -60,7 +60,7 @@ public class RSASigningHandler implements SigningHandler {
             return signatureUtil.sign((PrivateKey) key, algorithm.getAlgorithm(), data);
         } catch (SignatureException e) {
             if (e.getCause().getClass().isAssignableFrom(NoSuchAlgorithmException.class)) {
-                throw new JwsSigningException("Unsupported Signing Algorithm, " + algorithm.getKnownName(), e);
+                throw new JwsSigningException("Unsupported Signing Algorithm, " + algorithm.getAlgorithm(), e);
             }
             throw new JwsSigningException(e);
         }
@@ -73,11 +73,11 @@ public class RSASigningHandler implements SigningHandler {
     public boolean verify(JwsAlgorithm algorithm, byte[] data, byte[] signature) {
         try {
             Reject.ifFalse(key instanceof PublicKey, "RSA requires public key for signature verification.");
-            return signatureUtil.verify((PublicKey) key, algorithm.getKnownName(),
+            return signatureUtil.verify((PublicKey) key, algorithm.getAlgorithm(),
                     new String(data, Utils.CHARSET), signature);
         } catch (SignatureException e) {
             if (e.getCause().getClass().isAssignableFrom(NoSuchAlgorithmException.class)) {
-                throw new JwsVerifyingException("Unsupported Signing Algorithm, " + algorithm.getKnownName(), e);
+                throw new JwsVerifyingException("Unsupported Signing Algorithm, " + algorithm.getAlgorithm(), e);
             }
             throw new JwsVerifyingException(e);
         }
