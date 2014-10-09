@@ -16,6 +16,17 @@ TODO
 
 ## Improvements & New Features
 
+**DOCS-215: Add configuration for stopping at pre-processed DocBook**
+
+This improvement introduces a boolean configuration parameter,
+`<stopAfterPreProcessing>` (default: `false`).
+
+When `<stopAfterPreProcessing>` is set to `true`,
+the build stops when DocBook XML requires no further pre-processing.
+The plugin logs a message indicating where to find the pre-processed files:
+
+    [INFO] Pre-processed sources are available under ...
+
 **DOCS-137: Add graphics for admonitions in PDF**
 
 

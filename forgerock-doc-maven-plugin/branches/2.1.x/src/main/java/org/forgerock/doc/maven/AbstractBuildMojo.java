@@ -698,4 +698,23 @@ abstract class AbstractBuildMojo extends AbstractMojo {
         return releaseCssFileName;
     }
 
+    /**
+     * Whether to stop execution after pre-processing source files.
+     *
+     * @parameter default-value="false" property="stopAfterPreProcessing"
+     */
+    private boolean stopAfterPreProcessing;
+
+    /**
+     * Whether to stop execution after pre-processing source files.
+     *
+     * <p>
+     *
+     * Default: {@code false}
+     *
+     * @return True if execution should stop after pre-processing. False otherwise.
+     */
+    public boolean stopAfterPreProcessing() {
+        return stopAfterPreProcessing;
+    }
 }
