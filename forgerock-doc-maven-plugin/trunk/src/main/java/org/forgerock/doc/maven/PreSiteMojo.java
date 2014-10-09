@@ -93,6 +93,17 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
             new CustomCss(this).execute();
         }
 
+
+        // When not producing final output, but only preprocessed XML,
+        // we can interrupt processing now.
+        if (stopAfterPreProcessing()) {
+            getLog().info(
+                    "Pre-processed sources are available under "
+                            + getDocbkxModifiableSourcesDirectory().getPath());
+            return;
+        }
+
+
         // Perform build.
         if (formats.contains("epub")) {
             new Epub(this).execute();
