@@ -75,8 +75,7 @@ public class LinkTest {
                 return;
             }
 
-            final String include =
-                    m.getDocbkxModifiableSourcesDirectory().getPath() + "/**/" + m.getDocumentSrcName();
+            final String include = "**/" + m.getDocumentSrcName();
             final String log = m.path(new File(m.getDocbkxOutputDirectory(), "linktester.err"));
             final String jiraUrlPattern =
                     "^https://bugster.forgerock.org/jira/browse/OPEN(AM|DJ|ICF|IDM|IG)-[0-9]{1,4}$";
