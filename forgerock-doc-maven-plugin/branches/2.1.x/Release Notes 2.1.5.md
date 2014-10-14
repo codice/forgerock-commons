@@ -32,6 +32,8 @@ The plugin logs a message indicating where to find the pre-processed files:
 
 ## Bugs Fixed
 
+**DOCS-213: Linktester phase in doc build plugin fails to detect broken links**
+
 **DOCS-206: Webhelp in-progress docs are not clearly marked DRAFT**
 
 **DOCS-171: Make Secondary Sub-Headings More Prominent**

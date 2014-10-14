@@ -233,12 +233,6 @@ public class SiteBuildMojo extends AbstractBuildMojo {
         void testLinks() throws MojoExecutionException {
             String include = "**/" + getDocumentSrcName();
 
-            if (getJCiteOutputDirectory().exists()) {
-                include = getJCiteOutputDirectory().getPath() + "/" + include;
-            } else if (doUseFilteredSources()) {
-                include = getFilteredDocbkxSourceDirectory().getPath() + "/" + include;
-            }
-
             final String log = getDocbkxOutputDirectory().getPath() + File.separator
                     + "linktester.err";
 
