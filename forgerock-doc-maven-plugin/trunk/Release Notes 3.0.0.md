@@ -131,6 +131,8 @@ The new architecture is described in the Design document.
 
 ## Fixes
 
+**DOCS-213: Linktester phase in doc build plugin fails to detect broken links**
+
 **DOCS-197: Prepending ↪ on mouseover is distracting**
 
 **DOCS-189: Discontinue default support for RTF**
