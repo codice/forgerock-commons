@@ -27,8 +27,6 @@ The plugin logs a message indicating where to find the pre-processed files:
 
     [INFO] Pre-processed sources are available under ...
 
-**DOCS-137: Add graphics for admonitions in PDF**
-
 
 ## Bugs Fixed
 

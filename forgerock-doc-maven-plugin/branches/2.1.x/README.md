@@ -3,7 +3,7 @@
 This Maven plugin centralizes configuration of core documentation, to ensure
 that documents are formatted uniformly.
 
-_This document covers functionality present in 2.1.3._
+_This document covers functionality present in 2.1.5._
 
 With centralized configuration handled by this Maven plugin, the core
 documentation-related project configuration takes at least three arguments:
@@ -231,6 +231,16 @@ Your PlantUML text files must have extension `.txt`.
 While creating images, you can generate them with PlantUML by hand.
 
     java -jar plantuml.jar image.txt
+
+
+## Pre-processing Sources Only
+
+When you set `<stopAfterPreProcessing>` to `true`,
+the build stops once DocBook XML requires no further pre-processing.
+The plugin logs a message indicating where to find the pre-processed files:
+
+    [INFO] Pre-processed sources are available under ...
+
 
 ## Link Checking
 
