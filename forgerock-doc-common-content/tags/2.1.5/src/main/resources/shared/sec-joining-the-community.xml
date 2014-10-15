@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ! CCPL HEADER START
+  !
+  ! This work is licensed under the Creative Commons
+  ! Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+  ! To view a copy of this license, visit
+  ! http://creativecommons.org/licenses/by-nc-nd/3.0/
+  ! or send a letter to Creative Commons, 444 Castro Street,
+  ! Suite 900, Mountain View, California, 94041, USA.
+  !
+  ! You can also obtain a copy of the license at
+  ! trunk/opendj3/legal-notices/CC-BY-NC-ND.txt.
+  ! See the License for the specific language governing permissions
+  ! and limitations under the License.
+  !
+  ! If applicable, add the following below this CCPL HEADER, with the fields
+  ! enclosed by brackets "[]" replaced with your own identifying information:
+  !      Portions Copyright [yyyy] [name of copyright owner]
+  !
+  ! CCPL HEADER END
+  !
+  !      Copyright 2011-2014 ForgeRock AS
+  !
+-->
+ <section xml:id="joining-the-community"
+          xmlns='http://docbook.org/ns/docbook' version='5.0' xml:lang='en'
+          xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+          xsi:schemaLocation='http://docbook.org/ns/docbook
+                              http://docbook.org/xml/5.0/xsd/docbook.xsd'
+          xmlns:xlink='http://www.w3.org/1999/xlink'>
+ <title>Joining the ForgeRock Community</title>
+
+ <para>
+  After you
+  <link
+   xlink:show="new"
+   xlink:href="https://backstage.forgerock.com/#/account/register"
+  >sign up</link> to join the ForgeRock community,
+  you can edit the
+  <link xlink:href="https://wikis.forgerock.org/" xlink:show="new"
+  >Community Wikis</link>,
+  and also log bugs and feature requests in the
+  <link xlink:show="new" xlink:href="https://bugster.forgerock.org/"
+  >issue tracker</link>.
+ </para>
+
+ <para>
+  If you have a question regarding a project but cannot find an answer
+  in the project documentation or Wiki, browse to the
+  <link xlink:show="new" xlink:href="http://forgerock.org"
+  >Developer Community</link> page for the project,
+  where you can find details on joining the project mailing lists,
+  and find links to mailing list archives.
+
+  You can also suggest updates to documentation through the
+  <link xlink:show="new" xlink:href="https://lists.forgerock.org/mailman/listinfo/docs"
+  >ForgeRock docs mailing list</link>.
+ </para>
+
+ <para>
+  The Community Wikis describe how to check out and build source code.
+
+  Should you want to contribute a patch, test, or feature,
+  or want to author part of the core documentation,
+  first have a look on the ForgeRock site at
+  <link xlink:href="http://forgerock.org/get_involved.html" xlink:show="new"
+  >how to get involved</link>.
+ </para>
+</section>
