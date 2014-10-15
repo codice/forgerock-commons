@@ -327,6 +327,15 @@ on the `<programlisting>` element, as in the following example:
     </programlisting>
 
 
+## Pre-processing Sources Only
+
+When you set `<stopAfterPreProcessing>` to `true`,
+the build stops once DocBook XML requires no further pre-processing.
+The plugin logs a message indicating where to find the pre-processed files:
+
+    [INFO] Pre-processed sources are available under ...
+
+
 ## Copying Arbitrary Documentation Set Resources
 
 If the documentation set includes resource files such as large samples
