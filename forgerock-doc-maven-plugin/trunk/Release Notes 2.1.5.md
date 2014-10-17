@@ -38,8 +38,6 @@ The plugin logs a message indicating where to find the pre-processed files:
 
 **DOCS-171: Make Secondary Sub-Headings More Prominent**
 
-**DOCS-160: Fix PDF Headers**
-
 
 ## Known Issues
 
