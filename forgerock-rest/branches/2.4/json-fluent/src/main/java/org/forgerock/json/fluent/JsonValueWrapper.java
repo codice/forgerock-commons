@@ -20,7 +20,9 @@ package org.forgerock.json.fluent;
  * TODO: Description.
  *
  * @author Paul C. Bryan
+ * @deprecated This interface will be removed in version 3.
  */
+@Deprecated
 public interface JsonValueWrapper {
 
     /**
