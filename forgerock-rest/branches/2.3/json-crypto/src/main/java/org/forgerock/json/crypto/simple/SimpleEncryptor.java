@@ -132,6 +132,8 @@ public class SimpleEncryptor implements JsonEncryptor {
 
     @Override
     public JsonValue encrypt(JsonValue value) throws JsonCryptoException {
+        // FIXME: in version 3 this call will be replaced with getObject().
+        @SuppressWarnings("deprecation")
         Object object = value.getWrappedObject();
         try {
             return new JsonValue((key instanceof SecretKey ? symmetric(object) : asymmetric(object)));
