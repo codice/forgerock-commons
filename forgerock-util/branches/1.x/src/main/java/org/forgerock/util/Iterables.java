@@ -24,6 +24,8 @@
 
 package org.forgerock.util;
 
+import org.forgerock.util.promise.Function;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 

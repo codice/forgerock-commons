@@ -13,10 +13,7 @@
  *
  * Copyright 2014 ForgeRock Inc.
  */
-package org.forgerock.util;
-
-import org.forgerock.util.promise.NeverThrowsException;
-import org.forgerock.util.promise.Promise;
+package org.forgerock.util.promise;
 
 /**
  * An asynchronous {@link Function} which returns a result at some point in the

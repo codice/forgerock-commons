@@ -13,9 +13,7 @@
  *
  * Copyright 2014 ForgeRock Inc.
  */
-package org.forgerock.util;
-
-import org.forgerock.util.promise.NeverThrowsException;
+package org.forgerock.util.promise;
 
 /**
  * A synchronous function which returns a result immediately.
