@@ -27,7 +27,9 @@ import java.util.List;
  * JSON value is a list.
  *
  * @author Paul C. Bryan
+ * @deprecated This class will be removed in version 3.
  */
+@Deprecated
 public class JsonValueList<E> extends AbstractList<E> implements JsonValueWrapper {
 
     /** TODO: Description. */

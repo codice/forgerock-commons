@@ -20,7 +20,7 @@ package org.forgerock.json.fluent;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,7 +28,9 @@ import java.util.Set;
  * TODO: Description.
  *
  * @author Paul C. Bryan
+ * @deprecated This class will be removed in version 3.
  */
+@Deprecated
 public class JsonValueMap implements JsonValueWrapper, Map<String, Object> {
 
     /** TODO: Description. */
@@ -164,7 +166,8 @@ public class JsonValueMap implements JsonValueWrapper, Map<String, Object> {
      * Returns a {@code Set} view of the mappings contained in this map.
      */
     public Set<Map.Entry<String, Object>> entrySet() {
-        HashSet<Map.Entry<String, Object>> result = new HashSet<Map.Entry<String, Object>>(size());
+        LinkedHashSet<Map.Entry<String, Object>> result =
+            new LinkedHashSet<Map.Entry<String, Object>>(size());
         for (String key : jsonValue.keys()) {
             result.add(new AbstractMap.SimpleEntry<String, Object>(key, get(key)));
         }

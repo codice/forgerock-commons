@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -1018,7 +1016,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
         final JsonValue result = new JsonValue(this.object, this.pointer);
         result.transformers.addAll(this.transformers); // avoid re-applying transformers
         if (isMap()) {
-            result.object = new HashMap<String, Object>(this.asMap());
+            result.object = new LinkedHashMap<String, Object>(this.asMap());
         } else if (isList()) {
             result.object = new ArrayList<Object>(this.asList());
         } else if (isSet()) {
@@ -1062,7 +1060,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
         // TODO: track original values to resolve cyclic references
         final JsonValue result = new JsonValue(object, pointer); // start with shallow copy
         if (this.isMap()) {
-            final HashMap<String, Object> map = new HashMap<String, Object>(size());
+            final Map<String, Object> map = new LinkedHashMap<String, Object>(size());
             for (final String key : keys()) {
                 map.put(key, this.get(key).copy().getObject()); // recursion
             }
@@ -1224,7 +1222,9 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
      * transformations as these objects (and their children) are accessed.
      *
      * @return a Java object representing this JSON value.
+     * @deprecated This method will be removed in version 3.
      */
+    @Deprecated
     public Object getWrappedObject() {
         if (isMap()) {
             return new JsonValueMap(this);
@@ -1405,22 +1405,17 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
 
     /**
      * Returns the set of keys for this JSON value's child values. If this value
-     * is a {@code Map}, then the order of the resulting keys is undefined. If
-     * there are no child values, this method returns an empty set.
+     * is a {@code Map}, then the order of the resulting keys is the same as the
+     * underlying Map implementation. If there are no child values, this method
+     * returns an empty set.
      *
      * @return the set of keys for this JSON value's child values.
      */
     public Set<String> keys() {
-        Set<String> result;
         if (isMap()) {
-            result = new HashSet<String>();
-            for (final Object key : asMap().keySet()) {
-                if (key instanceof String) {
-                    result.add((String) key); // only expose string keys in map
-                }
-            }
+            return asMap().keySet();
         } else if (isList()) {
-            result = new AbstractSet<String>() {
+            return new AbstractSet<String>() {
                 final RangeSet range = new RangeSet(JsonValue.this.size()); // 0 through size-1 inclusive
 
                 @Override
@@ -1464,9 +1459,8 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
                 }
             };
         } else {
-            result = Collections.emptySet();
+            return Collections.emptySet();
         }
-        return result;
     }
 
     /**
@@ -1843,6 +1837,7 @@ public class JsonValue implements Cloneable, Iterable<JsonValue> {
      * Unwraps a {@link JsonValueWrapper} and/or {@link JsonValue} object. If
      * nothing was unwrapped, then {@code null} is returned.
      */
+    @Deprecated
     private JsonValue unwrapObject(Object object) {
         JsonValue result = null;
         if (object != null && object instanceof JsonValueWrapper) {
