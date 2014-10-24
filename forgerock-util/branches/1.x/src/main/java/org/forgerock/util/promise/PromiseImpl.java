@@ -21,9 +21,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.forgerock.util.AsyncFunction;
-import org.forgerock.util.Function;
-
 /**
  * An implementation of {@link Promise} which can be used as is, or as the basis
  * for more complex asynchronous behavior. A {@code PromiseImpl} must be
@@ -262,7 +259,7 @@ public class PromiseImpl<V, E extends Exception> implements Promise<V, E>, Succe
     }
 
     @Override
-    public final Promise<V, E> thenOnFailure(final FailureHandler<? super E> onFail) {
+    public final Promise<V, E> onFailure(final FailureHandler<? super E> onFail) {
         addOrFireListener(new StateListener<V, E>() {
             @Override
             public void handleStateChange(final int newState, final V result, final E error) {
@@ -275,7 +272,7 @@ public class PromiseImpl<V, E extends Exception> implements Promise<V, E>, Succe
     }
 
     @Override
-    public final Promise<V, E> thenOnSuccess(final SuccessHandler<? super V> onSuccess) {
+    public final Promise<V, E> onSuccess(final SuccessHandler<? super V> onSuccess) {
         addOrFireListener(new StateListener<V, E>() {
             @Override
             public void handleStateChange(final int newState, final V result, final E error) {
@@ -288,23 +285,7 @@ public class PromiseImpl<V, E extends Exception> implements Promise<V, E>, Succe
     }
 
     @Override
-    public final Promise<V, E> thenOnSuccessOrFailure(final SuccessHandler<? super V> onSuccess,
-        final FailureHandler<? super E> onFailure) {
-        addOrFireListener(new StateListener<V, E>() {
-            @Override
-            public void handleStateChange(final int newState, final V result, final E error) {
-                if (newState == SUCCEEDED) {
-                    onSuccess.handleResult(result);
-                } else {
-                    onFailure.handleError(error);
-                }
-            }
-        });
-        return this;
-    }
-
-    @Override
-    public final Promise<V, E> thenOnSuccessOrFailure(final Runnable onSuccessOrFail) {
+    public final Promise<V, E> onSuccessOrFailure(final Runnable onSuccessOrFail) {
         addOrFireListener(new StateListener<V, E>() {
             @Override
             public void handleStateChange(final int newState, final V result, final E error) {
@@ -320,13 +301,9 @@ public class PromiseImpl<V, E extends Exception> implements Promise<V, E>, Succe
     }
 
     @Override
-    public <EOUT extends Exception> Promise<V, EOUT> thenCatch(final Function<? super E, V, EOUT> onFailure) {
-        return then(Promises.<V, EOUT> successIdempotentFunction(), onFailure);
-    }
-
-    @Override
     public final <VOUT, EOUT extends Exception> Promise<VOUT, EOUT> then(
-        final Function<? super V, VOUT, EOUT> onSuccess, final Function<? super E, VOUT, EOUT> onFailure) {
+            final Function<? super V, VOUT, EOUT> onSuccess,
+            final Function<? super E, VOUT, EOUT> onFailure) {
         final PromiseImpl<VOUT, EOUT> chained = new PromiseImpl<VOUT, EOUT>();
         addOrFireListener(new StateListener<V, E>() {
             @Override
@@ -347,23 +324,24 @@ public class PromiseImpl<V, E extends Exception> implements Promise<V, E>, Succe
     }
 
     @Override
-    public final Promise<V, E> thenAlways(final Runnable onSuccessOrFailure) {
-        return thenOnSuccessOrFailure(onSuccessOrFailure);
+    public final Promise<V, E> then(final SuccessHandler<? super V> onSuccess) {
+        return onSuccess(onSuccess);
     }
 
     @Override
-    public final Promise<V, E> thenFinally(final Runnable onSuccessOrFailure) {
-        return thenOnSuccessOrFailure(onSuccessOrFailure);
+    public final Promise<V, E> then(final SuccessHandler<? super V> onSuccess,
+            final FailureHandler<? super E> onFailure) {
+        return onSuccess(onSuccess).onFailure(onFailure);
+    }
+
+    @Override
+    public final Promise<V, E> thenAlways(final Runnable onSuccessOrFailure) {
+        return onSuccessOrFailure(onSuccessOrFailure);
     }
 
     @Override
     public final <VOUT> Promise<VOUT, E> thenAsync(final AsyncFunction<? super V, VOUT, E> onSuccess) {
         return thenAsync(onSuccess, Promises.<VOUT, E> failIdempotentAsyncFunction());
-    }
-
-    @Override
-    public final <EOUT extends Exception> Promise<V, EOUT> thenCatchAsync(AsyncFunction<? super E, V, EOUT> onFailure) {
-        return thenAsync(Promises.<V, EOUT> successIdempotentAsyncFunction(), onFailure);
     }
 
     @Override
@@ -382,12 +360,12 @@ public class PromiseImpl<V, E extends Exception> implements Promise<V, E>, Succe
                     } else {
                         nestedPromise = onFailure.apply(error);
                     }
-                    nestedPromise.thenOnSuccess(new SuccessHandler<VOUT>() {
+                    nestedPromise.onSuccess(new SuccessHandler<VOUT>() {
                         @Override
                         public void handleResult(final VOUT value) {
                             chained.handleResult(value);
                         }
-                    }).thenOnFailure(new FailureHandler<EOUT>() {
+                    }).onFailure(new FailureHandler<EOUT>() {
                         @Override
                         public void handleError(final EOUT error) {
                             chained.handleError(error);
