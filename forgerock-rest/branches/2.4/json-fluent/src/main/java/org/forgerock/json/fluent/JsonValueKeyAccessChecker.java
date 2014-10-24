@@ -319,6 +319,7 @@ public class JsonValueKeyAccessChecker extends JsonValue {
 
     /** {@inheritDoc} */
     @Override
+    @Deprecated
     public Object getWrappedObject() {
         throw new UnsupportedOperationException();
     }
