@@ -128,6 +128,10 @@ and a simplification of the plugin configuration model.
 
 The new architecture is described in the Design document.
 
+**DOCS-119: Support Maven 3.1 & 3.2**
+
+The plugin has been tested with Maven 3.0.5, 3.1.1, 3.2.3.
+
 
 ## Fixes
 
