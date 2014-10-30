@@ -32,7 +32,10 @@ import java.util.NoSuchElementException;
 
 /**
  * Iterable utilties.
+ *
+ * @deprecated use org.forgerock.guava.common.collect.FluentIterable instead
  */
+@Deprecated
 public class Iterables {
     /**
      * An {@link Iterable} that will filter the provided {@link Iterable}
@@ -164,7 +167,9 @@ public class Iterables {
      * </ul>
      *
      * @param <T> The parameterized element type of the {@link Iterable}.
+     * @deprecated use org.forgerock.guava.common.collect.FluentIterable instead
      */
+    @Deprecated
     public static class FluentIterable<T> implements Iterable<T> {
         /** The Iterable to wrap */
         private final Iterable<T> iterable;
@@ -193,7 +198,9 @@ public class Iterables {
          *
          * @param predicate the {@linkplain Predicate} used to include elements in the filtered result
          * @return the filtered {@linkplain Iterable}
+         * @deprecated use org.forgerock.guava.common.collect.FluentIterable#filter instead
          */
+        @Deprecated
         public FluentIterable<T> filter(final Predicate<T> predicate) {
             return new FluentIterable<T>(new FilteredIterable<T>(iterable, predicate));
         }
@@ -206,7 +213,9 @@ public class Iterables {
          * @param <E> An optional exception that the transform function may throw.
          * @param mapper the {@linkplain Function} used to map elements from source type to return type
          * @return the mapped {@linkplain Iterable}
+         * @deprecated use org.forgerock.guava.common.collect.FluentIterable#transform instead
          */
+        @Deprecated
         public <R, E extends RuntimeException> FluentIterable<R> map(final Function<T, R, E> mapper) {
             return new FluentIterable<R>(new MappedIterable<T, R, E>(iterable, mapper));
         }
@@ -249,7 +258,9 @@ public class Iterables {
      *            the {@linkplain Predicate} used to include elements in the
      *            filtered result
      * @return the filtered {@linkplain Iterable}
+     * @deprecated use org.forgerock.guava.common.collect.FluentIterable#filter instead
      */
+    @Deprecated
     public static <T> Iterable<T> filter(Iterable<T> iterable, Predicate<T> predicate) {
         return new FilteredIterable<T>(iterable, predicate);
     }
@@ -291,7 +302,9 @@ public class Iterables {
      *            the {@linkplain Function} used to map elements from source
      *            type to return type
      * @return the mapped {@linkplain Iterable}
+     * @deprecated use org.forgerock.guava.common.collect.FluentIterable#transform instead
      */
+    @Deprecated
     public static <T, R, E extends RuntimeException> Iterable<R> map(Iterable<T> iterable, Function<T, R, E> mapper) {
         return new MappedIterable<T, R, E>(iterable, mapper);
     }
@@ -350,7 +363,9 @@ public class Iterables {
      * @param iterable
      *            the Iterable to wrap
      * @return a wrapped {@linkplain Iterable}
+     * @deprecated use org.forgerock.guava.common.collect.FluentIterable instead
      */
+    @Deprecated
     public static <T> FluentIterable<T> from(Iterable<T> iterable) {
         return new FluentIterable<T>(iterable);
     }
