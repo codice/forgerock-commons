@@ -179,6 +179,7 @@ public class AuthZFilter implements Filter {
     private void handleException(HttpServletResponse response, ResourceException jsonResourceException)
             throws IOException {
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonResourceException.toJsonValue().toString());
     }
 

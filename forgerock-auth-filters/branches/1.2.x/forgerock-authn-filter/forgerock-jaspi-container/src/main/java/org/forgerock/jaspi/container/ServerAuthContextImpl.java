@@ -193,8 +193,9 @@ public class ServerAuthContextImpl implements ServerAuthContext {
             HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
             ResourceException jre = ResourceException.getException(401, "Access denied");
             try {
-                response.getWriter().write(jre.toJsonValue().toString());
                 response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(jre.toJsonValue().toString());
             } catch (IOException e) {
                 throw new AuthException(e.getMessage());
             }
