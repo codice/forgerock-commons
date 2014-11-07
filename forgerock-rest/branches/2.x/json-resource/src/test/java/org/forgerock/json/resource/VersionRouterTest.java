@@ -56,7 +56,7 @@ public final class VersionRouterTest {
     }
 
     @Test(dataProvider = "absoluteRouteHitTestData")
-    public void testAbsoluteRouteHit(final String resourceName) throws ResourceException {
+    public void testAbsoluteRouteHit(final String resourceName) {
         final VersionRouter router = new VersionRouter();
         final RequestHandler h = mock(RequestHandler.class);
         router.addRoute(RoutingMode.EQUALS, resourceName, h);
@@ -103,14 +103,14 @@ public final class VersionRouterTest {
 
     @Test(dataProvider = "invalidTemplatesTestData",
             expectedExceptions = IllegalArgumentException.class)
-    public void testInvalidTemplates(final String template) throws ResourceException {
+    public void testInvalidTemplates(final String template) {
         final VersionRouter router = new VersionRouter();
         final RequestHandler h = mock(RequestHandler.class);
         router.addRoute(RoutingMode.EQUALS, template, h);
     }
 
     @Test
-    public void testMultipleRoutePrecedence() throws ResourceException {
+    public void testMultipleRoutePrecedence() {
         final VersionRouter router = new VersionRouter();
         final RequestHandler h1 = mock(RequestHandler.class);
         router.addRoute(RoutingMode.EQUALS, "object", h1);
@@ -134,7 +134,7 @@ public final class VersionRouterTest {
     }
 
     @Test
-    public void testMultipleRoutes() throws ResourceException {
+    public void testMultipleRoutes() {
         final VersionRouter router = new VersionRouter();
         final RequestHandler h1 = mock(RequestHandler.class);
         router.addRoute(RoutingMode.EQUALS, "users", h1);
@@ -204,7 +204,8 @@ public final class VersionRouterTest {
             { "{userId}/devices", "test/devices", new String[] {"userId", "test" }},
             { "{a}/{b}", "aaa/bbb", new String[] {"a", "aaa", "b", "bbb" }},
             { "{a}/b/{c}", "aaa/b/ccc", new String[] {"a", "aaa", "c", "ccc" }},
-            { "users/{id}/devices", "users/test+user/devices", new String[] {"id", "test user" }},
+            { "users/{id}/devices", "users/test%20user/devices", new String[] {"id", "test user" }},
+            { "users/{id}/devices", "users/test+%2buser/devices", new String[] {"id", "test++user" }},
             { "users/{id}/devices", "users/test%2fdevices/devices", new String[] {"id", "test/devices" }},
         };
         // @formatter:on
@@ -212,7 +213,7 @@ public final class VersionRouterTest {
 
     @Test(dataProvider = "variableRouteHitTestData")
     public void testVariableRouteHit(final String template, final String resourceName,
-            final String[] expectedVars) throws ResourceException {
+            final String[] expectedVars) {
         final VersionRouter router = new VersionRouter();
         final RequestHandler h = mock(RequestHandler.class);
         router.addRoute(RoutingMode.EQUALS, template, h);

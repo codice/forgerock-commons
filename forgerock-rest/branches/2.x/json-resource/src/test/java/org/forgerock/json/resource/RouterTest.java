@@ -19,14 +19,18 @@ package org.forgerock.json.resource;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 import static org.fest.assertions.Assertions.assertThat;
 import static org.forgerock.json.resource.Requests.newReadRequest;
 import static org.forgerock.json.resource.Resources.newInternalConnection;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
+
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -56,7 +60,7 @@ public final class RouterTest {
     }
 
     @Test(dataProvider = "absoluteRouteHitTestData")
-    public void testAbsoluteRouteHit(final String resourceName) throws ResourceException {
+    public void testAbsoluteRouteHit(final String resourceName) {
         final Router router = new Router();
         final RequestHandler h = mock(RequestHandler.class);
         router.addRoute(RoutingMode.EQUALS, resourceName, h);
@@ -94,7 +98,7 @@ public final class RouterTest {
     }
 
     @Test
-    public void testDefaultRouteWithOne() throws ResourceException {
+    public void testDefaultRouteWithOne() {
         final Router router = new Router();
         final RequestHandler h1 = mock(RequestHandler.class);
         router.addRoute(RoutingMode.EQUALS, "users", h1);
@@ -112,7 +116,7 @@ public final class RouterTest {
     }
 
     @Test
-    public void testDefaultRouteWithZero() throws ResourceException {
+    public void testDefaultRouteWithZero() {
         final Router router = new Router();
         final RequestHandler h = mock(RequestHandler.class);
         router.setDefaultRoute(h);
@@ -143,14 +147,14 @@ public final class RouterTest {
 
     @Test(dataProvider = "invalidTemplatesTestData",
             expectedExceptions = IllegalArgumentException.class)
-    public void testInvalidTemplates(final String template) throws ResourceException {
+    public void testInvalidTemplates(final String template) {
         final Router router = new Router();
         final RequestHandler h = mock(RequestHandler.class);
         router.addRoute(RoutingMode.EQUALS, template, h);
     }
 
     @Test
-    public void testMultipleRoutePrecedence() throws ResourceException {
+    public void testMultipleRoutePrecedence() {
         final Router router = new Router();
         final RequestHandler h1 = mock(RequestHandler.class);
         router.addRoute(RoutingMode.EQUALS, "object", h1);
@@ -174,7 +178,7 @@ public final class RouterTest {
     }
 
     @Test
-    public void testMultipleRoutes() throws ResourceException {
+    public void testMultipleRoutes() {
         final Router router = new Router();
         final RequestHandler h1 = mock(RequestHandler.class);
         router.addRoute(RoutingMode.EQUALS, "users", h1);
@@ -244,7 +248,8 @@ public final class RouterTest {
             { "{userId}/devices", "test/devices", new String[] {"userId", "test" }},
             { "{a}/{b}", "aaa/bbb", new String[] {"a", "aaa", "b", "bbb" }},
             { "{a}/b/{c}", "aaa/b/ccc", new String[] {"a", "aaa", "c", "ccc" }},
-            { "users/{id}/devices", "users/test+user/devices", new String[] {"id", "test user" }},
+            { "users/{id}/devices", "users/test%20user/devices", new String[] {"id", "test user" }},
+            { "users/{id}/devices", "users/test+%2buser/devices", new String[] {"id", "test++user" }},
             { "users/{id}/devices", "users/test%2fdevices/devices", new String[] {"id", "test/devices" }},
         };
         // @formatter:on
@@ -252,7 +257,7 @@ public final class RouterTest {
 
     @Test(dataProvider = "variableRouteHitTestData")
     public void testVariableRouteHit(final String template, final String resourceName,
-            final String[] expectedVars) throws ResourceException {
+            final String[] expectedVars) {
         final Router router = new Router();
         final RequestHandler h = mock(RequestHandler.class);
         router.addRoute(RoutingMode.EQUALS, template, h);

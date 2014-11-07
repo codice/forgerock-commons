@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2013 ForgeRock AS.
+ * Copyright 2013-2014 ForgeRock AS.
  */
 package org.forgerock.json.resource;
 
@@ -37,8 +37,9 @@ public final class RequestsTest {
             { "users/", "test", "users/test" },
             { "/users", "test", "users/test" },
             { "/users/", "test", "users/test" },
-            { "users", "test user", "users/test+user" },
+            { "users", "test user", "users/test%20user" },
             { "users", "test/user", "users/test%2Fuser" },
+            { "users", "test+user", "users/test+user" }
             // @formatter:on
         };
     }
@@ -53,7 +54,7 @@ public final class RequestsTest {
     // test the contract that resource name must not be null
     @Test(expectedExceptions = NullPointerException.class)
     public void testNullResourceName() {
-        newReadRequest(null);
+        newReadRequest((String) null);
     }
 
     // test the contract that request.getResourceName/getResourceNameObject
