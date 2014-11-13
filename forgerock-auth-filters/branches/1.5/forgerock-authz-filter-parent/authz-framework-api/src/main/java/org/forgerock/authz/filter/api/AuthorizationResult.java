@@ -25,20 +25,20 @@ import org.forgerock.json.fluent.JsonValue;
  */
 public final class AuthorizationResult {
     /**
-     * Creates a new {@code AuthorizationResult} instance which represents that the request was authorized and deemed
-     * that the request is authorized to access the requested resource.
+     * Creates a new {@code AuthorizationResult} instance which indicates that access to the requested protected
+     * resource is allowed.
      *
      * @return A successful {@code AuthorizationResult} instance.
      * @deprecated Use {@link #accessPermitted()} instead
      */
     @Deprecated
     public static AuthorizationResult success() {
-        return new AuthorizationResult(true, null, null);
+        return accessPermitted();
     }
 
     /**
-     * Creates a new {@code AuthorizationResult} instance which represents that the request was authorized and deemed
-     * that the request is authorized to access the requested resource.
+     * Creates a new {@code AuthorizationResult} instance which indicates that access to the requested protected
+     * resource is allowed.
      *
      * @return A successful {@code AuthorizationResult} instance.
      */
@@ -47,8 +47,8 @@ public final class AuthorizationResult {
     }
 
     /**
-     * Creates a new {@code AuthorizationResult} instance which represents that the request was authorized and deemed
-     * that the request is unauthorized to access the requested resource, for the given reason.
+     * Creates a new {@code AuthorizationResult} instance which indicates that access to the requested protected
+     * resource is denied, for the given reason.
      *
      * @param reason The reason why authorization has failed.
      * @return A failed {@code AuthorizationResult} instance.
@@ -56,12 +56,12 @@ public final class AuthorizationResult {
      */
     @Deprecated
     public static AuthorizationResult failure(String reason) {
-        return new AuthorizationResult(false, reason, null);
+        return accessDenied(reason);
     }
 
     /**
-     * Creates a new {@code AuthorizationResult} instance which represents that the request was authorized and deemed
-     * that the request is unauthorized to access the requested resource, for the given reason.
+     * Creates a new {@code AuthorizationResult} instance which indicates that access to the requested protected
+     * resource is denied, for the given reason.
      *
      * @param reason The reason why authorization has failed.
      * @return A failed {@code AuthorizationResult} instance.
@@ -71,8 +71,8 @@ public final class AuthorizationResult {
     }
 
     /**
-     * Creates a new {@code AuthorizationResult} instance which represents that the request was authorized and deemed
-     * that the request is unauthorized to access the requested resource, for the given reason and detail.
+     * Creates a new {@code AuthorizationResult} instance which indicates that access to the requested protected
+     * resource is denied, for the given reason and detail.
      *
      * @param reason The reason why authorization failed.
      * @param detail A {@code JsonValue} containing additional detail on why authorization failed.
@@ -81,12 +81,12 @@ public final class AuthorizationResult {
      */
     @Deprecated
     public static AuthorizationResult failure(String reason, JsonValue detail) {
-        return new AuthorizationResult(false, reason, detail);
+        return accessDenied(reason, detail);
     }
 
     /**
-     * Creates a new {@code AuthorizationResult} instance which represents that the request was authorized and deemed
-     * that the request is unauthorized to access the requested resource, for the given reason and detail.
+     * Creates a new {@code AuthorizationResult} instance which indicates that access to the requested protected
+     * resource is denied, for the given reason and detail.
      *
      * @param reason The reason why authorization failed.
      * @param detail A {@code JsonValue} containing additional detail on why authorization failed.
