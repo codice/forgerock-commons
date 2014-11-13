@@ -39,7 +39,7 @@ public class AcceptAPIVersionTest {
     }
 
     @Test
-    public void nullInstanceWithBlankString() {
+    public void nullInstanceWithBlankString() throws BadRequestException {
         // Given
         AcceptAPIVersion acceptAPIVersion = AcceptAPIVersion
                 .newBuilder(null)
@@ -51,7 +51,7 @@ public class AcceptAPIVersionTest {
     }
 
     @Test
-    public void handlesEmptyString() {
+    public void handlesEmptyString() throws BadRequestException {
         // Given
         AcceptAPIVersion acceptAPIVersion = AcceptAPIVersion
                 .newBuilder("")
@@ -62,22 +62,22 @@ public class AcceptAPIVersionTest {
         assertNull(acceptAPIVersion.getResourceVersion());
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void handlesInvalidFormat() {
+    @Test(expectedExceptions = BadRequestException.class)
+    public void handlesInvalidFormat() throws BadRequestException {
         // Given
         AcceptAPIVersion
                 .newBuilder("someInvalidString");
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void unknownVersionType() {
+    @Test(expectedExceptions = BadRequestException.class)
+    public void unknownVersionType() throws BadRequestException {
         // Given
         AcceptAPIVersion
                 .newBuilder("unknownType=1.0");
     }
 
     @Test
-    public void validVersionStringSingleValue() {
+    public void validVersionStringSingleValue() throws BadRequestException {
         // Given
         AcceptAPIVersion acceptAPIVersion = AcceptAPIVersion
                 .newBuilder("resource=2.1")
@@ -90,7 +90,7 @@ public class AcceptAPIVersionTest {
     }
 
     @Test
-    public void validVersionStringMultipleValues() {
+    public void validVersionStringMultipleValues() throws BadRequestException {
         // Given
         AcceptAPIVersion acceptAPIVersion = AcceptAPIVersion
                 .newBuilder("protocol=1.0,resource=2.1")
@@ -102,29 +102,29 @@ public class AcceptAPIVersionTest {
         assertEquals(acceptAPIVersion.getResourceVersion(), resourceVersion);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void handlesToManyVersionStrings() {
+    @Test(expectedExceptions = BadRequestException.class)
+    public void handlesToManyVersionStrings() throws BadRequestException {
         // Given
         AcceptAPIVersion
                 .newBuilder("protocol=1.0,resource=2.1,resource=3.2");
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void invalidDelimiter() {
+    @Test(expectedExceptions = BadRequestException.class)
+    public void invalidDelimiter() throws BadRequestException {
         // Given
         AcceptAPIVersion
                 .newBuilder("resource=2.1;protocol=1.0");
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void invalidVersionSchema() {
+    @Test(expectedExceptions = BadRequestException.class)
+    public void invalidVersionSchema() throws BadRequestException {
         // Given
         AcceptAPIVersion
                 .newBuilder("resource=1.2.3");
     }
 
     @Test
-    public void defaultsDoNotOverride() {
+    public void defaultsDoNotOverride() throws BadRequestException {
         // Given
         AcceptAPIVersion acceptAPIVersion = AcceptAPIVersion
                 .newBuilder("protocol=1.0,resource=2.1")
@@ -156,7 +156,7 @@ public class AcceptAPIVersionTest {
     }
 
     @Test
-    public void expectsSatisfiedWhenVersionsPresent() {
+    public void expectsSatisfiedWhenVersionsPresent() throws BadRequestException {
         // Given
         AcceptAPIVersion acceptAPIVersion = AcceptAPIVersion
                 .newBuilder("protocol=1.0,resource=2.1")
@@ -171,7 +171,7 @@ public class AcceptAPIVersionTest {
     }
 
     @Test(expectedExceptions = NullPointerException.class)
-    public void expectsFailsNoProtocol() {
+    public void expectsFailsNoProtocol() throws BadRequestException {
         // Given
         AcceptAPIVersion
                 .newBuilder("resource=2.1")
@@ -181,7 +181,7 @@ public class AcceptAPIVersionTest {
     }
 
     @Test(expectedExceptions = NullPointerException.class)
-    public void expectsFailsNoResource() {
+    public void expectsFailsNoResource() throws BadRequestException {
         // Given
         AcceptAPIVersion
                 .newBuilder("protocol=1.0")
@@ -191,7 +191,7 @@ public class AcceptAPIVersionTest {
     }
 
     @Test
-    public void objectEquality() {
+    public void objectEquality() throws BadRequestException {
         // Given
         AcceptAPIVersion acceptAPIVersion1 = AcceptAPIVersion
                 .newBuilder("protocol=1.0,resource=2.1")
