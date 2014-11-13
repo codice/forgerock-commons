@@ -24,6 +24,17 @@ import org.forgerock.json.fluent.JsonValue;
  * @since 1.5.0
  */
 public final class AuthorizationResult {
+    /**
+     * Creates a new {@code AuthorizationResult} instance which represents that the request was authorized and deemed
+     * that the request is authorized to access the requested resource.
+     *
+     * @return A successful {@code AuthorizationResult} instance.
+     * @deprecated Use {@link #accessPermitted()} instead
+     */
+    @Deprecated
+    public static AuthorizationResult success() {
+        return new AuthorizationResult(true, null, null);
+    }
 
     /**
      * Creates a new {@code AuthorizationResult} instance which represents that the request was authorized and deemed
@@ -31,7 +42,7 @@ public final class AuthorizationResult {
      *
      * @return A successful {@code AuthorizationResult} instance.
      */
-    public static AuthorizationResult success() {
+    public static AuthorizationResult accessPermitted() {
         return new AuthorizationResult(true, null, null);
     }
 
@@ -41,8 +52,21 @@ public final class AuthorizationResult {
      *
      * @param reason The reason why authorization has failed.
      * @return A failed {@code AuthorizationResult} instance.
+     * @deprecated Use {@link #accessDenied(String)} instead
      */
+    @Deprecated
     public static AuthorizationResult failure(String reason) {
+        return new AuthorizationResult(false, reason, null);
+    }
+
+    /**
+     * Creates a new {@code AuthorizationResult} instance which represents that the request was authorized and deemed
+     * that the request is unauthorized to access the requested resource, for the given reason.
+     *
+     * @param reason The reason why authorization has failed.
+     * @return A failed {@code AuthorizationResult} instance.
+     */
+    public static AuthorizationResult accessDenied(String reason) {
         return new AuthorizationResult(false, reason, null);
     }
 
@@ -50,12 +74,25 @@ public final class AuthorizationResult {
      * Creates a new {@code AuthorizationResult} instance which represents that the request was authorized and deemed
      * that the request is unauthorized to access the requested resource, for the given reason and detail.
      *
+     * @param reason The reason why authorization failed.
+     * @param detail A {@code JsonValue} containing additional detail on why authorization failed.
+     * @return A failed {@code AuthorizationResult} instance.
+     * @deprecated Use {@link #accessDenied(String, JsonValue)} instead
+     */
+    @Deprecated
+    public static AuthorizationResult failure(String reason, JsonValue detail) {
+        return new AuthorizationResult(false, reason, detail);
+    }
+
+    /**
+     * Creates a new {@code AuthorizationResult} instance which represents that the request was authorized and deemed
+     * that the request is unauthorized to access the requested resource, for the given reason and detail.
      *
      * @param reason The reason why authorization failed.
      * @param detail A {@code JsonValue} containing additional detail on why authorization failed.
      * @return A failed {@code AuthorizationResult} instance.
      */
-    public static AuthorizationResult failure(String reason, JsonValue detail) {
+    public static AuthorizationResult accessDenied(String reason, JsonValue detail) {
         return new AuthorizationResult(false, reason, detail);
     }
 
