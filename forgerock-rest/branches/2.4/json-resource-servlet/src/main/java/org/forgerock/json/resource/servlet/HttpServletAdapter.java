@@ -645,7 +645,7 @@ public final class HttpServletAdapter {
      * @throws BadRequestException
      *         If an invalid version is requested
      */
-    private AcceptAPIVersion parseAcceptAPIVersion(final HttpServletRequest req) throws ResourceException {
+    private AcceptAPIVersion parseAcceptAPIVersion(final HttpServletRequest req) throws BadRequestException {
         // Extract out the protocol and resource versions.
         final String versionString = req.getHeader(ACCEPT_API_VERSION);
 
