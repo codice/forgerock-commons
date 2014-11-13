@@ -135,6 +135,12 @@ The plugin has been tested with Maven 3.0.5, 3.1.1, 3.2.3.
 
 ## Fixes
 
+**DOCS-225: Run docbook-linktester only on pre-processed DocBook files**
+
+The fix assumes that the build directory is
+exactly one level below the project base directory,
+such as `${basedir}/target` or `${basedir}/build`.
+
 **DOCS-213: Linktester phase in doc build plugin fails to detect broken links**
 
 **DOCS-197: Prepending ↪ on mouseover is distracting**
