@@ -75,7 +75,11 @@ public class LinkTest {
                 return;
             }
 
-            final String include = "**/" + m.getDocumentSrcName();
+            // Check only preprocessed sources.
+            // This works with a relative path, not with an absolute path.
+            final String buildDirectory = getName(m.getBuildDirectory());
+            final String include = buildDirectory + "/**/" + m.getDocumentSrcName();
+
             final String log = m.path(new File(m.getDocbkxOutputDirectory(), "linktester.err"));
             final String jiraUrlPattern =
                     "^https://bugster.forgerock.org/jira/browse/OPEN(AM|DJ|ICF|IDM|IG)-[0-9]{1,4}$";
@@ -99,6 +103,16 @@ public class LinkTest {
                                     element(name("skipUrlPattern"), jiraUrlPattern),
                                     element(name("skipUrlPattern"), rfcUrlPattern))),
                     executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
+        }
+
+        /**
+         * Return the name of a file or directory relative to its parent.
+         *
+         * @param file  The file or directory.
+         * @return      The name of the file or directory relative to its parent.
+         */
+        private String getName(File file) {
+            return file.getPath().replace(file.getParent() + File.separator, "");
         }
     }
 }
