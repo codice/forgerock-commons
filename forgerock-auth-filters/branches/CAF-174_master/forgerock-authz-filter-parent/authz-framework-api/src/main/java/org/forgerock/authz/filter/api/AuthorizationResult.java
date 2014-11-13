@@ -31,7 +31,7 @@ public final class AuthorizationResult {
      *
      * @return A successful {@code AuthorizationResult} instance.
      */
-    public static AuthorizationResult success() {
+    public static AuthorizationResult accessPermitted() {
         return new AuthorizationResult(true, null, null);
     }
 
@@ -42,7 +42,7 @@ public final class AuthorizationResult {
      * @param reason The reason why authorization has failed.
      * @return A failed {@code AuthorizationResult} instance.
      */
-    public static AuthorizationResult failure(String reason) {
+    public static AuthorizationResult accessDenied(String reason) {
         return new AuthorizationResult(false, reason, null);
     }
 
@@ -50,12 +50,11 @@ public final class AuthorizationResult {
      * Creates a new {@code AuthorizationResult} instance which represents that the request was authorized and deemed
      * that the request is unauthorized to access the requested resource, for the given reason and detail.
      *
-     *
      * @param reason The reason why authorization failed.
      * @param detail A {@code JsonValue} containing additional detail on why authorization failed.
      * @return A failed {@code AuthorizationResult} instance.
      */
-    public static AuthorizationResult failure(String reason, JsonValue detail) {
+    public static AuthorizationResult accessDenied(String reason, JsonValue detail) {
         return new AuthorizationResult(false, reason, detail);
     }
 
