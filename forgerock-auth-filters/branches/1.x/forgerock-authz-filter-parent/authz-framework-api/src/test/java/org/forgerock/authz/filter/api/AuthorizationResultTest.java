@@ -72,4 +72,49 @@ public class AuthorizationResultTest {
         assertEquals(authorizationResult.getReason(), reason);
         assertEquals(authorizationResult.getDetail(), detail);
     }
+
+    @Test
+    public void shouldCreateAccessPermittedAuthorizationResult() {
+
+        //Given
+
+        //When
+        AuthorizationResult authorizationResult = AuthorizationResult.accessPermitted();
+
+        //Then
+        assertTrue(authorizationResult.isAuthorized());
+        assertNull(authorizationResult.getReason());
+        assertNull(authorizationResult.getDetail());
+    }
+
+    @Test
+    public void shouldCreateAccessDeniedAuthorizationResult() {
+
+        //Given
+        String reason = "REASON";
+
+        //When
+        AuthorizationResult authorizationResult = AuthorizationResult.accessDenied(reason);
+
+        //Then
+        assertFalse(authorizationResult.isAuthorized());
+        assertEquals(authorizationResult.getReason(), reason);
+        assertNull(authorizationResult.getDetail());
+    }
+
+    @Test
+    public void shouldCreateAccessDeniedAuthorizationResultWithDetail() {
+
+        //Given
+        String reason = "REASON";
+        JsonValue detail = json(object());
+
+        //When
+        AuthorizationResult authorizationResult = AuthorizationResult.accessDenied(reason, detail);
+
+        //Then
+        assertFalse(authorizationResult.isAuthorized());
+        assertEquals(authorizationResult.getReason(), reason);
+        assertEquals(authorizationResult.getDetail(), detail);
+    }
 }
