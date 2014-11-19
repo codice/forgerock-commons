@@ -468,7 +468,7 @@ public class JwtSessionModule implements ServerAuthModule {
 
         Cookie cookie = new Cookie(JWT_SESSION_COOKIE_NAME, jwtString);
         cookie.setPath("/");
-        cookie.setMaxAge(new Long(exp.getTime() - now.getTime()).intValue() / 1000);
+        cookie.setMaxAge(new Long((exp.getTime() - now.getTime()) / 1000L).intValue());
 
         return cookie;
     }
