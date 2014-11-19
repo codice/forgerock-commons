@@ -25,7 +25,7 @@
 
     <groupId>org.forgerock.commons</groupId>
     <artifactId>forgerock-auth-filters</artifactId>
-    <version>1.5.1</version>
+    <version>1.5.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>ForgeRock Auth Filters</name>
@@ -79,9 +79,9 @@
     </properties>
 
     <scm>
-        <url>https://svn.forgerock.org/commons/forgerock-auth-filters/tags/1.5.1</url>
-        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-auth-filters/tags/1.5.1</connection>
-        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-auth-filters/tags/1.5.1</developerConnection>
+        <url>https://svn.forgerock.org/commons/forgerock-auth-filters/branches/1.5</url>
+        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-auth-filters/branches/1.5</connection>
+        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-auth-filters/branches/1.5</developerConnection>
     </scm>
 
     <ciManagement>
