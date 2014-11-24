@@ -40,6 +40,8 @@ See the README for this version for details.
 
 **Changes to plugin configuration**
 
+The fix for DOCS-237 introduces a new configuration parameter, `<skipUrlPatterns>`.
+
 The fix for DOCS-215 introduces a new configuration parameter,
 `<stopAfterPreProcessing>`, to interrupt output generation.
 See the explanation below for details.
@@ -52,6 +54,11 @@ See the explanation below for details.
 
 
 ## What's New
+
+**DOCS-237: Provide a configuration parameter for passing skipUrl regexes**
+
+This introduces a `<skipUrlPatterns>` parameter
+that mirrors the one provided by `docbook-linktester`.
 
 **DOCS-215: Add configuration for stopping at pre-processed DocBook**
 

@@ -126,9 +126,9 @@ public class LinkTest {
                 element(name("skipUrlPattern"), // RFCs
                         "^http://tools.ietf.org/html/rfc[0-9]+$"),
                 element(name("skipUrlPattern"), // localhost
-                        "^http(s)?://localhost.*$"),
+                        "^https?://localhost.*$"),
                 element(name("skipUrlPattern"), // example (see RFC 2606)
-                        "^http(s)?://.*example.*$"),
+                        "^https?://[^/]*example.*$"),
                 element(name("skipUrlPattern"), // relative URLs
                         "^\\.\\./.*$")
             };

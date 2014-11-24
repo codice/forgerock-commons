@@ -50,7 +50,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether WinAnsi encoding be used for embedded fonts.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code false}
      *
@@ -63,7 +63,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Should sections have numeric labels?
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;sectionAutolabel&gt;
      *
@@ -75,11 +75,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether sections should have numeric labels.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code true}
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;sectionAutolabel&gt;
      *
@@ -120,7 +120,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Project base directory, needed to workaround bugs with *target.db and webhelp.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${basedir}}
      *
@@ -210,7 +210,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether to build a .zip containing the release content.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code false}
      *
@@ -224,7 +224,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Location of the chunked HTML XSL stylesheet customization file,
      * relative to the build directory.
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;htmlCustomization&gt;
      *
@@ -236,11 +236,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the location of the chunked HTML XSL stylesheet customization file.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.directory}/docbkx-stylesheets/html/chunked.xsl}
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;htmlCustomization&gt;
      *
@@ -315,7 +315,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether to copy resource files alongside docs for site, release.
      *
-     * <p>
+     * <br>
      *
      * Default: false
      *
@@ -356,7 +356,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Base directory for built documentation.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.directory}/docbkx}
      *
@@ -430,7 +430,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the URL to the site for published documentation.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code http://docs.forgerock.org/}
      *
@@ -451,17 +451,17 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the top-level DocBook XML source document name.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code index.xml}.
      *
-     * <p>
+     * <br>
      *
      * Documents included in the documentation set
      * such as books, articles, and references share a common entry point,
      * which is a file having the name specified by this element.
      *
-     * <p>
+     * <br>
      *
      * For example, if your documentation set has
      * Release Notes, an Installation Guide, an Admin Guide, a Dev Guide, and a Reference,
@@ -489,7 +489,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *   ...other files...
      * </pre>
      *
-     * <p>
+     * <br>
      *
      * The {@code ...other files...} can have whatever names you want,
      * as long as the name does not match the file name you configure.
@@ -506,7 +506,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Whether section labels should include parent numbers,
      * like 1.1, 1.2, 1.2.1, 1.2.2.
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;sectionLabelIncludesComponentLabel&gt;
      *
@@ -520,11 +520,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Whether section labels should include parent numbers,
      * like 1.1, 1.2, 1.2.1, 1.2.2.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code true}
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;sectionLabelIncludesComponentLabel&gt;
      *
@@ -537,7 +537,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * For draft mode, URL to the background watermark image.
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;draftWatermarkImage&gt;
      *
@@ -551,11 +551,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * For draft mode, URL to the background watermark image.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code http://docbook.sourceforge.net/release/images/draft.png}
      *
-     * <p>
+     * <br>
      * docbkx-tools element: &lt;draftWatermarkImage&gt;
      *
      * @return The URL to the background watermark image.
@@ -585,7 +585,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Location of the EPUB XSL stylesheet customization file,
      * relative to the build directory.
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;epubCustomization&gt;
      *
@@ -597,11 +597,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the location of the EPUB XSL stylesheet customization file.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.directory}/docbkx-stylesheets/epub/coredoc.xsl}
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;epubCustomization&gt;
      *
@@ -623,11 +623,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Do not process these default formats.
      *
-     * <p>
+     * <br>
      *
      * Choices include: epub, html, man, pdf, webhelp.
      *
-     * <p>
+     * <br>
      *
      * Do not set both excludes and includes in the same configuration.
      *
@@ -660,7 +660,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Location of the FO XSL stylesheet customization file (for PDF, RTF),
      * relative to the build directory.
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;foCustomization&gt;
      *
@@ -672,11 +672,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the location of the FO XSL stylesheet customization file (for PDF, RTF).
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.directory}/docbkx-stylesheets/fo/coredoc.xsl}
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;foCustomization&gt;
      *
@@ -698,7 +698,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Directory where fonts and font metrics are stored.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.directory}/fonts}
      *
@@ -711,12 +711,12 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Return a list of output formats to generate.
      *
-     * <p>
+     * <br>
      *
      * If no defaults are specified, then the default list of formats includes
      * epub, html, man, pdf, webhelp.
      *
-     * <p>
+     * <br>
      *
      * The rtf, xhtml5 formats are also supported,
      * but are not included in the default list.
@@ -775,7 +775,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Google Analytics identifier for the project.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code UA-23412190-14}
      *
@@ -796,11 +796,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Process only this format.
      *
-     * <p>
+     * <br>
      *
      * Choices include: epub, html, man, pdf, rtf, webhelp.
      *
-     * <p>
+     * <br>
      *
      * Do not set both excludes and includes in the same configuration.
      *
@@ -813,7 +813,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether these are draft documents, rather than final documents.
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;draftMode&gt;
      *
@@ -825,11 +825,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether these are draft documents, rather than final documents.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code yes}
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;draftMode&gt;
      *
@@ -842,7 +842,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether documents should be allowed to include other documents.
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;xincludeSupported&gt;
      *
@@ -854,11 +854,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether documents should be allowed to include other documents.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code true}
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;xincludeSupported&gt;
      *
@@ -879,7 +879,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the main JavaScript file name, found under {@code /js/} in plugin resources.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code uses-jquery.js}
      *
@@ -899,7 +899,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the source paths where cited Java files are found.
      *
-     * <p>
+     * <br>
      *
      * If source paths are not set, {@code src/main/java} is used.
      *
@@ -936,7 +936,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether to keep a custom index.html file for the documentation set.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code false}
      *
@@ -984,7 +984,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Location of the man page XSL stylesheet customization file,
      * relative to the build directory.
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;manpagesCustomization&gt;
      *
@@ -996,11 +996,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the location of the man page XSL stylesheet customization file.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.directory}/docbkx-stylesheets/man/coredoc.xsl}
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;manpagesCustomization&gt;
      *
@@ -1038,13 +1038,13 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether to overwrite the copy of DocBook sources if it exists.
      *
-     * <p>
+     * <br>
      *
      * One of the first things the plugin does when preparing DocBook sources
      * is to make a working copy of the files that is separate from the sources.
      * This allows the plugin to make changes to the files as necessary.
      *
-     * <p>
+     * <br>
      *
      * If for some reason you must provide the copy yourself,
      * and your copy must be in the {@code docbkxModifiableSourcesDirectory},
@@ -1053,7 +1053,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * The plugin with then pre-process the copy, however,
      * so expect the files in the modifiable copy to be changed.
      *
-     * <p>
+     * <br>
      *
      * Default: true
      *
@@ -1074,7 +1074,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether to overwrite project files with shared content.
      *
-     * <p>
+     * <br>
      *
      * Default: true
      *
@@ -1163,7 +1163,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the CSS file for the pre-site version of the HTML.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.directory}/coredoc.css}
      *
@@ -1237,7 +1237,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the CSS file for the release version of the HTML.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.directory}/dfo.css}
      *
@@ -1259,7 +1259,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the file system directory for release layout documentation.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.directory}/release}
      *
@@ -1345,7 +1345,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Directory for arbitrary documentation set resources.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${basedir}/src/main/docbkx/resources}
      *
@@ -1365,11 +1365,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether to run the ForgeRock link tester plugin.
      *
-     * <p>
+     * <br>
      *
      * You only need to run the link test from the top level of a project.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code "true"}
      *
@@ -1400,7 +1400,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Location of the single page HTML XSL stylesheet customization file,
      * relative to the build directory.
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;htmlCustomization&gt;
      *
@@ -1412,11 +1412,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the location of the single page HTML XSL stylesheet customization file.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.directory}/docbkx-stylesheets/html/coredoc.xsl}
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;htmlCustomization&gt;
      *
@@ -1437,7 +1437,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the file system directory for site content.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.directory}/site}
      *
@@ -1451,7 +1451,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Whether the ForgeRock link tester plugin should skip checking
      * that external URLs are valid.
      *
-     * <p>
+     * <br>
      *
      * See the {@code skipUrls} parameter of the <a
      * href="https://github.com/aldaris/docbook-linktester/">linktester plugin</a>.
@@ -1464,12 +1464,12 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Whether the ForgeRock link tester plugin should skip checking
      * that external URLs are valid.
      *
-     * <p>
+     * <br>
      *
      * See the {@code skipUrls} parameter of the <a
      * href="https://github.com/aldaris/docbook-linktester/">linktester plugin</a>.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code false}
      *
@@ -1482,7 +1482,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Regex patterns of URLs to skip when checking external links.
      *
-     * <p>
+     * <br>
      *
      * See the {@code skipUrlPatterns} parameter of the <a
      * href="https://github.com/aldaris/docbook-linktester/">linktester plugin</a>.
@@ -1494,7 +1494,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get regex patterns of URLs to skip when checking external links.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code null}
      *
@@ -1514,7 +1514,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether to stop execution after pre-processing source files.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code false}
      *
@@ -1527,7 +1527,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether &lt;programlisting&gt; content has syntax highlighting.
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;highlightSource&gt;
      *
@@ -1539,11 +1539,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Whether &lt;programlisting&gt; content has syntax highlighting.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code 1} (true)
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;highlightSource&gt;
      *
@@ -1565,7 +1565,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the location of the main CSS file for webhelp documents.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.dir}/docbkx-stylesheets/webhelp/positioning.css}
      *
@@ -1578,7 +1578,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Loctain of the webhelp XSL stylesheet customization file, relative to the build
      * directory.
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;webhelpCustomization&gt;
      *
@@ -1590,11 +1590,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the location of the webhelp XSL stylesheet customization file.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.dir}/docbkx-stylesheets/webhelp/coredoc.xsl}
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;webhelpCustomization&gt;
      *
@@ -1616,7 +1616,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the location of the logo image for webhelp documents.
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.dir}/docbkx-stylesheets/webhelp/logo.png}
      *
@@ -1646,7 +1646,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Location of the XHTML5 XSL stylesheet customization file,
      * relative to the build directory.
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;xhtml5Customization&gt;
      *
@@ -1658,11 +1658,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Get the location of the FO XSL stylesheet customization file (for PDF, RTF).
      *
-     * <p>
+     * <br>
      *
      * Default: {@code ${project.build.directory}/docbkx-stylesheets/fo/coredoc.xsl}
      *
-     * <p>
+     * <br>
      *
      * docbkx-tools element: &lt;foCustomization&gt;
      *
