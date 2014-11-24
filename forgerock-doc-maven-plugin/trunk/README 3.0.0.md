@@ -273,13 +273,20 @@ including Olinks.
 You can find errors in `${project.build.directory}/docbkx/linktester.err`
 after the `site` phase `site` goal runs successfully.
 
-If you want to skip the checks for external URLs,
-pass `-DskipLinkCheck=true` to Maven, as in the following example:
+To skip the checks for external URLs, pass `-DskipLinkCheck=true` to Maven.
 
     mvn -DskipLinkCheck=true clean site
 
+To skip only some external URLs, use the `<skipUrlPatterns>` configuration list.
+
+    <skipUrlPatterns>
+     <skipUrlPattern>^http(s)?://my-host.*$</skipUrlPattern>
+     <skipUrlPattern>^http(s)?://.*siroe.*$</skipUrlPattern>
+    </skipUrlPatterns>
+
 This capability is provided by Peter Major's
 [linktester](https://github.com/aldaris/docbook-linktester) plugin.
+For details on skipping URLs by pattern, see the documentation for his plugin.
 
 
 ## Handling PNG Images
