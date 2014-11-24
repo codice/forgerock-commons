@@ -19,6 +19,8 @@ import org.forgerock.doc.maven.AbstractDocbkxMojo;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Test links in pre-processed copy of the sources.
@@ -133,26 +135,14 @@ public class LinkTest {
                         "^\\.\\./.*$")
             };
 
-            final String[] configPatterns = m.getSkipUrlPatterns();
-            MojoExecutor.Element[] additionalPatterns = null;
-            if (configPatterns != null) {
-                additionalPatterns = new MojoExecutor.Element[configPatterns.length];
-                for (int i = 0; i < configPatterns.length; i++) {
-                    additionalPatterns[i] = element("skipUrlPattern", configPatterns[i]);
-                }
+            // The full list includes both default patterns and also configured patterns.
+            final ArrayList<Element> patterns = new ArrayList<Element>();
+            patterns.addAll(Arrays.asList(defaultPatterns));
+            for (String pattern: m.getSkipUrlPatterns()) {
+                patterns.add(element("skipUrlPattern", pattern));
             }
 
-            final MojoExecutor.Element[] allPatterns;
-            if (additionalPatterns == null) {
-                allPatterns = defaultPatterns;
-            } else {
-                allPatterns = new MojoExecutor.Element[defaultPatterns.length + additionalPatterns.length];
-                System.arraycopy(defaultPatterns, 0, allPatterns, 0, defaultPatterns.length);
-                System.arraycopy(
-                        additionalPatterns, 0, allPatterns, defaultPatterns.length, additionalPatterns.length);
-            }
-
-            return element(name("skipUrlPatterns"), allPatterns);
+            return element(name("skipUrlPatterns"), patterns.toArray(new Element[patterns.size()]));
         }
     }
 }
