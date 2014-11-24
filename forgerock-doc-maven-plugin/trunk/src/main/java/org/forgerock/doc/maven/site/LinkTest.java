@@ -20,7 +20,6 @@ import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Test links in pre-processed copy of the sources.
@@ -122,22 +121,22 @@ public class LinkTest {
          */
         private MojoExecutor.Element getSkipUrlPatterns() {
 
-            final MojoExecutor.Element[] defaultPatterns = {
-                element(name("skipUrlPattern"), // ForgeRock JIRA
-                        "^https://bugster.forgerock.org/jira/browse/.+$"),
-                element(name("skipUrlPattern"), // RFCs
-                        "^http://tools.ietf.org/html/rfc[0-9]+$"),
-                element(name("skipUrlPattern"), // localhost
-                        "^https?://localhost.*$"),
-                element(name("skipUrlPattern"), // example (see RFC 2606)
-                        "^https?://[^/]*example.*$"),
-                element(name("skipUrlPattern"), // relative URLs to arbitrary resources
-                        "^\\.\\./\\Q" + m.getRelativeResourcesDirectoryPath() + "\\E.*$")
-            };
-
             // The full list includes both default patterns and also configured patterns.
             final ArrayList<Element> patterns = new ArrayList<Element>();
-            patterns.addAll(Arrays.asList(defaultPatterns));
+
+            // Default patterns
+            patterns.add(element(name("skipUrlPattern"), // ForgeRock JIRA
+                    "^https://bugster.forgerock.org/jira/browse/.+$"));
+            patterns.add(element(name("skipUrlPattern"), // RFCs
+                    "^http://tools.ietf.org/html/rfc[0-9]+$"));
+            patterns.add(element(name("skipUrlPattern"), // example (see RFC 2606)
+                    "^https?://[^/]*example.*$"));
+            patterns.add(element(name("skipUrlPattern"), // localhost
+                    "^https?://localhost.*$"));
+            patterns.add(element(name("skipUrlPattern"), // relative URLs to arbitrary resources
+                    "^\\.\\./\\Q" + m.getRelativeResourcesDirectoryPath() + "\\E.*$"));
+
+            // Configured patterns
             for (String pattern: m.getSkipUrlPatterns()) {
                 patterns.add(element("skipUrlPattern", pattern));
             }
