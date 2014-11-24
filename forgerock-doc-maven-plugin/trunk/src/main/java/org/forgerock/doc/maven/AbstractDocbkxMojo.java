@@ -1343,6 +1343,20 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     private String resourcesDirectory;
 
     /**
+     * Path to arbitrary documentation set resources,
+     * relative to the modifiable sources directory.
+     *
+     * <br>
+     *
+     * Default: {@code resources}
+     *
+     * @return The resources directory path, relative to the modifiable sources directory.
+     */
+    public String getRelativeResourcesDirectoryPath() {
+        return resourcesDirectory;
+    }
+
+    /**
      * Directory for arbitrary documentation set resources.
      *
      * <br>
