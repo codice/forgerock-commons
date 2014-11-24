@@ -132,7 +132,7 @@ public class LinkTest {
                 element(name("skipUrlPattern"), // example (see RFC 2606)
                         "^https?://[^/]*example.*$"),
                 element(name("skipUrlPattern"), // relative URLs to arbitrary resources
-                        "^\\.\\./" + m.getRelativeResourcesDirectoryPath() + ".*$")
+                        "^\\.\\./\\Q" + m.getRelativeResourcesDirectoryPath() + "\\E.*$")
             };
 
             // The full list includes both default patterns and also configured patterns.
