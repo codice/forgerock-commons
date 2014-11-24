@@ -1480,6 +1480,31 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
+     * Regex patterns of URLs to skip when checking external links.
+     *
+     * <p>
+     *
+     * See the {@code skipUrlPatterns} parameter of the <a
+     * href="https://github.com/aldaris/docbook-linktester/">linktester plugin</a>.
+     *
+     * @parameter property="skipUrlPatterns"
+     */
+    private String[] skipUrlPatterns;
+
+    /**
+     * Get regex patterns of URLs to skip when checking external links.
+     *
+     * <p>
+     *
+     * Default: {@code null}
+     *
+     * @return Regex patterns of URLs to skip when checking external links.
+     */
+    public String[] getSkipUrlPatterns() {
+        return skipUrlPatterns;
+    }
+
+    /**
      * Whether to stop execution after pre-processing source files.
      *
      * @parameter default-value="false" property="stopAfterPreProcessing"

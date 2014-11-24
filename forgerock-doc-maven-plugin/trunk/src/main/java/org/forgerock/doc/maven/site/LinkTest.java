@@ -81,9 +81,9 @@ public class LinkTest {
             final String include = buildDirectory + "/**/" + m.getDocumentSrcName();
 
             final String log = m.path(new File(m.getDocbkxOutputDirectory(), "linktester.err"));
-            final String jiraUrlPattern =
-                    "^https://bugster.forgerock.org/jira/browse/OPEN(AM|DJ|ICF|IDM|IG)-[0-9]+$";
-            final String rfcUrlPattern = "^http://tools.ietf.org/html/rfc[0-9]+$";
+
+            // The list of URL patterns to skip can be extended by the configuration.
+            MojoExecutor.Element skipUrlPatterns = getSkipUrlPatterns();
 
             executeMojo(
                     plugin(
@@ -99,9 +99,7 @@ public class LinkTest {
                             element(name("xIncludeAware"), "true"),
                             element(name("failOnError"), "false"),
                             element(name("outputFile"), log),
-                            element(name("skipUrlPatterns"),
-                                    element(name("skipUrlPattern"), jiraUrlPattern),
-                                    element(name("skipUrlPattern"), rfcUrlPattern))),
+                            skipUrlPatterns),
                     executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
         }
 
@@ -113,6 +111,48 @@ public class LinkTest {
          */
         private String getName(File file) {
             return file.getPath().replace(file.getParent() + File.separator, "");
+        }
+
+        /**
+         * Return the URL patterns to skip, which can be extended by configuration.
+         *
+         * @return      The URL patterns to skip.
+         */
+        private MojoExecutor.Element getSkipUrlPatterns() {
+
+            final MojoExecutor.Element[] defaultPatterns = {
+                element(name("skipUrlPattern"), // ForgeRock JIRA
+                        "^https://bugster.forgerock.org/jira/browse/.+$"),
+                element(name("skipUrlPattern"), // RFCs
+                        "^http://tools.ietf.org/html/rfc[0-9]+$"),
+                element(name("skipUrlPattern"), // localhost
+                        "^http(s)?://localhost.*$"),
+                element(name("skipUrlPattern"), // example (see RFC 2606)
+                        "^http(s)?://.*example.*$"),
+                element(name("skipUrlPattern"), // relative URLs
+                        "^\\.\\./.*$")
+            };
+
+            final String[] configPatterns = m.getSkipUrlPatterns();
+            MojoExecutor.Element[] additionalPatterns = null;
+            if (configPatterns != null) {
+                additionalPatterns = new MojoExecutor.Element[configPatterns.length];
+                for (int i = 0; i < configPatterns.length; i++) {
+                    additionalPatterns[i] = element("skipUrlPattern", configPatterns[i]);
+                }
+            }
+
+            final MojoExecutor.Element[] allPatterns;
+            if (additionalPatterns == null) {
+                allPatterns = defaultPatterns;
+            } else {
+                allPatterns = new MojoExecutor.Element[defaultPatterns.length + additionalPatterns.length];
+                System.arraycopy(defaultPatterns, 0, allPatterns, 0, defaultPatterns.length);
+                System.arraycopy(
+                        additionalPatterns, 0, allPatterns, defaultPatterns.length, additionalPatterns.length);
+            }
+
+            return element(name("skipUrlPatterns"), allPatterns);
         }
     }
 }
