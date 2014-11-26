@@ -70,6 +70,7 @@ import static org.forgerock.json.resource.servlet.HttpUtils.PARAM_QUERY_ID;
 import static org.forgerock.json.resource.servlet.HttpUtils.PARAM_SORT_KEYS;
 import static org.forgerock.json.resource.servlet.HttpUtils.PROTOCOL_NAME;
 import static org.forgerock.json.resource.servlet.HttpUtils.PROTOCOL_VERSION;
+import static org.forgerock.json.resource.servlet.HttpUtils.RESTRICTED_HEADER_NAMES;
 import static org.forgerock.json.resource.servlet.HttpUtils.asBooleanValue;
 import static org.forgerock.json.resource.servlet.HttpUtils.asIntValue;
 import static org.forgerock.json.resource.servlet.HttpUtils.asSingleValue;
@@ -579,7 +580,8 @@ public final class HttpServletAdapter {
         final Context root = contextFactory.createContext(req);
         return new AdviceContext(
                 new AcceptAPIVersionContext(
-                        new HttpContext(root, req), PROTOCOL_NAME, acceptVersion));
+                        new HttpContext(root, req), PROTOCOL_NAME, acceptVersion),
+                RESTRICTED_HEADER_NAMES);
     }
 
     private boolean parseCommonParameter(final String name, final String[] values,
