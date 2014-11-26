@@ -15,12 +15,17 @@
  */
 package org.forgerock.json.resource.servlet;
 
-import java.io.IOException;
-import java.util.Map;
+import static org.forgerock.json.resource.QueryResult.*;
+import static org.forgerock.json.resource.servlet.HttpUtils.*;
+
 import javax.mail.internet.ContentType;
 import javax.mail.internet.ParseException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
 import org.codehaus.jackson.JsonGenerator;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
@@ -32,11 +37,6 @@ import org.forgerock.json.resource.DeleteRequest;
 import org.forgerock.json.resource.PatchRequest;
 import org.forgerock.json.resource.QueryRequest;
 import org.forgerock.json.resource.QueryResult;
-import static org.forgerock.json.resource.QueryResult.FIELD_ERROR;
-import static org.forgerock.json.resource.QueryResult.FIELD_PAGED_RESULTS_COOKIE;
-import static org.forgerock.json.resource.QueryResult.FIELD_REMAINING_PAGED_RESULTS;
-import static org.forgerock.json.resource.QueryResult.FIELD_RESULT;
-import static org.forgerock.json.resource.QueryResult.FIELD_RESULT_COUNT;
 import org.forgerock.json.resource.QueryResultHandler;
 import org.forgerock.json.resource.ReadRequest;
 import org.forgerock.json.resource.Request;
@@ -46,14 +46,6 @@ import org.forgerock.json.resource.ResourceException;
 import org.forgerock.json.resource.ResourceName;
 import org.forgerock.json.resource.ResultHandler;
 import org.forgerock.json.resource.UpdateRequest;
-import static org.forgerock.json.resource.servlet.HttpUtils.HEADER_ETAG;
-import static org.forgerock.json.resource.servlet.HttpUtils.HEADER_LOCATION;
-import static org.forgerock.json.resource.servlet.HttpUtils.MIME_TYPE_APPLICATION_JSON;
-import static org.forgerock.json.resource.servlet.HttpUtils.MIME_TYPE_TEXT_PLAIN;
-import static org.forgerock.json.resource.servlet.HttpUtils.adapt;
-import static org.forgerock.json.resource.servlet.HttpUtils.closeQuietly;
-import static org.forgerock.json.resource.servlet.HttpUtils.getIfNoneMatch;
-import static org.forgerock.json.resource.servlet.HttpUtils.getJsonGenerator;
 import org.forgerock.util.encode.Base64url;
 
 /**
@@ -436,8 +428,10 @@ final class RequestRunner implements ResultHandler<Connection>, RequestVisitor<V
     private void writeAdvice() {
         if (context.containsContext(AdviceContext.class)) {
             AdviceContext adviceContext = context.asContext(AdviceContext.class);
-            for (Map.Entry<String, String> entry : adviceContext.getAdvices().entrySet()) {
-                httpResponse.setHeader(entry.getKey(), entry.getValue());
+            for (Map.Entry<String, List<String>> entry : adviceContext.getAdvices().entrySet()) {
+                for (String value : entry.getValue()) {
+                    httpResponse.setHeader(entry.getKey(), value);
+                }
             }
         }
     }
