@@ -15,6 +15,8 @@
 package org.forgerock.doc.maven;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.forgerock.doc.maven.release.Css;
 import org.forgerock.doc.maven.release.Favicon;
 import org.forgerock.doc.maven.release.IndexHtml;
@@ -25,11 +27,8 @@ import org.forgerock.doc.maven.release.Zip;
 
 /**
  * Call other classes to prepare release layout documents.
- *
- * @Checkstyle:ignoreFor 2
- * @goal release
- * @phase site
  */
+@Mojo(name = "release", defaultPhase = LifecyclePhase.SITE)
 public class ReleaseMojo extends AbstractDocbkxMojo {
 
     /**

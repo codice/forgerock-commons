@@ -16,6 +16,8 @@ package org.forgerock.doc.maven;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.forgerock.doc.maven.build.ChunkedHtml;
 import org.forgerock.doc.maven.build.Epub;
 import org.forgerock.doc.maven.build.Manpage;
@@ -45,11 +47,8 @@ import java.util.List;
 
 /**
  * Call other classes to perform pre-site build.
- *
- * @Checkstyle:ignoreFor 2
- * @goal build
- * @phase pre-site
  */
+@Mojo(name = "build", defaultPhase = LifecyclePhase.PRE_SITE)
 public class PreSiteMojo extends AbstractDocbkxMojo {
 
     /**
