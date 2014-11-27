@@ -22,6 +22,8 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.forgerock.doc.maven.utils.NameUtils;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
@@ -41,10 +43,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Whether WinAnsi encoding be used for embedded fonts.
-     *
-     * @parameter default-value="false"
-     * @required
      */
+    @Parameter(defaultValue = "false")
     private String ansi;
 
     /**
@@ -66,10 +66,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * <br>
      *
      * docbkx-tools element: &lt;sectionAutolabel&gt;
-     *
-     * @parameter default-value="true" property="areSectionsAutolabeled"
-     * @required
      */
+    @Parameter(defaultValue = "true")
     private String areSectionsAutolabeled;
 
     /**
@@ -111,10 +109,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Project base directory, needed to workaround bugs with *target.db and webhelp.
-     *
-     * @parameter default-value="${basedir}"
-     * @required
      */
+    @Parameter(defaultValue = "${basedir}")
     private File baseDir;
 
     /**
@@ -132,14 +128,15 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * The artifactId of the branding to use.
-     *
-     * @parameter default-value="forgerock-doc-default-branding" property="brandingArtifactId"
-     * @required
      */
+    @Parameter(defaultValue = "forgerock-doc-default-branding")
     private String brandingArtifactId;
 
     /**
      * Gets the branding artifactId to use.
+     *
+     * <br>
+     *
      * Default: {@code forgerock-doc-default-branding}.
      *
      * @return The branding artifactId.
@@ -150,14 +147,15 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * The groupId of the branding to use.
-     *
-     * @parameter default-value="org.forgerock.commons" property="brandingGroupId"
-     * @required
      */
+    @Parameter(defaultValue = "org.forgerock.commons")
     private String brandingGroupId;
 
     /**
      * Gets the groupId of the branding artifact to use.
+     *
+     * <br>
+     *
      * Default: {@code org.forgerock.commons}
      *
      * @return The branding groupId.
@@ -168,10 +166,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Version of the branding artifact to use.
-     *
-     * @parameter default-value="3.0.0-SNAPSHOT" property="brandingVersion"
-     * @required
      */
+    @Parameter(defaultValue = "3.0.0-SNAPSHOT")
     private String brandingVersion;
 
     /**
@@ -185,16 +181,22 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * The project build directory.
-     * Defaults to {@code ${project.build.directory}}.
      *
-     * @parameter default-value="${project.build.directory}"
-     * @required
+     * <br>
+     *
+     * Default: {@code ${project.build.directory}}.
      */
+    @Parameter(defaultValue = "${project.build.directory}")
     private File buildDirectory;
 
     /**
      * Get the project build directory for this plugin.
-     * @return The build directory. Default: {@code ${project.build.directory}}.
+     *
+     * <br>
+     *
+     * Default: {@code ${project.build.directory}}.
+     *
+     * @return The build directory.
      */
     public File getBuildDirectory() {
         return buildDirectory;
@@ -202,9 +204,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Whether to build a .zip of the release content.
-     *
-     * @parameter default-value="false" property="buildReleaseZip"
      */
+    @Parameter(defaultValue = "false", property = "buildReleaseZip")
     private boolean buildReleaseZip;
 
     /**
@@ -227,10 +228,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * <br>
      *
      * docbkx-tools element: &lt;htmlCustomization&gt;
-     *
-     * @parameter default-value="docbkx-stylesheets/html/chunked.xsl"
-     * @required
      */
+    @Parameter(defaultValue = "docbkx-stylesheets/html/chunked.xsl")
     private String chunkedHTMLCustomization;
 
     /**
@@ -244,7 +243,6 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * docbkx-tools element: &lt;htmlCustomization&gt;
      *
-     *
      * @return The location of the chunked HTML XSL stylesheet.
      */
     public final File getChunkedHTMLCustomization() {
@@ -253,14 +251,15 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * The {@code artifactId} of the common content artifact.
-     *
-     * @parameter default-value="forgerock-doc-common-content" property="commonContentArtifactId"
-     * @required
      */
+    @Parameter(defaultValue = "forgerock-doc-common-content")
     private String commonContentArtifactId;
 
     /**
      * Get the {@code artifactId} of the common content artifact.
+     *
+     * <br>
+     *
      * Default: {@code forgerock-doc-common-content}.
      *
      * @return The {@code artifactId} of the common content artifact.
@@ -271,14 +270,15 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * The {@code groupId} of the common content artifact.
-     *
-     * @parameter default-value="org.forgerock.commons" property="commonContentGroupId"
-     * @required
      */
+    @Parameter(defaultValue = "org.forgerock.commons")
     private String commonContentGroupId;
 
     /**
      * Get the {@code groupId} of the common content artifact.
+     *
+     * <br>
+     *
      * Default: {@code org.forgerock.commons}.
      *
      * @return The {@code groupId} of the common content artifact.
@@ -289,10 +289,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Version of the common content artifact to use.
-     *
-     * @parameter default-value="3.0.0-SNAPSHOT" property="commonContentVersion"
-     * @required
      */
+    @Parameter(defaultValue = "3.0.0-SNAPSHOT")
     private String commonContentVersion;
 
     /**
@@ -306,10 +304,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Whether to copy resource files alongside docs for site, release.
-     *
-     * @parameter default-value="false" property="copyResourceFiles"
-     * @required
      */
+    @Parameter(defaultValue = "false")
     private boolean copyResourceFiles;
 
     /**
@@ -328,15 +324,16 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Base directory for the modifiable copy of DocBook XML source files,
      * relative to the build directory.
-     *
-     * @parameter default-value="docbkx-sources" property="docbkxModifiableSourcesDirectory"
-     * @required
      */
+    @Parameter(defaultValue = "docbkx-sources")
     private String docbkxModifiableSourcesDirectory;
 
     /**
      * Get the base directory for the modifiable copy of DocBook XML source files.
      * This copy is modified during preparation for processing.
+     *
+     * <br>
+     *
      * Default: {@code ${project.build.directory}/docbkx-sources}
      *
      * @return The base directory for the modifiable copy of DocBook XML source files.
@@ -347,10 +344,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Base directory for built documentation, relative to the build directory.
-     *
-     * @parameter default-value="docbkx" property="docbkxOutputDirectory"
-     * @required
      */
+    @Parameter(defaultValue = "docbkx")
     private String docbkxOutputDirectory;
 
     /**
@@ -368,15 +363,16 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Base directory for DocBook XML source files.
-     *
-     * @parameter default-value="${basedir}/src/main/docbkx" property="docbkxSourceDirectory"
-     * @required
      */
+    @Parameter(defaultValue = "${basedir}/src/main/docbkx")
     private File docbkxSourceDirectory;
 
     /**
      * Get the base directory for DocBook XML source files.
      * These files remain unchanged during processing.
+     *
+     * <br>
+     *
      * Default: {@code ${basedir}/src/main/docbkx}.
      *
      * @return The base directory for DocBook XML source files.
@@ -387,10 +383,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Docbkx Tools plugin version to use.
-     *
-     * @parameter default-value="2.0.15" property="docbkxVersion"
-     * @required
      */
+    @Parameter(defaultValue = "2.0.15")
     private String docbkxVersion;
 
     /**
@@ -421,10 +415,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * URL to site for published documentation.
-     *
-     * @parameter default-value="http://docs.forgerock.org/" property="docsSite"
-     * @required
      */
+    @Parameter(defaultValue = "http://docs.forgerock.org/")
     private String docsSite;
 
     /**
@@ -442,10 +434,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Top-level DocBook XML source document name.
-     *
-     * @parameter default-value="index.xml" property="documentSrcName"
-     * @required
      */
+    @Parameter(defaultValue = "index.xml", property = "documentSrcName")
     private String documentSrcName;
 
     /**
@@ -509,11 +499,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * <br>
      *
      * docbkx-tools element: &lt;sectionLabelIncludesComponentLabel&gt;
-     *
-     * @parameter default-value="true"
-     * property="doesSectionLabelIncludeComponentLabel"
-     * @required
      */
+    @Parameter(defaultValue = "true")
     private String doesSectionLabelIncludeComponentLabel;
 
     /**
@@ -540,12 +527,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * <br>
      *
      * docbkx-tools element: &lt;draftWatermarkImage&gt;
-     *
-     * @parameter default-value=
-     * "http://docbook.sourceforge.net/release/images/draft.png"
-     * property="draftWatermarkURL"
-     * @required
      */
+    @Parameter(defaultValue = "http://docbook.sourceforge.net/release/images/draft.png")
     private String draftWatermarkURL;
 
     /**
@@ -556,6 +539,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Default: {@code http://docbook.sourceforge.net/release/images/draft.png}
      *
      * <br>
+     *
      * docbkx-tools element: &lt;draftWatermarkImage&gt;
      *
      * @return The URL to the background watermark image.
@@ -566,10 +550,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * URL to JSON object showing EOSL versions for each project.
-     *
-     * @parameter default-value="http://docs.forgerock.org/eosl.json" property="eoslJson"
-     * @required
      */
+    @Parameter(defaultValue = "http://docs.forgerock.org/eosl.json")
     private String eoslJson;
 
     /**
@@ -588,10 +570,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * <br>
      *
      * docbkx-tools element: &lt;epubCustomization&gt;
-     *
-     * @parameter default-value="docbkx-stylesheets/epub/coredoc.xsl"
-     * @required
      */
+    @Parameter(defaultValue = "docbkx-stylesheets/epub/coredoc.xsl")
     private String epubCustomization;
 
     /**
@@ -614,10 +594,12 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Do not process these default formats.
      * Choices include: epub, html, man, pdf, webhelp.
-     * Do not set both excludes and includes in the same configuration.
      *
-     * @parameter
+     * <br>
+     *
+     * Do not set both excludes and includes in the same configuration.
      */
+    @Parameter
     private List<String> excludes;
 
     /**
@@ -639,12 +621,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Favicon link element for the pre-site version of the HTML.
-     *
-     * @parameter
-     * default-value="<link rel=\"shortcut icon\" href=\"http://forgerock.org/favicon.ico\">"
-     * property="faviconLink"
-     * @required
      */
+    @Parameter(defaultValue = "<link rel=\"shortcut icon\" href=\"http://forgerock.org/favicon.ico\">")
     private String faviconLink;
 
     /**
@@ -663,10 +641,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * <br>
      *
      * docbkx-tools element: &lt;foCustomization&gt;
-     *
-     * @parameter default-value="docbkx-stylesheets/fo/coredoc.xsl"
-     * @required
      */
+    @Parameter(defaultValue = "docbkx-stylesheets/fo/coredoc.xsl")
     private String foCustomization;
 
     /**
@@ -689,10 +665,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Directory where fonts and font metrics are stored,
      * relative to the build directory.
-     *
-     * @parameter default-value="fonts" property="fontsDirectory"
-     * @required
      */
+    @Parameter(defaultValue = "fonts")
     private String fontsDirectory;
 
     /**
@@ -767,9 +741,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Google Analytics identifier for the project.
      *
-     * @parameter default-value="UA-23412190-14" property="googleAnalyticsId"
-     * @required
+     * <br>
+     *
+     * The identifier for docs.forgerock.org is {@code UA-23412190-14}.
      */
+    @Parameter(defaultValue = "UA-23412190-14")
     private String googleAnalyticsId;
 
     /**
@@ -786,11 +762,17 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
-     * Process only this format. Choices include: epub, html, man, pdf, rtf.
-     * Do not set both excludes and includes in the same configuration.
+     * Process only this format.
      *
-     * @parameter property="include"
+     * <br>
+     *
+     * Choices include: epub, html, man, pdf, rtf, webhelp, xhtml5.
+     *
+     * <br>
+     *
+     * Do not set both excludes and includes in the same configuration.
      */
+    @Parameter(property = "include")
     private String include;
 
     /**
@@ -798,7 +780,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * <br>
      *
-     * Choices include: epub, html, man, pdf, rtf, webhelp.
+     * Choices include: epub, html, man, pdf, rtf, webhelp, xhtml5.
      *
      * <br>
      *
@@ -816,10 +798,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * <br>
      *
      * docbkx-tools element: &lt;draftMode&gt;
-     *
-     * @parameter default-value="yes" property="isDraftMode"
-     * @required
      */
+    @Parameter(defaultValue = "yes", property = "isDraftMode")
     private String isDraftMode;
 
     /**
@@ -845,10 +825,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * <br>
      *
      * docbkx-tools element: &lt;xincludeSupported&gt;
-     *
-     * @parameter default-value="true" property="isXincludeSupported"
-     * @required
      */
+    @Parameter(defaultValue = "true")
     private String isXincludeSupported;
 
     /**
@@ -870,10 +848,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * JavaScript file name, found under {@code /js/} in plugin resources.
-     *
-     * @parameter default-value="uses-jquery.js" property="javaScriptFileName"
-     * @required
      */
+    @Parameter(defaultValue = "uses-jquery.js")
     private String javaScriptFileName;
 
     /**
@@ -891,9 +867,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * The set of source paths where cited Java files are found.
-     *
-     * @parameter
      */
+    @Parameter
     private List<File> jCiteSourcePaths;
 
     /**
@@ -911,10 +886,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * JCite version to use for code citations.
-     *
-     * @parameter default-value="1.13.0" property="jCiteVersion"
-     * @required
      */
+    @Parameter(defaultValue = "1.13.0")
     private String jCiteVersion;
 
     /**
@@ -928,9 +901,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Whether to keep a custom index.html file for the documentation set.
-     *
-     * @parameter default-value="false" property="keepCustomIndexHtml"
      */
+    @Parameter(defaultValue = "false")
     private boolean keepCustomIndexHtml;
 
     /**
@@ -948,10 +920,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * URL to JSON object showing latest versions for each project.
-     *
-     * @parameter default-value="http://docs.forgerock.org/latest.json" property="latestJson"
-     * @required
      */
+    @Parameter(defaultValue = "http://docs.forgerock.org/latest.json")
     private String latestJson;
 
     /**
@@ -965,10 +935,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * ForgeRock link tester plugin version to use.
-     *
-     * @parameter default-value="1.2.0" property="linkTesterVersion"
-     * @required
      */
+    @Parameter(defaultValue = "1.2.0")
     private String linkTesterVersion;
 
     /**
@@ -987,10 +955,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * <br>
      *
      * docbkx-tools element: &lt;manpagesCustomization&gt;
-     *
-     * @parameter default-value="docbkx-stylesheets/man/coredoc.xsl"
-     * @required
      */
+    @Parameter(defaultValue = "docbkx-stylesheets/man/coredoc.xsl")
     private String manpagesCustomization;
 
     /**
@@ -1012,10 +978,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Maximum height for PNG images used in PDF, in inches.
-     *
-     * @parameter default-value="5" property="maxImageHeightInInches"
-     * @required
      */
+    @Parameter(defaultValue = "5")
     private int maxImageHeightInInches;
 
     /**
@@ -1029,10 +993,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Overwrite the copy of DocBook sources if it exists.
-     *
-     * @parameter default-value="true" property="overwriteModifiableCopy"
-     * @required
      */
+    @Parameter(defaultValue = "true")
     private boolean overwriteModifiableCopy;
 
     /**
@@ -1065,10 +1027,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Overwrite project files with shared content.
-     *
-     * @parameter default-value="true" property="overwriteProjectFilesWithSharedContent"
-     * @required
      */
+    @Parameter(defaultValue = "true", property = "overwriteProjectFilesWithSharedContent")
     private boolean overwriteProjectFilesWithSharedContent;
 
     /**
@@ -1085,9 +1045,6 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
-     *
-     */
-    /**
      * Get path name in UNIX format.
      *
      * @param file Path to return in UNIX format.
@@ -1103,10 +1060,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Version of the PlantUML artifact to use.
-     *
-     * @parameter default-value="7993" property="plantUmlVersion"
-     * @required
      */
+    @Parameter(defaultValue = "7993")
     private String plantUmlVersion;
 
     /**
@@ -1120,9 +1075,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * The version of Plexus Utils used by the XCite Maven plugin.
-     *
-     * @parameter default-value="3.0.17"
      */
+    @Parameter(defaultValue = "3.0.17")
     private String plexusUtilsVersion;
 
     /**
@@ -1136,10 +1090,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * The Maven {@code BuildPluginManager} object.
-     *
-     * @component
-     * @required
      */
+    @Component
     private BuildPluginManager pluginManager;
 
     /**
@@ -1154,10 +1106,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * CSS file for the pre-site version of the HTML,
      * relative to the build directory.
-     *
-     * @parameter default-value="coredoc.css" property="preSiteCssFileName"
-     * @required
      */
+    @Parameter(defaultValue = "coredoc.css")
     private String preSiteCssFileName;
 
     /**
@@ -1175,11 +1125,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * The {@code MavenProject} object, which is read-only.
-     *
-     * @parameter property="project"
-     * @required
-     * @readonly
      */
+    @Parameter(property = "project", required = true, readonly = true)
     private MavenProject project;
 
     /**
@@ -1193,10 +1140,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Short name of the project, such as OpenAM, OpenDJ, OpenIDM.
-     *
-     * @parameter property="projectName"
-     * @required
      */
+    @Parameter(property = "projectName", required = true)
     private String projectName;
 
     /**
@@ -1210,10 +1155,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Project version.
-     *
-     * @parameter property="projectVersion"
-     * @required
      */
+    @Parameter(property = "projectVersion", required = true)
     private String projectVersion;
 
     /**
@@ -1228,10 +1171,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * CSS file for the release version of the HTML,
      * relative to the build directory.
-     *
-     * @parameter default-value="dfo.css" property="releaseCssFileName"
-     * @required
      */
+    @Parameter(defaultValue = "dfo.css")
     private String releaseCssFileName;
 
     /**
@@ -1250,10 +1191,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * File system directory for release layout documentation,
      * relative to the build directory.
-     *
-     * @parameter default-value="release" property="releaseDirectory"
-     * @required
      */
+    @Parameter(defaultValue = "release")
     private String releaseDirectory;
 
     /**
@@ -1271,12 +1210,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Favicon link element for the release version of the HTML.
-     *
-     * @parameter
-     * default-value="<link rel=\"shortcut icon\" href=\"http://forgerock.org/favicon.ico\">"
-     * property="releaseFaviconLink"
-     * @required
      */
+    @Parameter(defaultValue = "<link rel=\"shortcut icon\" href=\"http://forgerock.org/favicon.ico\">")
     private String releaseFaviconLink;
 
     /**
@@ -1290,9 +1225,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Version for this release.
-     *
-     * @parameter property="releaseVersion"
      */
+    @Parameter(property = "releaseVersion", required = true)
     private String releaseVersion;
 
     /**
@@ -1317,10 +1251,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Maven resources plugin version.
      * Executions seem to hit an NPE when the version is not specified.
-     *
-     * @parameter default-value="2.5" property="resourcesVersion"
-     * @required
      */
+    @Parameter(defaultValue = "2.5")
     private String resourcesVersion;
 
     /**
@@ -1336,10 +1268,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * File system directory for arbitrary documentation set resources,
      * relative to the modifiable sources directory.
-     *
-     * @parameter default-value="resources" property="resourcesDirectory"
-     * @required
      */
+    @Parameter(defaultValue = "resources")
     private String resourcesDirectory;
 
     /**
@@ -1371,9 +1301,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Whether to run the ForgeRock link tester plugin.
-     *
-     * @parameter default-value="true" property="runLinkTester"
      */
+    @Parameter(defaultValue = "true", property = "runLinkTester")
     private String runLinkTester;
 
     /**
@@ -1395,11 +1324,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * The {@code MavenSession} object, which is read-only.
-     *
-     * @parameter property="session"
-     * @required
-     * @readonly
      */
+    @Parameter(property = "session", required = true, readonly = true)
     private MavenSession session;
 
     /**
@@ -1417,10 +1343,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * <br>
      *
      * docbkx-tools element: &lt;htmlCustomization&gt;
-     *
-     * @parameter default-value="/docbkx-stylesheets/html/coredoc.xsl"
-     * @required
      */
+    @Parameter(defaultValue = "/docbkx-stylesheets/html/coredoc.xsl")
     private String singleHTMLCustomization;
 
     /**
@@ -1442,10 +1366,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * File system directory for site content, relative to the build directory.
-     *
-     * @parameter default-value="site" property="siteDirectory"
-     * @required
      */
+    @Parameter(defaultValue = "site")
     private String siteDirectory;
 
     /**
@@ -1469,9 +1391,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * See the {@code skipUrls} parameter of the <a
      * href="https://github.com/aldaris/docbook-linktester/">linktester plugin</a>.
-     *
-     * @parameter default-value="false" property="skipLinkCheck"
      */
+    @Parameter(defaultValue = "false", property = "skipLinkCheck")
     private String skipLinkCheck;
 
     /**
@@ -1500,9 +1421,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * See the {@code skipUrlPatterns} parameter of the <a
      * href="https://github.com/aldaris/docbook-linktester/">linktester plugin</a>.
-     *
-     * @parameter property="skipUrlPatterns"
      */
+    @Parameter
     private String[] skipUrlPatterns;
 
     /**
@@ -1520,9 +1440,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Whether to stop execution after pre-processing source files.
-     *
-     * @parameter default-value="false" property="stopAfterPreProcessing"
      */
+    @Parameter(defaultValue = "false", property = "stopAfterPreProcessing")
     private boolean stopAfterPreProcessing;
 
     /**
@@ -1544,10 +1463,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * <br>
      *
      * docbkx-tools element: &lt;highlightSource&gt;
-     *
-     * @parameter default-value="1" property="useSyntaxHighlighting"
-     * @required
      */
+    @Parameter(defaultValue = "1")
     private String useSyntaxHighlighting;
 
     /**
@@ -1570,10 +1487,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Location of the main CSS for webhelp documents,
      * relative to the build directory.
-     *
-     * @parameter default-value="docbkx-stylesheets/webhelp/positioning.css" property="webhelpCss"
-     * @required
      */
+    @Parameter(defaultValue = "docbkx-stylesheets/webhelp/positioning.css")
     private String webhelpCss;
 
     /**
@@ -1592,13 +1507,12 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Loctain of the webhelp XSL stylesheet customization file, relative to the build
      * directory.
+     *
      * <br>
      *
      * docbkx-tools element: &lt;webhelpCustomization&gt;
-     *
-     * @parameter default-value="docbkx-stylesheets/webhelp/coredoc.xsl"
-     * @required
      */
+    @Parameter(defaultValue = "docbkx-stylesheets/webhelp/coredoc.xsl")
     private String webhelpCustomization;
 
     /**
@@ -1621,10 +1535,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Location of the logo image for webhelp documents,
      * relative to the build directory.
-     *
-     * @parameter default-value="docbkx-stylesheets/webhelp/logo.png" property="webhelpLogo"
-     * @required
      */
+    @Parameter(defaultValue = "docbkx-stylesheets/webhelp/logo.png")
     private String webhelpLogo;
 
     /**
@@ -1642,9 +1554,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
 
     /**
      * Version of the XCite Maven plugin to use.
-     *
-     * @parameter default-value="1.0.0-SNAPSHOT"
      */
+    @Parameter(defaultValue = "1.0.0-SNAPSHOT")
     private String xCiteVersion;
 
     /**
@@ -1663,10 +1574,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * <br>
      *
      * docbkx-tools element: &lt;xhtml5Customization&gt;
-     *
-     * @parameter default-value="docbkx-stylesheets/xhtml5/coredoc.xsl"
-     * @required
      */
+    @Parameter(defaultValue = "docbkx-stylesheets/xhtml5/coredoc.xsl")
     private String xhtml5Customization;
 
     /**

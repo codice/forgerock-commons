@@ -15,6 +15,8 @@
 package org.forgerock.doc.maven;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.forgerock.doc.maven.site.Htaccess;
 import org.forgerock.doc.maven.site.Layout;
 import org.forgerock.doc.maven.site.LinkTest;
@@ -22,11 +24,8 @@ import org.forgerock.doc.maven.site.Redirect;
 
 /**
  * Call other classes to copy docs to site build directory.
- *
- * @Checkstyle:ignoreFor 2
- * @goal site
- * @phase site
  */
+@Mojo(name = "site", defaultPhase = LifecyclePhase.SITE)
 public class SiteMojo extends AbstractDocbkxMojo {
 
     /**
