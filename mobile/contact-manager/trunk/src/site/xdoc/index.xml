@@ -106,7 +106,7 @@
      </p>
 
      <p>
-      The minimum Android SDK version is 8.
+      The minimum Android SDK version is 14.
 
       The target Android SDK version is the
       <code>android:targetSdkVersion</code> of the <code>&lt;uses-sdk></code> element.
@@ -380,7 +380,7 @@ Stopping Server...
      </p>
 
      <p>
-      The minimum Android SDK version is 8.
+      The minimum Android SDK version is 14.
 
       The target Android SDK version is the
       <code>android:targetSdkVersion</code> of the <code>&lt;uses-sdk></code> element.
