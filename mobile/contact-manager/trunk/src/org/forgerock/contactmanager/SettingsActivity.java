@@ -32,8 +32,8 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class SettingsActivity extends AugmentedActivity {
         setContentView(R.layout.activity_settings);
 
         final Spinner serverSpinner = (Spinner) findViewById(R.id.settings_spinner_servers);
-        final ToggleButton toogleSSL = (ToggleButton) findViewById(R.id.settings_toggle_ssl);
+        final Switch switchSsl = (Switch) findViewById(R.id.settings_switch_ssl);
 
         final List<ServerConfiguration> servers = loadRegisteredServerList();
         final TextView tvSrvAddress = (TextView) findViewById(R.id.settings_selected_server_address_content);
@@ -90,7 +90,7 @@ public class SettingsActivity extends AugmentedActivity {
                                 serverConfiguration.getServerName()), LENGTH_SHORT).show();
 
                 tvSrvAddress.setText(serverConfiguration.getAddress());
-                toogleSSL.setChecked(serverConfiguration.isSSL());
+                switchSsl.setChecked(serverConfiguration.isSSL());
                 tvAuthentication.setText(getResources().getString(R.string.settings_authentication_basic));
 
             }

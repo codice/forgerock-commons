@@ -25,7 +25,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ToggleButton;
+import android.widget.Switch;
 
 /**
  * This class is the second step of the 'wizard' server configuration.
@@ -48,7 +48,7 @@ public class ServerWizardPart2Activity extends AugmentedActivity {
         final Button btnFinish = (Button) findViewById(R.id.sw2AccountFinishBtn);
         final EditText etUsername = (EditText) findViewById(R.id.sw2EditAccountUserName);
         final EditText etPassword = (EditText) findViewById(R.id.sw2EditAccountServerPassword);
-        final ToggleButton toogleSSL = (ToggleButton) findViewById(R.id.sw2_toggle_ssl);
+        final Switch switchSsl = (Switch) findViewById(R.id.sw2_switch_ssl);
         etUsername.requestFocus();
 
         /*
@@ -61,7 +61,7 @@ public class ServerWizardPart2Activity extends AugmentedActivity {
             original = AppContext.getServerConfiguration();
             etUsername.setText(original.getUsername());
             etPassword.setText(original.getPassword());
-            toogleSSL.setChecked(original.isSSL());
+            switchSsl.setChecked(original.isSSL());
         }
 
         final ServerConfiguration newServerConfiguration = new ServerConfiguration(
@@ -77,7 +77,7 @@ public class ServerWizardPart2Activity extends AugmentedActivity {
 
                     newServerConfiguration.setUsername(etUsername.getText().toString().trim());
                     newServerConfiguration.setPassword(etPassword.getText().toString().trim());
-                    newServerConfiguration.setSSL(toogleSSL.isChecked());
+                    newServerConfiguration.setSSL(switchSsl.isChecked());
 
                     if (isEdit) {
                         deleteServerConfigurationFromPreferences(original.getServerName());

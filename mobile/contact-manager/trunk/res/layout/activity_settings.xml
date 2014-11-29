@@ -172,16 +172,15 @@
                     android:drawableLeft="@drawable/ic_action_warning"
                     android:text="@string/sw2_security_ssl" />
 
-                <ToggleButton
-                    android:id="@+id/settings_toggle_ssl"
+                <Switch
+                    android:id="@+id/settings_switch_ssl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/settings_separator_security_server"
-                    android:background="@drawable/toggle_design"
                     android:enabled="false"
-                    android:textOff=""
-                    android:textOn="" />
+                    android:textOff="Off"
+                    android:textOn="On" />
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
