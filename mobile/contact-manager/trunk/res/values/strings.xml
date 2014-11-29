@@ -3,8 +3,6 @@
 
     <!-- Main -->
     <string name="app_name">Contact Manager</string>
-    <string name="windows_title">OpenDJ Contact Manager</string>
-    <string name="logo_description">Forgerock</string>
 
     <!-- Search activity -->
     <string name="photo_description">Photo</string>
