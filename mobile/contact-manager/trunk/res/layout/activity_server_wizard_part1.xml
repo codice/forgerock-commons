@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
             android:contentDescription="@string/settings_title_description"
             android:paddingLeft="5dip"
             android:src="@drawable/ic_action_settings" />
