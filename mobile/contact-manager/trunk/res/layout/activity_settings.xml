@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/settings_separator_selected_server"
                     android:text="@string/sw1_server_address" />
-                
+
                 <TextView
                     android:id="@+id/settings_selected_server_address_content"
                     style="@style/settingsCommons"
@@ -117,7 +117,7 @@
                     android:maxWidth="190sp"
                     android:scrollHorizontally="true"
                     android:singleLine="true" />
-                
+
                 <TextView
                     android:id="@+id/settings_selected_authentication"
                     style="@style/settingsCommons"
