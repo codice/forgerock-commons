@@ -123,6 +123,10 @@ public class SettingsActivity extends AugmentedActivity {
             final Intent intent = new Intent(this, ServerWizardPart1Activity.class);
             startActivityForResult(intent, 1);
             return true;
+        } else if (itemId == R.id.settings_action_search) {
+            final Intent intent = new Intent(this, SearchActivity.class);
+            startActivityForResult(intent, 1);
+            return true;
         } else if (itemId == R.id.settings_action_edit) {
             final Intent intentEdit = new Intent(SettingsActivity.this, ServerWizardPart1Activity.class);
             if (serverConfiguration != null) {

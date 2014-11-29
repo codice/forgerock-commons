@@ -16,8 +16,7 @@
 
 package org.forgerock.contactmanager;
 
-import static android.view.Window.FEATURE_CUSTOM_TITLE;
-
+import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 
@@ -29,9 +28,7 @@ public abstract class AugmentedActivity extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(FEATURE_CUSTOM_TITLE);
-
-        setContentView(R.layout.activity_search);
-        getWindow().setFeatureInt(FEATURE_CUSTOM_TITLE, R.layout.forgerock_title_bar);
+        final ActionBar actionBar = getActionBar();
+        actionBar.show();
     }
 }
