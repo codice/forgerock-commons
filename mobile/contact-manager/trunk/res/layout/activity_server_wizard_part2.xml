@@ -79,11 +79,11 @@
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/sw2StaticAccountServerName"
                 android:ems="10"
+                android:focusableInTouchMode="true"
                 android:hint="@string/sw2_account_username_hint"
                 android:inputType="textNoSuggestions|textVisiblePassword"
                 android:maxLength="39"
-                android:singleLine="true"
-                android:focusableInTouchMode="true" >
+                android:singleLine="true" >
 
                 <requestFocus android:layout_width="wrap_content" />
             </EditText>
@@ -140,8 +140,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/sw2StaticAccountSecurity"
-                android:background="@drawable/toggle_design"
                 android:layout_marginTop="4dp"
+                android:background="@drawable/toggle_design"
                 android:textOff=""
                 android:textOn="" />
         </RelativeLayout>
@@ -159,7 +159,7 @@
             android:layout_width="fill_parent"
             android:layout_marginBottom="5sp"
             android:layout_marginTop="0sp" />
-        
+
         <Button
             android:id="@+id/sw2AccountFinishBtn"
             style="@style/NextButton"

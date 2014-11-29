@@ -14,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="257dp"
         android:layout_marginTop="10sp"
-        android:src="@drawable/opendjsingle"
-        android:contentDescription="@string/about_opendj" />
+        android:contentDescription="@string/about_opendj"
+        android:src="@drawable/opendjsingle" />
 
     <ScrollView
         android:layout_width="fill_parent"
