@@ -32,14 +32,6 @@
 			<version>4.1.1.4</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<!-- Support library (aka compatibility library) from the central repository 
-				as well note that this uses default scope (NOT provided) since the library 
-				will need to be added to your apk -->
-			<groupId>com.google.android</groupId>
-			<artifactId>support-v4</artifactId>
-			<version>r7</version>
-		</dependency>
 	</dependencies>
 
 	<build>
