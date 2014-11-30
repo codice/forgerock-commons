@@ -22,7 +22,6 @@ import static org.forgerock.contactmanager.Constants.PAGE_RESULT_OFFSET;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ProgressBar;
@@ -142,11 +141,6 @@ public class AsyncServerRequest extends AsyncTask<String, Integer, JSONObject> {
                     c.setDoOutput(false);
                     c.setRequestProperty("Authorization",
                             "Basic " + Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP));
-                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.FROYO) {
-                        c.setDoInput(true);
-                        ((HttpURLConnection) c).setInstanceFollowRedirects(false);
-                    }
-
                     c.connect();
 
                     publishProgress(50);
