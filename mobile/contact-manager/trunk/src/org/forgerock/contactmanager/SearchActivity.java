@@ -18,30 +18,23 @@ package org.forgerock.contactmanager;
 
 import static android.view.KeyEvent.*;
 import static android.view.ViewGroup.LayoutParams.*;
+import static java.lang.String.*;
 import static org.forgerock.contactmanager.Constants.*;
 import static org.forgerock.contactmanager.MapperConstants.*;
+import static org.forgerock.contactmanager.PagedResultCookie.*;
+
+import java.util.List;
+
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.view.View.OnKeyListener;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-
-import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * This class is main activity of this application.
@@ -147,7 +140,7 @@ public class SearchActivity extends AugmentedActivity {
                 displayFooterList();
             }
             // Sets the pagedResultsCookie used to manage pagination.
-            PagedResultCookie.setCookie(contactList.optString(PAGED_RESULT_COOKIE));
+            setCookie(contactList.optString(PAGED_RESULT_COOKIE));
         }
 
         lvSearchResult.setAdapter(adapter);
@@ -207,11 +200,11 @@ public class SearchActivity extends AugmentedActivity {
 
     private String getFilterRequest(final String searchValue) {
         final String encodedValue = Utils.getURLEncoded(searchValue);
-        return String.format(FILTER_FAMILYNAME_STARTSWITH, encodedValue, encodedValue);
+        return format(FILTER_FAMILYNAME_STARTSWITH, encodedValue, encodedValue);
     }
 
     static void initializePageCounter() {
-        PagedResultCookie.initialize();
+        initialize();
         currentPage = 0;
     }
 }
