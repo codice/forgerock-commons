@@ -10,6 +10,7 @@
     <string name="search">Search&#8230;</string>
     <string name="search_previous">Previous</string>
     <string name="search_next">Next</string>
+    <string name="search_speech">Search</string>
 
     <!-- Contact activity -->
     <string name="contact_mobile_title">Mobile</string>
