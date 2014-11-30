@@ -36,6 +36,16 @@
             android:maxLines="1"
             android:padding="10dip" />
 
+        <ImageButton
+            android:id="@+id/btn_search_speech"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:contentDescription="@string/search_speech"
+            android:src="@android:drawable/ic_btn_speak_now"
+            android:layout_gravity="center_vertical"
+            android:textAlignment="center" />
+
         <ProgressBar
             android:id="@+id/list_progress_bar"
             style="?android:attr/progressBarStyleSmall"

@@ -16,13 +16,16 @@
 
 package org.forgerock.contactmanager;
 
+import static android.speech.RecognizerIntent.*;
 import static android.view.KeyEvent.*;
 import static android.view.ViewGroup.LayoutParams.*;
 import static java.lang.String.*;
+import static java.text.Normalizer.*;
 import static org.forgerock.contactmanager.Constants.*;
 import static org.forgerock.contactmanager.MapperConstants.*;
 import static org.forgerock.contactmanager.PagedResultCookie.*;
 
+import java.text.Normalizer.Form;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -36,6 +39,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -49,6 +53,8 @@ import android.widget.ProgressBar;
  * This class is main activity of this application.
  */
 public class SearchActivity extends AugmentedActivity {
+
+    private static final int SPEECH_REQUEST_CODE = 0;
 
     /**
      * The progress bar linked to the search.
@@ -89,6 +95,8 @@ public class SearchActivity extends AugmentedActivity {
 
         lvSearchResult = (ListView) findViewById(R.id.lvSearchResult);
 
+        ImageButton speakSearchButton = (ImageButton) findViewById(R.id.btn_search_speech);
+
         displayContactList(null);
 
         searchText.addTextChangedListener(new PendingTextWatcher(700) {
@@ -117,6 +125,12 @@ public class SearchActivity extends AugmentedActivity {
             }
         });
 
+        speakSearchButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                speechRecognizer();
+            }
+        });
     }
 
     @Override
@@ -210,6 +224,24 @@ public class SearchActivity extends AugmentedActivity {
     private String getFilterRequest(final String searchValue) {
         final String encodedValue = Utils.getURLEncoded(searchValue);
         return format(FILTER_FAMILYNAME_STARTSWITH, encodedValue, encodedValue);
+    }
+
+    private void speechRecognizer() {
+        final Intent intent = new Intent(ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(EXTRA_LANGUAGE_MODEL, LANGUAGE_MODEL_FREE_FORM);
+        startActivityForResult(intent, SPEECH_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
+            final List<String> results = data.getStringArrayListExtra(EXTRA_RESULTS);
+            // Canonical decomposition of the accent marks && replaces all non ascii char by an empty string.
+            final String spokenText = normalize(results.get(0), Form.NFD)
+                    .replaceAll("[^\\p{ASCII}]", "");
+            searchText.setText(spokenText);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     static void initializePageCounter() {
