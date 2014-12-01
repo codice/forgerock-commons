@@ -20,6 +20,7 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.name;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
+import org.forgerock.doc.maven.AbstractDocbkxMojo.Format;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 import java.io.File;
@@ -80,31 +81,31 @@ public class Layout {
 
         ArrayList<MojoExecutor.Element> r = new ArrayList<MojoExecutor.Element>();
 
-        final List<String> formats = m.getFormats();
+        final List<Format> formats = m.getFormats();
         final String outputDir = m.path(m.getDocbkxOutputDirectory());
 
-        if (formats.contains("epub")) {
+        if (formats.contains(Format.epub)) {
             r.add(element(name("resource"),
                     element(name("directory"), outputDir + "/epub/"),
                     element(name("includes"),
                             element(name("include"), "**/*.epub"))));
         }
 
-        if (formats.contains("html")) {
+        if (formats.contains(Format.html)) {
             r.add(element(name("resource"),
                     element(name("directory"), outputDir + "/html/")));
         }
 
         // Man pages are not currently copied anywhere.
 
-        if (formats.contains("pdf")) {
+        if (formats.contains(Format.pdf)) {
             r.add(element(name("resource"),
                     element(name("directory"), outputDir + "/pdf/"),
                     element(name("includes"),
                             element(name("include"), "**/*.pdf"))));
         }
 
-        if (formats.contains("rtf")) {
+        if (formats.contains(Format.rtf)) {
             r.add(element(name("resource"),
                     element(name("directory"), outputDir + "/rtf/"),
                     element(name("includes"),
@@ -113,7 +114,7 @@ public class Layout {
 
         // Webhelp is handled separately.
 
-        if (formats.contains("xhtml5")) {
+        if (formats.contains(Format.xhtml5)) {
             r.add(element(name("resource"),
                     element(name("directory"), outputDir + "/xhtml/")));
         }
@@ -150,7 +151,7 @@ public class Layout {
             // The webhelp directory needs to be copied in its entirety
             // to avoid overwriting other HTML.
 
-            if (m.getFormats().contains("webhelp")) {
+            if (m.getFormats().contains(Format.webhelp)) {
 
                 // 2.0.15 does not allow <webhelpBaseDir> to be set,
                 // so the output location is hard-coded for now.
