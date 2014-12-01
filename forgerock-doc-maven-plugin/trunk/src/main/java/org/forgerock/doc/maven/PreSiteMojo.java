@@ -67,7 +67,7 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
             throw new MojoExecutionException("No build directory available.");
         }
 
-        final List<String> formats = getFormats();
+        final List<Format> formats = getFormats();
 
         // Perform pre-processing.
         new Branding(this).execute();
@@ -79,16 +79,16 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
         new ImageData(this).execute();
         new PlantUml(this).execute();
 
-        if (formats.contains("pdf") || formats.contains("rtf")) {
+        if (formats.contains(Format.pdf) || formats.contains(Format.rtf)) {
             new Dpi(this).execute();
         }
 
         new CurrentDocId(this).execute();
 
-        if (formats.contains("pdf") || formats.contains("rtf")) {
+        if (formats.contains(Format.pdf) || formats.contains(Format.rtf)) {
             new Fop(this).execute();
         }
-        if (formats.contains("html")) {
+        if (formats.contains(Format.html)) {
             new CustomCss(this).execute();
         }
 
@@ -104,49 +104,49 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
 
 
         // Perform build.
-        if (formats.contains("epub")) {
+        if (formats.contains(Format.epub)) {
             new Epub(this).execute();
         }
-        if (formats.contains("html")) {
+        if (formats.contains(Format.html)) {
             new SingleHtml(this).execute();
             new ChunkedHtml(this).execute();
         }
-        if (formats.contains("man")) {
+        if (formats.contains(Format.man)) {
             new Manpage(this).execute();
         }
-        if (formats.contains("pdf")) {
+        if (formats.contains(Format.pdf)) {
             new Pdf(this).execute();
         }
-        if (formats.contains("rtf")) {
+        if (formats.contains(Format.rtf)) {
             new Rtf(this).execute();
         }
-        if (formats.contains("webhelp")) {
+        if (formats.contains(Format.webhelp)) {
             new Webhelp(this).execute();
         }
-        if (formats.contains("xhtml5")) {
+        if (formats.contains(Format.xhtml5)) {
             new Xhtml5(this).execute();
         }
 
         // Perform post-processing.
-        if (formats.contains("epub")) {
+        if (formats.contains(Format.epub)) {
             new NoOp(this).execute();
         }
-        if (formats.contains("html")) {
+        if (formats.contains(Format.html)) {
             new Html(this).execute();
         }
-        if (formats.contains("man")) {
+        if (formats.contains(Format.man)) {
             new NoOp(this).execute();
         }
-        if (formats.contains("pdf")) {
+        if (formats.contains(Format.pdf)) {
             new NoOp(this).execute();
         }
-        if (formats.contains("rtf")) {
+        if (formats.contains(Format.rtf)) {
             new NoOp(this).execute();
         }
-        if (formats.contains("webhelp")) {
+        if (formats.contains(Format.webhelp)) {
             new WebhelpPost(this).execute();
         }
-        if (formats.contains("xhtml5")) {
+        if (formats.contains(Format.xhtml5)) {
             new Xhtml(this).execute();
         }
     }

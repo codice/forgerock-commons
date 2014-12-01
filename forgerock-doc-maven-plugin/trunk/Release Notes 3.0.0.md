@@ -40,6 +40,9 @@ See the README for this version for details.
 
 **Changes to plugin configuration**
 
+The fix for DOCS-240 replaces configuration parameters
+`<include>` and `<excludes>` with `<formats>`.
+
 The fix for DOCS-237 introduces a new configuration parameter, `<skipUrlPatterns>`.
 
 The fix for DOCS-215 introduces a new configuration parameter,
@@ -141,6 +144,10 @@ The plugin has been tested with Maven 3.0.5, 3.1.1, 3.2.3.
 
 
 ## Fixes
+
+**DOCS-240: <include> (singular) and <excludes> are confusing**
+
+This fix replaces those settings with `<formats>`.
 
 **DOCS-225: Run docbook-linktester only on pre-processed DocBook files**
 

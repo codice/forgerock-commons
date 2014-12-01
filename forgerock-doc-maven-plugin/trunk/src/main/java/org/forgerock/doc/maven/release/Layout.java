@@ -20,6 +20,7 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.name;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
+import org.forgerock.doc.maven.AbstractDocbkxMojo.Format;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 import java.io.File;
@@ -79,15 +80,15 @@ public class Layout {
     private MojoExecutor.Element getResources() throws MojoExecutionException {
 
         ArrayList<MojoExecutor.Element> r = new ArrayList<MojoExecutor.Element>();
-        final List<String> formats = m.getFormats();
+        final List<Format> formats = m.getFormats();
         final String outputDir = m.path(m.getDocbkxOutputDirectory());
 
-        if (formats.contains("html")) {
+        if (formats.contains(Format.html)) {
             r.add(element(name("resource"),
                     element(name("directory"), outputDir + "/html/")));
         }
 
-        if (formats.contains("pdf")) {
+        if (formats.contains(Format.pdf)) {
             r.add(element(name("resource"),
                     element(name("directory"), outputDir + "/pdf/"),
                     element(name("includes"),

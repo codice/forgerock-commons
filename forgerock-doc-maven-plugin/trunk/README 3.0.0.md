@@ -237,32 +237,26 @@ only for a chapter named `chap-one.xml`.
     mvn -DdocumentSrcName=chap-one.xml clean pre-site
 
 
-## Including & Excluding Output Formats
+## Selecting Output Formats
 
-If you want only one type of output, then specify that using `include`.
+Specify the type of outputs you want using `<formats>`.
+On the command line, use `-Dformats` with a comma-separated list.
+
+Supported formats include:
+`epub`, `html`, `man`, `pdf`, `rtf`, `webhelp`, `xhtml5`.
+
+If you do not specify any formats, the default output formats are
+`epub`, `html`, `man`, `pdf`, and `webhelp`.
+
+Release builds only include `html` and `pdf`.
 
 The following command generates only PDF output for your single chapter.
 
-    mvn -DdocumentSrcName=chap-one.xml -Dinclude=pdf clean pre-site
+    mvn -DdocumentSrcName=chap-one.xml -Dformats=pdf clean pre-site
 
-It is also possible to generate only RTF & XHTML5 output using `include`.
+The following command generates only man pages & XHTML5 output.
 
-    mvn -Dinclude=rtf clean pre-site
-    mvn -Dinclude=xhtml5 clean pre-site
-
-Default formats, however, only include `epub`, `html`, `man`, `pdf`, and `webhelp`.
-
-To exclude formats from the build,
-you can use the optional `<excludes>` configuration element.
-
-The following example excludes all formats but HTML from the build.
-
-     <excludes>
-      <exclude>epub</exclude>
-      <exclude>man</exclude>
-      <exclude>pdf</exclude>
-      <exclude>webhelp</exclude>
-     </excludes>
+    mvn -Dformats=man,xhtml5 clean pre-site
 
 
 ## Checking Links

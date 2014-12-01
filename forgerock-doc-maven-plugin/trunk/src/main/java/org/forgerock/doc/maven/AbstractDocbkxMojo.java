@@ -30,7 +30,6 @@ import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -592,34 +591,6 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
-     * Do not process these default formats.
-     * Choices include: epub, html, man, pdf, webhelp.
-     *
-     * <br>
-     *
-     * Do not set both excludes and includes in the same configuration.
-     */
-    @Parameter
-    private List<String> excludes;
-
-    /**
-     * Do not process these default formats.
-     *
-     * <br>
-     *
-     * Choices include: epub, html, man, pdf, webhelp.
-     *
-     * <br>
-     *
-     * Do not set both excludes and includes in the same configuration.
-     *
-     * @return The list of default formats to exclude.
-     */
-    public List<String> getExcludes() {
-        return excludes;
-    }
-
-    /**
      * Favicon link element for the pre-site version of the HTML.
      */
     @Parameter(defaultValue = "<link rel=\"shortcut icon\" href=\"http://forgerock.org/favicon.ico\">")
@@ -683,59 +654,63 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
+     * Supported output formats.
+     */
+    public enum Format {
+        /**
+         * EPUB v2 without styling; not ready for publication.
+         */
+        epub,
+
+        /**
+         * Styled single-page and chunked HTML 4.
+         */
+        html,
+
+        /**
+         * Reference manual pages for use with the {@code man} command.
+         */
+        man,
+
+        /**
+         * PDF.
+         */
+        pdf,
+
+        /**
+         * RTF without styling; not ready for publication.
+         */
+        rtf,
+
+        /**
+         * Styled DocBook Webhelp format.
+         */
+        webhelp,
+
+        /**
+         * Single-page XHTML5 without styling except syntax highlighting;
+         * not ready for publication as is.
+         */
+        xhtml5
+    };
+
+    /**
+     * Comma-separated list of output formats to generate.
+     */
+    @Parameter(property = "formats", defaultValue = "epub,html,man,pdf,webhelp")
+    private List<Format> formats;
+
+    /**
      * Return a list of output formats to generate.
      *
      * <br>
      *
-     * If no defaults are specified, then the default list of formats includes
-     * epub, html, man, pdf, webhelp.
+     * Default: epub,html,man,pdf,webhelp
      *
-     * <br>
-     *
-     * The rtf, xhtml5 formats are also supported,
-     * but are not included in the default list.
-     *
-     * @param defaults (Restricted) list of formats to consider.
-     *                 Set this to limit the list of output formats.
-     *                 Formats are passed on to the plugin as is.
      * @return List of output formats.
-     * @throws MojoExecutionException Attempt to configure mutually exclusive options.
      */
-    public List<String> getFormats(final String... defaults)
-            throws MojoExecutionException {
-        ArrayList<String> formats = new ArrayList<String>();
-
-        if (defaults.length != 0) {                  // Restrict list.
-            formats.addAll(Arrays.asList(defaults));
-        } else {
-            formats.addAll(Arrays.asList("epub", "html", "man", "pdf", "webhelp"));
-        }
-
-        ArrayList<String> excludes = new ArrayList<String>();
-        String include = "";
-
-        if (getExcludes() != null) {
-            excludes = (ArrayList<String>) getExcludes();
-        }
-
-        if (getInclude() != null) {
-            include = getInclude();
-        }
-
-        if (!excludes.isEmpty() && !include.equals("")) {
-            throw new MojoExecutionException("<excludes> and <include> are mutually exclusive.");
-
-        } else if (!excludes.isEmpty()) {
-            // Exclude formats.
-            for (String format : excludes) {
-                formats.remove(format);
-            }
-        } else if (!include.isEmpty()) {
-            // Include one format.
-            formats.clear();
-            formats.add(include);
-        }
-        return formats;
+    public List<Format> getFormats() {
+        return this.formats;
     }
 
     /**
@@ -759,37 +734,6 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public String getGoogleAnalyticsId() {
         return googleAnalyticsId;
-    }
-
-    /**
-     * Process only this format.
-     *
-     * <br>
-     *
-     * Choices include: epub, html, man, pdf, rtf, webhelp, xhtml5.
-     *
-     * <br>
-     *
-     * Do not set both excludes and includes in the same configuration.
-     */
-    @Parameter(property = "include")
-    private String include;
-
-    /**
-     * Process only this format.
-     *
-     * <br>
-     *
-     * Choices include: epub, html, man, pdf, rtf, webhelp, xhtml5.
-     *
-     * <br>
-     *
-     * Do not set both excludes and includes in the same configuration.
-     *
-     * @return Single output format to generate.
-     */
-    public String getInclude() {
-        return include;
     }
 
     /**
