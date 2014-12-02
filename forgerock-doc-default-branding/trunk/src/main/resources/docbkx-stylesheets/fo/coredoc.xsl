@@ -68,7 +68,7 @@ version="1.0">
  </xsl:template>
 
  <!--      linebreak   -->
- <!-- use <?linkbreak?> -->
+ <!-- use <?linebreak?> -->
  <xsl:template match="processing-instruction('linebreak')">
   <fo:block/>
  </xsl:template>
@@ -148,10 +148,6 @@ version="1.0">
   <xsl:param name="use.extensions" select="1"/>
   <xsl:param name="linenumbering.everyNth" select="1"/>
   <xsl:param name="orderedlist.label.width">1.8em</xsl:param>
-
-  <xsl:param name="default.table.frame">topbot</xsl:param>
-  <xsl:param name="default.table.rules">none</xsl:param>
-  <xsl:param name="table.cell.border.thickness">0pt</xsl:param>
   
   <xsl:param name="variablelist.as.blocks" select="1" />
   <xsl:param name="variablelist.term.separator" select="''"/>
@@ -575,11 +571,11 @@ version="1.0">
 
  <xsl:attribute-set name="formal.title.properties">
   <xsl:attribute name="font-weight">bold</xsl:attribute>
-  <xsl:attribute name="font-size">10pt</xsl:attribute>
+  <xsl:attribute name="font-size">9pt</xsl:attribute>
   <xsl:attribute name="hyphenate">false</xsl:attribute>
   <xsl:attribute name="font-family">Helvetica</xsl:attribute>
   <xsl:attribute name="space-after">0pt</xsl:attribute>
-  <xsl:attribute name="margin-top">20pt</xsl:attribute>
+  <xsl:attribute name="margin-top">14pt</xsl:attribute>
  </xsl:attribute-set>
 
  <!--  =====================================================================  -->
@@ -591,7 +587,50 @@ version="1.0">
   <xsl:attribute name="font-size">8pt</xsl:attribute>
  </xsl:attribute-set>
 
+ <!--  =====================================================================  -->
+ <!--                             Tables                                      -->
+ <!--  =====================================================================  -->
 
+ <!--xsl:param name="default.table.frame">topbot</xsl:param>
+ <xsl:param name="default.table.rules">rows</xsl:param>
+ <xsl:param name="table.cell.border.thickness">0pt</xsl:param-->
 
+ <!-- general cell padding for all tables -->
+ <xsl:attribute-set name="table.cell.padding">
+  <xsl:attribute name="padding-top">5pt</xsl:attribute>
+  <xsl:attribute name="padding-bottom">3pt</xsl:attribute>
+ </xsl:attribute-set>
+
+ <!-- Border settings -->
+ <xsl:param name="table.cell.border.color">#D3D2D1</xsl:param>
+ <xsl:param name="table.cell.border.thickness">1pt</xsl:param>
+ <xsl:param name="table.frame.border.color">#D3D2D1</xsl:param>
+ <xsl:param name="table.frame.border.thickness">1pt</xsl:param>
+
+ <xsl:template name="table.row.properties">
+  <xsl:variable name="row-height">
+   <xsl:if test="processing-instruction('dbfo')">
+    <xsl:call-template name="pi.dbfo_row-height"/>
+   </xsl:if>
+  </xsl:variable>
+  <xsl:if test="$row-height != ''">
+   <xsl:attribute name="block-progression-dimension">
+    <xsl:value-of select="$row-height"/>
+   </xsl:attribute>
+  </xsl:if>
+  <xsl:variable name="bgcolor">
+   <xsl:call-template name="pi.dbfo_bgcolor"/>
+  </xsl:variable>
+  <xsl:if test="$bgcolor != ''">
+   <xsl:attribute name="background-color">
+    <xsl:value-of select="$bgcolor"/>
+   </xsl:attribute>
+  </xsl:if>
+  <!--  Keep header row with next row-->
+  <xsl:if test="ancestor::thead">
+   <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
+   <xsl:attribute name="font-weight">bold</xsl:attribute>
+  </xsl:if>
+ </xsl:template>
 
 </xsl:stylesheet>
