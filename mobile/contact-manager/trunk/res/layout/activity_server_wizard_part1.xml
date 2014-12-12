@@ -128,6 +128,16 @@
 
                 <requestFocus android:layout_width="wrap_content" />
             </EditText>
+                 
+            <TextView
+                android:id="@+id/sw1_server_address_hint2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/sw1EditServerAddress"
+                android:text="@string/sw1_server_address_hint2"
+                android:textSize="12sp"
+                android:textStyle="italic" />
 
             <TextView
                 android:id="@+id/sw1StaticTitle"

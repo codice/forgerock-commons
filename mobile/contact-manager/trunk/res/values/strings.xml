@@ -49,7 +49,8 @@
     <string name="act_next_description">Continue</string>
     <string name="sw1_server_address">Server address</string>
     <string name="sw1_title">In a few steps, you will be able to set up your connection via REST to your LDAP server.</string>
-    <string name="sw1_server_address_hint">IP:port/opendj</string>
+    <string name="sw1_server_address_hint">IP:port</string>
+    <string name="sw1_server_address_hint2">(In case of servlet use, please add IP:port/opendj_path)</string>
     <string name="sw1_server_name">Server name</string>
     <string name="sw1_server_name_hint">Home</string>
 
