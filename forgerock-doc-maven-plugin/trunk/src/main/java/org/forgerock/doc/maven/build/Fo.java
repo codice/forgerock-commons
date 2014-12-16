@@ -289,7 +289,12 @@ public class Fo {
                 File file = FileUtils.getFile(
                         m.getDocbkxOutputDirectory(), getFormat(),
                         FilenameUtils.getBaseName(m.getDocumentSrcName()) + "." + getFormat());
-                NameUtils.renameDocument(file, docName, m.getProjectName());
+
+                try {
+                    NameUtils.renameDocument(file, docName, m.getProjectName());
+                } catch (IOException e) {
+                    throw new MojoExecutionException("Failed to rename document", e);
+                }
             }
         }
     }

@@ -60,11 +60,14 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
 
-        if (!getBuildDirectory().exists()) {
-            getBuildDirectory().mkdir();
-        }
-        if (!getBuildDirectory().isDirectory()) {
+        if (getBuildDirectory() == null) {
             throw new MojoExecutionException("No build directory available.");
+        }
+
+        if (!getBuildDirectory().exists()) {
+            if (!getBuildDirectory().mkdir()) {
+                throw new MojoExecutionException("Could not create build directory");
+            }
         }
 
         final List<Format> formats = getFormats();

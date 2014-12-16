@@ -174,8 +174,12 @@ public class Xhtml5 {
          * @throws org.apache.maven.plugin.MojoExecutionException Failed to build the output.
          */
         void build() throws MojoExecutionException {
-            ImageCopier.copyImages("xhtml", "", m.getDocumentSrcName(),
-                    m.getDocbkxModifiableSourcesDirectory(), m.getDocbkxOutputDirectory());
+
+            try {
+                ImageCopier.copyImages("xhtml", "", m);
+            } catch (IOException e) {
+                throw new MojoExecutionException("Failed to copy images", e);
+            }
 
             ArrayList<Element> cfg = new ArrayList<Element>();
             cfg.add(element(name("chunkedOutput"), "false"));

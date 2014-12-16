@@ -175,8 +175,12 @@ public class SingleHtml {
          * @throws MojoExecutionException Failed to build the output.
          */
         void build() throws MojoExecutionException {
-            ImageCopier.copyImages("html", "", m.getDocumentSrcName(),
-                    m.getDocbkxModifiableSourcesDirectory(), m.getDocbkxOutputDirectory());
+
+            try {
+                ImageCopier.copyImages("html", "", m);
+            } catch (IOException e) {
+                throw new MojoExecutionException("Failed to copy images", e);
+            }
 
             ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
             cfg.addAll(m.getBaseConfiguration());

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+! MPL 2.0 HEADER START
+!
+! This Source Code Form is subject to the terms of the Mozilla Public
+! License, v. 2.0. If a copy of the MPL was not distributed with this
+! file, You can obtain one at http://mozilla.org/MPL/2.0/.
+!
+! If applicable, add the following below this MPL 2.0 HEADER, replacing
+! the fields enclosed by brackets "[]" replaced with your own identifying
+! information:
+!     Portions Copyright [yyyy] [name of copyright owner]
+!
+! MPL 2.0 HEADER END
+!
+!     Copyright 2014 ForgeRock AS
+!
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+
+ <groupId>commons.forgerock.org</groupId>
+ <artifactId>doc-plugin-test</artifactId>
+ <version>1.0.0-SNAPSHOT</version>
+ <packaging>pom</packaging>
+
+ <build>
+  <plugins>
+   <plugin>
+    <artifactId>forgerock-doc-maven-plugin</artifactId>
+
+    <configuration>
+     <projectName>Test</projectName>
+     <projectVersion>1.0.0-SNAPSHOT</projectVersion>
+     <releaseVersion>1.0.0</releaseVersion>
+    </configuration>
+
+    <executions>
+     <execution>
+      <id>doc-build</id>
+      <phase>pre-site</phase>
+      <goals>
+       <goal>build</goal>
+      </goals>
+     </execution>
+
+     <execution>
+      <id>doc-site</id>
+      <phase>site</phase>
+      <goals>
+       <goal>site</goal>
+      </goals>
+     </execution>
+
+     <execution>
+      <id>doc-release</id>
+      <phase>site</phase>
+      <goals>
+       <goal>release</goal>
+      </goals>
+     </execution>
+    </executions>
+   </plugin>
+  </plugins>
+ </build>
+
+</project>
