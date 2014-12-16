@@ -109,4 +109,26 @@
  <xsl:param name="toc.section.depth" select="2" />
  <xsl:param name="toc.max.depth" select="1" />
  <xsl:param name="generate.meta.abstract" select="1" />
+
+ <!-- START DOCS-243: Clean up XHTML5 -->
+
+ <!-- Remove inline style attributes (does not purge all inline CSS, but most) -->
+ <xsl:param name="admon.style"></xsl:param>
+ <xsl:param name="css.decoration" select="0" />
+ <xsl:param name="make.clean.html" select="1" />
+ <xsl:param name="table.borders.with.css" select="0" />
+
+ <!-- Prefix class names with 'db-' -->
+ <xsl:template match="*" mode="class.value">
+  <xsl:param name="class" select="local-name(.)"/>
+  <xsl:if test="string-length($class) != 0">
+   <xsl:value-of select="concat('db-', $class)"/>
+  </xsl:if>
+ </xsl:template>
+
+ <!-- Fix image representation: no tables, no height/width -->
+ <xsl:param name="make.graphic.viewport" select="0" />
+ <xsl:param name="ignore.image.scaling" select="1" />
+
+ <!-- END DOCS-243: Clean up XHTML5 -->
 </xsl:stylesheet>
