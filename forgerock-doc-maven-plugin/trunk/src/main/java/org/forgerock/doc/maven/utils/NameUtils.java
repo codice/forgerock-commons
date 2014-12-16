@@ -20,12 +20,10 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -34,6 +32,19 @@ import org.codehaus.plexus.util.StringUtils;
 public final class NameUtils {
     /**
      * Pattern to validate the document names.
+     *
+     * <br>
+     *
+     * project-doc-version names are not expected in published docs,
+     * @see #renameDoc(String, String, String, String)
+     *
+     * <br>
+     *
+     * When published, documentation file names
+     * should include the version before the document name:
+     * Project-Version-Doc-Name.ext
+     *
+     * @deprecated since 3.0.0
      *
      * <p>Valid names:</p>
      * <ul>
@@ -59,14 +70,10 @@ public final class NameUtils {
      *     <li>guide-.</li>
      * </ul>
      */
+    @Deprecated
     public static final Pattern DOCUMENT_FILE_PATTERN = Pattern
             .compile("^([a-zA-Z0-9]+)(-?[0-9].[0-9\\.]*[0-9])?(-SNAPSHOT|(-Ex|-ex|-X)press[0-9])"
                     + "?([a-zA-Z-]*)((-?[0-9].[0-9\\.]*[0-9])?-?(SNAPSHOT|(Ex|ex|X)press[0-9]?)?)$");
-
-    /**
-     * Pattern to find version sting.
-     */
-    private static final Pattern VERSION_PATTERN = Pattern.compile("(-[0-9].[0-9.]*[0-9])");
 
     /**
      * Rename document to reflect project and document name. For example,
@@ -82,7 +89,8 @@ public final class NameUtils {
      * @return New name for document. Can be "" if rename failed.
      */
     public static String renameDoc(final String projectName,
-            final String docName, final String extension) {
+                                   final String docName,
+                                   final String extension) {
         return renameDoc(projectName, docName, "", extension);
     }
 
@@ -102,32 +110,38 @@ public final class NameUtils {
      * @return New name for document. Can be "" if rename failed.
      */
     public static String renameDoc(final String projectName,
-            final String docName, final String version, final String extension) {
-        String doc = docName;
+                                   final String docName,
+                                   final String version,
+                                   final String extension) {
 
-        Matcher docNameMatcher = DOCUMENT_FILE_PATTERN.matcher(docName);
-
-        if (docNameMatcher.matches()) {
-            doc = capitalize(doc);
-        } else {
+        // Doc name must be non-empty.
+        if (!StringUtils.isNotBlank(docName)) {
             return "";
         }
 
-        StringBuilder sb = StringUtils.isNotBlank(projectName)
-                           ? new StringBuilder(projectName).append("-")
-                           : new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-        // Only add a . if the extension is not empty.
-        String ext = extension;
-        if (!ext.equalsIgnoreCase("")) {
-            ext = "." + ext;
+        // If project name exists, capitalize it and follow it with a hyphen.
+        if (StringUtils.isNotBlank(projectName)) {
+            sb.append(capitalize(projectName)).append('-');
+
+            // Version precedes the document name.
+            // It only makes sense to use a version if a project name is defined.
+            // If version exists, follow it with a hyphen.
+            if (StringUtils.isNotBlank(version)) {
+                sb.append(version).append('-');
+            }
         }
 
-        Matcher versionMatcher = VERSION_PATTERN.matcher(docName);
-        if (!versionMatcher.matches() && StringUtils.isNotBlank(version)) {
-            sb.append(version).append("-");
+        // Capitalize the doc name.
+        sb.append(capitalize(docName));
+
+        // If extension exists, precede it with a .
+        if (StringUtils.isNotBlank(extension)) {
+            sb.append('.').append(extension);
         }
-        return sb.append(doc).append(ext).toString();
+
+        return sb.toString();
     }
 
     /**
@@ -137,8 +151,8 @@ public final class NameUtils {
      *            Name of the document such as reference or admin-guide
      * @return Capitalized name such as Reference or Admin-Guide
      */
-    private static String capitalize(final String docName) {
-        char[] chars = docName.toLowerCase().toCharArray();
+    protected static String capitalize(final String docName) {
+        char[] chars = docName.toCharArray();
 
         boolean isInitial = true;
         for (int i = 0; i < chars.length; i++) {
@@ -167,7 +181,7 @@ public final class NameUtils {
      * @return Document names, as in admin-guide or reference
      */
     public static Set<String> getDocumentNames(final File srcDir,
-            final String docFile) {
+                                               final String docFile) {
         Set<String> documentDirectories = new TreeSet<String>();
 
         // Match directories containing DocBook document entry point files,
@@ -207,23 +221,16 @@ public final class NameUtils {
      * @param builtDocument File to rename, such as {@code index.pdf}.
      * @param docName       Simple document name such as {@code admin-guide}.
      * @param projectName   Project name, such as {@code OpenAM}.
-     * @throws MojoExecutionException Something went wrong renaming the file.
+     * @throws IOException  Something went wrong renaming the file.
      */
     public static void renameDocument(final File builtDocument,
-                                            final String docName,
-                                            final String projectName)
-            throws MojoExecutionException {
-
+                                      final String docName,
+                                      final String projectName)
+            throws IOException {
         String ext = FilenameUtils.getExtension(builtDocument.getName());
-        String newName = builtDocument.getParent() + File.separator
-                + renameDoc(projectName, docName, ext);
-        try {
-            File newFile = new File(newName);
-            if (!newFile.exists()) {
-                FileUtils.moveFile(builtDocument, newFile);
-            }
-        } catch (IOException e) {
-            throw new MojoExecutionException("Failed to rename " + builtDocument);
+        File newFile = new File(builtDocument.getParent(), renameDoc(projectName, docName, ext));
+        if (!newFile.exists()) {
+            FileUtils.moveFile(builtDocument, newFile);
         }
     }
 

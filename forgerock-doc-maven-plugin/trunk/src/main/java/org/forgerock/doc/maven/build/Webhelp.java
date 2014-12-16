@@ -171,8 +171,11 @@ public class Webhelp {
          */
         void build() throws MojoExecutionException {
 
-            ImageCopier.copyImages("webhelp", "", m.getDocumentSrcName(),
-                    m.getDocbkxModifiableSourcesDirectory(), m.getDocbkxOutputDirectory());
+            try {
+                ImageCopier.copyImages("webhelp", "", m);
+            } catch (IOException e) {
+                throw new MojoExecutionException("Failed to copy images", e);
+            }
 
             for (String docName : m.getDocNames()) {
                 ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();

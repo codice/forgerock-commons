@@ -16,7 +16,7 @@ package org.forgerock.doc.maven.utils;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.apache.maven.plugin.MojoExecutionException;
+import org.forgerock.doc.maven.AbstractDocbkxMojo;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -39,6 +39,30 @@ public final class ImageCopier {
     /**
      * Copy images from source to destination.
      *
+     *
+     * @param docType         Type of output document,
+     *                        such as {@code epub} or {@code html}
+     * @param baseName        Directory name to add, such as {@code index}.
+     *                        Leave null or empty when not adding a directory name.
+     * @param mojo            Mojo holding configuration information.
+     *
+     * @throws IOException    Something went wrong copying images.
+     */
+    public static void copyImages(final String docType,
+                                  final String baseName,
+                                  final AbstractDocbkxMojo mojo)
+            throws IOException {
+        copyImages(
+                docType,
+                baseName,
+                mojo.getDocumentSrcName(),
+                mojo.getDocbkxModifiableSourcesDirectory(),
+                mojo.getDocbkxOutputDirectory());
+    }
+
+    /**
+     * Copy images from source to destination.
+     *
      * <p>
      *
      * DocBook XSL does not copy the images,
@@ -54,29 +78,29 @@ public final class ImageCopier {
      * @param sourceDirectory Base directory for DocBook XML sources.
      * @param outputDirectory Base directory where the output is found.
      *
-     * @throws MojoExecutionException Something went wrong copying images.
+     * @throws IOException    Something went wrong copying images.
      */
     public static void copyImages(final String docType,
                                   final String baseName,
                                   final String documentSrcName,
                                   final File sourceDirectory,
                                   final File outputDirectory)
-            throws MojoExecutionException {
+            throws IOException {
 
         if (docType == null) {
-            throw new MojoExecutionException("Type of output document must not be null.");
+            throw new IllegalArgumentException("Type of output document must not be null.");
         }
 
 
         if (documentSrcName == null) {
-            throw new MojoExecutionException(
+            throw new IllegalArgumentException(
                     "Top-level DocBook XML document source name must not be null.");
         }
 
         Set<String> docNames = NameUtils.getDocumentNames(
                 sourceDirectory, documentSrcName);
         if (docNames.isEmpty()) {
-            throw new MojoExecutionException("No document names found.");
+            throw new IOException("No document names found.");
         }
 
         String extra = "";
@@ -91,26 +115,17 @@ public final class ImageCopier {
             // Copy images specific to the document.
             File srcDir = FileUtils.getFile(sourceDirectory, docName, "images");
             File destDir = FileUtils.getFile(outputDirectory, docType, docName + extra, "images");
-            try {
-                if (srcDir.exists()) {
-                    FileUtils.copyDirectory(srcDir, destDir, onlyImages);
-                }
-            } catch (IOException e) {
-                throw new MojoExecutionException(
-                        "Failed to copy images from " + srcDir + " to " + destDir);
+            if (srcDir.exists()) {
+                FileUtils.copyDirectory(srcDir, destDir, onlyImages);
             }
+
 
             // Copy any shared images.
             String shared = "shared" + File.separator + "images";
             srcDir = new File(sourceDirectory, shared);
             destDir = FileUtils.getFile(outputDirectory, docType, docName + extra, shared);
-            try {
-                if (srcDir.exists()) {
-                    FileUtils.copyDirectory(srcDir, destDir, onlyImages);
-                }
-            } catch (IOException ioe) {
-                throw new MojoExecutionException(
-                        "Failed to copy images from " + srcDir + " to " + destDir);
+            if (srcDir.exists()) {
+                FileUtils.copyDirectory(srcDir, destDir, onlyImages);
             }
         }
     }

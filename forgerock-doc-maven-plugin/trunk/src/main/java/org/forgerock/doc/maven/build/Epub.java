@@ -23,6 +23,7 @@ import org.forgerock.doc.maven.utils.NameUtils;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -80,8 +81,12 @@ public class Epub {
          * @throws MojoExecutionException Failed to build the output.
          */
         void build() throws MojoExecutionException {
-            ImageCopier.copyImages("epub", "", m.getDocumentSrcName(),
-                    m.getDocbkxModifiableSourcesDirectory(), m.getDocbkxOutputDirectory());
+
+            try {
+                ImageCopier.copyImages("epub", "", m);
+            } catch (IOException e) {
+                throw new MojoExecutionException("Failed to copy images", e);
+            }
 
             for (String docName : m.getDocNames()) {
                 ArrayList<Element> cfg = new ArrayList<MojoExecutor.Element>();
@@ -103,7 +108,12 @@ public class Epub {
                 File outputEpub = FileUtils.getFile(
                         m.getDocbkxOutputDirectory(), "epub",
                         FilenameUtils.getBaseName(m.getDocumentSrcName()) + ".epub");
-                NameUtils.renameDocument(outputEpub, docName, m.getProjectName());
+
+                try {
+                    NameUtils.renameDocument(outputEpub, docName, m.getProjectName());
+                } catch (IOException e) {
+                    throw new MojoExecutionException("Failed to rename document", e);
+                }
             }
         }
     }

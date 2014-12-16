@@ -186,8 +186,12 @@ public class ChunkedHtml {
          */
         void build() throws MojoExecutionException {
 
-            ImageCopier.copyImages("html", FilenameUtils.getBaseName(m.getDocumentSrcName()),
-                    m.getDocumentSrcName(), m.getDocbkxModifiableSourcesDirectory(), m.getDocbkxOutputDirectory());
+            String documentSrcName = FilenameUtils.getBaseName(m.getDocumentSrcName());
+            try {
+                ImageCopier.copyImages("html", documentSrcName, m);
+            } catch (IOException e) {
+                throw new MojoExecutionException("Failed to copy images", e);
+            }
 
             for (String docName : m.getDocNames()) {
                 ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
