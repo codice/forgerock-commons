@@ -95,7 +95,7 @@ public class Zip {
                     plugin(
                             groupId("org.apache.maven.plugins"),
                             artifactId("maven-assembly-plugin"),
-                            version("2.4")),
+                            version(m.getMavenAssemblyVersion())),
                     goal("single"),
                     configuration(
                             element(name("finalName"), finalName),

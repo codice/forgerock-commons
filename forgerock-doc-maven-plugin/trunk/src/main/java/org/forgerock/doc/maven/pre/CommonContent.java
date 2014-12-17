@@ -116,7 +116,7 @@ public class CommonContent {
                     plugin(
                             groupId("org.apache.maven.plugins"),
                             artifactId("maven-dependency-plugin"),
-                            version("2.8")),
+                            version(m.getMavenDependencyVersion())),
                     goal("unpack"),
                     configuration(
                             element("artifactItems",

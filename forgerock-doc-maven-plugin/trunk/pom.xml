@@ -60,13 +60,31 @@
 
  <properties>
   <checkstyleHeaderLocation>${basedir}/src/main/resources/org/forgerock/checkstyle/mpl2-java-header</checkstyleHeaderLocation>
-  <docbkxVersion>2.0.15</docbkxVersion>
-  <jCiteVersion>1.13.0</jCiteVersion>
+
+  <mavenVersion>3.2.3</mavenVersion>
   <maven.compiler.source>1.6</maven.compiler.source>
   <maven.compiler.target>1.6</maven.compiler.target>
-  <mavenVersion>3.2.3</mavenVersion>
-  <mavenPluginPluginVersion>3.3</mavenPluginPluginVersion>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+  <!--
+       Versions of plugins driven by this plugin.
+
+       When adding to this list, update src/main/resources/versions.properties, too.
+  -->
+  <brandingVersion>3.0.0-SNAPSHOT</brandingVersion>
+  <commonContentVersion>3.0.0-SNAPSHOT</commonContentVersion>
+  <docbkxVersion>2.0.15</docbkxVersion>
+  <fopHyphVersion>1.2</fopHyphVersion>
+  <jCiteVersion>1.13.0</jCiteVersion>
+  <linkTesterVersion>1.2.0</linkTesterVersion>
+  <mavenAssembly>2.4</mavenAssembly>
+  <mavenDependencyVersion>2.8</mavenDependencyVersion>
+  <mavenPluginPluginVersion>3.3</mavenPluginPluginVersion>
+  <mavenResourcesVersion>2.5</mavenResourcesVersion>
+  <plantUmlVersion>7993</plantUmlVersion>
+  <plexusUtilsVersion>3.0.17</plexusUtilsVersion>
+  <xCiteVersion>1.0.0-SNAPSHOT</xCiteVersion>
+
  </properties>
 
  <dependencies>
@@ -149,7 +167,7 @@
   <dependency>
    <groupId>org.codehaus.plexus</groupId>
    <artifactId>plexus-utils</artifactId>
-   <version>3.0.17</version>
+   <version>${plexusUtilsVersion}</version>
   </dependency>
 
   <dependency>
@@ -232,7 +250,7 @@
     <plugin>
      <groupId>org.apache.maven.plugins</groupId>
      <artifactId>maven-dependency-plugin</artifactId>
-     <version>2.8</version>
+     <version>${mavenDependencyVersion}</version>
     </plugin>
 
     <plugin>
@@ -293,6 +311,23 @@
 
    </plugins>
   </pluginManagement>
+
+  <resources>
+   <resource>
+    <directory>src/main/resources</directory>
+    <filtering>true</filtering>
+    <includes>
+     <include>**/*.properties</include>
+    </includes>
+   </resource>
+   <resource>
+    <directory>src/main/resources</directory>
+    <filtering>false</filtering>
+    <excludes>
+     <exclude>**/*.properties</exclude>
+    </excludes>
+   </resource>
+  </resources>
 
   <plugins>
    <plugin>

@@ -280,7 +280,7 @@ public class Fo {
                                         dependency(
                                                 groupId("net.sf.offo"),
                                                 artifactId("fop-hyph"),
-                                                version("1.2")))),
+                                                version(m.getFopHyphVersion())))),
                         goal("generate-" + getFormat()),
                         configuration(cfg.toArray(new Element[cfg.size()])),
                         executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
