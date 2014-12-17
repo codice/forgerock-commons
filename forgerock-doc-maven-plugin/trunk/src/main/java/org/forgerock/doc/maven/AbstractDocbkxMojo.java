@@ -29,8 +29,11 @@ import org.forgerock.doc.maven.utils.NameUtils;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -39,6 +42,60 @@ import java.util.Set;
  * using <a href="http://code.google.com/p/docbkx-tools/">docbkx-tools</a>.
  */
 abstract public class AbstractDocbkxMojo extends AbstractMojo {
+
+    /**
+     * Versions of plugins driven by this plugin.
+     */
+    private Properties versions;
+
+    /**
+     * Load versions of plugins driven by this plugin.
+     */
+    private void loadVersions() {
+        versions = new Properties();
+        InputStream inputStream = null;
+
+        try {
+            inputStream = getClass().getResourceAsStream("/versions.properties");
+            if (inputStream == null) {
+                throw new IOException("Could not read properties resource");
+            }
+            versions.load(inputStream);
+        } catch (IOException e) {
+            getLog().error("Failed to read plugin version properties", e);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    // Ignore exception.
+                }
+            }
+        }
+    }
+
+    /**
+     * Get a version property based on the version properties file.
+     *
+     * <br>
+     *
+     * Prefer the current value if it is already set.
+     *
+     * @param currentValue  If not null or empty, then return this value.
+     * @param key           Otherwise return the value for this key.
+     * @return              The currentValue if set, otherwise the property.
+     */
+    private String getVersionProperty(String currentValue, String key) {
+        if (currentValue != null && !currentValue.isEmpty()) {
+            return currentValue;
+        }
+
+        if (versions == null) {
+            loadVersions();
+        }
+
+        return versions.getProperty(key);
+    }
 
     /**
      * Whether WinAnsi encoding be used for embedded fonts.
@@ -166,7 +223,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Version of the branding artifact to use.
      */
-    @Parameter(defaultValue = "3.0.0-SNAPSHOT")
+    @Parameter
     private String brandingVersion;
 
     /**
@@ -175,7 +232,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * @return The branding artifact version.
      */
     public String getBrandingVersion() {
-        return brandingVersion;
+        return getVersionProperty(brandingVersion, "brandingVersion");
     }
 
     /**
@@ -289,7 +346,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Version of the common content artifact to use.
      */
-    @Parameter(defaultValue = "3.0.0-SNAPSHOT")
+    @Parameter
     private String commonContentVersion;
 
     /**
@@ -298,7 +355,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * @return the version of the common content artifact to use.
      */
     public String getCommonContentVersion() {
-        return commonContentVersion;
+        return getVersionProperty(commonContentVersion, "commonContentVersion");
     }
 
     /**
@@ -383,7 +440,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Docbkx Tools plugin version to use.
      */
-    @Parameter(defaultValue = "2.0.15")
+    @Parameter
     private String docbkxVersion;
 
     /**
@@ -392,7 +449,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * @return The docbkx-tools plugin version to use
      */
     public String getDocbkxVersion() {
-        return docbkxVersion;
+        return getVersionProperty(docbkxVersion, "docbkxVersion");
     }
 
     /**
@@ -654,6 +711,20 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
+     * Version of the FOP hyphenation plugin to use.
+     */
+    @Parameter
+    private String fopHyphVersion;
+
+    /**
+     * Get the version of the FOP hyphenation plugin to use.
+     * @return The version of the FOP hyphenation plugin to use.
+     */
+    public String getFopHyphVersion() {
+        return getVersionProperty(fopHyphVersion, "fopHyphVersion");
+    }
+
+    /**
      * Supported output formats.
      */
     public enum Format {
@@ -831,7 +902,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * JCite version to use for code citations.
      */
-    @Parameter(defaultValue = "1.13.0")
+    @Parameter
     private String jCiteVersion;
 
     /**
@@ -840,7 +911,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * @return The JCite artifact version to use for Java code citations.
      */
     public String getJCiteVersion() {
-        return jCiteVersion;
+        return getVersionProperty(jCiteVersion, "jCiteVersion");
     }
 
     /**
@@ -880,7 +951,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * ForgeRock link tester plugin version to use.
      */
-    @Parameter(defaultValue = "1.2.0")
+    @Parameter
     private String linkTesterVersion;
 
     /**
@@ -889,7 +960,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * @return The link tester plugin version to use.
      */
     public String getLinkTesterVersion() {
-        return linkTesterVersion;
+        return getVersionProperty(linkTesterVersion, "linkTesterVersion");
     }
 
     /**
@@ -925,6 +996,51 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     @Parameter(defaultValue = "5")
     private int maxImageHeightInInches;
+
+    /**
+     * Version of the Maven assembly plugin to use.
+     */
+    @Parameter
+    private String mavenAssemblyVersion;
+
+    /**
+     * Get the version of the Maven dependency plugin to use.
+     * @return The version of the Maven dependency plugin to use.
+     */
+    public String getMavenAssemblyVersion() {
+        return getVersionProperty(mavenAssemblyVersion, "mavenAssemblyVersion");
+    }
+
+    /**
+     * Version of the Maven dependency plugin to use.
+     */
+    @Parameter
+    private String mavenDependencyVersion;
+
+    /**
+     * Get the version of the Maven dependency plugin to use.
+     * @return The version of the Maven dependency plugin to use.
+     */
+    public String getMavenDependencyVersion() {
+        return getVersionProperty(mavenDependencyVersion, "mavenDependencyVersion");
+    }
+
+    /**
+     * Maven resources plugin version.
+     * Executions seem to hit an NPE when the version is not specified.
+     */
+    @Parameter
+    private String mavenResourcesVersion;
+
+    /**
+     * Get the Maven resources plugin version.
+     * Executions seem to hit an NPE when the version is not specified.
+     *
+     * @return The Maven resources plugin version.
+     */
+    public String getMavenResourcesVersion() {
+        return getVersionProperty(mavenResourcesVersion, "mavenResourcesVersion");
+    }
 
     /**
      * Get maximum height for PNG images used in PDF, in inches.
@@ -1005,7 +1121,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Version of the PlantUML artifact to use.
      */
-    @Parameter(defaultValue = "7993")
+    @Parameter
     private String plantUmlVersion;
 
     /**
@@ -1014,13 +1130,13 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * @return The version of the PlantUML artifact.
      */
     public String getPlantUmlVersion() {
-        return plantUmlVersion;
+        return getVersionProperty(plantUmlVersion, "plantUmlVersion");
     }
 
     /**
      * The version of Plexus Utils used by the XCite Maven plugin.
      */
-    @Parameter(defaultValue = "3.0.17")
+    @Parameter
     private String plexusUtilsVersion;
 
     /**
@@ -1029,7 +1145,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * @return The version of Plexus Utils used by the XCite Maven plugin.
      */
     public String getPlexusUtilsVersion() {
-        return plexusUtilsVersion;
+        return getVersionProperty(plexusUtilsVersion, "plexusUtilsVersion");
     }
 
     /**
@@ -1190,23 +1306,6 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public final String getReleaseVersionPath() {
         return getReleaseDirectory().getPath() + File.separator + getReleaseVersion();
-    }
-
-    /**
-     * Maven resources plugin version.
-     * Executions seem to hit an NPE when the version is not specified.
-     */
-    @Parameter(defaultValue = "2.5")
-    private String resourcesVersion;
-
-    /**
-     * Get the Maven resources plugin version.
-     * Executions seem to hit an NPE when the version is not specified.
-     *
-     * @return The Maven resources plugin version.
-     */
-    public String getResourcesVersion() {
-        return resourcesVersion;
     }
 
     /**
@@ -1499,7 +1598,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Version of the XCite Maven plugin to use.
      */
-    @Parameter(defaultValue = "1.0.0-SNAPSHOT")
+    @Parameter
     private String xCiteVersion;
 
     /**
@@ -1508,7 +1607,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * @return The version of the XCite Maven plugin to use.
      */
     public String getXCiteVersion() {
-        return xCiteVersion;
+        return getVersionProperty(xCiteVersion, "xCiteVersion");
     }
 
     /**

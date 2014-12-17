@@ -115,7 +115,7 @@ public class Layout {
                     plugin(
                             groupId("org.apache.maven.plugins"),
                             artifactId("maven-resources-plugin"),
-                            version(m.getResourcesVersion())),
+                            version(m.getMavenResourcesVersion())),
                     goal("copy-resources"),
                     configuration(
                             element(name("encoding"), "UTF-8"),
