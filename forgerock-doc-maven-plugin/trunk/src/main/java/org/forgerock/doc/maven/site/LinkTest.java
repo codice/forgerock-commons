@@ -78,11 +78,6 @@ public class LinkTest {
                 return;
             }
 
-            // Check only preprocessed sources.
-            // This works with a relative path, not with an absolute path.
-            final String buildDirectory = getName(m.getBuildDirectory());
-            final String include = buildDirectory + "/**/" + m.getDocumentSrcName();
-
             final String log = m.path(new File(m.getDocbkxOutputDirectory(), "linktester.err"));
 
             // The list of URL patterns to skip can be extended by the configuration.
@@ -95,8 +90,13 @@ public class LinkTest {
                             version(m.getLinkTesterVersion())),
                     goal("check"),
                     configuration(
-                            element(name("includes"),
-                                    element(name("include"), include)),
+                            element(name("docSources"),
+                                    element(name("docSource"),
+                                            element(name("directory"),
+                                                    m.getBuildDirectory().getPath()),
+                                            element(name("includes"),
+                                                    element(name("include"),
+                                                            "**/" + m.getDocumentSrcName())))),
                             element(name("validating"), "true"),
                             element(name("skipUrls"), m.skipLinkCheck()),
                             element(name("xIncludeAware"), "true"),
@@ -104,16 +104,6 @@ public class LinkTest {
                             element(name("outputFile"), log),
                             skipUrlPatterns),
                     executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
-        }
-
-        /**
-         * Return the name of a file or directory relative to its parent.
-         *
-         * @param file  The file or directory.
-         * @return      The name of the file or directory relative to its parent.
-         */
-        private String getName(File file) {
-            return file.getPath().replace(file.getParent() + File.separator, "");
         }
 
         /**

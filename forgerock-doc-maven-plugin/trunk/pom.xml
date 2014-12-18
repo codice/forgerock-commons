@@ -87,7 +87,7 @@
   <docbkxVersion>2.0.15</docbkxVersion>
   <fopHyphVersion>1.2</fopHyphVersion>
   <jCiteVersion>1.13.0</jCiteVersion>
-  <linkTesterVersion>1.2.0</linkTesterVersion>
+  <linkTesterVersion>1.3.0-SNAPSHOT</linkTesterVersion>
   <mavenAssembly>2.4</mavenAssembly>
   <mavenDependencyVersion>2.8</mavenDependencyVersion>
   <mavenPluginPluginVersion>3.3</mavenPluginPluginVersion>
