@@ -153,11 +153,9 @@ The plugin has been tested with Maven 3.0.5, 3.1.1, 3.2.3.
 
 This fix replaces those settings with `<formats>`.
 
-**DOCS-225: Run docbook-linktester only on pre-processed DocBook files**
+**DOCS-233: Build plugin fails processing child module site**
 
-The fix assumes that the build directory is
-exactly one level below the project base directory,
-such as `${basedir}/target` or `${basedir}/build`.
+**DOCS-225: Run docbook-linktester only on pre-processed DocBook files**
 
 **DOCS-213: Linktester phase in doc build plugin fails to detect broken links**
 
