@@ -100,17 +100,17 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
-     * Whether WinAnsi encoding be used for embedded fonts.
+     * Whether to use WinAnsi encoding for embedded fonts.
+     * If {@code true}, then some UTF-8 characters cannot be used.
      */
-    @Parameter(defaultValue = "false")
-    private String ansi;
+    private String ansi = "false";
 
     /**
-     * Whether WinAnsi encoding be used for embedded fonts.
+     * Whether to use WinAnsi encoding for embedded fonts.
      *
      * <br>
      *
-     * Default: {@code false}
+     * Value: {@code false}
      *
      * @return Whether WinAnsi encoded should be used for embedded fonts.
      */
@@ -125,15 +125,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * docbkx-tools element: &lt;sectionAutolabel&gt;
      */
-    @Parameter(defaultValue = "true")
-    private String areSectionsAutolabeled;
+    private String areSectionsAutolabeled = "true";
 
     /**
      * Whether sections should have numeric labels.
      *
      * <br>
      *
-     * Default: {@code true}
+     * Value: {@code true}
      *
      * <br>
      *
@@ -287,8 +286,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * docbkx-tools element: &lt;htmlCustomization&gt;
      */
-    @Parameter(defaultValue = "docbkx-stylesheets/html/chunked.xsl")
-    private String chunkedHTMLCustomization;
+    private String chunkedHTMLCustomization = "docbkx-stylesheets/html/chunked.xsl";
 
     /**
      * Get the location of the chunked HTML XSL stylesheet customization file.
@@ -383,8 +381,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Base directory for the modifiable copy of DocBook XML source files,
      * relative to the build directory.
      */
-    @Parameter(defaultValue = "docbkx-sources")
-    private String docbkxModifiableSourcesDirectory;
+    private String docbkxModifiableSourcesDirectory = "docbkx-sources";
 
     /**
      * Get the base directory for the modifiable copy of DocBook XML source files.
@@ -392,7 +389,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * <br>
      *
-     * Default: {@code ${project.build.directory}/docbkx-sources}
+     * Value: {@code ${project.build.directory}/docbkx-sources}
      *
      * @return The base directory for the modifiable copy of DocBook XML source files.
      */
@@ -403,15 +400,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Base directory for built documentation, relative to the build directory.
      */
-    @Parameter(defaultValue = "docbkx")
-    private String docbkxOutputDirectory;
+    private String docbkxOutputDirectory = "docbkx";
 
     /**
      * Base directory for built documentation.
      *
      * <br>
      *
-     * Default: {@code ${project.build.directory}/docbkx}
+     * Value: {@code ${project.build.directory}/docbkx}
      *
      * @return The base directory for built documentation.
      */
@@ -558,8 +554,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * docbkx-tools element: &lt;sectionLabelIncludesComponentLabel&gt;
      */
-    @Parameter(defaultValue = "true")
-    private String doesSectionLabelIncludeComponentLabel;
+    private String doesSectionLabelIncludeComponentLabel = "true";
 
     /**
      * Whether section labels should include parent numbers,
@@ -567,7 +562,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * <br>
      *
-     * Default: {@code true}
+     * Value: {@code true}
      *
      * <br>
      *
@@ -629,8 +624,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * docbkx-tools element: &lt;epubCustomization&gt;
      */
-    @Parameter(defaultValue = "docbkx-stylesheets/epub/coredoc.xsl")
-    private String epubCustomization;
+    private String epubCustomization = "docbkx-stylesheets/epub/coredoc.xsl";
 
     /**
      * Get the location of the EPUB XSL stylesheet customization file.
@@ -672,15 +666,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * docbkx-tools element: &lt;foCustomization&gt;
      */
-    @Parameter(defaultValue = "docbkx-stylesheets/fo/coredoc.xsl")
-    private String foCustomization;
+    private String foCustomization = "docbkx-stylesheets/fo/coredoc.xsl";
 
     /**
      * Get the location of the FO XSL stylesheet customization file (for PDF, RTF).
      *
      * <br>
      *
-     * Default: {@code ${project.build.directory}/docbkx-stylesheets/fo/coredoc.xsl}
+     * Value: {@code ${project.build.directory}/docbkx-stylesheets/fo/coredoc.xsl}
      *
      * <br>
      *
@@ -696,15 +689,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Directory where fonts and font metrics are stored,
      * relative to the build directory.
      */
-    @Parameter(defaultValue = "fonts")
-    private String fontsDirectory;
+    private String fontsDirectory  = "fonts";
 
     /**
      * Directory where fonts and font metrics are stored.
      *
      * <br>
      *
-     * Default: {@code ${project.build.directory}/fonts}
+     * Value: {@code ${project.build.directory}/fonts}
      *
      * @return The directory where fonts and font metrics are stored.
      */
@@ -843,15 +835,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * docbkx-tools element: &lt;xincludeSupported&gt;
      */
-    @Parameter(defaultValue = "true")
-    private String isXincludeSupported;
+    private String isXincludeSupported = "true";
 
     /**
      * Whether documents should be allowed to include other documents.
      *
      * <br>
      *
-     * Default: {@code true}
+     * Value: {@code true}
      *
      * <br>
      *
@@ -866,15 +857,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * JavaScript file name, found under {@code /js/} in plugin resources.
      */
-    @Parameter(defaultValue = "uses-jquery.js")
-    private String javaScriptFileName;
+    private String javaScriptFileName = "uses-jquery.js";
 
     /**
      * Get the main JavaScript file name, found under {@code /js/} in plugin resources.
      *
      * <br>
      *
-     * Default: {@code uses-jquery.js}
+     * Value: {@code uses-jquery.js}
      *
      * @return The JavaScript file name.
      */
@@ -973,15 +963,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * docbkx-tools element: &lt;manpagesCustomization&gt;
      */
-    @Parameter(defaultValue = "docbkx-stylesheets/man/coredoc.xsl")
-    private String manpagesCustomization;
+    private String manpagesCustomization = "docbkx-stylesheets/man/coredoc.xsl";
 
     /**
      * Get the location of the man page XSL stylesheet customization file.
      *
      * <br>
      *
-     * Default: {@code ${project.build.directory}/docbkx-stylesheets/man/coredoc.xsl}
+     * Value: {@code ${project.build.directory}/docbkx-stylesheets/man/coredoc.xsl}
      *
      * <br>
      *
@@ -992,12 +981,6 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     public final File getManpagesCustomization() {
         return new File(getBuildDirectory(), manpagesCustomization);
     }
-
-    /**
-     * Maximum height for PNG images used in PDF, in inches.
-     */
-    @Parameter(defaultValue = "5")
-    private int maxImageHeightInInches;
 
     /**
      * Version of the Maven assembly plugin to use.
@@ -1043,6 +1026,12 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     public String getMavenResourcesVersion() {
         return getVersionProperty(mavenResourcesVersion, "mavenResourcesVersion");
     }
+
+    /**
+     * Maximum height for PNG images used in PDF, in inches.
+     */
+    @Parameter(defaultValue = "5")
+    private int maxImageHeightInInches;
 
     /**
      * Get maximum height for PNG images used in PDF, in inches.
@@ -1169,15 +1158,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * CSS file for the pre-site version of the HTML,
      * relative to the build directory.
      */
-    @Parameter(defaultValue = "coredoc.css")
-    private String preSiteCssFileName;
+    private String preSiteCssFileName = "coredoc.css";
 
     /**
      * Get the CSS file for the pre-site version of the HTML.
      *
      * <br>
      *
-     * Default: {@code ${project.build.directory}/coredoc.css}
+     * Value: {@code ${project.build.directory}/coredoc.css}
      *
      * @return The CSS file.
      */
@@ -1234,15 +1222,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * CSS file for the release version of the HTML,
      * relative to the build directory.
      */
-    @Parameter(defaultValue = "dfo.css")
-    private String releaseCssFileName;
+    private String releaseCssFileName = "dfo.css";
 
     /**
      * Get the CSS file for the release version of the HTML.
      *
      * <br>
      *
-     * Default: {@code ${project.build.directory}/dfo.css}
+     * Value: {@code ${project.build.directory}/dfo.css}
      *
      * @return The CSS file.
      */
@@ -1389,15 +1376,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * docbkx-tools element: &lt;htmlCustomization&gt;
      */
-    @Parameter(defaultValue = "/docbkx-stylesheets/html/coredoc.xsl")
-    private String singleHTMLCustomization;
+    private String singleHTMLCustomization = "/docbkx-stylesheets/html/coredoc.xsl";
 
     /**
      * Get the location of the single page HTML XSL stylesheet customization file.
      *
      * <br>
      *
-     * Default: {@code ${project.build.directory}/docbkx-stylesheets/html/coredoc.xsl}
+     * Value: {@code ${project.build.directory}/docbkx-stylesheets/html/coredoc.xsl}
      *
      * <br>
      *
@@ -1509,15 +1495,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * docbkx-tools element: &lt;highlightSource&gt;
      */
-    @Parameter(defaultValue = "1")
-    private String useSyntaxHighlighting;
+    private String useSyntaxHighlighting = "1";
 
     /**
      * Whether &lt;programlisting&gt; content has syntax highlighting.
      *
      * <br>
      *
-     * Default: {@code 1} (true)
+     * Value: {@code 1} (true)
      *
      * <br>
      *
@@ -1533,15 +1518,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Location of the main CSS for webhelp documents,
      * relative to the build directory.
      */
-    @Parameter(defaultValue = "docbkx-stylesheets/webhelp/positioning.css")
-    private String webhelpCss;
+    private String webhelpCss = "docbkx-stylesheets/webhelp/positioning.css";
 
     /**
      * Get the location of the main CSS file for webhelp documents.
      *
      * <br>
      *
-     * Default: {@code ${project.build.dir}/docbkx-stylesheets/webhelp/positioning.css}
+     * Value: {@code ${project.build.dir}/docbkx-stylesheets/webhelp/positioning.css}
      *
      * @return The main CSS file for webhelp documents.
      */
@@ -1557,15 +1541,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * docbkx-tools element: &lt;webhelpCustomization&gt;
      */
-    @Parameter(defaultValue = "docbkx-stylesheets/webhelp/coredoc.xsl")
-    private String webhelpCustomization;
+    private String webhelpCustomization = "docbkx-stylesheets/webhelp/coredoc.xsl";
 
     /**
      * Get the location of the webhelp XSL stylesheet customization file.
      *
      * <br>
      *
-     * Default: {@code ${project.build.dir}/docbkx-stylesheets/webhelp/coredoc.xsl}
+     * Value: {@code ${project.build.dir}/docbkx-stylesheets/webhelp/coredoc.xsl}
      *
      * <br>
      *
@@ -1581,15 +1564,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Location of the logo image for webhelp documents,
      * relative to the build directory.
      */
-    @Parameter(defaultValue = "docbkx-stylesheets/webhelp/logo.png")
-    private String webhelpLogo;
+    private String webhelpLogo = "docbkx-stylesheets/webhelp/logo.png";
 
     /**
      * Get the location of the logo image for webhelp documents.
      *
      * <br>
      *
-     * Default: {@code ${project.build.dir}/docbkx-stylesheets/webhelp/logo.png}
+     * Value: {@code ${project.build.dir}/docbkx-stylesheets/webhelp/logo.png}
      *
      * @return The logo image for webhelp documents.
      */
@@ -1620,15 +1602,14 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * docbkx-tools element: &lt;xhtml5Customization&gt;
      */
-    @Parameter(defaultValue = "docbkx-stylesheets/xhtml5/coredoc.xsl")
-    private String xhtml5Customization;
+    private String xhtml5Customization = "docbkx-stylesheets/xhtml5/coredoc.xsl";
 
     /**
      * Get the location of the FO XSL stylesheet customization file (for PDF, RTF).
      *
      * <br>
      *
-     * Default: {@code ${project.build.directory}/docbkx-stylesheets/fo/coredoc.xsl}
+     * Value: {@code ${project.build.directory}/docbkx-stylesheets/fo/coredoc.xsl}
      *
      * <br>
      *
