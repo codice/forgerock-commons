@@ -68,7 +68,7 @@ public class Manpage {
          * @throws MojoExecutionException Failed to build target database.
          */
         void prepareOlinkDB() throws MojoExecutionException {
-            // Not implemented yet.
+            // No plans to implement this for man pages.
         }
 
         /**

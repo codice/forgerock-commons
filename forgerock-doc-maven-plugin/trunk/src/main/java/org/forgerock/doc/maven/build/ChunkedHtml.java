@@ -16,18 +16,16 @@
 
 package org.forgerock.doc.maven.build;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
 import org.forgerock.doc.maven.utils.ImageCopier;
+import org.forgerock.doc.maven.utils.OLinkUtils;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * Build chunked HTML output.
@@ -65,69 +63,23 @@ public class ChunkedHtml {
     }
 
     /**
-     * Get absolute path to a temporary Olink target database XML document
+     * Get absolute path to an Olink target database XML document
      * that points to the individual generated Olink DB files,
      * for chunked HTML.
      *
-     * @return Absolute path to the temporary file
+     * @return Absolute path to the file.
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
         File targetDB = new File(m.getBuildDirectory(), "olinkdb-chunked-html.xml");
 
         try {
-            StringBuilder content = new StringBuilder();
-            content.append("<?xml version='1.0' encoding='utf-8'?>\n")
-                    .append("<!DOCTYPE targetset [\n");
-
-            String targetDbDtd = IOUtils.toString(getClass()
-                    .getResourceAsStream("/targetdatabase.dtd"));
-            content.append(targetDbDtd).append("\n");
-
-            final Set<String> docNames = m.getDocNames();
-
-            for (String docName : docNames) {
-/*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
-                String sysId = getBuildDirectory().getAbsolutePath()
-                        + File.separator + docName + "-chunked.target.db";
-*/
-                String sysId = m.getBaseDir().getAbsolutePath() + "/target/docbkx/html/"
-                        + docName + "/index.html.target.db";
-
-                content.append("<!ENTITY ").append(docName)
-                        .append(" SYSTEM '").append(sysId).append("'>\n");
-            }
-
-            content.append("]>\n")
-
-                    .append("<targetset>\n")
-                    .append(" <targetsetinfo>Target DB for DocBook content,\n")
-                    .append(" for use with chunked HTML only.</targetsetinfo>\n")
-                    .append(" <sitemap>\n")
-                    .append("  <dir name='doc'>\n");
-
-            String baseName = FilenameUtils.getBaseName(m.getDocumentSrcName());
-            for (String docName : docNames) {
-                content.append("   <dir name='").append(docName).append("'>\n")
-                        .append("    <dir name='").append(baseName).append("'>\n")
-                        .append("     <document targetdoc='").append(docName).append("'\n")
-                        .append("               baseuri='../../")
-                        .append(docName).append("/").append(baseName).append("/'>\n")
-                        .append("      &").append(docName).append(";\n")
-                        .append("     </document>\n")
-                        .append("    </dir>\n")
-                        .append("   </dir>\n");
-            }
-
-            content.append("  </dir>\n")
-                    .append(" </sitemap>\n")
-                    .append("</targetset>\n");
-
-            FileUtils.writeStringToFile(targetDB, content.toString());
-        } catch (IOException e) {
+            OLinkUtils.createTargetDatabase(targetDB, "html", m, true);
+        } catch (Exception e) {
             throw new MojoExecutionException(
-                    "Failed to write link target database: " + e.getMessage());
+                    "Failed to write link target database: " + targetDB.getPath(), e);
         }
+
         return targetDB.getPath();
     }
 
