@@ -1,6 +1,6 @@
 # DRAFT IN PROGRESS
 
-Latest release is 2.1.4. These are draft release notes.
+Latest release is 2.1.5. These are draft release notes.
 
 
 # ForgeRock Documentation Tools 3.0.0 Release Notes
@@ -43,6 +43,9 @@ See the README for this version for details.
 The fix for DOCS-240 replaces configuration parameters
 `<include>` and `<excludes>` with `<formats>`.
 
+The fix for DOCS-239 eliminates configuration settings
+not generally set by any projects using the plugin.
+
 The fix for DOCS-237 introduces a new configuration parameter, `<skipUrlPatterns>`.
 
 The fix for DOCS-215 introduces a new configuration parameter,
@@ -61,6 +64,39 @@ ForgeRock doc build tools have moved to CDDL to align with other ForgeRock proje
 
 
 ## What's New
+
+**DOCS-239: Reduce the list of configuration settings**
+
+This change removes these configuration settings, relying instead on the default values:
+
+*   `<ansi>`: `true`
+*   `<areSectionsAutolabeled>`: `true`
+*   `<chunkedHTMLCustomization>`: `${project.build.directory}/docbkx-stylesheets/html/chunked.xsl`
+*   `<docbkxModifiableSourcesDirectory>`: `${project.build.directory}/docbkx-sources`
+*   `<docbkxOutputDirectory>`: `${project.build.directory}/docbkx`
+*   `<doesSectionLabelIncludeComponentLabel>`: `true`
+*   `<epubCustomization>`: `${project.build.directory}/docbkx-stylesheets/epub/coredoc.xsl`
+*   `<foCustomization>`: `${project.build.directory}/docbkx-stylesheets/fo/coredoc.xsl`
+*   `<fontsDirectory>`: `${project.build.directory}/fonts`
+*   `<isXincludeSupported>`: `true`
+*   `<javaScriptFileName>`: `uses-jquery.js`
+*   `<manpagesCustomization>`: `${project.build.directory}/docbkx-stylesheets/man/coredoc.xsl`
+*   `<preSiteCssFileName>`: `${project.build.directory}/coredoc.css`
+*   `<releaseCssFileName>`: `${project.build.directory}/dfo.css`
+*   `<singleHTMLCustomization>`: `${project.build.directory}/docbkx-stylesheets/html/coredoc.xsl`
+*   `<useSyntaxHighlighting>`: `1` (true)
+*   `<webhelpCss>`: `${project.build.dir}/docbkx-stylesheets/webhelp/positioning.css`
+*   `<webhelpCustomization>`: `${project.build.dir}/docbkx-stylesheets/webhelp/coredoc.xsl`
+*   `<webhelpLogo>`: `${project.build.dir}/docbkx-stylesheets/webhelp/logo.png`
+*   `<xhtml5Customization>`: `${project.build.directory}/docbkx-stylesheets/fo/coredoc.xsl`
+
+This change effectively reserves `${project.build.directory}/docbkx*` for use by this plugin.
+This plugin uses `${project.build.directory}/fonts`,
+`${project.build.directory}/coredoc.css` and `${project.build.directory}/dfo.css`.
+
+This change also constrains the stylesheet names and layouts
+that custom branding artifacts can use.
+
 
 **DOCS-237: Provide a configuration parameter for passing skipUrl regexes**
 
@@ -93,7 +129,7 @@ plus syntax highlighting.
 
 XHTML5 is not built automatically. Specify the format as an include.
 
-    mvn -Dinclude=xhtml5 clean pre-site
+    mvn -Dformats=xhtml5 clean pre-site
 
 The resulting documents are single pages, not chunked.
 
