@@ -11,16 +11,15 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- *       Copyright 2013-2014 ForgeRock AS.
+ *       Copyright 2013-2015 ForgeRock AS.
  */
 
 package org.forgerock.contactmanager;
 
 import static android.text.TextUtils.isEmpty;
 import static org.forgerock.contactmanager.AppContext.*;
-import static org.forgerock.contactmanager.Constants.ALL_SERVER_CONFIGURATIONS;
-import static org.forgerock.contactmanager.Constants.SELECTED_SERVER_CONFIGURATION;
-import static org.forgerock.contactmanager.MapperConstants.RESULT;
+import static org.forgerock.contactmanager.Constants.*;
+import static org.forgerock.contactmanager.MapperConstants.*;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -307,5 +306,27 @@ public final class Utils {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Saves the active filter used by search in shared preferences.
+     *
+     * @param filterName
+     *            The filter name to save.
+     * @return Returns {@code true} if the server configuration is saved.
+     */
+    static final void saveSearchFilter(final String filterName) {
+        final Editor edit = getPref().edit();
+        edit.putString(SELECTED_FILTER, filterName);
+        edit.commit();
+    }
+
+    /**
+     * Loads the active filter from shared preferences.
+     *
+     * @return The active filter.
+     */
+    static final String loadSearchFilter() {
+        return getPref().getString(SELECTED_FILTER, Filter.START_WITH.getName());
     }
 }

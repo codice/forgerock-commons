@@ -43,6 +43,7 @@
     <string name="action_about">A propos</string>
     <string name="action_settings">Paramètres</string>
     <string name="action_search">Rechercher</string>
+    <string name="action_filter">Filtre de recherche</string>
 
     <!-- Server wizard part 1 -->
     <string name="sw1_image_title">Nouveau server</string>
@@ -77,5 +78,13 @@
     <string name="warning_selected_server">%s est defini comme serveur par défaut</string>
     <string name="warning_call_number">Appeler %s?</string>
     <string name="warning_no_result_found">Aucun résultat</string>
+    
+    <!-- Filter dialog box -->
+    <string name="menu_filter_label">Choisir un filtre de recherche</string>
+    <!-- Filter descriptions -->
+    <string name="filter_start_with">Prénoms ou noms commencant par les mots clés</string>
+    <string name="filter_exact_match">Prénoms et noms correspondant exactement aux mots-clés</string>
+    <string name="filter_function">Recherche par poste</string>
+    <string name="filter_manager">Recherche par manager</string>
 
 </resources>

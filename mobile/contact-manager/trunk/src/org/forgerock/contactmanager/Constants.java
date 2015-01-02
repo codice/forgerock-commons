@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- *       Copyright 2013-2014 ForgeRock AS.
+ *       Copyright 2013-2015 ForgeRock AS.
  */
 
 package org.forgerock.contactmanager;
@@ -25,8 +25,6 @@ final class Constants {
     static final int DEFAULT_ID_PICTURE = R.drawable.avatar_male_gray_frame_200x200;
 
     static final String SEARCH_SPECIFICUSER_BY_ID = "/users/%s";
-    static final String FILTER_FAMILYNAME_STARTSWITH =
-        "/users?_queryFilter=name/familyName+sw+\"%s\"+or+name/givenName+sw+\"%s\"";
 
     /** Pagination. */
     static final int PAGED_RESULT = 8;
@@ -36,6 +34,7 @@ final class Constants {
     /** Internal use. */
     static final String ALL_SERVER_CONFIGURATIONS = "srvconf";
     static final String SELECTED_SERVER_CONFIGURATION = "selectedsrvconf";
+    static final String SELECTED_FILTER = "selectedfilter";
     static final String PREF_NAME_APPLICATION = "OPENDJ";
     static final String PREF_STORAGE_APPLICATION = "ContactManagerCache";
 

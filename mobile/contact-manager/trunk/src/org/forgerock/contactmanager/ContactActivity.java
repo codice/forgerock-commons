@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- *       Copyright 2013-2014 ForgeRock AS.
+ *       Copyright 2013-2015 ForgeRock AS.
  *       Fancy Avatars, © 2009 Brandon Mathis, http://brandonmathis.com/projects/fancy-avatars/
  */
 
@@ -313,7 +313,7 @@ public class ContactActivity extends AugmentedActivity {
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         final MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.search, menu);
+        inflater.inflate(R.menu.contact, menu);
 
         return true;
     }
@@ -321,9 +321,9 @@ public class ContactActivity extends AugmentedActivity {
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int itemId = item.getItemId();
-        if (itemId == R.id.search_action_settings) {
+        if (itemId == R.id.contact_action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
-        } else if (itemId == R.id.search_action_about) {
+        } else if (itemId == R.id.contact_action_about) {
             startActivity(new Intent(this, AboutActivity.class));
         }
         return true;
