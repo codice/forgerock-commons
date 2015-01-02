@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- *       Copyright 2013-2014 ForgeRock AS.
+ *       Copyright 2013-2015 ForgeRock AS.
  */
 
 package org.forgerock.contactmanager;
@@ -21,15 +21,18 @@ import static android.view.KeyEvent.*;
 import static android.view.ViewGroup.LayoutParams.*;
 import static java.lang.String.*;
 import static java.text.Normalizer.*;
+import static java.util.Arrays.*;
 import static org.forgerock.contactmanager.Constants.*;
 import static org.forgerock.contactmanager.MapperConstants.*;
 import static org.forgerock.contactmanager.PagedResultCookie.*;
+import static org.forgerock.contactmanager.Utils.*;
 
 import java.text.Normalizer.Form;
 import java.util.List;
 
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -48,6 +51,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 /**
  * This class is main activity of this application.
@@ -80,6 +85,11 @@ public class SearchActivity extends AugmentedActivity {
      * List view footer.
      */
     LinearLayout footer;
+
+    /** The filters alert dialog. */
+    AlertDialog fDialog;
+
+    private List<Filter> filters;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -147,8 +157,47 @@ public class SearchActivity extends AugmentedActivity {
             startActivity(new Intent(this, SettingsActivity.class));
         } else if (itemId == R.id.search_action_about) {
             startActivity(new Intent(this, AboutActivity.class));
+        } else if (itemId == R.id.search_action_filters) {
+            fDialog = new AlertDialog.Builder(this).create();
+            fDialog.setTitle(R.string.menu_filter_label);
+            fDialog.setView(createFiltersSubMenuView());
+            fDialog.show();
         }
         return true;
+    }
+
+    private View createFiltersSubMenuView() {
+        final RadioGroup filterGroup = new RadioGroup(this);
+        filterGroup.setOrientation(RadioGroup.VERTICAL);
+        if (filters == null) {
+            filters = asList(Filter.values());
+        }
+        for (final Filter f : filters) {
+            final RadioButton rb = new RadioButton(this);
+            rb.setTextSize(10);
+            rb.setText(f.getDescription());
+            rb.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    filterGroup.clearCheck();
+                    rb.setChecked(true);
+                    saveSearchFilter(f.getName());
+                    fDialog.dismiss();
+                }
+            });
+
+            filterGroup.addView(rb);
+            if (loadSearchFilter().equals(f.getName())) {
+                filterGroup.check(rb.getId());
+            }
+        }
+
+        final LinearLayout layout = new LinearLayout(getApplicationContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(filterGroup);
+
+        return layout;
     }
 
     void displayContactList(final JSONObject contactList) {
@@ -223,7 +272,8 @@ public class SearchActivity extends AugmentedActivity {
 
     private String getFilterRequest(final String searchValue) {
         final String encodedValue = Utils.getURLEncoded(searchValue);
-        return format(FILTER_FAMILYNAME_STARTSWITH, encodedValue, encodedValue);
+        final Filter filter = Filter.forName(loadSearchFilter());
+        return format(filter.getExpression(), encodedValue, encodedValue);
     }
 
     private void speechRecognizer() {

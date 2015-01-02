@@ -1,20 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:compat="http://schemas.android.com/apk/res-auto" >
     <item
-        android:id="@+id/search_action_settings"
+        android:id="@+id/contact_action_settings"
         android:icon="@drawable/ic_action_settings"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
         android:title="@string/action_settings"/>
     <item
-        android:id="@+id/search_action_filters"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_filter"/>
-    <item
-        android:id="@+id/search_action_about"
+        android:id="@+id/contact_action_about"
         android:icon="@drawable/ic_action_about"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        android:showAsAction="ifRoom"
         android:title="@string/action_about"/>
 </menu>
