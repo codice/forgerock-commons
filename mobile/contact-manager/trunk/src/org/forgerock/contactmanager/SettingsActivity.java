@@ -11,13 +11,12 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- *       Copyright 2013-2014 ForgeRock AS.
+ *       Copyright 2013-2015 ForgeRock AS.
  */
 
 package org.forgerock.contactmanager;
 
-import static android.widget.Toast.LENGTH_SHORT;
-import static android.widget.Toast.makeText;
+import static android.widget.Toast.*;
 import static org.forgerock.contactmanager.Utils.*;
 
 import android.app.AlertDialog;
@@ -59,7 +58,8 @@ public class SettingsActivity extends AugmentedActivity {
 
         final List<ServerConfiguration> servers = loadRegisteredServerList();
         final TextView tvSrvAddress = (TextView) findViewById(R.id.settings_selected_server_address_content);
-        final TextView tvAuthentication = (TextView) findViewById(R.id.settings_selected_authentication_content);
+        final TextView tvAuthentication =
+                (TextView) findViewById(R.id.settings_selected_authentication_content);
 
         final SpinnerAdapter adapter = new ServerListAdapter(this, servers);
         serverSpinner.setAdapter(adapter);
