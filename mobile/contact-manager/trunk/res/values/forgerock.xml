@@ -30,10 +30,6 @@
         <item name="android:background">#131518</item>
     </style>
 
-    <style name="Spinner" parent="@android:style/Widget.Spinner">
-        <item name="android:textColor">@color/black</item>
-    </style>
-
     <style name="contactTitle">
         <item name="android:textColor">@color/textPrimaryColor</item>
         <item name="android:textSize">@dimen/defaultTitleSize</item>
@@ -91,10 +87,6 @@
         <item name="android:background">@color/transparent</item>
         <item name="android:drawablePadding">10sp</item>
         <item name="android:height">20sp</item>
-    </style>
-
-    <style name="SpinnerServers">
-        <item name="android:background">@color/black</item>
     </style>
 
     <style name="BottomBarLayout">

@@ -64,7 +64,6 @@
 
             <Spinner
                 android:id="@+id/settings_spinner_servers"
-                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
 
