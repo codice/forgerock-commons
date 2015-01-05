@@ -624,13 +624,13 @@ PresenceExpr   = Pointer 'pr'
 LiteralExpr    = 'true' | 'false'
 Pointer        = JSON pointer
 OpName         = 'eq' |  # equal to
-'co' |  # contains
-'sw' |  # starts with
-'lt' |  # less than
-'le' |  # less than or equal to
-'gt' |  # greater than
-'ge' |  # greater than or equal to
-STRING  # extended operator
+                 'co' |  # contains
+                 'sw' |  # starts with
+                 'lt' |  # less than
+                 'le' |  # less than or equal to
+                 'gt' |  # greater than
+                 'ge' |  # greater than or equal to
+                 STRING  # extended operator
 JsonValue      = NUMBER | BOOLEAN | '"' UTF8STRING '"'
 STRING         = ASCII string not containing white-space
 UTF8STRING     = UTF-8 string possibly containing white-space
