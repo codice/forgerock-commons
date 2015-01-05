@@ -208,6 +208,7 @@
   <simplelist>
    <member><literal>_action</literal></member>
    <member><literal>_fields</literal></member>
+   <member><literal>_mimeType</literal></member>
    <member><literal>_pageSize</literal></member>
    <member><literal>_pagedResultsCookie</literal></member>
    <member><literal>_pagedResultsOffset</literal></member>
@@ -360,6 +361,28 @@ Accept: application/json
     <listitem>
      <para>
       Return only the specified fields in the body of the response.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><literal>_mimeType=<replaceable>mime-type</replaceable></literal></term>
+    <listitem>
+     <para>
+      Some resources have fields whose values are multi-media resources
+      such as a profile photo for example.
+     </para>
+
+     <para>
+      By specifying both a single <replaceable>field</replaceable>
+      and also the <replaceable>mime-type</replaceable> for the response content,
+      you can read a single field value that is a multi-media resource.
+     </para>
+
+     <para>
+      In this case, the content type of the field value returned
+      matches the <replaceable>mime-type</replaceable> that you specify,
+      and the body of the response is the multi-media resource.
      </para>
     </listitem>
    </varlistentry>
