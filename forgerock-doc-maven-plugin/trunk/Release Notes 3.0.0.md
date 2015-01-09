@@ -26,8 +26,9 @@ As a result, you should no doubt remove links to in-progress RTF documents.
 
 The fix for DOCS-108 is a major refactoring of the doc Maven plugin.
 
-As a result of the refactoring, the plugin now has only three goals:
+As a result of the refactoring, the plugin now has these goals:
 
+*   A `pre-site` phase `process` goal to pre-process documents
 *   A `pre-site` phase `build` goal to generate output
 *   A `site` phase `site` goal to copy documents to a site layout
 *   A `site` phase `release` goal to copy documents to a release layout
@@ -48,8 +49,8 @@ not generally set by any projects using the plugin.
 
 The fix for DOCS-237 introduces a new configuration parameter, `<skipUrlPatterns>`.
 
-The fix for DOCS-215 introduces a new configuration parameter,
-`<stopAfterPreProcessing>`, to interrupt output generation.
+The fix for DOCS-216 introduces a new configuration parameter,
+`<doCreateArtifacts>`, to build artifacts from pre-processed sources.
 See the explanation below for details.
 
 Due to changes in the plugin architecture,
@@ -103,16 +104,50 @@ that custom branding artifacts can use.
 This introduces a `<skipUrlPatterns>` parameter
 that mirrors the one provided by `docbook-linktester`.
 
+**DOCS-216: Provide pre-processed sources as Maven artifacts**
+
+Unless you set `<doCreateArtifacts>` to `false`,
+the plugin builds a Maven artifact from pre-processed documentation sources.
+
+The resulting artifact is named `artifactId-version-doc-sources.jar`,
+where `artifactId` and `version` are those of your project,
+and the classifier is `doc-sources`.
+
+When building output directly from pre-processed sources,
+use the Maven dependency plugin to retrieve and unpack the sources
+before you call this plugin.
+
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <executions>
+        <execution>
+          <goals>
+            <goal>unpack</goal>
+          </goals>
+          <phase>pre-site</phase>
+          <configuration>
+            <artifactItems>
+              <artifactItem>
+                <groupId>${myGroupId}</groupId>
+                <artifactId>${myArtifactId}</artifactId>
+                <version>${myVersion}</version>
+                <classifier>doc-sources</classifier>
+                <outputDirectory>${project.build.directory}/db-src</outputDirectory>
+              </artifactItem>
+            </artifactItems>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+
+Skip the `process` goal in the configuration for this plugin,
+and instead specify `<docbkxSourceDirectory>` to pick up the pre-processed files.
+
+
 **DOCS-215: Add configuration for stopping at pre-processed DocBook**
 
-This improvement introduces a boolean configuration parameter,
-`<stopAfterPreProcessing>` (default: `false`).
-
-When `<stopAfterPreProcessing>` is set to `true`,
-the build stops when DocBook XML requires no further pre-processing.
-The plugin logs a message indicating where to find the pre-processed files:
-
-    [INFO] Pre-processed sources are available under ...
+Superseded by DOCS-216.
 
 **DOCS-203: Provide a convention for copying arbitrary files to the built documentation**
 
@@ -237,4 +272,4 @@ the License file at legal/CDDLv1.0.txt. If applicable, add the following below t
 Header, with the fields enclosed by brackets [] replaced by your own identifying
 information: "Portions copyright [year] [name of copyright owner]".
 
-Copyright 2014 ForgeRock AS
+Copyright 2014-2015 ForgeRock AS

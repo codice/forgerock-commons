@@ -19,9 +19,10 @@ _This document covers functionality present in 3.0.0-SNAPSHOT._
 
 The project runs multiple plugin executions:
 
-1.  A `pre-site` phase `build` goal to format documents (HTML, PDF, etc.)
-2.  A `site` phase `site` goal to lay out documents in site format
-2.  A `site` phase `release` goal to lay out documents in release format
+1.  A `pre-site` phase `process` goal to pre-process documents.
+2.  A `pre-site` phase `build` goal to format documents (HTML, PDF, etc.)
+3.  A `site` phase `site` goal to lay out documents in site format
+4.  A `site` phase `release` goal to lay out documents in release format
 
 With centralized configuration handled by this Maven plugin,
 the overall configuration requires at least these arguments:
@@ -52,6 +53,13 @@ You call the plugin from your `pom.xml` as in the following example.
         <googleAnalyticsId>${googleAnalyticsId}</googleAnalyticsId>
        </configuration>
        <executions>
+        <execution>
+         <id>pre-process-doc</id>
+         <phase>pre-site</phase>
+         <goals>
+          <goal>process</goal>
+         </goals>
+        </execution>
         <execution>
          <id>build-doc</id>
          <phase>pre-site</phase>
@@ -328,13 +336,38 @@ on the `<programlisting>` element, as in the following example:
     </programlisting>
 
 
-## Pre-processing Sources Only
+## Building Documentation from Pre-Processed Sources
 
-When you set `<stopAfterPreProcessing>` to `true`,
-the build stops once DocBook XML requires no further pre-processing.
-The plugin logs a message indicating where to find the pre-processed files:
+When building output directly from pre-processed sources,
+use the Maven dependency plugin to retrieve and unpack the sources
+before you call this plugin.
 
-    [INFO] Pre-processed sources are available under ...
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <phase>pre-site</phase>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${myGroupId}</groupId>
+                  <artifactId>${myArtifactId}</artifactId>
+                  <version>${myVersion}</version>
+                  <classifier>doc-sources</classifier>
+                  <outputDirectory>${project.build.directory}/db-src</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+Skip the `process` goal in the configuration for this plugin,
+and instead specify `<docbkxSourceDirectory>` to pick up the pre-processed files.
 
 
 ## Copying Arbitrary Documentation Set Resources
@@ -503,4 +536,4 @@ the License file at legal/CDDLv1.0.txt. If applicable, add the following below t
 Header, with the fields enclosed by brackets [] replaced by your own identifying
 information: "Portions copyright [year] [name of copyright owner]".
 
-Copyright 2012-2014 ForgeRock AS
+Copyright 2012-2015 ForgeRock AS

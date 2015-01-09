@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS
  */
 
 package org.forgerock.doc.maven;
@@ -375,6 +375,25 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public boolean doCopyResourceFiles() {
         return copyResourceFiles;
+    }
+
+    /**
+     * Whether to build artifacts from pre-processed sources.
+     */
+    @Parameter(defaultValue = "true")
+    private boolean createArtifacts;
+
+    /**
+     * Whether to build artifacts from pre-processed sources.
+     *
+     * <br>
+     *
+     * Default: true
+     *
+     * @return true if artifacts should be build from pre-processed sources.
+     */
+    public boolean doCreateArtifacts() {
+        return createArtifacts;
     }
 
     /**
@@ -1467,25 +1486,6 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public String[] getSkipUrlPatterns() {
         return skipUrlPatterns;
-    }
-
-    /**
-     * Whether to stop execution after pre-processing source files.
-     */
-    @Parameter(defaultValue = "false", property = "stopAfterPreProcessing")
-    private boolean stopAfterPreProcessing;
-
-    /**
-     * Whether to stop execution after pre-processing source files.
-     *
-     * <br>
-     *
-     * Default: {@code false}
-     *
-     * @return True if execution should stop after pre-processing. False otherwise.
-     */
-    public boolean stopAfterPreProcessing() {
-        return stopAfterPreProcessing;
     }
 
     /**
