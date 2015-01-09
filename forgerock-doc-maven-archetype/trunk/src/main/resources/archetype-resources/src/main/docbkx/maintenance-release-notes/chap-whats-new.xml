@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ! CCPL HEADER START
+  !
+  ! This work is licensed under the Creative Commons
+  ! Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+  ! To view a copy of this license, visit
+  ! http://creativecommons.org/licenses/by-nc-nd/3.0/
+  ! or send a letter to Creative Commons, 444 Castro Street,
+  ! Suite 900, Mountain View, California, 94041, USA.
+  !
+  ! You can also obtain a copy of the license at legal-notices/CC-BY-NC-ND.txt.
+  ! See the License for the specific language governing permissions
+  ! and limitations under the License.
+  !
+  ! If applicable, add the following below this CCPL HEADER, with the fields
+  ! enclosed by brackets "[]" replaced with your own identifying information:
+  !      Portions Copyright [yyyy] [name of copyright owner]
+  !
+  ! CCPL HEADER END
+  !
+  !      Copyright 2014-2015 ForgeRock AS
+  !    
+-->
+<chapter xml:id="chap-whats-new"
+         xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://docbook.org/ns/docbook
+                             http://docbook.org/xml/5.0/xsd/docbook.xsd"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+ <title>What's New in ${projectVersion}</title>
+
+ <important>
+  <para>
+   ${projectName} ${projectVersion} is a maintenance release
+   that resolves a number of issues, including security issues.
+   It is strongly recommended that you update to this release
+   to make your deployment more secure,
+   and to take advantage of important functional fixes.
+   ForgeRock customers can contact support for help and further information.
+  </para>
+ </important>
+
+ <para>
+  Before you install or update ${projectName}, read these release notes.
+ </para>
+
+ <section xml:id="new-features">
+  <title>Feature Changes</title>
+
+  <itemizedlist>
+   <para>
+    Release ${projectVersion} provides the following new features.
+   </para>
+
+   <listitem>
+    <para>
+     TODO: Update for the next release
+    </para>
+   </listitem>
+
+  </itemizedlist>
+
+  <!-- Alternative for a maintenance release with no changes to user interfaces: -->
+  <para>
+   This maintenance release fixes issues only. It introduces no new features.
+  </para>
+ </section>
+
+ <section xml:id="documentation">
+  <title>${projectName} Documentation</title>
+
+  <para>
+   You can find the following product documentation online.
+   This is the latest published documentation
+   that corresponds to this maintenance release.
+  </para>
+
+  <itemizedlist>
+   <!-- Link to the existing major/minor release documentation. -->
+
+   <listitem>
+    <para>
+     <link
+      xlink:href="http://docs.forgerock.org/..."
+      xlink:show="new"
+     ><citetitle>Document Title</citetitle></link>
+    </para>
+   </listitem>
+
+  </itemizedlist>
+ </section>
+</chapter>
