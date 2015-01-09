@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS
+ * Copyright 2014-2015 ForgeRock AS
  */
 
 package org.forgerock.doc.maven;
@@ -37,13 +37,6 @@ public class SiteMojo extends AbstractDocbkxMojo {
      */
     @Override
     public void execute() throws MojoExecutionException {
-
-        // When not producing final output, but only preprocessed XML,
-        // we can interrupt processing now.
-        if (stopAfterPreProcessing()) {
-            return;
-        }
-
         new Layout(this).execute();
         new Htaccess(this).execute();
         new Redirect(this).execute();

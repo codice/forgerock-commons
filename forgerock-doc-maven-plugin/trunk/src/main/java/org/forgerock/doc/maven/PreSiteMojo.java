@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS
  */
 
 package org.forgerock.doc.maven;
@@ -33,17 +33,7 @@ import org.forgerock.doc.maven.post.NoOp;
 import org.forgerock.doc.maven.post.WebhelpPost;
 import org.forgerock.doc.maven.post.Xhtml;
 import org.forgerock.doc.maven.pre.Branding;
-import org.forgerock.doc.maven.pre.CommonContent;
-import org.forgerock.doc.maven.pre.CurrentDocId;
-import org.forgerock.doc.maven.pre.CustomCss;
-import org.forgerock.doc.maven.pre.Dpi;
-import org.forgerock.doc.maven.pre.Filter;
 import org.forgerock.doc.maven.pre.Fop;
-import org.forgerock.doc.maven.pre.ImageData;
-import org.forgerock.doc.maven.pre.JCite;
-import org.forgerock.doc.maven.pre.ModifiableCopy;
-import org.forgerock.doc.maven.pre.PlantUml;
-import org.forgerock.doc.maven.pre.XCite;
 
 import java.util.List;
 
@@ -62,51 +52,20 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
 
-        if (getBuildDirectory() == null) {
-            throw new MojoExecutionException("No build directory available.");
+        // Must start with pre-processed sources.
+        if (getDocbkxModifiableSourcesDirectory() == null
+                || !getDocbkxModifiableSourcesDirectory().exists()) {
+            throw new MojoExecutionException("Preprocessed sources unavailable.");
         }
 
-        if (!getBuildDirectory().exists()) {
-            if (!getBuildDirectory().mkdir()) {
-                throw new MojoExecutionException("Could not create build directory");
-            }
-        }
+        // Prepare for build.
+        new Branding(this).execute();
 
         final List<Format> formats = getFormats();
-
-        // Perform pre-processing.
-        new Branding(this).execute();
-        new ModifiableCopy(this).execute();
-        new CommonContent(this).execute();
-        new JCite(this).execute();
-        new XCite(this).execute();
-        new Filter(this).execute();
-        new ImageData(this).execute();
-        new PlantUml(this).execute();
-
-        if (formats.contains(Format.pdf) || formats.contains(Format.rtf)) {
-            new Dpi(this).execute();
-        }
-
-        new CurrentDocId(this).execute();
 
         if (formats.contains(Format.pdf) || formats.contains(Format.rtf)) {
             new Fop(this).execute();
         }
-        if (formats.contains(Format.html)) {
-            new CustomCss(this).execute();
-        }
-
-
-        // When not producing final output, but only preprocessed XML,
-        // we can interrupt processing now.
-        if (stopAfterPreProcessing()) {
-            getLog().info(
-                    "Pre-processed sources are available under "
-                            + getDocbkxModifiableSourcesDirectory().getPath());
-            return;
-        }
-
 
         // Perform build.
         if (formats.contains(Format.epub)) {

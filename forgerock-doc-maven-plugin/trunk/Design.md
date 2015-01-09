@@ -29,16 +29,22 @@ A variety of pre-processing tasks are performed in the following order:
 *  Perform Maven resource filtering on the copy to replace variables. (`Filter`)
 *  Edit `<imagedata>` elements in the resource filtered files. (`ImageData`)
 *  Perform image generation on the resource filtered files. (`PlantUml`)
-*  If building FO, set DPI on .png images in the resource filtered files. (`Dpi`)
+*  Set DPI on .png images in the resource filtered files. (`Dpi`)
 *  Perform additional pre-processing on the resource filtered files. (`CurrentDocId`)
-*  When generating FO output, prepare fonts for use with Apache FOP. (`Fop`)
-*  When generating HTML output, add custom CSS to the sources. (`CustomCss`)
+*  Add custom CSS to the sources. (`CustomCss`)
+*  If configured, build a Maven artifact from pre-processed sources. (`ArtifactBuilder`)
 
-This stage is performed during the `pre-site` phase, `build` goal. (`PreSiteMojo`)
+This stage is performed during the `pre-site` phase, `process` goal. (`PreProcessMojo`)
 
 ## Processing Sources to Generate Output
 
 The next stage generates output formats.
+
+Like the pre-processing stage it also unpacks the branding elements
+in case the build operates on pre-processed files. (`Branding`)
+
+When preparing to generate PDF or RTF,
+this stage starts by preparing fonts for use with Apache FOP. (`Fop`)
 
 A build class named by output format encapsulates generation of each format,
 including olink generation:
@@ -135,4 +141,4 @@ the License file at legal/CDDLv1.0.txt. If applicable, add the following below t
 Header, with the fields enclosed by brackets [] replaced by your own identifying
 information: "Portions copyright [year] [name of copyright owner]".
 
-Copyright 2014 ForgeRock AS
+Copyright 2014-2015 ForgeRock AS
