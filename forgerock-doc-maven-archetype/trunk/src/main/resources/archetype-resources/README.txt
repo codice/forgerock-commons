@@ -6,6 +6,7 @@ for two types of ForgeRock core documentation projects.
 To generate files for MyProject:
 
     mvn archetype:generate                                  \
+      -DarchetypeRepository=http://maven.forgerock.org/repo \
       -DarchetypeGroupId=commons.forgerock.org              \
       -DarchetypeArtifactId=forgerock-doc-maven-archetype   \
       -DarchetypeVersion=3.0.0-SNAPSHOT                     \
