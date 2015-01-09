@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ! CCPL HEADER START
+  !
+  ! This work is licensed under the Creative Commons
+  ! Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+  ! To view a copy of this license, visit
+  ! http://creativecommons.org/licenses/by-nc-nd/3.0/
+  ! or send a letter to Creative Commons, 444 Castro Street,
+  ! Suite 900, Mountain View, California, 94041, USA.
+  !
+  ! You can also obtain a copy of the license at legal-notices/CC-BY-NC-ND.txt.
+  ! See the License for the specific language governing permissions
+  ! and limitations under the License.
+  !
+  ! If applicable, add the following below this CCPL HEADER, with the fields
+  ! enclosed by brackets "[]" replaced with your own identifying information:
+  !      Portions Copyright [yyyy] [name of copyright owner]
+  !
+  ! CCPL HEADER END
+  !
+  !      Copyright 2014-2015 ForgeRock AS
+  !    
+-->
+<chapter xml:id="chap-compatibility"
+         xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://docbook.org/ns/docbook
+                             http://docbook.org/xml/5.0/xsd/docbook.xsd">
+ <title>Changes, Deprecated, and Removed Functionality</title>
+
+ <!--
+  A maintenance release should be fully backwards compatible,
+  though it might deprecate functionality.
+
+  Adjust the following content accordingly.
+ -->
+
+ <note>
+  <para>
+   This chapter has not changed since ${projectName} TODO: identity major/minor release.
+  </para>
+ </note>
+
+ <para>
+  This chapter covers both major changes to existing functionality,
+  and also deprecated and removed functionality.
+ </para>
+
+ <section xml:id="changes">
+  <title>Important Changes to Existing Functionality</title>
+
+  <itemizedlist>
+
+   <listitem>
+    <para>
+     TODO Update for release
+    </para>
+   </listitem>
+
+  </itemizedlist>
+ </section>
+
+ <section xml:id="deprecated">
+  <title>Deprecated Functionality</title>
+  
+  <para>
+   The following functionality is deprecated in ${projectVersion},
+   and is likely to be removed in a future release.
+  </para>
+
+  <itemizedlist>
+
+   <listitem>
+    <para>
+     TODO
+    </para>
+   </listitem>
+
+  </itemizedlist>
+ </section>
+
+ <section xml:id="removed">
+  <title>Removed Functionality</title>
+
+  <para>
+   The following functionality has been removed in ${projectVersion}.
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     TODO
+    </para>
+   </listitem>
+  </itemizedlist>
+
+  <!-- If nothing has been removed in this release, use this para instead. -->
+  <para>
+   No functionality has been removed in this release.
+  </para>
+ </section>
+</chapter>
