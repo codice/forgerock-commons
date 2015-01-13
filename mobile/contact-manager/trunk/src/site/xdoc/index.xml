@@ -18,7 +18,7 @@
   !
   ! CCPL HEADER END
   !
-  !      Copyright 2013 ForgeRock AS
+  !      Copyright 2013-2015 ForgeRock AS
   !
 -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
@@ -60,6 +60,8 @@
     <li>Send a text message (SMS) to the user.</li>
     <li>Geolocate the user's address.</li>
     <li>Get the resource for the user's manager.</li>
+    <li>Supports voice search.</li>
+    <li>Supports filters search, i.e. search by manager, employee type...etc.</li>
    </ul>
 
    <p>
@@ -146,7 +148,9 @@
      <p>
       Install and configure OpenDJ directory server.
      </p>
-
+     <p>
+      The minimum OpenDJ version is 2.6.0.
+     </p>
      <ol>
       <li>
        Install OpenDJ as described in the <a
