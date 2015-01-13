@@ -18,7 +18,7 @@
   !
   ! CCPL HEADER END
   !
-  !      Copyright 2011-2013 ForgeRock AS
+  !      Copyright 2011-2015 ForgeRock AS
   !
 -->
  <section xml:id="accessing-doc-online"
@@ -72,25 +72,16 @@
 
  <para>
   Fully reviewed, published core documentation is available at
-  <link xlink:show="new" xlink:href="http://docs.forgerock.org/" />.
-
+  <link xlink:show="new" xlink:href="http://backstage.forgerock.com/" />.
   Use this documentation when working with a ForgeRock Enterprise release.
  </para>
 
  <para>
-  In-progress documentation can be found at each project site under the
-  <link xlink:show="new" xlink:href="http://forgerock.org"
-  >Developer Community</link> projects page.
-
+  You can find draft, in-progress documentation at the online
+  <link
+   xlink:show="new"
+   xlink:href="http://forgerock.org"
+  >community resource center</link>.
   Use this documentation when trying a nightly build.
- </para>
-
- <para>
-  The ForgeRock <link xlink:href="https://wikis.forgerock.org/" xlink:show="new"
-  >Community Wikis</link> and provide additional, user-created information.
-
-  We encourage you to
-  <link xlink:show="new" xlink:href="https://sso.forgerock.com/openam/UI/Login"
-  >join the community</link>, so that you can update the Wikis, too.
  </para>
 </section>
