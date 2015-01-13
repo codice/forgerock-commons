@@ -253,7 +253,7 @@ Stopping Server...
 
      <img src="images/run-contact-manager.png"
           alt="Import Wizard SDK Screen"
-          style="max-width: 640px;"
+          style="max-width: 480px;"
      />
     </li>
 
@@ -278,7 +278,7 @@ Stopping Server...
 
        <img src="images/configure-connection.png"
             alt="Server Connection Configuration Screen"
-            style="max-width: 640px;"
+            style="max-width: 480px;"
        />
 
        <p>
@@ -295,7 +295,7 @@ Stopping Server...
 
        <img src="images/configure-connection-authn.png"
             alt="Server Connection Authentication Screen"
-            style="max-width: 640px;"
+            style="max-width: 480px;"
        />
 
        <p>
@@ -319,7 +319,7 @@ Stopping Server...
 
        <img src="images/search-result.png"
             alt="Search Result for jensen"
-            style="max-width: 640px;"
+            style="max-width: 480px;"
        />
       </li>
 
@@ -331,7 +331,7 @@ Stopping Server...
 
        <img src="images/add-contact.png"
             alt="Adding Sam Carter to the address book"
-            style="max-width: 640px;"
+            style="max-width: 480px;"
        />
 
        <p>
@@ -340,7 +340,7 @@ Stopping Server...
 
        <img src="images/address-book.png"
             alt="Adding Sam Carter to the address book"
-            style="max-width: 640px;"
+            style="max-width: 480px;"
        />
       </li>
      </ul>
