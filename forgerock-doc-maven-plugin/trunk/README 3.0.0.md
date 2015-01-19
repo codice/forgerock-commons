@@ -251,10 +251,10 @@ Specify the type of outputs you want using `<formats>`.
 On the command line, use `-Dformats` with a comma-separated list.
 
 Supported formats include:
-`epub`, `html`, `man`, `pdf`, `rtf`, `webhelp`, `xhtml5`.
+`epub`, `html`, `man`, `pdf`, `rtf`, `webhelp`, `xhtml5`, `bootstrap`.
 
 If you do not specify any formats, the default output formats are
-`epub`, `html`, `man`, `pdf`, and `webhelp`.
+`pdf`, and `bootstrap`.
 
 Release builds only include `html` and `pdf`.
 
@@ -262,7 +262,7 @@ The following command generates only PDF output for your single chapter.
 
     mvn -DdocumentSrcName=chap-one.xml -Dformats=pdf clean pre-site
 
-The following command generates only man pages & XHTML5 output.
+The following command generates only man pages and XHTML5 output.
 
     mvn -Dformats=man,xhtml5 clean pre-site
 
@@ -521,7 +521,6 @@ The following example shows the full configuration to use the 2.1.3 version.
 If you need to create your own shared content artifact,
 see the `forgerock-doc-common-content` project as an example.
 
-
 * * *
 
 The contents of this file are subject to the terms of the Common Development and
@@ -536,4 +535,4 @@ the License file at legal/CDDLv1.0.txt. If applicable, add the following below t
 Header, with the fields enclosed by brackets [] replaced by your own identifying
 information: "Portions copyright [year] [name of copyright owner]".
 
-Copyright 2012-2015 ForgeRock AS
+Copyright 2012-2015 ForgeRock AS.

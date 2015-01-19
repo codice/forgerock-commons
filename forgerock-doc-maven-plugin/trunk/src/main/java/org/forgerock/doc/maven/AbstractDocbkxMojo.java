@@ -752,6 +752,11 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
         html,
 
         /**
+         * Styled with HtmlForBootstrap single-page HTML 4.
+         */
+        bootstrap,
+
+        /**
          * Reference manual pages for use with the {@code man} command.
          */
         man,
@@ -781,7 +786,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Comma-separated list of output formats to generate.
      */
-    @Parameter(property = "formats", defaultValue = "epub,html,man,pdf,webhelp")
+    @Parameter(property = "formats", defaultValue = "bootstrap,pdf")
     private List<Format> formats;
 
     /**
@@ -1534,7 +1539,8 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
-     * Loctain of the webhelp XSL stylesheet customization file, relative to the build
+     * Location of the webhelp XSL stylesheet customization file, relative to
+     * the build
      * directory.
      *
      * <br>
@@ -1605,19 +1611,51 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     private String xhtml5Customization = "docbkx-stylesheets/xhtml5/coredoc.xsl";
 
     /**
-     * Get the location of the FO XSL stylesheet customization file (for PDF, RTF).
+     * Location of the XHTML5 XSL stylesheet customization file,
+     * relative to the build directory.
      *
      * <br>
      *
-     * Value: {@code ${project.build.directory}/docbkx-stylesheets/fo/coredoc.xsl}
+     * Value: {@code ${project.build.directory}/docbkx-stylesheets/xhtml5/coredoc.xsl}
      *
      * <br>
      *
-     * docbkx-tools element: &lt;foCustomization&gt;
+     * Default: {@code ${project.build.directory}/docbkx-stylesheets/xhtml5/coredoc.xsl}
      *
-     * @return The location of the FO XSL stylesheet.
+     * <br>
+     *
+     * docbkx-tools element: &lt;xhtml5Customization&gt;
+     *
+     * @return The location of the XHTML5 XSL stylesheet.
      */
     public final File getXhtml5Customization() {
         return new File(getBuildDirectory(), xhtml5Customization);
+    }
+
+    /**
+     * Location of the HtmlForBootstrap XSL stylesheet customization file,
+     * relative to the build directory.
+     *
+     * <br>
+     *
+     * docbkx-tools element: &lt;bootstrapCustomization&gt;
+     */
+    private String bootstrapCustomization =
+            "docbkx-stylesheets/bootstrap/coredoc.xsl";
+    /**
+     * Get the location of the HtmlForBootstrap XSL stylesheet customization file.
+     *
+     * <br>
+     *
+     * Default: {@code ${project.build.directory}/docbkx-stylesheets/bootstrap/coredoc.xsl}
+     *
+     * <br>
+     *
+     * docbkx-tools element: &lt;bootstrapCustomization&gt;
+     *
+     * @return The location of the HtmlForBootstrap XSL stylesheet.
+     */
+    public final File getBootstrapCustomization() {
+        return new File(getBuildDirectory(), bootstrapCustomization);
     }
 }

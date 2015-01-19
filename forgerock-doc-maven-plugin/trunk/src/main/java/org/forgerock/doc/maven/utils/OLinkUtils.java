@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS
+ * Copyright 2014-2015 ForgeRock AS
  */
 package org.forgerock.doc.maven.utils;
 
@@ -280,6 +280,9 @@ public final class OLinkUtils {
         if (format.equals("xhtml5")) {
             extension = "xhtml";
         }
+        if (format.equals("bootstrap")) {
+            extension = "html";
+        }
         map.put("extension", extension);
 
         map.put("format", format);
@@ -296,6 +299,9 @@ public final class OLinkUtils {
         }
         if (format.equals("xhtml5")) {
             type = "xhtml";
+        }
+        if (format.equals("bootstrap")) {
+            type = "html";
         }
         map.put("type", type);
 
