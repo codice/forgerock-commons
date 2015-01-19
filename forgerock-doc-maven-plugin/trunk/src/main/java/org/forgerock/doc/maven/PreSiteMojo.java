@@ -28,7 +28,9 @@ import org.forgerock.doc.maven.build.Rtf;
 import org.forgerock.doc.maven.build.SingleHtml;
 import org.forgerock.doc.maven.build.Webhelp;
 import org.forgerock.doc.maven.build.Xhtml5;
+import org.forgerock.doc.maven.build.HtmlForBootstrap;
 import org.forgerock.doc.maven.post.Html;
+import org.forgerock.doc.maven.post.Bootstrap;
 import org.forgerock.doc.maven.post.NoOp;
 import org.forgerock.doc.maven.post.WebhelpPost;
 import org.forgerock.doc.maven.post.Xhtml;
@@ -90,6 +92,9 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
         if (formats.contains(Format.xhtml5)) {
             new Xhtml5(this).execute();
         }
+        if (formats.contains(Format.bootstrap)) {
+            new HtmlForBootstrap(this).execute();
+        }
 
         // Perform post-processing.
         if (formats.contains(Format.epub)) {
@@ -112,6 +117,9 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
         }
         if (formats.contains(Format.xhtml5)) {
             new Xhtml(this).execute();
+        }
+        if (formats.contains(Format.bootstrap)) {
+            new Bootstrap(this).execute();
         }
     }
 }

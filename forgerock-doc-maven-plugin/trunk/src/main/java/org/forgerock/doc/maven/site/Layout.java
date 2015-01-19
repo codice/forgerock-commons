@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS
  */
 
 package org.forgerock.doc.maven.site;
@@ -119,6 +119,11 @@ public class Layout {
         if (formats.contains(Format.xhtml5)) {
             r.add(element(name("resource"),
                     element(name("directory"), outputDir + "/xhtml/")));
+        }
+
+        if (formats.contains(Format.bootstrap)) {
+            r.add(element(name("resource"),
+                    element(name("directory"), outputDir + "/bootstrap/")));
         }
 
         return element("resources", r.toArray(new MojoExecutor.Element[r.size()]));
