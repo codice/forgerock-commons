@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.build;
@@ -132,6 +132,7 @@ public class Fo {
                 cfg.add(element(name("xincludeSupported"), m.isXincludeSupported()));
                 cfg.add(element(name("sourceDirectory"), m.path(m.getDocbkxModifiableSourcesDirectory())));
                 cfg.add(element(name("fop1Extensions"), "1"));
+                cfg.add(element(name("fopLogLevel"), m.getFopLogLevel()));
                 cfg.add(element(name("collectXrefTargets"), "yes"));
                 if (getFormat().equalsIgnoreCase("pdf")) {
                     cfg.add(element(name("insertOlinkPdfFrag"), "1"));
@@ -205,6 +206,7 @@ public class Fo {
                 cfg.addAll(m.getBaseConfiguration());
                 cfg.add(element(name("foCustomization"), m.path(m.getFoCustomization())));
                 cfg.add(element(name("fop1Extensions"), "1"));
+                cfg.add(element(name("fopLogLevel"), m.getFopLogLevel()));
                 if (getFormat().equalsIgnoreCase("pdf")) {
                     cfg.add(element(name("insertOlinkPdfFrag"), "1"));
                 }
