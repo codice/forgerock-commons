@@ -31,9 +31,9 @@ public final class BootstrapCopier {
      * HtmlForBootstrap logo files.
      */
     private final String[] bootstrapLogoResources = {
-            "/logos/hero-bg-01.png",
-            "/logos/left-shape-4.png",
-            "/logos/Icon_External_Link.png"
+        "/logos/hero-bg-01.png",
+        "/logos/left-shape-4.png",
+        "/logos/Icon_External_Link.png"
     };
 
     /**
@@ -85,8 +85,7 @@ public final class BootstrapCopier {
             // Instead the files must be copied to the output directories.
 
             for (final String outputDirectory : outputDirectories) {
-                final File styleSheetFile = FileUtils.getFile
-                        (outputDirectory, "includes", resource);
+                final File styleSheetFile = FileUtils.getFile(outputDirectory, "includes", resource);
                 FileUtils.copyURLToFile(resourceUrl, styleSheetFile);
             }
         }

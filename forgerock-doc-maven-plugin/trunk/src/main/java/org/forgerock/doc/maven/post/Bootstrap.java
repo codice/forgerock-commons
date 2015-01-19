@@ -16,18 +16,12 @@
 
 package org.forgerock.doc.maven.post;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
-import org.forgerock.doc.maven.utils.HtmlUtils;
 import org.forgerock.doc.maven.utils.BootstrapCopier;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
 
 /**
  * HTML post-processor for both single-page and chunked HTML formats.
