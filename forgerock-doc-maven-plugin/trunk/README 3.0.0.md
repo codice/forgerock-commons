@@ -251,12 +251,12 @@ Specify the type of outputs you want using `<formats>`.
 On the command line, use `-Dformats` with a comma-separated list.
 
 Supported formats include:
-`epub`, `html`, `man`, `pdf`, `rtf`, `webhelp`, `xhtml5`, `bootstrap`.
+`bootstrap`, `epub`, `html`, `man`, `pdf`, `rtf`, `webhelp`, `xhtml5`.
 
 If you do not specify any formats, the default output formats are
-`pdf`, and `bootstrap`.
+`bootstrap` and `pdf`.
 
-Release builds only include `html` and `pdf`.
+Release builds only include HTML and `pdf`.
 
 The following command generates only PDF output for your single chapter.
 
