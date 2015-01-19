@@ -30,10 +30,12 @@
 
  <title>Version Control Conflicts Demo</title>
 
- <para>Paragraph A.</para>
+ <para>Paragraph 1.</para>
 
- <para>Paragraph B.</para>
+ <para>Paragraph 2.</para>
 
  <para>Paragraph C.</para>
+
+ <para>Paragraph 4.</para>
 
  </chapter>
