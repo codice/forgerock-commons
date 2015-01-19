@@ -234,7 +234,15 @@ This fix replaces those settings with `<formats>`.
 
 **DOCS-189: Discontinue default support for RTF**
 
+**DOCS-188: JavaScript icons in HTML to (un)fold screen are not accessible**
+
+The fix removes the icons and (un)fold functionality.
+
 **DOCS-179: Issue with Maven HTML builds and images**
+
+**DOCS-150: When a code sample is unwrapped, it it not limited to the width of the page**
+
+The fix for DOCS-188 removed the functionality that was causing the problem.
 
 **DOCS-59: Only the draft documents are optimized to appear in Google searches; the final docs need to be SEO too.**
 
@@ -245,8 +253,6 @@ that it then removes from release HTML.
 ## Known Issues
 
 **DOCS-163: The performance="optional" attr in a step has no effect**
-
-**DOCS-150: When a code sample is unwrapped, it it not limited to the width of the page**
 
 **DOCS-132: Soft hyphens used to break lines are rendered in PDF as hyphen + space**
 
@@ -272,4 +278,4 @@ the License file at legal/CDDLv1.0.txt. If applicable, add the following below t
 Header, with the fields enclosed by brackets [] replaced by your own identifying
 information: "Portions copyright [year] [name of copyright owner]".
 
-Copyright 2014-2015 ForgeRock AS
+Copyright 2014-2015 ForgeRock AS.
