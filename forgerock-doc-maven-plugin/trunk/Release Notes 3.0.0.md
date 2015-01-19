@@ -59,6 +59,9 @@ the configuration option `<overwriteGeneratedSource>`,
 but instead provides similar capability through other settings.
 See the explanation below for details.
 
+The fix for DOCS-144 makes Bootstrap-styled HTML and PDF the default formats.
+To build other formats, set the `formats` property as in `-Dformats=xhtml5`.
+
 **Changes to source code licensing**
 
 ForgeRock doc build tools have moved to CDDL to align with other ForgeRock projects.
@@ -204,6 +207,15 @@ For the full list of EOSL versions, see the
 **DOCS-178: Apply Maven resource filtering to .txt files as well**
 
 The fix for this issue addresses both .txt and also .json files.
+
+
+**DOCS-144: Style HTML output with Bootstrap UI**
+
+The fix for this introduces a `bootstrap` format
+that generates each document as a single HTML page styled with Bootstrap
+and including a left-menu TOC on screens of appropriate size.
+
+This fix also sets the default formats to the equivalent of `-Dformats=bootstrap,pdf`.
 
 
 **DOCS-108: Reconsider forgerock-doc-maven-plugin architecture**
