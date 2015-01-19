@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS
+ * Copyright 2014-2015 ForgeRock AS.
  */
 
 $(document).ready(function () {
@@ -34,25 +34,6 @@ $(document).ready(function () {
      */
     $("img").wrap(function () {
         return "<a target=\"_blank\" href=\"" + $(this).prop('src') + "\" />";
-    });
-
-    /*
-     Include both a wrapped (.screen) and unwrapped (.flat) version of
-     each screen element, with [-] image to collapse and [+] image
-     to expand content.
-
-     The fix for DOCS-76 removes backslash and caret at the end of a line
-     when flattening the line for copying.
-     This fix can leave extra (hopefully, not significant) white spaces
-     in flattened lines.
-     */
-    $(".screen").each(function () {
-        $(this).replaceWith(
-            "<div class=\"screen\" title=\"Click [-] to flatten lines.\">"
-                + minus + $(this).html() + "</div>" +
-                "<div class=\"flat nodisplay\" title=\"Click [+] to wrap long lines.\">"
-                + plus + $(this).html().replace(/([\\\^]?\n|[\\\^]?\r\n) /g, " ") + "</div>"
-        )
     });
 
     /*
@@ -144,7 +125,7 @@ $(document).ready(function () {
      */
     var project = "PROJECT_NAME";       // E.g. "OpenAM"
     var version = "PROJECT_VERSION";    // E.g. "11.0.0"
-    var jsonUrl = "LATEST_JSON";        // E.g. "http://docs.forgerock.org/latest.php"
+    var jsonUrl = "LATEST_JSON";        // E.g. "http://docs.forgerock.org/latest.json"
     var language = "en";
     var latestUrl, latest;
 
@@ -165,7 +146,7 @@ $(document).ready(function () {
      * If the projectName/projectVersion is EOSL, then hide the footer,
      * which makes it easy to file JIRA issues on this documentation.
      */
-    jsonUrl = "EOSL_JSON";        // E.g. "http://docs.forgerock.org/eosl.php"
+    jsonUrl = "EOSL_JSON";        // E.g. "http://docs.forgerock.org/eosl.json"
 
     $.getJSON(jsonUrl, function( data ) {
         var eoslVersions = data[project];
@@ -174,17 +155,4 @@ $(document).ready(function () {
             $("#footer").addClass("nodisplay");
         }
     });
-});
-
-/*
- Add class="nodisplay" to parent div; remove from parent's sibling.
- If the current parent is .screen, then next sibling is .flat.
- */
-$(document).on("click", ".toggle", function () {
-    $(this).parent().toggleClass("nodisplay");
-    if ($(this).parent().hasClass("screen")) {
-        $(this).parent().next().toggleClass("nodisplay");
-    } else {
-        $(this).parent().prev().toggleClass("nodisplay");
-    }
 });
