@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2015 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven;
@@ -735,6 +735,33 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public String getFopHyphVersion() {
         return getVersionProperty(fopHyphVersion, "fopHyphVersion");
+    }
+
+    /**
+     * Log level when building FO output (PDF, RTF).
+     *
+     * <br>
+     *
+     * docbkx-tools element: &lt;fopLogLevel&gt;
+     */
+    @Parameter(defaultValue = "ERROR")
+    private String fopLogLevel;
+
+    /**
+     * Log level when building FO output (PDF, RTF).
+     *
+     * <br>
+     *
+     * Default: {@code ERROR}
+     *
+     * <br>
+     *
+     * docbkx-tools element: &lt;fopLogLevel&gt;
+     *
+     * @return The log level for Apache FOP.
+     */
+    public final String getFopLogLevel() {
+        return fopLogLevel;
     }
 
     /**

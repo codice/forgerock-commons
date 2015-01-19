@@ -12,7 +12,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2015 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
  <modelVersion>4.0.0</modelVersion>
@@ -84,7 +84,7 @@
   -->
   <brandingVersion>3.0.0-SNAPSHOT</brandingVersion>
   <commonContentVersion>3.0.0-SNAPSHOT</commonContentVersion>
-  <docbkxVersion>2.0.15</docbkxVersion>
+  <docbkxVersion>2.0.16</docbkxVersion>
   <fopHyphVersion>1.2</fopHyphVersion>
   <jCiteVersion>1.13.0</jCiteVersion>
   <linkTesterVersion>1.3.0-SNAPSHOT</linkTesterVersion>
