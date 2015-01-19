@@ -1,0 +1,446 @@
+/*
+ * The contents of this file are subject to the terms of the Common Development and
+ * Distribution License (the License). You may not use this file except in compliance with the
+ * License.
+ *
+ * You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+ * specific language governing permission and limitations under the License.
+ *
+ * When distributing Covered Software, include this CDDL Header Notice in each file and include
+ * the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ * Header, with the fields enclosed by brackets [] replaced by your own identifying
+ * information: "Portions copyright [year] [name of copyright owner]".
+ *
+ * Copyright 2015 ForgeRock AS.
+ */
+
+@import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css);
+
+a {
+    /* Sea Green */
+    color: #519387;
+}
+
+.section, .chapter, .preface, .glossary, .refentry, .reference, .appendix,
+.index {
+    padding-top: 50px;
+    margin-top: -50px;
+}
+
+.answer > td {
+    padding: 0 15px 0 0;
+}
+
+.btn-primary {
+    /* Sea Green */
+    background-color: #519387;
+    /* Dark Sea Green */
+    border-color: #488378;
+    color: #fff;
+}
+
+.indexdiv > h3 {
+    border-bottom: 2px dotted lightgrey;
+    padding-bottom: 5px;
+}
+
+.indexdiv > dl {
+    margin-left: 30px;
+}
+
+.indexdiv dl {
+    margin-bottom: 5px;
+}
+
+.indexdiv dt {
+    margin: 5px 0 2px;
+}
+
+.indexdiv dd {
+    margin-left: 35px;
+}
+
+.indexdiv .indexterm {
+    font-weight: 200;
+}
+
+
+
+.itemizedlist-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 12px 0 6px;
+}
+
+html { height: 100%;}
+
+body {
+    /* Dark Grey */
+    color: #2a2f32;
+    font-family: "proxima-nova",sans-serif;
+}
+
+.jumbotron {
+
+    /* Vivid Yellow
+    background-color: #eeea07;
+    color: black; */
+
+    /* Sea Green */
+    background: url("includes/logos/hero-bg-01.png") no-repeat fixed left top #519387;
+    color: white;
+}
+
+.jumbotron small { color: white;}
+
+div.procedure {
+    border-color: lightslategray;
+    border-left: 6px solid lightslategray;
+    border-style: dotted dotted dotted solid;
+    border-width: 1px 1px 1px 6px;
+    margin: 15px 0 10px;
+    padding: 10px 15px 10px 10px;
+}
+
+.procedure-title {
+    color: lightslategray;
+    font-size: 14pt;
+    font-weight: 400;
+    margin: 6px 0 8px;
+}
+
+h1 span {
+    margin-right: .3em;
+}
+
+.footer {
+    /* Light Grey */
+    background-color: #f5f5f5;
+    /* Medium Grey */
+    border-top: 1px solid #e5e5e5;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    height: 50px;
+    padding-top: 15px;
+    bottom: 0;
+}
+.footer h3 {
+    margin: 0;
+}
+.footer a:hover {
+    text-decoration: none;
+}
+.footer-item {
+    line-height: 22px;
+    margin-left: 10px;
+    vertical-align: bottom;
+}
+.footer-item.highlighted {
+    /* Orange */
+    color: #f7a540;
+}
+.footer-item.highlighted:hover {
+    /* Dark Orange */
+    color: #c97208;
+}
+.footer span {
+    /* Grey */
+    color: #2a2f32;
+    margin-bottom: 0;
+}
+.footer .footer-left {
+    float: left;
+}
+.footer .footer-right {
+    float: right;
+}
+
+h1    {
+    font-size: 40px !important;
+    font-weight: 700 !important;
+}
+h2    {
+    font-size: 32px !important;
+    font-weight: 700 !important;
+}
+
+.chapter > p:first-of-type, .preface > p:first-of-type {
+    font-size: 21px;
+    font-weight: 300;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+
+/* all links */
+#sidebar .nav>li>a {
+    /* Light Grey */
+    color: #777;
+    border-left: 4px solid transparent;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+/* nested links */
+#sidebar .nav .nav>li>a {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 30px;
+    font-size: 12px;
+}
+
+/* nested nested links */
+#sidebar .nav .nav .nav>li>a {
+    font-size: 11px;
+    padding-bottom: 2px;
+    padding-left: 50px;
+    padding-top: 4px;
+}
+
+/* nested nested nested links */
+#sidebar .nav .nav .nav .nav>li>a {
+    font-size: 11px;
+    padding-bottom: 2px;
+    padding-left: 70px;
+    padding-top: 4px;
+}
+
+/* active and hover links */
+#sidebar .nav>.active>a,
+#sidebar .nav>li>a:hover,
+#sidebar .nav>li>a:focus {
+    text-decoration: none;
+    /*
+    background-color: rgb(125, 179, 168, 0.8);
+    background-color: rgba(125, 179, 168, 0.8);
+    border-color: rgb(45, 52, 55, 0.8);
+    border-color: rgba(45, 52, 55, 0.8);
+    color: white;
+    */
+    /* Bright Yellow */
+    background-color: #eeea07;
+    border-color: #eeea07;
+    /* Grey */
+    color: #2a2f32;
+}
+
+/* all active links */
+#sidebar .nav>.active>a,
+#sidebar .nav>.active:hover>a,
+#sidebar .nav>.active:focus>a {
+    font-weight: 600;
+}
+/* nested active links */
+#sidebar .nav .nav>.active>a,
+#sidebar .nav .nav>.active:hover>a,
+#sidebar .nav .nav>.active:focus>a {
+    font-weight: 400;
+}
+
+/* nested nested active links */
+#sidebar .nav  .nav .nav>.active>a,
+#sidebar .nav  .nav .nav>.active:hover>a,
+#sidebar .nav  .nav .nav>.active:focus>a {
+    font-weight: 300;
+}
+
+/* nested nested active links */
+#sidebar .nav  .nav .nav>.active>a,
+#sidebar .nav  .nav .nav>.active:hover>a,
+#sidebar .nav  .nav .nav>.active:focus>a {
+    font-weight: 300;
+}
+
+/* hide all (inactive) nested list */
+#sidebar .nav ul.nav {
+    display: none;
+}
+/* show active nested list */
+#sidebar .nav>.active>ul.nav {
+    display: block;
+}
+
+#sidebar.affix {
+    top: 66px;
+    position: fixed;
+    bottom: 55px;
+    height: auto;
+    overflow-y: scroll;
+}
+
+#sidebar.affix-top {
+
+}
+
+#sidebar.affix-bottom {
+    position: absolute;
+}
+
+.figure-title {
+    font-weight: bold;
+    margin: 16px 0 4px;
+    text-align: center;
+}
+
+#doc-content {
+    padding: 0 20px 55px 10px;
+}
+
+.table-title {
+    font-size: 12pt;
+    font-weight: 700;
+}
+
+.dl-horizontal dt {
+    white-space: normal;
+    padding: 0 3px 0 0;
+    width: 200px;
+}
+
+.variablelist dt {
+    margin: 18px 0 5px 15px;
+}
+
+.dl-horizontal dd {
+    border-bottom: 1px dotted rgb(125, 179, 168);
+    border-bottom: 1px dotted rgba(125, 179, 168, 0.8);
+    margin-bottom: 18px;
+    margin-left: 210px;
+}
+
+.variablelist dd {
+    border-bottom: 1px dotted rgba(125, 179, 168, 0.8);
+    margin: 5px 0 5px 30px;
+}
+
+.variablelist > dl {
+    border-top: 1px dotted rgba(125, 179, 168, 0.8);
+}
+
+.dl-horizontal {
+    border-top: 1px dotted rgb(125, 179, 168);
+    border-top: 1px dotted rgba(125, 179, 168, 0.9);
+    padding-top: 10px;
+}
+
+img.img-responsive {
+    margin-bottom: 20px;
+}
+
+#footer {
+    display: none;
+}
+
+a.link[href^="http"] {
+    background-image: url("includes/logos/Icon_External_Link.png");
+    background-position: top right;
+    background-repeat: no-repeat;
+    padding-right: 15px;
+    margin-right: 2px;
+}
+
+
+
+.variablelist-title {
+    font-weight: bold;
+    margin: 10px 0;
+    text-decoration: underline;
+}
+
+#about-content {
+    width: 60%;
+}
+
+.left-shape-content {
+    background: url("includes/logos/left-shape-4.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    float: left;
+    height: 566px;
+    position: fixed;
+    width: 57px;
+    top: 60%;
+    z-index: -1;
+}
+
+#doc-content h1, #doc-content .h1 {
+    /* Sea Green */
+    border-bottom: 2px solid #70ab9b;
+    font-size: 36px;
+    margin-top: 24px;
+    padding-bottom: 5px;
+}
+
+.zero-clipboard {
+    display: block;
+    position: relative;
+}
+
+.btn-copy-cmdline, .btn-copy-codelisting {
+    /* White */
+    background-color: #fff;
+    /* Light Grey */
+    border: 1px solid #e1e1e8;
+    border-radius: 0 4px;
+    color: #777;
+    display: block;
+    font-size: 12px;
+    padding: 5px 8px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    z-index: 10;
+}
+
+.zeroclipboard-is-hover {
+    /* Light Sea Green */
+    background-color: #6faa9b;
+    border-color: #6faa9b;
+    color: #fff;
+    cursor: pointer;
+}
+
+.ui-effects-transfer {
+    border: 1px dotted black;
+    background-color: yellow;
+    opacity: 0.4;
+}
+
+pre.prettyprint {
+    border: 1px solid #ccc;
+    padding: 9.5px;
+    font-size: 12px;
+}
+
+li.L0, li.L1, li.L2, li.L3,
+li.L5, li.L6, li.L7, li.L8
+{ list-style-type: decimal !important }
+
+.back-to-top {
+    position: fixed;
+    bottom: 55px;
+    right: 5px;
+    display: none;
+    z-index:15;
+}
+
+.navbar.navbar-inverse.navbar-fixed-top {
+    box-shadow: 0 0 10px 2px #111;
+}
+
+.jumbotron {
+    box-shadow: 0 0 10px 2px grey;
+    margin-top: 50px;
+}
+
+.nav > li > a {
+    font-weight: 200;
+}
+
+.simplelist {
+    margin-bottom: 10px;
+    width: 100%;
+    font-size: 15px;
+}
+.table { font-size: 14px;}
