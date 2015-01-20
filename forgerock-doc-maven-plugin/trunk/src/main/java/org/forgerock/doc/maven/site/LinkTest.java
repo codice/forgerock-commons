@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.site;
@@ -129,10 +129,11 @@ public class LinkTest {
                     "^\\.\\./\\Q" + m.getRelativeResourcesDirectoryPath() + "\\E.*$"));
 
             // Configured patterns
-            for (String pattern: m.getSkipUrlPatterns()) {
-                patterns.add(element("skipUrlPattern", pattern));
+            if (m.getSkipUrlPatterns() != null) {
+                for (String pattern : m.getSkipUrlPatterns()) {
+                    patterns.add(element("skipUrlPattern", pattern));
+                }
             }
-
             return element(name("skipUrlPatterns"), patterns.toArray(new Element[patterns.size()]));
         }
     }
