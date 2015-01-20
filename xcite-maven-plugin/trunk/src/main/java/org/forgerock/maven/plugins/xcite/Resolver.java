@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS.
+ * Copyright 2014-2015 ForgeRock AS.
  */
 
 package org.forgerock.maven.plugins.xcite;
@@ -205,7 +205,7 @@ public class Resolver {
         }
 
         // Either this is not a citation, or it is a broken citation.
-        if (!citedFile.exists()) {
+        if (!citedFile.exists() || !citedFile.isFile()) {
             return citation.toString();
         }
 
