@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014-2015 ForgeRock AS
+ * Copyright 2014-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.build;
@@ -100,8 +100,7 @@ public class HtmlForBootstrap {
                 cfg.add(element(name("collectXrefTargets"), "only"));
                 cfg.add(element(name("includes"), docName + "/" + m.getDocumentSrcName()));
                 cfg.add(element(name("sourceDirectory"), m.path(m.getDocbkxModifiableSourcesDirectory())));
-                cfg.add(element(name("htmlCustomization"), m.path(m
-                        .getBootstrapCustomization())));
+                cfg.add(element(name("htmlCustomization"), m.path(m.getBootstrapCustomization())));
                 cfg.add(element(name("xincludeSupported"), m.isXincludeSupported()));
 
 /*  <targetsFilename> is ignored with docbkx-tools 2.0.15.

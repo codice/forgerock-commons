@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS
+ * Copyright 2014-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.utils;
@@ -46,6 +46,7 @@ public class OLinkUtilsTest {
     private File html;
     private File webhelp;
     private File xhtml5;
+    private File bootstrap;
 
     private AbstractDocbkxMojo mojo;
 
@@ -59,6 +60,7 @@ public class OLinkUtilsTest {
         html = new File(folder.getRoot(), "html");
         webhelp = new File(folder.getRoot(), "webhelp");
         xhtml5 = new File(folder.getRoot(), "xhtml5");
+        bootstrap = new File(folder.getRoot(), "bootstrap");
 
 
         TreeSet<String> docNames = new TreeSet<String>();
@@ -124,6 +126,15 @@ public class OLinkUtilsTest {
         OLinkUtils.createTargetDatabase(html, "html", mojo);
         File expected = file("/unit/utils/olu/olinkdb-single-page-html.xml");
         assertThat(html).hasContentEqualTo(expected);
+    }
+
+    @Test
+    public void shouldCreateBootstrapDatabase()
+            throws IOException, MojoExecutionException, URISyntaxException {
+
+        OLinkUtils.createTargetDatabase(bootstrap, "bootstrap", mojo);
+        File expected = file("/unit/utils/olu/olinkdb-bootstrap.xml");
+        assertThat(bootstrap).hasContentEqualTo(expected);
     }
 
     @Test
