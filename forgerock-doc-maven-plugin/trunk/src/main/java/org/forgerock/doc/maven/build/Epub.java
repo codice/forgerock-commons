@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.build;
@@ -73,7 +73,7 @@ public class Epub {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = new File(m.getBuildDirectory(), "olinkdb-epub.xml");
+        File targetDB = FileUtils.getFile(m.getBaseDir(), "target", "olinkdb-epub.xml");
 
         try {
             OLinkUtils.createTargetDatabase(targetDB, "epub", m);
@@ -90,6 +90,24 @@ public class Epub {
      */
     class Executor extends MojoExecutor {
 
+        // Absolute path to Olink target database XML document.
+        private String targetDatabaseDocument;
+
+        /**
+         * Get the olink target database XML document path.
+         *
+         * @return Absolute path to the file.
+         * @throws MojoExecutionException Could not write target DB file.
+         */
+        String getTargetDatabaseDocument() throws MojoExecutionException {
+            // If it has not been set yet, then set it now.
+            if (targetDatabaseDocument == null || targetDatabaseDocument.isEmpty()) {
+                targetDatabaseDocument = getTargetDB();
+            }
+
+            return targetDatabaseDocument;
+        }
+
         /**
          * Prepare olink target database from DocBook XML sources.
          *
@@ -105,10 +123,8 @@ public class Epub {
                 cfg.add(element(name("collectXrefTargets"), "yes"));
                 cfg.add(element(name("includes"), docName + "/" + m.getDocumentSrcName()));
                 cfg.add(element(name("currentDocid"), docName));
-
-                // <targetsFilename> is ignored with docbkx-tools 2.0.15.
-                //cfg.add(element(name("targetsFilename"),
-                //        m.path(m.getBuildDirectory()) + "/" + docName + "-" + "epub.target.db"));
+                cfg.add(element(name("targetDatabaseDocument"), getTargetDatabaseDocument()));
+                cfg.add(element(name("targetsFilename"), m.getDocumentSrcName() + ".epub.target.db"));
 
                 executeMojo(
                         plugin(
@@ -139,7 +155,7 @@ public class Epub {
                 ArrayList<Element> cfg = new ArrayList<MojoExecutor.Element>();
                 cfg.addAll(m.getBaseConfiguration());
                 cfg.add(element(name("epubCustomization"), m.path(m.getEpubCustomization())));
-                cfg.add(element(name("targetDatabaseDocument"), getTargetDB()));
+                cfg.add(element(name("targetDatabaseDocument"), getTargetDatabaseDocument()));
                 cfg.add(element(name("targetDirectory"), m.path(m.getDocbkxOutputDirectory()) + "/epub"));
 
                 cfg.add(element(name("includes"), docName + "/" + m.getDocumentSrcName()));
