@@ -821,7 +821,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * <br>
      *
-     * Default: epub,html,man,pdf,webhelp
+     * Default: bootstrap,pdf
      *
      * @return List of output formats.
      */
