@@ -98,6 +98,7 @@ public class Webhelp {
                 ArrayList<Element> cfg = new ArrayList<MojoExecutor.Element>();
                 cfg.addAll(m.getBaseConfiguration());
 
+                cfg.add(element(name("chapterAutolabel"), "1"));
                 cfg.add(element(name("webhelpAutolabel"), "1"));
                 cfg.add(element(name("webhelpCustomization"), m.path(m.getWebHelpCustomization())));
                 cfg.add(element(name("collectXrefTargets"), "only"));
@@ -134,6 +135,7 @@ public class Webhelp {
                 ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
                 cfg.addAll(m.getBaseConfiguration());
 
+                cfg.add(element(name("chapterAutolabel"), "1"));
                 cfg.add(element(name("webhelpAutolabel"), "1"));
                 cfg.add(element(name("webhelpCustomization"),
                         m.path(m.getWebHelpCustomization())));
