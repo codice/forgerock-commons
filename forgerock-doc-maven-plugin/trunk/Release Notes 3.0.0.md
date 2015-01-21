@@ -240,6 +240,8 @@ This fix replaces those settings with `<formats>`.
 
 **DOCS-225: Run docbook-linktester only on pre-processed DocBook files**
 
+**DOCS-220: Chapter numbers should be included in WebHelp format**
+
 **DOCS-213: Linktester phase in doc build plugin fails to detect broken links**
 
 **DOCS-197: Prepending ↪ on mouseover is distracting**
