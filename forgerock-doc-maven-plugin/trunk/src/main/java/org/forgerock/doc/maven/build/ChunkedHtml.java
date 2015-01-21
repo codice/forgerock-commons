@@ -11,11 +11,12 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.build;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
@@ -71,7 +72,7 @@ public class ChunkedHtml {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = new File(m.getBuildDirectory(), "olinkdb-chunked-html.xml");
+        File targetDB = FileUtils.getFile(m.getBaseDir(), "target", "olinkdb-chunked-html.xml");
 
         try {
             OLinkUtils.createTargetDatabase(targetDB, "html", m, true);
@@ -106,16 +107,7 @@ public class ChunkedHtml {
 
                 cfg.add(element(name("currentDocid"), docName));
                 cfg.add(element(name("includes"), docName + "/" + m.getDocumentSrcName()));
-
-/*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
-                cfg.add(element(
-                        name("targetsFilename"),
-                        FilenameUtils.separatorsToUnix(getBuildDirectory()
-                                .getPath())
-                                + "/"
-                                + docName
-                                + "-chunked.target.db"));
-*/
+                cfg.add(element(name("targetsFilename"), m.getDocumentSrcName() + ".html.target.db"));
 
                 final String base = FilenameUtils.getBaseName(m.getDocumentSrcName());
                 final String chunkBaseDir = m.path(m.getDocbkxOutputDirectory())

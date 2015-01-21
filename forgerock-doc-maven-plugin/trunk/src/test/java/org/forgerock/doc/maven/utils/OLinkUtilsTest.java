@@ -69,7 +69,7 @@ public class OLinkUtilsTest {
 
         mojo = mock(AbstractDocbkxMojo.class);
         when(mojo.getBaseDir()).thenReturn(new File("/path/to"));
-        when(mojo.path(mojo.getBuildDirectory())).thenReturn("/path/to/build");
+        when(mojo.path(mojo.getBuildDirectory())).thenReturn("/path/to/target");
         when(mojo.getDocNames()).thenReturn(docNames);
         when(mojo.getDocumentSrcName()).thenReturn("index.xml");
         when(mojo.getProjectName()).thenReturn("ForgeRock");

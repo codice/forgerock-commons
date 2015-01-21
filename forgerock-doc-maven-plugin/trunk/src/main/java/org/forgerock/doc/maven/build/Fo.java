@@ -102,7 +102,7 @@ public class Fo {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = new File(m.getBuildDirectory(), "olinkdb-" + getFormat() + ".xml");
+        File targetDB = FileUtils.getFile(m.getBaseDir(), "target", "olinkdb-" + getFormat() + ".xml");
 
         try {
             OLinkUtils.createTargetDatabase(targetDB, getFormat(), m);
@@ -119,12 +119,38 @@ public class Fo {
      */
     class Executor extends MojoExecutor {
 
+        // Absolute path to Olink target database XML document.
+        private String targetDatabaseDocument;
+
+        /**
+         * Get the olink target database XML document path.
+         *
+         * @return Absolute path to the file.
+         * @throws MojoExecutionException Could not write target DB file.
+         */
+        String getTargetDatabaseDocument() throws MojoExecutionException {
+            // If it has not been set yet, then set it now.
+            if (targetDatabaseDocument == null || targetDatabaseDocument.isEmpty()) {
+                targetDatabaseDocument = getTargetDB();
+            }
+
+            return targetDatabaseDocument;
+        }
+
         /**
          * Prepare olink target database from DocBook XML sources.
          *
          * @throws MojoExecutionException Failed to build target database.
          */
         void prepareOlinkDB() throws MojoExecutionException {
+
+            // Due to https://code.google.com/p/docbkx-tools/issues/detail?id=112
+            // RTF generation does not work with docbkx-tools 2.0.15 or 2.0.16.
+            // Rather than try also to fix olinks in RTF,
+            // skip this until that issue is resolved.
+            if (getFormat().equalsIgnoreCase("rtf")) {
+                return;
+            }
 
             for (String docName : m.getDocNames()) {
                 ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
@@ -139,30 +165,14 @@ public class Fo {
                 }
                 cfg.add(element(name("includes"), docName + "/" + m.getDocumentSrcName()));
                 cfg.add(element(name("currentDocid"), docName));
-
-                // <targetsFilename> is ignored with docbkx-tools 2.0.15,
-                // but not with 2.0.14.
-
-                // The following configuration should be kept
-                // for versions of docbkx-tools that honor <targetsFilename>.
-                cfg.add(element(
-                        name("targetsFilename"),
-                        m.path(m.getBuildDirectory()) + "/" + docName + "-" + getFormat() + ".target.db"));
-
-                // Due to https://code.google.com/p/docbkx-tools/issues/detail?id=112
-                // RTF generation does not work with docbkx-tools 2.0.15.
-                // If the format is RTF, stick with 2.0.14 for now.
-                // TODO: Remove this sick hack when docbkx-tools #112 is fixed.
-                String docbkxVersion = m.getDocbkxVersion();
-                if (getFormat().equalsIgnoreCase("rtf")) {
-                    docbkxVersion = "2.0.14";
-                }
+                cfg.add(element(name("targetDatabaseDocument"), getTargetDatabaseDocument()));
+                cfg.add(element(name("targetsFilename"), m.getDocumentSrcName() + ".fo.target.db"));
 
                 executeMojo(
                         plugin(
                                 groupId("com.agilejava.docbkx"),
                                 artifactId("docbkx-maven-plugin"),
-                                version(docbkxVersion)),
+                                version(m.getDocbkxVersion())),
                         goal("generate-" + getFormat()),
                         configuration(cfg.toArray(new Element[cfg.size()])),
                         executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager())
@@ -171,8 +181,6 @@ public class Fo {
                 File outputDir = FileUtils.getFile(
                         m.getBaseDir(), "target", "docbkx", getFormat(), docName);
 
-                // <targetsFilename> is ignored with docbkx-tools 2.0.15,
-                // but not with 2.0.14.
                 // The following output directory should be where the files are
                 // for versions of docbkx-tools that honor <targetsFilename>.
                 if (!outputDir.exists()) {
@@ -206,11 +214,24 @@ public class Fo {
                 cfg.addAll(m.getBaseConfiguration());
                 cfg.add(element(name("foCustomization"), m.path(m.getFoCustomization())));
                 cfg.add(element(name("fop1Extensions"), "1"));
-                cfg.add(element(name("fopLogLevel"), m.getFopLogLevel()));
+
                 if (getFormat().equalsIgnoreCase("pdf")) {
                     cfg.add(element(name("insertOlinkPdfFrag"), "1"));
                 }
-                cfg.add(element(name("targetDatabaseDocument"), getTargetDB()));
+
+                // Due to https://code.google.com/p/docbkx-tools/issues/detail?id=112
+                // RTF generation does not work with docbkx-tools 2.0.15 or 2.0.16.
+                // New features like <fopLogLevel> cannot be used with RTF for now.
+                if (!getFormat().equalsIgnoreCase("rtf")) {
+                    cfg.add(element(name("fopLogLevel"), m.getFopLogLevel()));
+                }
+
+                // Due to https://code.google.com/p/docbkx-tools/issues/detail?id=112
+                // skip olink resolution with RTF for now.
+                if (!getFormat().equalsIgnoreCase("rtf")) {
+                    cfg.add(element(name("targetDatabaseDocument"), getTargetDatabaseDocument()));
+                }
+
                 cfg.add(element(name("targetDirectory"), m.path(m.getDocbkxOutputDirectory()) + "/" + getFormat()));
 
                 final String fontDir = m.path(m.getFontsDirectory());
@@ -220,9 +241,7 @@ public class Fo {
                 cfg.add(element(name("currentDocid"), docName));
 
                 // Due to https://code.google.com/p/docbkx-tools/issues/detail?id=112
-                // RTF generation does not work with docbkx-tools 2.0.15.
-                // If the format is RTF, stick with 2.0.14 for now.
-                // TODO: Remove this sick hack when docbkx-tools #112 is fixed.
+                // if the format is RTF, stick with 2.0.14 for now.
                 String docbkxVersion = m.getDocbkxVersion();
                 if (format.equalsIgnoreCase("rtf")) {
                     docbkxVersion = "2.0.14";

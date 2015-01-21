@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.build;
@@ -70,7 +70,7 @@ public class Webhelp {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = new File(m.getBuildDirectory(), "olinkdb-webhelp.xml");
+        File targetDB = FileUtils.getFile(m.getBaseDir(), "target", "olinkdb-webhelp.xml");
 
         try {
             OLinkUtils.createTargetDatabase(targetDB, "webhelp", m);
@@ -104,16 +104,8 @@ public class Webhelp {
 
                 cfg.add(element(name("currentDocid"), docName));
                 cfg.add(element(name("includes"), docName + "/" + m.getDocumentSrcName()));
+                cfg.add(element(name("targetsFilename"), m.getDocumentSrcName() + ".webhelp.target.db"));
 
-/*  <targetsFilename> is ignored with docbkx-tools 2.0.15.
-                cfg.add(element(
-                        name("targetsFilename"),
-                        FilenameUtils.separatorsToUnix(getBuildDirectory()
-                                .getPath())
-                                + "/"
-                                + docName
-                                + "-webhelp.target.db"));
-*/
                 executeMojo(
                         plugin(
                                 groupId("com.agilejava.docbkx"),

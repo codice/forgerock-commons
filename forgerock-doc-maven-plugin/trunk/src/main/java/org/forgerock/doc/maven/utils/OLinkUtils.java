@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014-2015 ForgeRock AS
+ * Copyright 2014-2015 ForgeRock AS.
  */
 package org.forgerock.doc.maven.utils;
 
@@ -121,17 +121,12 @@ public final class OLinkUtils {
                                             boolean isChunkedHtml)
             throws IOException, MojoExecutionException {
 
-        // <targetsFilename> is ignored with docbkx-tools 2.0.15, not 2.0.14.
-        String basePath = new File(mojo.getBaseDir(), "target").getAbsolutePath();
-
-        // docbkx-tools 2.0.15 cannot build RTF, so use 2.0.14 style.
-        if (format.equals("rtf")) {
-            basePath = mojo.path(mojo.getBuildDirectory());
-        }
+        // docbkx-tools 2.0.16 seems to put target.db files
+        // in ${basedir}/target regardless of ${project.build.dir}.
 
         createTargetDatabase(
                 file,
-                basePath,
+                new File(mojo.getBaseDir(), "target").getAbsolutePath(),
                 mojo.getDocNames(),
                 FilenameUtils.getBaseName(mojo.getDocumentSrcName()),
                 format,

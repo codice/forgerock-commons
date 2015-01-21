@@ -50,8 +50,8 @@
         page      CDATA   #IMPLIED
 >
 
-<!ENTITY guide SYSTEM '/path/to/build/docbkx/rtf/guide/index.fo.target.db'>
-<!ENTITY reference SYSTEM '/path/to/build/docbkx/rtf/reference/index.fo.target.db'>
+<!ENTITY guide SYSTEM '/path/to/target/docbkx/rtf/guide/index.fo.target.db'>
+<!ENTITY reference SYSTEM '/path/to/target/docbkx/rtf/reference/index.fo.target.db'>
 ]>
 <targetset>
  <sitemap>
