@@ -58,7 +58,7 @@ $(document).ready(function () {
             href = $(this).siblings("a").prop("name");
         }
 
-        if (href === undefined) { // Name anchor seems to be missing.
+        if (href === undefined || href === "") { // Name anchor seems to be missing.
             return;
         }
 
