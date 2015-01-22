@@ -232,6 +232,8 @@ The plugin has been tested with Maven 3.0.5, 3.1.1, 3.2.3.
 
 ## Fixes
 
+**DOCS-244: Webhelp format does not include noindex,nofollow meta tag*
+
 **DOCS-240: `<include>` (singular) and `<excludes>` are confusing**
 
 This fix replaces those settings with `<formats>`.

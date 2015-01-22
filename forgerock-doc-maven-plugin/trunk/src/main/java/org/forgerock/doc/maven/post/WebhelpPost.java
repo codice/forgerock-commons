@@ -17,12 +17,14 @@
 package org.forgerock.doc.maven.post;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
 import org.forgerock.doc.maven.utils.HtmlUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Webhelp post-processor for both single-page and chunked HTML formats.
@@ -51,6 +53,18 @@ public class WebhelpPost {
     public void execute() throws MojoExecutionException {
 
         final File webhelpDir = new File(m.getDocbkxOutputDirectory(), "webhelp");
+
+        HashMap<String, String> replacements = new HashMap<String, String>();
+
+        try {
+            // See https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag
+            String robots = "<head>" + System.getProperty("line.separator")
+                    + IOUtils.toString(getClass().getResourceAsStream("/robots.txt"), "UTF-8");
+            replacements.put("<head>", robots);
+            HtmlUtils.updateHtml(webhelpDir.getPath(), replacements);
+        } catch (IOException e) {
+            throw new MojoExecutionException("Failed to update webhelp with nofollow,noindex tag", e);
+        }
 
         if (m.doCopyResourceFiles() && m.getResourcesDirectory().exists()) {
 
