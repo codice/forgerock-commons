@@ -43,6 +43,9 @@
 
  <xsl:output method="html" encoding="UTF-8" indent="no" />
 
+ <!--<xsl:variable name="target.database"
+               select="index.html.target.db"/> //-->
+
  <xsl:preserve-space
  elements="db:computeroutput db:programlisting db:screen db:userinput"/>
 
@@ -140,8 +143,9 @@
  <xsl:param name="use.id.as.filename" select="1" />
  <xsl:param name="make.graphic.viewport" select="0" />
  <xsl:param name="ignore.image.scaling" select="1" />
+ <xsl:param name="html.longdesc" select="1" />
  <xsl:param name="html.longdesc.link" select="0" />
- <xsl:param name="html.longdesc" select="0" />
+
 
  <xsl:param name="generate.toc">
   appendix  nop
@@ -180,6 +184,13 @@
     <xsl:text>width=device-width, initial-scale=1</xsl:text>
    </xsl:attribute>
   </meta>
+  <xsl:if test="($draft.mode = 'yes')">
+   <meta name="robots">
+    <xsl:attribute name="content">
+     <xsl:text>noindex,nofollow</xsl:text>
+    </xsl:attribute>
+   </meta>
+  </xsl:if>
  </xsl:template>
 
  <xsl:template name="user.footer.content">
