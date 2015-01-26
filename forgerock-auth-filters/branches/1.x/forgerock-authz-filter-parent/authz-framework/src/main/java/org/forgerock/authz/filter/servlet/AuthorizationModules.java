@@ -16,6 +16,8 @@
 
 package org.forgerock.authz.filter.servlet;
 
+import javax.servlet.FilterConfig;
+
 import org.forgerock.authz.filter.servlet.api.HttpServletAuthorizationModule;
 import org.forgerock.util.Reject;
 
@@ -28,10 +30,42 @@ import org.forgerock.util.Reject;
  */
 public final class AuthorizationModules {
 
+    public static final String INIT_PARAM_MODULE_CLASS_NAME = "servlet-authz-module-class";
+
     /**
      * Private utility constructor.
      */
     private AuthorizationModules() { }
+
+    /**
+     * Returns a new {@link AuthorizationModuleFactory} which finds by reflection the
+     * {@code HttpServletAuthorizationModule} which will be used to protect access to resources by performing
+     * authorization on each incoming request.
+     *
+     * @param config The {@code FilterConfig} that will be used to obtain the module class name.
+     * @return A new {@code AuthorizationModuleFactory} which contains the {@code HttpServletAuthorizationModule} which
+     * will perform the authorization of requests.
+     * @throws java.lang.IllegalArgumentException If either the specified {@code module} cannot be found or instantiated.
+     */
+    public static AuthorizationModuleFactory getAuthorizationModuleFactory(final FilterConfig config) {
+        String moduleTypeName = config.getInitParameter(INIT_PARAM_MODULE_CLASS_NAME);
+        Reject.ifTrue(moduleTypeName == null, "Authorization module class name cannot be null.");
+        try {
+            Class<?> moduleType = Class.forName(moduleTypeName);
+            if (!HttpServletAuthorizationModule.class.isAssignableFrom(moduleType)) {
+                throw new IllegalArgumentException("Servlet authz module class is not a " +
+                        "HttpServletAuthorizationModule: " + moduleTypeName);
+            }
+            return newAuthorizationModuleFactory(
+                    moduleType.asSubclass(HttpServletAuthorizationModule.class).newInstance());
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException("Servlet authz module class not found: " + moduleTypeName, e);
+        } catch (InstantiationException e) {
+            throw new IllegalArgumentException("Cannot instantiate module: " + moduleTypeName, e);
+        } catch (IllegalAccessException e) {
+            throw new IllegalArgumentException("Cannot instantiate module: " + moduleTypeName, e);
+        }
+    }
 
     /**
      * Returns a new {@link AuthorizationModuleFactory} which contains the {@code HttpServletAuthorizationModule} which
