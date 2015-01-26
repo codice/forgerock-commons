@@ -16,7 +16,7 @@
 
 ZeroClipboard.config({
         /* swfPath:  "includes/swf/ZeroClipboard.swf", */
-        swfPath:  "https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf",
+        swfPath:  "http://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf",
         trustedDomains: ["*"],
         forceEnhancedClipboard: true,
         forceHandCursor: true,

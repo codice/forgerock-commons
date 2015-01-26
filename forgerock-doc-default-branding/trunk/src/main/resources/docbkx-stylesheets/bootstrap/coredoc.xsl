@@ -122,7 +122,6 @@
   http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js
   http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js
   http://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.min.js
-  includes/js/coredoc.js
  </xsl:param>
 
  <xsl:param name="make.clean.html" select="1" />
@@ -193,7 +192,7 @@
   </xsl:if>
  </xsl:template>
 
- <xsl:template name="user.footer.content">
+ <xsl:template name="user.head.content">
   <script type="text/javascript" >
    &js;
   </script>
