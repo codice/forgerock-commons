@@ -12,7 +12,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2011-2014 ForgeRock AS
+ * Copyright 2011-2015 ForgeRock AS.
 -->
 <xsl:stylesheet
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -213,19 +213,58 @@ version="1.0">
        Wrap screen text containing HTTP* URLs at the start of the query string.
   -->
   <xsl:template match="d:screen//text()">
-   <xsl:call-template name="string-replace">
-    <xsl:with-param name="text" select="." />
-    <xsl:with-param name="replace" select="'?'" />
-    <xsl:with-param name="by" select="'&#x000A; ?'" />
+   <xsl:call-template name="split-screen-lines">
+    <xsl:with-param name="lines" select="." />
    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="split-screen-lines">
+   <!-- Inspired by http://www.heber.it/?p=1088 -->
+   <xsl:param name="lines" />
+   <xsl:param name="eol" select="'&#x000A;'" />
+
+   <xsl:choose>
+
+    <xsl:when test="contains($lines, $eol)">
+     <!-- Handle everything up to the first EOL. -->
+     <xsl:call-template name="string-replace">
+      <xsl:with-param name="text" select="concat(substring-before($lines, $eol), $eol)" />
+      <xsl:with-param name="replace" select="'?'" />
+      <xsl:with-param name="by" select="'&#x000A; ?'" />
+     </xsl:call-template>
+
+     <!-- Handle everything that remains. -->
+     <xsl:call-template name="split-screen-lines">
+      <xsl:with-param name="lines" select="substring-after($lines, $eol)" />
+     </xsl:call-template>
+    </xsl:when>
+
+    <xsl:otherwise>
+     <xsl:choose>
+      <xsl:when test="$lines = ''">
+       <xsl:text />
+      </xsl:when>
+
+      <xsl:otherwise>
+       <xsl:call-template name="string-replace">
+        <xsl:with-param name="text" select="$lines" />
+        <xsl:with-param name="replace" select="'?'" />
+        <xsl:with-param name="by" select="'&#x000A; ?'" />
+       </xsl:call-template>
+      </xsl:otherwise>
+     </xsl:choose>
+    </xsl:otherwise>
+   </xsl:choose>
   </xsl:template>
 
   <xsl:template name="string-replace">
    <xsl:param name="text" />
    <xsl:param name="replace" />
    <xsl:param name="by" />
+   <xsl:param name="max-length" select="80" />
    <xsl:choose>
-     <xsl:when test="contains($text, 'http') and contains($text, $replace)">
+     <xsl:when test="string-length($text) &gt; $max-length
+                     and contains($text, 'http') and contains($text, $replace)">
        <xsl:value-of select="substring-before($text, $replace)" />
        <xsl:value-of select="$by" />
        <xsl:call-template name="string-replace">
