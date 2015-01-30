@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2013-2014 ForgeRock AS
+ * Copyright 2013-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.pre;
@@ -91,6 +91,10 @@ public class Filter {
          */
         void filter() throws MojoExecutionException {
 
+            // Regarding nonFilteredFileExtensions,
+            // jpg, jpeg, gif, bmp and png are not filtered by default according to
+            // http://maven.apache.org/plugins/maven-resources-plugin/examples/binaries-filtering.html.
+
             executeMojo(
                     plugin(
                             groupId("org.apache.maven.plugins"),
@@ -99,21 +103,16 @@ public class Filter {
                     goal("copy-resources"),
                     configuration(
                             element(name("outputDirectory"), filteredOutputDirectory),
+                            element(name("nonFilteredFileExtensions"),
+                                    element(name("nonFilteredFileExtension"), "eps"),
+                                    element(name("nonFilteredFileExtension"), "pptx"),
+                                    element(name("nonFilteredFileExtension"), "tiff")),
                             element(name("resources"),
                                     element(name("resource"),
                                             element(name("directory"), sourceDirectory),
                                             element(name("filtering"), "true"),
                                             element(name("includes"),
-                                                    element(name("include"), "**/*.json"),
-                                                    element(name("include"), "**/*.txt"),
-                                                    element(name("include"), "**/*.xml"))),
-                                    element(name("resource"),
-                                            element(name("directory"), sourceDirectory),
-                                            element(name("filtering"), "false"),
-                                            element(name("excludes"),
-                                                    element(name("exclude"), "**/*.json"),
-                                                    element(name("exclude"), "**/*.txt"),
-                                                    element(name("exclude"), "**/*.xml"))))),
+                                                    element(name("include"), "**/*.*"))))),
                     executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
         }
     }
