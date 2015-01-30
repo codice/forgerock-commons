@@ -18,14 +18,18 @@ package org.forgerock.doc.maven.pre;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
-import org.forgerock.doc.maven.utils.ImageDataTransformer;
+import org.forgerock.doc.maven.utils.TheadRowTransformer;
 
 import java.io.IOException;
 
 /**
- * Edit {@code &lt;imagedata&gt;} elements in DocBook XML sources.
+ * Add color to &lt;thead>&lt;row> in DocBook XML sources.
+ *
+ * <p>
+ *
+ * This adds a processing instruction that affects only FO output, such as PDF.
  */
-public class ImageData {
+public class HeaderColor {
 
     /**
      * The Mojo that holds configuration and related methods.
@@ -37,19 +41,19 @@ public class ImageData {
      *
      * @param mojo The Mojo that holds the configuration.
      */
-    public ImageData(final AbstractDocbkxMojo mojo) {
+    public HeaderColor(final AbstractDocbkxMojo mojo) {
         m = mojo;
     }
 
     /**
-     * Edit {@code &lt;imagedata&gt;} elements in the copy of DocBook XML sources.
+     * Add color to &lt;thead>&lt;row> in the copy of DocBook XML sources.
      *
      * @throws MojoExecutionException Failed to update an XML file.
      */
     public void execute() throws MojoExecutionException {
-        ImageDataTransformer idt = new ImageDataTransformer();
+        TheadRowTransformer trt = new TheadRowTransformer();
         try {
-            idt.update(m.getDocbkxModifiableSourcesDirectory());
+            trt.update(m.getDocbkxModifiableSourcesDirectory());
         } catch (IOException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }

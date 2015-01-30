@@ -30,40 +30,23 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 @SuppressWarnings("javadoc")
-public class ImageDataTransformerTest {
+public class TheadRowTransformerTest {
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
     @Before
     public void setUp() throws IOException, URISyntaxException {
-        File testFile = new File(getClass().getResource("/unit/utils/idt/chapter.xml").toURI());
+        File testFile = new File(getClass().getResource("/unit/utils/trt/chapter.xml").toURI());
         FileUtils.copyFileToDirectory(testFile, folder.getRoot());
     }
 
     @Test
     public void shouldAddImageAttributes() throws IOException {
-        new ImageDataTransformer().update(folder.getRoot());
-
-        /*
-            This causes the following messages at present.
-
-            Compiler warnings:
-              line 38: Attribute 'align' outside of element.
-              line 39: Attribute 'scalefit' outside of element.
-              line 40: Attribute 'width' outside of element.
-              line 41: Attribute 'contentdepth' outside of element.
-
-            It would be nice to know what those warnings mean,
-            but the output seems to be okay for further processing.
-         */
+        new TheadRowTransformer().update(folder.getRoot());
 
         File out = new File(folder.getRoot(), "chapter.xml");
-        String expectedElement =
-                "<db:imagedata xmlns:db=\"http://docbook.org/ns/docbook\""
-                        + " fileref=\"images/an-image.png\" format=\"PNG\""
-                        + " align=\"center\" scalefit=\"1\" width=\"100%\""
-                        + " contentdepth=\"100%\"/>";
+        String expectedElement = "<?dbfo bgcolor=\"#EEEEEE\"?>";
 
         assertThat(contentOf(out)).contains(expectedElement);
     }
