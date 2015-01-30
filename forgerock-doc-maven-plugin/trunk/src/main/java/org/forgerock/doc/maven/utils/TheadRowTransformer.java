@@ -19,11 +19,10 @@ package org.forgerock.doc.maven.utils;
 import org.forgerock.doc.maven.utils.helper.FileFilterFactory;
 
 /**
- * Update XML files, transforming &lt;imagedata&gt; elements to make sure they use
- * {@code scalefit="1"}, {@code width="100%"}, and {@code contentdepth="100%"}
- * attributes.
+ * Update XML files, adding a dbfo processing instruction
+ * to set the background color of table header rows.
  */
-public class ImageDataTransformer extends XmlTransformer {
+public class TheadRowTransformer extends XmlTransformer {
 
     /**
      * Construct an updater to match DocBook XML files.
@@ -40,11 +39,12 @@ public class ImageDataTransformer extends XmlTransformer {
      *     File xmlSourceDirectory  = new File("/path/to/xml/files/");
      *
      *     // Update XML files.
-     *     ImageDataTransformer idt = new ImageDataTransformer();
-     *     return idt.update(xmlSourceDirectory);
+     *     TheadRowTransformer trt = new TheadRowTransformer();
+     *     return trt.update(xmlSourceDirectory);
      * </pre>
+     *
      */
-    public ImageDataTransformer() {
-        super(FileFilterFactory.getXmlFileFilter(), "/xslt/imagedata.xsl");
+    public TheadRowTransformer() {
+        super(FileFilterFactory.getXmlFileFilter(), "/xslt/thead-row-pi.xsl");
     }
 }

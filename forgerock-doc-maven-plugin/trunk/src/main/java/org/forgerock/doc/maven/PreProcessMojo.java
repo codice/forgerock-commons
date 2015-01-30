@@ -27,6 +27,7 @@ import org.forgerock.doc.maven.pre.CurrentDocId;
 import org.forgerock.doc.maven.pre.CustomCss;
 import org.forgerock.doc.maven.pre.Dpi;
 import org.forgerock.doc.maven.pre.Filter;
+import org.forgerock.doc.maven.pre.HeaderColor;
 import org.forgerock.doc.maven.pre.ImageData;
 import org.forgerock.doc.maven.pre.JCite;
 import org.forgerock.doc.maven.pre.ModifiableCopy;
@@ -66,6 +67,7 @@ public class PreProcessMojo extends AbstractDocbkxMojo {
         new XCite(this).execute();
         new Filter(this).execute();
         new ImageData(this).execute();
+        new HeaderColor(this).execute();
         new PlantUml(this).execute();
         new Dpi(this).execute();
         new CurrentDocId(this).execute();

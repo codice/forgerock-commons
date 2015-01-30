@@ -28,6 +28,7 @@ A variety of pre-processing tasks are performed in the following order:
 *  Include quotes from other text files by applying the XCite plugin. (`XCite`)
 *  Perform Maven resource filtering on the copy to replace variables. (`Filter`)
 *  Edit `<imagedata>` elements in the resource filtered files. (`ImageData`)
+*  Add color to `<thead><row>` in the resource filtered files. (`HeaderColor`)
 *  Perform image generation on the resource filtered files. (`PlantUml`)
 *  Set DPI on .png images in the resource filtered files. (`Dpi`)
 *  Perform additional pre-processing on the resource filtered files. (`CurrentDocId`)
@@ -141,4 +142,4 @@ the License file at legal/CDDLv1.0.txt. If applicable, add the following below t
 Header, with the fields enclosed by brackets [] replaced by your own identifying
 information: "Portions copyright [year] [name of copyright owner]".
 
-Copyright 2014-2015 ForgeRock AS
+Copyright 2014-2015 ForgeRock AS.
