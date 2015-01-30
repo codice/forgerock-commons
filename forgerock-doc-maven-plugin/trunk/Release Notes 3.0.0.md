@@ -147,6 +147,9 @@ before you call this plugin.
 Skip the `process` goal in the configuration for this plugin,
 and instead specify `<docbkxSourceDirectory>` to pick up the pre-processed files.
 
+**DOCS-235: Add PI for table header row color in PDF**
+
+This makes the table header row background color light gray in PDF.
 
 **DOCS-215: Add configuration for stopping at pre-processed DocBook**
 
@@ -253,6 +256,10 @@ This fix replaces those settings with `<formats>`.
 **DOCS-188: JavaScript icons in HTML to (un)fold screen are not accessible**
 
 The fix removes the icons and (un)fold functionality.
+
+**DOCS-184: Remove automatic line-breaking at the '?' character**
+
+The fix only breaks URL lines longer than 80 characters in PDF.
 
 **DOCS-179: Issue with Maven HTML builds and images**
 
