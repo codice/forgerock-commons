@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.utils;
@@ -123,9 +123,10 @@ public final class NameUtils {
 
         StringBuilder sb = new StringBuilder();
 
-        // If project name exists, capitalize it and follow it with a hyphen.
+        // If project name exists, capitalize it, replace spaces with hyphens,
+        // and follow the result with a hyphen.
         if (StringUtils.isNotBlank(projectName)) {
-            sb.append(capitalize(projectName)).append('-');
+            sb.append(spacesToHyphens(capitalize(projectName))).append('-');
 
             // Version precedes the document name.
             // It only makes sense to use a version if a project name is defined.
@@ -167,6 +168,16 @@ public final class NameUtils {
         }
 
         return String.valueOf(chars);
+    }
+
+    /**
+     * Replace spaces with hyphens.
+     *
+     * @param   string  String in which to replace spaces with hyphens
+     * @return  String with spaces replaced by hyphens.
+     */
+    protected static String spacesToHyphens(final String string) {
+        return string.replaceAll(" ", "-");
     }
 
     /**
