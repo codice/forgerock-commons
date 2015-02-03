@@ -69,6 +69,10 @@ ForgeRock doc build tools have moved to CDDL to align with other ForgeRock proje
 
 ## What's New
 
+**DOCS-264: Refine PDF naming for release documentation**
+
+The fix allows the plugin to handle project names that include spaces.
+
 **DOCS-261: Allow building output formats from pre-processed DocBook XML 5**
 
 If the DocBook XML sources have already been fully pre-processed,
