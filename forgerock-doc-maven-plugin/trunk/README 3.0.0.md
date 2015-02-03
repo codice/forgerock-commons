@@ -366,8 +366,15 @@ before you call this plugin.
         </executions>
       </plugin>
 
-Skip the `process` goal in the configuration for this plugin,
-and instead specify `<docbkxSourceDirectory>` to pick up the pre-processed files.
+If the DocBook XML sources have already been fully pre-processed,
+set `<usePreProcessedSources>true</usePreProcessedSources>`
+(or `-DusePreProcessedSources=true`)
+and set `<docbkxSourceDirectory>` (or `-DdocbkxSourceDirectory`)
+to the file system directory containing the pre-processed sources,
+as in the following example that corresponds to the above settings.
+
+      <usePreProcessedSources>true</usePreProcessedSources>
+      <docbkxSourceDirectory>${project.build.directory}/db-src</docbkxSourceDirectory>
 
 
 ## Copying Arbitrary Documentation Set Resources

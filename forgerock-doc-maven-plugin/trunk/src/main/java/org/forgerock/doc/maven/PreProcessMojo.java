@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2015 ForgeRock AS
+ * Copyright 2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven;
@@ -59,19 +59,24 @@ public class PreProcessMojo extends AbstractDocbkxMojo {
             }
         }
 
-        // Perform pre-processing for all formats.
+        // Get branding.
         new Branding(this).execute();
+
+        // Make a copy of the source files that the plugin can edit.
         new ModifiableCopy(this).execute();
-        new CommonContent(this).execute();
-        new JCite(this).execute();
-        new XCite(this).execute();
-        new Filter(this).execute();
-        new ImageData(this).execute();
-        new HeaderColor(this).execute();
-        new PlantUml(this).execute();
-        new Dpi(this).execute();
-        new CurrentDocId(this).execute();
-        new CustomCss(this).execute();
+
+        if (!doUsePreProcessedSources()) {  // Sources require pre-processing.
+            new CommonContent(this).execute();
+            new JCite(this).execute();
+            new XCite(this).execute();
+            new Filter(this).execute();
+            new ImageData(this).execute();
+            new HeaderColor(this).execute();
+            new PlantUml(this).execute();
+            new Dpi(this).execute();
+            new CurrentDocId(this).execute();
+            new CustomCss(this).execute();
+        }
 
         if (doCreateArtifacts()) {
             new ArtifactBuilder(this).execute();

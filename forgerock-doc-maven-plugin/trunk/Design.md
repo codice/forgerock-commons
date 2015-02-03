@@ -19,10 +19,13 @@ one that resembles a pipeline having the following stages.
 
 The first stage pre-processes DocBook XML source files.
 
-A variety of pre-processing tasks are performed in the following order:
+First, this stage prepares for processing.
 
 *  Unpack the branding elements. (`Branding`)
 *  Make a modifiable copy of the original sources. (`ModifiableCopy`)
+
+By default, pre-processing tasks are performed in the following order:
+
 *  Augment the copy with common content. (`CommonContent`)
 *  Include Java code by applying the JCite plugin. (`JCite`)
 *  Include quotes from other text files by applying the XCite plugin. (`XCite`)
@@ -33,6 +36,7 @@ A variety of pre-processing tasks are performed in the following order:
 *  Set DPI on .png images in the resource filtered files. (`Dpi`)
 *  Perform additional pre-processing on the resource filtered files. (`CurrentDocId`)
 *  Add custom CSS to the sources. (`CustomCss`)
+
 *  If configured, build a Maven artifact from pre-processed sources. (`ArtifactBuilder`)
 
 This stage is performed during the `pre-site` phase, `process` goal. (`PreProcessMojo`)

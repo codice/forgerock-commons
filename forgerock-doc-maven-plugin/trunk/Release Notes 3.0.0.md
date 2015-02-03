@@ -69,6 +69,14 @@ ForgeRock doc build tools have moved to CDDL to align with other ForgeRock proje
 
 ## What's New
 
+**DOCS-261: Allow building output formats from pre-processed DocBook XML 5**
+
+If the DocBook XML sources have already been fully pre-processed,
+set `<usePreProcessedSources>true</usePreProcessedSources>`
+(or `-DusePreProcessedSources=true`)
+and set `<docbkxSourceDirectory>` (or `-DdocbkxSourceDirectory`)
+to the file system directory containing the pre-processed sources.
+
 **DOCS-239: Reduce the list of configuration settings**
 
 This change removes these configuration settings, relying instead on the default values:
