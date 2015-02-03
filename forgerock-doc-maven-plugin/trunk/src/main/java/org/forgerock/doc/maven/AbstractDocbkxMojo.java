@@ -437,7 +437,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     /**
      * Base directory for DocBook XML source files.
      */
-    @Parameter(defaultValue = "${basedir}/src/main/docbkx")
+    @Parameter(defaultValue = "${basedir}/src/main/docbkx", property = "docbkxSourceDirectory")
     private File docbkxSourceDirectory;
 
     /**
@@ -1518,6 +1518,25 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public String[] getSkipUrlPatterns() {
         return skipUrlPatterns;
+    }
+
+    /**
+     * Whether to build from pre-processed DocBook XML sources.
+     */
+    @Parameter(defaultValue = "false", property = "usePreProcessedSources")
+    private boolean usePreProcessedSources;
+
+    /**
+     * Whether to build from pre-processed DocBook XML sources.
+     *
+     * <p>
+     *
+     * Default: {@code false}
+     *
+     * @return True if {@code docbkxSourceDirectory} contains fully pre-processed sources.
+     */
+    public boolean doUsePreProcessedSources() {
+        return usePreProcessedSources;
     }
 
     /**
