@@ -22,6 +22,11 @@ The link to the online issue tracker is
 With the fix for DOCS-189, RTF is no longer a default format.
 As a result, you should no doubt remove links to in-progress RTF documents.
 
+**Changes to site layout**
+
+The fix for DOCS-260 includes each type of HTML output
+in its own directory under `site/doc` as described below.
+
 **Changes to plugin execution goals**
 
 The fix for DOCS-108 is a major refactoring of the doc Maven plugin.
@@ -80,6 +85,18 @@ set `<usePreProcessedSources>true</usePreProcessedSources>`
 (or `-DusePreProcessedSources=true`)
 and set `<docbkxSourceDirectory>` (or `-DdocbkxSourceDirectory`)
 to the file system directory containing the pre-processed sources.
+
+**DOCS-260: Separate different types of HTML output**
+
+The fix for this issue separates the 4 types of HTML output,
+`bootstrap`, (single-page & chunked) `html`, `webhelp`, `xhtml5`,
+when preparing the site layout, by keeping each in its own folder:
+`site/doc/bootstrap`, `site/doc/html`, `site/doc/webhelp`, `site/doc/xhtml`.
+
+If you have been using links to HTML in your Maven site documents
+such as `doc/my-guide/index.html`,
+then you must update those links after this fix is committed,
+for example `doc/bootstrap/my-guide/index.html`.
 
 **DOCS-239: Reduce the list of configuration settings**
 

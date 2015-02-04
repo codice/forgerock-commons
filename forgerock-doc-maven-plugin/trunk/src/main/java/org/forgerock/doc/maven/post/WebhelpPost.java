@@ -11,12 +11,11 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS
+ * Copyright 2014-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.post;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
@@ -64,17 +63,6 @@ public class WebhelpPost {
             HtmlUtils.updateHtml(webhelpDir.getPath(), replacements);
         } catch (IOException e) {
             throw new MojoExecutionException("Failed to update webhelp with nofollow,noindex tag", e);
-        }
-
-        if (m.doCopyResourceFiles() && m.getResourcesDirectory().exists()) {
-
-            final String baseName = FilenameUtils.getBaseName(m.getResourcesDirectory().getPath());
-
-            try {
-                HtmlUtils.fixResourceLinks(webhelpDir.getPath(), baseName);
-            } catch (IOException e) {
-                throw new MojoExecutionException("Failed to update resource links", e);
-            }
         }
     }
 }
