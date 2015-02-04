@@ -22,6 +22,9 @@ The link to the online issue tracker is
 With the fix for DOCS-189, RTF is no longer a default format.
 As a result, you should no doubt remove links to in-progress RTF documents.
 
+The fix for DOCS-144 makes Bootstrap-styled HTML and PDF the default formats.
+To build other formats, set the `formats` property as in `-Dformats=xhtml5`.
+
 **Changes to site layout**
 
 The fix for DOCS-260 includes each type of HTML output
@@ -63,9 +66,6 @@ the fix for DOCS-194 in this release does not provide
 the configuration option `<overwriteGeneratedSource>`,
 but instead provides similar capability through other settings.
 See the explanation below for details.
-
-The fix for DOCS-144 makes Bootstrap-styled HTML and PDF the default formats.
-To build other formats, set the `formats` property as in `-Dformats=xhtml5`.
 
 **Changes to source code licensing**
 
