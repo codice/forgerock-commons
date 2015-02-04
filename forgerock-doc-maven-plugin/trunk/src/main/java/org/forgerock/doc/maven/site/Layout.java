@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2015 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.site;
@@ -95,7 +95,9 @@ public class Layout {
 
         if (formats.contains(Format.html)) {
             r.add(element(name("resource"),
-                    element(name("directory"), outputDir + "/html/")));
+                    element(name("directory"), outputDir + "/"),
+                    element(name("includes"),
+                            element(name("include"), "html/**/*.*"))));
         }
 
         // Man pages are not currently copied anywhere.
@@ -118,12 +120,16 @@ public class Layout {
 
         if (formats.contains(Format.xhtml5)) {
             r.add(element(name("resource"),
-                    element(name("directory"), outputDir + "/xhtml/")));
+                    element(name("directory"), outputDir + "/"),
+                    element(name("includes"),
+                            element(name("include"), "xhtml/**/*.*"))));
         }
 
         if (formats.contains(Format.bootstrap)) {
             r.add(element(name("resource"),
-                    element(name("directory"), outputDir + "/bootstrap/")));
+                    element(name("directory"), outputDir + "/"),
+                    element(name("includes"),
+                            element(name("include"), "bootstrap/**/*.*"))));
         }
 
         return element("resources", r.toArray(new MojoExecutor.Element[r.size()]));
@@ -181,11 +187,32 @@ public class Layout {
                         executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
             }
 
-            // Optionally copy an entire directory of arbitrary resources, too.
+            // Optionally copy the entire directory of arbitrary resources
+            // to the directories containing HTML format docs.
             if (m.doCopyResourceFiles() && m.getResourcesDirectory().exists()) {
+
+                List<String> directories = new ArrayList<String>();
+                if (m.getFormats().contains(Format.bootstrap)) {
+                    directories.add("bootstrap");
+                }
+
+                if (m.getFormats().contains(Format.html)) {
+                    directories.add("html");
+                }
+
+                if (m.getFormats().contains(Format.webhelp)) {
+                    directories.add("webhelp");
+                }
+
+                if (m.getFormats().contains(Format.xhtml5)) {
+                    directories.add("xhtml");
+                }
+
                 try {
-                    FileUtils.copyDirectoryToDirectory(m.getResourcesDirectory(),
-                            new File(m.getSiteDirectory(), "doc"));
+                    for (String directory : directories) {
+                        File targetDirectory = FileUtils.getFile(m.getSiteDirectory(), "doc", directory);
+                        FileUtils.copyDirectoryToDirectory(m.getResourcesDirectory(), targetDirectory);
+                    }
                 } catch (IOException e) {
                     throw new MojoExecutionException("Failed to copy resources", e);
                 }
