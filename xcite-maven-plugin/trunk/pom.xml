@@ -17,7 +17,7 @@
   ! information:
   !      Portions Copyright [yyyy] [name of copyright owner]
   !
-  !     Copyright 2014 ForgeRock AS
+  !     Copyright 2015 ForgeRock AS.
   !
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -47,10 +47,10 @@
 
   <licenses>
    <license>
-    <name>MPL-2.0</name>
-    <url>http://www.mozilla.org/MPL/2.0/</url>
+    <name>CDDL-1.0</name>
+    <url>http://www.opensource.org/licenses/CDDL-1.0</url>
     <comments>
-     Mozilla Public License Version 2.0.
+     Common Development and Distribution License (CDDL) 1.0.
      This license applies to source code as indicated in the source code.
     </comments>
     <distribution>repo</distribution>
