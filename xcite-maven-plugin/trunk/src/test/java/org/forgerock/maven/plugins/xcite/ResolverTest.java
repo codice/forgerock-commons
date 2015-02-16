@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS.
+ * Copyright 2014-2015 ForgeRock AS.
  */
 
 package org.forgerock.maven.plugins.xcite;
@@ -165,5 +165,17 @@ public class ResolverTest {
         String result = resolver.getQuote(file, citation);
 
         assertThat(result).isEqualTo("[does-not-exist.txt]");
+    }
+
+    @Test
+    public void ignoreInvalidCitation() throws IOException, URISyntaxException {
+        Resolver resolver = new Resolver(new File("."), false, 0, true);
+
+        String line = "return [ {\"policyRequirement\": \"NOT_NULL\"}];";
+
+        File file = new File(getClass().getResource("/invalid.txt").toURI());
+        String result = resolver.resolve(file, line);
+
+        assertThat(result).isEqualTo(line);
     }
 }

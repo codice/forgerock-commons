@@ -128,8 +128,12 @@ public class Resolver {
 
             if (citation == null) { // The part is not a citation.
                 parts[i] = part;
-            } else {                // The part is a citation.
-                parts[i] = getQuote(file, citation);
+            } else {
+                String quote = getQuote(file, citation);
+
+                // If the quote is the same the original citation string,
+                // return the part unchanged.
+                parts[i] = (quote.equals(citation.toString())) ? part : quote;
             }
 
             ++i;
