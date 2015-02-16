@@ -30,13 +30,13 @@ public final class FixedBloomFilter<T> implements FalsePositiveSet<T>, BloomFilt
 
     private final BloomFilter<T> bloomFilter;
 
-    public FixedBloomFilter(final Funnel<T> funnel, final int expectedInsertions, final double fpp) {
+    public FixedBloomFilter(final Funnel<? super T> funnel, final int expectedInsertions, final double fpp) {
         this.configuredFpp = fpp;
         this.capacity = expectedInsertions;
         this.bloomFilter = BloomFilter.create(funnel, expectedInsertions, fpp);
     }
 
-    public FixedBloomFilter(final Funnel<T> funnel, final int expectedInsertions) {
+    public FixedBloomFilter(final Funnel<? super T> funnel, final int expectedInsertions) {
         this(funnel, expectedInsertions, FalsePositiveSetBuilder.DEFAULT_OVERALL_FALSE_POSITIVE_PROBABILITY);
     }
 
