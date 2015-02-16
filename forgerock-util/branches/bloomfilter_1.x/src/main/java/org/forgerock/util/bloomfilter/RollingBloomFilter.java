@@ -39,7 +39,7 @@ import java.util.List;
 public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, RollingBloomFilterMXBean {
 
     /**
-     * The chain of bloom filter buckets. NB: must be synchronized on any use.
+     * The chain of bloom filter buckets.
      */
     private final Deque<Bucket> chain = new ArrayDeque<Bucket>();
 
@@ -100,14 +100,12 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
      */
     public void addUntil(T object, long expiryTime) {
         Reject.ifNull(object);
-        synchronized (chain) {
-            Bucket bucket = chain.peekLast();
-            if (bucket == null || bucket.isSaturated()) {
-                bucket = createNewBucket();
-                chain.addLast(bucket);
-            }
-            bucket.add(object, expiryTime);
+        Bucket bucket = chain.peekLast();
+        if (bucket == null || bucket.isSaturated()) {
+            bucket = createNewBucket();
+            chain.addLast(bucket);
         }
+        bucket.add(object, expiryTime);
     }
 
     private Bucket createNewBucket() {
@@ -121,16 +119,14 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
 
     @Override
     public boolean mightContain(T object) {
-        synchronized (chain) {
-            for (Iterator<Bucket> it = chain.iterator(); it.hasNext();) {
-                final Bucket bucket = it.next();
-                // Remove any buckets that have both expired and become saturated.
-                if (bucket.isExpired() && bucket.isSaturated()) {
-                    it.remove();
-                    nextBucketNumber.clear(bucket.n);
-                } else if (bucket.mightContain(object)) {
-                    return true;
-                }
+        for (Iterator<Bucket> it = chain.iterator(); it.hasNext();) {
+            final Bucket bucket = it.next();
+            // Remove any buckets that have both expired and become saturated.
+            if (bucket.isExpired() && bucket.isSaturated()) {
+                it.remove();
+                nextBucketNumber.clear(bucket.n);
+            } else if (bucket.mightContain(object)) {
+                return true;
             }
         }
 
@@ -168,10 +164,8 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
     @Override
     public long getMemoryUsed() {
         long size = 0;
-        synchronized (chain) {
-            for (Bucket bucket : chain) {
-                size += bucket.getMemoryUsed();
-            }
+        for (Bucket bucket : chain) {
+            size += bucket.getMemoryUsed();
         }
         return size;
     }
@@ -179,10 +173,8 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
     @Override
     public List<BucketStatistics> getBucketStatistics() {
         final List<BucketStatistics> stats = new ArrayList<BucketStatistics>();
-        synchronized (chain) {
-            for (Bucket bucket : chain) {
-                stats.add(bucket.stats());
-            }
+        for (Bucket bucket : chain) {
+            stats.add(bucket.stats());
         }
         return stats;
     }
