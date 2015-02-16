@@ -53,9 +53,9 @@ abstract class FalsePositiveSetBuilder<T, F extends FalsePositiveSet<T>> {
     public static final int DEFAULT_MAX_NUMBER_OF_BUCKETS = 64;
     int maximumNumberOfBuckets = DEFAULT_MAX_NUMBER_OF_BUCKETS;
     TimeService clock = TimeService.SYSTEM;
-    final Funnel<T> funnel;
+    final Funnel<? super T> funnel;
 
-    FalsePositiveSetBuilder(final Funnel<T> funnel) {
+    FalsePositiveSetBuilder(final Funnel<? super T> funnel) {
         this.funnel = funnel;
     }
 

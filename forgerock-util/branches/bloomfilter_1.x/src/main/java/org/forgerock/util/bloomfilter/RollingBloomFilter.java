@@ -49,7 +49,7 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
     private final TimeService clock;
     private final int maxNumberOfBuckets;
     private final BitSet nextBucketNumber;
-    private final Funnel<T> funnel;
+    private final Funnel<? super T> funnel;
 
     /**
      * False positive probability of the first bucket in the chain.
@@ -86,7 +86,7 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
      * @param <T> the type of elements to be stored in the set.
      * @return a builder instance to further configure and build the scalable bloom filter.
      */
-    public static <T> Builder<T> create(final Funnel<T> funnel) {
+    public static <T> Builder<T> create(final Funnel<? super T> funnel) {
         return new Builder<T>(funnel);
     }
 
@@ -188,7 +188,7 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
     }
 
     public static class Builder<T> extends FalsePositiveSetBuilder<T, RollingBloomFilter<T>> {
-        Builder(final Funnel<T> funnel) {
+        Builder(final Funnel<? super T> funnel) {
             super(funnel);
         }
 

@@ -45,7 +45,7 @@ public final class ScalableBloomFilter<T> implements FalsePositiveSet<T>, Rollin
      * @param <T> the type of elements to be stored in the set.
      * @return a builder instance to further configure and build the scalable bloom filter.
      */
-    public static <T> Builder<T> create(final Funnel<T> funnel) {
+    public static <T> Builder<T> create(final Funnel<? super T> funnel) {
         return new Builder<T>(funnel);
     }
 
@@ -95,7 +95,7 @@ public final class ScalableBloomFilter<T> implements FalsePositiveSet<T>, Rollin
     }
 
     public static class Builder<T> extends FalsePositiveSetBuilder<T, ScalableBloomFilter<T>> {
-        Builder(final Funnel<T> funnel) {
+        Builder(final Funnel<? super T> funnel) {
             super(funnel);
         }
 
