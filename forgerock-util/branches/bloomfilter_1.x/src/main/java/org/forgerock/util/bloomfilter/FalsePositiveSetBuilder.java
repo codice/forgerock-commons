@@ -54,9 +54,11 @@ abstract class FalsePositiveSetBuilder<T, F extends FalsePositiveSet<T>> {
     int maximumNumberOfBuckets = DEFAULT_MAX_NUMBER_OF_BUCKETS;
     TimeService clock = TimeService.SYSTEM;
     final Funnel<? super T> funnel;
+    final ExpirationStrategy<T> expirationStrategy;
 
-    FalsePositiveSetBuilder(final Funnel<? super T> funnel) {
+    FalsePositiveSetBuilder(final Funnel<? super T> funnel, final ExpirationStrategy<T> expirationStrategy) {
         this.funnel = funnel;
+        this.expirationStrategy = expirationStrategy;
     }
 
     /**
@@ -140,4 +142,11 @@ abstract class FalsePositiveSetBuilder<T, F extends FalsePositiveSet<T>> {
      */
     public abstract F build();
 
+    /**
+     * Builds the false positive set instance as per {@link #build()} and then wraps the result in a synchronized
+     * wrapper to ensure the result can be used safely by multiple simultaneous threads.
+     */
+    public SynchronizedFalsePositiveSet<T> buildSynchronized() {
+        return new SynchronizedFalsePositiveSet<T>(build());
+    }
 }

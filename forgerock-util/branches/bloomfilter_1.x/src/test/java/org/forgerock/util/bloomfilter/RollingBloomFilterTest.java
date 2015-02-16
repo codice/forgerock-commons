@@ -37,7 +37,8 @@ public class RollingBloomFilterTest {
     @BeforeMethod
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        testFilter = RollingBloomFilter.create(Funnels.unencodedCharsFunnel())
+        testFilter = RollingBloomFilter.create(Funnels.unencodedCharsFunnel(),
+                        NeverExpiringStrategy.<CharSequence>instance())
                 .withExpectedInsertions(1)
                 .withOverallFalsePositiveProbability(0.01d)
                 .withBucketCapacityGrowthFactor(2.0d)

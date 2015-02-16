@@ -17,6 +17,7 @@
 package org.forgerock.util.bloomfilter;
 
 import org.forgerock.guava.common.hash.Funnel;
+import org.forgerock.util.Reject;
 
 import java.util.List;
 
@@ -90,13 +91,14 @@ public final class ScalableBloomFilter<T> implements FalsePositiveSet<T>, Rollin
      *
      * @param object the object to add to the bloom filter.
      */
+    @Override
     public void add(final T object) {
         rbf.addUntil(object, Long.MAX_VALUE);
     }
 
     public static class Builder<T> extends FalsePositiveSetBuilder<T, ScalableBloomFilter<T>> {
         Builder(final Funnel<? super T> funnel) {
-            super(funnel);
+            super(funnel, NeverExpiringStrategy.<T>instance());
         }
 
         @Override

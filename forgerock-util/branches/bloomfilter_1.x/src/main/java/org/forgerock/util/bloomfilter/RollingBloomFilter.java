@@ -50,6 +50,7 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
     private final int maxNumberOfBuckets;
     private final BitSet nextBucketNumber;
     private final Funnel<? super T> funnel;
+    private final ExpirationStrategy<T> expirationStrategy;
 
     /**
      * False positive probability of the first bucket in the chain.
@@ -67,6 +68,7 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
         Reject.ifFalse(builder.maximumNumberOfBuckets >= 1, "maximumNumberOfBuckets must be >= 1");
         Reject.ifNull(builder.clock);
         Reject.ifNull(builder.funnel);
+        Reject.ifNull(builder.expirationStrategy);
 
         this.expectedInsertions = builder.expectedInsertions;
         this.bucketCapacityGrowthFactor = builder.bucketCapacityGrowthFactor;
@@ -75,6 +77,7 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
         this.nextBucketNumber = new BitSet(builder.maximumNumberOfBuckets);
         this.clock = builder.clock;
         this.funnel = builder.funnel;
+        this.expirationStrategy = builder.expirationStrategy;
 
         this.P0 = builder.overallFalsePositiveProbability * (1.0d - bucketFalsePositiveProbabilityScaleFactor);
     }
@@ -86,8 +89,9 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
      * @param <T> the type of elements to be stored in the set.
      * @return a builder instance to further configure and build the scalable bloom filter.
      */
-    public static <T> Builder<T> create(final Funnel<? super T> funnel) {
-        return new Builder<T>(funnel);
+    public static <T> Builder<T> create(final Funnel<? super T> funnel, final ExpirationStrategy<T> expirationStrategy)
+    {
+        return new Builder<T>(funnel, expirationStrategy);
     }
 
     /**
@@ -106,6 +110,11 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
             chain.addLast(bucket);
         }
         bucket.add(object, expiryTime);
+    }
+
+    @Override
+    public void add(T object) {
+        addUntil(object, expirationStrategy.expiryTime(object));
     }
 
     private Bucket createNewBucket() {
@@ -180,8 +189,9 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
     }
 
     public static class Builder<T> extends FalsePositiveSetBuilder<T, RollingBloomFilter<T>> {
-        Builder(final Funnel<? super T> funnel) {
-            super(funnel);
+
+        Builder(final Funnel<? super T> funnel, final ExpirationStrategy<T> expirationStrategy) {
+            super(funnel, expirationStrategy);
         }
 
         @Override
