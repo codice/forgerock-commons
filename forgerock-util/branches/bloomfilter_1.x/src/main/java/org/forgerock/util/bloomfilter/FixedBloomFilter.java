@@ -48,6 +48,7 @@ public final class FixedBloomFilter<T> implements FalsePositiveSet<T>, BloomFilt
     /**
      * Adds an element to this bloom filter.
      */
+    @Override
     public void add(final T element) {
         bloomFilter.put(element);
     }

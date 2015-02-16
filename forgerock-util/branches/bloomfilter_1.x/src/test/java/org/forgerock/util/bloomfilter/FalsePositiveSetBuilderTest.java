@@ -113,7 +113,7 @@ public class FalsePositiveSetBuilderTest {
 
     private static class TestBuilder extends FalsePositiveSetBuilder<CharSequence, ScalableBloomFilter<CharSequence>> {
         public TestBuilder(final Funnel<CharSequence> funnel) {
-            super(funnel);
+            super(funnel, NeverExpiringStrategy.<CharSequence>instance());
         }
 
         @Override

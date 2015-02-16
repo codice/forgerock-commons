@@ -40,4 +40,12 @@ public interface FalsePositiveSet<T> {
      * @return a predicate that tests for membership in this set.
      */
     MightContainPredicate<T> asPredicate();
+
+    /**
+     * Adds the given element to this set. Subsequent calls to {@link #mightContain(Object)} will return true for
+     * this object from now on.
+     *
+     * @param element the element to add.
+     */
+    void add(T element);
 }
