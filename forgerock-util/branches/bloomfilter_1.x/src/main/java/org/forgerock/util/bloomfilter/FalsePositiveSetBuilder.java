@@ -26,7 +26,7 @@ import org.forgerock.util.time.TimeService;
  * @param <T> the type of elements to be stored in the set.
  * @param <F> the concrete type of set that will be built.
  */
-abstract class FalsePositiveSetBuilder<T, F extends FalsePositiveSet<T>> {
+public abstract class FalsePositiveSetBuilder<T, F extends FalsePositiveSet<T>> {
     /**
      * The default number of items to expect to be inserted into each bucket before it expires [1000].
      */
