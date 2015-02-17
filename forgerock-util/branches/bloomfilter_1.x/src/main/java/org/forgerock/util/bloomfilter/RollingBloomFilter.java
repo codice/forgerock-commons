@@ -133,7 +133,7 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
             // Remove any buckets that have both expired and become saturated.
             if (bucket.isExpired() && bucket.isSaturated()) {
                 it.remove();
-                nextBucketNumber.clear(bucket.n);
+                nextBucketNumber.clear(bucket.bucketNumber);
             } else if (bucket.mightContain(object)) {
                 return true;
             }
@@ -206,14 +206,14 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
      * caller is responsible for ensuring visibility of any changes to this object to other threads.
      */
     private final class Bucket {
-        private final int n;
+        private final int bucketNumber;
         private final FixedBloomFilter<T> bloomFilter;
         private long lastExpiryTime = Long.MIN_VALUE;
 
-        Bucket(final int n) {
-            this.n = n;
-            double fpp = P0 * Math.pow(bucketFalsePositiveProbabilityScaleFactor, n);
-            int capacity = (int) (expectedInsertions * Math.pow(bucketCapacityGrowthFactor, n));
+        Bucket(final int bucketNumber) {
+            this.bucketNumber = bucketNumber;
+            double fpp = P0 * Math.pow(bucketFalsePositiveProbabilityScaleFactor, bucketNumber);
+            int capacity = (int) (expectedInsertions * Math.pow(bucketCapacityGrowthFactor, bucketNumber));
             this.bloomFilter = new FixedBloomFilter<T>(funnel, capacity, fpp);
         }
 
