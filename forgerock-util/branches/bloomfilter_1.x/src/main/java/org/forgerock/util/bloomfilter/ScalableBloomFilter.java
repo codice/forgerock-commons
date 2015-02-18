@@ -17,7 +17,6 @@
 package org.forgerock.util.bloomfilter;
 
 import org.forgerock.guava.common.hash.Funnel;
-import org.forgerock.util.Reject;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.List;
@@ -28,7 +27,7 @@ import java.util.List;
  * exceeding the overall desired false positive probability. This implementation is based on the
  * {@link RollingBloomFilter} implementation with all elements set to never expire.
  *
- * @see <a href="http://gsd.di.uminho.pt/members/cbm/ps/dbloom.pdf">"Scalable Bloom Filters"</a> by Paulo Sérgio
+ * @see <a href="http://asc.di.fct.unl.pt/~nmp/pubs/ref--04.pdf">"Scalable Bloom Filters"</a> by Paulo Sérgio
  * Almeida, Carlos Baquero, Nuno Preguiça and David Hutchison, <em>Information Processing Letters</em> 101 (2007)
  * pp.255–261
  */
@@ -48,7 +47,7 @@ public final class ScalableBloomFilter<T> implements FalsePositiveSet<T>, Rollin
      * @param <T> the type of elements to be stored in the set.
      * @return a builder instance to further configure and build the scalable bloom filter.
      */
-    public static <T> Builder<T> create(final Funnel<? super T> funnel) {
+    public static <T> FalsePositiveSetBuilder<T, ScalableBloomFilter<T>> create(final Funnel<? super T> funnel) {
         return new Builder<T>(funnel);
     }
 
@@ -98,7 +97,7 @@ public final class ScalableBloomFilter<T> implements FalsePositiveSet<T>, Rollin
         rbf.addUntil(object, Long.MAX_VALUE);
     }
 
-    public static class Builder<T> extends FalsePositiveSetBuilder<T, ScalableBloomFilter<T>> {
+    private static class Builder<T> extends FalsePositiveSetBuilder<T, ScalableBloomFilter<T>> {
         Builder(final Funnel<? super T> funnel) {
             super(funnel, NeverExpiringStrategy.<T>instance());
         }

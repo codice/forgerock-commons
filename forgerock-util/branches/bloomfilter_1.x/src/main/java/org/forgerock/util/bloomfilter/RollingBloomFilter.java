@@ -91,8 +91,8 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
      * @param <T> the type of elements to be stored in the set.
      * @return a builder instance to further configure and build the scalable bloom filter.
      */
-    public static <T> Builder<T> create(final Funnel<? super T> funnel, final ExpirationStrategy<T> expirationStrategy)
-    {
+    public static <T> FalsePositiveSetBuilder<T, RollingBloomFilter<T>> create(
+            final Funnel<? super T> funnel, final ExpirationStrategy<T> expirationStrategy) {
         return new Builder<T>(funnel, expirationStrategy);
     }
 
@@ -190,7 +190,7 @@ public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, Rolling
         return stats;
     }
 
-    public static class Builder<T> extends FalsePositiveSetBuilder<T, RollingBloomFilter<T>> {
+    private static class Builder<T> extends FalsePositiveSetBuilder<T, RollingBloomFilter<T>> {
 
         Builder(final Funnel<? super T> funnel, final ExpirationStrategy<T> expirationStrategy) {
             super(funnel, expirationStrategy);
