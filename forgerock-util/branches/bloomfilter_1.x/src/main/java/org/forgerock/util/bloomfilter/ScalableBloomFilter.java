@@ -19,6 +19,7 @@ package org.forgerock.util.bloomfilter;
 import org.forgerock.guava.common.hash.Funnel;
 import org.forgerock.util.Reject;
 
+import javax.annotation.concurrent.NotThreadSafe;
 import java.util.List;
 
 /**
@@ -31,6 +32,7 @@ import java.util.List;
  * Almeida, Carlos Baquero, Nuno Preguiça and David Hutchison, <em>Information Processing Letters</em> 101 (2007)
  * pp.255–261
  */
+@NotThreadSafe
 public final class ScalableBloomFilter<T> implements FalsePositiveSet<T>, RollingBloomFilterMXBean {
 
     private final RollingBloomFilter<T> rbf;

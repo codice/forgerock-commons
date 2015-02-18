@@ -136,6 +136,9 @@ public abstract class FalsePositiveSetBuilder<T, F extends FalsePositiveSet<T>> 
 
     /**
      * Constructs the false positive set instance according to the given configuration options.
+     * <p/>
+     * <strong>Thread-safety:</strong> the returned data structure is not guaranteed to be thread-safe. Use {@link
+     * #buildSynchronized()} if a thread-safe version is required.
      *
      * @return the configured false positive set.
      * @throws IllegalArgumentException if the configuration is invalid.
@@ -145,6 +148,9 @@ public abstract class FalsePositiveSetBuilder<T, F extends FalsePositiveSet<T>> 
     /**
      * Builds the false positive set instance as per {@link #build()} and then wraps the result in a synchronized
      * wrapper to ensure the result can be used safely by multiple simultaneous threads.
+     * <p/>
+     * <strong>Thread-safety:</strong> the returned data structure is fully thread-safe with respect to the basic
+     * operations of add/mightContain.
      */
     public SynchronizedFalsePositiveSet<T> buildSynchronized() {
         return new SynchronizedFalsePositiveSet<T>(build());

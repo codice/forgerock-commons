@@ -16,9 +16,12 @@
 
 package org.forgerock.util.bloomfilter;
 
+import javax.annotation.concurrent.Immutable;
+
 /**
  * Strategy for elements that should never expire.
  */
+@Immutable
 public enum NeverExpiringStrategy implements ExpirationStrategy<Object> {
     INSTANCE;
 

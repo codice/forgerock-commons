@@ -18,13 +18,19 @@ package org.forgerock.util.bloomfilter;
 
 import org.forgerock.util.Reject;
 
+import javax.annotation.concurrent.GuardedBy;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.List;
 
 /**
  * Wrapper around a {@link FalsePositiveSet} that provides synchronization of all methods for thread-safety. Also
- * implements all JMX monitoring interfaces to ensure thread-safety in the presence of concurrent JMX monitoring.
+ * implements all JMX monitoring interfaces to ensure thread-safety in the presence of concurrent JMX monitoring. All
+ * methods synchronize on the SynchronizedFalsePositiveSet itself, so that callers may also synchronize on this
+ * object to perform compound operations that they wish to be atomic.
  */
+@ThreadSafe
 public final class SynchronizedFalsePositiveSet<T> implements FalsePositiveSet<T>, RollingBloomFilterMXBean {
+    @GuardedBy("this")
     private final FalsePositiveSet<T> delegate;
 
     public SynchronizedFalsePositiveSet(final FalsePositiveSet<T> delegate) {
@@ -33,10 +39,8 @@ public final class SynchronizedFalsePositiveSet<T> implements FalsePositiveSet<T
     }
 
     @Override
-    public boolean mightContain(final T element) {
-        synchronized (delegate) {
-            return delegate.mightContain(element);
-        }
+    public synchronized boolean mightContain(final T element) {
+        return delegate.mightContain(element);
     }
 
     @Override
@@ -45,16 +49,14 @@ public final class SynchronizedFalsePositiveSet<T> implements FalsePositiveSet<T
     }
 
     @Override
-    public void add(final T element) {
-        synchronized (delegate) {
-            delegate.add(element);
-        }
+    public synchronized void add(final T element) {
+        delegate.add(element);
     }
 
     @Override
     public List<BucketStatistics> getBucketStatistics() {
         if (delegate instanceof RollingBloomFilterMXBean) {
-            synchronized (delegate) {
+            synchronized (this) {
                 return ((RollingBloomFilterMXBean) delegate).getBucketStatistics();
             }
         }
@@ -64,7 +66,7 @@ public final class SynchronizedFalsePositiveSet<T> implements FalsePositiveSet<T
     @Override
     public double getConfiguredFalsePositiveProbability() {
         if (delegate instanceof BloomFilterMXBean) {
-            synchronized (delegate) {
+            synchronized (this) {
                 return ((BloomFilterMXBean) delegate).getConfiguredFalsePositiveProbability();
             }
         }
@@ -74,7 +76,7 @@ public final class SynchronizedFalsePositiveSet<T> implements FalsePositiveSet<T
     @Override
     public double getExpectedFalsePositiveProbability() {
         if (delegate instanceof BloomFilterMXBean) {
-            synchronized (delegate) {
+            synchronized (this) {
                 return ((BloomFilterMXBean) delegate).getExpectedFalsePositiveProbability();
             }
         }
@@ -84,7 +86,7 @@ public final class SynchronizedFalsePositiveSet<T> implements FalsePositiveSet<T
     @Override
     public long getCapacity() {
         if (delegate instanceof BloomFilterMXBean) {
-            synchronized (delegate) {
+            synchronized (this) {
                 return ((BloomFilterMXBean) delegate).getCapacity();
             }
         }
@@ -94,7 +96,7 @@ public final class SynchronizedFalsePositiveSet<T> implements FalsePositiveSet<T
     @Override
     public long getMemoryUsed() {
         if (delegate instanceof BloomFilterMXBean) {
-            synchronized (delegate) {
+            synchronized (this) {
                 return ((BloomFilterMXBean) delegate).getMemoryUsed();
             }
         }
