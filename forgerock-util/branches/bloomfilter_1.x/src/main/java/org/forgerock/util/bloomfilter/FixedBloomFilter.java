@@ -19,11 +19,14 @@ package org.forgerock.util.bloomfilter;
 import org.forgerock.guava.common.hash.BloomFilter;
 import org.forgerock.guava.common.hash.Funnel;
 
+import javax.annotation.concurrent.NotThreadSafe;
+
 /**
  * A simple fixed capacity Bloom Filter.
  *
  * @see <a href="http://en.wikipedia.org/wiki/Bloom_filter">Bloom filter</a> entry at Wikipedia.
  */
+@NotThreadSafe
 public final class FixedBloomFilter<T> implements FalsePositiveSet<T>, BloomFilterMXBean {
     private final double configuredFpp;
     private final int capacity;

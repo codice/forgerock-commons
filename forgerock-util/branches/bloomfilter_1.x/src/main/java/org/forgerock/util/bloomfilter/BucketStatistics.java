@@ -16,11 +16,13 @@
 
 package org.forgerock.util.bloomfilter;
 
+import javax.annotation.concurrent.Immutable;
 import java.beans.ConstructorProperties;
 
 /**
  * Encapsulates statistics about a bucket in a {@link RollingBloomFilter} for monitoring purposes.
  */
+@Immutable
 public final class BucketStatistics {
     private final double configuredFpp;
     private final double expectedFpp;

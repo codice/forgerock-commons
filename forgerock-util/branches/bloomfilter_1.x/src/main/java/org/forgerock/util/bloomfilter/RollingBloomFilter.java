@@ -20,6 +20,7 @@ import org.forgerock.guava.common.hash.Funnel;
 import org.forgerock.util.Reject;
 import org.forgerock.util.time.TimeService;
 
+import javax.annotation.concurrent.NotThreadSafe;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -36,6 +37,7 @@ import java.util.List;
  * @param <T> The type of elements to be stored in the bloom filter.
  * @see ScalableBloomFilter
  */
+@NotThreadSafe
 public final class RollingBloomFilter<T> implements FalsePositiveSet<T>, RollingBloomFilterMXBean {
 
     /**
