@@ -457,8 +457,13 @@ version="1.0">
     <xsl:when test="$level=3">
      <fo:block xsl:use-attribute-sets="section.title.level3.properties">
       <xsl:copy-of select="$title.block"/>
-     </fo:block>
+     </fo:block>	 
     </xsl:when>
+    <xsl:when test="$level=4">
+     <fo:block xsl:use-attribute-sets="section.title.level4.properties">
+      <xsl:copy-of select="$title.block"/>
+     </fo:block>	 
+    </xsl:when>	
     <xsl:otherwise>
      <fo:block xsl:use-attribute-sets="section.title.properties"/>
     </xsl:otherwise>
