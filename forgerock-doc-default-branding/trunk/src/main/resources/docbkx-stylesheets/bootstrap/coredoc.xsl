@@ -55,10 +55,12 @@
     <pre class="codelisting prettyprint "><xsl:value-of select="." /></pre>
    </xsl:when>
    <xsl:when test="@language='csv'">
-    <pre class="codelisting prettyprint lang-java"><xsl:value-of select="." /></pre>
+    <pre
+     class="codelisting prettyprint"><xsl:value-of select="." /></pre>
    </xsl:when>
    <xsl:when test="@language='html'">
-    <pre class="codelisting prettyprint lang-html"><xsl:value-of select="." /></pre>
+    <pre class="codelisting prettyprint linenums lang-html"><xsl:value-of
+     select="." /></pre>
    </xsl:when>
    <xsl:when test="@language='http'">
     <pre class="codelisting prettyprint"><xsl:value-of select="." /></pre>
