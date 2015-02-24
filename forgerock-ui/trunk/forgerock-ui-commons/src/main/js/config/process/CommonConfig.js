@@ -28,7 +28,7 @@
  * @author yaromin
  */
 define("config/process/CommonConfig", [
-    "org/forgerock/commons/ui/common/util/Constants", 
+    "org/forgerock/commons/ui/common/util/Constants",
     "org/forgerock/commons/ui/common/main/EventManager"
 ], function(constants, eventManager) {
     var obj = [
@@ -85,7 +85,7 @@ define("config/process/CommonConfig", [
             processDescription: function(event, navigation, popupCtrl, breadcrumbs, conf, loggedUserBarView,footer) {
                 navigation.init();
                 popupCtrl.init();
-                
+
                 breadcrumbs.buildByUrl();
                 loggedUserBarView.render();
                 footer.render();
@@ -100,7 +100,7 @@ define("config/process/CommonConfig", [
                 "org/forgerock/commons/ui/common/LoggedUserBarView"
             ],
             processDescription: function(event, conf, navigation, loggedUserBarView) {
-                var serviceInvokerModuleName, serviceInvokerConfig; 
+                var serviceInvokerModuleName, serviceInvokerConfig;
                 serviceInvokerModuleName = "org/forgerock/commons/ui/common/main/ServiceInvoker";
                 serviceInvokerConfig = conf.getModuleConfiguration(serviceInvokerModuleName);
                 if(!event.anonymousMode) {
@@ -108,13 +108,13 @@ define("config/process/CommonConfig", [
                     delete serviceInvokerConfig.defaultHeaders[constants.HEADER_PARAM_PASSWORD];
                     delete serviceInvokerConfig.defaultHeaders[constants.HEADER_PARAM_USERNAME];
                     delete serviceInvokerConfig.defaultHeaders[constants.HEADER_PARAM_NO_SESSION];
-                    
+
                     eventManager.sendEvent(constants.EVENT_AUTHENTICATED);
                 } else {
                     serviceInvokerConfig.defaultHeaders[constants.HEADER_PARAM_PASSWORD] = constants.ANONYMOUS_PASSWORD;
                     serviceInvokerConfig.defaultHeaders[constants.HEADER_PARAM_USERNAME] = constants.ANONYMOUS_USERNAME;
-                    serviceInvokerConfig.defaultHeaders[constants.HEADER_PARAM_NO_SESSION]= true; 
-                    
+                    serviceInvokerConfig.defaultHeaders[constants.HEADER_PARAM_NO_SESSION]= true;
+
                     conf.setProperty('loggedUser', null);
                     loggedUserBarView.render();
                     navigation.reload();
@@ -178,7 +178,7 @@ define("config/process/CommonConfig", [
                 "org/forgerock/commons/ui/common/components/Navigation"
             ],
             processDescription: function(event, router, conf, viewManager, navigation) {
-                viewManager.currentDialog = "null";
+                viewManager.currentDialog = null;
                 if(conf.baseView) {
                     require(router.configuration.routes[conf.baseView].view).rebind();
                     router.navigate(router.getLink(router.configuration.routes[conf.baseView], conf.baseViewArgs));
@@ -263,7 +263,7 @@ define("config/process/CommonConfig", [
                 "org/forgerock/commons/ui/common/components/Navigation"
             ],
             processDescription: function(args, viewManager, router, conf, navigation) {
-                var route = args.route, params = args.args, callback = args.callback;
+                var route = args.route, params = args.args, callback = args.callback, routeBaseView;
 
                 if (!router.checkRole(route)) {
                     return;
@@ -271,19 +271,19 @@ define("config/process/CommonConfig", [
 
                 conf.setProperty("baseView", args.base);
                 conf.setProperty("baseViewArgs", params);
-                
+
                 navigation.init();
 
-                if (!_.has(route, "baseView") && _.has(route, "base")) {
-                    viewManager.changeView(router.configuration.routes[route.base].view, viewManager.currentViewArgs, function() {
+                routeBaseView = (!_.has(route, "baseView") && _.has(route, "base")) ? router.configuration.routes[route.base].view : route.baseView.view;
+
+                if (viewManager.currentView === null ){
+                    viewManager.changeView( routeBaseView, params, function() {
                         viewManager.showDialog(route.dialog, params, callback);
                         router.navigate(router.getLink(route, params));
                     });
                 } else {
-                    viewManager.changeView(route.baseView.view, viewManager.currentViewArgs, function() {
-                        viewManager.showDialog(route.dialog, params, callback);
-                        router.navigate(router.getLink(route, params));
-                    });
+                    viewManager.showDialog(route.dialog, params, callback);
+                    router.navigate(router.getLink(route, params));
                 }
             }
         },
@@ -335,9 +335,9 @@ define("config/process/CommonConfig", [
             processDescription: function(event, sessionManager, conf, router, viewManager) {
                 sessionManager.login(event, function(user) {
                     conf.setProperty('loggedUser', user);
-                    
+
                     eventManager.sendEvent(constants.EVENT_AUTHENTICATION_DATA_CHANGED, { anonymousMode: false});
-                    
+
                     if (! conf.backgroundLogin) {
                         if(conf.globalData.auth.urlParams && conf.globalData.auth.urlParams.goto){
                             window.location.href = conf.globalData.auth.urlParams.goto;
@@ -355,7 +355,7 @@ define("config/process/CommonConfig", [
                                 return;
                             }
                         }
-                    } else if (viewManager.currentDialog !== "null") {
+                    } else if (viewManager.currentDialog !== null) {
                         require(viewManager.currentDialog).close();
                     }
 
@@ -387,7 +387,7 @@ define("config/process/CommonConfig", [
                 });
             }
         }
-        
+
         ];
     return obj;
 });
