@@ -43,15 +43,11 @@ define("org/forgerock/commons/ui/common/components/Dialog", [
     var Dialog = AbstractView.extend({
         template: "templates/common/DialogTemplate.html",
         element: "#dialogs",
-
-        data: { },
-
         mode: "append",
 
         events: {
             "click .dialogCloseCross img": "close",
-            "click input[name='close']": "close",
-            "click .dialogContainer": "stop"
+            "click input[name='close']": "close"
         },
 
         actions: [
@@ -60,10 +56,6 @@ define("org/forgerock/commons/ui/common/components/Dialog", [
                 "name": "close"
             }
         ],
-
-        stop: function(event) {
-            event.stopPropagation();
-        },
 
         /**
          * Creates new dialog in #dialogs div. Fills it with dialog template.
@@ -81,14 +73,12 @@ define("org/forgerock/commons/ui/common/components/Dialog", [
                 this.setElement(this.$el.find(".dialogContainer:last"));
 
                 $("#dialog-background").addClass('show');
-                this.$el.off('click').on('click', _.bind(this.close, this));
+                this.$el.off('click').on('click', _.bind(this.bgClickToClose, this));
 
                 this.loadContent(callback);
                 this.delegateEvents();
             }, this));
         },
-
-
 
         /**
          * Loads template from 'contentTemplate'
@@ -105,16 +95,16 @@ define("org/forgerock/commons/ui/common/components/Dialog", [
             this.show();
         },
 
-
+        bgClickToClose: function(e) {
+            e.stopPropagation();
+            // return if not a button press
+            if (e.target !== e.currentTarget) {
+                return;
+            }
+            this.close(e);
+        },
 
         close: function(e) {
-            if (e) {
-                e.preventDefault();
-                // return if not a button press
-                if (e.target !== e.currentTarget  ) {
-                    return;
-                }
-            }
 
             if ($(".dialogContainer").length < 2) {
                 $("#dialog-background").removeClass('show');
@@ -122,7 +112,6 @@ define("org/forgerock/commons/ui/common/components/Dialog", [
             }
 
             eventManager.sendEvent(constants.EVENT_DIALOG_CLOSE);
-
             this.$el.remove();
         },
 
