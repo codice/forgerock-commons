@@ -103,17 +103,22 @@ var addZeroClipboardToCmdlineButtonsFN = function () {
 
     copycmdline.on( 'ready', function(event) {
         // console.log( 'movie is loaded' );
-    });
 
-    copycmdline.on( 'copy', function(event) {
-        event.clipboardData.setData('text/plain', $(event.target).parent().next().find("strong").first().text());
-    });
+        copycmdline.on( 'copy', function(event) {
+            var wrappedText = "";
+            $(event.target).parent().next().find("strong").each(function(index) {
+                wrappedText += $(this).text() + "\n";
+            });
+            event.clipboardData.setData('text/plain', wrappedText);
+        });
 
-    copycmdline.on( 'aftercopy', function(event) {
-        console.log('Copied text to clipboard: ' + event.data['text/plain']);
-        $(event.target).parent().next().find("strong").first().effect("transfer", { to: $(event.target)}, 750);
+        copycmdline.on( 'aftercopy', function(event) {
+            // console.log('Copied to clipboard: ' + event.data['text/plain']);
+            $(event.target).parent().next().find("strong").each(function(index) {
+                $(this).effect("transfer", { to: $(event.target)}, 750);
+            });
+        });
     });
-
 
     copycmdline.on( 'error', function(event) {
         console.log( 'ZeroClipboard error of type "' + event.name + '": ' + event.message );
@@ -125,17 +130,21 @@ var addZeroClipboardToCodeButtonsFN = function () {
     var copycodelisting = new ZeroClipboard( $('.btn-copy-codelisting') );
 
     copycodelisting.on( 'ready', function(event) {
-        console.log( 'movie is loaded' );
+        //console.log( 'movie is loaded' );
 
         copycodelisting.on( 'copy', function(event) {
-            var text = $(event.target).parent().next(".codelisting").first().text();
-            var windowsText = text.replace(/\n/g, '\r\n');
-            event.clipboardData.setData('text/plain', windowsText);
-            // event.clipboardData.setData('text/plain', $(event.target).parent().next(".codelisting").first().text());
+            var wrappedText = "";
+            $(event.target).parent().next(".codelisting.linenums").children().contents().each(function(index) {
+                wrappedText += $(this).text() + "\n";
+            });
+            if(wrappedText == "") {
+                wrappedText = $(event.target).parent().next(".codelisting").contents().text();
+            };
+            event.clipboardData.setData('text/plain', wrappedText);
         });
 
         copycodelisting.on( 'aftercopy', function(event) {
-            console.log('Copied code to clipboard: ' + event.data['text/plain']);
+            // console.log('Copied code to clipboard: ' + event.data['text/plain']);
             $(event.target).parent().next(".codelisting").first().effect("transfer", { to: $(event.target)}, 750);
         });
     });
