@@ -283,7 +283,9 @@ define("config/process/CommonConfig", [
                     });
                 } else {
                     viewManager.showDialog(route.dialog, params, callback);
-                    router.navigate(router.getLink(route, params));
+                    if (!args.noViewChange){
+                        router.navigate(router.getLink(route, params));
+                    }
                 }
             }
         },
