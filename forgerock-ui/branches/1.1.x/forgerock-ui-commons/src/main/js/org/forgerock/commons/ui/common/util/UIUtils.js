@@ -799,7 +799,7 @@ define("org/forgerock/commons/ui/common/util/UIUtils", [
         }
     };
 
-
+    /*jqConfirm requires jquery-ui*/
     obj.jqConfirm = function(message,confirmCallback,width){
         var btns = {};
         btns[$.t('common.form.cancel')] = function(){
