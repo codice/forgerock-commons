@@ -46,7 +46,7 @@ define("org/forgerock/commons/ui/common/components/Dialog", [
         mode: "append",
 
         events: {
-            "click .dialogCloseCross img": "close",
+            "click .dialogCloseCross":   "close",
             "click input[name='close']": "close"
         },
 
@@ -96,16 +96,13 @@ define("org/forgerock/commons/ui/common/components/Dialog", [
         },
 
         bgClickToClose: function(e) {
-            e.stopPropagation();
-            // return if not a button press
-            if (e.target !== e.currentTarget) {
-                return;
+            if (e.target === e.currentTarget || e.target.className === 'dialogCloseCross'){
+                this.close(e);
             }
-            this.close(e);
         },
 
         close: function(e) {
-
+            if(e){ e.preventDefault(); }
             if ($(".dialogContainer").length < 2) {
                 $("#dialog-background").removeClass('show');
                 $("#dialogs").removeClass('show');
