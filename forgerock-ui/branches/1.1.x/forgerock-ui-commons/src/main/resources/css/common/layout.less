@@ -23,6 +23,7 @@
                 font-size: 16px;
                 padding: 10px 20px 10px 15px;
                 text-decoration: none;
+                text-shadow: 0 1px 0 rgba(0,0,0,0.4);
             }
 
             .transition(background, 0.3s, ease-out);
@@ -320,13 +321,6 @@ button.button, a.button, input.button {
         }
     }
 
-    &:disabled, &.inactive {
-        background: @color-inactive;
-        border:  1px solid @color-inactive;
-        cursor:default;
-        .box-shadow(0, 0, 0, 0);
-    }
-
     &.error {
         border: 1px solid darken(@color-error, 10%);
         .linear-gradient(top, @color-error, darken(@color-error, 10%));
@@ -334,6 +328,13 @@ button.button, a.button, input.button {
             .linear-gradient(top, lighten(@color-error, @button-hover-lightness), @color-error);
             .box-shadow(0, 0, 0, 0);
         }
+    }
+
+    &:disabled, &.inactive, &.disabled, &.disabled:hover, &.inactive:hover {
+        background: @color-inactive;
+        border:  1px solid @color-inactive;
+        cursor:default;
+        .box-shadow(0, 0, 0, 0);
     }
 
     &.choosable {
