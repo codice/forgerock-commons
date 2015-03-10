@@ -277,7 +277,7 @@ define("org/forgerock/commons/ui/common/util/UIUtils", [
             defaultOptions = {
                 datatype: "json",
                 loadBeforeSend: function (jqXHR) {
-                    jqXHR.setRequestHeader('Accept-API-Version', 'protocol=1.0,resource=1.0');
+                    jqXHR.setRequestHeader('Accept-API-Version', additional.apiVersion || 'protocol=1.0,resource=1.0');
                 },
                 colNames: [],
                 colModel: [],
