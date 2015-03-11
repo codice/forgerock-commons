@@ -20,7 +20,9 @@ package org.forgerock.util;
  * filter {@link Iterable} elements in {@link Iterables#filter}.
  *
  * @param <T> the element type
+ * @deprecated use org.forgerock.guava.common.base.Predicate instead
  */
+@Deprecated
 public interface Predicate<T> {
     /**
      * Apply the Predicate.
