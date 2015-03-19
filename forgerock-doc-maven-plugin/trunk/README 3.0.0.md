@@ -23,6 +23,7 @@ The project runs multiple plugin executions:
 2.  A `pre-site` phase `build` goal to format documents (HTML, PDF, etc.)
 3.  A `site` phase `site` goal to lay out documents in site format
 4.  A `site` phase `release` goal to lay out documents in release format
+5.  A `site` phase `backstage` goal to lay out documents in Backstage format
 
 With centralized configuration handled by this Maven plugin,
 the overall configuration requires at least these arguments:
@@ -79,6 +80,13 @@ You call the plugin from your `pom.xml` as in the following example.
          <phase>site</phase>
          <goals>
           <goal>release</goal>
+         </goals>
+        </execution>
+        <execution>
+         <id>layout-backstage</id>
+         <phase>site</phase>
+         <goals>
+          <goal>backstage</goal>
          </goals>
         </execution>
        </executions>
@@ -230,6 +238,63 @@ The file, `projectName-releaseVersion-docs.zip`,
 can be found after the build in the project build directory.
 When unzipped, it unpacks the documentation for the release
 under `projectName/releaseVersion/`.
+
+
+## Building Backstage Layout Documentation
+
+The `backstage` goal allows you to generate docs in a layout
+suitable for ForgeRock Backstage.
+
+If the documentation set includes pre-built artifacts, such as Javadoc,
+then you must specify those artifacts in the configuration.
+For example:
+
+     <artifactItems>
+      <artifactItem>
+       <groupId>org.forgerock.commons</groupId>
+       <artifactId>forgerock-doc-maven-plugin</artifactId>
+       <version>${project.version}</version>
+       <classifier>javadoc</classifier>
+       <outputDirectory>javadoc</outputDirectory>
+       <title>ForgeRock Doc Maven Plugin ${project.version} Javadoc</title>
+      </artifactItem>
+     </artifactItems>
+
+Backstage layout is as follows:
+
+* `apidocs/` contains folders of any generated HTML-based documentation,
+   such as Javadoc, that is not built from normal documentation sources,
+   including a `meta.json` file inside each folder
+   to specify the name of the document.
+   The artifacts must be specified in the configuration.
+   An example `meta.json` file looks like this:
+
+
+    {
+        "title": "OpenAM 12.0.0 Javadoc"
+    }
+
+* `docbook/` contains the pre-processed DocBook XML sources
+  suitable for formatting by a separate program.
+
+* `docset.json` specifies meta information about the documentation set.
+  For example:
+
+
+    {
+        "product": "OpenAM",
+        "version": "12.0.0",
+        "language": "en",
+        "released": "2014-12-17"
+    }
+
+* `pdf/` contains PDF files corresponding to the DocBook XML sources,
+  named as `<Product-from-docset-json>-<Version>-<Doc-name>.pdf`.
+
+By default the product name is from `<productName>`.
+You can however use `<backstageProductName>` to set a different product name:
+
+     <backstageProductName>OpenAM Policy Agents</backstageProductName>
 
 
 ## Generating Single-Chapter Output

@@ -100,7 +100,7 @@ This stage is performed during the `site` phase, `site` goal. (`SiteMojo`)
 
 ## Copying Output to a Release Layout
 
-The final stage copies output to a release directory.
+The release stage copies output to a release directory.
 
 *  Lay out release docs (`Layout`)
 *  Add an index.html to release docs (`IndexHtml`)
@@ -111,6 +111,17 @@ The final stage copies output to a release directory.
 *  Zip release docs (`Zip`)
 
 This stage is performed during the `site` phase, `release` goal. (`ReleaseMojo`)
+
+## Preparing Output for
+
+The Backstage stage prepares a layout suitable as input to Backstage.
+
+* Unpack pre-built doc artifacts to the Backstage layout (`ArtifactDocs`)
+* Copy pre-processed sources to the Backstage layout (`BackstageMojo`)
+* Write a `docset.json` file for the Backstage layout (`BackstageMojo`)
+* Copy PDFs to the Backstage layout (`Pdf`)
+
+This stage is performed during the `site` phase, `backstage` goal.
 
 
 ## Configuration
@@ -124,6 +135,7 @@ The other Mojo classes inherit from this abstract class.
 ## About the Java Packages
 
 *  `org.forgerock.doc.maven`: top-level classes for configuration & overall operation
+*  `org.forgerock.doc.maven.backstage`: classes for preparing Backstage layout
 *  `org.forgerock.doc.maven.build`: classes for building output formats
 *  `org.forgerock.doc.maven.post`: post-processing classes
 *  `org.forgerock.doc.maven.pre`: pre-processing classes
