@@ -27,6 +27,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.forgerock.doc.maven.backstage.ArtifactItem;
 import org.forgerock.doc.maven.utils.NameUtils;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
@@ -34,6 +35,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -142,6 +145,45 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public final String areSectionsAutolabeled() {
         return areSectionsAutolabeled;
+    }
+
+    /**
+     * File system directory for Backstage layout output
+     * relative to the build directory.
+     */
+    @Parameter(defaultValue = "backstage")
+    private String backstageDirectory;
+
+    /**
+     * Get the file system directory for Backstage layout output.
+     *
+     * <br>
+     *
+     * Default: {@code ${project.build.directory}/backstage}
+     *
+     * @return The file system directory for Backstage layout output.
+     */
+    public File getBackstageDirectory() {
+        return new File(getBuildDirectory(), backstageDirectory);
+    }
+
+    /**
+     * Product name as shown on Backstage.
+     */
+    @Parameter(property = "backstageProductName")
+    private String backstageProductName;
+
+    /**
+     * Get the product name as shown on Backstage.
+     *
+     * <br>
+     *
+     * Default: {@code projectName}
+     *
+     * @return The product name as shown on Backstage.
+     */
+    public String getBackstageProductName() {
+        return backstageProductName != null ? backstageProductName : projectName;
     }
 
     /**
@@ -394,6 +436,21 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public boolean doCreateArtifacts() {
         return createArtifacts;
+    }
+
+    /**
+     * Doc artifacts to unpack when preparing Backstage layout.
+     */
+    @Parameter
+    private List<ArtifactItem> artifactItems;
+
+    /**
+     * Get the doc artifacts to unpack when preparing Backstage layout.
+     *
+     * @return The doc artifacts to unpack when preparing Backstage layout.
+     */
+    public List<ArtifactItem> getArtifactItems() {
+        return artifactItems != null ? artifactItems : new LinkedList<ArtifactItem>();
     }
 
     /**
@@ -1007,6 +1064,25 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
+     * Locale tag for the documentation set.
+     */
+    @Parameter(defaultValue = "en")
+    private String localeTag;
+
+    /**
+     * Get the Locale tag for the documentation set.
+     *
+     * <br>
+     *
+     * Default: {@code en}
+     *
+     * @return The Locale tag for the documentation set.
+     */
+    public String getLocaleTag() {
+        return localeTag;
+    }
+
+    /**
      * Location of the man page XSL stylesheet customization file,
      * relative to the build directory.
      *
@@ -1286,6 +1362,25 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public final File getReleaseCss() {
         return new File(getBuildDirectory(), releaseCssFileName);
+    }
+
+    /**
+     * Software release date.
+     */
+    @Parameter(property = "releaseDate")
+    private Date releaseDate;
+
+    /**
+     * Get the software release date.
+     *
+     * <br>
+     *
+     * Default: now
+     *
+     * @return The software release date.
+     */
+    public Date getReleaseDate() {
+        return releaseDate != null ? releaseDate : new Date();
     }
 
     /**

@@ -74,6 +74,37 @@ ForgeRock doc build tools have moved to CDDL to align with other ForgeRock proje
 
 ## What's New
 
+**DOCS-265: Provide alternate release layout**
+
+* `apidocs/` contains folders of any generated HTML-based documentation,
+   such as Javadoc, that is not built from normal documentation sources,
+   including a `meta.json` file inside each folder
+   to specify the name of the document.
+   The artifacts must be specified in the configuration.
+   An example `meta.json` file looks like this:
+
+
+    {
+        "title": "OpenAM 12.0.0 Javadoc"
+    }
+
+* `docbook/` contains the pre-processed DocBook XML sources
+  suitable for formatting by a separate program.
+
+* `docset.json` specifies meta information about the documentation set.
+  For example:
+
+
+    {
+        "product": "OpenAM",
+        "version": "12.0.0",
+        "language": "en",
+        "released": "2014-12-17"
+    }
+
+* `pdf/` contains PDF files corresponding to the DocBook XML sources,
+  named as `<Product-from-docset-json>-<Version>-<Doc-name>.pdf`.
+
 **DOCS-264: Refine PDF naming for release documentation**
 
 The fix allows the plugin to handle project names that include spaces.
