@@ -73,7 +73,9 @@ public class PreProcessMojo extends AbstractDocbkxMojo {
             new ImageData(this).execute();
             new HeaderColor(this).execute();
             new PlantUml(this).execute();
-            new Dpi(this).execute();
+            if (getFormats().contains(Format.pdf) || getFormats().contains(Format.rtf)) {
+                new Dpi(this).execute();
+            }
             new CurrentDocId(this).execute();
             new CustomCss(this).execute();
         }
