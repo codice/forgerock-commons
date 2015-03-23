@@ -29,7 +29,6 @@ import org.assertj.core.api.StringAssert;
 import org.assertj.core.data.MapEntry;
 import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.fluent.JsonValue;
-import org.forgerock.util.promise.Function;
 import org.forgerock.util.promise.Promise;
 import org.forgerock.util.test.assertj.AbstractAssertJPromiseAssert;
 
@@ -65,19 +64,25 @@ public class AssertJJsonValueAssert {
     }
 
     /**
+     * Alias for {@link #assertThat(Promise)} for when there are colliding assertThat static imports.
+     */
+    public static AssertJJsonValuePromiseAssert assertThatJsonValue(Promise<JsonValue, ?> promise) {
+        return new AssertJJsonValuePromiseAssert(promise);
+    }
+
+    /**
      * An assertion class for promises that return {@code JsonValue}s.
      */
     public static class AssertJJsonValuePromiseAssert
             extends AbstractAssertJPromiseAssert<JsonValue, AssertJJsonValuePromiseAssert, PromisedJsonValueAssert> {
 
         private AssertJJsonValuePromiseAssert(Promise<JsonValue, ?> promise) {
-            super(promise, AssertJJsonValuePromiseAssert.class,
-                    new Function<JsonValue, PromisedJsonValueAssert, RuntimeException>() {
-                        @Override
-                        public PromisedJsonValueAssert apply(JsonValue jsonValue) throws RuntimeException {
-                            return new PromisedJsonValueAssert(jsonValue);
-                        }
-                    });
+            super(promise, AssertJJsonValuePromiseAssert.class);
+        }
+
+        @Override
+        protected PromisedJsonValueAssert createSucceededAssert(JsonValue jsonValue) {
+            return new PromisedJsonValueAssert(jsonValue);
         }
     }
 
