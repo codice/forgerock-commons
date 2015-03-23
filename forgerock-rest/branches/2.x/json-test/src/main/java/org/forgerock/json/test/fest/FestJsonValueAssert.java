@@ -68,19 +68,25 @@ public abstract class FestJsonValueAssert {
     }
 
     /**
+     * Alias for {@link #assertThat(Promise)} for when there are colliding assertThat static imports.
+     */
+    public static FestJsonValuePromiseAssert assertThatJsonValue(Promise<JsonValue, ?> promise) {
+        return new FestJsonValuePromiseAssert(promise);
+    }
+
+    /**
      * An assertion class for promises that return {@code JsonValue}s.
      */
     public static class FestJsonValuePromiseAssert
             extends AbstractFestPromiseAssert<JsonValue, FestJsonValuePromiseAssert, PromisedJsonValueAssert> {
 
         private FestJsonValuePromiseAssert(Promise<JsonValue, ?> promise) {
-            super(promise, FestJsonValuePromiseAssert.class,
-                    new Function<JsonValue, PromisedJsonValueAssert, RuntimeException>() {
-                        @Override
-                        public PromisedJsonValueAssert apply(JsonValue jsonValue) throws RuntimeException {
-                            return new PromisedJsonValueAssert(jsonValue);
-                        }
-                    });
+            super(promise, FestJsonValuePromiseAssert.class);
+        }
+
+        @Override
+        protected PromisedJsonValueAssert createSucceededAssert(JsonValue jsonValue) {
+            return new PromisedJsonValueAssert(jsonValue);
         }
     }
 
