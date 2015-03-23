@@ -23,7 +23,7 @@ package org.forgerock.json.jose.exceptions;
  *
  * @since 2.0.0
  */
-public final class JweDecryptionException extends JweException {
+public class JweDecryptionException extends JweException {
 
     /** Serializable class version number. */
     private static final long serialVersionUID = 2L;
