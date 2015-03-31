@@ -1190,7 +1190,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * and your copy must be in the {@code docbkxModifiableSourcesDirectory},
      * then you can set this to {@code false}
      * to prevent the plugin from replacing the copy.
-     * The plugin with then pre-process the copy, however,
+     * The plugin will then pre-process the copy, however,
      * so expect the files in the modifiable copy to be changed.
      *
      * <br>
