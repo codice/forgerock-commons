@@ -584,8 +584,8 @@ public final class HttpServletAdapter {
                 RESTRICTED_HEADER_NAMES);
     }
 
-    private boolean parseCommonParameter(final String name, final String[] values,
-            final Request request) throws ResourceException {
+    private boolean parseCommonParameter(final String name, final String[] values, final Request request)
+            throws ResourceException {
         if (name.equalsIgnoreCase(PARAM_FIELDS)) {
             for (final String s : values) {
                 try {
