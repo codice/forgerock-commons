@@ -263,13 +263,8 @@ public final class FiltersTest {
 
     @DataProvider
     public Object[][] requestTypes() {
-        final int sz = RequestType.values().length;
-        final Object[][] args = new Object[sz][1];
-        for (int i = 0; i < sz; i++) {
-            args[i] = new Object[1];
-            args[i][0] = RequestType.values()[i];
-        }
-        return args;
+        return new Object[][] { { RequestType.ACTION }, { RequestType.CREATE }, { RequestType.DELETE },
+                { RequestType.PATCH }, { RequestType.QUERY }, { RequestType.READ }, { RequestType.UPDATE } };
     }
 
     @Test(dataProvider = "booleanData")
@@ -468,7 +463,7 @@ public final class FiltersTest {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void invokeFilter(final ServerContext context, final RequestType type,
+        private void invokeFilter(final ServerContext context, final RequestType type,
             final Filter filter, final ResultHandler handler, final RequestHandler next) {
         switch (type) {
         case ACTION:

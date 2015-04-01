@@ -208,6 +208,54 @@ public final class Requests {
         }
     }
 
+    private static final class BatchRequestImpl extends AbstractRequestImpl<BatchRequest>
+            implements BatchRequest {
+        private JsonValue content;
+
+        private BatchRequestImpl() {
+            // Default constructor.
+            content = new JsonValue(null);
+        }
+
+        private BatchRequestImpl(final BatchRequest request) {
+            super(request);
+            this.content = copyJsonValue(request.getContent());
+        }
+
+        @Override
+        public <R, P> R accept(final RequestVisitor<R, P> v, final P p) {
+            return ((BatchRequestVisitor<R, P>) v).visitBatchRequest(p, this);
+        }
+
+        @Override
+        public JsonValue getContent() {
+            return content;
+        }
+
+        @Override
+        public BatchRequest setContent(final JsonValue content) {
+            this.content = content != null ? content : new JsonValue(null);
+            return this;
+        }
+
+        @Override
+        protected BatchRequest getThis() {
+            return this;
+        }
+
+        @Override
+        public RequestType getRequestType() {
+            return RequestType.BATCH;
+        }
+
+        @Override
+        public JsonValue toJsonValue() {
+            return super.toJsonValue()
+                    .put(FIELD_CONTENT, getContent().getObject())
+                    .put(FIELD_ADDITIONAL_PARAMETERS, getAdditionalParameters());
+        }
+    }
+
     private static final class CreateRequestImpl extends AbstractRequestImpl<CreateRequest>
             implements CreateRequest {
         private JsonValue content;
@@ -632,6 +680,17 @@ public final class Requests {
     }
 
     /**
+     * Returns a copy of the provided batch request.
+     *
+     * @param request
+     *            The batch request to be copied.
+     * @return The batch request copy.
+     */
+    public static BatchRequest copyOfBatchRequest(final BatchRequest request) {
+        return new BatchRequestImpl(request);
+    }
+
+    /**
      * Returns a copy of the provided create request.
      *
      * @param request
@@ -782,6 +841,22 @@ public final class Requests {
     public static ActionRequest newActionRequest(final ResourceName resourceContainer,
             final String resourceId, final String actionId) {
         return newActionRequest(resourceContainer.child(resourceId), actionId);
+    }
+
+    /**
+     * Returns a new batch request with the provided resource name,
+     * Invoke this method as follows:
+     *
+     * <pre>
+     * newBatchRequest(&quot;managed/user&quot;);
+     * </pre>
+     *
+     * @param resourceName
+     *            The URL-encoded resource name.
+     * @return The new action request.
+     */
+    public static BatchRequest newBatchRequest(final String resourceName) {
+        return new BatchRequestImpl().setResourceName(resourceName);
     }
 
     /**
