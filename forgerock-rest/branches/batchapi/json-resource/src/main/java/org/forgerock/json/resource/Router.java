@@ -15,6 +15,7 @@
  */
 package org.forgerock.json.resource;
 
+import static org.forgerock.json.fluent.JsonValue.array;
 import static org.forgerock.json.fluent.JsonValue.field;
 import static org.forgerock.json.fluent.JsonValue.json;
 import static org.forgerock.json.fluent.JsonValue.object;
@@ -321,7 +322,7 @@ public final class Router implements RequestHandler, BatchRequestHandler {
     @Override
     public void handleBatch(final ServerContext context, final BatchRequest request,
                                final ResultHandler<JsonValue> handler) {
-        final List<Object> results = new ArrayList<Object>();
+        final JsonValue results = json(array());
 
         boolean failOnError = Boolean.valueOf(request.getAdditionalParameters().get("failOnError"));
         final AtomicBoolean failed = new AtomicBoolean(false);
@@ -331,23 +332,18 @@ public final class Router implements RequestHandler, BatchRequestHandler {
         ResultHandler<JsonValue> subJsonHandler = new ResultHandler<JsonValue>() {
             @Override
             public void handleError(ResourceException error) {
-                results.add(json(object(
-                        field(FIELD_CODE, error.getCode()),
-                        field(FIELD_REASON, error.getReason()),
-                        field(FIELD_DETAIL, error.getMessage())
-                )).getWrappedObject());
+                results.add(error.toJsonValue().getObject());
                 failed.set(true);
             }
 
             @Override
             public void handleResult(JsonValue result) {
                 if (result.isList()) {
-                    for (Object resultObj : result.asList()) {
-                        JsonValue resultJson = new JsonValue(resultObj);
-                        results.add(resultJson.getWrappedObject());
+                    for (JsonValue resultObj : result) {
+                        results.add(resultObj.getObject());
                     }
                 } else {
-                    results.add(result.getWrappedObject());
+                    results.add(result.getObject());
                 }
             }
         };
@@ -355,45 +351,38 @@ public final class Router implements RequestHandler, BatchRequestHandler {
         ResultHandler<Resource> subResourceHandler = new ResultHandler<Resource>() {
             @Override
             public void handleError(ResourceException error) {
-                results.add(json(object(
-                        field(FIELD_CODE, error.getCode()),
-                        field(FIELD_REASON, error.getReason()),
-                        field(FIELD_DETAIL, error.getMessage())
-                )).getWrappedObject());
+                results.add(error.toJsonValue().getObject());
                 failed.set(true);
             }
 
             @Override
             public void handleResult(Resource result) {
-                results.add(result.getContent().getWrappedObject());
+                results.add(result.getContent().getObject());
             }
         };
 
         QueryResultHandler subQueryResultHandler = new QueryResultHandler() {
-            final List<Object> resources = new ArrayList<Object>();
+            final JsonValue resources = json(array());
 
             @Override
             public void handleError(ResourceException error) {
-                results.add(json(object(
-                        field(FIELD_CODE, error.getCode()),
-                        field(FIELD_REASON, error.getReason()),
-                        field(FIELD_DETAIL, error.getMessage())
-                )).getWrappedObject());
+                results.add(error.toJsonValue().getObject());
                 failed.set(true);
             }
 
             @Override
             public boolean handleResource(Resource resource) {
-                return resources.add(resource.getContent().getWrappedObject());
+                resources.add(resource.getContent().getObject());
+                return true;
             }
 
             @Override
             public void handleResult(QueryResult result) {
-                results.add(json(object(
+                results.add(object(
                         field(FIELD_PAGED_RESULTS_COOKIE, result.getPagedResultsCookie()),
                         field(FIELD_REMAINING_PAGED_RESULTS, result.getRemainingPagedResults()),
                         field(FIELD_CONTENT, resources)
-                )).getWrappedObject());
+                ));
             }
         };
 
