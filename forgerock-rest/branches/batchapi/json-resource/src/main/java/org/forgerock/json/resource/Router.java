@@ -32,8 +32,6 @@ import static org.forgerock.json.resource.RoutingMode.STARTS_WITH;
 import static org.forgerock.json.resource.ResourceException.FIELD_CODE;
 import static org.forgerock.json.resource.ResourceException.FIELD_REASON;
 import static org.forgerock.json.resource.ResourceException.FIELD_DETAIL;
-import static org.forgerock.json.resource.Resource.FIELD_CONTENT_ID;
-import static org.forgerock.json.resource.Resource.FIELD_CONTENT_REVISION;
 import static org.forgerock.json.resource.Resource.FIELD_CONTENT;
 import static org.forgerock.json.resource.QueryResult.FIELD_PAGED_RESULTS_COOKIE;
 import static org.forgerock.json.resource.QueryResult.FIELD_REMAINING_PAGED_RESULTS;
@@ -218,8 +216,12 @@ public final class Router implements RequestHandler, BatchRequestHandler {
             final ResultHandler<JsonValue> handler) {
         try {
             if (request.getAction().equals("batch")) {
-                handleBatch(context, Requests.newBatchRequest(request.getResourceName()).setContent(
-                        request.getContent()), handler);
+                BatchRequest batchRequest = Requests.newBatchRequest(request.getResourceName()).setContent(
+                        request.getContent());
+                for (String key : request.getAdditionalParameters().keySet()) {
+                    batchRequest.setAdditionalParameter(key, request.getAdditionalParameter(key));
+                }
+                handleBatch(context, batchRequest, handler);
             } else {
                 final RouteMatcher bestMatch = getBestRoute(context, request);
                 final ActionRequest routedRequest = bestMatch.wasRouted()
@@ -455,7 +457,7 @@ public final class Router implements RequestHandler, BatchRequestHandler {
             }
             lastMatch = bestMatch;
 
-            if (failOnError && Boolean.valueOf(failed.get()).equals(Boolean.TRUE)) {
+            if (failOnError && failed.get()) {
                 break;
             }
         }
@@ -472,18 +474,18 @@ public final class Router implements RequestHandler, BatchRequestHandler {
         handler.handleResult(new JsonValue(results));
     }
 
-    private LinkedList<Request> parseBatchRequests(Request request) {
+    private LinkedList<Request> parseBatchRequests(BatchRequest request) {
         LinkedList<Request> requests = new LinkedList<Request>();
 
         final JsonPointer ptrRequestType = new JsonPointer("/requestType");
-        final JsonPointer ptrResource = new JsonPointer("/resource");
         final JsonPointer ptrRequestTypeDetail = new JsonPointer("/requestType/detail");
-        final JsonPointer ptrHeader = new JsonPointer("/header");
+        final JsonPointer ptrResource = new JsonPointer("/resource");
         final JsonPointer ptrHeaderRevision = new JsonPointer("/header/revision");
         final JsonPointer ptrContent = new JsonPointer("/content");
 
-        for (Object reqObject : request.toJsonValue().get("content").asList()) {
-            JsonValue object = new JsonValue(reqObject);
+        final String SORT_KEYS_DELIMITER = ",";
+
+        for (JsonValue object : request.getContent()) {
             Request newRequest = null;
 
             try {
@@ -508,8 +510,68 @@ public final class Router implements RequestHandler, BatchRequestHandler {
                                 PatchOperation.valueOfList(object.get(ptrContent)));
                         break;
                     case QUERY:
-                        newRequest = Requests.newQueryRequest(object.get(ptrResource).asString());
-                        // TODO support query options
+                        QueryRequest queryRequest = Requests.newQueryRequest(object.get(ptrResource).asString());
+                        JsonValue value = object.get(new JsonPointer("/parameter/" + Request.FIELD_FIELDS));
+                        if (value != null) {
+                            for (final JsonValue s : value) {
+                                try {
+                                    queryRequest.addField(s.asString().split(","));
+                                } catch (final IllegalArgumentException e) {
+                                    // FIXME: i18n.
+                                    throw new BadRequestException("The value '" + s + "' for parameter '"
+                                            + Request.FIELD_FIELDS + "' could not be parsed as a comma separated "
+                                            + "list of JSON pointers");
+                                }
+                            }
+                        }
+                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_SORT_KEYS));
+                        if (value != null) {
+                            for (final JsonValue s : value) {
+                                try {
+                                    queryRequest.addSortKey(s.asString().split(SORT_KEYS_DELIMITER));
+                                } catch (final IllegalArgumentException e) {
+                                    // FIXME: i18n.
+                                    throw new BadRequestException("The value '" + s
+                                            + "' for parameter '" + QueryRequest.FIELD_SORT_KEYS
+                                            + "' could not be parsed as a "
+                                            + SORT_KEYS_DELIMITER
+                                            + " separated list of sort keys");
+                                }
+                            }
+                        }
+                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_QUERY_ID));
+                        if (value != null) {
+                            queryRequest.setQueryId(value.asString());
+                        }
+                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_QUERY_EXPRESSION));
+                        if (value != null) {
+                            queryRequest.setQueryExpression(value.asString());
+                        }
+                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_PAGED_RESULTS_COOKIE));
+                        if (value != null) {
+                            queryRequest.setPagedResultsCookie(value.asString());
+                        }
+                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_PAGED_RESULTS_OFFSET));
+                        if (value != null) {
+                            queryRequest.setPagedResultsOffset(Integer.valueOf(value.asString()));
+                        }
+                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_PAGE_SIZE));
+                        if (value != null) {
+                            queryRequest.setPageSize(Integer.valueOf(value.asString()));
+                        }
+                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_QUERY_FILTER));
+                        if (value != null) {
+                            try {
+                                queryRequest.setQueryFilter(QueryFilter.valueOf(value.asString()));
+                            } catch (final IllegalArgumentException e) {
+                                // FIXME: i18n.
+                                throw new BadRequestException("The value '" + value + "' for parameter '"
+                                        + QueryRequest.FIELD_QUERY_FILTER + "' could not be parsed as a valid "
+                                        + "query filter");
+                            }
+                        }
+
+                        newRequest = queryRequest;
                         break;
                     case READ:
                         newRequest = Requests.newReadRequest(object.get(ptrResource).asString());
@@ -521,13 +583,6 @@ public final class Router implements RequestHandler, BatchRequestHandler {
                 }
 
                 if (newRequest != null) {
-                    JsonValue headers = object.get(ptrHeader);
-                    if (headers != null) {
-                        for (String key : headers.keys()) {
-                            JsonValue value = headers.get(key);
-                            newRequest.setAdditionalParameter(key, value.asString());
-                        }
-                    }
                     for (String key : request.getAdditionalParameters().keySet()) {
                         newRequest.setAdditionalParameter(key, request.getAdditionalParameter(key));
                     }
