@@ -34,6 +34,7 @@ import org.twdata.maven.mojoexecutor.MojoExecutor;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -1368,7 +1369,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * Software release date.
      */
     @Parameter(property = "releaseDate")
-    private Date releaseDate;
+    private String releaseDate;
 
     /**
      * Get the software release date.
@@ -1379,8 +1380,9 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      *
      * @return The software release date.
      */
-    public Date getReleaseDate() {
-        return releaseDate != null ? releaseDate : new Date();
+    public String getReleaseDate() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return releaseDate == null || releaseDate.isEmpty() ? format.format(new Date()) : releaseDate;
     }
 
     /**
