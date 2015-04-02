@@ -29,13 +29,6 @@ public enum RequestType {
     ACTION,
 
     /**
-     * A batch request.
-     *
-     * @see BatchRequest
-     */
-    BATCH,
-
-    /**
      * A create request.
      *
      * @see CreateRequest

@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS.
+ * Copyright 2012-2015 ForgeRock AS.
  */
 package org.forgerock.json.resource.servlet;
 
@@ -56,6 +56,7 @@ import org.forgerock.json.resource.PatchOperation;
 import org.forgerock.json.resource.PreconditionFailedException;
 import org.forgerock.json.resource.QueryRequest;
 import org.forgerock.json.resource.Request;
+import org.forgerock.json.resource.RequestUtil;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.json.resource.Version;
 import org.forgerock.util.encode.Base64url;
@@ -110,7 +111,7 @@ public final class HttpUtils {
     public static final String PARAM_PAGED_RESULTS_OFFSET =
             param(QueryRequest.FIELD_PAGED_RESULTS_OFFSET);
     /** the HTTP request parameter to request pretty printing. */
-    public static final String PARAM_PRETTY_PRINT = "_prettyPrint";
+    public static final String PARAM_PRETTY_PRINT = param(RequestUtil.PARAM_PRETTY_PRINT);
     /** the HTTP request parameter to specify a query expression. */
     public static final String PARAM_QUERY_EXPRESSION = param(QueryRequest.FIELD_QUERY_EXPRESSION);
     /** the HTTP request parameter to specify a query filter. */
@@ -181,70 +182,6 @@ public final class HttpUtils {
         } else {
             return new InternalServerErrorException(t);
         }
-    }
-
-    /**
-     * Parses a header or request parameter as a boolean value.
-     *
-     * @param name
-     *            The name of the header or parameter.
-     * @param values
-     *            The header or parameter values.
-     * @return The boolean value.
-     * @throws ResourceException
-     *             If the value could not be parsed as a boolean.
-     */
-    static boolean asBooleanValue(final String name, final String[] values)
-            throws ResourceException {
-        final String value = asSingleValue(name, values);
-        return Boolean.parseBoolean(value);
-    }
-
-    /**
-     * Parses a header or request parameter as an integer value.
-     *
-     * @param name
-     *            The name of the header or parameter.
-     * @param values
-     *            The header or parameter values.
-     * @return The integer value.
-     * @throws ResourceException
-     *             If the value could not be parsed as a integer.
-     */
-    static int asIntValue(final String name, final String[] values) throws ResourceException {
-        final String value = asSingleValue(name, values);
-        try {
-            return Integer.parseInt(value);
-        } catch (final NumberFormatException e) {
-            // FIXME: i18n.
-            throw new BadRequestException("The value \'" + value + "\' for parameter '" + name
-                    + "' could not be parsed as a valid integer");
-        }
-    }
-
-    /**
-     * Parses a header or request parameter as a single string value.
-     *
-     * @param name
-     *            The name of the header or parameter.
-     * @param values
-     *            The header or parameter values.
-     * @return The single string value.
-     * @throws ResourceException
-     *             If the value could not be parsed as a single string.
-     */
-    static String asSingleValue(final String name, final String[] values) throws ResourceException {
-        if (values == null || values.length == 0) {
-            // FIXME: i18n.
-            throw new BadRequestException("No values provided for the request parameter \'" + name
-                    + "\'");
-        } else if (values.length > 1) {
-            // FIXME: i18n.
-            throw new BadRequestException(
-                    "Multiple values provided for the single-valued request parameter \'" + name
-                            + "\'");
-        }
-        return values[0];
     }
 
     /**
@@ -401,7 +338,7 @@ public final class HttpUtils {
         final String[] values = getParameter(req, PARAM_PRETTY_PRINT);
         if (values != null) {
             try {
-                if (asBooleanValue(PARAM_PRETTY_PRINT, values)) {
+                if (RequestUtil.asBooleanValue(PARAM_PRETTY_PRINT, values)) {
                     writer.useDefaultPrettyPrinter();
                 }
             } catch (final ResourceException e) {
@@ -665,7 +602,7 @@ public final class HttpUtils {
         }
     }
 
-    private static Object parseJsonBody(final HttpServletRequest req, final boolean allowEmpty)
+    public static Object parseJsonBody(final HttpServletRequest req, final boolean allowEmpty)
             throws BadRequestException, ResourceException {
         JsonParser parser = null;
         try {
