@@ -38,8 +38,11 @@ import static org.forgerock.json.resource.QueryResult.FIELD_PAGED_RESULTS_COOKIE
 import static org.forgerock.json.resource.QueryResult.FIELD_REMAINING_PAGED_RESULTS;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -217,12 +220,7 @@ public final class Router implements RequestHandler, BatchRequestHandler {
             final ResultHandler<JsonValue> handler) {
         try {
             if (request.getAction().equals("batch")) {
-                BatchRequest batchRequest = Requests.newBatchRequest(request.getResourceName()).setContent(
-                        request.getContent());
-                for (String key : request.getAdditionalParameters().keySet()) {
-                    batchRequest.setAdditionalParameter(key, request.getAdditionalParameter(key));
-                }
-                handleBatch(context, batchRequest, handler);
+                handleBatch(context, request, handler);
             } else {
                 final RouteMatcher bestMatch = getBestRoute(context, request);
                 final ActionRequest routedRequest = bestMatch.wasRouted()
@@ -320,7 +318,7 @@ public final class Router implements RequestHandler, BatchRequestHandler {
     }
 
     @Override
-    public void handleBatch(final ServerContext context, final BatchRequest request,
+    public void handleBatch(final ServerContext context, final ActionRequest request,
                                final ResultHandler<JsonValue> handler) {
         final JsonValue results = json(array());
 
@@ -383,6 +381,7 @@ public final class Router implements RequestHandler, BatchRequestHandler {
                         field(FIELD_REMAINING_PAGED_RESULTS, result.getRemainingPagedResults()),
                         field(FIELD_CONTENT, resources)
                 ));
+                resources.clear();
             }
         };
 
@@ -406,7 +405,7 @@ public final class Router implements RequestHandler, BatchRequestHandler {
             if (!(bestMatch.getRequestHandler() instanceof BatchRequestHandler)) {
                 // Found a non-batch handler, send any pending sub-batched requests
                 if (!subbatch.isEmpty() && lastMatch != null) {
-                    BatchRequest batchedRequest = Requests.newBatchRequest(batchedReq.getResourceName())
+                    ActionRequest batchedRequest = Requests.newActionRequest(batchedReq.getResourceName(), "batch")
                             .setContent(new JsonValue(subbatch));
                     ((BatchRequestHandler) lastMatch.getRequestHandler()).handleBatch(
                             lastMatch.getServerContext(), batchedRequest, subJsonHandler);
@@ -436,7 +435,7 @@ public final class Router implements RequestHandler, BatchRequestHandler {
             } else {
                 // Found a sub-batch-able request that does not match the existing sub-batch. Send the
                 // existing sub-batch and start a new one.
-                BatchRequest batchedRequest = Requests.newBatchRequest(batchedReq.getResourceName())
+                ActionRequest batchedRequest = Requests.newActionRequest(batchedReq.getResourceName(), "batch")
                         .setContent(new JsonValue(subbatch));
                 ((BatchRequestHandler) lastMatch.getRequestHandler()).handleBatch(
                         lastMatch.getServerContext(), batchedRequest, subJsonHandler);
@@ -454,7 +453,7 @@ public final class Router implements RequestHandler, BatchRequestHandler {
         // Handle "leftover" batched requests
         if (!subbatch.isEmpty() && lastMatch != null &&
                 !(failOnError && Boolean.valueOf(failed.get()).equals(Boolean.TRUE))) {
-            BatchRequest batchedRequest = Requests.newBatchRequest(subbatch.get(0).getResourceName())
+            ActionRequest batchedRequest = Requests.newActionRequest(subbatch.get(0).getResourceName(), "batch")
                     .setContent(new JsonValue(subbatch));
             ((BatchRequestHandler) lastMatch.getRequestHandler()).handleBatch(
                     lastMatch.getServerContext(), batchedRequest, subJsonHandler);
@@ -463,126 +462,80 @@ public final class Router implements RequestHandler, BatchRequestHandler {
         handler.handleResult(new JsonValue(results));
     }
 
-    private LinkedList<Request> parseBatchRequests(BatchRequest request) {
+    private LinkedList<Request> parseBatchRequests(ActionRequest request) {
         LinkedList<Request> requests = new LinkedList<Request>();
 
-        final JsonPointer ptrRequestType = new JsonPointer("/requestType");
+        final String strRequestType = "requestType";
         final JsonPointer ptrRequestTypeDetail = new JsonPointer("/requestType/detail");
-        final JsonPointer ptrResource = new JsonPointer("/resource");
-        final JsonPointer ptrHeaderRevision = new JsonPointer("/header/revision");
-        final JsonPointer ptrContent = new JsonPointer("/content");
+        final String strParameters = "parameters";
+        final String strResource = "resource";
+        final JsonPointer ptrResourceId = new JsonPointer("/resource/id");
+        final String strRevision = "revision";
+        final String strContent = "content";
 
         final String SORT_KEYS_DELIMITER = ",";
 
         for (JsonValue object : request.getContent()) {
             Request newRequest = null;
 
+            Map<String, String[]> parameters = parseParameters(object.get(strParameters));
+            ResourceName resourceName = new ResourceName(object.get(strResource).asString());
+            String revision = object.get(strRevision).asString();
+            JsonValue content = object.get(strContent);
+
             try {
-                switch(object.get(ptrRequestType).asEnum(RequestType.class)) {
+                switch(object.get(strRequestType).asEnum(RequestType.class)) {
                     case ACTION:
-                        newRequest = Requests.newActionRequest(object.get(ptrResource).asString(),
-                                object.get(ptrRequestTypeDetail).asString()).setContent(object.get(ptrContent));
+                        newRequest = RequestUtil.buildActionRequest(parameters, resourceName,
+                                object.get(ptrRequestTypeDetail).asString(), content);
                         break;
                     case CREATE:
-                        newRequest = Requests.newCreateRequest(object.get(ptrResource).asString(),
-                                object.get(ptrContent));
-                        // TODO support PUT creates
+                        newRequest = RequestUtil.buildCreateRequest(parameters, resourceName, content,
+                                object.get(ptrResourceId).asString());
                         break;
                     case DELETE:
-                        newRequest = Requests.newDeleteRequest(object.get(ptrResource).asString())
-                                .setRevision(object.get(ptrHeaderRevision).asString());
+                        newRequest = RequestUtil.buildDeleteRequest(parameters, resourceName, revision);
                         break;
                     case PATCH:
-                        newRequest = Requests.newPatchRequest(object.get(ptrResource).asString())
-                                .setRevision(object.get(ptrHeaderRevision).asString());
-                        ((PatchRequest) newRequest).getPatchOperations().addAll(
-                                PatchOperation.valueOfList(object.get(ptrContent)));
+                        newRequest = RequestUtil.buildPatchRequest(parameters, resourceName, revision, content);
                         break;
                     case QUERY:
-                        QueryRequest queryRequest = Requests.newQueryRequest(object.get(ptrResource).asString());
-                        JsonValue value = object.get(new JsonPointer("/parameter/" + Request.FIELD_FIELDS));
-                        if (value != null) {
-                            for (final JsonValue s : value) {
-                                try {
-                                    queryRequest.addField(s.asString().split(","));
-                                } catch (final IllegalArgumentException e) {
-                                    // FIXME: i18n.
-                                    throw new BadRequestException("The value '" + s + "' for parameter '"
-                                            + Request.FIELD_FIELDS + "' could not be parsed as a comma separated "
-                                            + "list of JSON pointers");
-                                }
-                            }
-                        }
-                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_SORT_KEYS));
-                        if (value != null) {
-                            for (final JsonValue s : value) {
-                                try {
-                                    queryRequest.addSortKey(s.asString().split(SORT_KEYS_DELIMITER));
-                                } catch (final IllegalArgumentException e) {
-                                    // FIXME: i18n.
-                                    throw new BadRequestException("The value '" + s
-                                            + "' for parameter '" + QueryRequest.FIELD_SORT_KEYS
-                                            + "' could not be parsed as a "
-                                            + SORT_KEYS_DELIMITER
-                                            + " separated list of sort keys");
-                                }
-                            }
-                        }
-                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_QUERY_ID));
-                        if (value != null) {
-                            queryRequest.setQueryId(value.asString());
-                        }
-                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_QUERY_EXPRESSION));
-                        if (value != null) {
-                            queryRequest.setQueryExpression(value.asString());
-                        }
-                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_PAGED_RESULTS_COOKIE));
-                        if (value != null) {
-                            queryRequest.setPagedResultsCookie(value.asString());
-                        }
-                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_PAGED_RESULTS_OFFSET));
-                        if (value != null) {
-                            queryRequest.setPagedResultsOffset(Integer.valueOf(value.asString()));
-                        }
-                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_PAGE_SIZE));
-                        if (value != null) {
-                            queryRequest.setPageSize(Integer.valueOf(value.asString()));
-                        }
-                        value = object.get(new JsonPointer("/parameter/" + QueryRequest.FIELD_QUERY_FILTER));
-                        if (value != null) {
-                            try {
-                                queryRequest.setQueryFilter(QueryFilter.valueOf(value.asString()));
-                            } catch (final IllegalArgumentException e) {
-                                // FIXME: i18n.
-                                throw new BadRequestException("The value '" + value + "' for parameter '"
-                                        + QueryRequest.FIELD_QUERY_FILTER + "' could not be parsed as a valid "
-                                        + "query filter");
-                            }
-                        }
-
-                        newRequest = queryRequest;
+                        newRequest = RequestUtil.buildQueryRequest(parameters, resourceName);
                         break;
                     case READ:
-                        newRequest = Requests.newReadRequest(object.get(ptrResource).asString());
+                        newRequest = RequestUtil.buildReadRequest(parameters, resourceName);
                         break;
                     case UPDATE:
-                        newRequest = Requests.newUpdateRequest(object.get(ptrResource).asString(),
-                                object.get(ptrContent)).setRevision(object.get(ptrHeaderRevision).asString());
+                        newRequest = RequestUtil.buildUpdateRequest(parameters, resourceName, content, revision);
                         break;
                 }
 
                 if (newRequest != null) {
-                    for (String key : request.getAdditionalParameters().keySet()) {
-                        newRequest.setAdditionalParameter(key, request.getAdditionalParameter(key));
-                    }
                     requests.add(newRequest);
                 }
             } catch (BadRequestException e) {
+                // TODO handle
+            } catch (ResourceException e) {
                 // TODO handle
             }
         }
 
         return requests;
+    }
+
+    private Map<String, String[]> parseParameters(JsonValue object) {
+        Map<String, String[]> parameters = new HashMap<String, String[]>();
+        for (String key : object.keys()) {
+            JsonValue value = object.get(key);
+            List<String> values = new ArrayList<String>();
+            if (value.isList()) {
+                values.addAll(value.asList(String.class));
+            } else {
+                values.add(value.asString());
+            }
+            parameters.put(key, values.toArray(new String[values.size()]));
+        }
+        return parameters;
     }
 
     /**

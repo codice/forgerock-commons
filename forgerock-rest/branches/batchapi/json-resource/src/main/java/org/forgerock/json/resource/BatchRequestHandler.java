@@ -42,5 +42,5 @@ public interface BatchRequestHandler {
      * @param handler
      *            The result handler to be notified on completion.
      */
-    void handleBatch(ServerContext context, BatchRequest request, ResultHandler<JsonValue> handler);
+    void handleBatch(ServerContext context, ActionRequest request, ResultHandler<JsonValue> handler);
 }

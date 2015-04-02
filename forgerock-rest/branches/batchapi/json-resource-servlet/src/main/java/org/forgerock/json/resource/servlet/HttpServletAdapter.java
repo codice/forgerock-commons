@@ -11,11 +11,12 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS.
+ * Copyright 2012-2015 ForgeRock AS.
  */
 package org.forgerock.json.resource.servlet;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -36,11 +37,10 @@ import org.forgerock.json.resource.DeleteRequest;
 import org.forgerock.json.resource.NotSupportedException;
 import org.forgerock.json.resource.PatchRequest;
 import org.forgerock.json.resource.PreconditionFailedException;
-import org.forgerock.json.resource.QueryFilter;
 import org.forgerock.json.resource.QueryRequest;
 import org.forgerock.json.resource.ReadRequest;
 import org.forgerock.json.resource.Request;
-import org.forgerock.json.resource.Requests;
+import org.forgerock.json.resource.RequestUtil;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.json.resource.ResourceName;
 import org.forgerock.json.resource.UpdateRequest;
@@ -58,29 +58,18 @@ import static org.forgerock.json.resource.servlet.HttpUtils.METHOD_PUT;
 import static org.forgerock.json.resource.servlet.HttpUtils.MIME_TYPE_APPLICATION_JSON;
 import static org.forgerock.json.resource.servlet.HttpUtils.MIME_TYPE_MULTIPART_FORM_DATA;
 import static org.forgerock.json.resource.servlet.HttpUtils.PARAM_ACTION;
-import static org.forgerock.json.resource.servlet.HttpUtils.PARAM_FIELDS;
-import static org.forgerock.json.resource.servlet.HttpUtils.PARAM_MIME_TYPE;
-import static org.forgerock.json.resource.servlet.HttpUtils.PARAM_PAGED_RESULTS_COOKIE;
-import static org.forgerock.json.resource.servlet.HttpUtils.PARAM_PAGED_RESULTS_OFFSET;
-import static org.forgerock.json.resource.servlet.HttpUtils.PARAM_PAGE_SIZE;
-import static org.forgerock.json.resource.servlet.HttpUtils.PARAM_PRETTY_PRINT;
 import static org.forgerock.json.resource.servlet.HttpUtils.PARAM_QUERY_EXPRESSION;
 import static org.forgerock.json.resource.servlet.HttpUtils.PARAM_QUERY_FILTER;
 import static org.forgerock.json.resource.servlet.HttpUtils.PARAM_QUERY_ID;
-import static org.forgerock.json.resource.servlet.HttpUtils.PARAM_SORT_KEYS;
 import static org.forgerock.json.resource.servlet.HttpUtils.PROTOCOL_NAME;
 import static org.forgerock.json.resource.servlet.HttpUtils.PROTOCOL_VERSION;
 import static org.forgerock.json.resource.servlet.HttpUtils.RESTRICTED_HEADER_NAMES;
-import static org.forgerock.json.resource.servlet.HttpUtils.asBooleanValue;
-import static org.forgerock.json.resource.servlet.HttpUtils.asIntValue;
-import static org.forgerock.json.resource.servlet.HttpUtils.asSingleValue;
 import static org.forgerock.json.resource.servlet.HttpUtils.checkNotNull;
 import static org.forgerock.json.resource.servlet.HttpUtils.fail;
 import static org.forgerock.json.resource.servlet.HttpUtils.getIfMatch;
 import static org.forgerock.json.resource.servlet.HttpUtils.getIfNoneMatch;
 import static org.forgerock.json.resource.servlet.HttpUtils.getJsonActionContent;
 import static org.forgerock.json.resource.servlet.HttpUtils.getJsonContent;
-import static org.forgerock.json.resource.servlet.HttpUtils.getJsonPatchContent;
 import static org.forgerock.json.resource.servlet.HttpUtils.getMethod;
 import static org.forgerock.json.resource.servlet.HttpUtils.getParameter;
 import static org.forgerock.json.resource.servlet.HttpUtils.hasParameter;
@@ -122,9 +111,6 @@ import static org.forgerock.json.resource.VersionConstants.ACCEPT_API_VERSION;
  * @see HttpServlet
  */
 public final class HttpServletAdapter {
-
-    private static final String FIELDS_DELIMITER = ",";
-    private static final String SORT_KEYS_DELIMITER = ",";
 
     private final ServletApiVersionAdapter syncFactory;
     private final ConnectionFactory connectionFactory;
@@ -250,17 +236,7 @@ public final class HttpServletAdapter {
             rejectIfNoneMatch(req);
 
             final Map<String, String[]> parameters = req.getParameterMap();
-            final DeleteRequest request =
-                    Requests.newDeleteRequest(getResourceName(req)).setRevision(getIfMatch(req));
-            for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
-                final String name = p.getKey();
-                final String[] values = p.getValue();
-                if (parseCommonParameter(name, values, request)) {
-                    continue;
-                } else {
-                    request.setAdditionalParameter(name, asSingleValue(name, values));
-                }
-            }
+            final DeleteRequest request = RequestUtil.buildDeleteRequest(parameters, getResourceName(req), getIfMatch(req));
             doRequest(req, resp, acceptVersion, request);
         } catch (final Exception e) {
             fail(req, resp, e);
@@ -286,69 +262,7 @@ public final class HttpServletAdapter {
                 rejectIfNoneMatch(req);
 
                 // Query against collection.
-                final QueryRequest request = Requests.newQueryRequest(getResourceName(req));
-
-                for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
-                    final String name = p.getKey();
-                    final String[] values = p.getValue();
-
-                    if (parseCommonParameter(name, values, request)) {
-                        continue;
-                    } else if (name.equalsIgnoreCase(PARAM_SORT_KEYS)) {
-                        for (final String s : values) {
-                            try {
-                                request.addSortKey(s.split(SORT_KEYS_DELIMITER));
-                            } catch (final IllegalArgumentException e) {
-                                // FIXME: i18n.
-                                throw new BadRequestException("The value '" + s
-                                        + "' for parameter '" + name
-                                        + "' could not be parsed as a comma "
-                                        + "separated list of sort keys");
-                            }
-                        }
-                    } else if (name.equalsIgnoreCase(PARAM_QUERY_ID)) {
-                        request.setQueryId(asSingleValue(name, values));
-                    } else if (name.equalsIgnoreCase(PARAM_QUERY_EXPRESSION)) {
-                        request.setQueryExpression(asSingleValue(name, values));
-                    } else if (name.equalsIgnoreCase(PARAM_PAGED_RESULTS_COOKIE)) {
-                        request.setPagedResultsCookie(asSingleValue(name, values));
-                    } else if (name.equalsIgnoreCase(PARAM_PAGED_RESULTS_OFFSET)) {
-                        request.setPagedResultsOffset(asIntValue(name, values));
-                    } else if (name.equalsIgnoreCase(PARAM_PAGE_SIZE)) {
-                        request.setPageSize(asIntValue(name, values));
-                    } else if (name.equalsIgnoreCase(PARAM_QUERY_FILTER)) {
-                        final String s = asSingleValue(name, values);
-                        try {
-                            request.setQueryFilter(QueryFilter.valueOf(s));
-                        } catch (final IllegalArgumentException e) {
-                            // FIXME: i18n.
-                            throw new BadRequestException("The value '" + s + "' for parameter '"
-                                    + name + "' could not be parsed as a valid query filter");
-                        }
-                    } else {
-                        request.setAdditionalParameter(name, asSingleValue(name, values));
-                    }
-                }
-
-                // Check for incompatible arguments.
-                if (request.getQueryId() != null && request.getQueryFilter() != null) {
-                    // FIXME: i18n.
-                    throw new BadRequestException("The parameters " + PARAM_QUERY_ID + " and "
-                            + PARAM_QUERY_FILTER + " are mutually exclusive");
-                }
-
-                if (request.getQueryId() != null && request.getQueryExpression() != null) {
-                    // FIXME: i18n.
-                    throw new BadRequestException("The parameters " + PARAM_QUERY_ID + " and "
-                            + PARAM_QUERY_EXPRESSION + " are mutually exclusive");
-                }
-
-                if (request.getQueryFilter() != null && request.getQueryExpression() != null) {
-                    // FIXME: i18n.
-                    throw new BadRequestException("The parameters " + PARAM_QUERY_FILTER + " and "
-                            + PARAM_QUERY_EXPRESSION + " are mutually exclusive");
-                }
-
+                final QueryRequest request = RequestUtil.buildQueryRequest(parameters, getResourceName(req));
                 doRequest(req, resp, acceptVersion, request);
             } else {
                 // Read of instance within collection or singleton.
@@ -359,25 +273,7 @@ public final class HttpServletAdapter {
                             + getMethod(req) + " requests");
                 }
 
-                final ReadRequest request = Requests.newReadRequest(getResourceName(req));
-                for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
-                    final String name = p.getKey();
-                    final String[] values = p.getValue();
-                    if (parseCommonParameter(name, values, request)) {
-                        continue;
-                    } else if (PARAM_MIME_TYPE.equalsIgnoreCase(name)) {
-                        if (values.length != 1 || values[0].split(FIELDS_DELIMITER).length > 1) {
-                            // FIXME: i18n.
-                            throw new BadRequestException("Only one mime type value allowed");
-                        }
-                        if (parameters.get(PARAM_FIELDS).length != 1) {
-                            // FIXME: i18n.
-                            throw new BadRequestException("The mime type parameter requires only 1 field to be specified");
-                        }
-                    } else {
-                        request.setAdditionalParameter(name, asSingleValue(name, values));
-                    }
-                }
+                final ReadRequest request = RequestUtil.buildReadRequest(parameters, getResourceName(req));
                 doRequest(req, resp, acceptVersion, request);
             }
         } catch (final Exception e) {
@@ -401,21 +297,10 @@ public final class HttpServletAdapter {
                         "Use of If-None-Match not supported for PATCH requests");
             }
 
-            final Map<String, String[]> parameters = req.getParameterMap();
-            final PatchRequest request =
-                    Requests.newPatchRequest(getResourceName(req)).setRevision(getIfMatch(req));
-            request.getPatchOperations().addAll(getJsonPatchContent(req));
-            for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
-                final String name = p.getKey();
-                final String[] values = p.getValue();
-                if (HttpUtils.isMultiPartRequest(req.getContentType())) {
-                    // Ignore - multipart content adds form parts to the parameter set
-                } else if (parseCommonParameter(name, values, request)) {
-                    continue;
-                } else {
-                    request.setAdditionalParameter(name, asSingleValue(name, values));
-                }
-            }
+            final Map<String, String[]> parameters = HttpUtils.isMultiPartRequest(req.getContentType())
+                    ? new HashMap<String, String[]>() : req.getParameterMap();
+            final PatchRequest request = RequestUtil.buildPatchRequest(parameters, getResourceName(req),
+                    getIfMatch(req), new JsonValue(HttpUtils.parseJsonBody(req, false)));
             doRequest(req, resp, acceptVersion, request);
         } catch (final Exception e) {
             fail(req, resp, e);
@@ -435,44 +320,18 @@ public final class HttpServletAdapter {
             rejectIfNoneMatch(req);
             rejectIfMatch(req);
 
-            final Map<String, String[]> parameters = req.getParameterMap();
-            final String action = asSingleValue(PARAM_ACTION, getParameter(req, PARAM_ACTION));
+            final Map<String, String[]> parameters = HttpUtils.isMultiPartRequest(req.getContentType())
+                    ? new HashMap<String, String[]>() : req.getParameterMap();
+            final String action = RequestUtil.asSingleValue(PARAM_ACTION, getParameter(req, PARAM_ACTION));
             if (action.equalsIgnoreCase(ACTION_ID_CREATE)) {
                 final JsonValue content = getJsonContent(req);
-                final CreateRequest request =
-                        Requests.newCreateRequest(getResourceName(req), content);
-                for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
-                    final String name = p.getKey();
-                    final String[] values = p.getValue();
-                    if (parseCommonParameter(name, values, request)) {
-                        continue;
-                    } else if (name.equalsIgnoreCase(PARAM_ACTION)) {
-                        // Ignore - already handled.
-                    } else if (HttpUtils.isMultiPartRequest(req.getContentType())) {
-                        // Ignore - multipart content adds form parts to the parameter set
-                    } else {
-                        request.setAdditionalParameter(name, asSingleValue(name, values));
-                    }
-                }
+                final CreateRequest request = RequestUtil.buildCreateRequest(parameters, getResourceName(req), content);
                 doRequest(req, resp, acceptVersion, request);
             } else {
                 // Action request.
                 final JsonValue content = getJsonActionContent(req);
-                final ActionRequest request =
-                        Requests.newActionRequest(getResourceName(req), action).setContent(content);
-                for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
-                    final String name = p.getKey();
-                    final String[] values = p.getValue();
-                    if (parseCommonParameter(name, values, request)) {
-                        continue;
-                    } else if (name.equalsIgnoreCase(PARAM_ACTION)) {
-                        // Ignore - already handled.
-                    } else if (HttpUtils.isMultiPartRequest(req.getContentType())) {
-                        // Ignore - multipart content adds form parts to the parameter set
-                    } else {
-                        request.setAdditionalParameter(name, asSingleValue(name, values));
-                    }
-                }
+                final ActionRequest request = RequestUtil.buildActionRequest(parameters, getResourceName(req), action,
+                        content);
                 doRequest(req, resp, acceptVersion, request);
             }
         } catch (final Exception e) {
@@ -499,7 +358,8 @@ public final class HttpServletAdapter {
                                 + "supported for PUT requests");
             }
 
-            final Map<String, String[]> parameters = req.getParameterMap();
+            final Map<String, String[]> parameters = HttpUtils.isMultiPartRequest(req.getContentType())
+                    ? new HashMap<String, String[]>() : req.getParameterMap();
             final JsonValue content = getJsonContent(req);
 
             final String rev = getIfNoneMatch(req);
@@ -512,36 +372,12 @@ public final class HttpServletAdapter {
                     throw new BadRequestException("No new resource ID in HTTP PUT request");
                 }
 
-                final CreateRequest request =
-                        Requests.newCreateRequest(resourceName.parent(), content).setNewResourceId(
-                                resourceName.leaf());
-                for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
-                    final String name = p.getKey();
-                    final String[] values = p.getValue();
-                    if (HttpUtils.isMultiPartRequest(req.getContentType())) {
-                        // Ignore - multipart content adds form parts to the parameter set
-                    } else if (parseCommonParameter(name, values, request)) {
-                        continue;
-                    } else {
-                        request.setAdditionalParameter(name, asSingleValue(name, values));
-                    }
-                }
+                final CreateRequest request = RequestUtil.buildCreateRequest(parameters, resourceName, content,
+                        resourceName.leaf());
                 doRequest(req, resp, acceptVersion, request);
             } else {
-                final UpdateRequest request =
-                        Requests.newUpdateRequest(getResourceName(req), content).setRevision(
-                                getIfMatch(req));
-                for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
-                    final String name = p.getKey();
-                    final String[] values = p.getValue();
-                    if (HttpUtils.isMultiPartRequest(req.getContentType())) {
-                        // Ignore - multipart content adds form parts to the parameter set
-                    } else if (parseCommonParameter(name, values, request)) {
-                        continue;
-                    } else {
-                        request.setAdditionalParameter(name, asSingleValue(name, values));
-                    }
-                }
+                final UpdateRequest request = RequestUtil.buildUpdateRequest(parameters, getResourceName(req), content,
+                        getIfMatch(req));
                 doRequest(req, resp, acceptVersion, request);
             }
         } catch (final Exception e) {
@@ -582,29 +418,6 @@ public final class HttpServletAdapter {
                 new AcceptAPIVersionContext(
                         new HttpContext(root, req), PROTOCOL_NAME, acceptVersion),
                 RESTRICTED_HEADER_NAMES);
-    }
-
-    private boolean parseCommonParameter(final String name, final String[] values, final Request request)
-            throws ResourceException {
-        if (name.equalsIgnoreCase(PARAM_FIELDS)) {
-            for (final String s : values) {
-                try {
-                    request.addField(s.split(","));
-                } catch (final IllegalArgumentException e) {
-                    // FIXME: i18n.
-                    throw new BadRequestException("The value '" + s + "' for parameter '" + name
-                            + "' could not be parsed as a comma separated list of JSON pointers");
-                }
-            }
-            return true;
-        } else if (name.equalsIgnoreCase(PARAM_PRETTY_PRINT)) {
-            // This will be handled by the completionHandlerFactory, so just validate.
-            asBooleanValue(name, values);
-            return true;
-        } else {
-            // Unrecognized - must be request specific.
-            return false;
-        }
     }
 
     private void preprocessRequest(final HttpServletRequest req) throws ResourceException {
