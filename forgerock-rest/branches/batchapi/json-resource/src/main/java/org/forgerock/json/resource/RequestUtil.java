@@ -33,7 +33,7 @@ public class RequestUtil {
 
     public static DeleteRequest buildDeleteRequest(Map<String, String[]> parameters, ResourceName resourceName,
                                                    String revision) throws ResourceException {
-        final DeleteRequest request = Requests.newDeleteRequest(ResourceName.urlDecode(resourceName))
+        final DeleteRequest request = Requests.newDeleteRequest(resourceName)
                 .setRevision(revision);
         for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
             final String name = p.getKey();
@@ -49,7 +49,7 @@ public class RequestUtil {
 
     public static QueryRequest buildQueryRequest(Map<String, String[]> parameters, ResourceName resourceName)
             throws ResourceException {
-        QueryRequest request = Requests.newQueryRequest(ResourceName.urlDecode(resourceName));
+        QueryRequest request = Requests.newQueryRequest(resourceName);
 
         for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
             final String name = p.getKey();
@@ -117,7 +117,7 @@ public class RequestUtil {
 
     public static ReadRequest buildReadRequest(Map<String, String[]> parameters, ResourceName resourceName)
             throws ResourceException {
-        final ReadRequest request = Requests.newReadRequest(ResourceName.urlDecode(resourceName));
+        final ReadRequest request = Requests.newReadRequest(resourceName);
         for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
             final String name = p.getKey();
             final String[] values = p.getValue();
@@ -141,7 +141,7 @@ public class RequestUtil {
 
     public static PatchRequest buildPatchRequest(Map<String, String[]> parameters, ResourceName resourceName,
             String revision, JsonValue patchContent) throws ResourceException {
-        final PatchRequest request = Requests.newPatchRequest(ResourceName.urlDecode(resourceName))
+        final PatchRequest request = Requests.newPatchRequest(resourceName)
                 .setRevision(revision);
         request.getPatchOperations().addAll(PatchOperation.valueOfList(patchContent));
         for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
@@ -163,7 +163,7 @@ public class RequestUtil {
 
     public static CreateRequest buildCreateRequest(Map<String, String[]> parameters, ResourceName resourceName,
             JsonValue content, String newResourceId) throws ResourceException {
-        final CreateRequest request = Requests.newCreateRequest(ResourceName.urlDecode(resourceName), content);
+        final CreateRequest request = Requests.newCreateRequest(resourceName, content);
         if (newResourceId != null) {
             request.setNewResourceId(newResourceId);
         }
@@ -183,7 +183,7 @@ public class RequestUtil {
 
     public static ActionRequest buildActionRequest(Map<String, String[]> parameters, ResourceName resourceName,
             String action, JsonValue content) throws ResourceException {
-        final ActionRequest request = Requests.newActionRequest(ResourceName.urlDecode(resourceName), action)
+        final ActionRequest request = Requests.newActionRequest(resourceName, action)
                 .setContent(content);
         for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
             final String name = p.getKey();
@@ -201,7 +201,7 @@ public class RequestUtil {
 
     public static UpdateRequest buildUpdateRequest(Map<String, String[]> parameters, ResourceName resourceName,
             JsonValue content, String revision) throws ResourceException {
-        final UpdateRequest request = Requests.newUpdateRequest(ResourceName.urlDecode(resourceName), content)
+        final UpdateRequest request = Requests.newUpdateRequest(resourceName, content)
                 .setRevision(revision);
         for (final Map.Entry<String, String[]> p : parameters.entrySet()) {
             final String name = p.getKey();
