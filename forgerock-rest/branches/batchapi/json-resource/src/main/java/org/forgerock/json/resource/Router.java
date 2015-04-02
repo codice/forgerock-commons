@@ -479,7 +479,7 @@ public final class Router implements RequestHandler, BatchRequestHandler {
             Request newRequest = null;
 
             Map<String, String[]> parameters = parseParameters(object.get(strParameters));
-            ResourceName resourceName = new ResourceName(object.get(strResource).asString());
+            ResourceName resourceName = ResourceName.valueOf(object.get(strResource).asString());
             String revision = object.get(strRevision).asString();
             JsonValue content = object.get(strContent);
 
