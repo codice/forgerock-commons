@@ -27,8 +27,6 @@ import org.forgerock.json.fluent.JsonValue;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 
 /**
@@ -106,12 +104,11 @@ public class BackstageMojo extends AbstractDocbkxMojo {
      * @throws MojoFailureException Failed to write {@code docset.json}.
      */
     private void writeDocsetJson() throws MojoFailureException {
-        final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         final JsonValue jsonValue = new JsonValue(new LinkedHashMap<String, Object>())
                 .add("product", getBackstageProductName())
                 .add("version", getProjectVersion())
                 .add("language", getLocaleTag())
-                .add("released", dateFormat.format(getReleaseDate()));
+                .add("released", getReleaseDate());
         final File file = new File(getBackstageDirectory(), "docset.json");
         try {
             FileUtils.writeStringToFile(file, jsonValue.toString());
