@@ -23,14 +23,30 @@ import java.util.Map;
  * A utility class to instantiate and configure {@link Request} objects.
  */
 public class RequestUtil {
-    /** the HTTP request parameter to request pretty printing. */
+    /** the request parameter to request pretty printing. */
     public static final String PARAM_PRETTY_PRINT = "_prettyPrint";
-    /** the HTTP request parameter to request a certain mimetype for a filed. */
+    /** the request parameter to request a certain mimetype for a filed. */
     public static final String PARAM_MIME_TYPE = "mimeType";
 
     private static final String FIELDS_DELIMITER = ",";
     private static final String SORT_KEYS_DELIMITER = ",";
 
+    private static String param(final String field) {
+        return "_" + field;
+    }
+
+    /**
+     * Instantiate and initialize a new DeleteRequest. The returned object is ready to be handled.
+     * 
+     * @param parameters
+     *              A map of parameters with which to configure the Request object.
+     * @param resourceName
+     *              The name of the Resource to which this Request applies.
+     * @param revision
+     *              The revision of the object that should be modified via this Request.
+     * @return DeleteRequest
+     * @throws ResourceException
+     */
     public static DeleteRequest buildDeleteRequest(Map<String, String[]> parameters, ResourceName resourceName,
                                                    String revision) throws ResourceException {
         final DeleteRequest request = Requests.newDeleteRequest(resourceName)
@@ -47,6 +63,16 @@ public class RequestUtil {
         return request;
     }
 
+    /**
+     * Instantiate and initialize a new QueryRequest. The returned object is ready to be handled.
+     * 
+     * @param parameters
+     *              A map of parameters with which to configure the Request object.
+     * @param resourceName
+     *              The name of the Resource to which this Request applies.
+     * @return QueryRequest
+     * @throws ResourceException
+     */
     public static QueryRequest buildQueryRequest(Map<String, String[]> parameters, ResourceName resourceName)
             throws ResourceException {
         QueryRequest request = Requests.newQueryRequest(resourceName);
@@ -57,7 +83,7 @@ public class RequestUtil {
 
             if (parseCommonParameter(name, values, request)) {
                 continue;
-            } else if (name.equalsIgnoreCase(QueryRequest.FIELD_SORT_KEYS)) {
+            } else if (name.equalsIgnoreCase(param(QueryRequest.FIELD_SORT_KEYS))) {
                 for (final String s : values) {
                     try {
                         request.addSortKey(s.split(SORT_KEYS_DELIMITER));
@@ -69,17 +95,17 @@ public class RequestUtil {
                                 + "separated list of sort keys");
                     }
                 }
-            } else if (name.equalsIgnoreCase(QueryRequest.FIELD_QUERY_ID)) {
+            } else if (name.equalsIgnoreCase(param(QueryRequest.FIELD_QUERY_ID))) {
                 request.setQueryId(asSingleValue(name, values));
-            } else if (name.equalsIgnoreCase(QueryRequest.FIELD_QUERY_EXPRESSION)) {
+            } else if (name.equalsIgnoreCase(param(QueryRequest.FIELD_QUERY_EXPRESSION))) {
                 request.setQueryExpression(asSingleValue(name, values));
-            } else if (name.equalsIgnoreCase(QueryRequest.FIELD_PAGED_RESULTS_COOKIE)) {
+            } else if (name.equalsIgnoreCase(param(QueryRequest.FIELD_PAGED_RESULTS_COOKIE))) {
                 request.setPagedResultsCookie(asSingleValue(name, values));
-            } else if (name.equalsIgnoreCase(QueryRequest.FIELD_PAGED_RESULTS_OFFSET)) {
+            } else if (name.equalsIgnoreCase(param(QueryRequest.FIELD_PAGED_RESULTS_OFFSET))) {
                 request.setPagedResultsOffset(asIntValue(name, values));
-            } else if (name.equalsIgnoreCase(QueryRequest.FIELD_PAGE_SIZE)) {
+            } else if (name.equalsIgnoreCase(param(QueryRequest.FIELD_PAGE_SIZE))) {
                 request.setPageSize(asIntValue(name, values));
-            } else if (name.equalsIgnoreCase(QueryRequest.FIELD_QUERY_FILTER)) {
+            } else if (name.equalsIgnoreCase(param(QueryRequest.FIELD_QUERY_FILTER))) {
                 final String s = asSingleValue(name, values);
                 try {
                     request.setQueryFilter(QueryFilter.valueOf(s));
@@ -96,25 +122,35 @@ public class RequestUtil {
         // Check for incompatible arguments.
         if (request.getQueryId() != null && request.getQueryFilter() != null) {
             // FIXME: i18n.
-            throw new BadRequestException("The parameters " + QueryRequest.FIELD_QUERY_ID + " and "
-                    + QueryRequest.FIELD_QUERY_EXPRESSION + " are mutually exclusive");
+            throw new BadRequestException("The parameters " + param(QueryRequest.FIELD_QUERY_ID) + " and "
+                    + param(QueryRequest.FIELD_QUERY_EXPRESSION) + " are mutually exclusive");
         }
 
         if (request.getQueryId() != null && request.getQueryExpression() != null) {
             // FIXME: i18n.
-            throw new BadRequestException("The parameters " + QueryRequest.FIELD_QUERY_ID + " and "
-                    + QueryRequest.FIELD_QUERY_EXPRESSION + " are mutually exclusive");
+            throw new BadRequestException("The parameters " + param(QueryRequest.FIELD_QUERY_ID) + " and "
+                    + param(QueryRequest.FIELD_QUERY_EXPRESSION) + " are mutually exclusive");
         }
 
         if (request.getQueryFilter() != null && request.getQueryExpression() != null) {
             // FIXME: i18n.
-            throw new BadRequestException("The parameters " + QueryRequest.FIELD_QUERY_FILTER + " and "
-                    + QueryRequest.FIELD_QUERY_EXPRESSION + " are mutually exclusive");
+            throw new BadRequestException("The parameters " + param(QueryRequest.FIELD_QUERY_FILTER) + " and "
+                    + param(QueryRequest.FIELD_QUERY_EXPRESSION) + " are mutually exclusive");
         }
 
         return request;
     }
 
+    /**
+     * Instantiate and initialize a new ReadRequest. The returned object is ready to be handled.
+     * 
+     * @param parameters
+     *              A map of parameters with which to configure the Request object.
+     * @param resourceName
+     *              The name of the Resource to which this Request applies.
+     * @return ReadRequest
+     * @throws ResourceException
+     */
     public static ReadRequest buildReadRequest(Map<String, String[]> parameters, ResourceName resourceName)
             throws ResourceException {
         final ReadRequest request = Requests.newReadRequest(resourceName);
@@ -128,7 +164,7 @@ public class RequestUtil {
                     // FIXME: i18n.
                     throw new BadRequestException("Only one mime type value allowed");
                 }
-                if (parameters.get(Request.FIELD_FIELDS).length != 1) {
+                if (parameters.get(param(Request.FIELD_FIELDS)).length != 1) {
                     // FIXME: i18n.
                     throw new BadRequestException("The mime type parameter requires only 1 field to be specified");
                 }
@@ -139,6 +175,20 @@ public class RequestUtil {
         return request;
     }
 
+    /**
+     * Instantiate and initialize a new PatchRequest. The returned object is ready to be handled.
+     * 
+     * @param parameters
+     *              A map of parameters with which to configure the Request object.
+     * @param resourceName
+     *              The name of the Resource to which this Request applies.
+     * @param revision
+     *              The revision of the object that should be modified via this Request.
+     * @param patchContent
+     *              JsonValue containing a list of patch operations for this Request.
+     * @return PatchRequest
+     * @throws ResourceException
+     */
     public static PatchRequest buildPatchRequest(Map<String, String[]> parameters, ResourceName resourceName,
             String revision, JsonValue patchContent) throws ResourceException {
         final PatchRequest request = Requests.newPatchRequest(resourceName)
@@ -156,11 +206,39 @@ public class RequestUtil {
         return request;
     }
 
+    /**
+     * Instantiate and initialize a new CreateRequest where the new object id is unknown. The returned object is
+     * ready to be handled.
+     * 
+     * @param parameters
+     *              A map of parameters with which to configure the Request object.
+     * @param resourceName
+     *              The name of the Resource to which this Request applies.
+     * @param content
+     *              JsonValue content to be processed via this Request.
+     * @return CreateRequest
+     * @throws ResourceException
+     */
     public static CreateRequest buildCreateRequest(Map<String, String[]> parameters, ResourceName resourceName,
             JsonValue content) throws ResourceException {
         return buildCreateRequest(parameters, resourceName, content, null);
     }
 
+    /**
+     * Instantiate and initialize a new CreateRequest using a specific object id. The returned object is ready to be
+     * handled.
+     * 
+     * @param parameters
+     *              A map of parameters with which to configure the Request object.
+     * @param resourceName
+     *              The name of the Resource to which this Request applies.
+     * @param content
+     *              JsonValue content to be processed via this Request.
+     * @param newResourceId
+     *              The id to be assigned to the newly created object.
+     * @return CreateRequest
+     * @throws ResourceException
+     */
     public static CreateRequest buildCreateRequest(Map<String, String[]> parameters, ResourceName resourceName,
             JsonValue content, String newResourceId) throws ResourceException {
         final CreateRequest request = Requests.newCreateRequest(resourceName, content);
@@ -172,7 +250,7 @@ public class RequestUtil {
             final String[] values = p.getValue();
             if (parseCommonParameter(name, values, request)) {
                 continue;
-            } else if (name.equalsIgnoreCase(ActionRequest.FIELD_ACTION)) {
+            } else if (name.equalsIgnoreCase(param(ActionRequest.FIELD_ACTION))) {
                 // Ignore - already handled.
             } else {
                 request.setAdditionalParameter(name, asSingleValue(name, values));
@@ -181,6 +259,20 @@ public class RequestUtil {
         return request;
     }
 
+    /**
+     * Instantiate and initialize a new ActionRequest. The returned object is ready to be handled.
+     * 
+     * @param parameters
+     *              A map of parameters with which to configure the Request object.
+     * @param resourceName
+     *              The name of the Resource to which this Request applies.
+     * @param action
+     *              The action that should be performed via this ActionRequest.
+     * @param content
+     *              JsonValue content to be processed via this Request.
+     * @return ActionRequest
+     * @throws ResourceException
+     */
     public static ActionRequest buildActionRequest(Map<String, String[]> parameters, ResourceName resourceName,
             String action, JsonValue content) throws ResourceException {
         final ActionRequest request = Requests.newActionRequest(resourceName, action)
@@ -190,7 +282,7 @@ public class RequestUtil {
             final String[] values = p.getValue();
             if (parseCommonParameter(name, values, request)) {
                 continue;
-            } else if (name.equalsIgnoreCase(ActionRequest.FIELD_ACTION)) {
+            } else if (name.equalsIgnoreCase(param(ActionRequest.FIELD_ACTION))) {
                 // Ignore - already handled.
             } else {
                 request.setAdditionalParameter(name, asSingleValue(name, values));
@@ -199,6 +291,20 @@ public class RequestUtil {
         return request;
     }
 
+    /**
+     * Instantiate and initialize a new UpdateRequest. The returned object is ready to be handled.
+     * 
+     * @param parameters
+     *              A map of parameters with which to configure the Request object.
+     * @param resourceName
+     *              The name of the Resource to which this Request applies.
+     * @param content
+     *              JsonValue content to be processed via this Request.
+     * @param revision
+     *              The revision of the object that should be modified via this Request.
+     * @return UpdateRequest
+     * @throws ResourceException
+     */
     public static UpdateRequest buildUpdateRequest(Map<String, String[]> parameters, ResourceName resourceName,
             JsonValue content, String revision) throws ResourceException {
         final UpdateRequest request = Requests.newUpdateRequest(resourceName, content)

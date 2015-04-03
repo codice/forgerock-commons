@@ -473,8 +473,6 @@ public final class Router implements RequestHandler, BatchRequestHandler {
         final String strRevision = "revision";
         final String strContent = "content";
 
-        final String SORT_KEYS_DELIMITER = ",";
-
         for (JsonValue object : request.getContent()) {
             Request newRequest = null;
 
