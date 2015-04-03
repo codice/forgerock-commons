@@ -107,10 +107,9 @@ public final class Requests {
 
         @Override
         public T setAdditionalParameter(final String name, final String value) throws BadRequestException {
-            if (isReservedParameter(name)) {
-                throw new BadRequestException("Unrecognized request parameter '" + name + "'");
+            if (!isReservedParameter(name)) {
+                parameters.put(notNull(name), notNull(value));
             }
-            parameters.put(notNull(name), notNull(value));
             return getThis();
         }
 
