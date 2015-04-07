@@ -30,15 +30,11 @@ import static org.forgerock.json.resource.Resources.newCollection;
 import static org.forgerock.json.resource.Resources.newSingleton;
 import static org.forgerock.json.resource.RoutingMode.EQUALS;
 import static org.forgerock.json.resource.RoutingMode.STARTS_WITH;
-import static org.forgerock.json.resource.ResourceException.FIELD_CODE;
-import static org.forgerock.json.resource.ResourceException.FIELD_REASON;
-import static org.forgerock.json.resource.ResourceException.FIELD_DETAIL;
 import static org.forgerock.json.resource.Resource.FIELD_CONTENT;
 import static org.forgerock.json.resource.QueryResult.FIELD_PAGED_RESULTS_COOKIE;
 import static org.forgerock.json.resource.QueryResult.FIELD_REMAINING_PAGED_RESULTS;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -322,7 +318,7 @@ public final class Router implements RequestHandler, BatchRequestHandler {
                                final ResultHandler<JsonValue> handler) {
         final JsonValue results = json(array());
 
-        boolean failOnError = Boolean.valueOf(request.getAdditionalParameters().get("failOnError"));
+        Boolean failOnError = Boolean.valueOf(request.getAdditionalParameters().get("failOnError"));
         final AtomicBoolean failed = new AtomicBoolean(false);
 
         // Sub-handlers to aggregate results for a single call to our handler.
@@ -370,7 +366,7 @@ public final class Router implements RequestHandler, BatchRequestHandler {
 
             @Override
             public boolean handleResource(Resource resource) {
-                resources.add(resource.getContent().getObject());
+                resources.add(resource.getContent().getWrappedObject());
                 return true;
             }
 
@@ -379,7 +375,7 @@ public final class Router implements RequestHandler, BatchRequestHandler {
                 results.add(object(
                         field(FIELD_PAGED_RESULTS_COOKIE, result.getPagedResultsCookie()),
                         field(FIELD_REMAINING_PAGED_RESULTS, result.getRemainingPagedResults()),
-                        field(FIELD_CONTENT, resources)
+                        field(FIELD_CONTENT, resources.clone())
                 ));
                 resources.clear();
             }
@@ -405,11 +401,11 @@ public final class Router implements RequestHandler, BatchRequestHandler {
             if (!(bestMatch.getRequestHandler() instanceof BatchRequestHandler)) {
                 // Found a non-batch handler, send any pending sub-batched requests
                 if (!subbatch.isEmpty() && lastMatch != null) {
-                    ActionRequest batchedRequest = Requests.newActionRequest(batchedReq.getResourceName(), "batch")
-                            .setContent(new JsonValue(subbatch));
-                    ((BatchRequestHandler) lastMatch.getRequestHandler()).handleBatch(
-                            lastMatch.getServerContext(), batchedRequest, subJsonHandler);
-
+                    try {
+                        submitBatch(batchedReq.getResourceName(), subbatch, failOnError, lastMatch, subJsonHandler);
+                    } catch (BadRequestException e) {
+                        subJsonHandler.handleError(e);
+                    }
                     subbatch.clear();
                 }
 
@@ -435,10 +431,11 @@ public final class Router implements RequestHandler, BatchRequestHandler {
             } else {
                 // Found a sub-batch-able request that does not match the existing sub-batch. Send the
                 // existing sub-batch and start a new one.
-                ActionRequest batchedRequest = Requests.newActionRequest(batchedReq.getResourceName(), "batch")
-                        .setContent(new JsonValue(subbatch));
-                ((BatchRequestHandler) lastMatch.getRequestHandler()).handleBatch(
-                        lastMatch.getServerContext(), batchedRequest, subJsonHandler);
+                try {
+                    submitBatch(batchedReq.getResourceName(), subbatch, failOnError, lastMatch, subJsonHandler);
+                } catch (BadRequestException e) {
+                    subJsonHandler.handleError(e);
+                }
 
                 subbatch.clear();
                 subbatch.add(batchedReq);
@@ -453,29 +450,37 @@ public final class Router implements RequestHandler, BatchRequestHandler {
         // Handle "leftover" batched requests
         if (!subbatch.isEmpty() && lastMatch != null &&
                 !(failOnError && Boolean.valueOf(failed.get()).equals(Boolean.TRUE))) {
-            ActionRequest batchedRequest = Requests.newActionRequest(subbatch.get(0).getResourceName(), "batch")
-                    .setContent(new JsonValue(subbatch));
-            ((BatchRequestHandler) lastMatch.getRequestHandler()).handleBatch(
-                    lastMatch.getServerContext(), batchedRequest, subJsonHandler);
+            try {
+                submitBatch(subbatch.get(0).getResourceName(), subbatch, failOnError, lastMatch, subJsonHandler);
+            } catch (BadRequestException e) {
+                subJsonHandler.handleError(e);
+            }
         }
 
         handler.handleResult(new JsonValue(results));
+    }
+
+    private void submitBatch(String resourceName, LinkedList<Request> batch, Boolean failOnError, RouteMatcher route,
+            ResultHandler<JsonValue> handler) throws BadRequestException {
+        ActionRequest batchedRequest = Requests.newActionRequest(resourceName, "batch")
+                .setContent(new JsonValue(batch))
+                .setAdditionalParameter("failOnError", failOnError.toString());
+        ((BatchRequestHandler) route.getRequestHandler()).handleBatch(
+                route.getServerContext(), batchedRequest, handler);
     }
 
     private LinkedList<Request> parseBatchRequests(ActionRequest request) {
         LinkedList<Request> requests = new LinkedList<Request>();
 
         final String strRequestType = "requestType";
-        final JsonPointer ptrRequestTypeDetail = new JsonPointer("/requestType/detail");
+        final String strRequestTypeDetail = "detail";
         final String strParameters = "parameters";
         final String strResource = "resource";
-        final JsonPointer ptrResourceId = new JsonPointer("/resource/id");
+        final String strResourceId = "id";
         final String strRevision = "revision";
         final String strContent = "content";
 
         for (JsonValue object : request.getContent()) {
-            Request newRequest = null;
-
             Map<String, String[]> parameters = parseParameters(object.get(strParameters));
             ResourceName resourceName = ResourceName.valueOf(object.get(strResource).asString());
             String revision = object.get(strRevision).asString();
@@ -484,32 +489,28 @@ public final class Router implements RequestHandler, BatchRequestHandler {
             try {
                 switch(object.get(strRequestType).asEnum(RequestType.class)) {
                     case ACTION:
-                        newRequest = RequestUtil.buildActionRequest(parameters, resourceName,
-                                object.get(ptrRequestTypeDetail).asString(), content);
+                        requests.add(RequestUtil.buildActionRequest(parameters, resourceName,
+                                object.get(strRequestType).get(strRequestTypeDetail).asString(), content));
                         break;
                     case CREATE:
-                        newRequest = RequestUtil.buildCreateRequest(parameters, resourceName, content,
-                                object.get(ptrResourceId).asString());
+                        requests.add(RequestUtil.buildCreateRequest(parameters, resourceName, content,
+                                object.get(strResource).get(strResourceId).asString()));
                         break;
                     case DELETE:
-                        newRequest = RequestUtil.buildDeleteRequest(parameters, resourceName, revision);
+                        requests.add(RequestUtil.buildDeleteRequest(parameters, resourceName, revision));
                         break;
                     case PATCH:
-                        newRequest = RequestUtil.buildPatchRequest(parameters, resourceName, revision, content);
+                        requests.add(RequestUtil.buildPatchRequest(parameters, resourceName, revision, content));
                         break;
                     case QUERY:
-                        newRequest = RequestUtil.buildQueryRequest(parameters, resourceName);
+                        requests.add(RequestUtil.buildQueryRequest(parameters, resourceName));
                         break;
                     case READ:
-                        newRequest = RequestUtil.buildReadRequest(parameters, resourceName);
+                        requests.add(RequestUtil.buildReadRequest(parameters, resourceName));
                         break;
                     case UPDATE:
-                        newRequest = RequestUtil.buildUpdateRequest(parameters, resourceName, content, revision);
+                        requests.add(RequestUtil.buildUpdateRequest(parameters, resourceName, content, revision));
                         break;
-                }
-
-                if (newRequest != null) {
-                    requests.add(newRequest);
                 }
             } catch (BadRequestException e) {
                 // TODO handle
