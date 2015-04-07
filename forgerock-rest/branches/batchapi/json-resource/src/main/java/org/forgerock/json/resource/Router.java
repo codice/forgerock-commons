@@ -473,10 +473,10 @@ public final class Router implements RequestHandler, BatchRequestHandler {
         LinkedList<Request> requests = new LinkedList<Request>();
 
         final String strRequestType = "requestType";
-        final String strRequestTypeDetail = "detail";
+        final String strRequestTypeDetail = "requestTypeDetail";
         final String strParameters = "parameters";
         final String strResource = "resource";
-        final String strResourceId = "id";
+        final String strResourceId = "resourceId";
         final String strRevision = "revision";
         final String strContent = "content";
 
@@ -490,11 +490,11 @@ public final class Router implements RequestHandler, BatchRequestHandler {
                 switch(object.get(strRequestType).asEnum(RequestType.class)) {
                     case ACTION:
                         requests.add(RequestUtil.buildActionRequest(parameters, resourceName,
-                                object.get(strRequestType).get(strRequestTypeDetail).asString(), content));
+                                object.get(strRequestTypeDetail).asString(), content));
                         break;
                     case CREATE:
                         requests.add(RequestUtil.buildCreateRequest(parameters, resourceName, content,
-                                object.get(strResource).get(strResourceId).asString()));
+                                object.get(strResourceId).asString()));
                         break;
                     case DELETE:
                         requests.add(RequestUtil.buildDeleteRequest(parameters, resourceName, revision));
