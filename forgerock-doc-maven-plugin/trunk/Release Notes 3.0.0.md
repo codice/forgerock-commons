@@ -295,7 +295,9 @@ The plugin has been tested with Maven 3.0.5, 3.1.1, 3.2.3.
 
 ## Fixes
 
-**DOCS-244: Webhelp format does not include noindex,nofollow meta tag*
+**DOCS-271: Running site twice without clean causes the build to fail**
+
+**DOCS-244: Webhelp format does not include noindex,nofollow meta tag**
 
 **DOCS-240: `<include>` (singular) and `<excludes>` are confusing**
 

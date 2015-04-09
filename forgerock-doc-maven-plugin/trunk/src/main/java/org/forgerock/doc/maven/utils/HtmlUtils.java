@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.utils;
@@ -89,10 +89,12 @@ public final class HtmlUtils {
             final File parent = new File(srcDir, docName);
             final File xmlFile = new File(parent, cssFile.getName() + ".xml");
 
-            FileUtils.write(xmlFile, "<?xml version=\"1.0\"?>\n", true);
-            FileUtils.write(xmlFile, "<style>\n", true);
-            FileUtils.write(xmlFile, cssString, true);
-            FileUtils.write(xmlFile, "</style>\n", true);
+            if (!xmlFile.exists()) { // Do not append the document again to the same file.
+                FileUtils.write(xmlFile, "<?xml version=\"1.0\"?>\n", true);
+                FileUtils.write(xmlFile, "<style>\n", true);
+                FileUtils.write(xmlFile, cssString, true);
+                FileUtils.write(xmlFile, "</style>\n", true);
+            }
         }
     }
 
