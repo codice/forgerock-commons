@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ The contents of this file are subject to the terms of the Common Development and
+  ~ Distribution License (the License). You may not use this file except in compliance with the License.
+  ~
+  ~ You can obtain a copy of the License at legal/CDDLv1.0.txt. See the License for the
+  ~ specific language governing permission and limitations under the License.
+  ~
+  ~ When distributing Covered Software, include this CDDL Header Notice in each file and include
+  ~ the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+  ~ Header, with the fields enclosed by brackets [] replaced by your own identifying
+  ~ information: "Portions copyright [year] [name of copyright owner]".
+  ~
+  ~ Copyright 2015 ForgeRock AS.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.forgerock</groupId>
+        <artifactId>forgerock-parent</artifactId>
+        <version>1.2.1</version>
+    </parent>
+    <groupId>org.forgerock.commons</groupId>
+    <artifactId>forgerock-utilities</artifactId>
+    <version>1.4.0-SNAPSHOT</version>
+    <name>ForgeRock Utility Classes Parent</name>
+    <description>Miscellaneous utility classes used within ForgeRock projects.</description>
+    <packaging>pom</packaging>
+        <url>http://commons.forgerock.org/forgerock-util</url>
+    <issueManagement>
+        <system>Jira</system>
+        <url>https://bugster.forgerock.org/jira/browse/COMMONS</url>
+    </issueManagement>
+    <scm>
+        <url>https://svn.forgerock.org/commons/forgerock-util/branches/1.x/</url>
+        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-util/branches/1.x/</connection>
+        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-util/branches/1.x/</developerConnection>
+    </scm>
+    <ciManagement>
+        <system>jenkins</system>
+        <url>https://builds.forgerock.org/job/Commons%20-%20ForgeRock%20Utils/</url>
+        <notifiers>
+            <notifier>
+                <type>mail</type>
+                <sendOnError>true</sendOnError>
+                <sendOnFailure>true</sendOnFailure>
+                <sendOnSuccess>false</sendOnSuccess>
+                <sendOnWarning>false</sendOnWarning>
+            </notifier>
+        </notifiers>
+    </ciManagement>
+    <distributionManagement>
+        <site>
+            <id>community.internal.forgerock.com</id>
+            <name>ForgeRock Community</name>
+            <url>scp://community.internal.forgerock.com/var/www/vhosts/commons.forgerock.org/httpdocs/forgerock-util</url>
+        </site>
+    </distributionManagement>
+    <properties>
+        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <clirrComparisonVersion>1.3.0</clirrComparisonVersion>
+        <crest.version>2.5.0-SNAPSHOT</crest.version>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.easytesting</groupId>
+                <artifactId>fest-assert</artifactId>
+                <version>1.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>1.6.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>1.9.5</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>6.0.1</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.forgerock.commons</groupId>
+                <artifactId>json-test</artifactId>
+                <version>${crest.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.forgerock.commons</groupId>
+                <artifactId>json-fluent</artifactId>
+                <version>${crest.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <modules>
+        <module>utils</module>
+        <module>test</module>
+    </modules>
+    <repositories>
+        <repository>
+            <id>forgerock-staging-repository</id>
+            <name>ForgeRock Release Repository</name>
+            <url>http://maven.forgerock.org/repo/releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+</project>
