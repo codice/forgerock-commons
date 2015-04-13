@@ -1,4 +1,4 @@
-# DRAFT IN PROGRESS
+# PRE-RELEASE DRAFT IN PROGRESS
 
 The ForgeRock Doc Maven Plugin builds ForgeRock core documentation
 from DocBook XML sources.

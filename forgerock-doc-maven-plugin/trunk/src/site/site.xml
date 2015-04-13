@@ -12,7 +12,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS.
 -->
 <project name="${project.name}" xmlns="http://maven.apache.org/DECORATION/1.0.1"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -41,6 +41,10 @@
       <item name="2.1.0 release notes" href="Release Notes 2.1.0.html"/>
       <item name="2.0.0 release notes" href="Release Notes 2.0.0.html"/>
       <item name="1.2.0 release notes" href="Release Notes 1.2.0.html"/>
+    </menu>
+    <menu name="Pre-Release Drafts">
+      <item name="README 3.0.0" href="README 3.0.0.html"/>
+      <item name="2.1.5 release notes" href="Release Notes 3.0.0.html"/>
     </menu>
     <menu name="Development">
       <item name="Join"
