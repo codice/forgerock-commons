@@ -43,8 +43,8 @@
       <item name="1.2.0 release notes" href="Release Notes 1.2.0.html"/>
     </menu>
     <menu name="Pre-Release Drafts">
-      <item name="README 3.0.0" href="README 3.0.0.html"/>
-      <item name="2.1.5 release notes" href="Release Notes 3.0.0.html"/>
+      <item name="3.0.0 README" href="README 3.0.0.html"/>
+      <item name="3.0.0 release notes" href="Release Notes 3.0.0.html"/>
     </menu>
     <menu name="Development">
       <item name="Join"
