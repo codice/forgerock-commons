@@ -16,7 +16,6 @@
 
 package org.forgerock.doc.maven.build;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
 import org.forgerock.doc.maven.utils.ImageCopier;
@@ -71,7 +70,7 @@ public class HtmlForBootstrap {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = FileUtils.getFile(m.getBaseDir(), "target", "olinkdb-bootstrap" + ".xml");
+        File targetDB = new File(m.getBuildDirectory(), "olinkdb-bootstrap.xml");
 
         try {
             OLinkUtils.createTargetDatabase(targetDB, "bootstrap", m);
@@ -103,6 +102,7 @@ public class HtmlForBootstrap {
                 cfg.add(element(name("sourceDirectory"), m.path(m.getDocbkxModifiableSourcesDirectory())));
                 cfg.add(element(name("htmlCustomization"), m.path(m.getBootstrapCustomization())));
                 cfg.add(element(name("xincludeSupported"), m.isXincludeSupported()));
+                cfg.add(element(name("targetDirectory"), m.path(m.getDocbkxOutputDirectory()) + "/bootstrap"));
                 cfg.add(element(name("targetsFilename"), m.getDocumentSrcName() + ".html.target.db"));
 
                 executeMojo(

@@ -70,7 +70,7 @@ public class Webhelp {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = FileUtils.getFile(m.getBaseDir(), "target", "olinkdb-webhelp.xml");
+        File targetDB = new File(m.getBuildDirectory(), "olinkdb-webhelp.xml");
 
         try {
             OLinkUtils.createTargetDatabase(targetDB, "webhelp", m);
@@ -105,6 +105,8 @@ public class Webhelp {
 
                 cfg.add(element(name("currentDocid"), docName));
                 cfg.add(element(name("includes"), docName + "/" + m.getDocumentSrcName()));
+                final File webHelpBase = new File(m.getDocbkxOutputDirectory(), "webhelp");
+                cfg.add(element(name("targetDirectory"), m.path(webHelpBase)));
                 cfg.add(element(name("targetsFilename"), m.getDocumentSrcName() + ".webhelp.target.db"));
 
                 executeMojo(

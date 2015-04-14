@@ -16,7 +16,6 @@
 
 package org.forgerock.doc.maven.build;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
@@ -72,7 +71,7 @@ public class ChunkedHtml {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = FileUtils.getFile(m.getBaseDir(), "target", "olinkdb-chunked-html.xml");
+        File targetDB = new File(m.getBuildDirectory(), "olinkdb-chunked-html.xml");
 
         try {
             OLinkUtils.createTargetDatabase(targetDB, "html", m, true);
@@ -107,6 +106,7 @@ public class ChunkedHtml {
 
                 cfg.add(element(name("currentDocid"), docName));
                 cfg.add(element(name("includes"), docName + "/" + m.getDocumentSrcName()));
+                cfg.add(element(name("targetDirectory"), m.path(m.getDocbkxOutputDirectory()) + "/html"));
                 cfg.add(element(name("targetsFilename"), m.getDocumentSrcName() + ".html.target.db"));
 
                 final String base = FilenameUtils.getBaseName(m.getDocumentSrcName());

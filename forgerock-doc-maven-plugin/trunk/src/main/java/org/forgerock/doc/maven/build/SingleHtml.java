@@ -16,7 +16,6 @@
 
 package org.forgerock.doc.maven.build;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
 import org.forgerock.doc.maven.utils.ImageCopier;
@@ -71,7 +70,7 @@ public class SingleHtml {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = FileUtils.getFile(m.getBaseDir(), "target", "olinkdb-single-page-html.xml");
+        File targetDB = new File(m.getBuildDirectory(), "olinkdb-single-page-html.xml");
 
         try {
             OLinkUtils.createTargetDatabase(targetDB, "html", m);
@@ -104,6 +103,7 @@ public class SingleHtml {
                 cfg.add(element(name("collectXrefTargets"), "only"));
 
                 cfg.add(element(name("includes"), docName + "/" + m.getDocumentSrcName()));
+                cfg.add(element(name("targetDirectory"), m.path(m.getDocbkxOutputDirectory()) + "/html"));
                 cfg.add(element(name("targetsFilename"), m.getDocumentSrcName() + ".html.target.db"));
 
                 executeMojo(

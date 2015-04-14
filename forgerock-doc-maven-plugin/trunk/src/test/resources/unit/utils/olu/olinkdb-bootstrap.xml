@@ -50,8 +50,8 @@
         page      CDATA   #IMPLIED
 >
 
-<!ENTITY guide SYSTEM '/path/to/target/docbkx/html/guide/index.html.target.db'>
-<!ENTITY reference SYSTEM '/path/to/target/docbkx/html/reference/index.html.target.db'>
+<!ENTITY guide SYSTEM '/path/to/target/docbkx/bootstrap/guide/index.html.target.db'>
+<!ENTITY reference SYSTEM '/path/to/target/docbkx/bootstrap/reference/index.html.target.db'>
 ]>
 <targetset>
  <sitemap>
