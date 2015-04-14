@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2013-2014 ForgeRock AS
+ * Copyright 2013-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.utils;
@@ -27,6 +27,9 @@ import javax.imageio.metadata.IIOInvalidTreeException;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.AlphaComposite;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -44,9 +47,75 @@ public final class PngUtils {
      * @throws IOException Failed to read the image.
      * @return Image height in pixels.
      */
-    public static int getHeight(final File image) throws IOException {
+    private static int getHeight(final File image) throws IOException {
         BufferedImage bufferedImage = ImageIO.read(image);
         return bufferedImage.getHeight();
+    }
+    /**
+     * Return image width in pixels.
+     *
+     * @param image image file.
+     * @throws IOException Failed to read the image.
+     * @return Image width in pixels.
+     */
+    private static int getWidth(final File image) throws IOException {
+        BufferedImage bufferedImage = ImageIO.read(image);
+        return bufferedImage.getWidth();
+    }
+    /**
+     * Creates a thumbnail copy of provided image, prefixed with "thumb_".
+     *
+     * @param image image file.
+     * @throws IOException Failed to read the image or to write the thumbnail.
+     */
+    public static void resizePng(final File image)
+            throws IOException {
+        BufferedImage originalImage = ImageIO.read(image);
+
+        final int imageWidth = getWidth(image);
+        final int imageHeight = getHeight(image);
+        final int newWidth = 720;
+
+        String absolutePath = image.getAbsolutePath();
+
+        /** File thumbFile = new File(absolutePath.substring(0, absolutePath
+                .lastIndexOf(File.separator)) + File.separator + "thumb_"
+                + image.getName()); */
+
+        File thumbFile = new File(image.getParent(), "thumb_" + image.getName());
+
+        if (imageWidth > newWidth) {
+
+            final int newHeight = Math.round(imageHeight * newWidth / imageWidth);
+
+            System.out.println("Creating thumbnail of: " + image.getName()
+                + " (" + newWidth + " x " + newHeight + ")");
+            int imageType = BufferedImage.TYPE_INT_ARGB;
+            BufferedImage scaledBI = new BufferedImage(newWidth, newHeight, imageType);
+            Graphics2D g = scaledBI.createGraphics();
+            g.setRenderingHint(RenderingHints.KEY_RENDERING,
+                    RenderingHints.VALUE_RENDER_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,
+                    RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                    RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
+                    RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            g.setRenderingHint(RenderingHints.KEY_DITHERING,
+                    RenderingHints.VALUE_DITHER_ENABLE);
+
+            g.setComposite(AlphaComposite.Src);
+            g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+            g.dispose();
+
+            saveBufferedImage(scaledBI, thumbFile, 160);
+        } else {
+            saveBufferedImage(originalImage, thumbFile, 160);
+        }
     }
 
     /**

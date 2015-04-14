@@ -25,6 +25,7 @@ import org.forgerock.doc.maven.pre.Branding;
 import org.forgerock.doc.maven.pre.CommonContent;
 import org.forgerock.doc.maven.pre.CurrentDocId;
 import org.forgerock.doc.maven.pre.CustomCss;
+import org.forgerock.doc.maven.pre.CreateThumbs;
 import org.forgerock.doc.maven.pre.Dpi;
 import org.forgerock.doc.maven.pre.Filter;
 import org.forgerock.doc.maven.pre.HeaderColor;
@@ -75,6 +76,9 @@ public class PreProcessMojo extends AbstractDocbkxMojo {
             new PlantUml(this).execute();
             if (getFormats().contains(Format.pdf) || getFormats().contains(Format.rtf)) {
                 new Dpi(this).execute();
+            }
+            if (getFormats().contains(Format.bootstrap)) {
+                new CreateThumbs(this).execute();
             }
             new CurrentDocId(this).execute();
             new CustomCss(this).execute();

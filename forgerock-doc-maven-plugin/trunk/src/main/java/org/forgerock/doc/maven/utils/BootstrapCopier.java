@@ -33,7 +33,8 @@ public final class BootstrapCopier {
     private final String[] bootstrapLogoResources = {
         "/logos/hero-bg-01.png",
         "/logos/left-shape-4.png",
-        "/logos/Icon_External_Link.png"
+        "/logos/Icon_External_Link.png",
+        "/logos/forgerock-header-logo.png"
     };
 
     /**
@@ -84,9 +85,15 @@ public final class BootstrapCopier {
             // the DocBook XSL stylesheets do not copy the files.
             // Instead the files must be copied to the output directories.
 
-            for (final String outputDirectory : outputDirectories) {
-                final File styleSheetFile = FileUtils.getFile(outputDirectory, "includes", resource);
-                FileUtils.copyURLToFile(resourceUrl, styleSheetFile);
+            if (resourceUrl != null) {
+                for (final String outputDirectory : outputDirectories) {
+                    final File styleSheetFile = FileUtils.getFile(outputDirectory, "includes", resource);
+                    FileUtils.copyURLToFile(resourceUrl, styleSheetFile);
+
+                }
+            } else {
+                System.err.println("WARNING: Resource " + resource + " "
+                    + "cannot be " + "found!");
             }
         }
     }

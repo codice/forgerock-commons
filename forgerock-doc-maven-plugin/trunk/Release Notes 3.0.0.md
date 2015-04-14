@@ -74,6 +74,18 @@ ForgeRock doc build tools have moved to CDDL to align with other ForgeRock proje
 
 ## What's New
 
+**DOCS-272: Create thumbnails of images for Bootstrap output**
+
+Thumbnails of all .PNG images are now created, having a filename prefixed with 
+`thumb_`. The thumbnail images are used by the forgerock-doc-default-branding
+ plugin to enhance the functionality of the Bootstrap format documentation.
+
+* Images that are wider than 720 pixels are copied and resampled to 720 
+pixels wide, maintaining aspect ratio.
+
+* Images that are 720 pixels wide or less are copied as-is without resizing or 
+resampling.
+
 **DOCS-265: Provide alternate release layout**
 
 * `apidocs/` contains folders of any generated HTML-based documentation,
