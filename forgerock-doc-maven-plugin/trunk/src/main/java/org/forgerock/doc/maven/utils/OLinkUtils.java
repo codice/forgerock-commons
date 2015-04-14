@@ -121,12 +121,9 @@ public final class OLinkUtils {
                                             boolean isChunkedHtml)
             throws IOException, MojoExecutionException {
 
-        // docbkx-tools 2.0.16 seems to put target.db files
-        // in ${basedir}/target regardless of ${project.build.dir}.
-
         createTargetDatabase(
                 file,
-                new File(mojo.getBaseDir(), "target").getAbsolutePath(),
+                mojo.getBuildDirectory().getAbsolutePath(),
                 mojo.getDocNames(),
                 FilenameUtils.getBaseName(mojo.getDocumentSrcName()),
                 format,
@@ -273,6 +270,7 @@ public final class OLinkUtils {
 
         String extension = format;
         if (format.equals("xhtml5")) {
+            format = "xhtml";
             extension = "xhtml";
         }
         if (format.equals("bootstrap")) {
@@ -292,7 +290,7 @@ public final class OLinkUtils {
         if (format.equals("pdf") || format.equals("rtf")) {
             type = "fo";
         }
-        if (format.equals("xhtml5")) {
+        if (format.equals("xhtml")) {
             type = "xhtml";
         }
         if (format.equals("bootstrap")) {

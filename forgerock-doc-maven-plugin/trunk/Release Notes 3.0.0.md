@@ -295,6 +295,8 @@ The plugin has been tested with Maven 3.0.5, 3.1.1, 3.2.3.
 
 ## Fixes
 
+**DOCS-278: Unused html directory created when you create local bootstrap output**
+  
 **DOCS-271: Running site twice without clean causes the build to fail**
 
 **DOCS-244: Webhelp format does not include noindex,nofollow meta tag**

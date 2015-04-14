@@ -64,11 +64,7 @@
 >
 
 <#list docNames as doc>
-<#if format == "bootstrap">
-<!ENTITY ${doc} SYSTEM '${basePath}/docbkx/html/${doc}/${baseName}.${type}.target.db'>
-<#else>
 <!ENTITY ${doc} SYSTEM '${basePath}/docbkx/${format}/${doc}/${baseName}.${type}.target.db'>
-</#if>
 </#list>
 ]>
 </#if>
@@ -96,7 +92,7 @@
    </dir>
    </#list>
   </#if>
-  <#if format == "html" && !isChunked || format == "xhtml5" || format == "bootstrap">
+  <#if format == "html" && !isChunked || format == "xhtml" || format == "bootstrap">
    <#list docNames as doc>
    <document targetdoc='${doc}' baseuri='../${doc}/${baseName}.${extension}'>
     &${doc};

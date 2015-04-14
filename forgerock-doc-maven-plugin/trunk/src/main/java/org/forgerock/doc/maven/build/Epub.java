@@ -73,7 +73,7 @@ public class Epub {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = FileUtils.getFile(m.getBaseDir(), "target", "olinkdb-epub.xml");
+        File targetDB = new File(m.getBuildDirectory(), "olinkdb-epub.xml");
 
         try {
             OLinkUtils.createTargetDatabase(targetDB, "epub", m);
@@ -124,6 +124,7 @@ public class Epub {
                 cfg.add(element(name("includes"), docName + "/" + m.getDocumentSrcName()));
                 cfg.add(element(name("currentDocid"), docName));
                 cfg.add(element(name("targetDatabaseDocument"), getTargetDatabaseDocument()));
+                cfg.add(element(name("targetDirectory"), m.path(m.getDocbkxOutputDirectory()) + "/epub"));
                 cfg.add(element(name("targetsFilename"), m.getDocumentSrcName() + ".epub.target.db"));
 
                 executeMojo(

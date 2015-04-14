@@ -102,7 +102,7 @@ public class Fo {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = FileUtils.getFile(m.getBaseDir(), "target", "olinkdb-" + getFormat() + ".xml");
+        File targetDB = new File(m.getBuildDirectory(), "olinkdb-" + getFormat() + ".xml");
 
         try {
             OLinkUtils.createTargetDatabase(targetDB, getFormat(), m);
@@ -166,6 +166,7 @@ public class Fo {
                 cfg.add(element(name("includes"), docName + "/" + m.getDocumentSrcName()));
                 cfg.add(element(name("currentDocid"), docName));
                 cfg.add(element(name("targetDatabaseDocument"), getTargetDatabaseDocument()));
+                cfg.add(element(name("targetDirectory"), m.path(m.getDocbkxOutputDirectory()) + "/" + getFormat()));
                 cfg.add(element(name("targetsFilename"), m.getDocumentSrcName() + ".fo.target.db"));
 
                 executeMojo(

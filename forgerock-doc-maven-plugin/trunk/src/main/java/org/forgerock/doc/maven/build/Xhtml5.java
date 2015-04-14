@@ -16,7 +16,6 @@
 
 package org.forgerock.doc.maven.build;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
 import org.forgerock.doc.maven.utils.ImageCopier;
@@ -71,7 +70,7 @@ public class Xhtml5 {
      * @throws MojoExecutionException Could not write target DB file.
      */
     final String getTargetDB() throws MojoExecutionException {
-        File targetDB = FileUtils.getFile(m.getBaseDir(), "target", "olinkdb-xhtml.xml");
+        File targetDB = new File(m.getBuildDirectory(), "olinkdb-xhtml.xml");
 
         try {
             OLinkUtils.createTargetDatabase(targetDB, "xhtml5", m);
@@ -103,6 +102,7 @@ public class Xhtml5 {
                 cfg.add(element(name("sourceDirectory"), m.path(m.getDocbkxModifiableSourcesDirectory())));
                 cfg.add(element(name("xhtml5Customization"), m.path(m.getXhtml5Customization())));
                 cfg.add(element(name("xincludeSupported"), m.isXincludeSupported()));
+                cfg.add(element(name("targetDirectory"), m.path(m.getDocbkxOutputDirectory()) + "/xhtml"));
                 cfg.add(element(name("targetsFilename"), m.getDocumentSrcName() + ".xhtml.target.db"));
 
                 executeMojo(
