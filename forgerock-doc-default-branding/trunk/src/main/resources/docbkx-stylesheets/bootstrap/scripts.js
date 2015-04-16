@@ -14,6 +14,8 @@
  * Copyright 2015 ForgeRock AS.
  */
 
+//<![CDATA[
+
 ZeroClipboard.config({
         /* swfPath:  "includes/swf/ZeroClipboard.swf", */
         swfPath:  "http://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf",
@@ -22,6 +24,52 @@ ZeroClipboard.config({
         forceHandCursor: true,
         debug: true}
 );
+
+
+
+var wrapConfigurablesFn = function () {
+    $('*:contains("https://openam.example.com:8443")').each(function(){
+        if($(this).children().length < 1)
+            $(this).html(
+                $(this).text().replace(new RegExp("https://openam.example.com:8443", 'g'),'<span class="exampleUrl">https://openam.example.com:8443</span>')
+            )
+    });
+    $('*:contains("amadmin")').each(function(){
+        if($(this).children().length < 1)
+            $(this).html(
+                $(this).text().replace(new RegExp("amadmin", 'g'),'<span class="exampleAdmin">amadmin</span>')
+            )
+    });
+    $('*:contains("iPlanetDirectoryPro")').each(function(){
+        if($(this).children().length < 1)
+            $(this).html(
+                $(this).text().replace(new RegExp("iPlanetDirectoryPro", 'g'),'<span class="exampleSsoCookieName">iPlanetDirectoryPro</span>')
+            )
+    });
+};
+
+var btnClickHandler = function () {
+    $("button#applyDocUpdate").click(function(){
+
+        $('span.exampleUrl').fadeOut("slow", function(){
+            $('span.exampleUrl').text($("input#exampleUrl").val());
+            $('span.exampleUrl').fadeIn("slow");
+        });
+
+        $('span.exampleAdmin').fadeOut("slow", function(){
+            $('span.exampleAdmin').text($("input#exampleAdmin").val());
+            $('span.exampleAdmin').fadeIn("slow");
+        });
+
+        $('span.exampleSsoCookieName').fadeOut("slow", function(){
+            $('span.exampleSsoCookieName').text($("input#exampleSsoCookieName").val());
+            $('span.exampleSsoCookieName').fadeIn("slow");
+        });
+
+        $('#docConfig').modal('hide');
+    });
+};
+
 
 var addCopyButtonFN = function () {
     $( ".cmdline" ).each(function() {
@@ -97,6 +145,9 @@ var affixToCFN = function() {
     });
 };
 
+var attachAnchorsToHeadings = function() {
+    addAnchors('h1.title, h2.title, h3.title, h4.title, h5.title');
+}
 
 var addZeroClipboardToCmdlineButtonsFN = function () {
     var copycmdline = new ZeroClipboard( $('.btn-copy-cmdline') );
@@ -155,7 +206,11 @@ var addZeroClipboardToCodeButtonsFN = function () {
     });
 };
 
+
+
 $(document).ready(function() {
+    //wrapConfigurablesFn();
+    btnClickHandler();
     addCopyButtonFN();
     addZeroClipboardToCmdlineButtonsFN();
     addZeroClipboardToCodeButtonsFN();
@@ -165,6 +220,24 @@ $(document).ready(function() {
     enableScrollSpyFN();
     affixToCFN();
     prettyPrint();
+    attachAnchorsToHeadings();
+    $(".fancybox").fancybox({
+        padding : 0,
+        helpers : {
+            overlay : {
+                css : {
+                    'background' : 'rgba(66, 130, 116, 0.6)'
+                }
+            }
+        },
+        beforeShow : function() {
+            var alt = this.element.find('img').attr('alt');
+
+            this.inner.find('img').attr('alt', alt);
+
+            this.title = alt;
+        }
+    });
 });
 
-
+//]]>

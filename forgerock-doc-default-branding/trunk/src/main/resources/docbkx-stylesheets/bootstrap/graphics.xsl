@@ -553,80 +553,111 @@
      </object>
     </xsl:when>
     <xsl:otherwise>
-     <xsl:element name="{$tag}">
-      <xsl:attribute name="class">img-responsive center-block</xsl:attribute>
-      <xsl:attribute name="data-toggle">tooltip</xsl:attribute>
-      <xsl:if test="$tag = 'img' and ../../self::db:imageobjectco">
-       <xsl:variable name="mapname">
-        <xsl:call-template name="object.id">
-         <xsl:with-param name="object" select="../../areaspec"/>
-        </xsl:call-template>
-       </xsl:variable>
-       <xsl:choose>
-        <xsl:when test="$scaled">
-         <!-- It might be possible to handle some scaling; needs -->
-         <!-- more investigation -->
-         <xsl:message>
-          <xsl:text>Warning: imagemaps not supported </xsl:text>
-          <xsl:text>on scaled images</xsl:text>
-         </xsl:message>
-        </xsl:when>
-        <xsl:otherwise>
-         <xsl:attribute name="border">0</xsl:attribute>
-         <xsl:attribute name="usemap">
-          <xsl:value-of select="concat('#', $mapname)"/>
-         </xsl:attribute>
-        </xsl:otherwise>
-       </xsl:choose>
-      </xsl:if>
 
-      <xsl:attribute name="src">
-       <xsl:choose>
-        <xsl:when test="$img.src.path != '' and
+       <xsl:element name="a">
+        <xsl:attribute name="class">fancybox</xsl:attribute>
+
+        <xsl:attribute name="href">
+         <xsl:choose>
+          <xsl:when test="$img.src.path != '' and
+                                                $tag = 'img' and
+                                                  not(starts-with($output_filename, '/')) and
+                                                not(contains($output_filename, '://'))">
+           <xsl:value-of select="$img.src.path"/>
+          </xsl:when>
+         </xsl:choose>
+         <xsl:value-of select="$output_filename"/>
+
+         <!--       <xsl:call-template name="string.subst">
+                    <xsl:with-param name="string" select="$output_filename"/>
+                    <xsl:with-param name="target" select="'images/'" />
+                    <xsl:with-param name="replacement" select="'images/thumbs/'" />
+                </xsl:call-template>-->
+
+        </xsl:attribute>
+
+        <xsl:element name="{$tag}">
+         <xsl:attribute name="class">img-responsive center-block</xsl:attribute>
+         <xsl:attribute name="data-toggle">tooltip</xsl:attribute>
+         <xsl:if test="$tag = 'img' and ../../self::db:imageobjectco">
+          <xsl:variable name="mapname">
+           <xsl:call-template name="object.id">
+            <xsl:with-param name="object" select="../../areaspec"/>
+           </xsl:call-template>
+          </xsl:variable>
+          <xsl:choose>
+           <xsl:when test="$scaled">
+            <!-- It might be possible to handle some scaling; needs -->
+            <!-- more investigation -->
+            <xsl:message>
+             <xsl:text>Warning: imagemaps not supported </xsl:text>
+             <xsl:text>on scaled images</xsl:text>
+            </xsl:message>
+           </xsl:when>
+           <xsl:otherwise>
+            <xsl:attribute name="border">0</xsl:attribute>
+            <xsl:attribute name="usemap">
+             <xsl:value-of select="concat('#', $mapname)"/>
+            </xsl:attribute>
+           </xsl:otherwise>
+          </xsl:choose>
+         </xsl:if>
+
+         <xsl:attribute name="src">
+          <xsl:choose>
+           <xsl:when test="$img.src.path != '' and
                            $tag = 'img' and
                              not(starts-with($output_filename, '/')) and
                            not(contains($output_filename, '://'))">
-         <xsl:value-of select="$img.src.path"/>
-        </xsl:when>
-       </xsl:choose>
-       <xsl:value-of select="$output_filename"/>
-      </xsl:attribute>
+            <xsl:value-of select="$img.src.path"/>
+           </xsl:when>
+          </xsl:choose>
 
-      <xsl:if test="@align">
-       <xsl:attribute name="align">
-        <xsl:choose>
-         <xsl:when test="@align = 'center'">middle</xsl:when>
-         <xsl:otherwise>
-          <xsl:value-of select="@align"/>
-         </xsl:otherwise>
-        </xsl:choose>
-       </xsl:attribute>
-      </xsl:if>
+          <xsl:call-template name="string.subst">
+           <xsl:with-param name="string" select="$output_filename"/>
+           <xsl:with-param name="target" select="'images/'" />
+           <xsl:with-param name="replacement" select="'images/thumb_'" />
+          </xsl:call-template>
+          <!--<xsl:value-of select="concat('thumb_',$output_filename)"/>-->
+         </xsl:attribute>
 
-      <xsl:call-template name="process.image.attributes">
-       <xsl:with-param name="alt">
-        <xsl:choose>
-         <xsl:when test="$alt != ''">
-          <xsl:copy-of select="$alt"/>
-         </xsl:when>
-         <xsl:when test="ancestor::figure">
-          <xsl:variable name="fig.title">
-           <xsl:apply-templates select="ancestor::figure/title/node()"/>
-          </xsl:variable>
-          <xsl:value-of select="normalize-space($fig.title)"/>
-         </xsl:when>
-        </xsl:choose>
-       </xsl:with-param>
-       <xsl:with-param name="html.depth" select="$html.depth"/>
-       <xsl:with-param name="html.width" select="$html.width"/>
-       <xsl:with-param name="longdesc" select="$longdesc"/>
-       <xsl:with-param name="scale" select="$scale"/>
-       <xsl:with-param name="scalefit" select="$scalefit"/>
-       <xsl:with-param name="scaled.contentdepth" select="$scaled.contentdepth"/>
-       <xsl:with-param name="scaled.contentwidth" select="$scaled.contentwidth"/>
-       <xsl:with-param name="viewport" select="$viewport"/>
-      </xsl:call-template>
-     </xsl:element>
+         <xsl:if test="@align">
+          <xsl:attribute name="align">
+           <xsl:choose>
+            <xsl:when test="@align = 'center'">middle</xsl:when>
+            <xsl:otherwise>
+             <xsl:value-of select="@align"/>
+            </xsl:otherwise>
+           </xsl:choose>
+          </xsl:attribute>
+         </xsl:if>
+
+         <xsl:call-template name="process.image.attributes">
+          <xsl:with-param name="alt">
+           <xsl:choose>
+            <xsl:when test="$alt != ''">
+             <xsl:copy-of select="$alt"/>
+            </xsl:when>
+            <xsl:when test="ancestor::figure">
+             <xsl:variable name="fig.title">
+              <xsl:apply-templates select="ancestor::figure/title/node()"/>
+             </xsl:variable>
+             <xsl:value-of select="normalize-space($fig.title)"/>
+            </xsl:when>
+           </xsl:choose>
+          </xsl:with-param>
+          <xsl:with-param name="html.depth" select="$html.depth"/>
+          <xsl:with-param name="html.width" select="$html.width"/>
+          <xsl:with-param name="longdesc" select="$longdesc"/>
+          <xsl:with-param name="scale" select="$scale"/>
+          <xsl:with-param name="scalefit" select="$scalefit"/>
+          <xsl:with-param name="scaled.contentdepth" select="$scaled.contentdepth"/>
+          <xsl:with-param name="scaled.contentwidth" select="$scaled.contentwidth"/>
+          <xsl:with-param name="viewport" select="$viewport"/>
+         </xsl:call-template>
+        </xsl:element>
+       </xsl:element>
+
     </xsl:otherwise>
    </xsl:choose>
   </xsl:variable>

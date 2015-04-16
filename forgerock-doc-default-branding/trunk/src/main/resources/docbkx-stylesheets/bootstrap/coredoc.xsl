@@ -31,20 +31,22 @@
                 xmlns:exslt="http://exslt.org/common"
                 exclude-result-prefixes="db ng exsl exslt"
                 version='1.0'>
- <xsl:import href="urn:docbkx:stylesheet" />
- <xsl:include href="admon.xsl" />
- <xsl:include href="autotoc.xsl" />
- <xsl:include href="booktitlepage.xsl" />
- <xsl:include href="division.xsl" />
- <xsl:include href="docbook.xsl" />
- <xsl:include href="graphics.xsl" />
- <xsl:include href="toc.xsl" />
- <xsl:include href="table.xsl" />
+    <xsl:import href="urn:docbkx:stylesheet" />
+    <xsl:include href="admon.xsl" />
+    <xsl:include href="autotoc.xsl" />
+    <xsl:include href="booktitlepage.xsl" />
+    <xsl:include href="toc.xsl" />
+    <xsl:include href="division.xsl" />
+    <xsl:include href="docbook.xsl" />
+    <xsl:include href="graphics.xsl" />
+    <xsl:include href="table.xsl" />
+    <xsl:include href="titlepage.templates.xsl" />
 
- <xsl:output method="html" encoding="UTF-8" indent="no" />
 
- <!--<xsl:variable name="target.database"
-               select="index.html.target.db"/> //-->
+<xsl:output method="html" encoding="UTF-8" indent="no" />
+
+<!--<xsl:variable name="target.database"
+              select="index.html.target.db"/> //-->
 
  <xsl:preserve-space
  elements="db:computeroutput db:programlisting db:screen db:userinput"/>
@@ -121,9 +123,11 @@
  <xsl:param name="html.script">
   http://code.jquery.com/jquery-1.11.1.min.js
   http://code.jquery.com/ui/1.11.1/jquery-ui.min.js
-  http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js
   http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js
+  http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js
   http://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.min.js
+  http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js
+  http://cdnjs.cloudflare.com/ajax/libs/anchor-js/0.3.1/anchor.min.js
  </xsl:param>
 
  <xsl:param name="make.clean.html" select="1" />
@@ -170,11 +174,12 @@
  <xsl:param name="generate.section.toc.level" select="1" />
  <xsl:param name="toc.section.depth" select="3" />
  <xsl:param name="toc.max.depth" select="4" />
- <xsl:param name="generate.meta.abstract" select="1" />
+ <xsl:param name="section.autolabel" select="0" />
+ <xsl:param name="section.autolabel.max.depth" select="3" />
 
+ <xsl:param name="generate.meta.abstract" select="1" />
  <xsl:param name="use.extensions" select="1" />
  <xsl:param name="generate.id.attributes" select="1" />
-
 
  <xsl:template name="system.head.content">
   <style type="text/css">
@@ -195,10 +200,9 @@
  </xsl:template>
 
  <xsl:template name="user.head.content">
-  <script type="text/javascript" >
-   &js;
-  </script>
-
+    <script type="text/javascript" >
+     &js;
+    </script>
   </xsl:template>
 
 
