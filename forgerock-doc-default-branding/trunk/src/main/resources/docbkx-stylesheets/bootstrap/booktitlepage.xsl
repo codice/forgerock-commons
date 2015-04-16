@@ -8,11 +8,13 @@
                 version='1.0'>
  <!--
   Skip creation of initial Book title page, avoids showing the authors and other information
- /-->
+
  <xsl:template name="book.titlepage.recto" />
 
  <xsl:template name="book.titlepage.verso" />
 
  <xsl:template name="book.titlepage.separator" />
+ /-->
+
 
 </xsl:stylesheet>

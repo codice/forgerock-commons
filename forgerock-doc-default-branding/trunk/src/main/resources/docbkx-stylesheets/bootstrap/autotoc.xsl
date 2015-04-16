@@ -124,6 +124,51 @@
   </xsl:choose>
 </xsl:template>
 
+
+ <xsl:template match="db:refentry" mode="toc">
+  <xsl:param name="toc-context" select="."/>
+
+  <xsl:variable name="refmeta" select=".//db:refmeta"/>
+  <xsl:variable name="refentrytitle" select="$refmeta//db:refentrytitle"/>
+  <xsl:variable name="refnamediv" select=".//db:refnamediv"/>
+  <xsl:variable name="refname" select="$refnamediv//db:refname"/>
+  <xsl:variable name="refdesc" select="$refnamediv//db:refdescriptor"/>
+  <xsl:variable name="title">
+   <xsl:choose>
+    <xsl:when test="$refentrytitle">
+     <xsl:apply-templates select="$refentrytitle[1]"
+                          mode="titleabbrev.markup"/>
+    </xsl:when>
+    <xsl:when test="$refdesc">
+     <xsl:apply-templates select="$refdesc"
+                          mode="titleabbrev.markup"/>
+    </xsl:when>
+    <xsl:when test="$refname">
+     <xsl:apply-templates select="$refname[1]"
+                          mode="titleabbrev.markup"/>
+    </xsl:when>
+   </xsl:choose>
+  </xsl:variable>
+
+  <xsl:element name="{$toc.listitem.type}">
+    <a>
+     <xsl:attribute name="href">
+      <xsl:call-template name="href.target">
+       <xsl:with-param name="toc-context" select="$toc-context"/>
+      </xsl:call-template>
+     </xsl:attribute>
+     <xsl:copy-of select="$title"/>
+    <xsl:if test="$annotate.toc != 0">
+     <!-- * DocBook 5 says inlinemediaobject (among other things) -->
+     <!-- * is allowed in refpurpose; so we need to run -->
+     <!-- * apply-templates on refpurpose here, instead of value-of  -->
+     <xsl:apply-templates select="db:refnamediv/db:refpurpose" mode="no.anchor.mode"/>
+    </xsl:if>
+    </a>
+  </xsl:element>
+ </xsl:template>
+
+
 <xsl:template name="toc.list.attributes">
   <xsl:param name="toc-context" select="."/>
   <xsl:param name="toc.title.p" select="true()"/>

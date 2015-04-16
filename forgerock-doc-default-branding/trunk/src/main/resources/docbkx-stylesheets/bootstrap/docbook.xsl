@@ -46,8 +46,14 @@
       <div class="navbar navbar-inverse navbar-fixed-top">
        <nav class="container-fluid">
         <div class="navbar-header">
-         <a class="navbar-brand" href="#">ForgeRock</a>
+         <a href="index.html" class="navbar-brand">
+          <img src='includes/logos/forgerock-header-logo.png'
+               alt="ForgeRock Documentation"/>
+         </a>
         </div>
+        <ul id="pdf-link">
+         <!-- If PDFs are built, a link to it will be inserted here as a post-build step. -->
+        </ul>
        </nav>
       </div>
      <!-- Add bootstrap full width banner, for doc title //-->
@@ -80,17 +86,66 @@
         </a>
        </div>
       </div>
+     <!-- *** Add bootstrap config popup - for future use ***
+     <div class="modal fade" id="docConfig" tabindex="-1" role="dialog"
+          aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+       <div class="modal-content">
+        <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal"
+                 aria-label="Close"><span aria-hidden="true">X</span></button>
+         <h4 class="modal-title" id="docCustomization">Document
+          Customization</h4>
+        </div>
+        <div class="modal-body">
+         <form>
+          <div class="form-group">
+           <label for="exampleUrl" class="control-label">OpenAM
+            Deployment URL:</label>
+           <input type="text" class="form-control" id="exampleUrl"
+                  value="https://openam.example.com:8443" />
+          </div>
+          <div class="form-group">
+           <label for="exampleAdmin" class="control-label">OpenAM
+            Admin User ID:</label>
+           <input type="text" class="form-control" id="exampleAdmin"
+                  value="amadmin" />
+          </div>
+          <div class="form-group">
+           <label for="exampleSsoCookieName" class="control-label">SSO
+            Cookie Name:</label>
+           <input type="text" class="form-control" id="exampleSsoCookieName"
+                  value="iPlanetDirectoryPro" />
+          </div>
+         </form>
+        </div>
+        <div class="modal-footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+         <button type="button" class="btn btn-primary"
+                 id="applyDocUpdate">Update
+          Config</button>
+        </div>
+       </div>
+      </div>
+     </div> -->
      <!-- Add bootstrap footer bar //-->
+
         <div class="footer">
          <div class="container-fluid">
           <div class="footer-left"><span class="footer-item">Copyright ©
-           2011-2015 ForgeRock AS</span></div>
+           <xsl:value-of select="db:info/db:copyright/db:year"/>&#160;
+           <xsl:value-of select="db:info/db:copyright/db:holder"/></span></div>
           <div class="footer-right"><a target="_blank"
                                        class="footer-item snap-left"
                                        href="legalnotice.html"><i
            class="glyphicon glyphicon-briefcase"></i> Legal Notice</a> <a
-           target="_blank" class="footer-item snap-left"
-           href="https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10000&amp;components=10007&amp;issuetype=1"><i class="glyphicon glyphicon-ok-sign"></i> Corrections</a><a target="_blank" class="footer-item snap-left" href="#" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-info-sign"></i> About</a> </div>
+           target="_blank" class="footer-item snap-left">
+           <xsl:attribute name="href">
+                <xsl:value-of select="'https://bugster.forgerock.org/jira/secure/CreateIssueDetails!init.jspa?pid=10290&amp;issuetype=1&amp;summary=Feedback on: '"/>
+                <xsl:apply-templates select="/*[1]" mode="title.markup"/>
+            </xsl:attribute>
+           <i class="glyphicon glyphicon-ok-sign"></i> Feedback</a>
+           <a target="_blank" class="footer-item snap-left" href="#" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-info-sign"></i> About</a> </div>
          </div>
         </div>
     </body>
