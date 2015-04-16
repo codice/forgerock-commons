@@ -18,16 +18,15 @@
   !
   ! CCPL HEADER END
   !
-  !      Copyright 2015 ForgeRock AS
+  !      Copyright 2015 ForgeRock AS.
   !
 -->
 <section xml:id="contact-us"
          xmlns='http://docbook.org/ns/docbook' version='5.0' xml:lang='en'
          xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
          xsi:schemaLocation='http://docbook.org/ns/docbook
-                              http://docbook.org/xml/5.0/xsd/docbook.xsd'
-         xmlns:xlink='http://www.w3.org/1999/xlink'>
- <title>Contact US</title>
+                              http://docbook.org/xml/5.0/xsd/docbook.xsd'>
+ <title>Contact Us</title>
 
  <para>
   ForgeRock has offices around the globe supporting our international customers
@@ -68,6 +67,7 @@
  </table>
 
  <table xml:id="forgerock-addresses-2">
+  <title> </title>
   <tgroup cols="3">
    <colspec colnum="1" colwidth="1*"/>
    <colspec colnum="2" colwidth="1*"/>
@@ -105,6 +105,7 @@
  </table>
 
  <table xml:id="forgerock-addresses-3">
+  <title> </title>
   <tgroup cols="3">
    <colspec colnum="1" colwidth="1*"/>
    <colspec colnum="2" colwidth="1*"/>
@@ -140,10 +141,4 @@
    </tbody>
   </tgroup>
  </table>
-
-
-
-
-
-
 </section>
