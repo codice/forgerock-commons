@@ -27,6 +27,7 @@ package org.forgerock.script.scope;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.Connection;
+import org.forgerock.json.resource.ConnectionFactory;
 import org.forgerock.json.resource.ConnectionProvider;
 import org.forgerock.json.resource.InternalServerErrorException;
 import org.forgerock.json.resource.MemoryBackend;
@@ -66,20 +67,20 @@ import static org.mockito.Mockito.mock;
  */
 public class ResourceFunctionsTest {
 
-    protected PersistenceConfig getPersistenceConfig() {
+    private ConnectionFactory getConnectionFactory() {
         // Get the OSGi Router
         final Router router = new Router();
         router.addRoute("Users", new MemoryBackend());
         router.addRoute("Groups", new MemoryBackend());
+        return Resources.newInternalConnectionFactory(router);
+    }
+
+    protected PersistenceConfig getPersistenceConfig(final ConnectionFactory connectionFactory) {
         return PersistenceConfig.builder().connectionProvider(new ConnectionProvider() {
+            // no longer used, but still required by PersistenceConfig
             @Override
             public Connection getConnection(String connectionId) throws ResourceException {
-                if ("TEST".equalsIgnoreCase(connectionId)) {
-                    return Resources.newInternalConnection(router);
-                } else {
-                    throw new InternalServerErrorException("Connection not found with id: "
-                            + connectionId);
-                }
+                return connectionFactory.getConnection();
             }
 
             @Override
@@ -95,17 +96,18 @@ public class ResourceFunctionsTest {
         // Example to use the stateless functions
         // ConnectionFunction.READ.call({ConnectionFactory,Context}, argument)
 
-        Bindings globalOpenIDMBinding = new SimpleBindings(new ConcurrentHashMap<String, Object>());
+        ConnectionFactory connectionFactory = getConnectionFactory();
 
-        globalOpenIDMBinding.put("openidm", FunctionFactory.getResource());
+        Bindings globalBinding = new SimpleBindings(new ConcurrentHashMap<String, Object>());
+
+        globalBinding.put("global", FunctionFactory.getResource(connectionFactory));
 
         // Use Spring or SCR to create this bean
-        ScriptRegistryImpl registry =
-                new ScriptRegistryImpl(new HashMap<String, Object>(), ServiceLoader
-                        .load(ScriptEngineFactory.class), globalOpenIDMBinding);
+        ScriptRegistryImpl registry = new ScriptRegistryImpl(
+                new HashMap<String, Object>(), ServiceLoader.load(ScriptEngineFactory.class), globalBinding);
 
         // Setup the PersistenceConfig
-        registry.setPersistenceConfig(getPersistenceConfig());
+        registry.setPersistenceConfig(getPersistenceConfig(connectionFactory));
 
         // Find the Engine for the Script name
         ScriptEngine engine = registry.getEngineByName("JavaScript");
@@ -139,8 +141,7 @@ public class ResourceFunctionsTest {
 
     @Test
     public void actionTest(final ITestContext testContext) throws Exception {
-        // action(String endPoint[, String id], String type, Map params, Map
-        // content[, List fieldFilter][,Map context])
+        // action(String endPoint[, String id], String type, Map params, Map content[, List fieldFilter][,Map context])
         final JsonValue result = new JsonValue(true);
 
         final RequestHandler resource = mock(RequestHandler.class);
@@ -149,20 +150,20 @@ public class ResourceFunctionsTest {
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 // ActionRequest request = (ActionRequest)
                 // invocation.getArguments()[1];
-                ResultHandler<JsonValue> handler =
-                        (ResultHandler<JsonValue>) invocation.getArguments()[2];
+                ResultHandler<JsonValue> handler = (ResultHandler<JsonValue>) invocation.getArguments()[2];
                 handler.handleResult(result);
                 return null;
             }
-        }).when(resource).handleAction(any(ServerContext.class), any(ActionRequest.class),
-                any(ResultHandler.class));
+        }).when(resource).handleAction(any(ServerContext.class), any(ActionRequest.class), any(ResultHandler.class));
+
+        final ConnectionFactory connectionFactory = Resources.newInternalConnectionFactory(resource);
 
         ServerContext serverContext = new ServerContext(new RootContext());
         final PersistenceConfig persistenceConfig =
                 PersistenceConfig.builder().connectionProvider(new ConnectionProvider() {
                     @Override
                     public Connection getConnection(String connectionId) throws ResourceException {
-                        return Resources.newInternalConnection(resource);
+                        return connectionFactory.getConnection();
                     }
 
                     @Override
@@ -194,22 +195,24 @@ public class ResourceFunctionsTest {
         // action(String resourceName, [String actionId,] Map params, Map
         // content[, List fieldFilter][,Map context])
 
+        Function<JsonValue> action = ResourceFunctions.newActionFunction(connectionFactory);
+
         Object[] arguments =
                 new Object[] { "resourceName", "actionId", new HashMap<String, Object>(),
                     new HashMap<String, Object>(), new ArrayList<String>(), serverContext.toJsonValue() };
-        Assert.assertTrue(ResourceFunctions.ACTION.call(parameter, null, arguments).asBoolean());
+        Assert.assertTrue(action.call(parameter, null, arguments).asBoolean());
 
         arguments =
                 new Object[] { "resourceName", "actionId", new HashMap<String, Object>(),
                     new HashMap<String, Object>(), new ArrayList<String>() };
-        Assert.assertTrue(ResourceFunctions.ACTION.call(parameter, null, arguments).asBoolean());
+        Assert.assertTrue(action.call(parameter, null, arguments).asBoolean());
 
         try {
             arguments =
                     new Object[] { "resourceName", null, "actionId", new HashMap<String, Object>(),
                         new HashMap<String, Object>(), new ArrayList<String>(),
                         new HashMap<String, Object>() };
-            ResourceFunctions.ACTION.call(parameter, null, arguments);
+            action.call(parameter, null, arguments);
             Assert.fail("No such method");
         } catch (NoSuchMethodException e) {
             /* expected */
@@ -219,7 +222,7 @@ public class ResourceFunctionsTest {
                 new Object[] { "resourceName", "actionId", new HashMap<String, Object>(),
                     new ArrayList<String>(), new HashMap<String, Object>() };
         try {
-            ResourceFunctions.ACTION.call(parameter, null, arguments);
+            action.call(parameter, null, arguments);
             Assert.fail("No such method");
         } catch (NoSuchMethodException e) {
             /* Expected */

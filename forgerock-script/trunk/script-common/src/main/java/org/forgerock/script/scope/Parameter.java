@@ -38,18 +38,6 @@ import org.forgerock.json.resource.ServerContext;
 public interface Parameter {
 
     /**
-     * Returns the internal connection.
-     * 
-     * @return a Connection
-     * @throws org.forgerock.json.resource.NotFoundException
-     *             If no such connection exists.
-     * @throws org.forgerock.json.resource.ResourceException
-     *             If the connection could not be obtained for some other reason
-     *             (e.g. due to a configuration or initialization problem).
-     */
-    public Connection getConnection() throws ResourceException;
-
-    /**
      * Returns the ServerRequest assigned with the current {@link org.forgerock.json.resource.Request}
      * from the saved context data.
      *
@@ -61,7 +49,7 @@ public interface Parameter {
      *             If the connection could not be obtained for some other reason
      *             (e.g. due to a configuration or initialization problem).
      */
-    public ServerContext getServerContext(JsonValue savedContext) throws ResourceException;
+    ServerContext getServerContext(JsonValue savedContext) throws ResourceException;
 
     /**
      * Returns the persistence config helper.
@@ -73,5 +61,5 @@ public interface Parameter {
      *             If the connection could not be obtained for some other reason
      *             (e.g. due to a configuration or initialization problem).
      */
-    public PersistenceConfig getPersistenceConfig();
+    PersistenceConfig getPersistenceConfig();
 }
