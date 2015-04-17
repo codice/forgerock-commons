@@ -11,20 +11,23 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2015 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven.post;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
+import org.forgerock.doc.maven.utils.HtmlUtils;
 import org.forgerock.doc.maven.utils.BootstrapCopier;
+import org.forgerock.doc.maven.utils.NameUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
- * HTML post-processor for both single-page and chunked HTML formats.
+ * HTML post-processor for Bootstrap-formatted HTML formats.
  */
 public class Bootstrap {
 
@@ -43,14 +46,12 @@ public class Bootstrap {
 
         outputDirectories = new String[1];
         outputDirectories[0] = "";
-     /*   outputDirectories[1] = File.separator + FilenameUtils.getBaseName(m
-                .getDocumentSrcName());  */
     }
 
     /**
-     * Post-processes HTML formats.
+     * Post-processes Bootstrap formats.
      *
-     * @throws MojoExecutionException Failed to post-process HTML.
+     * @throws MojoExecutionException Failed to post-process Bootstrap format.
      */
     public void execute() throws MojoExecutionException {
 
@@ -64,6 +65,11 @@ public class Bootstrap {
         for (final String docName : m.getDocNames()) {
 
             final File docDir = new File(htmlDir, docName);
+
+            // If PDFs are also being built, edit Bootstrap HTML with a link
+            if (m.getFormats().contains(AbstractDocbkxMojo.Format.pdf)) {
+                editBuiltHtml(docDir.getPath(), docName);
+            }
 
             // Example:
             // ${project.build.directory}/docbkx/html/my-book
@@ -81,6 +87,48 @@ public class Bootstrap {
                     "Failed to copy files: " + e.getMessage(), e);
         }
 
+    }
+
+    /**
+     * Edit built Bootstrap HTML.
+     *
+     * <p>
+     *
+     * If both Bootstrap and PDF formats are being built, link to the PDFs
+     * from the Bootstrap.
+     *
+     *
+     * @param htmlDir Directory under which to find Bootstrap output.
+     * @param docName The short name of the document, for example "dev-guide".
+     * @throws MojoExecutionException Something went wrong when updating HTML.
+     */
+    final void editBuiltHtml(final String htmlDir, final String docName) throws
+            MojoExecutionException {
+        try {
+            HashMap<String, String> replacements = new HashMap<String, String>();
+
+            String linkToPdf = getLinkToPdf(docName);
+            replacements.put("<ul id=\"pdf-link\">", linkToPdf);
+
+            HtmlUtils.updateHtml(htmlDir, replacements);
+        } catch (IOException e) {
+            throw new MojoExecutionException(
+                    "Failed to update output HTML correctly: " + e.getMessage());
+        }
+    }
+
+    private String getLinkToPdf(final String docName) {
+        String link = "<ul id=\"pdf-link\" class=\"nav navbar-nav "
+                + "navbar-right\">\n"
+                + "<li><a href=\"PDF-URL\"><span\n"
+                + "class=\"glyphicon glyphicon-print\"></span> Open PDF "
+                + "Version</a></li>";
+
+        String pdfUrl = "../../" + NameUtils.renameDoc(m.getProjectName(),
+                docName, "pdf");
+        link = link.replaceFirst("PDF-URL", pdfUrl);
+
+        return link;
     }
 
     /**
