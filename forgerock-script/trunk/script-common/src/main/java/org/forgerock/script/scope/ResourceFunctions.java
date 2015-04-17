@@ -34,6 +34,7 @@ import java.util.Map;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.BadRequestException;
+import org.forgerock.json.resource.ConnectionFactory;
 import org.forgerock.json.resource.CreateRequest;
 import org.forgerock.json.resource.DeleteRequest;
 import org.forgerock.json.resource.FutureResult;
@@ -64,19 +65,22 @@ public final class ResourceFunctions {
     private ResourceFunctions() {
     }
 
-    public static final CreateFunction CREATE = new CreateFunction();
+    public static Function<JsonValue> newCreateFunction(ConnectionFactory connectionFactory) {
+        return new CreateFunction(connectionFactory);
+    }
 
     /**
      * <pre>
      * create(String resourceContainer, String newResourceId, Map content[, Map params][, List fieldFilter][, Map context])
      * </pre>
      */
-    public static final class CreateFunction extends AbstractFunction {
+    private static final class CreateFunction extends AbstractFunction {
 
         /** Serializable class a version number. */
-        static final long serialVersionUID = 1L;
+        static final long serialVersionUID = 2L;
 
-        private CreateFunction() {
+        private CreateFunction(ConnectionFactory connectionFactory) {
+            super(connectionFactory);
         }
 
         @Override
@@ -176,7 +180,7 @@ public final class ResourceFunctions {
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<Resource> future =
-                    scope.getConnection().createAsync(serverContext, cr,
+                    connectionFactory.getConnection().createAsync(serverContext, cr,
                             this.<Resource> getResultHandler(scope, callback));
             try {
                 return future.get();
@@ -190,19 +194,22 @@ public final class ResourceFunctions {
 
     }
 
-    public static final ReadFunction READ = new ReadFunction();
+    public static Function<JsonValue> newReadFunction(ConnectionFactory connectionFactory) {
+        return new ReadFunction(connectionFactory);
+    }
 
     /**
      * <pre>
      * read(String resourceName[, Map params][, List fieldFilter][,Map context])
      * </pre>
      */
-    public static final class ReadFunction extends AbstractFunction {
+    private static final class ReadFunction extends AbstractFunction {
 
         /** Serializable class a version number. */
-        static final long serialVersionUID = 1L;
+        static final long serialVersionUID = 2L;
 
-        private ReadFunction() {
+        private ReadFunction(ConnectionFactory connectionFactory) {
+            super(connectionFactory);
         }
 
         @Override
@@ -273,7 +280,7 @@ public final class ResourceFunctions {
             return result;
         }
 
-        public Resource read(final Parameter parameter, String resourceName, JsonValue params,
+        public Resource read(final Parameter scope, String resourceName, JsonValue params,
                 List<Object> fieldFilter, JsonValue context, final Function<?> callback)
                 throws ResourceException {
 
@@ -284,10 +291,10 @@ public final class ResourceFunctions {
                 setAdditionalParameter(rr, name, params.get(name));
             }
 
-            final ServerContext serverContext = parameter.getServerContext(context);
+            final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<Resource> future =
-                    parameter.getConnection().readAsync(serverContext, rr,
-                            this.<Resource> getResultHandler(parameter, callback));
+                    connectionFactory.getConnection().readAsync(serverContext, rr,
+                            this.<Resource> getResultHandler(scope, callback));
             try {
                 return future.get();
             } catch (final InterruptedException e) {
@@ -299,19 +306,22 @@ public final class ResourceFunctions {
         }
     }
 
-    public static final UpdateFunction UPDATE = new UpdateFunction();
+    public static Function<JsonValue> newUpdateFunction(ConnectionFactory connectionFactory) {
+        return new UpdateFunction(connectionFactory);
+    }
 
     /**
      * <pre>
      * update(String resourceName, String revision, Map content [, Map params][, List fieldFilter][,Map context])
      * </pre>
      */
-    public static final class UpdateFunction extends AbstractFunction {
+    private static final class UpdateFunction extends AbstractFunction {
 
         /** Serializable class a version number. */
-        static final long serialVersionUID = 1L;
+        static final long serialVersionUID = 2L;
 
-        private UpdateFunction() {
+        private UpdateFunction(ConnectionFactory connectionFactory) {
+            super(connectionFactory);
         }
 
         @Override
@@ -414,7 +424,7 @@ public final class ResourceFunctions {
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<Resource> future =
-                    scope.getConnection().updateAsync(serverContext, ur,
+                    connectionFactory.getConnection().updateAsync(serverContext, ur,
                             this.<Resource> getResultHandler(scope, callback));
             try {
                 return future.get();
@@ -427,19 +437,22 @@ public final class ResourceFunctions {
         }
     }
 
-    public static final PatchFunction PATCH = new PatchFunction();
+    public static Function<JsonValue> newPatchFunction(ConnectionFactory connectionFactory) {
+        return new PatchFunction(connectionFactory);
+    }
 
     /**
      * <pre>
      * patch(String resourceName, String revision, Map patch[, Map params][, List fieldFilter][,Map context])
      * </pre>
      */
-    public static final class PatchFunction extends AbstractFunction {
+    private static final class PatchFunction extends AbstractFunction {
 
         /** Serializable class a version number. */
-        static final long serialVersionUID = 1L;
+        static final long serialVersionUID = 2L;
 
-        private PatchFunction() {
+        private PatchFunction(ConnectionFactory connectionFactory) {
+            super(connectionFactory);
         }
 
         @Override
@@ -543,7 +556,7 @@ public final class ResourceFunctions {
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<Resource> future =
-                    scope.getConnection().patchAsync(serverContext, pr,
+                    connectionFactory.getConnection().patchAsync(serverContext, pr,
                             this.<Resource> getResultHandler(scope, callback));
             try {
                 return future.get();
@@ -556,19 +569,22 @@ public final class ResourceFunctions {
         }
     }
 
-    public static final QueryFunction QUERY = new QueryFunction();
+    public static Function<JsonValue> newQueryFunction(ConnectionFactory connectionFactory) {
+        return new QueryFunction(connectionFactory);
+    }
 
     /**
      * <pre>
      * query(String resourceContainer, Map params [, List fieldFilter][,Map context])
      * </pre>
      */
-    public static final class QueryFunction extends AbstractFunction {
+    private static final class QueryFunction extends AbstractFunction {
 
         /** Serializable class a version number. */
-        static final long serialVersionUID = 1L;
+        static final long serialVersionUID = 2L;
 
-        private QueryFunction() {
+        private QueryFunction(ConnectionFactory connectionFactory) {
+            super(connectionFactory);
         }
 
         @Override
@@ -721,7 +737,7 @@ public final class ResourceFunctions {
 
                 final ServerContext serverContext = scope.getServerContext(context);
                 final FutureResult<QueryResult> future =
-                        scope.getConnection().queryAsync(serverContext, qr,
+                        connectionFactory.getConnection().queryAsync(serverContext, qr,
                                 new QueryResultHandler() {
                                     @Override
                                     public void handleError(final ResourceException error) {
@@ -796,19 +812,22 @@ public final class ResourceFunctions {
         }
     }
 
-    public static final DeleteFunction DELETE = new DeleteFunction();
+    public static Function<JsonValue> newDeleteFunction(ConnectionFactory connectionFactory) {
+        return new DeleteFunction(connectionFactory);
+    }
 
     /**
      * <pre>
      * delete(String resourceName, String revision [, Map params][, List fieldFilter][,Map context])
      * </pre>
      */
-    public static final class DeleteFunction extends AbstractFunction {
+    private static final class DeleteFunction extends AbstractFunction {
 
         /** Serializable class a version number. */
-        static final long serialVersionUID = 1L;
+        static final long serialVersionUID = 2L;
 
-        private DeleteFunction() {
+        private DeleteFunction(ConnectionFactory connectionFactory) {
+            super(connectionFactory);
         }
 
         @Override
@@ -898,7 +917,7 @@ public final class ResourceFunctions {
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<Resource> future =
-                    scope.getConnection().deleteAsync(serverContext, dr,
+                    connectionFactory.getConnection().deleteAsync(serverContext, dr,
                             this.<Resource> getResultHandler(scope, callback));
             try {
                 return future.get();
@@ -911,19 +930,22 @@ public final class ResourceFunctions {
         }
     }
 
-    public static final ActionFunction ACTION = new ActionFunction();
+    public static Function<JsonValue> newActionFunction(ConnectionFactory connectionFactory) {
+        return new ActionFunction(connectionFactory);
+    }
 
     /**
      * <pre>
      * action(String resourceName, [String actionId,] Map content, Map params [, List fieldFilter][,Map context])
      * </pre>
      */
-    public static final class ActionFunction extends AbstractFunction {
+    private static final class ActionFunction extends AbstractFunction {
 
         /** Serializable class a version number. */
-        static final long serialVersionUID = 1L;
+        static final long serialVersionUID = 2L;
 
-        private ActionFunction() {
+        private ActionFunction(ConnectionFactory connectionFactory) {
+            super(connectionFactory);
         }
 
         @Override
@@ -1035,7 +1057,7 @@ public final class ResourceFunctions {
 
             final ServerContext serverContext = scope.getServerContext(context);
             final FutureResult<JsonValue> future =
-                    scope.getConnection().actionAsync(serverContext, ar,
+                    connectionFactory.getConnection().actionAsync(serverContext, ar,
                             this.<JsonValue> getResultHandler(scope, callback));
             try {
                 return future.get();
@@ -1051,9 +1073,13 @@ public final class ResourceFunctions {
     private static abstract class AbstractFunction implements Function<JsonValue> {
 
         /** Serializable class a version number. */
-        static final long serialVersionUID = 1L;
+        static final long serialVersionUID = 2L;
 
-        // private static abstract class AbstractFunction {
+        final ConnectionFactory connectionFactory;
+
+        AbstractFunction(ConnectionFactory connectionFactory) {
+            this.connectionFactory = connectionFactory;
+        }
 
         protected <T> ResultHandler<T> getResultHandler(final Parameter scope,
                 final Function<?> callback) {
