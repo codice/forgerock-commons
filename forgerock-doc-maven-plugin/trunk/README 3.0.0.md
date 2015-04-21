@@ -31,7 +31,6 @@ the overall configuration requires at least these arguments:
 *   `<projectName>`: OpenAM, OpenDJ, OpenICF, OpenIDM, OpenIG, and so forth
 *   `<projectVersion>`: the version, such as `1.0.0-SNAPSHOT`, or `3.3.1`
 *   `<releaseVersion>`: the release version, such as `1.0.0`, or `3.3.1`
-*   `<googleAnalyticsId>`: to add Google Analytics JavaScript to HTML output
 
 Other features are described in this README.
 
@@ -51,7 +50,6 @@ You call the plugin from your `pom.xml` as in the following example.
         <projectName>MyProject</projectName>
         <projectVersion>1.0.0-SNAPSHOT</projectVersion>
         <releaseVersion>1.0.0</releaseVersion>
-        <googleAnalyticsId>${googleAnalyticsId}</googleAnalyticsId>
        </configuration>
        <executions>
         <execution>
