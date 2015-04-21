@@ -86,6 +86,22 @@ pixels wide, maintaining aspect ratio.
 * Images that are 720 pixels wide or less are copied as-is without resizing or 
 resampling.
 
+**DOCS-253: Updated use of Google Analytics
+
+This fix re-adds the Google Analytics tracking ID and code snippet to the 
+Bootstrap format documentation. 
+
+The default Property ID `UA-23412190-14` can be overridden by 
+adding a `<googleAnalyticsId>` value to the `<configuration>` 
+section of the plugin settings in the POM.XML. For example:
+
+       <configuration>
+        <projectName>MyProject</projectName>
+        <projectVersion>1.0.0-SNAPSHOT</projectVersion>
+        <releaseVersion>1.0.0</releaseVersion>
+        <googleAnalyticsId>UA-XXXX-Y</googleAnalyticsId>
+       </configuration>
+
 **DOCS-265: Provide alternate release layout**
 
 * `apidocs/` contains folders of any generated HTML-based documentation,

@@ -16,6 +16,8 @@
 
 package org.forgerock.doc.maven.post;
 
+import org.apache.commons.io.IOUtils;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
 import org.forgerock.doc.maven.utils.HtmlUtils;
@@ -68,7 +70,7 @@ public class Bootstrap {
 
             // If PDFs are also being built, edit Bootstrap HTML with a link
             if (m.getFormats().contains(AbstractDocbkxMojo.Format.pdf)) {
-                editBuiltHtml(docDir.getPath(), docName);
+                addPDFLink(docDir.getPath(), docName);
             }
 
             // Example:
@@ -77,6 +79,7 @@ public class Bootstrap {
             ++i;
 
         }
+        editBuiltHtml(htmlDir.getPath());
 
         BootstrapCopier copier =
                 new BootstrapCopier(outputDirectories);
@@ -90,7 +93,35 @@ public class Bootstrap {
     }
 
     /**
-     * Edit built Bootstrap HTML.
+     * Add essentials to the built Bootstrap HTML.
+     *
+     * <p>
+     *
+     * - Add Google Analytics tracking code to the Bootstrap HTML
+     *
+     *
+     * @param htmlDir Directory under which to find Bootstrap output.
+     * @throws MojoExecutionException Something went wrong when updating HTML.
+     */
+    final void editBuiltHtml(final String htmlDir) throws
+            MojoExecutionException {
+        try {
+            HashMap<String, String> replacements = new HashMap<String, String>();
+
+            String gascript = IOUtils.toString(
+                    getClass().getResourceAsStream("/endhead-ga.txt"), "UTF-8");
+            gascript = gascript.replace("ANALYTICS-ID", m.getGoogleAnalyticsId());
+            replacements.put("</head>", gascript);
+
+            HtmlUtils.updateHtml(htmlDir, replacements);
+        } catch (IOException e) {
+            throw new MojoExecutionException(
+                    "Failed to update output HTML correctly: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Add a link to the PDF in the built Bootstrap HTML.
      *
      * <p>
      *
@@ -102,7 +133,7 @@ public class Bootstrap {
      * @param docName The short name of the document, for example "dev-guide".
      * @throws MojoExecutionException Something went wrong when updating HTML.
      */
-    final void editBuiltHtml(final String htmlDir, final String docName) throws
+    final void addPDFLink(final String htmlDir, final String docName) throws
             MojoExecutionException {
         try {
             HashMap<String, String> replacements = new HashMap<String, String>();
@@ -113,7 +144,7 @@ public class Bootstrap {
             HtmlUtils.updateHtml(htmlDir, replacements);
         } catch (IOException e) {
             throw new MojoExecutionException(
-                    "Failed to update output HTML correctly: " + e.getMessage());
+                    "Failed to inject PDF link HTML correctly: " + e.getMessage());
         }
     }
 
