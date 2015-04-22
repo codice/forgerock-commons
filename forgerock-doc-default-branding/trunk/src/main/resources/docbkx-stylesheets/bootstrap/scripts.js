@@ -206,21 +206,23 @@ var addZeroClipboardToCodeButtonsFN = function () {
     });
 };
 
+var enableColorboxFN = function () {
+    $(".fancybox").colorbox({
+        title: function() {
+            return $(this).children('img').attr('alt');
+        },
+        opacity: 1,
+        transition:"elastic",
+        initialWidth: 0,
+        initialHeight: 0,
+        maxWidth:"95%",
+        maxHeight: "95%",
+        scalePhotos: true,
+        fixed: true
+    });
+};
 
-
-$(document).ready(function() {
-    //wrapConfigurablesFn();
-    btnClickHandler();
-    addCopyButtonFN();
-    addZeroClipboardToCmdlineButtonsFN();
-    addZeroClipboardToCodeButtonsFN();
-    enableToolTipFN();
-    enableBackToTopFadeInFN();
-    enableClampedWidthsFN();
-    enableScrollSpyFN();
-    affixToCFN();
-    prettyPrint();
-    attachAnchorsToHeadings();
+var enableFancyboxFN = function () {
     $(".fancybox").fancybox({
         padding : 0,
         helpers : {
@@ -238,6 +240,23 @@ $(document).ready(function() {
             this.title = alt;
         }
     });
+};
+
+$(document).ready(function() {
+    //wrapConfigurablesFn();
+    btnClickHandler();
+    addCopyButtonFN();
+    addZeroClipboardToCmdlineButtonsFN();
+    addZeroClipboardToCodeButtonsFN();
+    enableToolTipFN();
+    enableBackToTopFadeInFN();
+    enableClampedWidthsFN();
+    enableScrollSpyFN();
+    affixToCFN();
+    prettyPrint();
+    enableColorboxFN();
+    attachAnchorsToHeadings();
+
 });
 
 //]]>
