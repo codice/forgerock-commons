@@ -19,10 +19,11 @@
 /***********************************/
 
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,300,400,700);
-@import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css);
-@import url(https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css);
-@import url(https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css);
-@import url(https://cdnjs.cloudflare.com/ajax/libs/anchor-js/0.3.1/anchor.min.css);
+@import url(http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css);
+@import url(http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css);
+/* @import url(http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css); */
+@import url(http://cdnjs.cloudflare.com/ajax/libs/anchor-js/0.3.1/anchor.min.css);
+@import url(http://cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/example1/colorbox.css);
 
 /***********************************/
 /* General Styles
@@ -211,7 +212,7 @@ li.L8 {
 /***********************************/
 
 .navbar-brand {
-    padding: 0 0 0 15px;
+    padding: 7px 15px;
 }
 .navbar-brand > img {
     height: 100%;
@@ -578,6 +579,16 @@ pre.prettyprint {
 }
 a.fancybox {
     text-decoration: none;
+}
+
+#cboxTitle {
+    color: #519387;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+#cboxOverlay{
+    background: none repeat scroll 0 0 rgba(66, 130, 116, 0.6);
 }
 
 img.img-responsive {

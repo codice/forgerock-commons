@@ -126,7 +126,8 @@
   http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js
   http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js
   http://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.min.js
-  http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js
+  <!-- http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js -->
+  http://cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js
   http://cdnjs.cloudflare.com/ajax/libs/anchor-js/0.3.1/anchor.min.js
  </xsl:param>
 
@@ -179,6 +180,7 @@
 
  <xsl:param name="generate.meta.abstract" select="1" />
  <xsl:param name="use.extensions" select="1" />
+ <xsl:param name="graphicsize.extension" select="0"/>
  <xsl:param name="generate.id.attributes" select="1" />
 
  <xsl:template name="system.head.content">
