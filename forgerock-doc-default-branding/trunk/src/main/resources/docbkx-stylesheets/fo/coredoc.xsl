@@ -671,4 +671,90 @@ version="1.0">
   </xsl:if>
  </xsl:template>
 
+ <!--  =====================================================================  -->
+ <!--                            literallayout                                -->
+ <!--  =====================================================================  -->
+
+ <xsl:template match="d:literallayout">
+  <xsl:param name="suppress-numbers" select="'0'"/>
+
+  <!-- This is the only line added to the template -->
+  <xsl:param name="shade.verbatim" select ="'0'"/>
+
+  <xsl:variable name="id"><xsl:call-template name="object.id"/></xsl:variable>
+
+  <xsl:variable name="keep.together">
+   <xsl:call-template name="pi.dbfo_keep-together"/>
+  </xsl:variable>
+
+  <xsl:variable name="content">
+   <xsl:choose>
+    <xsl:when test="$suppress-numbers = '0'
+                      and @linenumbering = 'numbered'
+                      and $use.extensions != '0'
+                      and $linenumbering.extension != '0'">
+     <xsl:call-template name="number.rtf.lines">
+      <xsl:with-param name="rtf">
+       <xsl:apply-templates/>
+      </xsl:with-param>
+     </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+     <xsl:apply-templates/>
+    </xsl:otherwise>
+   </xsl:choose>
+  </xsl:variable>
+
+  <xsl:choose>
+   <xsl:when test="@class='monospaced'">
+    <xsl:choose>
+     <xsl:when test="$shade.verbatim != 0">
+      <fo:block id="{$id}"
+                xsl:use-attribute-sets="monospace.verbatim.properties shade.verbatim.style">
+       <xsl:if test="$keep.together != ''">
+        <xsl:attribute name="keep-together.within-column"><xsl:value-of
+         select="$keep.together"/></xsl:attribute>
+       </xsl:if>
+       <xsl:copy-of select="$content"/>
+      </fo:block>
+     </xsl:when>
+     <xsl:otherwise>
+      <fo:block id="{$id}"
+                xsl:use-attribute-sets="monospace.verbatim.properties">
+       <xsl:if test="$keep.together != ''">
+        <xsl:attribute name="keep-together.within-column"><xsl:value-of
+         select="$keep.together"/></xsl:attribute>
+       </xsl:if>
+       <xsl:copy-of select="$content"/>
+      </fo:block>
+     </xsl:otherwise>
+    </xsl:choose>
+   </xsl:when>
+   <xsl:otherwise>
+    <xsl:choose>
+     <xsl:when test="$shade.verbatim != 0">
+      <fo:block id="{$id}"
+                xsl:use-attribute-sets="verbatim.properties shade.verbatim.style">
+       <xsl:if test="$keep.together != ''">
+        <xsl:attribute name="keep-together.within-column"><xsl:value-of
+         select="$keep.together"/></xsl:attribute>
+       </xsl:if>
+       <xsl:copy-of select="$content"/>
+      </fo:block>
+     </xsl:when>
+     <xsl:otherwise>
+      <fo:block id="{$id}"
+                xsl:use-attribute-sets="verbatim.properties">
+       <xsl:if test="$keep.together != ''">
+        <xsl:attribute name="keep-together.within-column"><xsl:value-of
+         select="$keep.together"/></xsl:attribute>
+       </xsl:if>
+       <xsl:copy-of select="$content"/>
+      </fo:block>
+     </xsl:otherwise>
+    </xsl:choose>
+   </xsl:otherwise>
+  </xsl:choose>
+ </xsl:template>
+
 </xsl:stylesheet>
