@@ -25,7 +25,8 @@
          xmlns='http://docbook.org/ns/docbook' version='5.0' xml:lang='en'
          xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
          xsi:schemaLocation='http://docbook.org/ns/docbook
-                              http://docbook.org/xml/5.0/xsd/docbook.xsd'>
+                              http://docbook.org/xml/5.0/xsd/docbook.xsd'
+         xmlns:xlink='http://www.w3.org/1999/xlink'>
  <title>Contact Us</title>
 
  <para>
@@ -34,7 +35,7 @@
  </para>
 
  <table xml:id="forgerock-addresses-1">
-  <title>ForgeRock Addresses</title>
+  <title>ForgeRock Offices</title>
   <tgroup cols="3">
    <colspec colnum="1" colwidth="1*"/>
    <colspec colnum="2" colwidth="1*"/>
@@ -48,26 +49,27 @@
    </thead>
    <tbody>
     <row>
-     <entry>201 Mission St, Suite 2900</entry>
-     <entry>55 Rue Blaise Pascal</entry>
-     <entry>60 Queen Square</entry>
-    </row>
-    <row>
-     <entry>San Francisco, CA 94105</entry>
-     <entry>38330 Montbonnot</entry>
-     <entry>Bristol BS1 4JZ</entry>
-    </row>
-    <row>
-     <entry>+1-415-599-1100</entry>
-     <entry>+33-625-14-96-92</entry>
-     <entry>+44-1935-804797</entry>
+     <entry><literallayout>201 Mission St,
+Suite 2900,
+San Francisco, CA
+94105
++1-415-599-1100</literallayout>
+     </entry>
+     <entry><literallayout>55 Rue Blaise Pascal,
+38330 Montbonnot
++33-625-14-96-92</literallayout>
+     </entry>
+     <entry><literallayout>60 Queen Square
+Bristol BS1 4JZ
++44-1935-804797</literallayout>
+     </entry>
     </row>
    </tbody>
   </tgroup>
  </table>
 
  <table xml:id="forgerock-addresses-2">
-  <title> </title>
+  <title>ForgeRock Offices</title>
   <tgroup cols="3">
    <colspec colnum="1" colwidth="1*"/>
    <colspec colnum="2" colwidth="1*"/>
@@ -75,37 +77,39 @@
    <thead>
     <row>
      <entry>Vancouver, USA</entry>
-     <entry>Oslo Norway</entry>
+     <entry>Oslo, Norway</entry>
      <entry>London, UK</entry>
     </row>
    </thead>
    <tbody>
     <row>
-     <entry>201 NE Park Plaza Drive</entry>
-     <entry>Visiting: Lysaker torg 2, 1326</entry>
-     <entry>4th Floor, One Kingdong Street</entry>
+     <entry><literallayout>201 NE Park Plaza Dr
+Suite 195 B
+Vancouver, WA
+98684
++1-360-229-7105</literallayout>
+     </entry>
+     <entry><literallayout>Visiting:
+Lysaker torg 2, 1326
+Postal:
+PO Box 330, 1326
+Lysaker
++47-2108-1746</literallayout>
+     </entry>
+     <entry><literallayout>4th Floor,
+One Kingdom Street
+Paddington Central
+London W2 6BD
++44-20-3598-4786</literallayout>
+     </entry>
     </row>
-    <row>
-     <entry>Suite 195 B</entry>
-     <entry>Postal: PO Box 330, 1326</entry>
-     <entry>Paddington Central</entry>
-    </row>
-    <row>
-     <entry>Vancouver, WA 98684</entry>
-     <entry>Lysaker</entry>
-     <entry>London W2 6BD</entry>
-    </row>
-    <row>
-     <entry>+1-360-229-7105</entry>
-     <entry>+47-2108-1746</entry>
-     <entry>+44-20-3598-4786</entry>
-    </row>
+
    </tbody>
   </tgroup>
  </table>
 
  <table xml:id="forgerock-addresses-3">
-  <title> </title>
+  <title>ForgeRock Offices</title>
   <tgroup cols="3">
    <colspec colnum="1" colwidth="1*"/>
    <colspec colnum="2" colwidth="1*"/>
@@ -119,26 +123,18 @@
    </thead>
    <tbody>
     <row>
-     <entry>Suite 8, Level 50, AXA Tower</entry>
-     <entry/>
-     <entry/>
-    </row>
-    <row>
-     <entry>8 Shenton Way</entry>
-     <entry/>
-     <entry/>
-    </row>
-    <row>
-     <entry>Singapore</entry>
-     <entry/>
-     <entry/>
-    </row>
-    <row>
-     <entry>+65-6709-5705</entry>
+     <entry>
+      <literallayout>Suite 8, Level 50
+AXA Tower
+8 Shenton Way
+Singapore
++65-6709-5705</literallayout>
+     </entry>
      <entry/>
      <entry/>
     </row>
    </tbody>
   </tgroup>
  </table>
+
 </section>
