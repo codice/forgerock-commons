@@ -386,14 +386,13 @@ version="1.0">
   <xsl:attribute name="font-size">10pt</xsl:attribute>
   <xsl:attribute name="font-weight">bold</xsl:attribute>
   <xsl:attribute name="text-align">left</xsl:attribute>
-  <xsl:attribute name="margin-top">1.5in</xsl:attribute>
-  <!--xsl:attribute name="font-family">Helvetica</xsl:attribute-->
+  <xsl:attribute name="margin-top">2.0in</xsl:attribute>
  </xsl:attribute-set>
 
  <xsl:attribute-set name="chap.title.properties">
   <xsl:attribute name="font-size">20pt</xsl:attribute>
   <xsl:attribute name="text-align">left</xsl:attribute>
-  <xsl:attribute name="space-after">1.0in</xsl:attribute>
+  <xsl:attribute name="space-after">0.5in</xsl:attribute>
  </xsl:attribute-set>
 
 <!--  =====================================================================  -->
