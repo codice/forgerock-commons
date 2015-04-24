@@ -23,18 +23,26 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * Copy HtmlForBootstrap files under the specified directories.
+ * Copy Bootstrap files under the specified directories.
  */
 public final class BootstrapCopier {
 
     /**
-     * HtmlForBootstrap logo files.
+     * Bootstrap logo files.
      */
     private final String[] bootstrapLogoResources = {
         "/logos/hero-bg-01.png",
         "/logos/left-shape-4.png",
         "/logos/Icon_External_Link.png",
-        "/logos/forgerock-header-logo.png"
+        "/logos/forgerock-header-logo.png",
+        "/logos/FR_logo_horiz_FC_rev.png"
+    };
+
+    /**
+     * Bootstrap SWF files.
+     */
+    private final String[] bootstrapSwfResources = {
+        "/swf/ZeroClipboard.swf"
     };
 
     /**
@@ -58,6 +66,7 @@ public final class BootstrapCopier {
      */
     public void copy() throws IOException {
         addBootstrapLogos();
+        addBootstrapSwf();
     }
 
     /**
@@ -67,6 +76,10 @@ public final class BootstrapCopier {
      */
     private void addBootstrapLogos() throws IOException {
         addBootstrapResources(bootstrapLogoResources);
+    }
+
+    private void addBootstrapSwf() throws IOException {
+        addBootstrapResources(bootstrapSwfResources);
     }
 
     /**

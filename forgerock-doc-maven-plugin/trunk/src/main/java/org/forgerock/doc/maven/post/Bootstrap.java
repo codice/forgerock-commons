@@ -149,11 +149,12 @@ public class Bootstrap {
     }
 
     private String getLinkToPdf(final String docName) {
-        String link = "<ul id=\"pdf-link\" class=\"nav navbar-nav "
-                + "navbar-right\">\n"
-                + "<li><a href=\"PDF-URL\" target=\"_blank\"><span\n"
-                + "class=\"glyphicon glyphicon-print\"></span> Open PDF "
-                + "Version</a></li>";
+        // Note: No closing UL required, it's already in the HTML
+        String link = "<ul id=\"pdf-link\" "
+            + "class=\"nav navbar-nav navbar-right hidden-xs\">"
+            + "<li><a href=\"PDF-URL\" target=\"_blank\">"
+            + "<span class=\"glyphicon glyphicon-save\"></span> "
+            + "Download PDF Version</a></li>";
 
         String pdfUrl = "../../" + NameUtils.renameDoc(m.getProjectName(),
                 docName, "pdf");
