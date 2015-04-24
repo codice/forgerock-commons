@@ -40,6 +40,7 @@
     <xsl:include href="docbook.xsl" />
     <xsl:include href="graphics.xsl" />
     <xsl:include href="table.xsl" />
+    <xsl:include href="lists.xsl" />
     <xsl:include href="titlepage.templates.xsl" />
 
 
@@ -121,14 +122,9 @@
  <xsl:param name="toc.list.type">ul</xsl:param>
 
  <xsl:param name="html.script">
-  http://code.jquery.com/jquery-1.11.1.min.js
-  http://code.jquery.com/ui/1.11.1/jquery-ui.min.js
+  http://code.jquery.com/jquery-1.11.2.min.js
+  http://code.jquery.com/ui/1.11.4/jquery-ui.min.js
   http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js
-  http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js
-  http://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.min.js
-  <!-- http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js -->
-  http://cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js
-  http://cdnjs.cloudflare.com/ajax/libs/anchor-js/0.3.1/anchor.min.js
  </xsl:param>
 
  <xsl:param name="make.clean.html" select="1" />

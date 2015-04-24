@@ -16,16 +16,12 @@
 
 //<![CDATA[
 
-ZeroClipboard.config({
-        /* swfPath:  "includes/swf/ZeroClipboard.swf", */
-        swfPath:  "http://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf",
-        trustedDomains: ["*"],
-        forceEnhancedClipboard: true,
-        forceHandCursor: true,
-        debug: true}
-);
-
-
+var loadJavaScriptsFN = function () {
+    $.ajaxSetup({ cache: true });
+    $.getScript("http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js", function () { prettyPrint() });
+    $.getScript("http://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.min.js", function () {enableZeroClipboardFN() });
+    $.getScript("http://cdnjs.cloudflare.com/ajax/libs/jquery.colorbox/1.4.33/jquery.colorbox-min.js", function () { enableColorboxFN() });
+};
 
 var wrapConfigurablesFn = function () {
     $('*:contains("https://openam.example.com:8443")').each(function(){
@@ -133,8 +129,6 @@ var enableClampedWidthsFN = function () {
     });
 };
 
-
-
 var affixToCFN = function() {
     $('#sidebar').affix({
         offset: {
@@ -146,8 +140,21 @@ var affixToCFN = function() {
 };
 
 var attachAnchorsToHeadings = function() {
-    addAnchors('h1.title, h2.title, h3.title, h4.title, h5.title');
-}
+    //addAnchors('h1.title, h2.title, h3.title, h4.title, h5.title');
+
+
+    $('h1.title, h2.title, h3.title, h4.title, h5.title, .procedure-title, .table-title').each(function () {
+
+        var href = $(this).closest("div[id]").attr("id");
+
+        if (href === undefined || href === "") { // Unable to locate ID of parent element.
+            return;
+        }
+
+        $(this).wrapInner('<a class=\"self-link" href=\"#' + href + '\"></a>');
+
+    });
+};
 
 var addZeroClipboardToCmdlineButtonsFN = function () {
     var copycmdline = new ZeroClipboard( $('.btn-copy-cmdline') );
@@ -222,41 +229,60 @@ var enableColorboxFN = function () {
     });
 };
 
-var enableFancyboxFN = function () {
-    $(".fancybox").fancybox({
-        padding : 0,
-        helpers : {
-            overlay : {
-                css : {
-                    'background' : 'rgba(66, 130, 116, 0.6)'
+var trackPageViewsFN = function () {
+
+    $("a").click(function() {
+        var href = $(this).attr('href');
+        if(href) {
+            var titleText =  $(this).text();
+            if(href.charAt(0) === '#') {
+                ga('send', {
+                    'hitType': 'pageview',
+                    'page': location.pathname + location.search + href,
+                    'title': titleText
+                });
+            };
+            if(href.charAt(0) === '.') {
+                var lastHashPos = href.lastIndexOf('#');
+                var cleanHref = href.slice(3,lastHashPos);
+                var cleanFrag = href.slice(lastHashPos);
+                if(window.location.href.search(cleanHref) > -1)
+                {
+                    ga('send', {
+                        'hitType': 'pageview',
+                        'page': location.pathname + location.search + cleanFrag,
+                        'title': titleText
+                    });
                 }
-            }
-        },
-        beforeShow : function() {
-            var alt = this.element.find('img').attr('alt');
-
-            this.inner.find('img').attr('alt', alt);
-
-            this.title = alt;
+            };
         }
     });
+};
+
+var enableZeroClipboardFN = function () {
+    ZeroClipboard.config({
+            swfPath:  "includes/swf/ZeroClipboard.swf",
+            trustedDomains: ["*"],
+            forceEnhancedClipboard: false,
+            forceHandCursor: true,
+            debug: false}
+    );
+    addCopyButtonFN();
+    addZeroClipboardToCmdlineButtonsFN();
+    addZeroClipboardToCodeButtonsFN();
 };
 
 $(document).ready(function() {
     //wrapConfigurablesFn();
     btnClickHandler();
-    addCopyButtonFN();
-    addZeroClipboardToCmdlineButtonsFN();
-    addZeroClipboardToCodeButtonsFN();
     enableToolTipFN();
     enableBackToTopFadeInFN();
     enableClampedWidthsFN();
     enableScrollSpyFN();
     affixToCFN();
-    prettyPrint();
-    enableColorboxFN();
     attachAnchorsToHeadings();
-
+    trackPageViewsFN();
+    loadJavaScriptsFN();
 });
 
 //]]>

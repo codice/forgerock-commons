@@ -47,7 +47,7 @@
        <nav class="container-fluid">
         <div class="navbar-header">
          <a href="index.html" class="navbar-brand">
-          <img src='includes/logos/forgerock-header-logo.png'
+          <img src='includes/logos/FR_logo_horiz_FC_rev.png'
                alt="ForgeRock Documentation"/>
          </a>
         </div>
