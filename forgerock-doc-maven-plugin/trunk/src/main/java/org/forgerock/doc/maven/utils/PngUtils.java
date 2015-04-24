@@ -88,8 +88,8 @@ public final class PngUtils {
 
             final int newHeight = Math.round(imageHeight * newWidth / imageWidth);
 
-            System.out.println("Creating thumbnail of: " + image.getName()
-                    + " (" + newWidth + " x " + newHeight + ")");
+            /* System.out.println("Creating thumbnail of: " + image.getName()
+                    + " (" + newWidth + " x " + newHeight + ")"); */
 
             BufferedImage scaledBI = getScaledInstance(
                     originalImage,
