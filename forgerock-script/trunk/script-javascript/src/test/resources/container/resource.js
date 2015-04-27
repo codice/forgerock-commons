@@ -50,7 +50,7 @@ var userC3 = router.create("Users", "paramTest", scimUser1, { "x" : "marksTheSpo
 
 try {
     var userC4 = router.create("Users", "badParamTest", scimUser1, { "_x" : "badParam" })
-    throw { "error" : "Assertion failed: router.create should have disallowed unknown paramter" } ;
+    throw { "error" : "Assertion failed: router.create should have disallowed unknown parameter" } ;
 } catch (e) {
     if (e.error) {
         throw e;
@@ -70,7 +70,7 @@ var userR3 = router.read("Users/paramTest", { "x" : "marksTheSpot" })
 
 try {
     var userR4 = router.read("Users/badParamTest", { "_x" : "badParam" })
-    throw { "error" : "Assertion failed: router.read should have disallowed unknown paramter" } ;
+    throw { "error" : "Assertion failed: router.read should have disallowed unknown parameter" } ;
 } catch (e) {
     if (e.error) {
         throw e;
@@ -98,7 +98,7 @@ var userU3 = router.update("Users/paramTest", userR3._rev, scimUser1Updated, { "
 
 try {
     var userU4 = router.update("Users/paramTest", userR4._rev, scimUser1Updated, { "_x" : "badParam" })
-    throw { "error" : "Assertion failed: router.update should have disallowed unknown paramter" } ;
+    throw { "error" : "Assertion failed: router.update should have disallowed unknown parameter" } ;
 } catch (e) {
     if (e.error) {
         throw e;
@@ -110,6 +110,7 @@ try {
  * patch(String resourceName, String revision, Map patch [, List fieldFilter][,Map context])
  * </pre>
  */
+// TODO test patch
 
 /**
  * <pre>
@@ -132,10 +133,10 @@ var userQ2 = router.query("Users", queryParams2)
 var userQ3 = router.query("Users", queryParams2, callback)
 
 var printResult = function (resource, error) {
-    if (error != null) {
-        java.lang.System.out.println("Result" + resource)
+    if (error == null) {
+        java.lang.System.out.println("Result: " + resource)
     } else {
-        java.lang.System.out.println("Error:" + error)
+        java.lang.System.out.println("Error: " + error)
     }
 }
 var userQ4 = router.query("Users", queryParams2, printResult)
@@ -146,7 +147,7 @@ var userQ5 = router.query("Users", queryParams2, printResult)
 try {
     queryParams2._x = "badParam"
     var userQ6 = router.query("Users", queryParams2, printResult)
-    throw { "error" : "Assertion failed: router.query should have disallowed unknown paramter" } ;
+    throw { "error" : "Assertion failed: router.query should have disallowed unknown parameter" } ;
 } catch (e) {
     if (e.error) {
         throw e;
@@ -160,7 +161,7 @@ try {
  */
 try {
     var userD2 = router.delete("Users", null, { "_illegal" : "parameter"})
-    throw { "error" : "Assertion failed: router.delete should have disallowed unknown paramter" } ;
+    throw { "error" : "Assertion failed: router.delete should have disallowed unknown parameter" } ;
 } catch (e) {
     if (e.error) {
         throw e;

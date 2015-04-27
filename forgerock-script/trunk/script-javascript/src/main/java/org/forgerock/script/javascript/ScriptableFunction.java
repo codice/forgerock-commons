@@ -107,8 +107,7 @@ class ScriptableFunction extends BaseFunction implements Wrapper {
                             try {
                                 nativeFunction.call(cx, scope, thisObj, arguments);
                             } catch (Exception e) {
-                                e.printStackTrace();
-                                // TODO do something
+                                // TODO log
                             }
                             return null;
                         }

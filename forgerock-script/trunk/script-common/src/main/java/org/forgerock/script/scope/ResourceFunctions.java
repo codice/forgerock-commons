@@ -24,6 +24,9 @@
 
 package org.forgerock.script.scope;
 
+import static org.forgerock.json.fluent.JsonValue.json;
+import static org.forgerock.json.fluent.JsonValue.object;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -743,8 +746,7 @@ public final class ResourceFunctions {
                                     public void handleError(final ResourceException error) {
                                         if (null != callback) {
                                             try {
-                                                callback.call(scope, null, null, error
-                                                        .toJsonValue().asMap());
+                                                callback.call(scope, null, null, error.toJsonValue());
                                             } catch (ResourceException e) {
                                                 // TODO log
                                             } catch (NoSuchMethodException e) {
@@ -757,8 +759,7 @@ public final class ResourceFunctions {
                                     public boolean handleResource(final Resource resource) {
                                         if (null != callback) {
                                             try {
-                                                callback.call(scope, null, null, resource
-                                                        .getContent().getObject());
+                                                callback.call(scope, null, resource.getContent());
                                             } catch (ResourceException e) {
                                                 // TODO log
                                                 return false;
@@ -776,18 +777,13 @@ public final class ResourceFunctions {
                                     public void handleResult(final QueryResult result) {
                                         // TODO We don't need this
                                         if (null != callback) {
-                                            JsonValue queryResult = null;
+                                            JsonValue queryResult = json(object());
                                             if (null != result) {
-                                                queryResult =
-                                                        new JsonValue(
-                                                                new LinkedHashMap<String, Object>(2));
-                                                queryResult.put("pagedResultsCookie", result
-                                                        .getPagedResultsCookie());
-                                                queryResult.put("remainingPagedResults", result
-                                                        .getRemainingPagedResults());
+                                                queryResult.put("pagedResultsCookie", result.getPagedResultsCookie());
+                                                queryResult.put("remainingPagedResults", result.getRemainingPagedResults());
                                             }
                                             try {
-                                                callback.call(scope, null, queryResult.asMap());
+                                                callback.call(scope, null, queryResult);
                                             } catch (ResourceException e) {
                                                 // TODO log
                                             } catch (NoSuchMethodException e) {
