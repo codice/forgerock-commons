@@ -30,20 +30,20 @@
  <title>Accessing Documentation Online</title>
 
  <para>
-  ForgeRock core documentation, such as what you are now reading, aims to be
+  ForgeRock core documentation, such as this document, aims to be
   technically accurate and complete with respect to the software documented.
  </para>
 
  <itemizedlist>
   <para>
    Core documentation therefore follows a three-phase review process
-   designed to eliminate errors.
+   designed to eliminate errors:
   </para>
 
   <listitem>
    <para>
     Product managers and software architects review project documentation design
-    with respect to the users' software lifecycle needs.
+    with respect to the readers' software lifecycle needs.
    </para>
   </listitem>
 
@@ -57,10 +57,9 @@
 
   <listitem>
    <para>
-    Quality experts validate implemented documentation changes for
-    technical validity with respect to the software,
-    technical completeness with respect to the scope of the document,
-    and usability for the expected audience.
+    Quality experts validate implemented documentation changes
+    for technical accuracy, completeness in scope,
+    and usability for the readership.
    </para>
   </listitem>
  </itemizedlist>
@@ -77,7 +76,7 @@
  </para>
 
  <para>
-  You can find draft, in-progress documentation at the online
+  You can find pre-release draft documentation at the online
   <link
    xlink:show="new"
    xlink:href="http://forgerock.org"
