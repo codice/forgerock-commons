@@ -18,7 +18,7 @@
   !
   ! CCPL HEADER END
   !
-  !      Copyright 2011-2015 ForgeRock AS
+  !      Copyright 2011-2015 ForgeRock AS.
   !
 -->
  <section xml:id="joining-the-community"
@@ -30,17 +30,12 @@
  <title>Joining the ForgeRock Community</title>
 
  <para>
-  The online
+  Visit the
   <link
    xlink:show="new"
    xlink:href="http://forgerock.org"
   >community resource center</link>
-  brings together everything you need to get started,
-  and to sign up when you want to get more deeply involved.
- </para>
-
- <para>
-  At the community resource center you can find information about each project,
+  where you can find information about each project,
   download nightly builds, browse the resource catalog,
   ask and answer questions on the forums, find community events near you,
   and of course get the source code as well.
