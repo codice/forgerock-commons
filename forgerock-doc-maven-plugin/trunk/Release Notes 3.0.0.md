@@ -86,7 +86,7 @@ pixels wide, maintaining aspect ratio.
 * Images that are 720 pixels wide or less are copied as-is without resizing or 
 resampling.
 
-**DOCS-253: Updated use of Google Analytics
+**DOCS-253: Updated use of Google Analytics**
 
 This fix re-adds the Google Analytics tracking ID and code snippet to the 
 Bootstrap format documentation. 
