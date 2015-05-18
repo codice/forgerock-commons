@@ -20,7 +20,7 @@
  <parent>
   <artifactId>forgerock-parent</artifactId>
   <groupId>org.forgerock</groupId>
-  <version>1.2.7</version>
+  <version>2.0.0</version>
  </parent>
 
  <groupId>org.forgerock.commons</groupId>
@@ -72,10 +72,8 @@
 
  <properties>
 
-  <jsonFluentVersion>2.4.0</jsonFluentVersion>
-  <mavenVersion>3.2.3</mavenVersion>
-  <maven.compiler.source>1.6</maven.compiler.source>
-  <maven.compiler.target>1.6</maven.compiler.target>
+  <jsonFluentVersion>2.4.2</jsonFluentVersion>
+  <mavenVersion>3.3.1</mavenVersion>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
   <!--
@@ -89,12 +87,12 @@
   <fopHyphVersion>1.2</fopHyphVersion>
   <jCiteVersion>1.13.0</jCiteVersion>
   <linkTesterVersion>1.3.0</linkTesterVersion>
-  <mavenAssemblyVersion>2.4</mavenAssemblyVersion>
-  <mavenDependencyVersion>2.8</mavenDependencyVersion>
-  <mavenPluginPluginVersion>3.3</mavenPluginPluginVersion>
-  <mavenResourcesVersion>2.5</mavenResourcesVersion>
+  <mavenAssemblyVersion>2.5.3</mavenAssemblyVersion>
+  <mavenDependencyVersion>2.10</mavenDependencyVersion>
+  <mavenPluginPluginVersion>3.4</mavenPluginPluginVersion>
+  <mavenResourcesVersion>2.7</mavenResourcesVersion>
   <plantUmlVersion>7993</plantUmlVersion>
-  <plexusUtilsVersion>3.0.17</plexusUtilsVersion>
+  <plexusUtilsVersion>3.0.22</plexusUtilsVersion>
   <xCiteVersion>1.0.0-SNAPSHOT</xCiteVersion>
 
  </properties>
@@ -143,28 +141,28 @@
   <dependency>
    <groupId>org.apache.maven.plugin-testing</groupId>
    <artifactId>maven-plugin-testing-harness</artifactId>
-   <version>3.2.0</version>
+   <version>3.3.0</version>
    <scope>test</scope>
   </dependency>
 
   <dependency>
    <groupId>org.assertj</groupId>
    <artifactId>assertj-core</artifactId>
-   <version>1.7.0</version>
+   <version>2.0.0</version>
    <scope>test</scope>
   </dependency>
 
   <dependency>
    <groupId>org.mockito</groupId>
    <artifactId>mockito-all</artifactId>
-   <version>1.10.8</version>
+   <version>1.10.19</version>
    <scope>test</scope>
   </dependency>
 
   <dependency>
    <groupId>junit</groupId>
    <artifactId>junit</artifactId>
-   <version>4.11</version>
+   <version>4.12</version>
    <scope>test</scope>
   </dependency>
 
@@ -185,7 +183,7 @@
   <dependency>
    <groupId>org.freemarker</groupId>
    <artifactId>freemarker</artifactId>
-   <version>2.3.21</version>
+   <version>2.3.22</version>
   </dependency>
 
   <dependency>
