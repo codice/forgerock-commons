@@ -18,7 +18,7 @@
   !
   ! CCPL HEADER END
   !
-  !      Copyright 2015 ForgeRock AS
+  !      Copyright 2015 ForgeRock AS.
   !
 -->
  <section xml:id="sec-about-crest"
@@ -500,6 +500,21 @@ Content-Type: application/json
 If-Match: <replaceable>_rev</replaceable>
 { <replaceable>JSON resource</replaceable> }
   </programlisting>
+
+  <note>
+   <para>
+    Some HTTP client libraries do not support the HTTP PATCH operation.
+    Make sure that the library you use supports HTTP PATCH
+    before using this REST operation.
+   </para>
+
+   <para>
+    For example, the Java Development Kit HTTP client
+    does not support PATCH as a valid HTTP method.
+    Instead, the method <literal>HttpURLConnection.setRequestMethod("PATCH")</literal>
+    throws <literal>ProtocolException</literal>.
+   </para>
+  </note>
 
   <variablelist>
    <title>Parameters</title>
