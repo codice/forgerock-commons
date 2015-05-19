@@ -99,7 +99,12 @@ public class Filter {
                     plugin(
                             groupId("org.apache.maven.plugins"),
                             artifactId("maven-resources-plugin"),
-                            version(m.getMavenResourcesVersion())),
+                            version(m.getMavenResourcesVersion()),
+                            dependencies(
+                                    dependency(
+                                            groupId("org.apache.maven.shared"),
+                                            artifactId("maven-filtering"),
+                                            version(m.getMavenFilteringVersion())))),
                     goal("copy-resources"),
                     configuration(
                             element(name("outputDirectory"), filteredOutputDirectory),

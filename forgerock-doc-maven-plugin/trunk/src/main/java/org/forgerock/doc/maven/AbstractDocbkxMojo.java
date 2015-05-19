@@ -193,7 +193,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      * @return The configuration applicable to all builds.
      */
     public ArrayList<MojoExecutor.Element> getBaseConfiguration() {
-        ArrayList<MojoExecutor.Element> cfg = new ArrayList<MojoExecutor.Element>();
+        ArrayList<MojoExecutor.Element> cfg = new ArrayList<>();
 
         cfg.add(element(name("draftMode"), isDraftMode()));
         cfg.add(element(name("draftWatermarkImage"), getDraftWatermarkURL()));
@@ -866,7 +866,7 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
          * not ready for publication as is.
          */
         xhtml5
-    };
+    }
 
     /**
      * Comma-separated list of output formats to generate.
@@ -1136,6 +1136,24 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public String getMavenDependencyVersion() {
         return getVersionProperty(mavenDependencyVersion, "mavenDependencyVersion");
+    }
+
+    /**
+     * Version of the Maven filtering library to use.
+     */
+    @Parameter
+    private String mavenFilteringVersion;
+
+    /**
+     * Get the version of the Maven filtering library to use.
+     * <br>
+     * This is used as a workaround for
+     * <a href="https://jira.codehaus.org/browse/MSHARED-325">MSHARED-325</a>.
+     *
+     * @return The version of the Maven filtering library to use.
+     */
+    public String getMavenFilteringVersion() {
+        return getVersionProperty(mavenFilteringVersion, "mavenFilteringVersion");
     }
 
     /**
