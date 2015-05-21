@@ -23,6 +23,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.forgerock.doc.maven.pre.ArtifactBuilder;
 import org.forgerock.doc.maven.pre.Branding;
 import org.forgerock.doc.maven.pre.CommonContent;
+import org.forgerock.doc.maven.pre.ConditionalText;
 import org.forgerock.doc.maven.pre.CurrentDocId;
 import org.forgerock.doc.maven.pre.CustomCss;
 import org.forgerock.doc.maven.pre.CreateThumbs;
@@ -65,6 +66,7 @@ public class PreProcessMojo extends AbstractDocbkxMojo {
 
         // Make a copy of the source files that the plugin can edit.
         new ModifiableCopy(this).execute();
+        new ConditionalText(this).execute();
 
         if (!doUsePreProcessedSources()) {  // Sources require pre-processing.
             new CommonContent(this).execute();

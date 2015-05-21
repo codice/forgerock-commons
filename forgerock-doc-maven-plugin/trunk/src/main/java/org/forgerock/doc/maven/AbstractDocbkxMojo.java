@@ -37,8 +37,10 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -525,6 +527,152 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
      */
     public String getDocbkxVersion() {
         return getVersionProperty(docbkxVersion, "docbkxVersion");
+    }
+
+    /**
+     * Supported DocBook profile attributes.
+     */
+    public enum ProfileAttributes {
+        /** Computer or chip architecture, such as i386. */
+        arch,
+
+        /** Intended audience of the content, such as instructor. Added in DocBook version 5.0. */
+        audience,
+
+        /** General purpose conditional attribute, with no preassigned semantics. */
+        condition,
+
+        /** Standards conformance, such as lsb (Linux Standards Base). */
+        conformance,
+
+        /** Language code, such as de_DE. */
+        lang,
+
+        /** Operating system. */
+        os,
+
+        /** Editorial revision, such as v2.1. */
+        revision,
+
+        /** Revision status of the element, such as changed. This attribute has a fixed set of values to choose from. */
+        revisionflag,
+
+        /** General purpose attribute, with no preassigned semantics. Use with caution for profiling. */
+        role,
+
+        /** Security level, such as high. */
+        security,
+
+        /** Editorial or publication status, such as InDevelopment or draft. */
+        status,
+
+        /** Level of user experience, such as beginner. */
+        userlevel,
+
+        /** Product vendor, such as apache. */
+        vendor,
+
+        /** Word size (width in bits) of the computer architecture, such as 64bit. Added in DocBook version 4.4. */
+        wordsize
+    }
+
+    /**
+     * Returns true if the attribute is one of the expected ProfileAttributes.
+     * @param attribute     The attribute to check.
+     * @return true if the attribute is one of the expected ProfileAttributes.
+     */
+    private boolean isProfileAttribute(final String attribute) {
+        try {
+            ProfileAttributes.valueOf(attribute);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Include elements with these
+     * <a href="http://www.sagehill.net/docbookxsl/Profiling.html">DocBook profile</a> settings.
+     * <br>
+     * See <a href="http://www.sagehill.net/docbookxsl/Profiling.html#ProfilingAttribs"
+     * >the list of profile attributes specified for DocBook</a>.
+     * <br>
+     * Separate multiple attribute values for the same attribute with spaces.
+     * <br>
+     * For example, to include all elements with {@code os="linux"} or {@code os="unix"}
+     * and all elements with no {@code os} attribute,
+     * use the following configuration:
+     * <pre>
+     * &lt;inclusions>
+     *  &lt;os>linux unix&lt;/os>
+     * &lt;/inclusions>
+     * </pre>
+     */
+    @Parameter
+    private Map<String, String> inclusions;
+
+    /**
+     * Returns a map of DocBook profile settings to include elements.
+     * <br>
+     * This implementation ignores unexpected profile settings.
+     *
+     * @return A map of DocBook profile settings to include elements,
+     *         or null if none are set.
+     */
+    public Map<String, String> getInclusions() {
+        if (inclusions == null) {
+            return null;
+        }
+
+        Map<String, String> result = new HashMap<>();
+        for (String attribute : inclusions.keySet()) {
+            if (isProfileAttribute(attribute)) {
+                result.put(attribute, inclusions.get(attribute));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Exclude elements with these
+     * <a href="http://www.sagehill.net/docbookxsl/Profiling.html">DocBook profile</a> settings.
+     * <br>
+     * See <a href="http://www.sagehill.net/docbookxsl/Profiling.html#ProfilingAttribs"
+     * >the list of profile attributes specified for DocBook</a>.
+     * <br>
+     * Separate multiple attribute values for the same attribute with spaces.
+     * <br>
+     * For example, to exclude all elements with {@code os="linux"} and {@code os="unix"},
+     * use the following configuration:
+     * <pre>
+     * &lt;exclusions>
+     *  &lt;os>linux unix&lt;/os>
+     * &lt;/exclusions>
+     * </pre>
+     */
+    @Parameter
+    private Map<String, String> exclusions;
+
+    /**
+     * Returns a map of DocBook profile settings to exclude elements.
+     * <br>
+     * This implementation ignores unexpected profile settings.
+     *
+     * @return A map of DocBook profile settings to exclude elements,
+     *         or null if none are set.
+     */
+    public Map<String, String> getExclusions() {
+        if (exclusions == null) {
+            return null;
+        }
+
+        Map<String, String> result = new HashMap<>();
+        for (String attribute : exclusions.keySet()) {
+            if (isProfileAttribute(attribute)) {
+                result.put(attribute, exclusions.get(attribute));
+            }
+        }
+        return result;
     }
 
     /**

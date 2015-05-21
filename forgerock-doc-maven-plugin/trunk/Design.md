@@ -23,6 +23,7 @@ First, this stage prepares for processing.
 
 *  Unpack the branding elements. (`Branding`)
 *  Make a modifiable copy of the original sources. (`ModifiableCopy`)
+*  Apply profiling to the modifiable copy of the DocBook XML sources. (`ConditionalText`)
 
 By default, pre-processing tasks are performed in the following order:
 
