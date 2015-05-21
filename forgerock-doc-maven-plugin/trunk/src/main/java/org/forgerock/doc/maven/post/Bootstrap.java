@@ -81,6 +81,10 @@ public class Bootstrap {
         }
         editBuiltHtml(htmlDir.getPath());
 
+        if (m.isDraftMode().equals("yes")) {
+            addDraftAlert(htmlDir.getPath());
+        }
+
         BootstrapCopier copier =
                 new BootstrapCopier(outputDirectories);
         try {
@@ -113,6 +117,22 @@ public class Bootstrap {
             gascript = gascript.replace("ANALYTICS-ID", m.getGoogleAnalyticsId());
             replacements.put("</head>", gascript);
 
+            HtmlUtils.updateHtml(htmlDir, replacements);
+        } catch (IOException e) {
+            throw new MojoExecutionException(
+                    "Failed to update output HTML correctly: " + e.getMessage());
+        }
+    }
+
+
+
+    final void addDraftAlert(final String htmlDir) throws
+        MojoExecutionException {
+        try {
+            HashMap<String, String> replacements = new HashMap<String, String>();
+            String draftAlert = IOUtils.toString(
+                    getClass().getResourceAsStream("/endbody-draftalert.txt"), "UTF-8");
+            replacements.put("</body>", draftAlert);
             HtmlUtils.updateHtml(htmlDir, replacements);
         } catch (IOException e) {
             throw new MojoExecutionException(
