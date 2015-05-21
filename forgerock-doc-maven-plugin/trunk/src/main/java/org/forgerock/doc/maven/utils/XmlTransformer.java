@@ -26,9 +26,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -68,12 +70,39 @@ public class XmlTransformer extends DirectoryWalker<File> {
         }
     }
 
+    /**
+     * Construct an updater to match DocBook XML files.
+     *
+     * <p>
+     *
+     * The files are updated in place.
+     *
+     * @param  filterToMatch    Filter to match XML files.
+     * @param  xsl              XSL as string.
+     */
+    public XmlTransformer(final String xsl, final FileFilter filterToMatch) {
+        super(filterToMatch, -1);
+
+        try {
+            this.transformer = getTransformerForString(xsl);
+        } catch (TransformerConfigurationException tce) {
+            System.err.println(Arrays.toString(tce.getStackTrace()));
+            System.exit(1);
+        }
+    }
+
     private Transformer transformer;
 
     private Transformer getTransformer(final String xslResource)
             throws IOException, TransformerConfigurationException {
         TransformerFactory factory = TransformerFactory.newInstance();
         Source xslt = new StreamSource(getClass().getResource(xslResource).openStream());
+        return factory.newTransformer(xslt);
+    }
+
+    private Transformer getTransformerForString(final String xsl) throws TransformerConfigurationException {
+        TransformerFactory factory = TransformerFactory.newInstance();
+        Source xslt = new StreamSource(new ByteArrayInputStream(xsl.getBytes(Charset.forName("UTF-8"))));
         return factory.newTransformer(xslt);
     }
 

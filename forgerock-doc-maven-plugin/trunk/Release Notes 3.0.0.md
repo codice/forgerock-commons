@@ -74,6 +74,39 @@ ForgeRock doc build tools have moved to CDDL to align with other ForgeRock proje
 
 ## What's New
 
+**DOCS-296: Include support for DocBook profiling**
+
+During the pre-processing phase the build plugin
+makes it possible to use conditional text with
+[DocBook profiling](http://www.sagehill.net/docbookxsl/Profiling.html) attributes.
+
+In the source, set profiling attributes on elements to identify their profiles:
+
+    <para os="linux">This is about Linux.</para>
+    <para os="windows">This is about Windows.</para>
+    <para condition="local-db">Include if local-db is delivered.</para>
+
+In the plugin configuration, specify the inclusions and exclusions.
+For example, to include the paragraphs about Linux and Windows,
+and to exclude the local-db paragraph:
+
+    <inclusions>
+      <os>linux windows</os>
+    </inclusions>
+    <exclusions>
+      <condition>local-db</condition>
+    </exclusions>
+    
+Notice that multiple values for profile attributes are separated by spaces.
+    
+After pre-processing, the source looks like this:
+
+    <para os="linux">This is about Linux.</para>
+    <para os="windows">This is about Windows.</para>
+
+For the list of supported profiling attributes,
+see <http://www.sagehill.net/docbookxsl/Profiling.html#ProfilingAttribs>.
+
 **DOCS-272: Create thumbnails of images for Bootstrap output**
 
 Thumbnails of all .PNG images are now created, having a filename prefixed with 
