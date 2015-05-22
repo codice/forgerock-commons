@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ! CCPL HEADER START
+  !
+  ! This work is licensed under the Creative Commons
+  ! Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+  ! To view a copy of this license, visit
+  ! http://creativecommons.org/licenses/by-nc-nd/3.0/
+  ! or send a letter to Creative Commons, 444 Castro Street,
+  ! Suite 900, Mountain View, California, 94041, USA.
+  !
+  ! You can also obtain a copy of the license at
+  ! legal-notices/CC-BY-NC-ND.txt.
+  ! See the License for the specific language governing permissions
+  ! and limitations under the License.
+  !
+  ! If applicable, add the following below this CCPL HEADER, with the fields
+  ! enclosed by brackets "[]" replaced with your own identifying information:
+  !      Portions Copyright [yyyy] [name of copyright owner]
+  !
+  ! CCPL HEADER END
+  !
+  !      Copyright 2014-2015 ForgeRock AS.
+  !    
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+
+ <parent>
+  <artifactId>forgerock-parent</artifactId>
+  <groupId>org.forgerock</groupId>
+  <version>2.0.0</version>
+ </parent>
+
+ <groupId>commons.forgerock.org</groupId>
+ <artifactId>forgerock-doc-maven-archetype</artifactId>
+ <version>3.0.0</version>
+ <packaging>jar</packaging>
+
+ <name>ForgeRock Doc Maven Archetype</name>
+ <description>Core documentation set Maven archetype</description>
+
+ <licenses>
+  <license>
+   <name>CC BY-NC-ND 3.0</name>
+   <url>http://creativecommons.org/licenses/by-nc-nd/3.0/</url>
+   <comments>
+    Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported.
+    This license applies to the site content and to the documentation
+    as indicated in the documentation source code.
+   </comments>
+   <distribution>repo</distribution>
+  </license>
+ </licenses>
+
+ <properties>
+  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+ </properties>
+
+ <inceptionYear>2014</inceptionYear>
+
+ <repositories>
+  <repository>
+   <id>forgerock-staging-repository</id>
+   <name>ForgeRock Release Repository</name>
+   <url>http://maven.forgerock.org/repo/releases</url>
+   <snapshots>
+    <enabled>false</enabled>
+   </snapshots>
+  </repository>
+  <repository>
+   <id>forgerock-snapshots-repository</id>
+   <name>ForgeRock Snapshot Repository</name>
+   <url>http://maven.forgerock.org/repo/snapshots</url>
+   <releases>
+    <enabled>false</enabled>
+   </releases>
+  </repository>
+ </repositories>
+
+  <scm>
+    <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-archetype/tags/3.0.0</connection>
+    <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-archetype/tags/3.0.0</developerConnection>
+    <url>https://svn.forgerock.org/commons/forgerock-doc-maven-archetype/tags/3.0.0</url>
+  </scm>
+</project>
