@@ -34,7 +34,7 @@
 
  <groupId>commons.forgerock.org</groupId>
  <artifactId>forgerock-doc-maven-archetype</artifactId>
- <version>3.0.0</version>
+ <version>3.1.0-SNAPSHOT</version>
  <packaging>jar</packaging>
 
  <name>ForgeRock Doc Maven Archetype</name>
@@ -79,8 +79,8 @@
  </repositories>
 
   <scm>
-    <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-archetype/tags/3.0.0</connection>
-    <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-archetype/tags/3.0.0</developerConnection>
-    <url>https://svn.forgerock.org/commons/forgerock-doc-maven-archetype/tags/3.0.0</url>
+    <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-archetype/trunk</connection>
+    <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-doc-maven-archetype/trunk</developerConnection>
+    <url>https://svn.forgerock.org/commons/forgerock-doc-maven-archetype/trunk</url>
   </scm>
 </project>
