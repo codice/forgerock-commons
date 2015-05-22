@@ -9,7 +9,7 @@ To generate files for MyProject:
       -DarchetypeRepository=http://maven.forgerock.org/repo \
       -DarchetypeGroupId=commons.forgerock.org              \
       -DarchetypeArtifactId=forgerock-doc-maven-archetype   \
-      -DarchetypeVersion=3.0.0-SNAPSHOT                     \
+      -DarchetypeVersion=3.0.0                              \
       -DgroupId=projectGroupId                              \
       -DartifactId=projectArtifactId                        \
       -DgoogleAnalyticsId=UA-xxxxxxxx-x                     \
@@ -44,3 +44,12 @@ If you are creating release notes for a maintenance release,
 then remove the other directories instead,
 and rename the directory `src/main/docbkx/maintenance-release-notes/`
 to be called `src/main/docbkx/release-notes/`.
+
+# Building Output
+
+After you write the docs, generate output in the default formats:
+
+    mvn forgerock-doc:build
+
+For more information on using the `forgerock-doc-maven-plugin`,
+see <http://commons.forgerock.org/forgerock-doc-maven-plugin/>.
