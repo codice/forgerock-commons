@@ -23,7 +23,7 @@ import org.forgerock.doc.maven.utils.TheadRowTransformer;
 import java.io.IOException;
 
 /**
- * Add color to &lt;thead>&lt;row> in DocBook XML sources.
+ * Add color to &lt;thead&gt;&lt;row&gt; in DocBook XML sources.
  *
  * <p>
  *
@@ -46,7 +46,7 @@ public class HeaderColor {
     }
 
     /**
-     * Add color to &lt;thead>&lt;row> in the copy of DocBook XML sources.
+     * Add color to &lt;thead&gt;&lt;row&gt; in the copy of DocBook XML sources.
      *
      * @throws MojoExecutionException Failed to update an XML file.
      */
