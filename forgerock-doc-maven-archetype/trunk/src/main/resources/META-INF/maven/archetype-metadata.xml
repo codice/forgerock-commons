@@ -20,7 +20,7 @@
   !
   ! CCPL HEADER END
   !
-  !      Copyright 2014-2015 ForgeRock AS
+  !      Copyright 2014-2015 ForgeRock AS.
   !
 -->
 <archetype-descriptor
@@ -32,7 +32,7 @@
 
  <requiredProperties>
   <requiredProperty key="googleAnalyticsId">
-   <defaultValue>UA-xxxxxxxx-x</defaultValue>
+   <defaultValue>UA-23412190-14</defaultValue>
   </requiredProperty>
 
   <requiredProperty key="name">
@@ -44,7 +44,7 @@
   <fileSet filtered="false">
    <directory />
    <includes>
-    <include>README.txt</include>
+    <include>README.md</include>
    </includes>
   </fileSet>
 
