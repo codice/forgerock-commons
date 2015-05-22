@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2013 ForgeRock AS.
+ * Copyright 2013,2015 ForgeRock AS.
  */
 
 package org.forgerock.json.jose.jws;
@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.forgerock.json.fluent.JsonException;
+import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.jose.exceptions.JwtRuntimeException;
 import org.forgerock.json.jose.jwk.JWK;
 import org.forgerock.json.jose.jwt.JwtHeader;
@@ -269,6 +271,8 @@ public abstract class JwtSecureHeader extends JwtHeader {
 
     /**
      * {@inheritDoc}
+     * Note that this method will also be called from JwtReconstruction, so it must make an attempt to parse complex
+     * objects if the first checkValueIsOfType fails.
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -277,18 +281,45 @@ public abstract class JwtSecureHeader extends JwtHeader {
 
         switch (headerKey) {
         case JKU: {
-            checkValueIsOfType(value, URL.class);
-            setJwkSetUrl((URL) value);
+            try {
+                checkValueIsOfType(value, URL.class);
+                setJwkSetUrl((URL) value);
+            } catch (JwtRuntimeException e) {
+                final URL url = marshalValueToURL(value);
+                if (url != null) {
+                    setJwkSetUrl(url);
+                } else {
+                    throw e;
+                }
+            }
             break;
         }
         case JWK: {
-            checkValueIsOfType(value, JWK.class);
-            setJsonWebKey((JWK) value);
+            try {
+                checkValueIsOfType(value, JWK.class);
+                setJsonWebKey((JWK) value);
+            } catch (JwtRuntimeException e) {
+                try {
+                    final JWK jwk = org.forgerock.json.jose.jwk.JWK.parse(new JsonValue(value));
+                    setJsonWebKey(jwk);
+                } catch (JsonException je) {
+                    throw e;
+                }
+            }
             break;
         }
         case X5U: {
-            checkValueIsOfType(value, URL.class);
-            setX509Url((URL) value);
+            try {
+                checkValueIsOfType(value, URL.class);
+                setX509Url((URL) value);
+            } catch (JwtRuntimeException e) {
+                final URL url = marshalValueToURL(value);
+                if (url != null) {
+                    setX509Url(url);
+                } else {
+                    throw e;
+                }
+            }
             break;
         }
         case X5T: {
@@ -321,6 +352,18 @@ public abstract class JwtSecureHeader extends JwtHeader {
         default: {
             super.setParameter(key, value);
         }
+        }
+    }
+
+    private URL marshalValueToURL(Object value) {
+        try {
+            if (value instanceof String) {
+                return new URL((String) value);
+            } else {
+                return null;
+            }
+        } catch (MalformedURLException e) {
+            return null;
         }
     }
 
