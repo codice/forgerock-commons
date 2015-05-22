@@ -81,8 +81,8 @@
 
        When adding to this list, update src/main/resources/versions.properties, too.
   -->
-  <brandingVersion>3.0.0</brandingVersion>
-  <commonContentVersion>3.0.0</commonContentVersion>
+  <brandingVersion>3.1.0-SNAPSHOT</brandingVersion>
+  <commonContentVersion>3.1.0-SNAPSHOT</commonContentVersion>
   <docbkxVersion>2.0.16</docbkxVersion>
   <fopHyphVersion>1.2</fopHyphVersion>
   <jCiteVersion>1.13.0</jCiteVersion>
