@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ! CCPL HEADER START
+  !
+  ! This work is licensed under the Creative Commons
+  ! Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+  ! To view a copy of this license, visit
+  ! http://creativecommons.org/licenses/by-nc-nd/3.0/
+  ! or send a letter to Creative Commons, 444 Castro Street,
+  ! Suite 900, Mountain View, California, 94041, USA.
+  !
+  ! You can also obtain a copy of the license at legal-notices/CC-BY-NC-ND.txt.
+  ! See the License for the specific language governing permissions
+  ! and limitations under the License.
+  !
+  ! If applicable, add the following below this CCPL HEADER, with the fields
+  ! enclosed by brackets "[]" replaced with your own identifying information:
+  !      Portions Copyright [yyyy] [name of copyright owner]
+  !
+  ! CCPL HEADER END
+  !
+  !      Copyright 2014-2015 ForgeRock AS
+  !    
+-->
+<chapter xml:id="chap-issues"
+         xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://docbook.org/ns/docbook
+                             http://docbook.org/xml/5.0/xsd/docbook.xsd"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+ <title>Fixes, Limitations, and Known Issues</title>
+
+ <para>
+  ${projectName} issues are tracked by using ForgeRock JIRA
+  <link xlink:href="https://bugster.forgerock.org" xlink:show="new" />.
+  This chapter covers issues and limitations in release ${projectVersion}.
+ </para>
+
+ <!-- TODO: Use for the release as necessary
+ <important>
+  <para>
+   This release resolves a number of issues,
+   including security issues in ${projectName}.
+   It is strongly recommended that you update to this release
+   to make your deployment more secure,
+   and to take advantage of important functional fixes.
+   ForgeRock customers can contact support for help and further information.
+   </para>
+ </important>
+ -->
+
+ <section xml:id="fixes">
+  <title>Key Fixes</title>
+
+  <para>
+   The following bugs were fixed in release ${projectVersion}.
+   For details, see <link xlink:href="https://bugster.forgerock.org" xlink:show="new" />.
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     TODO: Update for the next release
+    </para>
+   </listitem>
+  </itemizedlist>
+
+ </section>
+
+ <section xml:id="limitations">
+  <title>Limitations</title>
+
+  <itemizedlist>
+
+   <listitem>
+    <para>
+     TODO
+    </para>
+   </listitem>
+
+  </itemizedlist>
+ </section>
+
+ <section xml:id="known-issues">
+  <title>Known Issues</title>
+
+  <para>
+   The following important known issues remained open at the time
+   release ${projectVersion} became available.
+   For details, see <link xlink:href="https://bugster.forgerock.org" xlink:show="new" />.
+  </para>
+
+  <itemizedlist>
+
+   <listitem>
+    <para>
+     TODO: Update for the next release
+    </para>
+   </listitem>
+
+  </itemizedlist>
+ </section>
+</chapter>

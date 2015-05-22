@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ! CCPL HEADER START
+  !
+  ! This work is licensed under the Creative Commons
+  ! Attribution-NonCommercial-NoDerivs 3.0 Unported License.
+  ! To view a copy of this license, visit
+  ! http://creativecommons.org/licenses/by-nc-nd/3.0/
+  ! or send a letter to Creative Commons, 444 Castro Street,
+  ! Suite 900, Mountain View, California, 94041, USA.
+  !
+  ! You can also obtain a copy of the license at legal-notices/CC-BY-NC-ND.txt.
+  ! See the License for the specific language governing permissions
+  ! and limitations under the License.
+  !
+  ! If applicable, add the following below this CCPL HEADER, with the fields
+  ! enclosed by brackets "[]" replaced with your own identifying information:
+  !      Portions Copyright [yyyy] [name of copyright owner]
+  !
+  ! CCPL HEADER END
+  !
+  !      Copyright 2014-2015 ForgeRock AS
+  !    
+-->
+<refentry xml:id="TODO"
+          xmlns="http://docbook.org/ns/docbook" version="5.0" xml:lang="en"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://docbook.org/ns/docbook
+                              http://docbook.org/xml/5.0/xsd/docbook.xsd">
+ <info>
+  <copyright>
+   <year>2014</year>
+   <holder>ForgeRock AS</holder>
+  </copyright>
+ </info>
+
+ <refmeta>
+  <refentrytitle>TODO</refentrytitle><manvolnum>1</manvolnum>
+  <refmiscinfo class="software">${projectName}</refmiscinfo>
+  <refmiscinfo class="version">${projectVersion}</refmiscinfo>
+ </refmeta>
+
+ <refnamediv>
+  <refname>TODO</refname>
+  <refpurpose>TODO short description</refpurpose>
+ </refnamediv>
+
+ <refsynopsisdiv>
+  <cmdsynopsis>
+   <command>TODO</command>
+   <arg choice="req">options</arg>
+  </cmdsynopsis>
+ </refsynopsisdiv>
+
+ <refsect1>
+  <title>Description</title>
+
+  <para>TODO description</para>
+ </refsect1>
+
+ <refsect1>
+  <title>Options</title>
+
+  <para>
+   The following options are supported.
+  </para>
+
+  <variablelist>
+
+   <varlistentry>
+    <term><option>--long-option</option></term>
+    <listitem>
+     <para>
+      Description
+     </para>
+    </listitem>
+   </varlistentry>
+
+  </variablelist>
+ </refsect1>
+
+ <refsect1>
+  <title>Examples</title>
+
+  <para>
+   The following example....
+  </para>
+
+  <screen>
+$ <userinput>TODO --some-option</userinput>
+<computeroutput>...</computeroutput>
+  </screen>
+
+ </refsect1>
+</refentry>
