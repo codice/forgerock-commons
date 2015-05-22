@@ -1,13 +1,9 @@
-# PRE-RELEASE DRAFT IN PROGRESS
-
-Latest release is 2.1.5. These are draft release notes.
-
-
 # ForgeRock Documentation Tools 3.0.0 Release Notes
 
 ForgeRock Documentation Tools is a catch all for
 the doc Maven plugin,
 default branding and common content,
+the doc Maven archetype,
 sites where we post documentation,
 and the documentation about documentation.
 
@@ -19,10 +15,7 @@ The link to the online issue tracker is
 
 **Changes to default output formats**
 
-With the fix for DOCS-189, RTF is no longer a default format.
-As a result, you should no doubt remove links to in-progress RTF documents.
-
-The fix for DOCS-144 makes Bootstrap-styled HTML and PDF the default formats.
+The fix for DOCS-144 makes Bootstrap-styled HTML and PDF the only default formats.
 To build other formats, set the `formats` property as in `-Dformats=xhtml5`.
 
 **Changes to site layout**
@@ -74,6 +67,9 @@ ForgeRock doc build tools have moved to CDDL to align with other ForgeRock proje
 
 ## What's New
 
+This section lists many, but not all of the new features and improvements 
+for this version.
+
 **DOCS-296: Include support for DocBook profiling**
 
 During the pre-processing phase the build plugin
@@ -107,6 +103,7 @@ After pre-processing, the source looks like this:
 For the list of supported profiling attributes,
 see <http://www.sagehill.net/docbookxsl/Profiling.html#ProfilingAttribs>.
 
+
 **DOCS-272: Create thumbnails of images for Bootstrap output**
 
 Thumbnails of all .PNG images are now created, having a filename prefixed with 
@@ -119,21 +116,6 @@ pixels wide, maintaining aspect ratio.
 * Images that are 720 pixels wide or less are copied as-is without resizing or 
 resampling.
 
-**DOCS-253: Updated use of Google Analytics**
-
-This fix re-adds the Google Analytics tracking ID and code snippet to the 
-Bootstrap format documentation. 
-
-The default Property ID `UA-23412190-14` can be overridden by 
-adding a `<googleAnalyticsId>` value to the `<configuration>` 
-section of the plugin settings in the POM.XML. For example:
-
-       <configuration>
-        <projectName>MyProject</projectName>
-        <projectVersion>1.0.0-SNAPSHOT</projectVersion>
-        <releaseVersion>1.0.0</releaseVersion>
-        <googleAnalyticsId>UA-XXXX-Y</googleAnalyticsId>
-       </configuration>
 
 **DOCS-265: Provide alternate release layout**
 
@@ -190,6 +172,22 @@ such as `doc/my-guide/index.html`,
 then you must update those links after this fix is committed,
 for example `doc/bootstrap/my-guide/index.html`.
 
+**DOCS-253: Updated use of Google Analytics**
+
+This fix re-adds the Google Analytics tracking ID and code snippet to the 
+Bootstrap format documentation. 
+
+The default Property ID `UA-23412190-14` can be overridden by 
+adding a `<googleAnalyticsId>` value to the `<configuration>` 
+section of the plugin settings in the POM.XML. For example:
+
+       <configuration>
+        <projectName>MyProject</projectName>
+        <projectVersion>1.0.0-SNAPSHOT</projectVersion>
+        <releaseVersion>1.0.0</releaseVersion>
+        <googleAnalyticsId>UA-XXXX-Y</googleAnalyticsId>
+       </configuration>
+
 **DOCS-239: Reduce the list of configuration settings**
 
 This change removes these configuration settings, relying instead on the default values:
@@ -227,6 +225,17 @@ that custom branding artifacts can use.
 
 This introduces a `<skipUrlPatterns>` parameter
 that mirrors the one provided by `docbook-linktester`.
+
+
+**DOCS-235: Add PI for table header row color in PDF**
+
+This makes the table header row background color light gray in PDF.
+
+
+**DOCS-223: Add ForgeRock phone numbers in common content**
+
+The relevant file is `shared/sec-contact-us.xml`.
+
 
 **DOCS-216: Provide pre-processed sources as Maven artifacts**
 
@@ -268,13 +277,16 @@ before you call this plugin.
 Skip the `process` goal in the configuration for this plugin,
 and instead specify `<docbkxSourceDirectory>` to pick up the pre-processed files.
 
-**DOCS-235: Add PI for table header row color in PDF**
-
-This makes the table header row background color light gray in PDF.
 
 **DOCS-215: Add configuration for stopping at pre-processed DocBook**
 
 Superseded by DOCS-216.
+
+
+**DOCS-210: Create a Maven archetype for ForgeRock doc sets**
+
+See _Generating a Basic Documentation Project_ in the README for details.
+
 
 **DOCS-203: Provide a convention for copying arbitrary files to the built documentation**
 
@@ -318,6 +330,11 @@ The plugin with then pre-process the copy, however,
 so expect the files in your modifiable copy to be changed.
 
 
+**DOCS-192: Common content on working with commons REST**
+
+The file retrieved during pre-processing is `../shared/sec-about-crest.xml`.
+
+
 **DOCS-187: Documentation for legacy versions should not have the report bug footer**
 
 The fix for this relies on a list of EOSL versions.
@@ -333,6 +350,11 @@ For the full list of EOSL versions, see the
 The fix for this issue addresses both .txt and also .json files.
 
 
+**DOCS-149: Support citation of non-Java code samples**
+
+See _Citing Text Files_ in the README for details.
+
+
 **DOCS-144: Style HTML output with Bootstrap UI**
 
 The fix for this introduces a `bootstrap` format
@@ -342,6 +364,11 @@ and including a left-menu TOC on screens of appropriate size.
 This fix also sets the default formats to the equivalent of `-Dformats=bootstrap,pdf`.
 
 
+**DOCS-119: Support Maven 3.1 & 3.2**
+
+The plugin has been tested with Maven 3.0.5, 3.1.1, 3.2.3.
+
+
 **DOCS-108: Reconsider forgerock-doc-maven-plugin architecture**
 
 The fix for this issue is a major refactoring of the doc Maven plugin,
@@ -349,12 +376,12 @@ and a simplification of the plugin configuration model.
 
 The new architecture is described in the Design document.
 
-**DOCS-119: Support Maven 3.1 & 3.2**
-
-The plugin has been tested with Maven 3.0.5, 3.1.1, 3.2.3.
-
 
 ## Fixes
+
+This section lists many, but not all of the new fixes for this version.
+
+**DOCS-279: PDF: Less space after chapter headings**
 
 **DOCS-278: Unused html directory created when you create local bootstrap output**
   
@@ -399,6 +426,30 @@ that it then removes from release HTML.
 
 
 ## Known Issues
+
+This section lists the main known issues at the time of release.
+
+**DOCS-290: Man pages not generated if project directory name contains a space**
+
+**DOCS-270: Robot-indexed links to in-progress docs lose their fragments**
+
+**DOCS-269: Webhelp does not include a link for reporting doc bugs**
+
+**DOCS-268: Strange pdf output when using bridgeheads**
+
+**DOCS-236: Webhelp stylesheets incorrectly resolve `<xref>` links**
+
+This issue occurs in one case that we know of.
+
+**DOCS-230: Bad line breaks in the middle of literals**
+
+Workaround: Check the PDF before you publish.
+
+**DOCS-226: XPointer resolution fails in XIncluded document**
+
+Workaround: Create a separate file to Xinclude containing the desired block element.
+
+**DOCS-190: PDF: release date and publication date are not shown**
 
 **DOCS-163: The performance="optional" attr in a step has no effect**
 
