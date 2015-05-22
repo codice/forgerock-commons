@@ -18,7 +18,7 @@
   !
   ! CCPL HEADER END
   !
-  !      Copyright 2013-2015 ForgeRock AS
+  !      Copyright 2013-2015 ForgeRock AS.
   !
 -->
  <section xml:id="release-levels"
@@ -38,7 +38,7 @@
  
  <variablelist>
   <varlistentry>
-   <term>Major (version: x.0.0)</term>
+   <term>Major (version: x[.0.0], trailing 0s are optional)</term>
    <listitem>
     <para>
      Major releases bring big new features.
@@ -56,7 +56,7 @@
   </varlistentry>
 
   <varlistentry>
-   <term>Minor (version: x.y.0)</term>
+   <term>Minor (version: x.y[.0], trailing 0s are optional)</term>
    <listitem>
     <para>
      Minor releases might include new features,
