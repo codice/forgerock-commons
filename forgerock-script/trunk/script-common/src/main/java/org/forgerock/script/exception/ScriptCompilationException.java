@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012 ForgeRock AS. All rights reserved.
+ * Copyright (c) 2015 ForgeRock AS. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -22,30 +22,37 @@
  * "Portions Copyrighted [year] [name of copyright owner]"
  */
 
-package org.forgerock.script.engine;
+package org.forgerock.script.exception;
 
 import javax.script.ScriptException;
 
+
 /**
- * A NAME does ...
- * 
- * @author Laszlo Hordos
+ * An exception that is thrown to indicate that the script compilation failed.
  */
-public interface ScriptEngineFactoryObserver {
+public class ScriptCompilationException extends ScriptException {
+
+    /** Serializable class a version number. */
+    static final long serialVersionUID = 1L;
 
     /**
-     * Called when a {@code ScriptEngineFactory} gets started.
-     * 
-     * @param factory
-     *            started ScriptEngineFactory
+     * Constructs a new exception with the specified detail message.
      */
-    void addingEntries(ScriptEngineFactory factory) throws ScriptException;
+    public ScriptCompilationException(String message) {
+        super(message);
+    }
 
     /**
-     * Called when a {@code ScriptEngineFactory} gets stopped.
-     * 
-     * @param factory
-     *            stopped ScriptEngineFactory
+     * Constructs a new exception with the specified cause.
      */
-    void removingEntries(ScriptEngineFactory factory) throws ScriptException;
+    public ScriptCompilationException(Exception e) {
+        super(e);
+    }
+
+    /**
+     * Constructs a new exception with the specified detail message.
+     */
+    public ScriptCompilationException(String message, String fileName, int lineNumber, int columnNumber) {
+        super(message, fileName, lineNumber, columnNumber);
+    }
 }

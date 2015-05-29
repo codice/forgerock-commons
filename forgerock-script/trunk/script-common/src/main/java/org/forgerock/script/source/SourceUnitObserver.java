@@ -47,5 +47,5 @@ public interface SourceUnitObserver {
      * @param unit
      *            stopped ScriptEngineFactory
      */
-    void removeSourceUnit(SourceUnit unit);
+    void removeSourceUnit(SourceUnit unit) throws ScriptException;
 }

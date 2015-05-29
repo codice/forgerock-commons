@@ -53,6 +53,7 @@ import org.forgerock.json.resource.SecurityContext;
 import org.forgerock.json.resource.ServerContext;
 import org.forgerock.json.resource.UpdateRequest;
 import org.forgerock.script.engine.ScriptEngineFactory;
+import org.forgerock.script.exception.ScriptCompilationException;
 import org.forgerock.script.exception.ScriptThrownException;
 import org.forgerock.script.registry.ScriptRegistryImpl;
 import org.forgerock.script.scope.Function;
@@ -295,7 +296,7 @@ public abstract class ScriptTest {
         } catch (ScriptException e) {
             /* Expected */
         } catch (Exception e) {
-            e.printStackTrace();
+            Assert.fail("Expecting script to fail with ScriptException");
         }
 
         getScriptRegistry().addSourceUnit(scriptSource);
@@ -313,18 +314,18 @@ public abstract class ScriptTest {
 
     }
 
-    @Test
+    @Test(expectedExceptions = ScriptCompilationException.class)
     public void testCompiler() throws Exception {
         ScriptName scriptName = new ScriptName("invalid", getLanguageName());
-        ScriptSource scriptSource =
-                new EmbeddedScriptSource("must-fail(\"syntax error')", scriptName);
+        try {
+            ScriptSource scriptSource = new EmbeddedScriptSource("must-fail(\"syntax error')", scriptName);
+            Assert.assertNull(getScriptRegistry().takeScript(scriptName));
 
-        Assert.assertNull(getScriptRegistry().takeScript(scriptName));
-
-        // TODO Should we throw exception here? Not maybe to resolve circular
-        // references
-        getScriptRegistry().addSourceUnit(scriptSource);
-        Assert.assertNotNull(getScriptRegistry().takeScript(scriptName));
-        Assert.assertFalse(getScriptRegistry().takeScript(scriptName).isActive());
+            getScriptRegistry().addSourceUnit(scriptSource);
+        } catch (Exception e) {
+            Assert.assertNotNull(getScriptRegistry().takeScript(scriptName));
+            Assert.assertFalse(getScriptRegistry().takeScript(scriptName).isActive());
+            throw e;
+        }
     }
 }

@@ -27,10 +27,12 @@ package org.forgerock.script.groovy;
 import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyCodeSource;
+import groovy.lang.GroovyRuntimeException;
 import groovy.lang.Script;
 import groovy.util.GroovyScriptEngine;
 import groovy.util.ResourceConnector;
 import groovy.util.ResourceException;
+import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
 import org.codehaus.groovy.runtime.InvokerHelper;
@@ -39,11 +41,13 @@ import org.forgerock.json.resource.PersistenceConfig;
 import org.forgerock.script.engine.AbstractScriptEngine;
 import org.forgerock.script.engine.CompilationHandler;
 import org.forgerock.script.engine.ScriptEngineFactory;
+import org.forgerock.script.exception.ScriptCompilationException;
 import org.forgerock.script.source.URLScriptSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.script.Bindings;
+import javax.script.ScriptException;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -177,7 +181,7 @@ public class GroovyScriptEngineImpl extends AbstractScriptEngine {
         return ic;
     }
 
-    public void compileScript(CompilationHandler handler) {
+    public void compileScript(CompilationHandler handler) throws ScriptException {
         try {
             handler.setClassLoader(groovyScriptEngine.getGroovyClassLoader());
 
@@ -205,9 +209,12 @@ public class GroovyScriptEngineImpl extends AbstractScriptEngine {
             }
 
             handler.setCompiledScript(new GroovyScript(codeSource.getName(), this));
-        } catch (Throwable e) {
-            e.printStackTrace();
+        } catch (CompilationFailedException e) {
             handler.handleException(e);
+            throw new ScriptCompilationException(e);
+        } catch (Exception e) {
+            handler.handleException(e);
+            throw new ScriptException(e);
         }
     }
 
