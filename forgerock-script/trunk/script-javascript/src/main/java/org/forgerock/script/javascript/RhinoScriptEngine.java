@@ -29,12 +29,14 @@ import org.forgerock.json.resource.ResourceException;
 import org.forgerock.script.engine.AbstractScriptEngine;
 import org.forgerock.script.engine.CompilationHandler;
 import org.forgerock.script.engine.ScriptEngineFactory;
+import org.forgerock.script.exception.ScriptCompilationException;
 import org.forgerock.script.scope.OperationParameter;
 import org.forgerock.script.source.ScriptSource;
 import org.forgerock.script.source.SourceContainer;
 import org.forgerock.script.source.URLScriptSource;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
+import org.mozilla.javascript.RhinoException;
 import org.mozilla.javascript.Script;
 import org.mozilla.javascript.commonjs.module.ModuleScriptProvider;
 import org.mozilla.javascript.commonjs.module.RequireBuilder;
@@ -199,7 +201,7 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
         throw new ScriptException("Script is not found:" + scriptName);
     }
 
-    public void compileScript(CompilationHandler handler) {
+    public void compileScript(CompilationHandler handler) throws ScriptException {
         try {
             boolean sharedScope = true;// config.get("sharedScope").defaultTo(true).asBoolean();
             handler.setClassLoader(classLoader);
@@ -222,20 +224,23 @@ public class RhinoScriptEngine extends AbstractScriptEngine {
                 rhinoScript = new RhinoScript(name, script, this, requireBuilder, sharedScope);
             }
             handler.setCompiledScript(rhinoScript);
-        } catch (Throwable e) {
+        } catch (ScriptException e) {
             handler.handleException(e);
+            throw e;
+        } catch (Exception e) {
+            handler.handleException(e);
+            throw new ScriptException(e);
         }
     }
 
-    private Script compileScript(String name, Reader scriptReader) throws IOException {
+    private Script compileScript(String name, Reader scriptReader) throws ScriptCompilationException {
         Context cx = Context.enter();
         try {
             return cx.compileReader(scriptReader, name, 1, null);
-            /*
-             * } catch (IOException ioe) { throw new ScriptException(ioe); }
-             * catch (RhinoException re) { throw new
-             * ScriptException(re.getMessage());
-             */
+        } catch (IOException ioe) {
+            throw new ScriptCompilationException(ioe);
+        } catch (RhinoException re) {
+            throw new ScriptCompilationException(re.getMessage(), re.sourceName(), re.lineNumber(), re.columnNumber());
         } finally {
             Context.exit();
             if (scriptReader != null) {

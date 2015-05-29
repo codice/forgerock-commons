@@ -27,6 +27,7 @@ package org.forgerock.script.engine;
 import org.forgerock.json.resource.Context;
 
 import javax.script.Bindings;
+import javax.script.ScriptException;
 
 /**
  * A ScriptEngine finds the applicable ...
@@ -35,7 +36,7 @@ import javax.script.Bindings;
  */
 public interface ScriptEngine {
 
-    public void compileScript(CompilationHandler handler);
+    public void compileScript(CompilationHandler handler) throws ScriptException;
 
     /**
      * Returns a <code>ScriptEngineFactory</code> for the class to which this

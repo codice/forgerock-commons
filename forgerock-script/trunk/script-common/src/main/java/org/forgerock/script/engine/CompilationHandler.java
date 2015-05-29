@@ -126,6 +126,6 @@ public interface CompilationHandler {
 
     public void setCompiledScript(CompiledScript script);
 
-    public void handleException(Throwable throwable);
+    public void handleException(Exception exception);
 
 }

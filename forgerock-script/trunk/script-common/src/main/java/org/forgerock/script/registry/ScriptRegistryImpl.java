@@ -326,8 +326,6 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
 
         private ClassLoader scriptClassLoader = null;
 
-        // private boolean compilationFailed = false;
-
         private final ScriptName scriptName;
 
         private LibraryRecord(ScriptName scriptName) {
@@ -337,7 +335,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
             this.scriptName = scriptName;
         }
 
-        private LibraryRecord(ScriptSource scriptSource) {
+        private LibraryRecord(ScriptSource scriptSource) throws ScriptException {
             if (null == scriptSource) {
                 throw new NullPointerException("ScriptSource is null");
             }
@@ -363,7 +361,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
             return false;
         }
 
-        private void setScriptEngine(final ScriptEngine scriptEngine) {
+        private void setScriptEngine(final ScriptEngine scriptEngine) throws ScriptException {
             synchronized (this) {
                 if (null != scriptEngine) {
                     this.scriptEngine = new WeakReference<ScriptEngine>(scriptEngine);
@@ -375,7 +373,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
             }
         }
 
-        private void setScriptSource(ScriptSource lazySource) {
+        private void setScriptSource(ScriptSource lazySource) throws ScriptException {
             synchronized (this) {
                 source = lazySource;
                 compile();
@@ -384,7 +382,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
 
         // This method is not Thread-Safe but it's called from synchronized
         // blocks only
-        private void compile() {
+        private void compile() throws ScriptException {
             ScriptEngine engine = null != scriptEngine ? scriptEngine.get() : null;
             if (null == source) {
                 source = findScriptSource(scriptName);
@@ -445,7 +443,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
             notifyListeners(type);
         }
 
-        public void handleException(Throwable throwable) {
+        public void handleException(Exception exception) {
             try {
                 if (null != target) {
                     status = STOPPING;
@@ -455,7 +453,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
                 status = RESOLVED;
                 target = null;
             }
-            logger.error("Script compilation exception: {}", source.getName().getName(), throwable);
+            logger.error("Script compilation exception: {}", source.getName().getName(), exception);
         }
 
         public void setClassLoader(ClassLoader classLoader) {
@@ -625,7 +623,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
     }
 
     // ScriptEngineFactoryObserver
-    public void addingEntries(ScriptEngineFactory factory) {
+    public void addingEntries(ScriptEngineFactory factory) throws ScriptException {
         engineFactories.add(factory);
         for (LibraryRecord cacheRecord : cache.values()) {
             if (CompilationHandler.INSTALLED == cacheRecord.status && null != cacheRecord.source) {
@@ -637,7 +635,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
         }
     }
 
-    public void removingEntries(ScriptEngineFactory factory) {
+    public void removingEntries(ScriptEngineFactory factory) throws ScriptException {
         engineFactories.remove(factory);
         engines.remove(factory);
         if (null != factory) {
@@ -679,7 +677,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
         }
     }
 
-    public void removeSourceUnit(SourceUnit unit) {
+    public void removeSourceUnit(SourceUnit unit) throws ScriptException {
         if (unit instanceof ScriptSource) {
             LibraryRecord cacheRecord = cache.get(unit.getName());
             if (null != cacheRecord) {
