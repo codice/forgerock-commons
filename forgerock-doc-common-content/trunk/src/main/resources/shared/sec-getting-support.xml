@@ -32,49 +32,18 @@
  <para>
   ForgeRock provides Support Services, Professional Services, University
   Training classes and Partner Services to assist you in your deployment.
-  You can contact ForgeRock at
+  For a general overview of these services, see
+  <link xlink:show="new"
+        xlink:href="https://www.forgerock.com/en-us/services">ForgeRock Services</link>.
+ </para>
+ <para>
+  ForgeRock has staff members around the globe that
+  support our international customers and partners.
+  If you have any questions, find the address or number closest to you at
+  <link xlink:show="new" xlink:href="https://www.forgerock.com/en-us/contact/">Get in Touch</link>
+  or send an email to ForgeRock at
   <link xlink:show="new" xlink:href="mailto:info@forgerock.com">info@forgerock.com</link>.
  </para>
-
- <itemizedlist>
-  <listitem>
-   <para><emphasis role="bold">Support Services</emphasis>.
-    ForgeRock provides global 24x7 support manned by a co-located Support
-    and Engineering staff. You can purchase different levels of support subscription
-    packages depending on your requirements.
-    See <link xlink:show="new"
-              xlink:href="https://www.forgerock.com/en-us/services/support-services/">Support Services</link>.
-   </para>
-  </listitem>
-
-  <listitem>
-   <para><emphasis role="bold">Professional Services</emphasis>.
-    ForgeRock provides Professional Services to assist you during the key phases
-    of your project lifecycle: design, build, and production.
-    See <link xlink:show="new"
-              xlink:href="https://www.forgerock.com/en-us/services/professional-services/">Professional Services</link>.
-   </para>
-  </listitem>
-
-  <listitem>
-   <para><emphasis role="bold">University Training</emphasis>.
-    ForgeRock provides University Training courses teaching the information
-    required to architect, build and deploy your system.
-    See <link xlink:show="new"
-              xlink:href="https://www.forgerock.com/en-us/services/professional-services/">University Training</link>.
-   </para>
-  </listitem>
-
-  <listitem>
-   <para><emphasis role="bold">Partner Services</emphasis>.
-    ForgeRock has a extensive Partner Program, enabling our customers to work
-    with highly-skilled system integrators, managed service providers and
-    technology vendors.
-    See <link xlink:show="new"
-              xlink:href="https://www.forgerock.com/en-us/partners/find">Partner Services</link>.
-   </para>
-  </listitem>
- </itemizedlist>
 
 
 </section>
