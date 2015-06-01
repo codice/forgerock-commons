@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2015 ForgeRock AS
+ * Copyright 2012-2015 ForgeRock AS.
  */
 
 package org.forgerock.doc.maven;
@@ -34,6 +34,7 @@ import org.forgerock.doc.maven.post.Bootstrap;
 import org.forgerock.doc.maven.post.NoOp;
 import org.forgerock.doc.maven.post.WebhelpPost;
 import org.forgerock.doc.maven.post.Xhtml;
+import org.forgerock.doc.maven.pre.ArbitraryResourceCopier;
 import org.forgerock.doc.maven.pre.Branding;
 import org.forgerock.doc.maven.pre.Fop;
 
@@ -121,5 +122,8 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
         if (formats.contains(Format.bootstrap)) {
             new Bootstrap(this).execute();
         }
+
+        // Optionally copy arbitrary resources.
+        new ArbitraryResourceCopier(this).execute();
     }
 }

@@ -82,6 +82,11 @@ Most formats currently require no post-processing.
 
 This stage is performed during the `pre-site` phase, `build` goal. (`PreSiteMojo`)
 
+## Copying Arbitrary Resources to Generated Output
+
+If the documents include arbitrary resources possibly referenced in source files,
+the plugin copies those to HTML (and similar) output folders. (`ArbitraryResourceCopier`)
+
 ## Copying Output to a Site Layout
 
 The next stage copies output to the site directory,
