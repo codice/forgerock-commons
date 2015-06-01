@@ -45,25 +45,12 @@ public class ImageDataTransformerTest {
     public void shouldAddImageAttributes() throws IOException {
         new ImageDataTransformer().update(folder.getRoot());
 
-        /*
-            This causes the following messages at present.
-
-            Compiler warnings:
-              line 38: Attribute 'align' outside of element.
-              line 39: Attribute 'scalefit' outside of element.
-              line 40: Attribute 'width' outside of element.
-              line 41: Attribute 'contentdepth' outside of element.
-
-            It would be nice to know what those warnings mean,
-            but the output seems to be okay for further processing.
-         */
-
         File out = new File(folder.getRoot(), "chapter.xml");
         String expectedElement =
                 "<db:imagedata xmlns:db=\"http://docbook.org/ns/docbook\""
-                        + " fileref=\"images/an-image.png\" format=\"PNG\""
                         + " align=\"center\" scalefit=\"1\" width=\"100%\""
-                        + " contentdepth=\"100%\"/>";
+                        + " contentdepth=\"100%\""
+                        + " fileref=\"images/an-image.png\" format=\"PNG\"/>";
 
         assertThat(contentOf(out)).contains(expectedElement);
     }
