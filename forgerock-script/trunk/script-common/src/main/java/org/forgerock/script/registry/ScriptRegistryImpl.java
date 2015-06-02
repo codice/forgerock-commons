@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2013-2014 ForgeRock AS. All Rights Reserved
+ * Copyright (c) 2013-2015 ForgeRock AS. All Rights Reserved
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -41,6 +41,7 @@ import org.forgerock.script.engine.ScriptEngine;
 import org.forgerock.script.engine.ScriptEngineFactory;
 import org.forgerock.script.engine.ScriptEngineFactoryObserver;
 import org.forgerock.script.engine.Utils;
+import org.forgerock.script.exception.ScriptCompilationException;
 import org.forgerock.script.source.EmbeddedScriptSource;
 import org.forgerock.script.source.ScriptEngineFactoryAware;
 import org.forgerock.script.source.ScriptSource;
@@ -650,30 +651,36 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
 
     // SourceUnitObserver
     public void addSourceUnit(SourceUnit unit) throws ScriptException {
-        if (unit instanceof ScriptSource) {
-            // Cheap: avoid the synchronized block
-            LibraryRecord record = new LibraryRecord(unit.getName());
-            LibraryRecord cacheRecord = cache.putIfAbsent(unit.getName(), record);
-            if (null == cacheRecord) {
-                cacheRecord = record;
-            }
-            if (null == cacheRecord.getScriptSource()
-                    || !cacheRecord.getScriptSource().getName().getRevision().equalsIgnoreCase(
-                            unit.getName().getRevision())) {
-                // Expensive: compile the source
-                cacheRecord.setScriptSource((ScriptSource) unit);
-            }
-        } else if (unit instanceof SourceContainer) {
-            SourceContainer container = (SourceContainer) unit;
-            sourceCache.put(unit.getName(), container);
-            for (LibraryRecord cacheRecord : cache.values()) {
-                if (null == cacheRecord.source) {
-                    ScriptSource source = container.findScriptSource(cacheRecord.scriptName);
-                    if (null != source) {
-                        cacheRecord.setScriptSource(source);
+        try {
+            if (unit instanceof ScriptSource) {
+                // Cheap: avoid the synchronized block
+                LibraryRecord record = new LibraryRecord(unit.getName());
+                LibraryRecord cacheRecord = cache.putIfAbsent(unit.getName(), record);
+                if (null == cacheRecord) {
+                    cacheRecord = record;
+                }
+                if (null == cacheRecord.getScriptSource()
+                        || !cacheRecord.getScriptSource().getName().getRevision().equalsIgnoreCase(
+                        unit.getName().getRevision())) {
+                    // Expensive: compile the source
+                    cacheRecord.setScriptSource((ScriptSource) unit);
+                }
+            } else if (unit instanceof SourceContainer) {
+                SourceContainer container = (SourceContainer) unit;
+                sourceCache.put(unit.getName(), container);
+                for (LibraryRecord cacheRecord : cache.values()) {
+                    if (null == cacheRecord.source) {
+                        ScriptSource source = container.findScriptSource(cacheRecord.scriptName);
+                        if (null != source) {
+                            cacheRecord.setScriptSource(source);
+                        }
                     }
                 }
             }
+        } catch (ScriptCompilationException e) {
+            // remove from cache if fails compilation
+            cache.remove(unit.getName());
+            throw e;
         }
     }
 
