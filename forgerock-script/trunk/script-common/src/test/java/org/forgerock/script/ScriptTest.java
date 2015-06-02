@@ -1,7 +1,7 @@
 /*
  * DO NOT REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2012-2014 ForgeRock AS.. All rights reserved.
+ * Copyright (c) 2012-2015 ForgeRock AS.. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -33,7 +33,6 @@ import org.forgerock.json.resource.ConnectionProvider;
 import org.forgerock.json.resource.Context;
 import org.forgerock.json.resource.CreateRequest;
 import org.forgerock.json.resource.DeleteRequest;
-import org.forgerock.json.resource.InternalServerErrorException;
 import org.forgerock.json.resource.MemoryBackend;
 import org.forgerock.json.resource.PatchOperation;
 import org.forgerock.json.resource.PatchRequest;
@@ -322,9 +321,8 @@ public abstract class ScriptTest {
             Assert.assertNull(getScriptRegistry().takeScript(scriptName));
 
             getScriptRegistry().addSourceUnit(scriptSource);
-        } catch (Exception e) {
-            Assert.assertNotNull(getScriptRegistry().takeScript(scriptName));
-            Assert.assertFalse(getScriptRegistry().takeScript(scriptName).isActive());
+        } catch (ScriptCompilationException e) {
+            Assert.assertNull(getScriptRegistry().takeScript(scriptName));
             throw e;
         }
     }
