@@ -98,6 +98,9 @@ public class ScriptThrownException extends ScriptException {
      *             when value can not be converted to ResourceException
      */
     public ResourceException toResourceException(int defaultCode, String defaultMsg) {
+        if (value instanceof ResourceException) {
+            return (ResourceException) value;
+        }
         if (value instanceof Map) {
             // Convention on structuring well known exceptions with value that
             // contains
