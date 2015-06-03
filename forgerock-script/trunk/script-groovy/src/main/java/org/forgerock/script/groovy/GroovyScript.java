@@ -230,7 +230,7 @@ public class GroovyScript implements CompiledScript {
             try {
                 return scriptObject.run();
             } catch (Exception e) {
-                throw new ScriptThrownException("", e);
+                throw new ScriptThrownException(e.getMessage(), e);
             }
         } catch (ScriptException e) {
             throw e;
