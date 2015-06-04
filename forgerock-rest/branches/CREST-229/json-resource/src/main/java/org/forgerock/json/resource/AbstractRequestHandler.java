@@ -18,6 +18,8 @@ package org.forgerock.json.resource;
 
 import org.forgerock.http.ServerContext;
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.util.promise.Promise;
+import org.forgerock.util.promise.Promises;
 
 /**
  * An abstract base class from which request handlersmay be easily implemented.
@@ -38,9 +40,9 @@ public abstract class AbstractRequestHandler implements RequestHandler {
      * The default implementation is to return a {@link NotSupportedException}.
      */
     @Override
-    public void handleAction(final ServerContext context, final ActionRequest request,
-            final ResultHandler<JsonValue> handler) {
-        handler.handleException(new NotSupportedException());
+    public Promise<JsonValue, ResourceException> handleAction(final ServerContext context,
+            final ActionRequest request) {
+        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
     }
 
     /**
@@ -49,9 +51,8 @@ public abstract class AbstractRequestHandler implements RequestHandler {
      * The default implementation is to return a {@link NotSupportedException}.
      */
     @Override
-    public void handleCreate(final ServerContext context, final CreateRequest request,
-            final ResultHandler<Resource> handler) {
-        handler.handleException(new NotSupportedException());
+    public Promise<Resource, ResourceException> handleCreate(final ServerContext context, final CreateRequest request) {
+        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
     }
 
     /**
@@ -60,9 +61,8 @@ public abstract class AbstractRequestHandler implements RequestHandler {
      * The default implementation is to return a {@link NotSupportedException}.
      */
     @Override
-    public void handleDelete(final ServerContext context, final DeleteRequest request,
-            final ResultHandler<Resource> handler) {
-        handler.handleException(new NotSupportedException());
+    public Promise<Resource, ResourceException> handleDelete(final ServerContext context, final DeleteRequest request) {
+        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
     }
 
     /**
@@ -71,9 +71,8 @@ public abstract class AbstractRequestHandler implements RequestHandler {
      * The default implementation is to return a {@link NotSupportedException}.
      */
     @Override
-    public void handlePatch(final ServerContext context, final PatchRequest request,
-            final ResultHandler<Resource> handler) {
-        handler.handleException(new NotSupportedException());
+    public Promise<Resource, ResourceException> handlePatch(final ServerContext context, final PatchRequest request) {
+        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
     }
 
     /**
@@ -82,9 +81,9 @@ public abstract class AbstractRequestHandler implements RequestHandler {
      * The default implementation is to return a {@link NotSupportedException}.
      */
     @Override
-    public void handleQuery(final ServerContext context, final QueryRequest request,
+    public Promise<QueryResult, ResourceException> handleQuery(final ServerContext context, final QueryRequest request,
             final QueryResultHandler handler) {
-        handler.handleException(new NotSupportedException());
+        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
     }
 
     /**
@@ -93,9 +92,8 @@ public abstract class AbstractRequestHandler implements RequestHandler {
      * The default implementation is to return a {@link NotSupportedException}.
      */
     @Override
-    public void handleRead(final ServerContext context, final ReadRequest request,
-            final ResultHandler<Resource> handler) {
-        handler.handleException(new NotSupportedException());
+    public Promise<Resource, ResourceException> handleRead(final ServerContext context, final ReadRequest request) {
+        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
     }
 
     /**
@@ -104,9 +102,7 @@ public abstract class AbstractRequestHandler implements RequestHandler {
      * The default implementation is to return a {@link NotSupportedException}.
      */
     @Override
-    public void handleUpdate(final ServerContext context, final UpdateRequest request,
-            final ResultHandler<Resource> handler) {
-        handler.handleException(new NotSupportedException());
+    public Promise<Resource, ResourceException> handleUpdate(final ServerContext context, final UpdateRequest request) {
+        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
     }
-
 }

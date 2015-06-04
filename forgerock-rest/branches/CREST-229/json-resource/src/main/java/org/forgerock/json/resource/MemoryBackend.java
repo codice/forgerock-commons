@@ -31,6 +31,8 @@ import org.forgerock.http.ServerContext;
 import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.fluent.JsonValueException;
+import org.forgerock.util.promise.Promise;
+import org.forgerock.util.promise.Promises;
 import org.forgerock.util.query.QueryFilterVisitor;
 
 /**
@@ -39,7 +41,7 @@ import org.forgerock.util.query.QueryFilterVisitor;
  * and there are no performance guarantees.
  */
 public final class MemoryBackend implements CollectionResourceProvider {
-    private static enum FilterResult {
+    private enum FilterResult {
         FALSE, TRUE, UNDEFINED;
 
         static FilterResult valueOf(final boolean b) {
@@ -345,8 +347,8 @@ public final class MemoryBackend implements CollectionResourceProvider {
      * {@inheritDoc}
      */
     @Override
-    public void actionCollection(final ServerContext context, final ActionRequest request,
-            final ResultHandler<JsonValue> handler) {
+    public Promise<JsonValue, ResourceException> actionCollection(final ServerContext context,
+            final ActionRequest request) {
         try {
             if (request.getAction().equals("clear")) {
                 final int size;
@@ -356,13 +358,13 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 }
                 final JsonValue result = new JsonValue(new LinkedHashMap<String, Object>(1));
                 result.put("cleared", size);
-                handler.handleResult(result);
+                return Promises.newResultPromise(result);
             } else {
                 throw new NotSupportedException("Unrecognized action ID '" + request.getAction()
                         + "'. Supported action IDs: clear");
             }
         } catch (final ResourceException e) {
-            handler.handleException(e);
+            return Promises.newExceptionPromise(e);
         }
     }
 
@@ -370,19 +372,19 @@ public final class MemoryBackend implements CollectionResourceProvider {
      * {@inheritDoc}
      */
     @Override
-    public void actionInstance(final ServerContext context, final String id,
-            final ActionRequest request, final ResultHandler<JsonValue> handler) {
+    public Promise<JsonValue, ResourceException> actionInstance(final ServerContext context, final String id,
+            final ActionRequest request) {
         final ResourceException e =
                 new NotSupportedException("Actions are not supported for resource instances");
-        handler.handleException(e);
+        return Promises.newExceptionPromise(e);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void createInstance(final ServerContext context, final CreateRequest request,
-            final ResultHandler<Resource> handler) {
+    public Promise<Resource, ResourceException> createInstance(final ServerContext context,
+            final CreateRequest request) {
         final JsonValue value = request.getContent();
         final String id = request.getNewResourceId();
         final String rev = "0";
@@ -412,9 +414,9 @@ public final class MemoryBackend implements CollectionResourceProvider {
                     }
                 }
             }
-            handler.handleResult(resource);
+            return Promises.newResultPromise(resource);
         } catch (final ResourceException e) {
-            handler.handleException(e);
+            return Promises.newExceptionPromise(e);
         }
     }
 
@@ -422,8 +424,8 @@ public final class MemoryBackend implements CollectionResourceProvider {
      * {@inheritDoc}
      */
     @Override
-    public void deleteInstance(final ServerContext context, final String id,
-            final DeleteRequest request, final ResultHandler<Resource> handler) {
+    public Promise<Resource, ResourceException> deleteInstance(final ServerContext context, final String id,
+            final DeleteRequest request) {
         final String rev = request.getRevision();
         try {
             final Resource resource;
@@ -431,9 +433,9 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 resource = getResourceForUpdate(id, rev);
                 resources.remove(id);
             }
-            handler.handleResult(resource);
+            return Promises.newResultPromise(resource);
         } catch (final ResourceException e) {
-            handler.handleException(e);
+            return Promises.newExceptionPromise(e);
         }
     }
 
@@ -441,8 +443,8 @@ public final class MemoryBackend implements CollectionResourceProvider {
      * {@inheritDoc}
      */
     @Override
-    public void patchInstance(final ServerContext context, final String id,
-            final PatchRequest request, final ResultHandler<Resource> handler) {
+    public Promise<Resource, ResourceException> patchInstance(final ServerContext context, final String id,
+            final PatchRequest request) {
         final String rev = request.getRevision();
         try {
             final Resource resource;
@@ -513,9 +515,9 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 addIdAndRevision(resource);
                 resources.put(id, resource);
             }
-            handler.handleResult(resource);
+            return Promises.newResultPromise(resource);
         } catch (final ResourceException e) {
-            handler.handleException(e);
+            return Promises.newExceptionPromise(e);
         }
     }
 
@@ -523,14 +525,12 @@ public final class MemoryBackend implements CollectionResourceProvider {
      * {@inheritDoc}
      */
     @Override
-    public void queryCollection(final ServerContext context, final QueryRequest request,
-            final QueryResultHandler handler) {
+    public Promise<QueryResult, ResourceException> queryCollection(final ServerContext context,
+            final QueryRequest request, final QueryResultHandler handler) {
         if (request.getQueryId() != null) {
-            handler.handleException(new NotSupportedException("Query by ID not supported"));
-            return;
+            return Promises.newExceptionPromise((ResourceException) new NotSupportedException("Query by ID not supported"));
         } else if (request.getQueryExpression() != null) {
-            handler.handleException(new NotSupportedException("Query by expression not supported"));
-            return;
+            return Promises.newExceptionPromise((ResourceException) new NotSupportedException("Query by expression not supported"));
         } else {
             // No filtering or query by filter.
             final org.forgerock.util.query.QueryFilter<JsonPointer> filter = request.getQueryFilter();
@@ -548,8 +548,7 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 try {
                     firstResultIndex = Integer.parseInt(pagedResultsCookie);
                 } catch (final NumberFormatException e) {
-                    handler.handleException(new BadRequestException("Invalid paged results cookie"));
-                    return;
+                    return Promises.newExceptionPromise((ResourceException) new BadRequestException("Invalid paged results cookie"));
                 }
             }
             final int lastResultIndex =
@@ -590,9 +589,9 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 final String nextCookie =
                         resultIndex > lastResultIndex ? String.valueOf(lastResultIndex) : null;
                 final int remaining = Math.max(resultIndex - lastResultIndex, 0);
-                handler.handleResult(new QueryResult(nextCookie, remaining));
+                return Promises.newResultPromise(new QueryResult(nextCookie, remaining));
             } else {
-                handler.handleResult(new QueryResult());
+                return Promises.newResultPromise(new QueryResult());
             }
         }
     }
@@ -601,17 +600,17 @@ public final class MemoryBackend implements CollectionResourceProvider {
      * {@inheritDoc}
      */
     @Override
-    public void readInstance(final ServerContext context, final String id,
-            final ReadRequest request, final ResultHandler<Resource> handler) {
+    public Promise<Resource, ResourceException> readInstance(final ServerContext context, final String id,
+            final ReadRequest request) {
         try {
             final Resource resource = resources.get(id);
             if (resource == null) {
                 throw new NotFoundException("The resource with ID '" + id
                         + "' could not be read because it does not exist");
             }
-            handler.handleResult(resource);
+            return Promises.newResultPromise(resource);
         } catch (final ResourceException e) {
-            handler.handleException(e);
+            return Promises.newExceptionPromise(e);
         }
     }
 
@@ -619,8 +618,8 @@ public final class MemoryBackend implements CollectionResourceProvider {
      * {@inheritDoc}
      */
     @Override
-    public void updateInstance(final ServerContext context, final String id,
-            final UpdateRequest request, final ResultHandler<Resource> handler) {
+    public Promise<Resource, ResourceException> updateInstance(final ServerContext context, final String id,
+            final UpdateRequest request) {
         final String rev = request.getRevision();
         try {
             final Resource resource;
@@ -631,9 +630,9 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 addIdAndRevision(resource);
                 resources.put(id, resource);
             }
-            handler.handleResult(resource);
+            return Promises.newResultPromise(resource);
         } catch (final ResourceException e) {
-            handler.handleException(e);
+            return Promises.newExceptionPromise(e);
         }
     }
 

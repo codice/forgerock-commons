@@ -61,14 +61,14 @@ final class AnnotatedMethod {
         this.numberOfParameters = numberOfParameters;
     }
 
-    <T> Promise<T, ? extends ResourceException> invoke(ServerContext context, Request request, String id) {
+    <T> Promise<T, ResourceException> invoke(ServerContext context, Request request, String id) {
         return invoke(context, request, null, id);
     }
 
-    <T> Promise<T, ? extends ResourceException> invoke(ServerContext context, Request request,
+    <T> Promise<T, ResourceException> invoke(ServerContext context, Request request,
             QueryResultHandler queryHandler, String id) {
         if (method == null) {
-            return Promises.newExceptionPromise(new NotSupportedException(operation + " not supported"));
+            return Promises.newExceptionPromise((ResourceException) new NotSupportedException(operation + " not supported"));
         }
         Object[] args = new Object[numberOfParameters];
         if (idParameter > -1) {
@@ -84,7 +84,7 @@ final class AnnotatedMethod {
             args[queryHandlerParameter] = queryHandler;
         }
         try {
-            return (Promise<T, ? extends ResourceException>) method.invoke(requestHandler, args);
+            return (Promise<T, ResourceException>) method.invoke(requestHandler, args);
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("Cannot access the annotated method: " + method.getName(), e);
         } catch (InvocationTargetException e) {

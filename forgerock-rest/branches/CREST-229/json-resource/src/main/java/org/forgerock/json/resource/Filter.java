@@ -11,13 +11,14 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions Copyright [year] [name of copyright owner]".
  *
- * Copyright 2013-2014 ForgeRock AS.
+ * Copyright 2013-2015 ForgeRock AS.
  */
 
 package org.forgerock.json.resource;
 
 import org.forgerock.http.ServerContext;
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.util.promise.Promise;
 
 /**
  * An interface for implementing request handler filters. Filters are linked
@@ -26,9 +27,8 @@ import org.forgerock.json.fluent.JsonValue;
  * On receipt of a request a filter implementation may either:
  * <ul>
  * <li><i>stop processing</i> the request and return a result or error
- * immediately. This is achieved by invoking the passed in result handler's
- * {@link ResultHandler#handleResult handleResult} or
- * {@link ResultHandler#handleError handleError} methods and returning
+ * immediately. This is achieved by returning a completed {@code Promise} with
+ * a {@link QueryResult} or a {@link ResourceException} methods and returning
  * <li><i>continue processing</i> the request using the next filter in the
  * filter chain. This is achieved by invoking the appropriate {@code handlerXXX}
  * method on the passed in request handler. Implementations are permitted to
@@ -106,14 +106,13 @@ public interface Filter {
      *            The filter chain context.
      * @param request
      *            The action request.
-     * @param handler
-     *            The result handler.
      * @param next
      *            A request handler representing the remainder of the filter
      *            chain.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void filterAction(ServerContext context, ActionRequest request,
-            ResultHandler<JsonValue> handler, RequestHandler next);
+    Promise<JsonValue, ResourceException> filterAction(ServerContext context, ActionRequest request,
+            RequestHandler next);
 
     /**
      * Filters a create request.
@@ -122,14 +121,13 @@ public interface Filter {
      *            The filter chain context.
      * @param request
      *            The create request.
-     * @param handler
-     *            The result handler.
      * @param next
      *            A request handler representing the remainder of the filter
      *            chain.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void filterCreate(ServerContext context, CreateRequest request,
-            ResultHandler<Resource> handler, RequestHandler next);
+    Promise<Resource, ResourceException> filterCreate(ServerContext context, CreateRequest request,
+            RequestHandler next);
 
     /**
      * Filters a delete request.
@@ -138,14 +136,13 @@ public interface Filter {
      *            The filter chain context.
      * @param request
      *            The delete request.
-     * @param handler
-     *            The result handler.
      * @param next
      *            A request handler representing the remainder of the filter
      *            chain.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void filterDelete(ServerContext context, DeleteRequest request,
-            ResultHandler<Resource> handler, RequestHandler next);
+    Promise<Resource, ResourceException> filterDelete(ServerContext context, DeleteRequest request,
+            RequestHandler next);
 
     /**
      * Filters a patch request.
@@ -154,14 +151,12 @@ public interface Filter {
      *            The filter chain context.
      * @param request
      *            The patch request.
-     * @param handler
-     *            The result handler.
      * @param next
      *            A request handler representing the remainder of the filter
      *            chain.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void filterPatch(ServerContext context, PatchRequest request, ResultHandler<Resource> handler,
-            RequestHandler next);
+    Promise<Resource, ResourceException> filterPatch(ServerContext context, PatchRequest request, RequestHandler next);
 
     /**
      * Filters a query request.
@@ -169,12 +164,10 @@ public interface Filter {
      * Implementations which return results directly rather than forwarding the
      * request should invoke {@link QueryResultHandler#handleResource(Resource)}
      * for each resource which matches the query criteria. Once all matching
-     * resources have been returned implementations are required to invoke
-     * either {@link QueryResultHandler#handleResult(QueryResult)} if the query
-     * has completed successfully, or
-     * {@link QueryResultHandler#handleError(ResourceException)} if the query
-     * did not complete successfully (even if some matching resources were
-     * returned).
+     * resources have been returned implementations are required to return
+     * either a {@link QueryResult} if the query has completed successfully, or
+     * {@link ResourceException} if the query did not complete successfully
+     * (even if some matching resources were returned).
      *
      * @param context
      *            The filter chain context.
@@ -185,9 +178,10 @@ public interface Filter {
      * @param next
      *            A request handler representing the remainder of the filter
      *            chain.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void filterQuery(ServerContext context, QueryRequest request, QueryResultHandler handler,
-            RequestHandler next);
+    Promise<QueryResult, ResourceException> filterQuery(ServerContext context, QueryRequest request,
+            QueryResultHandler handler, RequestHandler next);
 
     /**
      * Filters a read request.
@@ -196,14 +190,12 @@ public interface Filter {
      *            The filter chain context.
      * @param request
      *            The read request.
-     * @param handler
-     *            The result handler.
      * @param next
      *            A request handler representing the remainder of the filter
      *            chain.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void filterRead(ServerContext context, ReadRequest request, ResultHandler<Resource> handler,
-            RequestHandler next);
+    Promise<Resource, ResourceException> filterRead(ServerContext context, ReadRequest request, RequestHandler next);
 
     /**
      * Filters an update request.
@@ -212,13 +204,11 @@ public interface Filter {
      *            The filter chain context.
      * @param request
      *            The update request.
-     * @param handler
-     *            The result handler.
      * @param next
      *            A request handler representing the remainder of the filter
      *            chain.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void filterUpdate(ServerContext context, UpdateRequest request,
-            ResultHandler<Resource> handler, RequestHandler next);
-
+    Promise<Resource, ResourceException> filterUpdate(ServerContext context, UpdateRequest request,
+            RequestHandler next);
 }

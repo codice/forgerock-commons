@@ -35,10 +35,10 @@ class AnnotatedActionMethods {
 
     private Map<String, AnnotatedMethod> methods = new HashMap<String, AnnotatedMethod>();
 
-    Promise<JsonValue, ? extends ResourceException> invoke(ServerContext context, ActionRequest request, String id) {
+    Promise<JsonValue, ResourceException> invoke(ServerContext context, ActionRequest request, String id) {
         AnnotatedMethod method = methods.get(request.getAction());
         if (method == null) {
-            return Promises.newExceptionPromise(new NotSupportedException(request.getAction() + "not supported"));
+            return Promises.newExceptionPromise((ResourceException) new NotSupportedException(request.getAction() + "not supported"));
         }
         return method.invoke(context, request, id);
     }

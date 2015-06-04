@@ -60,110 +60,110 @@ public final class ResourcesTest {
         // @formatter:off
         return new Object[][] {
 
-            // Null content
-            {
-                filter(),
-                content(null),
-                expected(null)
-            },
+                // Null content
+                {
+                        filter(),
+                        content(null),
+                        expected(null)
+                },
 
-            {
-                filter("/"),
-                content(null),
-                expected(null)
-            },
+                {
+                        filter("/"),
+                        content(null),
+                        expected(null)
+                },
 
-            {
-                filter("/a/b"),
-                content(null),
-                expected(null)
-            },
+                {
+                        filter("/a/b"),
+                        content(null),
+                        expected(null)
+                },
 
-            {
-                filter("/1"),
-                content(null),
-                expected(null)
-            },
+                {
+                        filter("/1"),
+                        content(null),
+                        expected(null)
+                },
 
-            // Empty object
-            {
-                filter(),
-                content(object()),
-                expected(object())
-            },
+                // Empty object
+                {
+                        filter(),
+                        content(object()),
+                        expected(object())
+                },
 
-            {
-                filter("/"),
-                content(object()),
-                expected(object())
-            },
+                {
+                        filter("/"),
+                        content(object()),
+                        expected(object())
+                },
 
-            {
-                filter("/a/b"),
-                content(object()),
-                expected(object())
-            },
+                {
+                        filter("/a/b"),
+                        content(object()),
+                        expected(object())
+                },
 
-            {
-                filter("/1"),
-                content(object()),
-                expected(object())
-            },
+                {
+                        filter("/1"),
+                        content(object()),
+                        expected(object())
+                },
 
-            // Miscellaneous
-            {
-                filter(),
-                content(object(field("a", "1"), field("b", "2"))),
-                expected(object(field("a", "1"), field("b", "2")))
-            },
+                // Miscellaneous
+                {
+                        filter(),
+                        content(object(field("a", "1"), field("b", "2"))),
+                        expected(object(field("a", "1"), field("b", "2")))
+                },
 
-            {
-                filter("/"),
-                content(object(field("a", "1"), field("b", "2"))),
-                expected(object(field("a", "1"), field("b", "2")))
-            },
+                {
+                        filter("/"),
+                        content(object(field("a", "1"), field("b", "2"))),
+                        expected(object(field("a", "1"), field("b", "2")))
+                },
 
-            {
-                filter("/a"),
-                content(object(field("a", "1"), field("b", "2"))),
-                expected(object(field("a", "1")))
-            },
+                {
+                        filter("/a"),
+                        content(object(field("a", "1"), field("b", "2"))),
+                        expected(object(field("a", "1")))
+                },
 
-            {
-                filter("/a/b"),
-                content(object(field("a", "1"), field("b", "2"))),
-                expected(object())
-            },
+                {
+                        filter("/a/b"),
+                        content(object(field("a", "1"), field("b", "2"))),
+                        expected(object())
+                },
 
-            {
-                filter("/a"),
-                content(object(field("a", object(field("b", "1"), field("c", "2"))), field("d", "3"))),
-                expected(object(field("a", object(field("b", "1"), field("c", "2")))))
-            },
+                {
+                        filter("/a"),
+                        content(object(field("a", object(field("b", "1"), field("c", "2"))), field("d", "3"))),
+                        expected(object(field("a", object(field("b", "1"), field("c", "2")))))
+                },
 
-            {
-                filter("/a/b"),
-                content(object(field("a", object(field("b", "1"), field("c", "2"))), field("d", "3"))),
-                expected(object(field("b", "1")))
-            },
+                {
+                        filter("/a/b"),
+                        content(object(field("a", object(field("b", "1"), field("c", "2"))), field("d", "3"))),
+                        expected(object(field("b", "1")))
+                },
 
-            {
-                filter("/a/b", "/d"),
-                content(object(field("a", object(field("b", "1"), field("c", "2"))), field("d", "3"))),
-                expected(object(field("b", "1"), field("d", "3")))
-            },
+                {
+                        filter("/a/b", "/d"),
+                        content(object(field("a", object(field("b", "1"), field("c", "2"))), field("d", "3"))),
+                        expected(object(field("b", "1"), field("d", "3")))
+                },
 
-            {
-                filter("/a/b", "/a"),
-                content(object(field("a", object(field("b", "1"), field("c", "2"))), field("d", "3"))),
-                expected(object(field("b", "1"), field("a", object(field("b", "1"), field("c", "2")))))
-            },
+                {
+                        filter("/a/b", "/a"),
+                        content(object(field("a", object(field("b", "1"), field("c", "2"))), field("d", "3"))),
+                        expected(object(field("b", "1"), field("a", object(field("b", "1"), field("c", "2")))))
+                },
 
-            {
-                filter("/a", "/a/b"),
-                content(object(field("a", object(field("b", "1"), field("c", "2"))), field("d", "3"))),
-                expected(object(field("a", object(field("b", "1"), field("c", "2"))), field("b", "1")))
-            },
+                {
+                        filter("/a", "/a/b"),
+                        content(object(field("a", object(field("b", "1"), field("c", "2"))), field("d", "3"))),
+                        expected(object(field("a", object(field("b", "1"), field("c", "2"))), field("b", "1")))
+                },
 
         };
         // @formatter:on
@@ -179,11 +179,11 @@ public final class ResourcesTest {
     public Object[][] testCollectionResourceProviderData() {
         // @formatter:off
         return new Object[][] {
-            { "test", "test" },
-            { "test%2fuser", "test/user" },
-            { "test user", "test user" },
-            { "test%20user", "test user" },
-            { "test+%2buser", "test++user" }
+                { "test", "test" },
+                { "test%2fuser", "test/user" },
+                { "test user", "test user" },
+                { "test%20user", "test user" },
+                { "test+%2buser", "test++user" }
         };
         // @formatter:on
     }
@@ -198,8 +198,7 @@ public final class ResourcesTest {
         ReadRequest read = Requests.newReadRequest(resourcePath);
         connection.readAsync(new RootContext(), read);
         ArgumentCaptor<ReadRequest> captor = ArgumentCaptor.forClass(ReadRequest.class);
-        verify(collection).readInstance(any(ServerContext.class), eq(expectedId), captor.capture(),
-                any(ResultHandler.class));
+        verify(collection).readInstance(any(ServerContext.class), eq(expectedId), captor.capture());
         Assertions.assertThat(captor.getValue().getResourcePath()).isEqualTo("");
     }
 
