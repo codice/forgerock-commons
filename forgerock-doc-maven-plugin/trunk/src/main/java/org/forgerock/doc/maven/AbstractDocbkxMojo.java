@@ -151,6 +151,41 @@ abstract public class AbstractDocbkxMojo extends AbstractMojo {
     }
 
     /**
+     * Base directory for Asciidoc source files.
+     */
+    @Parameter(defaultValue = "${basedir}/src/main/asciidoc")
+    private File asciidocSourceDirectory;
+
+    /**
+     * Get the base directory for Asciidoc source files.
+     * These files remain unchanged during processing.
+     *
+     * <br>
+     *
+     * Default: {@code ${basedir}/src/main/asciidoc}.
+     *
+     * @return The base directory for Asciidoc source files.
+     */
+    public File getAsciidocSourceDirectory() {
+        return asciidocSourceDirectory;
+    }
+
+    /**
+     * Version of the Asciidoctor Maven plugin to use.
+     */
+    @Parameter
+    private String asciidoctorPluginVersion;
+
+    /**
+     * Returns the version of the Asciidoctor Maven plugin to use.
+     *
+     * @return The version of the Asciidoctor Maven plugin to use.
+     */
+    public String getAsciidoctorPluginVersion() {
+        return getVersionProperty(asciidoctorPluginVersion, "asciidoctorPluginVersion");
+    }
+
+    /**
      * File system directory for Backstage layout output
      * relative to the build directory.
      */

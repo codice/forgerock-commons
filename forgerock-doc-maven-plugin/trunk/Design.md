@@ -28,6 +28,7 @@ First, this stage prepares for processing.
 By default, pre-processing tasks are performed in the following order:
 
 *  Augment the copy with common content. (`CommonContent`)
+*  Process Asciidoc sources to DocBook XML. (`AsciidocToDocBook`)
 *  Include Java code by applying the JCite plugin. (`JCite`)
 *  Include quotes from other text files by applying the XCite plugin. (`XCite`)
 *  Perform Maven resource filtering on the copy to replace variables. (`Filter`)

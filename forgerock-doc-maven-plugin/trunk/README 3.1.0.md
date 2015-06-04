@@ -379,6 +379,18 @@ This capability is provided by Peter Major's
 For details on skipping URLs by pattern, see the documentation for his plugin.
 
 
+## Adding Asciidoc Books
+
+Asciidoc books can now be added alongside DocBook XML books.
+The Asciidoc format books are converted to DocBook XML during pre-processing.
+The current implementation does not support mixing
+Asciidoc and DocBook XML sources for the same book.
+
+Lay out your Asciidoc book sources in the same way you lay out DocBook sources,
+under `src/main/asciidoc` by default.
+Use `<asciidocSourceDirectory>` if necessary to modify the source location.
+
+
 ## Handling PNG Images
 
 Getting screenshots and other images to look okay in PDF can be a hassle.
