@@ -21,6 +21,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.forgerock.doc.maven.pre.ArtifactBuilder;
+import org.forgerock.doc.maven.pre.AsciidocToDocBook;
 import org.forgerock.doc.maven.pre.Branding;
 import org.forgerock.doc.maven.pre.CommonContent;
 import org.forgerock.doc.maven.pre.ConditionalText;
@@ -70,6 +71,7 @@ public class PreProcessMojo extends AbstractDocbkxMojo {
 
         if (!doUsePreProcessedSources()) {  // Sources require pre-processing.
             new CommonContent(this).execute();
+            new AsciidocToDocBook(this).execute();
             new JCite(this).execute();
             new XCite(this).execute();
             new Filter(this).execute();

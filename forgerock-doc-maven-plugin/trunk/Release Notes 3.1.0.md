@@ -18,6 +18,13 @@ This release does not introduce any incompatible changes.
 
 **DOCS-300: The copyResources flag should take effect during the pre-site phase**
 
+**DOCS-241: Add support for Asciidoc**
+
+Asciidoc books can now be added alongside DocBook XML books.
+The Asciidoc format books are converted to DocBook XML during pre-processing.
+The current implementation does not support mixing
+Asciidoc and DocBook XML sources for the same book.
+
 
 ## Bugs Fixed
 
