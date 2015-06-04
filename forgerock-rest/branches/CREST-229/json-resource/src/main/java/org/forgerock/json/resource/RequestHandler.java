@@ -11,13 +11,14 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions Copyright [year] [name of copyright owner]".
  *
- * Copyright 2012-2014 ForgeRock AS.
+ * Copyright 2012-2015 ForgeRock AS.
  */
 
 package org.forgerock.json.resource;
 
 import org.forgerock.http.ServerContext;
 import org.forgerock.json.fluent.JsonValue;
+import org.forgerock.util.promise.Promise;
 
 /**
  * Represents the contract with a set of resources.
@@ -35,11 +36,11 @@ import org.forgerock.json.fluent.JsonValue;
  * Supports either synchronous or asynchronous internal processing, i.e. it does
  * not have to block the request thread until a response becomes available.
  * <p>
- * For synchronous internal processing, directly call
- * {@link ResultHandler#handleResult} on the result handler in the method, e.g.
+ * For synchronous internal processing, immediately return a completed
+ * {@code Promise}, e.g.
  *
  * <pre>
- * handler.handleResult(result);
+ * return Promises.newResultPromise(result);
  * </pre>
  *
  * Asynchronous implementations must take care to eventually set a result or a
@@ -81,10 +82,9 @@ public interface RequestHandler {
      *            The request server context, such as associated principal.
      * @param request
      *            The action request.
-     * @param handler
-     *            The result handler to be notified on completion.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void handleAction(ServerContext context, ActionRequest request, ResultHandler<JsonValue> handler);
+    Promise<JsonValue, ResourceException> handleAction(ServerContext context, ActionRequest request);
 
     /**
      * Adds a new JSON resource, invoking the provided result handler upon
@@ -108,10 +108,9 @@ public interface RequestHandler {
      *            The request server context, such as associated principal.
      * @param request
      *            The create request.
-     * @param handler
-     *            The result handler to be notified on completion.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void handleCreate(ServerContext context, CreateRequest request, ResultHandler<Resource> handler);
+    Promise<Resource, ResourceException> handleCreate(ServerContext context, CreateRequest request);
 
     /**
      * Deletes a JSON resource, invoking the provided result handler upon
@@ -135,10 +134,9 @@ public interface RequestHandler {
      *            The request server context, such as associated principal.
      * @param request
      *            The delete request.
-     * @param handler
-     *            The result handler to be notified on completion.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void handleDelete(ServerContext context, DeleteRequest request, ResultHandler<Resource> handler);
+    Promise<Resource, ResourceException> handleDelete(ServerContext context, DeleteRequest request);
 
     /**
      * Updates a JSON resource by applying a set of changes to its existing
@@ -165,10 +163,9 @@ public interface RequestHandler {
      *            The request server context, such as associated principal.
      * @param request
      *            The patch request.
-     * @param handler
-     *            The result handler to be notified on completion.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void handlePatch(ServerContext context, PatchRequest request, ResultHandler<Resource> handler);
+    Promise<Resource, ResourceException> handlePatch(ServerContext context, PatchRequest request);
 
     /**
      * Searches for all JSON resources matching a user specified set of
@@ -177,11 +174,10 @@ public interface RequestHandler {
      * Implementations must invoke
      * {@link QueryResultHandler#handleResource(Resource)} for each resource
      * which matches the query criteria. Once all matching resources have been
-     * returned implementations are required to invoke either
-     * {@link QueryResultHandler#handleResult(QueryResult)} if the query has
-     * completed successfully, or
-     * {@link QueryResultHandler#handleError(ResourceException)} if the query
-     * did not complete successfully (even if some matching resources were returned).
+     * returned implementations are required to return either a
+     * {@link QueryResult} if the query has completed successfully, or
+     * {@link ResourceException} if the query did not complete successfully
+     * (even if some matching resources were returned).
      * <p>
      * Query expects failure exceptions as follows:
      * <ul>
@@ -199,9 +195,12 @@ public interface RequestHandler {
      * @param request
      *            The query request.
      * @param handler
-     *            The query result handler to be notified on completion.
+     *            The query result handler to be notified for each matching
+     *            resource.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void handleQuery(ServerContext context, QueryRequest request, QueryResultHandler handler);
+    Promise<QueryResult, ResourceException> handleQuery(ServerContext context, QueryRequest request,
+            QueryResultHandler handler);
 
     /**
      * Reads a JSON resource, invoking the provided result handler upon
@@ -222,10 +221,9 @@ public interface RequestHandler {
      *            The request server context, such as associated principal.
      * @param request
      *            The read request.
-     * @param handler
-     *            The result handler to be notified on completion.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void handleRead(ServerContext context, ReadRequest request, ResultHandler<Resource> handler);
+    Promise<Resource, ResourceException> handleRead(ServerContext context, ReadRequest request);
 
     /**
      * Updates a JSON resource by replacing its existing content with new
@@ -250,9 +248,7 @@ public interface RequestHandler {
      *            The request server context, such as associated principal.
      * @param request
      *            The update request.
-     * @param handler
-     *            The result handler to be notified on completion.
+     * @return A {@code Promise} containing the result of the operation.
      */
-    void handleUpdate(ServerContext context, UpdateRequest request, ResultHandler<Resource> handler);
-
+    Promise<Resource, ResourceException> handleUpdate(ServerContext context, UpdateRequest request);
 }
