@@ -21,14 +21,14 @@
   !      Copyright 2015 ForgeRock AS.
   !
 -->
-<section xml:id="getting-support"
+<section xml:id="sec-support-contact"
          xmlns='http://docbook.org/ns/docbook' version='5.0' xml:lang='en'
          xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
          xsi:schemaLocation='http://docbook.org/ns/docbook
                               http://docbook.org/xml/5.0/xsd/docbook.xsd'
          xmlns:xlink='http://www.w3.org/1999/xlink'>
- <title>Getting Support</title>
 
+ <title>Getting Support and Contacting ForgeRock</title>
  <para>
   ForgeRock provides Support Services, Professional Services, University
   Training classes and Partner Services to assist you in your deployment.
@@ -44,6 +44,5 @@
   or send an email to ForgeRock at
   <link xlink:show="new" xlink:href="mailto:info@forgerock.com">info@forgerock.com</link>.
  </para>
-
 
 </section>
