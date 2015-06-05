@@ -16,10 +16,12 @@
 
 package org.forgerock.json.resource;
 
+import static org.forgerock.json.resource.ResourceException.newNotSupportedException;
+import static org.forgerock.util.promise.Promises.newExceptionPromise;
+
 import org.forgerock.http.ServerContext;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 
 /**
  * An abstract base class from which request handlersmay be easily implemented.
@@ -42,7 +44,7 @@ public abstract class AbstractRequestHandler implements RequestHandler {
     @Override
     public Promise<JsonValue, ResourceException> handleAction(final ServerContext context,
             final ActionRequest request) {
-        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
+        return newExceptionPromise(newNotSupportedException());
     }
 
     /**
@@ -52,7 +54,7 @@ public abstract class AbstractRequestHandler implements RequestHandler {
      */
     @Override
     public Promise<Resource, ResourceException> handleCreate(final ServerContext context, final CreateRequest request) {
-        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
+        return newExceptionPromise(newNotSupportedException());
     }
 
     /**
@@ -62,7 +64,7 @@ public abstract class AbstractRequestHandler implements RequestHandler {
      */
     @Override
     public Promise<Resource, ResourceException> handleDelete(final ServerContext context, final DeleteRequest request) {
-        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
+        return newExceptionPromise(newNotSupportedException());
     }
 
     /**
@@ -72,7 +74,7 @@ public abstract class AbstractRequestHandler implements RequestHandler {
      */
     @Override
     public Promise<Resource, ResourceException> handlePatch(final ServerContext context, final PatchRequest request) {
-        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
+        return newExceptionPromise(newNotSupportedException());
     }
 
     /**
@@ -82,8 +84,8 @@ public abstract class AbstractRequestHandler implements RequestHandler {
      */
     @Override
     public Promise<QueryResult, ResourceException> handleQuery(final ServerContext context, final QueryRequest request,
-            final QueryResultHandler handler) {
-        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
+            final QueryResourceHandler handler) {
+        return newExceptionPromise(newNotSupportedException());
     }
 
     /**
@@ -93,7 +95,7 @@ public abstract class AbstractRequestHandler implements RequestHandler {
      */
     @Override
     public Promise<Resource, ResourceException> handleRead(final ServerContext context, final ReadRequest request) {
-        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
+        return newExceptionPromise(newNotSupportedException());
     }
 
     /**
@@ -103,6 +105,6 @@ public abstract class AbstractRequestHandler implements RequestHandler {
      */
     @Override
     public Promise<Resource, ResourceException> handleUpdate(final ServerContext context, final UpdateRequest request) {
-        return Promises.newExceptionPromise((ResourceException) new NotSupportedException());
+        return newExceptionPromise(newNotSupportedException());
     }
 }

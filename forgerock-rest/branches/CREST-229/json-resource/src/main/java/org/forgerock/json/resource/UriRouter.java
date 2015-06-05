@@ -21,6 +21,7 @@ import static org.forgerock.http.RoutingMode.STARTS_WITH;
 import static org.forgerock.json.resource.Requests.*;
 import static org.forgerock.json.resource.Resources.newCollection;
 import static org.forgerock.json.resource.Resources.newSingleton;
+import static org.forgerock.util.promise.Promises.newExceptionPromise;
 
 import org.forgerock.http.AbstractUriRouter;
 import org.forgerock.http.RouteMatcher;
@@ -29,7 +30,6 @@ import org.forgerock.http.ServerContext;
 import org.forgerock.http.UriRoute;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 
 /**
  * A request handler which routes requests using URI template matching against
@@ -160,7 +160,7 @@ public final class UriRouter extends AbstractUriRouter<UriRouter, RequestHandler
                     : request;
             return bestMatch.getHandler().handleAction(bestMatch.getContext(), routedRequest);
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -173,7 +173,7 @@ public final class UriRouter extends AbstractUriRouter<UriRouter, RequestHandler
                     : request;
             return bestMatch.getHandler().handleCreate(bestMatch.getContext(), routedRequest);
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -186,7 +186,7 @@ public final class UriRouter extends AbstractUriRouter<UriRouter, RequestHandler
                     : request;
             return bestMatch.getHandler().handleDelete(bestMatch.getContext(), routedRequest);
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -199,13 +199,13 @@ public final class UriRouter extends AbstractUriRouter<UriRouter, RequestHandler
                     : request;
             return bestMatch.getHandler().handlePatch(bestMatch.getContext(), routedRequest);
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
     @Override
     public Promise<QueryResult, ResourceException> handleQuery(final ServerContext context, final QueryRequest request,
-            final QueryResultHandler handler) {
+            final QueryResourceHandler handler) {
         try {
             final RouteMatcher<RequestHandler> bestMatch = getBestRoute(context, request);
             final QueryRequest routedRequest = bestMatch.wasRouted()
@@ -213,7 +213,7 @@ public final class UriRouter extends AbstractUriRouter<UriRouter, RequestHandler
                     : request;
             return bestMatch.getHandler().handleQuery(bestMatch.getContext(), routedRequest, handler);
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -226,7 +226,7 @@ public final class UriRouter extends AbstractUriRouter<UriRouter, RequestHandler
                     : request;
             return bestMatch.getHandler().handleRead(bestMatch.getContext(), routedRequest);
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -239,7 +239,7 @@ public final class UriRouter extends AbstractUriRouter<UriRouter, RequestHandler
                     : request;
             return bestMatch.getHandler().handleUpdate(bestMatch.getContext(), routedRequest);
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 

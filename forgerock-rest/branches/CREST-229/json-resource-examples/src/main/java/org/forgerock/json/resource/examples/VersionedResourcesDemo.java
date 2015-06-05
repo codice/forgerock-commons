@@ -35,7 +35,7 @@ import org.forgerock.json.resource.MemoryBackend;
 import org.forgerock.json.resource.PatchRequest;
 import org.forgerock.json.resource.QueryRequest;
 import org.forgerock.json.resource.QueryResult;
-import org.forgerock.json.resource.QueryResultHandler;
+import org.forgerock.json.resource.QueryResourceHandler;
 import org.forgerock.json.resource.ReadRequest;
 import org.forgerock.json.resource.RequestHandler;
 import org.forgerock.json.resource.Requests;
@@ -188,7 +188,7 @@ public final class VersionedResourcesDemo {
 
             @Override
             public Promise<QueryResult, ResourceException> handleQuery(ServerContext context, QueryRequest request,
-                    QueryResultHandler handler) {
+                    QueryResourceHandler handler) {
                 return backend.queryCollection(context, request, handler);
             }
 

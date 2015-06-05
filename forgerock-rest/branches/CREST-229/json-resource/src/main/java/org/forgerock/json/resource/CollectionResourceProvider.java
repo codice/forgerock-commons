@@ -132,12 +132,12 @@ public interface CollectionResourceProvider {
     Promise<Resource, ResourceException> patchInstance(ServerContext context, String resourceId, PatchRequest request);
 
     /**
-     * {@link RequestHandler#handleQuery(ServerContext, QueryRequest, QueryResultHandler)
+     * {@link RequestHandler#handleQuery(ServerContext, QueryRequest, QueryResourceHandler)
      * Searches} the collection for all resources which match the query request
      * criteria.
      * <p>
      * Implementations must invoke
-     * {@link QueryResultHandler#handleResource(Resource)} for each resource
+     * {@link QueryResourceHandler#handleResource(Resource)} for each resource
      * which matches the query criteria. Once all matching resources have been
      * returned implementations are required to return either a
      * {@link QueryResult} if the query has completed successfully, or
@@ -149,14 +149,14 @@ public interface CollectionResourceProvider {
      * @param request
      *            The query request.
      * @param handler
-     *            The query result handler to be notified for each matching
+     *            The query resource handler to be notified for each matching
      *            resource.
      * @return A {@code Promise} containing the result of the operation.
      * @see RequestHandler#handleQuery(ServerContext, QueryRequest,
-     *      QueryResultHandler)
+     *      QueryResourceHandler)
      */
     Promise<QueryResult, ResourceException> queryCollection(ServerContext context, QueryRequest request,
-            QueryResultHandler handler);
+            QueryResourceHandler handler);
 
     /**
      * {@link RequestHandler#handleRead(ServerContext, ReadRequest)

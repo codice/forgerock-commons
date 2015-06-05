@@ -240,7 +240,7 @@ public class VersionRouterTest {
                         withDefaultResourceVersion(requestedVersion).build());
         ServerContext context = new ServerContext(apiVersionContext);
         QueryRequest request = Requests.newQueryRequest("");
-        QueryResultHandler handler = mock(QueryResultHandler.class);
+        QueryResourceHandler handler = mock(QueryResourceHandler.class);
 
         //When
         Promise<QueryResult, ResourceException> promise = versionRouter.handleQuery(context, request, handler);

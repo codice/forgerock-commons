@@ -19,6 +19,7 @@ package org.forgerock.json.resource.http;
 import static org.forgerock.json.resource.QueryResult.*;
 import static org.forgerock.json.resource.http.HttpUtils.*;
 import static org.forgerock.util.Utils.closeSilently;
+import static org.forgerock.util.promise.Promises.newResultPromise;
 
 import javax.mail.internet.ContentType;
 import javax.mail.internet.ParseException;
@@ -44,7 +45,7 @@ import org.forgerock.json.resource.DeleteRequest;
 import org.forgerock.json.resource.PatchRequest;
 import org.forgerock.json.resource.QueryRequest;
 import org.forgerock.json.resource.QueryResult;
-import org.forgerock.json.resource.QueryResultHandler;
+import org.forgerock.json.resource.QueryResourceHandler;
 import org.forgerock.json.resource.ReadRequest;
 import org.forgerock.json.resource.Request;
 import org.forgerock.json.resource.RequestVisitor;
@@ -56,7 +57,6 @@ import org.forgerock.util.encode.Base64url;
 import org.forgerock.util.promise.ExceptionHandler;
 import org.forgerock.util.promise.NeverThrowsException;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 import org.forgerock.util.promise.ResultHandler;
 
 /**
@@ -115,7 +115,7 @@ final class RequestRunner implements RequestVisitor<Promise<Response, NeverThrow
                             onError(e);
                         }
 
-                        return Promises.newResultPromise(httpResponse);
+                        return newResultPromise(httpResponse);
                     }
                 }, new AsyncFunction<ResourceException, Response, NeverThrowsException>() {
                     @Override
@@ -146,7 +146,7 @@ final class RequestRunner implements RequestVisitor<Promise<Response, NeverThrow
                         } catch (final Exception e) {
                             onError(e);
                         }
-                        return Promises.newResultPromise(httpResponse);
+                        return newResultPromise(httpResponse);
                     }
                 }, new AsyncFunction<ResourceException, Response, NeverThrowsException>() {
                     @Override
@@ -193,7 +193,7 @@ final class RequestRunner implements RequestVisitor<Promise<Response, NeverThrow
     public final Promise<Response, NeverThrowsException> visitQueryRequest(final Void p, final QueryRequest request) {
         final AtomicBoolean isFirstResult = new AtomicBoolean(true);
         final AtomicInteger resultCount = new AtomicInteger(0);
-        return connection.queryAsync(context, request, new QueryResultHandler() {
+        return connection.queryAsync(context, request, new QueryResourceHandler() {
             @Override
             public boolean handleResource(final Resource resource) {
                 try {
@@ -244,7 +244,7 @@ final class RequestRunner implements RequestVisitor<Promise<Response, NeverThrow
         }).thenAsync(new AsyncFunction<QueryResult, Response, NeverThrowsException>() {
             @Override
             public Promise<Response, NeverThrowsException> apply(QueryResult queryResult) {
-                return Promises.newResultPromise(httpResponse);
+                return newResultPromise(httpResponse);
             }
         }, new AsyncFunction<ResourceException, Response, NeverThrowsException>() {
             @Override
@@ -338,7 +338,7 @@ final class RequestRunner implements RequestVisitor<Promise<Response, NeverThrow
                             // No change so 304.
                             Map<String, Object> responseBody = ResourceException.getException(304)
                                     .setReason("Not Modified").toJsonValue().asMap();
-                            return Promises.newResultPromise(new Response().setStatus(Status.valueOf(304))
+                            return newResultPromise(new Response().setStatus(Status.valueOf(304))
                                     .setEntity(responseBody));
                         }
                     }
@@ -347,7 +347,7 @@ final class RequestRunner implements RequestVisitor<Promise<Response, NeverThrow
                 } catch (final Exception e) {
                     onError(e);
                 }
-                return Promises.newResultPromise(httpResponse);
+                return newResultPromise(httpResponse);
             }
         };
     }

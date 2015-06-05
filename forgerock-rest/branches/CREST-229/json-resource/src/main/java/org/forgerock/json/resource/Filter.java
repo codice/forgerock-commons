@@ -32,10 +32,10 @@ import org.forgerock.util.promise.Promise;
  * <li><i>continue processing</i> the request using the next filter in the
  * filter chain. This is achieved by invoking the appropriate {@code handlerXXX}
  * method on the passed in request handler. Implementations are permitted to
- * modify the context or request before forwarding. They may also wrap the
- * provided result handler in order to be notified when a response is returned,
- * allowing a filter to interact with responses before they are sent to the
- * client.
+ * modify the context or request before forwarding. They may also chain the
+ * promise, returned from the downstream handler, in order to be notified when
+ * a response is returned, allowing a filter to interact with responses before
+ * they are sent to the client.
  * </ul>
  * <p>
  * Implementations are allowed to invoke arbitrary {@code handleXXX} methods on
@@ -56,33 +56,36 @@ import org.forgerock.util.promise.Promise;
  * <pre>
  * public class AuthzFilter implements Filter {
  *
- *     public void filterRead(final ServerContext context, final ReadRequest request,
- *             final ResultHandler&lt;Resource&gt; handler, final RequestHandler next) {
+ *     public Promise&lt;Resource, ResourceException&gt; filterRead(final ServerContext context,
+ *             final ReadRequest request, final RequestHandler next) {
  *         /*
  *          * Only forward the request if the request is allowed.
  *          &#42;/
  *         if (isAuthorized(context, request)) {
  *             /*
- *              * Continue processing the request since it is allowed. Wrap the
- *              * result handler so that we can filter the returned resource.
+ *              * Continue processing the request since it is allowed. Chain the
+ *              * promise so that we can filter the returned resource.
  *              &#42;/
- *             next.handleRead(context, request, new ResultHandler&lt;Resource&gt;() {
- *                 public void handleResult(final Resource result) {
- *                     /*
- *                      * Filter the resource and its attributes.
- *                      &#42;/
- *                     if (isAuthorized(context, result)) {
- *                         handler.handleResult(filterResource(context, result));
- *                     } else {
- *                         handler.handleError(new NotFoundException());
- *                     }
- *                 }
- *
- *                 public void handleError(final ResourceException error) {
- *                     // Forward - assumes no authorization is required.
- *                     handler.handleError(error);
- *                 }
- *             });
+ *             return next.handleRead(context, request)
+ *                     .thenAsync(new AsyncFunction&lt;Resource, Resource, ResourceException&gt;() {
+ *                         &#064;Override
+ *                         public Promise&lt;Resource, ResourceException&gt; apply(Resource result) {
+ *                             /*
+ *                              * Filter the resource and its attributes.
+ *                              &#42;/
+ *                             if (isAuthorized(context, result)) {
+ *                                 return Promises.newResultPromise(filterResource(context, result));
+ *                             } else {
+ *                                 return Promises.newExceptionPromise(ResourceException.newNotFoundException());
+ *                             }
+ *                         }
+ *                     }, new AsyncFunction&lt;ResourceException, Resource, ResourceException&gt() {
+ *                         &#064;Override
+ *                         public Promise&lt;Resource, ResourceException&gt apply(ResourceException error) {
+ *                             // Forward - assumes no authorization is required.
+ *                             return Promises.newExceptionPromise(error);
+ *                         }
+ *                     });
  *         } else {
  *             /*
  *              * Stop processing the request since it is not allowed.
@@ -162,7 +165,7 @@ public interface Filter {
      * Filters a query request.
      * <p>
      * Implementations which return results directly rather than forwarding the
-     * request should invoke {@link QueryResultHandler#handleResource(Resource)}
+     * request should invoke {@link QueryResourceHandler#handleResource(Resource)}
      * for each resource which matches the query criteria. Once all matching
      * resources have been returned implementations are required to return
      * either a {@link QueryResult} if the query has completed successfully, or
@@ -174,14 +177,14 @@ public interface Filter {
      * @param request
      *            The query request.
      * @param handler
-     *            The result handler.
+     *            The resource handler.
      * @param next
      *            A request handler representing the remainder of the filter
      *            chain.
      * @return A {@code Promise} containing the result of the operation.
      */
     Promise<QueryResult, ResourceException> filterQuery(ServerContext context, QueryRequest request,
-            QueryResultHandler handler, RequestHandler next);
+            QueryResourceHandler handler, RequestHandler next);
 
     /**
      * Filters a read request.

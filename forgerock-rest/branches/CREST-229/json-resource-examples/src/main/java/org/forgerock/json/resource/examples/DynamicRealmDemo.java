@@ -18,6 +18,8 @@ package org.forgerock.json.resource.examples;
 
 import static org.forgerock.json.resource.examples.DemoUtils.ctx;
 import static org.forgerock.json.resource.examples.DemoUtils.log;
+import static org.forgerock.util.promise.Promises.newExceptionPromise;
+import static org.forgerock.util.promise.Promises.newResultPromise;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -37,7 +39,7 @@ import org.forgerock.json.resource.NotSupportedException;
 import org.forgerock.json.resource.PatchRequest;
 import org.forgerock.json.resource.QueryRequest;
 import org.forgerock.json.resource.QueryResult;
-import org.forgerock.json.resource.QueryResultHandler;
+import org.forgerock.json.resource.QueryResourceHandler;
 import org.forgerock.json.resource.ReadRequest;
 import org.forgerock.json.resource.RequestHandler;
 import org.forgerock.json.resource.Requests;
@@ -47,7 +49,6 @@ import org.forgerock.json.resource.Resources;
 import org.forgerock.json.resource.UpdateRequest;
 import org.forgerock.json.resource.UriRouter;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 
 /**
  * An example illustrating how you can route realms / sub-realm requests using
@@ -100,42 +101,42 @@ public final class DynamicRealmDemo {
             public Promise<JsonValue, ResourceException> actionCollection(final ServerContext context,
                     final ActionRequest request) {
                 ResourceException e = new NotSupportedException();
-                return Promises.newExceptionPromise(e);
+                return newExceptionPromise(e);
             }
 
             @Override
             public Promise<JsonValue, ResourceException> actionInstance(final ServerContext context,
                     final String resourceId, final ActionRequest request) {
                 ResourceException e = new NotSupportedException();
-                return Promises.newExceptionPromise(e);
+                return newExceptionPromise(e);
             }
 
             @Override
             public Promise<Resource, ResourceException> createInstance(final ServerContext context,
                     final CreateRequest request) {
                 ResourceException e = new NotSupportedException();
-                return Promises.newExceptionPromise(e);
+                return newExceptionPromise(e);
             }
 
             @Override
             public Promise<Resource, ResourceException> deleteInstance(final ServerContext context,
                     final String resourceId, final DeleteRequest request) {
                 ResourceException e = new NotSupportedException();
-                return Promises.newExceptionPromise(e);
+                return newExceptionPromise(e);
             }
 
             @Override
             public Promise<Resource, ResourceException> patchInstance(final ServerContext context,
                     final String resourceId, final PatchRequest request) {
                 ResourceException e = new NotSupportedException();
-                return Promises.newExceptionPromise(e);
+                return newExceptionPromise(e);
             }
 
             @Override
             public Promise<QueryResult, ResourceException> queryCollection(final ServerContext context,
-                    final QueryRequest request, final QueryResultHandler handler) {
+                    final QueryRequest request, final QueryResourceHandler handler) {
                 ResourceException e = new NotSupportedException();
-                return Promises.newExceptionPromise(e);
+                return newExceptionPromise(e);
             }
 
             @Override
@@ -146,14 +147,14 @@ public final class DynamicRealmDemo {
                 log("    realm path  : " + path);
                 final JsonValue content =
                         new JsonValue(Collections.singletonMap("id", (Object) resourceId));
-                return Promises.newResultPromise(new Resource(resourceId, "1", content));
+                return newResultPromise(new Resource(resourceId, "1", content));
             }
 
             @Override
             public Promise<Resource, ResourceException> updateInstance(final ServerContext context,
                     final String resourceId, final UpdateRequest request) {
                 ResourceException e = new NotSupportedException();
-                return Promises.newExceptionPromise(e);
+                return newExceptionPromise(e);
             }
         };
     }

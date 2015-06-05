@@ -18,6 +18,7 @@ package org.forgerock.json.resource.examples;
 
 import static org.forgerock.json.resource.examples.DemoUtils.ctx;
 import static org.forgerock.json.resource.examples.DemoUtils.log;
+import static org.forgerock.util.promise.Promises.newResultPromise;
 
 import java.util.Collections;
 
@@ -33,7 +34,6 @@ import org.forgerock.json.resource.Resource;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.json.resource.Resources;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 
 /**
  * An example illustrating how you can route realms / sub-realm requests using
@@ -99,7 +99,7 @@ public final class SimpleRealmDemo {
 
                 final JsonValue content =
                         new JsonValue(Collections.singletonMap("id", (Object) name.leaf()));
-                return Promises.newResultPromise(new Resource(name.leaf(), "1", content));
+                return newResultPromise(new Resource(name.leaf(), "1", content));
             }
         };
     }

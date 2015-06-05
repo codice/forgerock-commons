@@ -29,8 +29,8 @@ class RequestHandlerUtils {
     }
 
     static <T> Promise<T, ResourceException> handle(AnnotatedMethod method, ServerContext context, Request request,
-            QueryResultHandler queryResultHandler) {
-        return method.invoke(context, request, queryResultHandler, null);
+            QueryResourceHandler queryResourceHandler) {
+        return method.invoke(context, request, queryResourceHandler, null);
     }
 
     static <T> Promise<T, ResourceException> handle(AnnotatedMethod method, ServerContext context, Request request,

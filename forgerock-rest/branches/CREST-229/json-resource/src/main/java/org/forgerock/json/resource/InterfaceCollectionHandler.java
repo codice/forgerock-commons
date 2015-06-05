@@ -16,10 +16,11 @@
 
 package org.forgerock.json.resource;
 
+import static org.forgerock.util.promise.Promises.newExceptionPromise;
+
 import org.forgerock.http.ServerContext;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 
 class InterfaceCollectionHandler implements RequestHandler {
     private final CollectionResourceProvider provider;
@@ -43,7 +44,7 @@ class InterfaceCollectionHandler implements RequestHandler {
     public final Promise<Resource, ResourceException> handleDelete(final ServerContext context,
             final DeleteRequest request) {
         // TODO: i18n
-        return Promises.newExceptionPromise(Resources.newBadRequestException(
+        return newExceptionPromise(Resources.newBadRequestException(
                 "The resource collection %s cannot be deleted", request.getResourcePath()));
     }
 
@@ -51,13 +52,13 @@ class InterfaceCollectionHandler implements RequestHandler {
     public final Promise<Resource, ResourceException> handlePatch(final ServerContext context,
             final PatchRequest request) {
         // TODO: i18n
-        return Promises.newExceptionPromise(Resources.newBadRequestException(
+        return newExceptionPromise(Resources.newBadRequestException(
                 "The resource collection %s cannot be patched", request.getResourcePath()));
     }
 
     @Override
     public Promise<QueryResult, ResourceException> handleQuery(final ServerContext context, final QueryRequest request,
-            final QueryResultHandler handler) {
+            final QueryResourceHandler handler) {
         return provider.queryCollection(Resources.parentOf(context), request, handler);
     }
 
@@ -65,7 +66,7 @@ class InterfaceCollectionHandler implements RequestHandler {
     public final Promise<Resource, ResourceException> handleRead(final ServerContext context,
             final ReadRequest request) {
         // TODO: i18n
-        return Promises.newExceptionPromise(Resources.newBadRequestException(
+        return newExceptionPromise(Resources.newBadRequestException(
                 "The resource collection %s cannot be read", request.getResourcePath()));
     }
 
@@ -73,7 +74,7 @@ class InterfaceCollectionHandler implements RequestHandler {
     public final Promise<Resource, ResourceException> handleUpdate(final ServerContext context,
             final UpdateRequest request) {
         // TODO: i18n
-        return Promises.newExceptionPromise(Resources.newBadRequestException(
+        return newExceptionPromise(Resources.newBadRequestException(
                 "The resource collection %s cannot be updated", request.getResourcePath()));
     }
 }

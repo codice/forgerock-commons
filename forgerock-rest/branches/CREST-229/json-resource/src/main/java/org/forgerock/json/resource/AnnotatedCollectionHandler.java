@@ -57,7 +57,7 @@ class AnnotatedCollectionHandler extends InterfaceCollectionHandler {
 
     @Override
     public Promise<QueryResult, ResourceException> handleQuery(ServerContext context, QueryRequest request,
-            QueryResultHandler handler) {
+            QueryResourceHandler handler) {
         return RequestHandlerUtils.handle(queryMethod, context, request, handler);
     }
 

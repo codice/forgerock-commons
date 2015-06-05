@@ -256,7 +256,7 @@ public class VersionedRouterTest {
                         .withDefaultResourceVersion(requestedVersion).build());
         ServerContext context = new ServerContext(apiVersionContext);
         QueryRequest request = Requests.newQueryRequest(resource);
-        QueryResultHandler handler = mock(QueryResultHandler.class);
+        QueryResourceHandler handler = mock(QueryResourceHandler.class);
 
         //When
         Promise<QueryResult, ResourceException> promise = router.handleQuery(context, request, handler);
@@ -448,7 +448,7 @@ public class VersionedRouterTest {
                 AcceptAPIVersion.newBuilder().withDefaultProtocolVersion("1.0").build());
         ServerContext context = new ServerContext(apiVersionContext);
         QueryRequest request = Requests.newQueryRequest(resource);
-        QueryResultHandler handler = mock(QueryResultHandler.class);
+        QueryResourceHandler handler = mock(QueryResourceHandler.class);
         setDefaultVersionBehaviour(versionRouter1, versionBehaviour);
         setDefaultVersionBehaviour(versionRouter2, versionBehaviour);
 

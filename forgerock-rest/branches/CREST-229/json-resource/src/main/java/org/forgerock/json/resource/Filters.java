@@ -86,7 +86,7 @@ public final class Filters {
 
         @Override
         public Promise<QueryResult, ResourceException> filterQuery(final ServerContext context,
-                final QueryRequest request, final QueryResultHandler handler, final RequestHandler next) {
+                final QueryRequest request, final QueryResourceHandler handler, final RequestHandler next) {
             if (condition.matches(context, request)) {
                 return subFilter.filterQuery(context, request, handler, next);
             } else {

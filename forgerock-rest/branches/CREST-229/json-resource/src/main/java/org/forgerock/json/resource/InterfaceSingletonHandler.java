@@ -16,10 +16,11 @@
 
 package org.forgerock.json.resource;
 
+import static org.forgerock.util.promise.Promises.newExceptionPromise;
+
 import org.forgerock.http.ServerContext;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 
 class InterfaceSingletonHandler implements RequestHandler {
     private final SingletonResourceProvider provider;
@@ -38,7 +39,7 @@ class InterfaceSingletonHandler implements RequestHandler {
     public final Promise<Resource, ResourceException> handleCreate(final ServerContext context,
             final CreateRequest request) {
         // TODO: i18n
-        return Promises.newExceptionPromise(Resources.newBadRequestException(
+        return newExceptionPromise(Resources.newBadRequestException(
                 "The singleton resource %s cannot be created", request.getResourcePath()));
     }
 
@@ -46,7 +47,7 @@ class InterfaceSingletonHandler implements RequestHandler {
     public final Promise<Resource, ResourceException> handleDelete(final ServerContext context,
             final DeleteRequest request) {
         // TODO: i18n
-        return Promises.newExceptionPromise(Resources.newBadRequestException(
+        return newExceptionPromise(Resources.newBadRequestException(
                 "The singleton resource %s cannot be deleted", request.getResourcePath()));
     }
 
@@ -57,9 +58,9 @@ class InterfaceSingletonHandler implements RequestHandler {
 
     @Override
     public final Promise<QueryResult, ResourceException> handleQuery(final ServerContext context, final QueryRequest request,
-            final QueryResultHandler handler) {
+            final QueryResourceHandler handler) {
         // TODO: i18n
-        return Promises.newExceptionPromise(Resources.newBadRequestException(
+        return newExceptionPromise(Resources.newBadRequestException(
                 "The singleton resource %s cannot be queried", request.getResourcePath()));
     }
 

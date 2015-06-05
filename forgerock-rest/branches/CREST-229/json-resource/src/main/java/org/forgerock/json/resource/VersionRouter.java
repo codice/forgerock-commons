@@ -19,6 +19,7 @@ package org.forgerock.json.resource;
 import static org.forgerock.json.resource.Resources.newCollection;
 import static org.forgerock.json.resource.Resources.newSingleton;
 import static org.forgerock.json.resource.VersionConstants.*;
+import static org.forgerock.util.promise.Promises.newExceptionPromise;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,7 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.forgerock.http.ServerContext;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 
 /**
  * <p>A request handler which routes requests using a request resource version.</p>
@@ -178,7 +178,7 @@ public final class VersionRouter implements RequestHandler {
         try {
             return getBestRoute(context).handleAction(context, request);
         } catch (ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -190,7 +190,7 @@ public final class VersionRouter implements RequestHandler {
         try {
             return getBestRoute(context).handleCreate(context, request);
         } catch (ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -202,7 +202,7 @@ public final class VersionRouter implements RequestHandler {
         try {
             return getBestRoute(context).handleDelete(context, request);
         } catch (ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -214,7 +214,7 @@ public final class VersionRouter implements RequestHandler {
         try {
             return getBestRoute(context).handlePatch(context, request);
         } catch (ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -223,11 +223,11 @@ public final class VersionRouter implements RequestHandler {
      */
     @Override
     public Promise<QueryResult, ResourceException> handleQuery(ServerContext context, QueryRequest request,
-            QueryResultHandler handler) {
+            QueryResourceHandler handler) {
         try {
             return getBestRoute(context).handleQuery(context, request, handler);
         } catch (ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -239,7 +239,7 @@ public final class VersionRouter implements RequestHandler {
         try {
             return getBestRoute(context).handleRead(context, request);
         } catch (ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -251,7 +251,7 @@ public final class VersionRouter implements RequestHandler {
         try {
             return getBestRoute(context).handleUpdate(context, request);
         } catch (ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 

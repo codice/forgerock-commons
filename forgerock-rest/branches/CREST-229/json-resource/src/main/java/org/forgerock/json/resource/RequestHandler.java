@@ -43,9 +43,6 @@ import org.forgerock.util.promise.Promise;
  * return Promises.newResultPromise(result);
  * </pre>
  *
- * Asynchronous implementations must take care to eventually set a result or a
- * failure on the result handler; i.e. they must catch all exceptions and set a
- * failure.
  * <p>
  * <b>NOTE:</b> field filtering alters the structure of a JSON resource and MUST
  * only be performed once while processing a request. It is therefore the
@@ -67,9 +64,9 @@ public interface RequestHandler {
      * basic Java types; its overall structure is defined by a specific
      * implementation.
      * <p>
-     * On completion, the action result (or null) must be set on the result
-     * handler. On failure, an exception must be set with setFailure on the
-     * result handler.
+     * On completion, the action result (or null) must be used to complete the
+     * returned {@code Promise}. On failure, the returned {@code Promise} must
+     * be completed with the exception.
      * <p>
      * Action expects failure exceptions as follows: {@code ForbiddenException}
      * if access to the resource is forbidden. {@code NotSupportedException} if
@@ -87,8 +84,8 @@ public interface RequestHandler {
     Promise<JsonValue, ResourceException> handleAction(ServerContext context, ActionRequest request);
 
     /**
-     * Adds a new JSON resource, invoking the provided result handler upon
-     * completion.
+     * Adds a new JSON resource, returning a {@code Promise} that will be
+     * completed when the resource has been added.
      * <p>
      * Create expects failure exceptions as follows:
      * <ul>
@@ -113,8 +110,8 @@ public interface RequestHandler {
     Promise<Resource, ResourceException> handleCreate(ServerContext context, CreateRequest request);
 
     /**
-     * Deletes a JSON resource, invoking the provided result handler upon
-     * completion.
+     * Deletes a JSON resource, returning a {@code Promise} that will be
+     * completed when the resource has been deleted.
      * <p>
      * Delete expects failure exceptions as follows:
      * <ul>
@@ -140,7 +137,8 @@ public interface RequestHandler {
 
     /**
      * Updates a JSON resource by applying a set of changes to its existing
-     * content, invoking the provided result handler upon completion.
+     * content, returning a {@code Promise} that will be completed when the
+     * resource has been updated.
      * <p>
      * Patch expects failure exceptions as follows:
      * <ul>
@@ -169,10 +167,11 @@ public interface RequestHandler {
 
     /**
      * Searches for all JSON resources matching a user specified set of
-     * criteria, invoking the provided query result handler upon completion.
+     * criteria, returning a {@code Promise} that will be completed when the
+     * search has completed.
      * <p>
      * Implementations must invoke
-     * {@link QueryResultHandler#handleResource(Resource)} for each resource
+     * {@link QueryResourceHandler#handleResource(Resource)} for each resource
      * which matches the query criteria. Once all matching resources have been
      * returned implementations are required to return either a
      * {@link QueryResult} if the query has completed successfully, or
@@ -195,16 +194,16 @@ public interface RequestHandler {
      * @param request
      *            The query request.
      * @param handler
-     *            The query result handler to be notified for each matching
+     *            The query resource handler to be notified for each matching
      *            resource.
      * @return A {@code Promise} containing the result of the operation.
      */
     Promise<QueryResult, ResourceException> handleQuery(ServerContext context, QueryRequest request,
-            QueryResultHandler handler);
+            QueryResourceHandler handler);
 
     /**
-     * Reads a JSON resource, invoking the provided result handler upon
-     * completion.
+     * Reads a JSON resource, returning a {@code Promise} that will be
+     * completed when the resource has been read.
      * <p>
      * Read expects failure exceptions as follows:
      * <ul>
@@ -227,7 +226,8 @@ public interface RequestHandler {
 
     /**
      * Updates a JSON resource by replacing its existing content with new
-     * content, invoking the provided result handler upon completion.
+     * content, returning a {@code Promise} that will be completed when the
+     * resource has been updated.
      * <p>
      * Update expects failure the following failure exceptions:
      * <ul>

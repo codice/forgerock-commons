@@ -16,6 +16,8 @@
 
 package org.forgerock.json.resource;
 
+import org.forgerock.http.ServerContext;
+
 /**
  * A completion handler for consuming the results of a query request.
  * <p>
@@ -36,15 +38,20 @@ package org.forgerock.json.resource;
  * resource. Invocation of {@code handleResource} for the final resource
  * <i>happens-before</i> returning a {@link QueryResult} or a
  * {@link ResourceException} are invoked with the final query status. In other
- * words, query result handler method invocations will occur sequentially and
+ * words, query resource handler method invocations will occur sequentially and
  * one at a time.
  */
-public interface QueryResultHandler {
+public interface QueryResourceHandler {
 
     /**
      * Invoked each time a matching JSON resource is returned from a query
      * request. More specifically, if a query request matches 10 resources, then
      * this method will be invoked 10 times, once for each matching resource.
+     *
+     * <p>Refer to
+     * {@link RequestHandler#handleQuery(ServerContext, QueryRequest, QueryResourceHandler)}
+     * for information regarding the concurrency and the order in which events
+     * are processed.</p>
      *
      * @param resource
      *            The matching JSON resource.

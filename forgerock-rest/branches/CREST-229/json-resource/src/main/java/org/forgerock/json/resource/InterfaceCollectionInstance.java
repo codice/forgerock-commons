@@ -16,10 +16,11 @@
 
 package org.forgerock.json.resource;
 
+import static org.forgerock.util.promise.Promises.newExceptionPromise;
+
 import org.forgerock.http.ServerContext;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 
 class InterfaceCollectionInstance implements RequestHandler {
     private final CollectionResourceProvider provider;
@@ -37,7 +38,7 @@ class InterfaceCollectionInstance implements RequestHandler {
     public final Promise<Resource, ResourceException> handleCreate(final ServerContext context,
             final CreateRequest request) {
         // TODO: i18n
-        return Promises.newExceptionPromise(Resources.newBadRequestException(
+        return newExceptionPromise(Resources.newBadRequestException(
                 "The resource instance %s cannot be created", request.getResourcePath()));
     }
 
@@ -53,9 +54,9 @@ class InterfaceCollectionInstance implements RequestHandler {
 
     @Override
     public final Promise<QueryResult, ResourceException> handleQuery(final ServerContext context,
-            final QueryRequest request, QueryResultHandler handler) {
+            final QueryRequest request, QueryResourceHandler handler) {
         // TODO: i18n
-        return Promises.newExceptionPromise(Resources.newBadRequestException(
+        return newExceptionPromise(Resources.newBadRequestException(
                 "The resource instance %s cannot be queried", request.getResourcePath()));
     }
 
