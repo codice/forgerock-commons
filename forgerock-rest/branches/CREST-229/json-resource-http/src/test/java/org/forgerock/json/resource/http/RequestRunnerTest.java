@@ -18,6 +18,8 @@ package org.forgerock.json.resource.http;
 
 import static org.forgerock.http.test.HttpTest.newRequest;
 import static org.forgerock.json.fluent.JsonValue.*;
+import static org.forgerock.util.promise.Promises.newExceptionPromise;
+import static org.forgerock.util.promise.Promises.newResultPromise;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
@@ -31,12 +33,11 @@ import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.Connection;
 import org.forgerock.json.resource.QueryRequest;
 import org.forgerock.json.resource.QueryResult;
-import org.forgerock.json.resource.QueryResultHandler;
+import org.forgerock.json.resource.QueryResourceHandler;
 import org.forgerock.json.resource.Requests;
 import org.forgerock.json.resource.Resource;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testng.annotations.Test;
@@ -45,22 +46,20 @@ import org.testng.annotations.Test;
 public class RequestRunnerTest {
 
     private static final ResourceException EXCEPTION = ResourceException.getException(ResourceException.NOT_FOUND);
-    private static final Promise<QueryResult, ResourceException> QUERY_RESULT =
-            Promises.newResultPromise(new QueryResult());
-    private static final Promise<QueryResult, ResourceException> RESOURCE_EXCEPTION =
-            Promises.newExceptionPromise(EXCEPTION);
+    private static final Promise<QueryResult, ResourceException> QUERY_RESULT = newResultPromise(new QueryResult());
+    private static final Promise<QueryResult, ResourceException> RESOURCE_EXCEPTION = newExceptionPromise(EXCEPTION);
 
     @Test
-    public void testHandleResultAnonymousQueryResultHandlerInVisitQueryAsync() throws Exception {
-        Response response = getAnonymousQueryResultHandler(QUERY_RESULT);
+    public void testHandleResultAnonymousQueryResourceHandlerInVisitQueryAsync() throws Exception {
+        Response response = getAnonymousQueryResourceHandler(QUERY_RESULT);
         assertEquals(getResponseContent(response), "{" + "\"result\":[],"
                 + "\"resultCount\":0,\"pagedResultsCookie\":null,\"remainingPagedResults\":-1"
                 + "}");
     }
 
     @Test
-    public void testHandleResourceAnonymousQueryResultHandlerInVisitQueryAsync() throws Exception {
-        Response response = getAnonymousQueryResultHandler(QUERY_RESULT,
+    public void testHandleResourceAnonymousQueryResourceHandlerInVisitQueryAsync() throws Exception {
+        Response response = getAnonymousQueryResourceHandler(QUERY_RESULT,
                 new Resource("id", "revision", new JsonValue("jsonValue")));
         assertEquals(getResponseContent(response), "{" + "\"result\":[\"jsonValue\"],"
                 + "\"resultCount\":1,\"pagedResultsCookie\":null,\"remainingPagedResults\":-1"
@@ -68,9 +67,9 @@ public class RequestRunnerTest {
     }
 
     @Test
-    public void testHandleResourceTwoAnonymousQueryResultHandlerInVisitQueryAsync()
+    public void testHandleResourceTwoAnonymousQueryResourceHandlerInVisitQueryAsync()
             throws Exception {
-        Response response = getAnonymousQueryResultHandler(QUERY_RESULT,
+        Response response = getAnonymousQueryResourceHandler(QUERY_RESULT,
                 new Resource("id", "revision",
                         json(object(field("intField", 42), field("stringField", "stringValue")))),
                 new Resource("id", "revision",
@@ -83,15 +82,15 @@ public class RequestRunnerTest {
     }
 
     @Test
-    public void testHandleErrorAnonymousQueryResultHandlerInVisitQueryAsync() throws Exception {
-        Response response = getAnonymousQueryResultHandler(RESOURCE_EXCEPTION);
+    public void testHandleErrorAnonymousQueryResourceHandlerInVisitQueryAsync() throws Exception {
+        Response response = getAnonymousQueryResourceHandler(RESOURCE_EXCEPTION);
         assertEquals(getResponseContent(response), "{\"code\":404,\"reason\":\"Not Found\",\"message\":\"Not Found\"}");
     }
 
     @Test
-    public void testHandleResourceThenErrorAnonymousQueryResultHandlerInVisitQueryAsync()
+    public void testHandleResourceThenErrorAnonymousQueryResourceHandlerInVisitQueryAsync()
             throws Exception {
-        Response response = getAnonymousQueryResultHandler(RESOURCE_EXCEPTION,
+        Response response = getAnonymousQueryResourceHandler(RESOURCE_EXCEPTION,
                 new Resource("id", "revision",
                         json(object(field("intField", 42), field("stringField", "stringValue")))));
         assertEquals(getResponseContent(response), "{\"code\":404,\"reason\":\"Not Found\",\"message\":\"Not Found\"}");
@@ -103,7 +102,7 @@ public class RequestRunnerTest {
         return new String(outputStream.toByteArray());
     }
 
-    private Response getAnonymousQueryResultHandler(final Promise<QueryResult, ResourceException> queryPromise,
+    private Response getAnonymousQueryResourceHandler(final Promise<QueryResult, ResourceException> queryPromise,
             final Resource... resources) throws Exception {
         // mock everything
         Context context = mock(Context.class);
@@ -113,11 +112,11 @@ public class RequestRunnerTest {
         Connection connection = mock(Connection.class);
 
         // set the expectations
-        when(connection.queryAsync(eq(context), eq(request), any(QueryResultHandler.class)))
+        when(connection.queryAsync(eq(context), eq(request), any(QueryResourceHandler.class)))
                 .thenAnswer(new Answer<Promise<QueryResult, ResourceException>>() {
                     @Override
                     public Promise<QueryResult, ResourceException> answer(InvocationOnMock invocationOnMock) {
-                        QueryResultHandler handler = (QueryResultHandler) invocationOnMock.getArguments()[2];
+                        QueryResourceHandler handler = (QueryResourceHandler) invocationOnMock.getArguments()[2];
                         for (Resource resource : resources) {
                             handler.handleResource(resource);
                         }

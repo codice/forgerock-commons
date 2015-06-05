@@ -116,7 +116,7 @@ public interface SynchronousRequestHandler {
      * @throws ResourceException
      *             If the request failed for some reason.
      * @see RequestHandler#handleQuery(ServerContext, QueryRequest,
-     *      QueryResultHandler)
+     *      QueryResourceHandler)
      */
     QueryResult handleQuery(ServerContext context, QueryRequest request,
             Collection<Resource> resources) throws ResourceException;

@@ -71,13 +71,12 @@ final class InternalConnection extends AbstractAsynchronousConnection {
 
     @Override
     public Promise<QueryResult, ResourceException> queryAsync(final Context context,
-            final QueryRequest request, final QueryResultHandler handler) {
+            final QueryRequest request, final QueryResourceHandler handler) {
         return requestHandler.handleQuery(getServerContext(context), request,
-                new QueryResultHandler() {
+                new QueryResourceHandler() {
                     @Override
                     public boolean handleResource(Resource resource) {
-                        return handler == null ||
-                                handler.handleResource(Resources.filterResource(resource, request.getFields()));
+                        return handler.handleResource(Resources.filterResource(resource, request.getFields()));
                     }
                 });
     }

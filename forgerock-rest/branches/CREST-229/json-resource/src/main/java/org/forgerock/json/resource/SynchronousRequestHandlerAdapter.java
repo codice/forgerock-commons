@@ -16,13 +16,15 @@
 
 package org.forgerock.json.resource;
 
+import static org.forgerock.util.promise.Promises.newExceptionPromise;
+import static org.forgerock.util.promise.Promises.newResultPromise;
+
 import java.util.Collection;
 import java.util.LinkedList;
 
 import org.forgerock.http.ServerContext;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 
 /**
  * Implementation class for {@link Resources#asRequestHandler}.
@@ -37,60 +39,60 @@ final class SynchronousRequestHandlerAdapter implements RequestHandler {
     @Override
     public Promise<Resource, ResourceException> handleUpdate(final ServerContext context, final UpdateRequest request) {
         try {
-            return Promises.newResultPromise(syncHandler.handleUpdate(context, request));
+            return newResultPromise(syncHandler.handleUpdate(context, request));
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
     @Override
     public Promise<Resource, ResourceException> handleRead(final ServerContext context, final ReadRequest request) {
         try {
-            return Promises.newResultPromise(syncHandler.handleRead(context, request));
+            return newResultPromise(syncHandler.handleRead(context, request));
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
     @Override
     public Promise<QueryResult, ResourceException> handleQuery(final ServerContext context, final QueryRequest request,
-            final QueryResultHandler handler) {
+            final QueryResourceHandler handler) {
         try {
             final Collection<Resource> resources = new LinkedList<Resource>();
             final QueryResult result = syncHandler.handleQuery(context, request, resources);
             for (final Resource resource : resources) {
                 handler.handleResource(resource);
             }
-            return Promises.newResultPromise(result);
+            return newResultPromise(result);
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
     @Override
     public Promise<Resource, ResourceException> handlePatch(final ServerContext context, final PatchRequest request) {
         try {
-            return Promises.newResultPromise(syncHandler.handlePatch(context, request));
+            return newResultPromise(syncHandler.handlePatch(context, request));
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
     @Override
     public Promise<Resource, ResourceException> handleDelete(final ServerContext context, final DeleteRequest request) {
         try {
-            return Promises.newResultPromise(syncHandler.handleDelete(context, request));
+            return newResultPromise(syncHandler.handleDelete(context, request));
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
     @Override
     public Promise<Resource, ResourceException> handleCreate(final ServerContext context, final CreateRequest request) {
         try {
-            return Promises.newResultPromise(syncHandler.handleCreate(context, request));
+            return newResultPromise(syncHandler.handleCreate(context, request));
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -98,9 +100,9 @@ final class SynchronousRequestHandlerAdapter implements RequestHandler {
     public Promise<JsonValue, ResourceException> handleAction(final ServerContext context,
             final ActionRequest request) {
         try {
-            return Promises.newResultPromise(syncHandler.handleAction(context, request));
+            return newResultPromise(syncHandler.handleAction(context, request));
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 }

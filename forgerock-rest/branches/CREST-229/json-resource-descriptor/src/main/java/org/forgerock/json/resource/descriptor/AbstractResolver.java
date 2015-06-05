@@ -16,12 +16,13 @@
 
 package org.forgerock.json.resource.descriptor;
 
+import static org.forgerock.util.promise.Promises.newResultPromise;
+
 import java.util.Collection;
 
 import org.forgerock.json.resource.RequestHandler;
 import org.forgerock.json.resource.ResourceException;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 
 public abstract class AbstractResolver implements Resolver {
 
@@ -37,7 +38,7 @@ public abstract class AbstractResolver implements Resolver {
     public Promise<Collection<RelationDescriptor>, ResourceException> getRelationsForResource(
             final RelationDescriptor relation, final String resourceId) {
         Collection<RelationDescriptor> descriptors = relation.getResource().getRelations();
-        return Promises.newResultPromise(descriptors);
+        return newResultPromise(descriptors);
     }
 
     @Override

@@ -16,6 +16,8 @@
 
 package org.forgerock.json.resource;
 
+import static org.forgerock.util.promise.Promises.newResultPromise;
+import static org.forgerock.util.promise.Promises.when;
 import static org.forgerock.util.test.assertj.AssertJPromiseAssert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
@@ -64,9 +66,9 @@ public final class FilterChainTest {
         final ReadRequest request = Requests.newReadRequest("read");
 
         // The handler will be invoked twice which is obviously unrealistic. In practice,
-        // filter1 will wrap the result handler and combine/reduce the result of the two
-        // sub-reads to produce a single read response. We won't do that here in order
-        // to keep the test simple.
+        // filter1 will chain the downstream handler's returned promise and combine/reduce
+        // the result of the two sub-reads to produce a single read response. We won't do
+        // that here in order to keep the test simple.
         Promise<Resource, ResourceException> promise = chain.handleRead(context, request);
 
         final InOrder inOrder = inOrder(filter1, filter2, target);
@@ -212,7 +214,7 @@ public final class FilterChainTest {
         final FilterChain chain = new FilterChain(target, filter1, filter2);
         final ServerContext context = context();
         final QueryRequest request = Requests.newQueryRequest("query");
-        final QueryResultHandler handler = mock(QueryResultHandler.class);
+        final QueryResourceHandler handler = mock(QueryResourceHandler.class);
 
         // Test twice to ensure that no state is carried over.
         final InOrder inOrder = inOrder(filter1, filter2, target, handler);
@@ -282,7 +284,7 @@ public final class FilterChainTest {
         doAnswer(invoke()).when(filter).filterPatch(any(ServerContext.class),
                 any(PatchRequest.class), any(RequestHandler.class));
         doAnswer(invoke()).when(filter).filterQuery(any(ServerContext.class),
-                any(QueryRequest.class), any(QueryResultHandler.class), any(RequestHandler.class));
+                any(QueryRequest.class), any(QueryResourceHandler.class), any(RequestHandler.class));
         doAnswer(invoke()).when(filter).filterRead(any(ServerContext.class),
                 any(ReadRequest.class), any(RequestHandler.class));
         doAnswer(invoke()).when(filter).filterUpdate(any(ServerContext.class),
@@ -301,10 +303,10 @@ public final class FilterChainTest {
                 final Object[] args = invocation.getArguments();
                 final ServerContext context = (ServerContext) args[0];
                 final Request request = (Request) args[1];
-                QueryResultHandler handler = null;
+                QueryResourceHandler handler = null;
                 final RequestHandler next;
                 if (args.length > 3) {
-                    handler = (QueryResultHandler) args[2];
+                    handler = (QueryResourceHandler) args[2];
                     next = (RequestHandler) args[3];
                 } else {
                     next = (RequestHandler) args[2];
@@ -335,11 +337,11 @@ public final class FilterChainTest {
                             break;
                     }
                 }
-                return Promises.when(promises)
+                return when(promises)
                         .thenAsync(new AsyncFunction<List<R>, R, ResourceException>() {
                             @Override
                             public Promise<R, ResourceException> apply(List<R> rs) throws ResourceException {
-                                return Promises.newResultPromise(rs.get(rs.size() - 1));
+                                return newResultPromise(rs.get(rs.size() - 1));
                             }
                         });
             }
@@ -356,7 +358,7 @@ public final class FilterChainTest {
                 .willReturn(Promises.<Resource, ResourceException>newResultPromise(RESOURCE));
         given(target.handlePatch(any(ServerContext.class), any(PatchRequest.class)))
                 .willReturn(Promises.<Resource, ResourceException>newResultPromise(RESOURCE));
-        given(target.handleQuery(any(ServerContext.class), any(QueryRequest.class), any(QueryResultHandler.class)))
+        given(target.handleQuery(any(ServerContext.class), any(QueryRequest.class), any(QueryResourceHandler.class)))
                 .willReturn(Promises.<QueryResult, ResourceException>newResultPromise(QUERY_RESULT));
         given(target.handleRead(any(ServerContext.class), any(ReadRequest.class)))
                 .willReturn(Promises.<Resource, ResourceException>newResultPromise(RESOURCE));

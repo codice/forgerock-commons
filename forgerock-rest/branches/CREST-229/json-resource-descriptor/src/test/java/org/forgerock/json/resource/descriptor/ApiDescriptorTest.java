@@ -19,6 +19,7 @@ package org.forgerock.json.resource.descriptor;
 import static org.forgerock.json.fluent.JsonValue.*;
 import static org.forgerock.json.resource.Requests.newReadRequest;
 import static org.forgerock.json.resource.descriptor.Api.JSON_MAPPER;
+import static org.forgerock.util.promise.Promises.newResultPromise;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -41,7 +42,6 @@ import org.forgerock.json.resource.ResourceException;
 import org.forgerock.json.resource.Resources;
 import org.forgerock.json.resource.descriptor.RelationDescriptor.Multiplicity;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 import org.testng.annotations.Test;
 
 @SuppressWarnings("javadoc")
@@ -82,7 +82,7 @@ public final class ApiDescriptorTest {
                     System.out.println("Queried " + relation + " : " + resourceId);
                     realmList.add(resourceId);
                     Collection<RelationDescriptor> descriptors = relation.getResource().getRelations();
-                    return Promises.newResultPromise(descriptors);
+                    return newResultPromise(descriptors);
                 }
 
                 @Override
@@ -98,7 +98,7 @@ public final class ApiDescriptorTest {
                                 System.out.println("Reading user from realm " + realmList);
                                 final JsonValue content =
                                         json(object(field("id", request.getResourcePath())));
-                                return Promises.newResultPromise(new Resource(request.getResourcePath(), "1",
+                                return newResultPromise(new Resource(request.getResourcePath(), "1",
                                         content));
                             }
                         };

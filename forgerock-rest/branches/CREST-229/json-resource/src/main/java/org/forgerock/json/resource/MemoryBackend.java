@@ -16,6 +16,11 @@
 
 package org.forgerock.json.resource;
 
+import static org.forgerock.json.resource.ResourceException.newBadRequestException;
+import static org.forgerock.json.resource.ResourceException.newNotSupportedException;
+import static org.forgerock.util.promise.Promises.newExceptionPromise;
+import static org.forgerock.util.promise.Promises.newResultPromise;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,7 +37,6 @@ import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.fluent.JsonValueException;
 import org.forgerock.util.promise.Promise;
-import org.forgerock.util.promise.Promises;
 import org.forgerock.util.query.QueryFilterVisitor;
 
 /**
@@ -326,12 +330,6 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 || (v1 instanceof Boolean && v2 instanceof Boolean);
     }
 
-    /*
-     * Throughout this map backend we take care not to invoke result handlers
-     * while holding locks since result handlers may perform blocking IO
-     * operations.
-     */
-
     private final AtomicLong nextResourceId = new AtomicLong();
     private final Map<String, Resource> resources = new ConcurrentHashMap<String, Resource>();
     private final Object writeLock = new Object();
@@ -358,13 +356,13 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 }
                 final JsonValue result = new JsonValue(new LinkedHashMap<String, Object>(1));
                 result.put("cleared", size);
-                return Promises.newResultPromise(result);
+                return newResultPromise(result);
             } else {
                 throw new NotSupportedException("Unrecognized action ID '" + request.getAction()
                         + "'. Supported action IDs: clear");
             }
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -376,7 +374,7 @@ public final class MemoryBackend implements CollectionResourceProvider {
             final ActionRequest request) {
         final ResourceException e =
                 new NotSupportedException("Actions are not supported for resource instances");
-        return Promises.newExceptionPromise(e);
+        return newExceptionPromise(e);
     }
 
     /**
@@ -414,9 +412,9 @@ public final class MemoryBackend implements CollectionResourceProvider {
                     }
                 }
             }
-            return Promises.newResultPromise(resource);
+            return newResultPromise(resource);
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -433,9 +431,9 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 resource = getResourceForUpdate(id, rev);
                 resources.remove(id);
             }
-            return Promises.newResultPromise(resource);
+            return newResultPromise(resource);
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -515,9 +513,9 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 addIdAndRevision(resource);
                 resources.put(id, resource);
             }
-            return Promises.newResultPromise(resource);
+            return newResultPromise(resource);
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -526,11 +524,11 @@ public final class MemoryBackend implements CollectionResourceProvider {
      */
     @Override
     public Promise<QueryResult, ResourceException> queryCollection(final ServerContext context,
-            final QueryRequest request, final QueryResultHandler handler) {
+            final QueryRequest request, final QueryResourceHandler handler) {
         if (request.getQueryId() != null) {
-            return Promises.newExceptionPromise((ResourceException) new NotSupportedException("Query by ID not supported"));
+            return newExceptionPromise(newNotSupportedException("Query by ID not supported"));
         } else if (request.getQueryExpression() != null) {
-            return Promises.newExceptionPromise((ResourceException) new NotSupportedException("Query by expression not supported"));
+            return newExceptionPromise(newNotSupportedException("Query by expression not supported"));
         } else {
             // No filtering or query by filter.
             final org.forgerock.util.query.QueryFilter<JsonPointer> filter = request.getQueryFilter();
@@ -548,7 +546,7 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 try {
                     firstResultIndex = Integer.parseInt(pagedResultsCookie);
                 } catch (final NumberFormatException e) {
-                    return Promises.newExceptionPromise((ResourceException) new BadRequestException("Invalid paged results cookie"));
+                    return newExceptionPromise((newBadRequestException("Invalid paged results cookie"));
                 }
             }
             final int lastResultIndex =
@@ -589,9 +587,9 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 final String nextCookie =
                         resultIndex > lastResultIndex ? String.valueOf(lastResultIndex) : null;
                 final int remaining = Math.max(resultIndex - lastResultIndex, 0);
-                return Promises.newResultPromise(new QueryResult(nextCookie, remaining));
+                return newResultPromise(new QueryResult(nextCookie, remaining));
             } else {
-                return Promises.newResultPromise(new QueryResult());
+                return newResultPromise(new QueryResult());
             }
         }
     }
@@ -608,9 +606,9 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 throw new NotFoundException("The resource with ID '" + id
                         + "' could not be read because it does not exist");
             }
-            return Promises.newResultPromise(resource);
+            return newResultPromise(resource);
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 
@@ -630,9 +628,9 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 addIdAndRevision(resource);
                 resources.put(id, resource);
             }
-            return Promises.newResultPromise(resource);
+            return newResultPromise(resource);
         } catch (final ResourceException e) {
-            return Promises.newExceptionPromise(e);
+            return newExceptionPromise(e);
         }
     }
 

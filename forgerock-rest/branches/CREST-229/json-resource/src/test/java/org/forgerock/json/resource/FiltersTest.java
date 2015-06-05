@@ -202,7 +202,7 @@ public final class FiltersTest {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private <R> Promise<R, ResourceException> invokeFilter(final ServerContext context, final RequestType type,
-            final Filter filter, final QueryResultHandler handler, final RequestHandler next) {
+            final Filter filter, final QueryResourceHandler handler, final RequestHandler next) {
         switch (type) {
             case ACTION:
                 return (Promise<R, ResourceException>) filter.filterAction(context, ACTION_REQUEST, next);
@@ -245,8 +245,8 @@ public final class FiltersTest {
     }
 
     @SuppressWarnings({ "rawtypes" })
-    private QueryResultHandler mockHandler(final RequestType type) {
-        return type == RequestType.QUERY ? mock(QueryResultHandler.class) : null;
+    private QueryResourceHandler mockHandler(final RequestType type) {
+        return type == RequestType.QUERY ? mock(QueryResourceHandler.class) : null;
     }
 
     private Request request(final RequestType type) {

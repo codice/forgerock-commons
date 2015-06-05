@@ -93,7 +93,7 @@ public final class FilterChain implements RequestHandler {
 
         @Override
         public Promise<QueryResult, ResourceException> handleQuery(final ServerContext context,
-                final QueryRequest request, final QueryResultHandler handler) {
+                final QueryRequest request, final QueryResourceHandler handler) {
             if (hasNext()) {
                 return get().filterQuery(context, request, handler, next());
             } else {
@@ -224,7 +224,7 @@ public final class FilterChain implements RequestHandler {
 
     @Override
     public Promise<QueryResult, ResourceException> handleQuery(final ServerContext context, final QueryRequest request,
-            final QueryResultHandler handler) {
+            final QueryResourceHandler handler) {
         return new Cursor().handleQuery(context, request, handler);
     }
 
