@@ -546,7 +546,7 @@ public final class MemoryBackend implements CollectionResourceProvider {
                 try {
                     firstResultIndex = Integer.parseInt(pagedResultsCookie);
                 } catch (final NumberFormatException e) {
-                    return newExceptionPromise((newBadRequestException("Invalid paged results cookie"));
+                    return newExceptionPromise(newBadRequestException("Invalid paged results cookie"));
                 }
             }
             final int lastResultIndex =
