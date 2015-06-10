@@ -78,6 +78,11 @@ public class AsciidocToDocBook {
                             element("baseDir", m.path(m.getAsciidocSourceDirectory())),
                             element("outputDirectory", m.path(m.getDocbkxModifiableSourcesDirectory())),
                             element("preserveDirectories", "true"),
+                            element("extensions",
+                                    element("extension", ".ad"),
+                                    element("extension", ".adoc"),
+                                    element("extension", ".asciidoc"),
+                                    element("extension", ".txt")),
                             element("backend", "docbook"),
                             element("doctype", "book")),
                     executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
