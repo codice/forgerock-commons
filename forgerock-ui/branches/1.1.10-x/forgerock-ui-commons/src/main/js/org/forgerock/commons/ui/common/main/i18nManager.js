@@ -1,7 +1,7 @@
 /**
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014 ForgeRock AS. All rights reserved.
+ * Copyright (c) 2014-2015 ForgeRock AS. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -22,7 +22,7 @@
  * "Portions Copyrighted [year] [name of copyright owner]"
  */
 
-/*global define */
+/*global require, define */
 
 /**
  * @author jkigwana
@@ -32,13 +32,13 @@ define( "org/forgerock/commons/ui/common/main/i18nManager", [
     "jquery",
     "org/forgerock/commons/ui/common/util/Constants",
     "org/forgerock/commons/ui/common/util/UIUtils"
-], function($, consts, uiUtils) {
+], function($, Constants, uiUtils) {
 
     /*
      * i18nManger with i18next try to detect the user language and load the corresponding translation in the following order:
      * 1) The query string parameter (&locale=fr)
      * 2) lang, a 2 digit language code passed in from server.
-     * 3) The default language set inside consts.DEFAULT_LANGUAGE
+     * 3) The default language set inside Constants.DEFAULT_LANGUAGE
      */
 
     var obj = {};
@@ -58,7 +58,15 @@ define( "org/forgerock/commons/ui/common/main/i18nManager", [
         obj.lang = lang;
 
    
-        opts = { fallbackLng: consts.DEFAULT_LANGUAGE, detectLngQS: 'locale', useCookie:false, getAsync: false, lng:lang, load: 'unspecific' };
+        opts = {
+            fallbackLng: Constants.DEFAULT_LANGUAGE,
+            detectLngQS: 'locale',
+            useCookie:false,
+            getAsync: false,
+            lng:lang,
+            load: 'unspecific',
+            resGetPath: require.toUrl('locales/__lng__/__ns__.json')
+        };
 
         $.i18n.init(opts);
 

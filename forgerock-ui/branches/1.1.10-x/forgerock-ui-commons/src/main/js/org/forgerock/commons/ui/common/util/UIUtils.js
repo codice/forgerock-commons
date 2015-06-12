@@ -1,7 +1,7 @@
 /**
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2011-2014 ForgeRock AS. All rights reserved.
+ * Copyright (c) 2011-2015 ForgeRock AS. All rights reserved.
  *
  * The contents of this file are subject to the terms
  * of the Common Development and Distribution License
@@ -22,7 +22,7 @@
  * "Portions Copyrighted [year] [name of copyright owner]"
  */
 
-/*global define, window, Handlebars, i18n, sessionStorage */
+/*global require, define, window, Handlebars, i18n, sessionStorage */
 /*jslint regexp: false*/
 
 define("org/forgerock/commons/ui/common/util/UIUtils", [
@@ -395,7 +395,7 @@ define("org/forgerock/commons/ui/common/util/UIUtils", [
             } else {
                 $.ajax({
                     type: "GET",
-                    url: templateUrl,
+                    url: require.toUrl(templateUrl),
                     dataType: "html",
                     success: function(template) {
                         if(data === 'unknown' || data === null) {
@@ -421,7 +421,7 @@ define("org/forgerock/commons/ui/common/util/UIUtils", [
     obj.reloadTemplate = function(url) {
         $.ajax({
             type: "GET",
-            url: url,
+            url: require.toUrl(url),
             dataType: "html",
             success: function(template) {
                 obj.templates[url] = template;
