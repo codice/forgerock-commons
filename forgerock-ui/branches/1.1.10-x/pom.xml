@@ -2,7 +2,7 @@
 <!--
   ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
   ~
-  ~ Copyright (c) 2011-2014 ForgeRock AS. All Rights Reserved
+  ~ Copyright (c) 2011-2015 ForgeRock AS. All Rights Reserved
   ~
   ~ The contents of this file are subject to the terms
   ~ of the Common Development and Distribution License
@@ -36,16 +36,16 @@
 
     <groupId>org.forgerock.commons.ui</groupId>
     <artifactId>forgerock-ui</artifactId>
-    <version>1.1.10</version>
+    <version>1.1.10-1-SNAPSHOT</version>
     <name>Forgerock Web UI</name>
     <description>Common modern ForgeRock Web UI</description>
     <packaging>pom</packaging>
 
     <inceptionYear>2012</inceptionYear>
     <scm>
-        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-ui/tags/1.1.10</connection>
-        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-ui/tags/1.1.10</developerConnection>
-        <url>http://sources.forgerock.org/browse/commons/forgerock-ui/tags/1.1.10</url>
+        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-ui/branches/1.1.10-x</connection>
+        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-ui/branches/1.1.10-x</developerConnection>
+        <url>http://sources.forgerock.org/browse/commons/forgerock-ui/branches/1.1.10-x</url>
     </scm>
     <distributionManagement>
         <site>
