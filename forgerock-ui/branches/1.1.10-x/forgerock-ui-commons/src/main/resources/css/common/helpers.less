@@ -116,7 +116,7 @@ a.button {
     text-decoration: none;
 }
 a.img-close {
-    background: url('../../images/cross.png') no-repeat;
+    background: url('../../images/cross.png?v=@{commons-ui-version}') no-repeat;
     width: 20px;
     height: 20px;
     display-inline: block;
@@ -185,11 +185,11 @@ a.img-close {
 }
 
 .linear-gradient-with-image (@background-url: none, @background-repeat: no-repeat, @background-position: center center, @position: left top, @color-start: #fcfcfc 0%, @color-end: #ededed 53%) {
-    background-image: url("@{background-url}"), linear-gradient(@position, @color-start, @color-end);
-    background-image: url("@{background-url}"), -o-linear-gradient(@position, @color-start, @color-end);
-    background-image: url("@{background-url}"), -moz-linear-gradient(@position, @color-start, @color-end);
-    background-image: url("@{background-url}"), -webkit-linear-gradient(@position, @color-start, @color-end);
-    background-image: url("@{background-url}"), -ms-linear-gradient(@position, @color-start, @color-end);
+    background-image: url("@{background-url}?v=@{commons-ui-version}"), linear-gradient(@position, @color-start, @color-end);
+    background-image: url("@{background-url}?v=@{commons-ui-version}"), -o-linear-gradient(@position, @color-start, @color-end);
+    background-image: url("@{background-url}?v=@{commons-ui-version}"), -moz-linear-gradient(@position, @color-start, @color-end);
+    background-image: url("@{background-url}?v=@{commons-ui-version}"), -webkit-linear-gradient(@position, @color-start, @color-end);
+    background-image: url("@{background-url}?v=@{commons-ui-version}"), -ms-linear-gradient(@position, @color-start, @color-end);
     background-repeat: @background-repeat;
     background-position: @background-position;
 }
@@ -442,17 +442,17 @@ a.img-close {
     border:none;
     padding:0;
     background-color:transparent;
-    background-image: url(@glyph-icon-url);
+    background-image: url('@{glyph-icon-url}?v=@{commons-ui-version}');
     cursor:@cursor;
     display:inline-block;
     width:13px;
     height:13px;
 }
 .glyph-icon-active {
-    background-image: url(@glyph-icon-active-url);
+    background-image: url('@{glyph-icon-active-url}?v=@{commons-ui-version}');
 }
 .glyph-icon-inactive {
-    background-image: url(@glyph-icon-inactive-url);
+    background-image: url('@{glyph-icon-inactive-url}?v=@{commons-ui-version}');
 }
 .glyph-icon-minus-sign {
     background-position: -24px -96px;
