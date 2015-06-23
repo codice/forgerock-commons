@@ -30,17 +30,21 @@
 
  <title>Getting Support and Contacting ForgeRock</title>
  <para>
-  ForgeRock provides Support Services, Professional Services, University
-  Training classes and Partner Services to assist you in your deployment.
+  ForgeRock provides support services, professional services, classes through
+  ForgeRock University, and partner services to assist you in setting up and
+  maintaining your deployments.
   For a general overview of these services, see
   <link xlink:show="new"
         xlink:href="https://www.forgerock.com/en-us/services">ForgeRock Services</link>.
  </para>
  <para>
-  ForgeRock has staff members around the globe that
+  ForgeRock has staff members around the globe who
   support our international customers and partners.
-  If you have any questions, find the address or number closest to you at
-  <link xlink:show="new" xlink:href="https://www.forgerock.com/en-us/contact/">Get in Touch</link>
+  If you have any questions, contact ForgeRock using the address or telephone number
+  nearest to you at
+  <link
+   xlink:show="new"
+   xlink:href="https://www.forgerock.com/en-us/contact/">https://www.forgerock.com/en-us/contact/</link>
   or send an email to ForgeRock at
   <link xlink:show="new" xlink:href="mailto:info@forgerock.com">info@forgerock.com</link>.
  </para>
