@@ -61,12 +61,15 @@ import java.lang.reflect.Proxy;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * A ScriptRegistryImpl does ...
@@ -90,8 +93,10 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
     private final ConcurrentHashMap<ScriptName, LibraryRecord> cache =
             new ConcurrentHashMap<ScriptName, LibraryRecord>();
 
-    private final ConcurrentHashMap<ScriptName, SourceContainer> sourceCache =
-            new ConcurrentHashMap<ScriptName, SourceContainer>();
+    private final LinkedHashMap<ScriptName, SourceContainer> sourceCache =
+            new LinkedHashMap<ScriptName, SourceContainer>();
+
+    private final ReadWriteLock sourceCacheLock = new ReentrantReadWriteLock();
 
     private final AtomicReference<PersistenceConfig> persistenceConfigReference =
             new AtomicReference<PersistenceConfig>();
@@ -305,8 +310,13 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
             configuration = new HashMap<String, Object>();
         }
         configuration.put(Bindings.class.getName(), globalScope);
-        return factory.getScriptEngine(persistenceConfigReference, configuration, sourceCache.values(),
-                getRegistryLevelScriptClassLoader());
+        sourceCacheLock.readLock().lock();
+        try {
+            return factory.getScriptEngine(persistenceConfigReference, configuration, sourceCache.values(),
+                    getRegistryLevelScriptClassLoader());
+        } finally {
+            sourceCacheLock.readLock().unlock();
+        }
     }
 
     // private classes
@@ -611,14 +621,19 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
 
     private ScriptSource findScriptSource(ScriptName name) {
         ScriptSource source = null;
-        for (SourceContainer container : sourceCache.values()) {
-            if (container instanceof ScriptEngineFactoryAware) {
-                ((ScriptEngineFactoryAware) container).setScriptEngineFactory(engineFactories);
+        sourceCacheLock.readLock().lock();
+        try {
+            for (SourceContainer container : sourceCache.values()) {
+                if (container instanceof ScriptEngineFactoryAware) {
+                    ((ScriptEngineFactoryAware) container).setScriptEngineFactory(engineFactories);
+                }
+                source = container.findScriptSource(name);
+                if (null != source) {
+                    break;
+                }
             }
-            source = container.findScriptSource(name);
-            if (null != source) {
-                break;
-            }
+        } finally {
+            sourceCacheLock.readLock().unlock();
         }
         return source;
     }
@@ -667,7 +682,14 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
                 }
             } else if (unit instanceof SourceContainer) {
                 SourceContainer container = (SourceContainer) unit;
-                sourceCache.put(unit.getName(), container);
+
+                sourceCacheLock.writeLock().lock();
+                try {
+                    sourceCache.put(unit.getName(), container);
+                } finally {
+                    sourceCacheLock.writeLock().unlock();
+                }
+
                 for (LibraryRecord cacheRecord : cache.values()) {
                     if (null == cacheRecord.source) {
                         ScriptSource source = container.findScriptSource(cacheRecord.scriptName);
@@ -691,7 +713,13 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
                 cacheRecord.setScriptSource(null);
             }
         } else if (unit instanceof SourceContainer) {
-            sourceCache.remove(unit);
+            sourceCacheLock.writeLock().lock();
+            try {
+                sourceCache.remove(unit);
+            } finally {
+                sourceCacheLock.writeLock().lock();
+            }
+
             for (LibraryRecord cacheRecord : cache.values()) {
                 if (cacheRecord.isDependOn(unit.getName())) {
                     cacheRecord.setScriptSource(null);
