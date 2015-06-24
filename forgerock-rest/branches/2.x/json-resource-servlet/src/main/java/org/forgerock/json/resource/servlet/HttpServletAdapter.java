@@ -25,6 +25,8 @@ import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.AcceptAPIVersion;
 import org.forgerock.json.resource.AcceptAPIVersionContext;
 import org.forgerock.json.resource.ActionRequest;
+
+import static java.util.Collections.list;
 import static org.forgerock.json.resource.ActionRequest.ACTION_ID_CREATE;
 import org.forgerock.json.resource.AdviceContext;
 import org.forgerock.json.resource.BadRequestException;
@@ -33,6 +35,7 @@ import org.forgerock.json.resource.ConnectionFactory;
 import org.forgerock.json.resource.Context;
 import org.forgerock.json.resource.CreateRequest;
 import org.forgerock.json.resource.DeleteRequest;
+import org.forgerock.json.resource.LocaleContext;
 import org.forgerock.json.resource.NotSupportedException;
 import org.forgerock.json.resource.PatchRequest;
 import org.forgerock.json.resource.PreconditionFailedException;
@@ -580,7 +583,8 @@ public final class HttpServletAdapter {
         final Context root = contextFactory.createContext(req);
         return new AdviceContext(
                 new AcceptAPIVersionContext(
-                        new HttpContext(root, req), PROTOCOL_NAME, acceptVersion),
+                        new HttpContext(
+                                new LocaleContext(root, list(req.getLocales())), req), PROTOCOL_NAME, acceptVersion),
                 RESTRICTED_HEADER_NAMES);
     }
 
