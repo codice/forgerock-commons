@@ -64,6 +64,7 @@
         <maven.compiler.source>1.6</maven.compiler.source>
         <i18nFrameworkVersion>1.4.1</i18nFrameworkVersion>
         <clirrComparisonVersion>2.3.1</clirrComparisonVersion>
+        <jackson.version>2.5.1</jackson.version>
     </properties>
     <modules>
         <module>json-fluent</module>
@@ -168,6 +169,13 @@
                 <artifactId>json-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+                <scope>test</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <reporting>
