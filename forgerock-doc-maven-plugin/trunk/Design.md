@@ -35,6 +35,7 @@ By default, pre-processing tasks are performed in the following order:
 *  Edit `<imagedata>` elements in the resource filtered files. (`ImageData`)
 *  Add color to `<thead><row>` in the resource filtered files. (`HeaderColor`)
 *  Perform image generation on the resource filtered files. (`PlantUml`)
+*  For PDF and RTF, add PIs to avoid page breaks in short listings. (`KeepTogether`)
 *  Set DPI on .png images in the resource filtered files. (`Dpi`)
 *  Perform additional pre-processing on the resource filtered files. (`CurrentDocId`)
 *  Add custom CSS to the sources. (`CustomCss`)
