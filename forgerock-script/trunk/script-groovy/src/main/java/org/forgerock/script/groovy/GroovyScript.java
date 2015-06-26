@@ -52,12 +52,10 @@ import groovy.lang.MissingMethodException;
 import groovy.lang.Script;
 import groovy.lang.Tuple;
 import groovy.util.ResourceException;
-import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.runtime.MetaClassHelper;
 import org.codehaus.groovy.runtime.MethodClosure;
 import org.forgerock.json.resource.Context;
 import org.forgerock.script.engine.CompiledScript;
-import org.forgerock.script.exception.ScriptCompilationException;
 import org.forgerock.script.exception.ScriptThrownException;
 import org.forgerock.script.scope.AbstractFactory;
 import org.forgerock.script.scope.Function;
@@ -236,8 +234,6 @@ public class GroovyScript implements CompiledScript {
             }
         } catch (ScriptException e) {
             throw e;
-        } catch (CompilationFailedException e) {
-            throw new ScriptCompilationException(e);
         } catch (Exception e) {
             throw new ScriptException(e);
         } finally {
