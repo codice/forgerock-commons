@@ -24,7 +24,6 @@
 
 package org.forgerock.script;
 
-import javax.script.ScriptException;
 import java.util.EventObject;
 
 /**
@@ -108,7 +107,7 @@ public class ScriptEvent extends EventObject {
      *
      * @return Reference to the script that had a lifecycle change.
      */
-    public ScriptEntry getScriptLibraryEntry() throws ScriptException {
+    public ScriptEntry getScriptLibraryEntry() {
         return reference.takeScript(name);
     }
 
