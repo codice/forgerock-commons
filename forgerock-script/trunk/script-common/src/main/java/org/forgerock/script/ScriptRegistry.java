@@ -97,7 +97,7 @@ public interface ScriptRegistry extends SourceUnitObserver {
      * @throws NullPointerException
      *             if script is null.
      */
-    public ScriptEntry takeScript(ScriptName name);
+    public ScriptEntry takeScript(ScriptName name) throws ScriptException;
 
     public void addScriptListener(ScriptName name, ScriptListener hook);
 
