@@ -197,7 +197,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
         return Collections.unmodifiableSet(cache.keySet());
     }
 
-    public ScriptEntry takeScript(String name) {
+    public ScriptEntry takeScript(String name) throws ScriptException {
         return takeScript(new ScriptName(name, SourceUnit.AUTO_DETECT));
     }
 
@@ -256,7 +256,7 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
         return scriptEntry;
     }
 
-    public synchronized ScriptEntry takeScript(ScriptName name) {
+    public synchronized ScriptEntry takeScript(ScriptName name) throws ScriptException {
         LibraryRecord rec = cache.get(name);
         if (null != rec) {
             return rec.getScriptEntry();
@@ -264,12 +264,8 @@ public class ScriptRegistryImpl implements ScriptRegistry, ScriptEngineFactoryOb
         ScriptEntry result = null;
         ScriptSource source = findScriptSource(name);
         if (null != source) {
-            try {
-                addSourceUnit(source);
-                result = takeScript(name);
-            } catch (ScriptException e) {
-                /* ignore */
-            }
+            addSourceUnit(source);
+            result = takeScript(name);
         }
         return result;
     }
