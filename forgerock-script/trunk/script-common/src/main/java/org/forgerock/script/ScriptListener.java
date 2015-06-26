@@ -24,8 +24,6 @@
 
 package org.forgerock.script;
 
-import javax.script.ScriptException;
-
 /**
  * A ScriptListener receives notification that a {@link ScriptEntry} has had a
  * lifecycle change.
@@ -41,5 +39,5 @@ public interface ScriptListener {
      * @param event
      *            The {@code ScriptEvent} object.
      */
-    public void scriptChanged(ScriptEvent event) throws ScriptException;
+    public void scriptChanged(ScriptEvent event);
 }

@@ -238,7 +238,7 @@ public abstract class ScriptTest {
     }
 
     @DataProvider(name = "Data-Provider-Function")
-    public Object[][] scriptProvider() throws ScriptException {
+    public Object[][] scriptProvider() {
         ScriptEntry scriptEntry =
                 getScriptRegistry().takeScript(new ScriptName("sample", getLanguageName()));
         scriptEntry.put("egy", 1);
@@ -265,7 +265,7 @@ public abstract class ScriptTest {
         };
         final Object[] status = new Object[2];
         ScriptListener listener = new ScriptListener() {
-            public void scriptChanged(ScriptEvent event) throws ScriptException {
+            public void scriptChanged(ScriptEvent event) {
                 status[0] = Integer.valueOf(event.getType());
                 status[1] = event.getScriptLibraryEntry();
             }
