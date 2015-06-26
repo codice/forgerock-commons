@@ -18,6 +18,8 @@ This release does not introduce any incompatible changes.
 
 **DOCS-300: The copyResources flag should take effect during the pre-site phase**
 
+**DOCS-292: Keep short `<programlisting>` and `<screen>` on same page**
+
 **DOCS-241: Add support for Asciidoc**
 
 Asciidoc books can now be added alongside DocBook XML books.
