@@ -33,6 +33,7 @@ import org.forgerock.doc.maven.pre.Filter;
 import org.forgerock.doc.maven.pre.HeaderColor;
 import org.forgerock.doc.maven.pre.ImageData;
 import org.forgerock.doc.maven.pre.JCite;
+import org.forgerock.doc.maven.pre.KeepTogether;
 import org.forgerock.doc.maven.pre.ModifiableCopy;
 import org.forgerock.doc.maven.pre.PlantUml;
 import org.forgerock.doc.maven.pre.XCite;
@@ -79,6 +80,7 @@ public class PreProcessMojo extends AbstractDocbkxMojo {
             new HeaderColor(this).execute();
             new PlantUml(this).execute();
             if (getFormats().contains(Format.pdf) || getFormats().contains(Format.rtf)) {
+                new KeepTogether(this).execute();
                 new Dpi(this).execute();
             }
             if (getFormats().contains(Format.bootstrap)) {
