@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS.
+ * Copyright 2014-2015 ForgeRock AS.
  */
 
 package org.forgerock.authz.filter.crest;
@@ -38,8 +38,7 @@ import org.forgerock.json.resource.ServerContext;
 import org.forgerock.json.resource.SingletonResourceProvider;
 import org.forgerock.json.resource.UpdateRequest;
 import org.forgerock.util.Reject;
-import org.forgerock.util.promise.FailureHandler;
-import org.forgerock.util.promise.SuccessHandler;
+import org.forgerock.util.promise.ExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,10 +155,10 @@ public final class AuthorizationFilters {
          * @param handler The {@code ResultHandler} that will handle the {@code ResourceException}.
          * @return A new {@code FailureHandler}.
          */
-        private FailureHandler<ResourceException> newFailureHandler(final ResultHandler<?> handler) {
-            return new FailureHandler<ResourceException>() {
+        private ExceptionHandler<ResourceException> newFailureHandler(final ResultHandler<?> handler) {
+            return new ExceptionHandler<ResourceException>() {
                 @Override
-                public void handleError(ResourceException e) {
+                public void handleException(ResourceException e) {
                     handler.handleError(e);
                 }
             };
@@ -193,8 +192,8 @@ public final class AuthorizationFilters {
         public void filterAction(final ServerContext context, final ActionRequest request,
                 final ResultHandler<JsonValue> handler, final RequestHandler next) {
             module.authorizeAction(context, request)
-                .then(
-                        new SuccessHandler<AuthorizationResult>() {
+                .thenOnResult(
+                        new org.forgerock.util.promise.ResultHandler<AuthorizationResult>() {
                             @Override
                             public void handleResult(AuthorizationResult result) {
                                 if (result.isAuthorized()) {
@@ -203,8 +202,8 @@ public final class AuthorizationFilters {
                                     handler.handleError(newUnauthorizedException(result));
                                 }
                             }
-                        }, newFailureHandler(handler)
-                );
+                        })
+                    .thenOnException(newFailureHandler(handler));
         }
 
         /**
@@ -223,18 +222,18 @@ public final class AuthorizationFilters {
         public void filterCreate(final ServerContext context, final CreateRequest request,
                 final ResultHandler<Resource> handler, final RequestHandler next) {
             module.authorizeCreate(context, request)
-                .then(
-                        new SuccessHandler<AuthorizationResult>() {
-                            @Override
-                            public void handleResult(AuthorizationResult result) {
-                                if (result.isAuthorized()) {
-                                    next.handleCreate(context, request, handler);
-                                } else {
-                                    handler.handleError(newUnauthorizedException(result));
+                    .thenOnResult(
+                            new org.forgerock.util.promise.ResultHandler<AuthorizationResult>() {
+                                @Override
+                                public void handleResult(AuthorizationResult result) {
+                                    if (result.isAuthorized()) {
+                                        next.handleCreate(context, request, handler);
+                                    } else {
+                                        handler.handleError(newUnauthorizedException(result));
+                                    }
                                 }
-                            }
-                        }, newFailureHandler(handler)
-                );
+                            })
+                    .thenOnException(newFailureHandler(handler));
         }
 
         /**
@@ -253,18 +252,18 @@ public final class AuthorizationFilters {
         public void filterDelete(final ServerContext context, final DeleteRequest request,
                 final ResultHandler<Resource> handler, final RequestHandler next) {
             module.authorizeDelete(context, request)
-                .then(
-                        new SuccessHandler<AuthorizationResult>() {
-                            @Override
-                            public void handleResult(AuthorizationResult result) {
-                                if (result.isAuthorized()) {
-                                    next.handleDelete(context, request, handler);
-                                } else {
-                                    handler.handleError(newUnauthorizedException(result));
+                    .thenOnResult(
+                            new org.forgerock.util.promise.ResultHandler<AuthorizationResult>() {
+                                @Override
+                                public void handleResult(AuthorizationResult result) {
+                                    if (result.isAuthorized()) {
+                                        next.handleDelete(context, request, handler);
+                                    } else {
+                                        handler.handleError(newUnauthorizedException(result));
+                                    }
                                 }
-                            }
-                        }, newFailureHandler(handler)
-                );
+                            })
+                    .thenOnException(newFailureHandler(handler));
         }
 
         /**
@@ -283,18 +282,18 @@ public final class AuthorizationFilters {
         public void filterPatch(final ServerContext context, final PatchRequest request,
                 final ResultHandler<Resource> handler, final RequestHandler next) {
             module.authorizePatch(context, request)
-                .then(
-                    new SuccessHandler<AuthorizationResult>() {
-                        @Override
-                        public void handleResult(AuthorizationResult result) {
-                            if (result.isAuthorized()) {
-                                next.handlePatch(context, request, handler);
-                            } else {
-                                handler.handleError(newUnauthorizedException(result));
-                            }
-                        }
-                    }, newFailureHandler(handler)
-                );
+                    .thenOnResult(
+                            new org.forgerock.util.promise.ResultHandler<AuthorizationResult>() {
+                                @Override
+                                public void handleResult(AuthorizationResult result) {
+                                    if (result.isAuthorized()) {
+                                        next.handlePatch(context, request, handler);
+                                    } else {
+                                        handler.handleError(newUnauthorizedException(result));
+                                    }
+                                }
+                            })
+                    .thenOnException(newFailureHandler(handler));
         }
 
         /**
@@ -313,18 +312,18 @@ public final class AuthorizationFilters {
         public void filterQuery(final ServerContext context, final QueryRequest request,
                 final QueryResultHandler handler, final RequestHandler next) {
             module.authorizeQuery(context, request)
-                .then(
-                    new SuccessHandler<AuthorizationResult>() {
-                        @Override
-                        public void handleResult(AuthorizationResult result) {
-                            if (result.isAuthorized()) {
-                                next.handleQuery(context, request, handler);
-                            } else {
-                                handler.handleError(newUnauthorizedException(result));
-                            }
-                        }
-                    }, newFailureHandler(handler)
-                );
+                    .thenOnResult(
+                            new org.forgerock.util.promise.ResultHandler<AuthorizationResult>() {
+                                @Override
+                                public void handleResult(AuthorizationResult result) {
+                                    if (result.isAuthorized()) {
+                                        next.handleQuery(context, request, handler);
+                                    } else {
+                                        handler.handleError(newUnauthorizedException(result));
+                                    }
+                                }
+                            })
+                    .thenOnException(newFailureHandler(handler));
         }
 
         /**
@@ -343,18 +342,18 @@ public final class AuthorizationFilters {
         public void filterRead(final ServerContext context, final ReadRequest request,
                 final ResultHandler<Resource> handler, final RequestHandler next) {
             module.authorizeRead(context, request)
-                .then(
-                    new SuccessHandler<AuthorizationResult>() {
-                        @Override
-                        public void handleResult(AuthorizationResult result) {
-                            if (result.isAuthorized()) {
-                                next.handleRead(context, request, handler);
-                            } else {
-                                handler.handleError(newUnauthorizedException(result));
-                            }
-                        }
-                    }, newFailureHandler(handler)
-                );
+                    .thenOnResult(
+                            new org.forgerock.util.promise.ResultHandler<AuthorizationResult>() {
+                                @Override
+                                public void handleResult(AuthorizationResult result) {
+                                    if (result.isAuthorized()) {
+                                        next.handleRead(context, request, handler);
+                                    } else {
+                                        handler.handleError(newUnauthorizedException(result));
+                                    }
+                                }
+                            })
+                    .thenOnException(newFailureHandler(handler));
         }
 
         /**
@@ -373,8 +372,8 @@ public final class AuthorizationFilters {
         public void filterUpdate(final ServerContext context, final UpdateRequest request,
                 final ResultHandler<Resource> handler, final RequestHandler next) {
             module.authorizeUpdate(context, request)
-                .then(
-                        new SuccessHandler<AuthorizationResult>() {
+                .thenOnResult(
+                        new org.forgerock.util.promise.ResultHandler<AuthorizationResult>() {
                             @Override
                             public void handleResult(AuthorizationResult result) {
                                 if (result.isAuthorized()) {
@@ -383,8 +382,8 @@ public final class AuthorizationFilters {
                                     handler.handleError(newUnauthorizedException(result));
                                 }
                             }
-                        }, newFailureHandler(handler)
-                );
+                        })
+                    .thenOnException(newFailureHandler(handler));
         }
     }
 }

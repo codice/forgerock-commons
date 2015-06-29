@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS.
+ * Copyright 2014-2015 ForgeRock AS.
  */
 
 package org.forgerock.authz.filter.servlet;
@@ -221,8 +221,8 @@ public class HttpServletAuthorizationFilterTest {
         FilterChain chain = mock(FilterChain.class);
         HttpServletAuthorizationModule module = mock(HttpServletAuthorizationModule.class);
         Promise<AuthorizationResult, AuthorizationException> authorizePromise =
-                Promises.newSuccessfulPromise(AuthorizationResult.accessPermitted());
-        Promise<Void, ServletException> resultHandlerPromise = Promises.newSuccessfulPromise(null);
+                Promises.newResultPromise(AuthorizationResult.accessPermitted());
+        Promise<Void, ServletException> resultHandlerPromise = Promises.newResultPromise(null);
 
         initialiseFilter(module);
 
@@ -245,7 +245,7 @@ public class HttpServletAuthorizationFilterTest {
         FilterChain chain = mock(FilterChain.class);
         HttpServletAuthorizationModule module = mock(HttpServletAuthorizationModule.class);
         AuthorizationException exception = mock(AuthorizationException.class);
-        Promise<AuthorizationResult, AuthorizationException> authorizePromise = Promises.newFailedPromise(exception);
+        Promise<AuthorizationResult, AuthorizationException> authorizePromise = Promises.newExceptionPromise(exception);
 
         initialiseFilter(module);
 
@@ -269,9 +269,9 @@ public class HttpServletAuthorizationFilterTest {
         FilterChain chain = mock(FilterChain.class);
         HttpServletAuthorizationModule module = mock(HttpServletAuthorizationModule.class);
         Promise<AuthorizationResult, AuthorizationException> authorizePromise =
-                Promises.newSuccessfulPromise(AuthorizationResult.accessPermitted());
+                Promises.newResultPromise(AuthorizationResult.accessPermitted());
         ServletException exception = mock(ServletException.class);
-        Promise<Void, ServletException> resultHandlerPromise = Promises.newFailedPromise(exception);
+        Promise<Void, ServletException> resultHandlerPromise = Promises.newExceptionPromise(exception);
 
         initialiseFilter(module);
 
