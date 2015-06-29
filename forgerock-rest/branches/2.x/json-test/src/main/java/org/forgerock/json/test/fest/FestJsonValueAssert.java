@@ -28,7 +28,7 @@ import org.fest.assertions.MapAssert;
 import org.fest.assertions.StringAssert;
 import org.forgerock.json.fluent.JsonPointer;
 import org.forgerock.json.fluent.JsonValue;
-import org.forgerock.util.promise.Function;
+import org.forgerock.util.Function;
 import org.forgerock.util.promise.Promise;
 import org.forgerock.util.test.assertj.AbstractAssertJPromiseAssert;
 import org.forgerock.util.test.fest.AbstractFestPromiseAssert;

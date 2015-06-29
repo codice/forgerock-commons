@@ -21,7 +21,7 @@
   !
   ! CDDL HEADER END
   !
-  !      Copyright 2014 ForgeRock AS
+  !      Copyright 2014-2015 ForgeRock AS.
   !    
 -->
 <differences>
@@ -51,4 +51,11 @@ Note: waiting on https://jira.codehaus.org/browse/MCLIRR-62 to be resolved to av
     <justification>OPENDJ-1058: Added a timeout parameter to actively shutdown dead connections</justification>
   </difference>
 -->
+  <difference>
+    <className>org/forgerock/json/fluent/JsonValue</className>
+    <differenceType>7005</differenceType>
+    <method>%regex[java\.util\.List asList\(org\.forgerock\.util\.promise\.Function?\)]</method>
+    <to>%regex[java\.util\.List asList\(org\.forgerock\.util\.Function?\)]</to>
+    <justification>To allow integration of CHF with CREST 2.x</justification>
+  </difference>
 </differences>
