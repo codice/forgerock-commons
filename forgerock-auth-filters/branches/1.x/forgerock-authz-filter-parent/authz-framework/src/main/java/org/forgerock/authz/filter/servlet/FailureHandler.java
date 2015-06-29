@@ -11,12 +11,12 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS.
+ * Copyright 2014-2015 ForgeRock AS.
  */
 
 package org.forgerock.authz.filter.servlet;
 
-import org.forgerock.util.promise.AsyncFunction;
+import org.forgerock.util.AsyncFunction;
 import org.forgerock.util.promise.Promise;
 import org.forgerock.util.promise.Promises;
 import org.slf4j.Logger;
@@ -77,10 +77,10 @@ class FailureHandler implements AsyncFunction<Exception, Void, ServletException>
                 writer.write(message);
             }
 
-            return Promises.newSuccessfulPromise(null);
+            return Promises.newResultPromise(null);
         } catch (IOException ex) {
             logger.error("Writing authorization failure response failed.", ex);
-            return Promises.newFailedPromise(new ServletException(ex));
+            return Promises.newExceptionPromise(new ServletException(ex));
         }
     }
 }

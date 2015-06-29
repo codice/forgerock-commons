@@ -11,13 +11,13 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS.
+ * Copyright 2014-2015 ForgeRock AS.
  */
 
 package org.forgerock.authz.filter.servlet;
 
 import org.forgerock.authz.filter.api.AuthorizationResult;
-import org.forgerock.util.promise.AsyncFunction;
+import org.forgerock.util.AsyncFunction;
 import org.forgerock.util.promise.Promise;
 import org.forgerock.util.promise.Promises;
 import org.slf4j.Logger;
@@ -80,7 +80,7 @@ class SuccessHandler implements AsyncFunction<AuthorizationResult, Void, Servlet
             if (result.isAuthorized()) {
                 logger.debug("Request authorized.");
                 chain.doFilter(req, resp);
-                return Promises.newSuccessfulPromise(null);
+                return Promises.newResultPromise(null);
             } else {
                 logger.debug("Request unauthorized.");
                 final PrintWriter writer = resultHandler.getWriter(resp);
@@ -92,14 +92,14 @@ class SuccessHandler implements AsyncFunction<AuthorizationResult, Void, Servlet
                             .toString();
                     writer.write(message);
                 }
-                return Promises.newSuccessfulPromise(null);
+                return Promises.newResultPromise(null);
             }
         } catch (IOException e) {
             logger.debug("Exception whilst authorizing: {}", e.getMessage());
-            return Promises.newFailedPromise(new ServletException(e));
+            return Promises.newExceptionPromise(new ServletException(e));
         } catch (ServletException e) {
             logger.debug("Exception whilst authorizing: {}", e.getMessage());
-            return Promises.newFailedPromise(e);
+            return Promises.newExceptionPromise(e);
         }
     }
 }
