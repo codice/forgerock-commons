@@ -20,6 +20,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.forgerock.doc.maven.AbstractDocbkxMojo;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -81,7 +82,9 @@ public class Manpage {
             cfg.addAll(m.getBaseConfiguration());
             cfg.add(element(name("includes"), "*/" + m.getDocumentSrcName()));
             cfg.add(element(name("manpagesCustomization"), m.path(m.getManpagesCustomization())));
-            cfg.add(element(name("targetDirectory"), m.path(m.getDocbkxOutputDirectory()) + "/manpages"));
+
+            File manPageOutputDir = new File(m.getDocbkxOutputDirectory(), "manpages");
+            cfg.add(element(name("targetDirectory"), m.path(manPageOutputDir)));
 
             executeMojo(
                     plugin(
@@ -91,6 +94,11 @@ public class Manpage {
                     goal("generate-manpages"),
                     configuration(cfg.toArray(new Element[cfg.size()])),
                     executionEnvironment(m.getProject(), m.getSession(), m.getPluginManager()));
+
+            // Man page generation replaces spaces in path name with underscores.
+            // If necessary, this is corrected during post-processing.
+            m.getLog().info("Man page output directory: "
+                    + manPageOutputDir.getAbsolutePath().replace(' ', '_'));
         }
     }
 }

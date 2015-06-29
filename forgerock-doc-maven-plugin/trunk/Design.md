@@ -78,6 +78,7 @@ to include JavaScript, change CSS, and so forth.
 Most formats currently require no post-processing.
 
 *  HTML post-processing (`Html`)
+*  Man page post-processing (`ManpagePost`)
 *  No post-processing (`NoOp`)
 *  Webhelp post-processing (`WebhelpPost`)
 *  XHTML post-processing (`Xhtml`)

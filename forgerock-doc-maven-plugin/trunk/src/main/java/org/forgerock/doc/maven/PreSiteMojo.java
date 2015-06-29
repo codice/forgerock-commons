@@ -31,6 +31,7 @@ import org.forgerock.doc.maven.build.Xhtml5;
 import org.forgerock.doc.maven.build.HtmlForBootstrap;
 import org.forgerock.doc.maven.post.Html;
 import org.forgerock.doc.maven.post.Bootstrap;
+import org.forgerock.doc.maven.post.ManpagePost;
 import org.forgerock.doc.maven.post.NoOp;
 import org.forgerock.doc.maven.post.WebhelpPost;
 import org.forgerock.doc.maven.post.Xhtml;
@@ -105,7 +106,7 @@ public class PreSiteMojo extends AbstractDocbkxMojo {
             new Html(this).execute();
         }
         if (formats.contains(Format.man)) {
-            new NoOp(this).execute();
+            new ManpagePost(this).execute();
         }
         if (formats.contains(Format.pdf)) {
             new NoOp(this).execute();
