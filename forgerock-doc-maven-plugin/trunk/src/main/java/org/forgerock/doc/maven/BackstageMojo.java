@@ -17,6 +17,7 @@
 package org.forgerock.doc.maven;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -91,7 +92,8 @@ public class BackstageMojo extends AbstractDocbkxMojo {
         new ArtifactDocs(this).execute();
         final File docbookDirectory = new File(getBackstageDirectory(), "docbook");
         try {
-            FileUtils.copyDirectoryToDirectory(getDocbkxModifiableSourcesDirectory(), docbookDirectory);
+            FileUtils.copyDirectory(
+                    getDocbkxModifiableSourcesDirectory(), docbookDirectory, FileFilterUtils.trueFileFilter());
         } catch (IOException e) {
             throw new MojoFailureException("Failed to copy pre-processed sources.", e);
         }
