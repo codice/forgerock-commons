@@ -26,7 +26,6 @@ package org.forgerock.script;
 
 import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
-import org.forgerock.json.resource.ApiInfoContext;
 import org.forgerock.json.resource.Connection;
 import org.forgerock.json.resource.ConnectionFactory;
 import org.forgerock.json.resource.ConnectionProvider;
@@ -215,7 +214,7 @@ public abstract class ScriptTest {
         updateContent.put("_id", UUID.randomUUID().toString());
         updateContent.put("profileUrl", "https://login.example.com/bjensen");
 
-        final Context context = new ApiInfoContext(new SecurityContext(new RootContext(), "bjensen@example.com", null), "", "");
+        final Context context = new SecurityContext(new RootContext(), "bjensen@example.com", null);
         script.put("context", context);
 
         CreateRequest createRequest = Requests.newCreateRequest("/Users", "701984", createContent);
