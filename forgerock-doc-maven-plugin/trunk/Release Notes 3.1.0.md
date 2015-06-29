@@ -30,13 +30,14 @@ Asciidoc and DocBook XML sources for the same book.
 
 ## Bugs Fixed
 
-TODO
+**DOCS-308: The backstage goal leaves an extra docbkx-sources directory under docbook**
+
+**DOCS-290: Man pages not generated if project directory name contains a space**
+
 
 ## Known Issues
 
 This section lists the main known issues at the time of release.
-
-**DOCS-290: Man pages not generated if project directory name contains a space**
 
 **DOCS-270: Robot-indexed links to in-progress docs lose their fragments**
 
