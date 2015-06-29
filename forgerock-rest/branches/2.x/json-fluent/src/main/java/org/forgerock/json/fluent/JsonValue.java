@@ -12,7 +12,7 @@
  * information: "Portions Copyrighted [year] [name of copyright owner]".
  *
  * Copyright © 2010–2011 ApexIdentity Inc. All rights reserved.
- * Portions Copyrighted 2011-2014 ForgeRock AS.
+ * Portions Copyrighted 2011-2015 ForgeRock AS.
  */
 
 package org.forgerock.json.fluent;
@@ -42,9 +42,9 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.forgerock.util.Function;
 import org.forgerock.util.RangeSet;
 import org.forgerock.util.Utils;
-import org.forgerock.util.promise.Function;
 
 /**
  * Represents a value in a JSON object model structure. JSON values are
