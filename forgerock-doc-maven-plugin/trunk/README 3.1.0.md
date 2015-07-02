@@ -279,7 +279,7 @@ For example:
        <version>${project.version}</version>
        <classifier>javadoc</classifier>
        <outputDirectory>javadoc</outputDirectory>
-       <title>ForgeRock Doc Maven Plugin ${project.version} Javadoc</title>
+       <title>ForgeRock Doc Maven Plugin Javadoc</title>
       </artifactItem>
      </artifactItems>
 
@@ -294,7 +294,7 @@ Backstage layout is as follows:
 
 
     {
-        "title": "OpenAM 12.0.0 Javadoc"
+        "title": "OpenAM Javadoc"
     }
 
 * `docbook/` contains the pre-processed DocBook XML sources
