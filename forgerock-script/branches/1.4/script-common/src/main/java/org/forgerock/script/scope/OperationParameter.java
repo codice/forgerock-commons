@@ -72,30 +72,6 @@ public class OperationParameter implements Parameter {
         throw new InternalServerErrorException("Failed to get ServerContext.");
     }
 
-    /**
-     * Returns the internal connection.
-     * 
-     * @return The internal connection.
-     * @throws org.forgerock.json.resource.NotFoundException
-     *             If no such connection exists.
-     * @throws ResourceException
-     *             If the connection could not be obtained for some other reason
-     *             (e.g. due to a configuration or initialization problem).
-     */
-    public Connection getConnection() throws ResourceException {
-        Connection connection =
-                getPersistenceConfig().getConnectionProvider().getConnection(getConnectionId());
-        if (null != connection) {
-            return connection;
-        }
-        throw new ServiceUnavailableException("Failed to get Connection for id: "
-                + getConnectionId());
-    }
-
-    public String getConnectionId() {
-        return connectionId;
-    }
-
     public PersistenceConfig getPersistenceConfig() {
         return persistenceConfig;
     }

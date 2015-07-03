@@ -28,6 +28,7 @@ import org.forgerock.json.fluent.JsonValue;
 import org.forgerock.json.resource.ActionRequest;
 import org.forgerock.json.resource.ApiInfoContext;
 import org.forgerock.json.resource.Connection;
+import org.forgerock.json.resource.ConnectionFactory;
 import org.forgerock.json.resource.ConnectionProvider;
 import org.forgerock.json.resource.Context;
 import org.forgerock.json.resource.CreateRequest;
@@ -91,6 +92,8 @@ public abstract class ScriptTest {
 
     private ScriptRegistryImpl scriptRegistry = null;
 
+    ConnectionFactory connectionFactory = null;
+
     protected abstract Map<String, Object> getConfiguration();
 
     protected abstract String getLanguageName();
@@ -113,16 +116,14 @@ public abstract class ScriptTest {
         router.addRoute("/Groups", new MemoryBackend());
         router.addRoute(RoutingMode.EQUALS, "mock/{id}", resource);
 
+        connectionFactory = Resources.newInternalConnectionFactory(router);
+
         scriptRegistry.setPersistenceConfig(PersistenceConfig.builder().connectionProvider(
+                // no longer used, but still required by PersistenceConfig
                 new ConnectionProvider() {
                     @Override
                     public Connection getConnection(String connectionId) throws ResourceException {
-                        if ("DEFAULT".equalsIgnoreCase(connectionId)) {
-                            return Resources.newInternalConnection(router);
-                        } else {
-                            throw new InternalServerErrorException("Connection not found with id: "
-                                    + connectionId);
-                        }
+                            return connectionFactory.getConnection();
                     }
 
                     @Override
@@ -143,7 +144,7 @@ public abstract class ScriptTest {
         }).when(resource).handleRead(any(ServerContext.class), any(ReadRequest.class),
                 any(ResultHandler.class));
 
-        scriptRegistry.put("router", FunctionFactory.getResource());
+        scriptRegistry.put("router", FunctionFactory.getResource(connectionFactory));
 
         URL container = getScriptContainer("/container/");
         Assert.assertNotNull(container);
