@@ -1,0 +1,190 @@
+/*
+    Base: All base HTML tags. No IDs or Classes should be included here.
+*/
+@import "base.less";
+
+/*
+    Generic css helpers and functions
+*/
+@import "helpers.less";
+
+/*
+    Navbar and SubNav
+*/
+@import "navbar.less";
+
+/*
+    Dropdown-menus - The drop down menu in the Navbar is styled within navbar.less
+*/
+@import "dropdown-menu.less";
+
+/*
+    Page Header
+*/
+@import "page-header.less";
+
+/*
+    Tab Styles
+*/
+@import "tabs.less";
+
+/*
+    Sortable List
+*/
+@import "sortable-list.less";
+
+/*
+    Popovers
+*/
+@import "popover.less";
+
+/*
+    Validation Rules
+*/
+@import "validation-rules.less";
+
+/*
+    Forms
+*/
+@import "form.less";
+
+/*
+    Wells
+*/
+@import "wells.less";
+
+/*
+    Alert System
+*/
+@import "alert-system.less";
+
+/*
+    dialogs
+*/
+@import "dialogs.less";
+
+/*
+    Toolbar
+*/
+@import "toolbar.less";
+
+/*
+    Generic buttons CSS
+*/
+@import "buttons.less";
+
+/*
+    Panel Styles
+*/
+@import "panel.less";
+
+@import "codemirror.less";
+
+/*
+    IDM Styles - please remove from commons
+*/
+@import "idm-only.less";
+
+@version: '';
+.nocache-background-image(@url) {
+    background-image: url("@{url}?v=@{version}");
+}
+
+/*
+Footer
+*/
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: @footer-height;
+    text-align: center;
+    color: @footer-color;
+    border-top: 1px solid #ccc;
+    background-color:  @footer-background-color;
+    padding: 10px;
+}
+
+/*
+Registration
+*/
+#passPhrasePictures img {
+    cursor: pointer;
+}
+
+#userRegistration {
+    .remember-forgot .checkbox{
+        padding-top: 0;
+        padding-bottom: 15px;
+        padding-left: 20px;
+    }
+
+    .form-horizontal .form-group {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .toggle-login-register {
+        margin-top: 20px;
+        text-align: center;
+    }
+}
+
+/*
+Login
+*/
+
+#loginContent {
+    .caret {
+        margin-left: 5px;
+    }
+
+    .fa {
+        margin-right: 5px;
+    }
+}
+
+.main-logo-holder {
+    margin: 60px auto 40px;
+    text-align: center;
+}
+
+.login .has-feedback .form-control-feedback,
+.register .has-feedback .form-control-feedback {
+    width: 46px;
+    height: 46px;
+    line-height: 46px;
+    top: 0;
+}
+
+.logo-header {
+    text-align: center;
+    padding: 60px 0 40px;
+
+    img {
+        max-width: 210px;
+    }
+}
+
+.login {
+    .remember-forgot {
+        overflow: auto;
+        padding: 0 0 10px;
+    }
+
+    .toggle-login-register {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .remember-forgot {
+        .forgot-password {
+            float: right;
+            padding: 0;
+        }
+
+        .checkbox {
+            margin-top: 0;
+        }
+    }
+}
