@@ -121,6 +121,8 @@ public class LinkTest {
                     "^https://bugster.forgerock.org/jira/browse/.+$"));
             patterns.add(element(name("skipUrlPattern"), // RFCs
                     "^http://tools.ietf.org/html/rfc[0-9]+$"));
+            patterns.add(element(name("skipUrlPattern"), // Internet-Drafts
+                    "^http://tools.ietf.org/html/draft-.+$"));
             patterns.add(element(name("skipUrlPattern"), // example (see RFC 2606)
                     "^https?://[^/]*example.*$"));
             patterns.add(element(name("skipUrlPattern"), // localhost
