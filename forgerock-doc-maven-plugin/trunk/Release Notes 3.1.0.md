@@ -16,6 +16,8 @@ This release does not introduce any incompatible changes.
 
 ## Improvements & New Features
 
+**DOCS-318: Skip I-D Urls by default when checking links**
+
 **DOCS-300: The copyResources flag should take effect during the pre-site phase**
 
 **DOCS-292: Keep short `<programlisting>` and `<screen>` on same page**
