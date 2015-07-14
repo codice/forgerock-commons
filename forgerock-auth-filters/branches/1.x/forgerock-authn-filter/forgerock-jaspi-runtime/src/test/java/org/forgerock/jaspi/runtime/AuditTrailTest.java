@@ -11,11 +11,12 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS.
+ * Copyright 2014-2015 ForgeRock AS.
  */
 
 package org.forgerock.jaspi.runtime;
 
+import org.forgerock.audit.events.AuthenticationAuditEventBuilder;
 import org.forgerock.json.fluent.JsonValue;
 import org.mockito.ArgumentCaptor;
 import org.testng.annotations.BeforeMethod;
@@ -42,7 +43,7 @@ public class AuditTrailTest {
         auditApi = mock(AuditApi.class);
         contextMap = new HashMap<String, Object>();
 
-        auditTrail = new AuditTrail(auditApi, contextMap);
+        auditTrail = new AuditTrail(auditApi, contextMap, "transactionId");
     }
 
     @Test
@@ -58,10 +59,12 @@ public class AuditTrailTest {
         verify(auditApi).audit(auditMessageCaptor.capture());
 
         JsonValue auditMessage = auditMessageCaptor.getValue();
-        assertThat(auditMessage.asMap()).hasSize(3);
-        assertThat(auditMessage.get("requestId").getObject()).isNotNull();
+        assertThat(auditMessage.asMap()).hasSize(9);
         assertThat(auditMessage.get("context").required().size()).isEqualTo(0);
         assertThat(auditMessage.get("entries").required().size()).isEqualTo(0);
+        assertThat(auditMessage.get("eventName").required().asString()).isEqualTo("authentication");
+        assertThat(auditMessage.get("transactionId").required().asString()).isEqualTo("transactionId");
+        assertThat(auditMessage.get("authentication").get("id").required().asString()).isEqualTo("");
     }
 
     @Test
@@ -86,13 +89,15 @@ public class AuditTrailTest {
         verify(auditApi).audit(auditMessageCaptor.capture());
 
         JsonValue auditMessage = auditMessageCaptor.getValue();
-        assertThat(auditMessage.asMap()).hasSize(6);
-        assertThat(auditMessage.get("requestId").getObject()).isNotNull();
-        assertThat(auditMessage.get("result").asString()).isEqualTo("SUCCESSFUL");
+        assertThat(auditMessage.asMap()).hasSize(9);
+        assertThat(auditMessage.get("result").getObject()).isEqualTo(AuthenticationAuditEventBuilder.Status.SUCCESSFUL.toString());
         assertThat(auditMessage.get("principal").asList(String.class)).containsExactly("PRINCIPAL");
         assertThat(auditMessage.get("context").required().size()).isEqualTo(0);
         assertThat(auditMessage.get("sessionId").asString()).isEqualTo("SESSION_ID");
         assertThat(auditMessage.get("entries").required().size()).isEqualTo(3);
+        assertThat(auditMessage.get("eventName").required().asString()).isEqualTo("authentication");
+        assertThat(auditMessage.get("transactionId").required().asString()).isEqualTo("transactionId");
+        assertThat(auditMessage.get("authentication").get("id").required().asString()).isEqualTo("PRINCIPAL");
 
         JsonValue moduleOneEntry = auditMessage.get("entries").get(0);
         JsonValue moduleTwoEntry = auditMessage.get("entries").get(1);
@@ -140,26 +145,28 @@ public class AuditTrailTest {
         verify(auditApi).audit(auditMessageCaptor.capture());
 
         JsonValue auditMessage = auditMessageCaptor.getValue();
-        assertThat(auditMessage.asMap()).hasSize(5);
-        assertThat(auditMessage.get("requestId").getObject()).isNotNull();
-        assertThat(auditMessage.get("result").asString()).isEqualTo("FAILED");
+        assertThat(auditMessage.asMap()).hasSize(9);
+        assertThat(auditMessage.get("result").getObject()).isEqualTo(AuthenticationAuditEventBuilder.Status.FAILED.toString());
         assertThat(auditMessage.get("principal").asList(String.class)).containsExactly("admin", "demo");
         assertThat(auditMessage.get("context").required().size()).isEqualTo(0);
         assertThat(auditMessage.get("entries").required().size()).isEqualTo(2);
+        assertThat(auditMessage.get("eventName").required().asString()).isEqualTo("authentication");
+        assertThat(auditMessage.get("transactionId").required().asString()).isEqualTo("transactionId");
+        assertThat(auditMessage.get("authentication").get("id").required().asString()).isEqualTo("admin");
 
         JsonValue moduleOneEntry = auditMessage.get("entries").get(0);
         JsonValue moduleTwoEntry = auditMessage.get("entries").get(1);
 
         assertThat(moduleOneEntry.asMap()).hasSize(4);
         assertThat(moduleOneEntry.get("moduleId").asString()).isEqualTo("MODULE_ONE_ID");
-        assertThat(moduleOneEntry.get("result").asString()).isEqualTo("FAILED");
+        assertThat(auditMessage.get("result").getObject()).isEqualTo(AuthenticationAuditEventBuilder.Status.FAILED.toString());
         assertThat(moduleOneEntry.get("reason").asMap()).containsOnly(entry("message", "MODULE_ONE_REASON"));
         assertThat(moduleOneEntry.get("info").asMap()).containsOnly(entry("MODULE_ONE", "INFO"),
                 entry(AuditTrail.AUDIT_PRINCIPAL_KEY, "admin"));
 
         assertThat(moduleTwoEntry.asMap()).hasSize(4);
         assertThat(moduleTwoEntry.get("moduleId").asString()).isEqualTo("MODULE_TWO_ID");
-        assertThat(moduleTwoEntry.get("result").asString()).isEqualTo("FAILED");
+        assertThat(auditMessage.get("result").getObject()).isEqualTo(AuthenticationAuditEventBuilder.Status.FAILED.toString());
         assertThat(moduleTwoEntry.get("reason").asMap()).containsOnly(entry("message", "MODULE_TWO_REASON"));
         assertThat(moduleTwoEntry.get("info").asMap()).containsOnly(entry("MODULE_TWO", "INFO"),
                 entry(AuditTrail.AUDIT_PRINCIPAL_KEY, "demo"));
