@@ -11,11 +11,14 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS.
+ * Copyright 2014-2015 ForgeRock AS.
  */
 
 package org.forgerock.jaspi.runtime;
 
+import org.forgerock.audit.events.AuditEvent;
+import org.forgerock.audit.events.AuthenticationAuditEventBuilder;
+import org.forgerock.audit.events.AuthenticationAuditEventBuilder.Status;
 import org.forgerock.json.fluent.JsonValue;
 
 import java.util.ArrayList;
@@ -74,20 +77,28 @@ public class AuditTrail {
     private static final String SUCCESSFUL_RESULT = "SUCCESSFUL";
     private static final String FAILED_RESULT = "FAILED";
 
+    /**
+     * Support transactionId for commons audit
+     */
+    private static final String TRANSACTION_ID_KEY = "transactionId";
+
     private final AuditApi api;
     private final List<Map<String, Object>> entries = new ArrayList<Map<String, Object>>();
-    private final JsonValue auditMessage = json(object(
-            field(REQUEST_ID_KEY, UUID.randomUUID().toString()),
-            field(ENTRIES_KEY, entries)));
+    private final JsonValue auditMessage = json(object(field(ENTRIES_KEY, entries)));
 
     /**
      * Constructs a new AuditTrail instance.
      *
      * @param api An instance of the {@code AuditApi}.
      */
-    public AuditTrail(AuditApi api, Map<String, Object> contextMap) {
+    public AuditTrail(AuditApi api, Map<String, Object> contextMap, String transactionId) {
         this.api = api;
         auditMessage.put(CONTEXT_KEY, contextMap);
+        if (transactionId == null) {
+            auditMessage.put(TRANSACTION_ID_KEY, UUID.randomUUID().toString());
+        } else {
+            auditMessage.put(TRANSACTION_ID_KEY, transactionId);
+        }
     }
 
     /**
@@ -161,7 +172,28 @@ public class AuditTrail {
      * Performs the actual audit by calling the {@link AuditApi#audit(JsonValue)} with the audit record.
      */
     void audit() {
-        api.audit(auditMessage);
+        final Status status =
+                auditMessage.get(RESULT_KEY).asEnum(Status.class);
+
+        String sessionId = null;
+        if (auditMessage.isDefined(SESSION_ID_KEY) && !auditMessage.get(SESSION_ID_KEY).isNull()) {
+            sessionId = auditMessage.get(SESSION_ID_KEY).asString();
+        }
+
+        final List<String> principals = auditMessage.get(PRINCIPAL_KEY).asList(String.class);
+        final String principal = (principals != null && principals.size() >= 1) ? principals.get(0) : "";
+
+        AuditEvent auditEvent = AuthenticationAuditEventBuilder.authenticationEvent()
+                .result(status)
+                .principal(principals)
+                .context(auditMessage.get(CONTEXT_KEY).asMap())
+                .authentication(principal)
+                .entries(auditMessage.get(ENTRIES_KEY).asList())
+                .eventName("authentication")
+                .transactionId(auditMessage.get(TRANSACTION_ID_KEY).asString())
+                .sessionId(sessionId)
+                .toEvent();
+        api.audit(auditEvent.getValue());
     }
 
     /**
@@ -180,9 +212,21 @@ public class AuditTrail {
      * Gets the request id.
      *
      * @return The request id.
+     *
+     * @deprecated use {@link #getTransactionId()} instead.
      */
+    @Deprecated
     String getRequestId() {
         return auditMessage.get(REQUEST_ID_KEY).asString();
+    }
+
+    /**
+     * Gets the transaction id.
+     *
+     * @return The transaction id.
+     */
+    String getTransactionId() {
+        return auditMessage.get(TRANSACTION_ID_KEY).asString();
     }
 
     /**

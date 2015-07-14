@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014 ForgeRock AS.
+ * Copyright 2014-2015 ForgeRock AS.
  */
 
 package org.forgerock.caf.authn;
@@ -214,8 +214,7 @@ class TestFramework {
             assertThat(auditRecords).hasSize(1);
 
             JsonValue auditRecord = auditRecords.get(0);
-            assertThat(auditRecord.get("result").asString()).isEqualTo(auditParams.result());
-            assertThat(auditRecord.get("requestId").asString()).isNotNull();
+            assertThat(auditRecord.get("result").getObject()).isEqualTo(auditParams.result());
             if (auditParams.principal() == null) {
                 assertThat(auditRecord.get("principal").asList(String.class)).isNull();
             } else if (auditParams.principal().isEmpty()) {
