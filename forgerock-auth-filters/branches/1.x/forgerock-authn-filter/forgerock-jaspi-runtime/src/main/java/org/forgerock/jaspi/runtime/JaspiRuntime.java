@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2013-2015 ForgeRock AS.
+ * Copyright 2013-2014 ForgeRock AS.
  */
 
 package org.forgerock.jaspi.runtime;
@@ -91,20 +91,11 @@ public class JaspiRuntime {
      * The name of the HTTP Servlet Request attribute where the unique id of the request will be set.
      */
     public static final String ATTRIBUTE_REQUEST_ID = "org.forgerock.authentication.request.id";
-    /**
-     * The name of the HTTP Servlet Request attribute where the unique id of the request will be set.
-     */
-    public static final String ATTRIBUTE_TRANSACTION_ID = "org.forgerock.authentication.transaction.id";
 
     private final ServerAuthContext serverAuthContext;
     private final RuntimeResultHandler resultHandler;
     private final AuditApi auditApi;
     private final FailureResponseHandler failureResponseHandler;
-
-    /**
-     * Support transactionId for Commons Audit
-     */
-    private static final String TRANSACTION_ID_HEADER = "X-ForgeRock-TransactionId";
 
     /**
      * Constructs a new instance of the JaspiRuntime.
@@ -151,8 +142,7 @@ public class JaspiRuntime {
         final Subject serviceSubject = null;
         Map<String, Object> contextMap = new HashMap<String, Object>();
         messageInfo.getMap().put(JaspiRuntime.ATTRIBUTE_AUTH_CONTEXT, contextMap);
-        final String transactionId = request.getHeader(TRANSACTION_ID_HEADER);
-        AuditTrail auditTrail = new AuditTrail(auditApi, contextMap, transactionId);
+        AuditTrail auditTrail = new AuditTrail(auditApi, contextMap);
         messageInfo.getMap().put(AUDIT_TRAIL_KEY, auditTrail);
 
         AuthStatus requestAuthStatus = null;
@@ -178,7 +168,7 @@ public class JaspiRuntime {
                 throw e;
             }
 
-            request.setAttribute(JaspiRuntime.ATTRIBUTE_TRANSACTION_ID, auditTrail.getTransactionId());
+            request.setAttribute(JaspiRuntime.ATTRIBUTE_REQUEST_ID, auditTrail.getRequestId());
 
             filterChain.doFilter((ServletRequest) messageInfo.getRequestMessage(),
                     (ServletResponse) messageInfo.getResponseMessage());
