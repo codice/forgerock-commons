@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014-2015 ForgeRock AS.
+ * Copyright 2014 ForgeRock AS.
  */
 
 package org.forgerock.jaspi.runtime;
@@ -32,6 +32,7 @@ public interface AuditApi {
      * {@code
      * {
      *   "result": "SUCCESSFUL",
+     *   "requestId": "...",
      *   "principal": [
      *     "demo"
      *   ],
@@ -49,12 +50,7 @@ public interface AuditApi {
      *         ...
      *       }
      *     }, ...
-     *   ],
-     *   "authentication" : {
-     *       "id" : "demo"
-     *   },
-     *   "transactionId" : "...",
-     *   "eventName" : "authentication"
+     *   ]
      * }
      * }
      *
@@ -62,6 +58,7 @@ public interface AuditApi {
      * {@code
      * {
      *   "result": "FAILED",
+     *   "requestId": "...",
      *   "principal": [
      *     "demo",
      *     ... //Multiple auth modules could identify different principals
@@ -80,12 +77,7 @@ public interface AuditApi {
      *         ...
      *       }
      *     }, ...
-     *   ],
-     *   "authentication" : {
-     *       "id" : "demo"
-     *   },
-     *   "transactionId" : "...",
-     *   "eventName" : "authentication"
+     *   ]
      * }
      * }
      *

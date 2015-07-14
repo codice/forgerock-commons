@@ -11,7 +11,7 @@
  * Header, with the fields enclosed by brackets [] replaced by your own identifying
  * information: "Portions copyright [year] [name of copyright owner]".
  *
- * Copyright 2014-2015 ForgeRock AS.
+ * Copyright 2014 ForgeRock AS.
  */
 
 package org.forgerock.caf.authn;
@@ -168,6 +168,7 @@ public class ModuleAuditingIT {
         assertThat(auditRecords).hasSize(1);
 
         assertThat(auditRecords.get(0).get("result").asString()).isEqualTo(auditResult);
+        assertThat(auditRecords.get(0).get("requestId").asString()).isNotNull();
         if (sessionPresent) {
             assertThat(auditRecords.get(0).get("sessionId").asString())
                     .isEqualTo("AUDITING_SESSION_AUTH_MODULE_SESSION_ID");
