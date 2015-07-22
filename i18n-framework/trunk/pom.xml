@@ -32,7 +32,7 @@
     <artifactId>forgerock-parent</artifactId>
     <version>1.2.1</version>
   </parent>
-  <groupId>org.forgerock.commons</groupId>
+  <groupId>org.codice.org.forgerock.commons</groupId>
   <artifactId>i18n-framework</artifactId>
   <version>1.4.3-SNAPSHOT</version>
   <name>ForgeRock I18N Framework</name>

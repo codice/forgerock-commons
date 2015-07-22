@@ -23,7 +23,7 @@
         <version>2.0.0</version>
     </parent>
 
-    <groupId>org.forgerock.commons</groupId>
+    <groupId>org.codice.org.forgerock.commons</groupId>
     <artifactId>forgerock-auth-filters</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -175,28 +175,28 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>authz-framework-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>authz-framework</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>forgerock-auth-filter-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>forgerock-jaspi-runtime</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>forgerock-authz-filter</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -208,22 +208,22 @@
             </dependency>
 
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>json-fluent</artifactId>
                 <version>${forgerock-rest.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>json-resource</artifactId>
                 <version>${forgerock-rest.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>json-resource-http</artifactId>
                 <version>${forgerock-rest.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>json-web-token</artifactId>
                 <version>${forgerock-rest.version}</version>
             </dependency>
@@ -319,7 +319,7 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>forgerock-test-utils</artifactId>
                 <version>${forgerock-util.version}</version>
                 <scope>test</scope>
@@ -341,7 +341,7 @@
             <artifactId>assertj-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.codice.org.forgerock.commons</groupId>
             <artifactId>forgerock-test-utils</artifactId>
         </dependency>
     </dependencies>

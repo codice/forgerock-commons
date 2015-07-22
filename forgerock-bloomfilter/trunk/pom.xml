@@ -24,7 +24,7 @@
         <artifactId>forgerock-parent</artifactId>
         <version>1.2.1</version>
     </parent>
-    <groupId>org.forgerock.commons</groupId>
+    <groupId>org.codice.org.forgerock.commons</groupId>
     <artifactId>forgerock-bloomfilter</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>ForgeRock Bloom Filters</name>
@@ -64,7 +64,7 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>forgerock-util</artifactId>
                 <version>${forgerock.util.version}</version>
             </dependency>
