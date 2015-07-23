@@ -96,7 +96,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <includeGroupIds>org.forgerock.commons.ui.libs</includeGroupIds>
+                            <includeGroupIds>org.codice.org.forgerock.commons.ui.libs</includeGroupIds>
                             <outputDirectory>${project.build.directory}/www/libs</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>

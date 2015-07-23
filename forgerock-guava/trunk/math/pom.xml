@@ -53,12 +53,12 @@
                 <configuration>
                     <artifactSet>
                         <includes>
-                            <include>org.forgerock.commons.guava:forgerock-guava-all</include>
+                            <include>org.codice.org.forgerock.commons.guava:forgerock-guava-all</include>
                         </includes>
                     </artifactSet>
                     <filters>
                         <filter>
-                            <artifact>org.forgerock.commons.guava:forgerock-guava-all</artifact>
+                            <artifact>org.codice.org.forgerock.commons.guava:forgerock-guava-all</artifact>
                             <includes>
                                 <include>org/forgerock/guava/common/math/**</include>
                             </includes>
