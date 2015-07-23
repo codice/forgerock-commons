@@ -17,7 +17,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <artifactId>forgerock-authz-modules</artifactId>
-    <groupId>org.forgerock.commons</groupId>
+    <groupId>org.codice.org.forgerock.commons</groupId>
     <version>1.5.2</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
@@ -28,7 +28,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.forgerock.commons</groupId>
+      <groupId>org.codice.org.forgerock.commons</groupId>
       <artifactId>forgerock-authz-oauth2-module</artifactId>
     </dependency>
     <dependency>

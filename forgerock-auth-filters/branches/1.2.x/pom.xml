@@ -9,7 +9,7 @@
         <version>1.1.0</version>
     </parent>
 
-    <groupId>org.forgerock.commons</groupId>
+    <groupId>org.codice.org.forgerock.commons</groupId>
     <artifactId>forgerock-auth-filters</artifactId>
     <version>1.2.3-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -101,27 +101,27 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>forgerock-auth-filter-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>forgerock-jaspi-container</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>json-resource</artifactId>
                 <version>${forgerock-rest.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>json-web-token</artifactId>
                 <version>${forgerock-rest.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>json-resource</artifactId>
                 <version>${forgerock-rest.version}</version>
             </dependency>

@@ -24,7 +24,7 @@
  </parent>
 
  <artifactId>forgerock-doc-common-content</artifactId>
- <groupId>org.forgerock.commons</groupId>
+ <groupId>org.codice.org.forgerock.commons</groupId>
  <name>ForgeRock Common Documentation Content</name>
  <version>3.0.0</version>
  <description>

@@ -449,7 +449,7 @@
                                 </pluginExecution>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
-                                        <groupId>org.forgerock.commons</groupId>
+                                        <groupId>org.codice.org.forgerock.commons</groupId>
                                         <artifactId>i18n-maven-plugin</artifactId>
                                         <versionRange>[1.2.0,)</versionRange>
                                         <goals>

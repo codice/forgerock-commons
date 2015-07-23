@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.forgerock.commons</groupId>
+        <groupId>org.codice.org.forgerock.commons</groupId>
         <artifactId>forgerock-auth-filters</artifactId>
         <version>1.2.3-SNAPSHOT</version>
     </parent>
@@ -35,11 +35,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.codice.org.forgerock.commons</groupId>
             <artifactId>json-resource</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.codice.org.forgerock.commons</groupId>
             <artifactId>forgerock-auth-filter-common</artifactId>
         </dependency>
         <dependency>

@@ -103,7 +103,7 @@
  <build>
   <plugins>
    <plugin>
-    <groupId>org.forgerock.commons</groupId>
+    <groupId>org.codice.org.forgerock.commons</groupId>
     <artifactId>forgerock-doc-maven-plugin</artifactId>
     <version>${frDocPluginVersion}</version>
     <configuration>

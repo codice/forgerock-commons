@@ -25,7 +25,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.forgerock.commons.ui</groupId>
+        <groupId>org.codice.org.forgerock.commons.ui</groupId>
         <artifactId>forgerock-ui</artifactId>
         <version>1.0.8</version>
     </parent>
@@ -36,26 +36,26 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.commons.ui</groupId>
+            <groupId>org.codice.org.forgerock.commons.ui</groupId>
             <artifactId>forgerock-ui-commons</artifactId>
             <version>${forgerock-ui.version}</version>
             <type>zip</type>
             <classifier>www</classifier>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
+            <groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
             <artifactId>jquery-ui</artifactId>
             <type>js</type>
             <classifier>min</classifier>
         </dependency>
             <dependency>
-                <groupId>org.forgerock.commons.ui.libs</groupId>
+                <groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
                 <artifactId>jquery.jqGrid</artifactId>
                 <classifier>min</classifier>
                 <type>js</type>
             </dependency>
         <dependency>
-            <groupId>org.forgerock.commons.ui.libs</groupId>
+            <groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
             <artifactId>contentflow</artifactId>
             <type>js</type>
             <classifier>min</classifier>
@@ -126,7 +126,7 @@
                     <configuration>
                         <artifactItems>
                         <artifactItem>
-                            <groupId>org.forgerock.commons.ui</groupId>
+                            <groupId>org.codice.org.forgerock.commons.ui</groupId>
                             <artifactId>forgerock-ui-commons</artifactId>
                             <version>${forgerock-ui.version}</version>
                             <type>zip</type>

@@ -18,7 +18,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.forgerock.commons</groupId>
+        <groupId>org.codice.org.forgerock.commons</groupId>
         <artifactId>forgerock-authn-filter</artifactId>
         <version>1.5.0</version>
     </parent>
@@ -45,12 +45,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.codice.org.forgerock.commons</groupId>
             <artifactId>forgerock-auth-filter-common</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.codice.org.forgerock.commons</groupId>
             <artifactId>json-resource</artifactId>
         </dependency>
 
@@ -64,7 +64,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.commons.guava</groupId>
+            <groupId>org.codice.org.forgerock.commons.guava</groupId>
             <artifactId>forgerock-guava-net</artifactId>
         </dependency>
     </dependencies>

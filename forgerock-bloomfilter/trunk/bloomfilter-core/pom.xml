@@ -34,7 +34,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.forgerock.commons.guava</groupId>
+            <groupId>org.codice.org.forgerock.commons.guava</groupId>
             <artifactId>forgerock-guava-hash</artifactId>
         </dependency>
         <dependency>

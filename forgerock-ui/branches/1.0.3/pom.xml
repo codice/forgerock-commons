@@ -23,7 +23,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<groupId>org.forgerock.commons.ui</groupId>
+	<groupId>org.codice.org.forgerock.commons.ui</groupId>
 	<artifactId>forgerock-ui</artifactId>
 	<version>1.0.4-SNAPSHOT</version>
 	<name>Forgerock Web UI</name>
@@ -103,115 +103,115 @@
 	<dependencyManagement>
 		<dependencies>
 		  <dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>moment</artifactId>
 				<version>1.7.2</version>
 				<type>js</type>
 				<classifier>min</classifier>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui</groupId>
 				<artifactId>forgerock-ui-commons</artifactId>
 				<version>${forgerock-ui.version}</version>
 				<type>zip</type>
 				<classifier>www</classifier>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>jquery.ba-dotimeout</artifactId>
 				<version>1.0</version>
 				<type>js</type>
 				<classifier>min</classifier>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>handlebars</artifactId>
 				<version>1.0.rc.1</version>
 				<type>js</type>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>i18next</artifactId>
 				<version>1.7.1</version>
 				<type>js</type>
 				<classifier>min</classifier>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>requirejs</artifactId>
 				<version>2.0.6</version>
 				<type>js</type>
 				<classifier>min</classifier>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>backbone</artifactId>
 				<version>0.9.2</version>
 				<type>js</type>
 				<classifier>min</classifier>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>jquery</artifactId>
 				<version>1.8.1</version>
 				<type>js</type>
 				<classifier>min</classifier>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>underscore</artifactId>
 				<version>1.4.4</version>
 				<type>js</type>
 				<classifier>min</classifier>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>spin</artifactId>
 				<version>1.2.5</version>
 				<type>js</type>
 				<classifier>min</classifier>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>datatables</artifactId>
 				<version>1.9.3</version>
 				<type>js</type>
 				<classifier>min</classifier>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>xdate</artifactId>
 				<version>0.7</version>
 				<type>js</type>
 				<classifier>min</classifier>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>js2form</artifactId>
 				<type>js</type>
 				<version>1.0</version>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>form2js</artifactId>
 				<type>js</type>
 				<version>1.0</version>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>jquery-ui</artifactId>
 				<version>1.8.23.custom</version>
 				<type>js</type>
 				<classifier>min</classifier>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>mustache</artifactId>
 				<version>0.7.0</version>
 				<type>js</type>
 			</dependency>
 			<dependency>
-				<groupId>org.forgerock.commons.ui.libs</groupId>
+				<groupId>org.codice.org.forgerock.commons.ui.libs</groupId>
 				<artifactId>contentflow</artifactId>
 				<version>1.0.2</version>
 				<classifier>min</classifier>
