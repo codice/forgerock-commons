@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.forgerock.commons</groupId>
+        <groupId>org.codice.org.forgerock.commons</groupId>
         <artifactId>forgerock-auth-filters</artifactId>
         <version>1.5.2</version>
     </parent>
@@ -39,12 +39,12 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>forgerock-authz-filter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>forgerock-authz-oauth2-module</artifactId>
                 <version>${project.version}</version>
             </dependency>

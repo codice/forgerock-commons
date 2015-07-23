@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.forgerock.commons</groupId>
+        <groupId>org.codice.org.forgerock.commons</groupId>
         <artifactId>forgerock-jaspi-modules</artifactId>
         <version>1.4.3-SNAPSHOT</version>
     </parent>
@@ -42,7 +42,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.codice.org.forgerock.commons</groupId>
             <artifactId>forgerock-jaspi-runtime</artifactId>
         </dependency>
 

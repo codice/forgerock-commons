@@ -26,7 +26,7 @@
  </parent>
 
  <artifactId>forgerock-doc-default-branding</artifactId>
- <groupId>org.forgerock.commons</groupId>
+ <groupId>org.codice.org.forgerock.commons</groupId>
  <name>ForgeRock Documentation Default Branding</name>
  <version>2.0.0</version>
  <description>

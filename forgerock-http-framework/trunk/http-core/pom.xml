@@ -29,7 +29,7 @@
   <name>HTTP Core library</name>
   <dependencies>
     <dependency>
-      <groupId>org.forgerock.commons</groupId>
+      <groupId>org.codice.org.forgerock.commons</groupId>
       <artifactId>forgerock-util</artifactId>
     </dependency>
     <dependency>
@@ -56,7 +56,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.forgerock.commons</groupId>
+      <groupId>org.codice.org.forgerock.commons</groupId>
       <artifactId>forgerock-test-utils</artifactId>
       <scope>test</scope>
     </dependency>

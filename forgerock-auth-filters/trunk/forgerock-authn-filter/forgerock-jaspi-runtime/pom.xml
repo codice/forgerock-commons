@@ -18,7 +18,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.forgerock.commons</groupId>
+        <groupId>org.codice.org.forgerock.commons</groupId>
         <artifactId>forgerock-authn-filter</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
@@ -55,17 +55,17 @@
 
         <!-- TODO remove -->
         <dependency> <!-- Required for deprecated Logging framework in JaspiRuntime#LOG -->
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.codice.org.forgerock.commons</groupId>
             <artifactId>forgerock-auth-filter-common</artifactId>
         </dependency>
 
         <dependency> <!-- Required for JsonValue and ResourceException -->
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.codice.org.forgerock.commons</groupId>
             <artifactId>json-resource</artifactId>
         </dependency>
 
         <dependency> <!-- Required for MediaType in FailureResponseHandler -->
-            <groupId>org.forgerock.commons.guava</groupId>
+            <groupId>org.codice.org.forgerock.commons.guava</groupId>
             <artifactId>forgerock-guava-net</artifactId>
         </dependency>
     </dependencies>

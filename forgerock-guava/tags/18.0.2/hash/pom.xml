@@ -17,7 +17,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.forgerock.commons.guava</groupId>
+        <groupId>org.codice.org.forgerock.commons.guava</groupId>
         <artifactId>forgerock-guava</artifactId>
         <version>18.0.2</version>
     </parent>
@@ -27,23 +27,23 @@
     <description>Repackaged version of Guava to avoid dependency collisions.</description>
     <dependencies>
         <dependency>
-            <groupId>org.forgerock.commons.guava</groupId>
+            <groupId>org.codice.org.forgerock.commons.guava</groupId>
             <artifactId>forgerock-guava-all</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons.guava</groupId>
+            <groupId>org.codice.org.forgerock.commons.guava</groupId>
             <artifactId>forgerock-guava-annotations</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons.guava</groupId>
+            <groupId>org.codice.org.forgerock.commons.guava</groupId>
             <artifactId>forgerock-guava-base</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons.guava</groupId>
+            <groupId>org.codice.org.forgerock.commons.guava</groupId>
             <artifactId>forgerock-guava-math</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons.guava</groupId>
+            <groupId>org.codice.org.forgerock.commons.guava</groupId>
             <artifactId>forgerock-guava-primitives</artifactId>
         </dependency>
     </dependencies>
@@ -61,12 +61,12 @@
                 <configuration>
                     <artifactSet>
                         <includes>
-                            <include>org.forgerock.commons.guava:forgerock-guava-all</include>
+                            <include>org.codice.org.forgerock.commons.guava:forgerock-guava-all</include>
                         </includes>
                     </artifactSet>
                     <filters>
                         <filter>
-                            <artifact>org.forgerock.commons.guava:forgerock-guava-all</artifact>
+                            <artifact>org.codice.org.forgerock.commons.guava:forgerock-guava-all</artifact>
                             <includes>
                                 <include>org/forgerock/guava/common/hash/**</include>
                             </includes>

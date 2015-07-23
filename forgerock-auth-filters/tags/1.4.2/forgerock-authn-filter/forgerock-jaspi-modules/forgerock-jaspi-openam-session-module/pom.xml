@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.forgerock.commons</groupId>
+        <groupId>org.codice.org.forgerock.commons</groupId>
         <artifactId>forgerock-jaspi-modules</artifactId>
         <version>1.4.2</version>
     </parent>
@@ -27,7 +27,7 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.codice.org.forgerock.commons</groupId>
             <artifactId>forgerock-jaspi-runtime</artifactId>
         </dependency>
         <dependency>
@@ -45,7 +45,7 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.forgerock.commons</groupId>
+            <groupId>org.codice.org.forgerock.commons</groupId>
             <artifactId>json-fluent</artifactId>
         </dependency>
         <dependency>

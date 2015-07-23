@@ -29,7 +29,7 @@
         <artifactId>forgerock-parent</artifactId>
         <version>1.2.1</version>
     </parent>
-    <groupId>org.forgerock.commons</groupId>
+    <groupId>org.codice.org.forgerock.commons</groupId>
     <artifactId>forgerock-script</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
@@ -146,12 +146,12 @@
 
             <!-- ForgeRock Commons -->
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>json-resource</artifactId>
                 <version>${commons.forgerock-rest.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>json-resource-servlet</artifactId>
                 <version>${commons.forgerock-rest.version}</version>
                 <scope>provided</scope>

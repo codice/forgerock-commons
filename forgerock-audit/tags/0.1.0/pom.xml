@@ -22,7 +22,7 @@
         <artifactId>forgerock-parent</artifactId>
         <version>2.0.1</version>
     </parent>
-    <groupId>org.forgerock.commons</groupId>
+    <groupId>org.codice.org.forgerock.commons</groupId>
     <artifactId>forgerock-audit</artifactId>
     <version>0.1.0</version>
     <name>Commons - ForgeRock Audit Framework</name>
@@ -119,17 +119,17 @@
 
             <!-- ForgeRock Commons Dependencies -->
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>json-resource</artifactId>
                 <version>${commons.forgerock-rest.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>json-patch</artifactId>
                 <version>${commons.forgerock-rest.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.forgerock.commons</groupId>
+                <groupId>org.codice.org.forgerock.commons</groupId>
                 <artifactId>json-resource-servlet</artifactId>
                 <version>${commons.forgerock-rest.version}</version>
             </dependency>
