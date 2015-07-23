@@ -32,9 +32,9 @@
         <url>https://bugster.forgerock.org/jira/browse/COMMONS</url>
     </issueManagement>
     <scm>
-        <url>https://svn.forgerock.org/commons/forgerock-util/trunk/</url>
-        <connection>scm:svn:https://svn.forgerock.org/commons/forgerock-util/trunk/</connection>
-        <developerConnection>scm:svn:https://svn.forgerock.org/commons/forgerock-util/trunk/</developerConnection>
+        <url>https://github.com/codice/forgerock-commons.git</url>
+        <connection>scm:git:git://github/com/codice/forgerock-commons.git</connection>
+        <developerConnection>scm:git:git://github.com/codice/forgerock-commons.git</developerConnection>
     </scm>
     <ciManagement>
         <system>jenkins</system>
