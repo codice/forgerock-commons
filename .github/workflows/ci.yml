@@ -1,0 +1,9 @@
+name: CI
+on:
+  push:
+    branches: [master, '[0-9]+.[0-9]+.x']
+  pull_request:
+    branches: [master, '[0-9]+.[0-9]+.x']
+jobs:
+  ci:
+    uses: codice/release-pipelines/.github/workflows/maven-ci.yml@main
